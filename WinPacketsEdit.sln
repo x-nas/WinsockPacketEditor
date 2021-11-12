@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPELibrary", "WPELibrary\WPELibrary.csproj", "{14612B06-5B07-47A4-8FE5-D3568AABAA8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessInjector", "ProcessInjector\ProcessInjector.csproj", "{B5ED16ED-ABD5-438B-A589-E8ACC2377432}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14612B06-5B07-47A4-8FE5-D3568AABAA8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14612B06-5B07-47A4-8FE5-D3568AABAA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14612B06-5B07-47A4-8FE5-D3568AABAA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14612B06-5B07-47A4-8FE5-D3568AABAA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5ED16ED-ABD5-438B-A589-E8ACC2377432}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFF26FEB-A1B5-495F-B576-40E2A818E9FE}
+	EndGlobalSection
+EndGlobal
