@@ -362,5 +362,20 @@ namespace WPELibrary
                 MessageBox.Show("加载失败！错误：" + ex.Message, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }                        
         }
+
+        //全选/取消
+        private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            string sSelect = "0";
+            if (this.cbSelectAll.Checked)
+            {
+                sSelect = "1";
+            }
+
+            for (int i = 0;i < this.dgBatchSend.Rows.Count;i ++)
+            {
+                this.dgBatchSend.Rows[i].Cells["cCheck"].Value = sSelect;
+            }
+        }
     }
 }

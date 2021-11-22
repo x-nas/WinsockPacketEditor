@@ -30,10 +30,10 @@ namespace WPELibrary
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmsBatchSend = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -60,10 +60,6 @@ namespace WPELibrary
             this.tSend = new System.Windows.Forms.Timer(this.components);
             this.sfdSaveSocket = new System.Windows.Forms.SaveFileDialog();
             this.dgBatchSend = new System.Windows.Forms.DataGridView();
-            this.bSaveSocket = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.bLoadSocket = new System.Windows.Forms.Button();
-            this.ofdLoadSocket = new System.Windows.Forms.OpenFileDialog();
             this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -71,6 +67,11 @@ namespace WPELibrary
             this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bSaveSocket = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.bLoadSocket = new System.Windows.Forms.Button();
+            this.ofdLoadSocket = new System.Windows.Forms.OpenFileDialog();
+            this.cbSelectAll = new System.Windows.Forms.CheckBox();
             this.cmsBatchSend.SuspendLayout();
             this.ssSocketBatchSend.SuspendLayout();
             this.gbSend_Bottom.SuspendLayout();
@@ -309,42 +310,6 @@ namespace WPELibrary
             this.dgBatchSend.Size = new System.Drawing.Size(681, 225);
             this.dgBatchSend.TabIndex = 55;
             // 
-            // bSaveSocket
-            // 
-            this.bSaveSocket.Location = new System.Drawing.Point(6, 11);
-            this.bSaveSocket.Name = "bSaveSocket";
-            this.bSaveSocket.Size = new System.Drawing.Size(120, 29);
-            this.bSaveSocket.TabIndex = 108;
-            this.bSaveSocket.Text = "保存此列表数据";
-            this.bSaveSocket.UseVisualStyleBackColor = true;
-            this.bSaveSocket.Click += new System.EventHandler(this.bSaveSocket_Click);
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.bLoadSocket);
-            this.groupBox1.Controls.Add(this.bSaveSocket);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 225);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(681, 46);
-            this.groupBox1.TabIndex = 54;
-            this.groupBox1.TabStop = false;
-            // 
-            // bLoadSocket
-            // 
-            this.bLoadSocket.Location = new System.Drawing.Point(144, 11);
-            this.bLoadSocket.Name = "bLoadSocket";
-            this.bLoadSocket.Size = new System.Drawing.Size(120, 29);
-            this.bLoadSocket.TabIndex = 109;
-            this.bLoadSocket.Text = "加载发送列表";
-            this.bLoadSocket.UseVisualStyleBackColor = true;
-            this.bLoadSocket.Click += new System.EventHandler(this.bLoadSocket_Click);
-            // 
-            // ofdLoadSocket
-            // 
-            this.ofdLoadSocket.Filter = "封包数据文件（*.txt）|*.txt";
-            this.ofdLoadSocket.RestoreDirectory = true;
-            // 
             // cCheck
             // 
             this.cCheck.FalseValue = "0";
@@ -357,8 +322,8 @@ namespace WPELibrary
             // cIndex
             // 
             this.cIndex.DataPropertyName = "序号";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
             this.cIndex.HeaderText = "序号";
             this.cIndex.Name = "cIndex";
             this.cIndex.ReadOnly = true;
@@ -374,8 +339,8 @@ namespace WPELibrary
             // cSocket
             // 
             this.cSocket.DataPropertyName = "套接字";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle2;
             this.cSocket.HeaderText = "套接字";
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
@@ -385,8 +350,8 @@ namespace WPELibrary
             // cIPTo
             // 
             this.cIPTo.DataPropertyName = "目的地址";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle3;
             this.cIPTo.HeaderText = "目的地址";
             this.cIPTo.Name = "cIPTo";
             this.cIPTo.ReadOnly = true;
@@ -396,8 +361,8 @@ namespace WPELibrary
             // cLen
             // 
             this.cLen.DataPropertyName = "长度";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle4;
             this.cLen.HeaderText = "长度";
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
@@ -412,6 +377,54 @@ namespace WPELibrary
             this.cData.ReadOnly = true;
             this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.cData.Width = 340;
+            // 
+            // bSaveSocket
+            // 
+            this.bSaveSocket.Location = new System.Drawing.Point(413, 11);
+            this.bSaveSocket.Name = "bSaveSocket";
+            this.bSaveSocket.Size = new System.Drawing.Size(120, 29);
+            this.bSaveSocket.TabIndex = 108;
+            this.bSaveSocket.Text = "保存此列表数据";
+            this.bSaveSocket.UseVisualStyleBackColor = true;
+            this.bSaveSocket.Click += new System.EventHandler(this.bSaveSocket_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.cbSelectAll);
+            this.groupBox1.Controls.Add(this.bLoadSocket);
+            this.groupBox1.Controls.Add(this.bSaveSocket);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox1.Location = new System.Drawing.Point(0, 225);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(681, 46);
+            this.groupBox1.TabIndex = 54;
+            this.groupBox1.TabStop = false;
+            // 
+            // bLoadSocket
+            // 
+            this.bLoadSocket.Location = new System.Drawing.Point(551, 11);
+            this.bLoadSocket.Name = "bLoadSocket";
+            this.bLoadSocket.Size = new System.Drawing.Size(120, 29);
+            this.bLoadSocket.TabIndex = 109;
+            this.bLoadSocket.Text = "加载发送列表";
+            this.bLoadSocket.UseVisualStyleBackColor = true;
+            this.bLoadSocket.Click += new System.EventHandler(this.bLoadSocket_Click);
+            // 
+            // ofdLoadSocket
+            // 
+            this.ofdLoadSocket.Filter = "封包数据文件（*.txt）|*.txt";
+            this.ofdLoadSocket.RestoreDirectory = true;
+            // 
+            // cbSelectAll
+            // 
+            this.cbSelectAll.AutoSize = true;
+            this.cbSelectAll.Location = new System.Drawing.Point(15, 18);
+            this.cbSelectAll.Name = "cbSelectAll";
+            this.cbSelectAll.Size = new System.Drawing.Size(88, 21);
+            this.cbSelectAll.TabIndex = 110;
+            this.cbSelectAll.Text = "全选 / 取消";
+            this.cbSelectAll.UseVisualStyleBackColor = true;
+            this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
             // SocketBatchSend_Form
             // 
@@ -436,6 +449,7 @@ namespace WPELibrary
             this.gbSend_Bottom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgBatchSend)).EndInit();
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -479,5 +493,6 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
+        private System.Windows.Forms.CheckBox cbSelectAll;
     }
 }

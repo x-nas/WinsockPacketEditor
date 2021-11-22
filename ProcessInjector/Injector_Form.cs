@@ -81,7 +81,7 @@ namespace ProcessInjector
             ProcessPath = Program.PATH;
             ProcessName = Program.PNAME;
             string sDllName = "WPELibrary.dll";
-
+            
             try
             {
                 if (string.IsNullOrEmpty(ProcessPath) && string.IsNullOrEmpty(ProcessName))
@@ -91,7 +91,7 @@ namespace ProcessInjector
                 else
                 {
                     string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
-                    string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
+                    string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);                    
 
                     ShowLog("开始注入目标进程 =>> " + ProcessName);
 
