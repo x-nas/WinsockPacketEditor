@@ -315,7 +315,7 @@ namespace WPELibrary
             // 
             this.nudLoop_CNT.Location = new System.Drawing.Point(45, 15);
             this.nudLoop_CNT.Maximum = new decimal(new int[] {
-            999,
+            99999,
             0,
             0,
             0});

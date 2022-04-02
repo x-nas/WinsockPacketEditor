@@ -132,45 +132,52 @@ namespace WPELibrary
         
         private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            for (int i = 0; i < Socket_Cache.SocketSendList.Loop_CNT; i++)
+            try
             {
-                for (int j = 0; j < dgSendList.Rows.Count; j++)
+                for (int i = 0; i < Socket_Cache.SocketSendList.Loop_CNT; i++)
                 {
-                    if (bgwSendList.CancellationPending)
+                    for (int j = 0; j < dgSendList.Rows.Count; j++)
                     {
-                        return;
-                    }
-                    else
-                    {
-                        if (this.dgSendList.Rows[j].Cells["cCheck"].Value != null)
+                        if (bgwSendList.CancellationPending)
                         {
-                            if (this.dgSendList.Rows[j].Cells["cCheck"].Value.ToString() == "1")
+                            return;
+                        }
+                        else
+                        {
+                            if (this.dgSendList.Rows[j].Cells["cCheck"].Value != null)
                             {
-                                int iSocket = 0;
-
-                                if (this.cbUseSocket.Checked)
+                                if (this.dgSendList.Rows[j].Cells["cCheck"].Value.ToString() == "1")
                                 {
-                                    iSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
-                                }
-                                else
-                                {
-                                    iSocket = Socket_Operation.CheckSocket(this.dgSendList.Rows[j].Cells["cSocket"].Value.ToString().Trim());                                    
-                                }
+                                    int iSocket = 0;
 
-                                Socket_Cache.SocketSendList.SendPacketList_ByIndex(iSocket, j);
+                                    if (this.cbUseSocket.Checked)
+                                    {
+                                        iSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
+                                    }
+                                    else
+                                    {
+                                        iSocket = Socket_Operation.CheckSocket(this.dgSendList.Rows[j].Cells["cSocket"].Value.ToString().Trim());
+                                    }
+
+                                    Socket_Cache.SocketSendList.SendPacketList_ByIndex(iSocket, j);
+                                }
                             }
                         }
                     }
-                }
 
-                Socket_Cache.SocketSendList.Loop_Send_CNT++;
-                int iLoop_UnSend = Socket_Cache.SocketSendList.Loop_CNT - Socket_Cache.SocketSendList.Loop_Send_CNT;
+                    Socket_Cache.SocketSendList.Loop_Send_CNT++;
+                    int iLoop_UnSend = Socket_Cache.SocketSendList.Loop_CNT - Socket_Cache.SocketSendList.Loop_Send_CNT;
 
-                if (iLoop_UnSend > 0)
-                {
-                    this.nudLoop_CNT.Value = iLoop_UnSend;                    
+                    if (iLoop_UnSend > 0)
+                    {
+                        this.nudLoop_CNT.Value = iLoop_UnSend;
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }            
 
             this.bSendList.Enabled = true;
             this.bSendListStop.Enabled = false;
@@ -186,6 +193,8 @@ namespace WPELibrary
 
             this.bSendList.Enabled = true;
             this.bSendListStop.Enabled = false;
+            this.cbUseSocket.Enabled = true;
+            this.txtUseSocket.Enabled = true;
         }
         #endregion
 

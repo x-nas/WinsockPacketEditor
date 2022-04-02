@@ -39,6 +39,10 @@ namespace WPELibrary
             this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiClear = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.保存此列表数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.加载发送列表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ssSocketSendList = new System.Windows.Forms.StatusStrip();
             this.tlLoop_Send = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlLoop_Send_CNT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -49,10 +53,10 @@ namespace WPELibrary
             this.tlSendList_Fail = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSendList_Fail_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.gbSend_Bottom = new System.Windows.Forms.GroupBox();
-            this.nudLoop_Int = new System.Windows.Forms.NumericUpDown();
-            this.nudLoop_CNT = new System.Windows.Forms.NumericUpDown();
             this.bSendListStop = new System.Windows.Forms.Button();
             this.bSendList = new System.Windows.Forms.Button();
+            this.nudLoop_Int = new System.Windows.Forms.NumericUpDown();
+            this.nudLoop_CNT = new System.Windows.Forms.NumericUpDown();
             this.lLoop_Int = new System.Windows.Forms.Label();
             this.lLoop_CNT = new System.Windows.Forms.Label();
             this.txtUseSocket = new System.Windows.Forms.TextBox();
@@ -69,10 +73,6 @@ namespace WPELibrary
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.保存此列表数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.加载发送列表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSendList.SuspendLayout();
             this.ssSocketSendList.SuspendLayout();
             this.gbSend_Bottom.SuspendLayout();
@@ -112,6 +112,28 @@ namespace WPELibrary
             this.tsmiClear.Name = "tsmiClear";
             this.tsmiClear.Size = new System.Drawing.Size(160, 22);
             this.tsmiClear.Text = "清空发送列表";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            // 
+            // 保存此列表数据ToolStripMenuItem
+            // 
+            this.保存此列表数据ToolStripMenuItem.Name = "保存此列表数据ToolStripMenuItem";
+            this.保存此列表数据ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.保存此列表数据ToolStripMenuItem.Text = "保存此列表数据";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(157, 6);
+            // 
+            // 加载发送列表ToolStripMenuItem
+            // 
+            this.加载发送列表ToolStripMenuItem.Name = "加载发送列表ToolStripMenuItem";
+            this.加载发送列表ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.加载发送列表ToolStripMenuItem.Text = "加载发送列表";
             // 
             // ssSocketSendList
             // 
@@ -192,6 +214,26 @@ namespace WPELibrary
             this.gbSend_Bottom.TabIndex = 52;
             this.gbSend_Bottom.TabStop = false;
             // 
+            // bSendListStop
+            // 
+            this.bSendListStop.Location = new System.Drawing.Point(589, 17);
+            this.bSendListStop.Name = "bSendListStop";
+            this.bSendListStop.Size = new System.Drawing.Size(80, 29);
+            this.bSendListStop.TabIndex = 108;
+            this.bSendListStop.Text = "停 止 (&T)";
+            this.bSendListStop.UseVisualStyleBackColor = true;
+            this.bSendListStop.Click += new System.EventHandler(this.bSendStop_Click);
+            // 
+            // bSendList
+            // 
+            this.bSendList.Location = new System.Drawing.Point(484, 17);
+            this.bSendList.Name = "bSendList";
+            this.bSendList.Size = new System.Drawing.Size(80, 29);
+            this.bSendList.TabIndex = 107;
+            this.bSendList.Text = "发 送 (&F)";
+            this.bSendList.UseVisualStyleBackColor = true;
+            this.bSendList.Click += new System.EventHandler(this.bSend_Click);
+            // 
             // nudLoop_Int
             // 
             this.nudLoop_Int.Increment = new decimal(new int[] {
@@ -222,9 +264,9 @@ namespace WPELibrary
             // 
             // nudLoop_CNT
             // 
-            this.nudLoop_CNT.Location = new System.Drawing.Point(438, 16);
+            this.nudLoop_CNT.Location = new System.Drawing.Point(421, 16);
             this.nudLoop_CNT.Maximum = new decimal(new int[] {
-            999,
+            99999,
             0,
             0,
             0});
@@ -234,7 +276,7 @@ namespace WPELibrary
             0,
             0});
             this.nudLoop_CNT.Name = "nudLoop_CNT";
-            this.nudLoop_CNT.Size = new System.Drawing.Size(57, 23);
+            this.nudLoop_CNT.Size = new System.Drawing.Size(74, 23);
             this.nudLoop_CNT.TabIndex = 111;
             this.nudLoop_CNT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nudLoop_CNT.Value = new decimal(new int[] {
@@ -242,26 +284,6 @@ namespace WPELibrary
             0,
             0,
             0});
-            // 
-            // bSendListStop
-            // 
-            this.bSendListStop.Location = new System.Drawing.Point(589, 17);
-            this.bSendListStop.Name = "bSendListStop";
-            this.bSendListStop.Size = new System.Drawing.Size(80, 29);
-            this.bSendListStop.TabIndex = 108;
-            this.bSendListStop.Text = "停 止 (&T)";
-            this.bSendListStop.UseVisualStyleBackColor = true;
-            this.bSendListStop.Click += new System.EventHandler(this.bSendStop_Click);
-            // 
-            // bSendList
-            // 
-            this.bSendList.Location = new System.Drawing.Point(484, 17);
-            this.bSendList.Name = "bSendList";
-            this.bSendList.Size = new System.Drawing.Size(80, 29);
-            this.bSendList.TabIndex = 107;
-            this.bSendList.Text = "发 送 (&F)";
-            this.bSendList.UseVisualStyleBackColor = true;
-            this.bSendList.Click += new System.EventHandler(this.bSend_Click);
             // 
             // lLoop_Int
             // 
@@ -275,7 +297,7 @@ namespace WPELibrary
             // lLoop_CNT
             // 
             this.lLoop_CNT.AutoSize = true;
-            this.lLoop_CNT.Location = new System.Drawing.Point(375, 19);
+            this.lLoop_CNT.Location = new System.Drawing.Point(360, 19);
             this.lLoop_CNT.Name = "lLoop_CNT";
             this.lLoop_CNT.Size = new System.Drawing.Size(68, 17);
             this.lLoop_CNT.TabIndex = 103;
@@ -283,7 +305,7 @@ namespace WPELibrary
             // 
             // txtUseSocket
             // 
-            this.txtUseSocket.Location = new System.Drawing.Point(269, 16);
+            this.txtUseSocket.Location = new System.Drawing.Point(250, 16);
             this.txtUseSocket.Name = "txtUseSocket";
             this.txtUseSocket.Size = new System.Drawing.Size(100, 23);
             this.txtUseSocket.TabIndex = 95;
@@ -292,7 +314,7 @@ namespace WPELibrary
             // cbUseSocket
             // 
             this.cbUseSocket.AutoSize = true;
-            this.cbUseSocket.Location = new System.Drawing.Point(162, 18);
+            this.cbUseSocket.Location = new System.Drawing.Point(143, 18);
             this.cbUseSocket.Name = "cbUseSocket";
             this.cbUseSocket.Size = new System.Drawing.Size(111, 21);
             this.cbUseSocket.TabIndex = 94;
@@ -433,28 +455,6 @@ namespace WPELibrary
             this.cbSelectAll.Text = "全选 / 取消";
             this.cbSelectAll.UseVisualStyleBackColor = true;
             this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
-            // 
-            // 保存此列表数据ToolStripMenuItem
-            // 
-            this.保存此列表数据ToolStripMenuItem.Name = "保存此列表数据ToolStripMenuItem";
-            this.保存此列表数据ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.保存此列表数据ToolStripMenuItem.Text = "保存此列表数据";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(157, 6);
-            // 
-            // 加载发送列表ToolStripMenuItem
-            // 
-            this.加载发送列表ToolStripMenuItem.Name = "加载发送列表ToolStripMenuItem";
-            this.加载发送列表ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.加载发送列表ToolStripMenuItem.Text = "加载发送列表";
             // 
             // Socket_SendList_Form
             // 
