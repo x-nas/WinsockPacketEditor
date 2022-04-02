@@ -21,7 +21,7 @@ namespace WPELibrary.Lib
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DLL_Form());           
+            Application.Run(new Socket_Form());           
         }        
     }
 }

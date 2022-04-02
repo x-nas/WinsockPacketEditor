@@ -56,16 +56,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DLL_Form.cs">
+    <Compile Include="Filter_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DLL_Form.Designer.cs">
-      <DependentUpon>DLL_Form.cs</DependentUpon>
+    <Compile Include="Filter_Form.Designer.cs">
+      <DependentUpon>Filter_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lib\SocketEvent.cs" />
-    <Compile Include="Lib\SocketOperation.cs" />
-    <Compile Include="Lib\SocketPacket.cs" />
-    <Compile Include="Lib\SocketSend.cs" />
+    <Compile Include="Lib\Filter_List.cs" />
+    <Compile Include="Lib\Socket_Log.cs" />
+    <Compile Include="Socket_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Socket_Form.Designer.cs">
+      <DependentUpon>Socket_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Socket_Operation.cs" />
+    <Compile Include="Lib\Socket_Packet.cs" />
+    <Compile Include="Lib\Socket_Packet_Info.cs" />
+    <Compile Include="Lib\Socket_Cache.cs" />
     <Compile Include="Lib\WinSockHook.cs" />
     <Compile Include="Lib\MainClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,18 +82,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Lib\SocketInfo.cs" />
-    <Compile Include="SocketBatchSend_Form.cs">
+    <Compile Include="Socket_SendList_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SocketBatchSend_Form.Designer.cs">
-      <DependentUpon>SocketBatchSend_Form.cs</DependentUpon>
+    <Compile Include="Socket_SendList_Form.Designer.cs">
+      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="SocketSend_Form.cs">
+    <Compile Include="Socket_Send_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SocketSend_Form.Designer.cs">
-      <DependentUpon>SocketSend_Form.cs</DependentUpon>
+    <Compile Include="Socket_Send_Form.Designer.cs">
+      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -112,18 +119,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DLL_Form.resx">
-      <DependentUpon>DLL_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Filter_Form.resx">
+      <DependentUpon>Filter_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_Form.resx">
+      <DependentUpon>Socket_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="SocketBatchSend_Form.resx">
-      <DependentUpon>SocketBatchSend_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_SendList_Form.resx">
+      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SocketSend_Form.resx">
-      <DependentUpon>SocketSend_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_Send_Form.resx">
+      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

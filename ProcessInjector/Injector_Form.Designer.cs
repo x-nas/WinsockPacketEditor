@@ -51,12 +51,12 @@ namespace ProcessInjector
             this.pTop.Location = new System.Drawing.Point(0, 0);
             this.pTop.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pTop.Name = "pTop";
-            this.pTop.Size = new System.Drawing.Size(432, 45);
+            this.pTop.Size = new System.Drawing.Size(434, 45);
             this.pTop.TabIndex = 0;
             // 
             // bInject
             // 
-            this.bInject.Location = new System.Drawing.Point(352, 9);
+            this.bInject.Location = new System.Drawing.Point(358, 9);
             this.bInject.Name = "bInject";
             this.bInject.Size = new System.Drawing.Size(66, 30);
             this.bInject.TabIndex = 3;
@@ -68,7 +68,7 @@ namespace ProcessInjector
             // 
             this.bSelectProcess.Location = new System.Drawing.Point(300, 12);
             this.bSelectProcess.Name = "bSelectProcess";
-            this.bSelectProcess.Size = new System.Drawing.Size(37, 25);
+            this.bSelectProcess.Size = new System.Drawing.Size(42, 25);
             this.bSelectProcess.TabIndex = 2;
             this.bSelectProcess.Text = ". . .";
             this.bSelectProcess.UseVisualStyleBackColor = true;
@@ -97,18 +97,19 @@ namespace ProcessInjector
             this.pFill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pFill.Location = new System.Drawing.Point(0, 45);
             this.pFill.Name = "pFill";
-            this.pFill.Size = new System.Drawing.Size(432, 125);
+            this.pFill.Size = new System.Drawing.Size(434, 126);
             this.pFill.TabIndex = 1;
             // 
             // rtbLog
             // 
             this.rtbLog.BackColor = System.Drawing.Color.Black;
             this.rtbLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbLog.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Location = new System.Drawing.Point(0, 0);
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
-            this.rtbLog.Size = new System.Drawing.Size(432, 125);
+            this.rtbLog.Size = new System.Drawing.Size(434, 126);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
@@ -116,7 +117,7 @@ namespace ProcessInjector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(432, 170);
+            this.ClientSize = new System.Drawing.Size(434, 171);
             this.Controls.Add(this.pFill);
             this.Controls.Add(this.pTop);
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));

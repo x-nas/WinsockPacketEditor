@@ -3,20 +3,22 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data;
 using System.IO;
+using WPELibrary.Lib;
 
 namespace ProcessInjector
 {
     public partial class ProcessList_Form : Form
     {
-        //窗体加载
+        #region//窗体加载
         public ProcessList_Form()
         {
             InitializeComponent();            
 
             this.GetProcess();
         }
+        #endregion
 
-        //获取所有进程
+        #region//获取所有进程
         public void GetProcess()
         {
             DataTable dtProcess = new DataTable();
@@ -55,8 +57,9 @@ namespace ProcessInjector
 
             lProcessCNT.Text = "进程数：" + pCNT.ToString();
         }
+        #endregion
 
-        //选中某个进程
+        #region//选中某个进程
         private void bSelected_Click(object sender, EventArgs e)
         {
             if (lvProcessList.SelectedItems.Count == 1)
@@ -68,17 +71,19 @@ namespace ProcessInjector
             }
             else
             {
-                MessageBox.Show("请选择一个进程！");
+                Socket_Operation.ShowMessageBox("请选择一个进程！");
             }
         }
+        #endregion
 
-        //刷新进程列表
+        #region//刷新进程列表
         private void bRefresh_Click(object sender, EventArgs e)
         {            
             GetProcess();
         }
+        #endregion
 
-        //选择程序
+        #region//选择程序
         private void bCreate_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofdCreate = new OpenFileDialog();
@@ -93,5 +98,6 @@ namespace ProcessInjector
             Program.PNAME = Path.GetFileName(Program.PATH);
             base.Close();
         }
+        #endregion
     }
 }

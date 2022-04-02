@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using EasyHook;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using WPELibrary.Lib;
+using EasyHook;
 
 namespace ProcessInjector
 {
@@ -14,29 +15,41 @@ namespace ProcessInjector
         private string ProcessPath = "";
         private int ProcessID = -1;
 
-        private ComputerInfo ci = new ComputerInfo();
+        #region//DLL 引用
 
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
-        
-        //窗体加载
+
+        #endregion
+
+        #region//窗体加载
         public Injector_Form()
         {
             InitializeComponent();
+
             this.Text = "进程注入器（x86, x64自适应）";
 
             Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            ShowLog("当前内核版本：" + Version);
+            ShowLog("当前内核版本：" + Version);            
         }
+        #endregion
 
-        //记录日志
+        #region//显示日志
         private void ShowLog(string ShowInfo)
         {
-            this.rtbLog.AppendText(ShowInfo + "\n");
+            if (string.IsNullOrEmpty(this.rtbLog.Text.Trim()))
+            {
+                this.rtbLog.AppendText(ShowInfo);
+            }
+            else
+            {
+                this.rtbLog.AppendText("\n" + ShowInfo);
+            }            
         }
+        #endregion
 
-        //判断是否为64位的进程
+        #region//判断是否为64位的进程
         private bool IsWin64Process(int ProcessID)
         {
             bool bReturn = false;
@@ -55,8 +68,9 @@ namespace ProcessInjector
 
             return bReturn;
         }
+        #endregion
 
-        //选择进程
+        #region//选择进程
         private void bSelectProcess_Click(object sender, EventArgs e)
         {
             ProcessList_Form plf = new ProcessList_Form();
@@ -71,11 +85,13 @@ namespace ProcessInjector
                 tbProcessID.Text = Program.PNAME;
             }
         }
+        #endregion
 
-        //注入
+        #region//注入
         private void bInject_Click(object sender, EventArgs e)
         {
             this.rtbLog.Clear();
+            ShowLog("当前内核版本：" + Version);
 
             ProcessID = Program.PID;
             ProcessPath = Program.PATH;
@@ -86,7 +102,7 @@ namespace ProcessInjector
             {
                 if (string.IsNullOrEmpty(ProcessPath) && string.IsNullOrEmpty(ProcessName))
                 {
-                    MessageBox.Show("请先选择要注入的进程！");
+                    Socket_Operation.ShowMessageBox("请先选择要注入的进程！");                    
                 }
                 else
                 {
@@ -114,6 +130,7 @@ namespace ProcessInjector
             {                
                 ShowLog("出现错误：" + ex.Message);                
             }
-        }                        
+        }
+        #endregion
     }
 }
