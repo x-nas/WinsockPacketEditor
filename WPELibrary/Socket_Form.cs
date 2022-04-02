@@ -27,7 +27,7 @@ namespace WPELibrary
         {
             this.Init();            
 
-            this.Text = "封包拦截器（x32 x64 自适应）";
+            this.Text = "封包拦截器（x86, x64自适应）";
             string sInjectInfo = string.Format("已注入目标进程 {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
             this.tlSystemInfo.Text = sInjectInfo;
 
