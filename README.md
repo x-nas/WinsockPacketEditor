@@ -14,15 +14,45 @@ Download setup.exe: https://www.x-nas.com/wpe/publish.htm
 
 安装版本使用方法：  
   1. 下载解压缩后双击运行安装程序图标 
+  
+  ![1](https://user-images.githubusercontent.com/67667226/161364663-ce7a01aa-f359-458c-ae9b-b7468803b19d.jpg)
+
+  
   2. 如有提示请选择 “更多信息”，并点击 “仍要运行” 
+  
+  ![2](https://user-images.githubusercontent.com/67667226/161364780-101447f1-ed3e-4c76-9980-43605a45711a.jpg)
+
+  
   3. 安装程序会自动检测操作系统的运行环境，如有需要会提示安装相关运行库（比如.net 4.0等），点击下载及安装即可.
+  
+  ![3](https://user-images.githubusercontent.com/67667226/161364787-0d028d2d-95b7-4771-a0f6-650542709f44.jpg)
+
+  
   4. 安装完成后启动时如有提示，请选择 “更多信息”，并点击 “仍要运行”
     
-  启动并注入进程：
+  ![4](https://user-images.githubusercontent.com/67667226/161364794-11c37f22-39f6-4c52-86cc-0acd41a7362f.jpg)
+ 
+启动并注入进程：
   1. 双击软件图标启动程序后，会提示以管理员权限运行，点击确定后显示进程注入界面，点击 “...” 按钮选择进程
+  
+  ![5](https://user-images.githubusercontent.com/67667226/161364836-3c089719-ae78-4089-ac2f-48d797600cde.jpg)
+
+  
   2. 选择需要拦截封包的进程名称，点击“确定”，如下面图示选择的为雷电模拟的进程
+  
+  ![6](https://user-images.githubusercontent.com/67667226/161364842-a1c97049-296a-4bfc-ac29-9cd03679d427.jpg)
+
+  
   3. 选择进程后，点击 “注入” 按钮
+  
+  ![7](https://user-images.githubusercontent.com/67667226/161364853-2c8760bd-4632-4dac-b76d-74f41a81876e.jpg)
+
+  
   4. 如下图出现红框内文字时代表注入进程成功，否则会提示相关错误信息（并不是所有进程都可以实现注入，各类手游模拟器及CCProxy等代{过}{滤}理软件经测试可以成功注入）
+  
+  ![8](https://user-images.githubusercontent.com/67667226/161364857-e3a00761-866d-41f5-9cde-b2a621f335d6.jpg)
+
+  
   5. 成功注入进程后，即可弹出封包拦截主界面，这时候即可关闭上图的进程注入器了
  
   封包拦截器的使用：  
@@ -30,4 +60,7 @@ Download setup.exe: https://www.x-nas.com/wpe/publish.htm
   
   软件的更新及卸载：
   1. 软件在每次启动的时候会自动更新，我会不定期的修改bug和完善功能。
+  
+  
+  
   2. 卸载软件 “控制面板” - “卸载软件” - “封包拦截器”
