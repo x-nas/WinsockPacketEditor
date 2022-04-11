@@ -290,11 +290,17 @@ namespace WPELibrary.Lib
                 case Socket_Packet.SocketType.Send:
                     sReturn = "发送";
                     break;
+                case Socket_Packet.SocketType.WSASend:
+                    sReturn = "WSA发送";
+                    break;
                 case Socket_Packet.SocketType.SendTo:
                     sReturn = "发送到";
                     break;
                 case Socket_Packet.SocketType.Recv:
                     sReturn = "接收";
+                    break;
+                case Socket_Packet.SocketType.WSARecv:
+                    sReturn = "WSA接收";
                     break;
                 case Socket_Packet.SocketType.RecvFrom:
                     sReturn = "接收自";
@@ -302,11 +308,17 @@ namespace WPELibrary.Lib
                 case Socket_Packet.SocketType.Send_Interecept:
                     sReturn = "拦截-发送";
                     break;
+                case Socket_Packet.SocketType.WSASend_Interecept:
+                    sReturn = "拦截-WSA发送";
+                    break;
                 case Socket_Packet.SocketType.SendTo_Interecept:
                     sReturn = "拦截-发送到";
                     break;
                 case Socket_Packet.SocketType.Recv_Interecept:
                     sReturn = "拦截-接收";
+                    break;
+                case Socket_Packet.SocketType.WSARecv_Interecept:
+                    sReturn = "拦截-WSA接收";
                     break;
                 case Socket_Packet.SocketType.RecvFrom_Interecept:
                     sReturn = "拦截-接收自";
@@ -360,6 +372,7 @@ namespace WPELibrary.Lib
             bool bISShow_BySize = ISShow_BySize(iResLen);
             if (!bISShow_BySize)
             {
+                DoLog("[过滤封包大小] " + iResLen.ToString());
                 return false;
             }
 
@@ -367,6 +380,7 @@ namespace WPELibrary.Lib
             bool bISShow_BySocket = ISShow_BySocket(iSocket);
             if (!bISShow_BySocket)
             {
+                DoLog("[过滤套接字] " + iSocket.ToString());
                 return false;
             }
 
@@ -374,6 +388,7 @@ namespace WPELibrary.Lib
             bool bISShow_ByIP = ISShow_ByIP(sIP_From, sIP_To);
             if (!bISShow_ByIP)
             {
+                DoLog("[过滤IP地址] " + sIP_From + " / " + sIP_To);
                 return false;
             }
 
@@ -382,6 +397,7 @@ namespace WPELibrary.Lib
             bool bISShow_ByPacket = ISShow_ByPacket(sPacket);
             if (!bISShow_ByPacket)
             {
+                DoLog("[过滤封包内容] " + sPacket);
                 return false;
             }
 
@@ -780,21 +796,35 @@ namespace WPELibrary.Lib
         #region//日志
         public static void DoLog_HookInfo(Socket_Packet.SocketType sType, int iSocket, int iLen, int iRes)
         {
-            if (bDoLog_Hook)
+            try
             {
-                string sTypeCN = GetSocketType_CN(sType);
+                if (bDoLog_Hook)
+                {
+                    string sTypeCN = GetSocketType_CN(sType);
 
-                string sLog = "[" + sTypeCN + "]" + " - " + iSocket.ToString() + "，" + iRes.ToString() + " / " + iLen.ToString();
-                DoLog(sLog);
-            }            
+                    string sLog = "[" + sTypeCN + "]" + " - " + iSocket.ToString() + "，" + iRes.ToString() + " / " + iLen.ToString();
+                    DoLog(sLog);
+                }
+            }
+            catch (Exception ex)
+            {
+                DoLog(ex.Message);
+            }           
         }
 
         public static void DoLog(string sLogContent)
         {
-            if (bDoLog)
+            try
             {
-                Socket_Cache.LogQueue.LogToQueue(sLogContent);
-            }            
+                if (bDoLog)
+                {
+                    Socket_Cache.LogQueue.LogToQueue(sLogContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                DoLog(ex.Message);
+            }           
         }
         #endregion
     }

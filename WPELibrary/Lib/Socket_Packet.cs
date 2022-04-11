@@ -21,16 +21,26 @@ namespace WPELibrary.Lib
             public byte[] sin_zero;
         }
 
+        public unsafe struct WSABUF
+        {
+            public Int32 len;
+            public IntPtr buf;
+        }
+
         public enum SocketType
         {
             Send = 1,
-            SendTo = 2,
-            Recv = 3,
-            RecvFrom = 4,
-            Send_Interecept = 5,
-            SendTo_Interecept = 6,
-            Recv_Interecept = 7,
-            RecvFrom_Interecept = 8,
+            WSASend = 2,
+            SendTo = 3,
+            Recv = 4,
+            WSARecv = 5,
+            RecvFrom = 6,
+            Send_Interecept = 7,
+            WSASend_Interecept = 8,
+            SendTo_Interecept = 9,
+            Recv_Interecept = 10,
+            WSARecv_Interecept = 11,
+            RecvFrom_Interecept = 12,
         }
 
         public enum IPType

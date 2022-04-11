@@ -36,7 +36,11 @@ namespace WPELibrary.Lib
             private static void SocketToQueue_Thread(object ob)
             {
                 Socket_Packet sp = (Socket_Packet)ob;
-                qSocket_Packet.Enqueue(sp);
+
+                lock (qSocket_Packet)
+                {
+                    qSocket_Packet.Enqueue(sp);
+                }                
             }
 
             #endregion
@@ -102,31 +106,45 @@ namespace WPELibrary.Lib
 
                             string sIP_From = "", sIP_To = "";
 
-                            if (sType.Equals(Socket_Packet.SocketType.Recv))
-                            {                              
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                            }
-                            else if (sType.Equals(Socket_Packet.SocketType.Send))
-                            {                              
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-                            }
-                            else if (sType.Equals(Socket_Packet.SocketType.SendTo))
-                            {                              
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                                sIP_To = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
-                            }
-                            else if (sType.Equals(Socket_Packet.SocketType.RecvFrom))
-                            {                               
-                                sIP_From = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                            }
-                            else
-                            {                               
-                                sIP_From = "127.0.0.1";
-                                sIP_To = "127.0.0.1";
-                            }
+                            switch (sType)
+                            {
+                                case Socket_Packet.SocketType.Recv:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+                                    sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+
+                                    break;
+                                case Socket_Packet.SocketType.WSARecv:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+                                    sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+
+                                    break;
+                                case Socket_Packet.SocketType.Send:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                    sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+
+                                    break;
+                                case Socket_Packet.SocketType.WSASend:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                    sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+
+                                    break;
+                                case Socket_Packet.SocketType.SendTo:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                    sIP_To = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
+
+                                    break;
+                                case Socket_Packet.SocketType.RecvFrom:
+
+                                    sIP_From = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
+                                    sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+
+                                    break;
+                            }                         
 
                             Socket_Packet_Info si = new Socket_Packet_Info(iIndex, sType, iSocket, sIP_From, sIP_To, iResLen, sData, bBuffer);
 
@@ -258,7 +276,11 @@ namespace WPELibrary.Lib
             private static void LogToQueue_Thread(object ob)
             {
                 Socket_Log sl = (Socket_Log)ob;
-                qSocket_Log.Enqueue(sl);
+
+                lock (qSocket_Log)
+                {
+                    qSocket_Log.Enqueue(sl);
+                }               
             }
 
             #endregion

@@ -74,8 +74,6 @@ namespace WPELibrary
             this.rtbGB2312 = new System.Windows.Forms.RichTextBox();
             this.tpLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
-            this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.导出到ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -135,12 +133,14 @@ namespace WPELibrary
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.dgvFilterList = new System.Windows.Forms.DataGridView();
-            this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cFilterIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFilterSearch = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFilterModify = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bgwLogList = new System.ComponentModel.BackgroundWorker();
+            this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilter_Size.SuspendLayout();
             this.gbFilter_Type.SuspendLayout();
             this.gbBottom.SuspendLayout();
@@ -207,7 +207,7 @@ namespace WPELibrary
             this.txtCheck_IP.Name = "txtCheck_IP";
             this.txtCheck_IP.Size = new System.Drawing.Size(399, 22);
             this.txtCheck_IP.TabIndex = 38;
-            this.txtCheck_IP.Text = "0.0.0.0";
+            this.txtCheck_IP.Text = "0.0.0.0;127.0.0.1";
             this.txtCheck_IP.WordWrap = false;
             // 
             // cbDisplay_RecvFrom
@@ -564,21 +564,6 @@ namespace WPELibrary
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLogList.Size = new System.Drawing.Size(711, 132);
             this.dgvLogList.TabIndex = 0;
-            // 
-            // cTime
-            // 
-            this.cTime.DataPropertyName = "Time";
-            this.cTime.HeaderText = "记录时间";
-            this.cTime.Name = "cTime";
-            this.cTime.ReadOnly = true;
-            // 
-            // cContent
-            // 
-            this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cContent.DataPropertyName = "Content";
-            this.cContent.HeaderText = "日志内容";
-            this.cContent.Name = "cContent";
-            this.cContent.ReadOnly = true;
             // 
             // cmsLogList
             // 
@@ -1040,7 +1025,7 @@ namespace WPELibrary
             this.cType.Name = "cType";
             this.cType.ReadOnly = true;
             this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cType.Width = 55;
+            this.cType.Width = 65;
             // 
             // cSocket
             // 
@@ -1062,7 +1047,7 @@ namespace WPELibrary
             this.cFrom.Name = "cFrom";
             this.cFrom.ReadOnly = true;
             this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cFrom.Width = 150;
+            this.cFrom.Width = 160;
             // 
             // Column5
             // 
@@ -1073,7 +1058,7 @@ namespace WPELibrary
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
             this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 150;
+            this.Column5.Width = 160;
             // 
             // cLen
             // 
@@ -1135,10 +1120,6 @@ namespace WPELibrary
             this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
             this.dgvFilterList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellDoubleClick);
             // 
-            // bgwLogList
-            // 
-            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
-            // 
             // cCheck
             // 
             this.cCheck.DataPropertyName = "ISCheck";
@@ -1179,6 +1160,26 @@ namespace WPELibrary
             this.cFilterModify.Name = "cFilterModify";
             this.cFilterModify.ReadOnly = true;
             this.cFilterModify.Visible = false;
+            // 
+            // bgwLogList
+            // 
+            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
+            // 
+            // cTime
+            // 
+            this.cTime.DataPropertyName = "Time";
+            this.cTime.HeaderText = "记录时间";
+            this.cTime.Name = "cTime";
+            this.cTime.ReadOnly = true;
+            this.cTime.Width = 120;
+            // 
+            // cContent
+            // 
+            this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cContent.DataPropertyName = "Content";
+            this.cContent.HeaderText = "日志内容";
+            this.cContent.Name = "cContent";
+            this.cContent.ReadOnly = true;
             // 
             // Socket_Form
             // 
@@ -1322,8 +1323,11 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem 导出到ExcelToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem 清空此列表ToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterSearch;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterModify;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
@@ -1331,10 +1335,7 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterSearch;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterModify;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
     }
 }
