@@ -6,6 +6,7 @@ using WPELibrary.Lib;
 using System.Diagnostics;
 using System.Drawing;
 using EasyHook;
+using System.Threading.Tasks;
 
 namespace WPELibrary
 {
@@ -16,15 +17,13 @@ namespace WPELibrary
         private int Send_CNT = 0;
         private int Send_Success_CNT = 0;
         private int Send_Fail_CNT = 0;
-        private int iColNum = 500;
 
         public int Select_Index = 0;
        
         #region//窗体加载
         public Socket_Send_Form()
         {
-            InitializeComponent();
-            this.InitDGV();
+            InitializeComponent();            
         }
 
         private void SocketSend_Form_Load(object sender, EventArgs e)
@@ -37,14 +36,24 @@ namespace WPELibrary
             this.bSend.Enabled = true;
             this.bSendStop.Enabled = false;
 
+            this.InitDGV();
             this.InitSocketSendInfo();
             this.ShowStepValue();
         }
+
+
         #endregion
 
         #region//初始化
         private void InitDGV()
         {
+            int iColNum = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen;
+
+            if (iColNum > 500)
+            {
+                iColNum = 500;
+            }
+
             for (int i = 0; i < iColNum; i++)
             {
                 DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
@@ -63,7 +72,7 @@ namespace WPELibrary
 
             dgvSocketSend.RowHeadersWidth = 100;
             dgvSocketSend.Rows.Add();
-            dgvSocketSend.Rows[0].HeaderCell.Value = "封包数据";
+            dgvSocketSend.Rows[0].HeaderCell.Value = "封包数据";            
         }
 
         private void InitSocketSendInfo()
@@ -75,6 +84,11 @@ namespace WPELibrary
 
             string sData = Socket_Operation.Byte_To_Hex(Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer);
             ShowSocketSendData(sData);
+        }
+
+        private void dgvSocketSend_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            e.Column.FillWeight = 10;
         }
         #endregion
 
@@ -372,6 +386,6 @@ namespace WPELibrary
                     break;
             }
         }
-        #endregion
+        #endregion        
     }
 }

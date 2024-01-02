@@ -141,6 +141,7 @@ namespace WPELibrary
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Filter_Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Filter_Form";
             this.Load += new System.EventHandler(this.Filter_Form_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).EndInit();

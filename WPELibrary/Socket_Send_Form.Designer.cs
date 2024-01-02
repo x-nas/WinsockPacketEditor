@@ -413,7 +413,7 @@ namespace WPELibrary
             // 
             this.nudStepIndex.Location = new System.Drawing.Point(87, 15);
             this.nudStepIndex.Maximum = new decimal(new int[] {
-            500,
+            9999,
             0,
             0,
             0});
@@ -527,6 +527,7 @@ namespace WPELibrary
             this.dgvSocketSend.Size = new System.Drawing.Size(739, 90);
             this.dgvSocketSend.TabIndex = 6;
             this.dgvSocketSend.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellClick);
+            this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);
             this.dgvSocketSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSocketSend_KeyDown);
             // 
             // Socket_Send_Form
@@ -542,12 +543,15 @@ namespace WPELibrary
             this.Controls.Add(this.gbSend1);
             this.Controls.Add(this.gbSend_Bottom);
             this.Controls.Add(this.ssSocketSend);
+            this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Socket_Send_Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "发送封包";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.SocketSend_Form_Load);
             this.ssSocketSend.ResumeLayout(false);
             this.ssSocketSend.PerformLayout();

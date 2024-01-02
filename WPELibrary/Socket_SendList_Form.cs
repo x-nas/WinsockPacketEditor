@@ -11,7 +11,7 @@ namespace WPELibrary
         #region//窗体加载
         public Socket_SendList_Form()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
         private void SocketSendList_Form_Load(object sender, EventArgs e)
@@ -160,12 +160,13 @@ namespace WPELibrary
                                     }
 
                                     Socket_Cache.SocketSendList.SendPacketList_ByIndex(iSocket, j);
+
+                                    Socket_Cache.SocketSendList.Loop_Send_CNT++;
                                 }
                             }
                         }
                     }
-
-                    Socket_Cache.SocketSendList.Loop_Send_CNT++;
+                    
                     int iLoop_UnSend = Socket_Cache.SocketSendList.Loop_CNT - Socket_Cache.SocketSendList.Loop_Send_CNT;
 
                     if (iLoop_UnSend > 0)

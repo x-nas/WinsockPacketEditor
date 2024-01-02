@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using WPELibrary.Lib;
 using EasyHook;
+using System.Security.Policy;
 
 namespace ProcessInjector
 {
@@ -14,6 +15,7 @@ namespace ProcessInjector
         private string ProcessName = "";
         private string ProcessPath = "";
         private int ProcessID = -1;
+        private string sHelpURL = "https://www.52pojie.cn/thread-1446781-1-1.html";
 
         #region//DLL 引用
 
@@ -29,6 +31,15 @@ namespace ProcessInjector
             InitializeComponent();
 
             this.Text = "进程注入器（x86, x64自适应）";
+
+            ToolTip ttSelectProcess = new ToolTip();
+            ttSelectProcess.SetToolTip(bSelectProcess, "选择进程");
+
+            ToolTip ttInject = new ToolTip();
+            ttInject.SetToolTip(bInject, "注入进程");
+
+            ToolTip ttHelp = new ToolTip();
+            ttHelp.SetToolTip(pbHelp, "帮助");
 
             Version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
             ShowLog("当前内核版本：" + Version);            
@@ -130,6 +141,13 @@ namespace ProcessInjector
             {                
                 ShowLog("出现错误：" + ex.Message);                
             }
+        }
+        #endregion
+
+        #region//帮助
+        private void pbHelp_Click(object sender, EventArgs e)
+        {
+            Process.Start(sHelpURL);
         }
         #endregion
     }

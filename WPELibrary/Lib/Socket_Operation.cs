@@ -111,6 +111,16 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
+        public static string Byte_To_Ascii(byte[] buffer)
+        {
+            string sReturn = "";
+
+            Encoding chs = Encoding.GetEncoding("Ascii");
+            sReturn = chs.GetString(buffer);
+
+            return sReturn;
+        }
+
         public static string Byte_To_GB2312(byte[] buffer)
         {
             string sReturn = "";

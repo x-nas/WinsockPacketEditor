@@ -74,6 +74,8 @@ namespace WPELibrary
             this.rtbGB2312 = new System.Windows.Forms.RichTextBox();
             this.tpLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
+            this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.导出到ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -139,8 +141,8 @@ namespace WPELibrary
             this.cFilterSearch = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFilterModify = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
-            this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tpASCII = new System.Windows.Forms.TabPage();
+            this.rtbASCII = new System.Windows.Forms.RichTextBox();
             this.gbFilter_Size.SuspendLayout();
             this.gbFilter_Type.SuspendLayout();
             this.gbBottom.SuspendLayout();
@@ -162,6 +164,7 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.gbFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
+            this.tpASCII.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbDisplay_SendTo
@@ -390,6 +393,7 @@ namespace WPELibrary
             this.tcPacketInfo.Controls.Add(this.tpDEC);
             this.tcPacketInfo.Controls.Add(this.tpBIN);
             this.tcPacketInfo.Controls.Add(this.tpUNICODE);
+            this.tcPacketInfo.Controls.Add(this.tpASCII);
             this.tcPacketInfo.Controls.Add(this.tpUTF8);
             this.tcPacketInfo.Controls.Add(this.tpGB2312);
             this.tcPacketInfo.Controls.Add(this.tpLog);
@@ -565,6 +569,22 @@ namespace WPELibrary
             this.dgvLogList.Size = new System.Drawing.Size(711, 132);
             this.dgvLogList.TabIndex = 0;
             // 
+            // cTime
+            // 
+            this.cTime.DataPropertyName = "Time";
+            this.cTime.HeaderText = "记录时间";
+            this.cTime.Name = "cTime";
+            this.cTime.ReadOnly = true;
+            this.cTime.Width = 120;
+            // 
+            // cContent
+            // 
+            this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cContent.DataPropertyName = "Content";
+            this.cContent.HeaderText = "日志内容";
+            this.cContent.Name = "cContent";
+            this.cContent.ReadOnly = true;
+            // 
             // cmsLogList
             // 
             this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -718,6 +738,7 @@ namespace WPELibrary
             // ssStatusInfo_Top
             // 
             this.ssStatusInfo_Top.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ssStatusInfo_Top.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.ssStatusInfo_Top.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlSystemInfo,
             this.toolStripStatusLabel3,
@@ -959,9 +980,10 @@ namespace WPELibrary
             // 
             // txtSearch
             // 
+            this.txtSearch.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.Location = new System.Drawing.Point(131, 18);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(320, 23);
+            this.txtSearch.Size = new System.Drawing.Size(320, 22);
             this.txtSearch.TabIndex = 1;
             // 
             // lSearch
@@ -1165,21 +1187,25 @@ namespace WPELibrary
             // 
             this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
             // 
-            // cTime
+            // tpASCII
             // 
-            this.cTime.DataPropertyName = "Time";
-            this.cTime.HeaderText = "记录时间";
-            this.cTime.Name = "cTime";
-            this.cTime.ReadOnly = true;
-            this.cTime.Width = 120;
+            this.tpASCII.Controls.Add(this.rtbASCII);
+            this.tpASCII.Location = new System.Drawing.Point(4, 26);
+            this.tpASCII.Name = "tpASCII";
+            this.tpASCII.Size = new System.Drawing.Size(711, 132);
+            this.tpASCII.TabIndex = 8;
+            this.tpASCII.Text = "ASCII";
+            this.tpASCII.UseVisualStyleBackColor = true;
             // 
-            // cContent
+            // rtbASCII
             // 
-            this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cContent.DataPropertyName = "Content";
-            this.cContent.HeaderText = "日志内容";
-            this.cContent.Name = "cContent";
-            this.cContent.ReadOnly = true;
+            this.rtbASCII.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbASCII.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtbASCII.Location = new System.Drawing.Point(0, 0);
+            this.rtbASCII.Name = "rtbASCII";
+            this.rtbASCII.Size = new System.Drawing.Size(711, 132);
+            this.rtbASCII.TabIndex = 3;
+            this.rtbASCII.Text = "";
             // 
             // Socket_Form
             // 
@@ -1199,6 +1225,7 @@ namespace WPELibrary
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "Socket_Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "封包拦截器";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DLL_Form_FormClosed);
             this.Load += new System.EventHandler(this.DLL_Form_Load);
@@ -1229,6 +1256,7 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.gbFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
+            this.tpASCII.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1337,5 +1365,7 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
         private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
+        private System.Windows.Forms.TabPage tpASCII;
+        private System.Windows.Forms.RichTextBox rtbASCII;
     }
 }

@@ -100,11 +100,11 @@ namespace WPELibrary
                 this.rtbDEC.Clear();
                 this.rtbBIN.Clear();
                 this.rtbUNICODE.Clear();
+                this.rtbASCII.Clear();
                 this.rtbUTF8.Clear();
                 this.rtbGB2312.Clear();
                 
-                this.dgvSocketList.Rows.Clear();
-                this.dgvLogList.Rows.Clear();
+                this.dgvSocketList.Rows.Clear();                
 
                 Socket_Operation.CheckCNT = 0;
                 Socket_Cache.SocketQueue.ResetQueue();
@@ -282,7 +282,14 @@ namespace WPELibrary
 
                         #region//发送
                         if (Select_Index > -1)
-                        {
+                        {                            
+                            int iSocketLen = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen;
+
+                            if (iSocketLen > 500)
+                            {
+                                MessageBox.Show("选择的封包较大，仅显示前500个数据！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+
                             Socket_Send_Form ssForm = new Socket_Send_Form();
                             ssForm.Select_Index = Select_Index;
                             ssForm.Show();
@@ -466,9 +473,12 @@ namespace WPELibrary
                                 this.rtbUNICODE.Invoke((MethodInvoker)delegate { this.rtbUNICODE.Text = Socket_Operation.Byte_To_Unicode(bSelected); });
                                 break;
                             case 4:
-                                this.rtbUTF8.Invoke((MethodInvoker)delegate { this.rtbUTF8.Text = Socket_Operation.Byte_To_UTF8(bSelected); });
+                                this.rtbASCII.Invoke((MethodInvoker)delegate { this.rtbASCII.Text = Socket_Operation.Byte_To_Ascii(bSelected); });
                                 break;
                             case 5:
+                                this.rtbUTF8.Invoke((MethodInvoker)delegate { this.rtbUTF8.Text = Socket_Operation.Byte_To_UTF8(bSelected); });
+                                break;
+                            case 6:
                                 this.rtbGB2312.Invoke((MethodInvoker)delegate { this.rtbGB2312.Text = Socket_Operation.Byte_To_GB2312(bSelected); });
                                 break;
                         }

@@ -31,6 +31,7 @@ namespace ProcessInjector
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Injector_Form));
             this.pTop = new System.Windows.Forms.Panel();
+            this.pbHelp = new System.Windows.Forms.PictureBox();
             this.bInject = new System.Windows.Forms.Button();
             this.bSelectProcess = new System.Windows.Forms.Button();
             this.tbProcessID = new System.Windows.Forms.TextBox();
@@ -38,11 +39,13 @@ namespace ProcessInjector
             this.pFill = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.pTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbHelp)).BeginInit();
             this.pFill.SuspendLayout();
             this.SuspendLayout();
             // 
             // pTop
             // 
+            this.pTop.Controls.Add(this.pbHelp);
             this.pTop.Controls.Add(this.bInject);
             this.pTop.Controls.Add(this.bSelectProcess);
             this.pTop.Controls.Add(this.tbProcessID);
@@ -51,14 +54,25 @@ namespace ProcessInjector
             this.pTop.Location = new System.Drawing.Point(0, 0);
             this.pTop.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.pTop.Name = "pTop";
-            this.pTop.Size = new System.Drawing.Size(434, 45);
+            this.pTop.Size = new System.Drawing.Size(460, 45);
             this.pTop.TabIndex = 0;
+            // 
+            // pbHelp
+            // 
+            this.pbHelp.Image = global::ProcessInjector.Properties.Resources.help;
+            this.pbHelp.Location = new System.Drawing.Point(430, 13);
+            this.pbHelp.Name = "pbHelp";
+            this.pbHelp.Size = new System.Drawing.Size(20, 20);
+            this.pbHelp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbHelp.TabIndex = 4;
+            this.pbHelp.TabStop = false;
+            this.pbHelp.Click += new System.EventHandler(this.pbHelp_Click);
             // 
             // bInject
             // 
             this.bInject.Location = new System.Drawing.Point(358, 9);
             this.bInject.Name = "bInject";
-            this.bInject.Size = new System.Drawing.Size(66, 30);
+            this.bInject.Size = new System.Drawing.Size(60, 30);
             this.bInject.TabIndex = 3;
             this.bInject.Text = "注 入";
             this.bInject.UseVisualStyleBackColor = true;
@@ -87,7 +101,7 @@ namespace ProcessInjector
             this.lProcessName.AutoSize = true;
             this.lProcessName.Location = new System.Drawing.Point(5, 16);
             this.lProcessName.Name = "lProcessName";
-            this.lProcessName.Size = new System.Drawing.Size(68, 17);
+            this.lProcessName.Size = new System.Drawing.Size(72, 15);
             this.lProcessName.TabIndex = 0;
             this.lProcessName.Text = "进程名称：";
             // 
@@ -97,7 +111,7 @@ namespace ProcessInjector
             this.pFill.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pFill.Location = new System.Drawing.Point(0, 45);
             this.pFill.Name = "pFill";
-            this.pFill.Size = new System.Drawing.Size(434, 126);
+            this.pFill.Size = new System.Drawing.Size(460, 126);
             this.pFill.TabIndex = 1;
             // 
             // rtbLog
@@ -109,7 +123,7 @@ namespace ProcessInjector
             this.rtbLog.Location = new System.Drawing.Point(0, 0);
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
-            this.rtbLog.Size = new System.Drawing.Size(434, 126);
+            this.rtbLog.Size = new System.Drawing.Size(460, 126);
             this.rtbLog.TabIndex = 0;
             this.rtbLog.Text = "";
             // 
@@ -117,18 +131,20 @@ namespace ProcessInjector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(434, 171);
+            this.ClientSize = new System.Drawing.Size(460, 171);
             this.Controls.Add(this.pFill);
             this.Controls.Add(this.pTop);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "Injector_Form";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "进程注入器";
             this.pTop.ResumeLayout(false);
             this.pTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbHelp)).EndInit();
             this.pFill.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -143,6 +159,7 @@ namespace ProcessInjector
         private System.Windows.Forms.Panel pFill;
         private System.Windows.Forms.RichTextBox rtbLog;
         private System.Windows.Forms.Button bInject;
+        private System.Windows.Forms.PictureBox pbHelp;
     }
 }
 

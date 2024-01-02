@@ -3,7 +3,9 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Data;
 using System.IO;
+using System.Drawing;
 using WPELibrary.Lib;
+using System.Threading;
 
 namespace ProcessInjector
 {
@@ -11,9 +13,12 @@ namespace ProcessInjector
     {
         #region//窗体加载
         public ProcessList_Form()
-        {
+        {           
             InitializeComponent();            
+        }
 
+        private void ProcessList_Form_Load(object sender, EventArgs e)
+        {
             this.GetProcess();
         }
         #endregion
@@ -21,51 +26,42 @@ namespace ProcessInjector
         #region//获取所有进程
         public void GetProcess()
         {
-            DataTable dtProcess = new DataTable();
-            dtProcess.Columns.Add("ProcessName", typeof(string));
-            dtProcess.Columns.Add("PID", typeof(int));
-            dtProcess.Columns.Add("RAM", typeof(long));
-
-            lvProcessList.Items.Clear();
+            DataTable dtProcessList = new DataTable();
+            dtProcessList.Columns.Add("ICO", typeof(Image));
+            dtProcessList.Columns.Add("PName", typeof(string));
+            dtProcessList.Columns.Add("PID", typeof(int));
 
             Process[] procesArr = Process.GetProcesses();
-
-            int pCNT = procesArr.Length;            
+            int pCNT = procesArr.Length;
 
             foreach (Process p in procesArr)
             {
-                DataRow dr = dtProcess.NewRow();
-                dr[0] = p.ProcessName;
-                dr[1] = p.Id;
-                dr[2] = p.PrivateMemorySize64;
+                string sPName = p.ProcessName;
+                int iPID = p.Id;
+                Image iICO = IconFromFile(p);
 
-                dtProcess.Rows.Add(dr);
+                DataRow dr = dtProcessList.NewRow();
+                dr["ICO"] = iICO;
+                dr["PName"] = sPName;
+                dr["PID"] = iPID;
+                dtProcessList.Rows.Add(dr);
             }
-            
-            DataView dv = dtProcess.DefaultView;
-            dv.Sort = "ProcessName";
-            dtProcess = dv.ToTable();
 
-            foreach (DataRow drSort in dtProcess.Rows)
-            {
-                ListViewItem obj = new ListViewItem();
-                obj.Text = drSort[0].ToString();
-                obj.SubItems.Add(drSort[1].ToString());
-                obj.SubItems.Add(drSort[2].ToString());
-                lvProcessList.Items.Add(obj);
-            }            
+            DataView dv = dtProcessList.DefaultView;
+            dv.Sort = "PName";
+            dtProcessList = dv.ToTable();
 
-            lProcessCNT.Text = "进程数：" + pCNT.ToString();
+            dgvProcessList.DataSource = dtProcessList;
         }
         #endregion
 
         #region//选中某个进程
         private void bSelected_Click(object sender, EventArgs e)
         {
-            if (lvProcessList.SelectedItems.Count == 1)
+            if (dgvProcessList.SelectedRows.Count == 1)
             {
-                Program.PID = int.Parse(lvProcessList.SelectedItems[0].SubItems[1].Text.ToString().Trim());
-                Program.PNAME = lvProcessList.SelectedItems[0].SubItems[0].Text.ToString().Trim();
+                Program.PID = (int)dgvProcessList.SelectedRows[0].Cells["cProcessID"].Value;
+                Program.PNAME = dgvProcessList.SelectedRows[0].Cells["cProcessName"].Value.ToString();
 
                 this.Close();
             }
@@ -78,10 +74,77 @@ namespace ProcessInjector
 
         #region//刷新进程列表
         private void bRefresh_Click(object sender, EventArgs e)
-        {            
+        {
+            DataTable dtClear = (DataTable)dgvProcessList.DataSource;
+            dtClear.Rows.Clear();
+            dgvProcessList.DataSource = dtClear;
+
             GetProcess();
         }
         #endregion
+
+        #region//获取进程的图标
+        private Image IconFromFile(Process p)
+        {
+            string filePath = "";
+            Image image = null;
+
+            try
+            {
+                filePath = p.MainModule.FileName.Replace(".ni.dll", ".dll");
+            }
+            catch
+            {
+                filePath = "";
+            }
+
+            try
+            {
+                var extractor = new IconExtractor(filePath);
+                var icon = extractor.GetIcon(0);
+
+                Icon[] splitIcons = IconUtil.Split(icon);
+
+                Icon selectedIcon = null;
+
+                foreach (var item in splitIcons)
+                {
+                    if (selectedIcon == null)
+                    {
+                        selectedIcon = item;
+                    }
+                    else
+                    {
+                        if (IconUtil.GetBitCount(item) > IconUtil.GetBitCount(selectedIcon))
+                        {
+                            selectedIcon = item;
+                        }
+                        else if (IconUtil.GetBitCount(item) == IconUtil.GetBitCount(selectedIcon) && item.Width > selectedIcon.Width)
+                        {
+                            selectedIcon = item;
+                        }
+                    }
+                }
+
+                return selectedIcon.ToBitmap();
+            }
+            catch (Exception)
+            {
+                //
+            }
+
+            try
+            {
+                image = Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
+            }
+            catch
+            {
+                image = new Icon(SystemIcons.Application, 256, 256).ToBitmap();
+            }
+
+            return image;
+        }
+        #endregion        
 
         #region//选择程序
         private void bCreate_Click(object sender, EventArgs e)
@@ -99,5 +162,34 @@ namespace ProcessInjector
             base.Close();
         }
         #endregion
+
+        #region//列表样式
+        private void dgvProcessList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            dgvProcessList.ClearSelection();
+        }
+
+        private void dgvProcessList_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                {
+                    this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Control");
+                }
+            }
+        }
+
+        private void dgvProcessList_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                {
+                    this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Window");
+                }
+            }
+        }
+        #endregion        
     }
 }
