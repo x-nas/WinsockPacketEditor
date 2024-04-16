@@ -16,19 +16,24 @@ namespace WPELibrary
         private int Max_DataLen = 50;        
         private bool bWakeUp = true;
         private bool bResetCNT = false;
+        private string sLanguage = "";
 
         #region//加载窗体
-        public Socket_Form()
+        public Socket_Form(string sLanguage)
         {
+            MultiLanguage.SetDefaultLanguage(sLanguage);            
+
             InitializeComponent();
+
+            MultiLanguage.LoadLanguage(this, typeof(Socket_Form));
         }
 
         private void DLL_Form_Load(object sender, EventArgs e)
         {
-            this.Init();            
+            this.Init();
 
-            this.Text = "封包拦截器（x86, x64自适应）";
-            string sInjectInfo = string.Format("已注入目标进程 {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
+            sLanguage = MultiLanguage.GetDefaultLanguage("目标进程：", "Process: ");
+            string sInjectInfo = string.Format(sLanguage + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
             this.tlSystemInfo.Text = sInjectInfo;
 
             Socket_Cache.SocketSendList.InitSendList();
@@ -239,13 +244,13 @@ namespace WPELibrary
         #region//右键菜单
         private void cmsSocketInfo_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string sItemText = e.ClickedItem.Text;
+            string sItemText = e.ClickedItem.Name;
 
             try
             {
                 switch (sItemText)
                 {
-                    case "查看发送列表":
+                    case "tsmiShowBatchSend":
 
                         #region//查看发送列表
 
@@ -259,7 +264,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "添加到发送列表":
+                    case "tsmiBatchSend":
 
                         #region//添加到发送列表
 
@@ -278,7 +283,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "发送":
+                    case "tsmiSend":
 
                         #region//发送
                         if (Select_Index > -1)
@@ -287,7 +292,8 @@ namespace WPELibrary
 
                             if (iSocketLen > 500)
                             {
-                                MessageBox.Show("选择的封包较大，仅显示前500个数据！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                sLanguage = MultiLanguage.GetDefaultLanguage("选择的封包较大，仅显示前500个数据！", "The selected package is too large, only the first 500 bit of data are displayed!");
+                                MessageBox.Show(sLanguage, "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             }
 
                             Socket_Send_Form ssForm = new Socket_Send_Form();
@@ -298,7 +304,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "使用此套接字":
+                    case "tsmiUseSocket":
 
                         #region//使用此套接字
 
@@ -311,7 +317,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "导出到Excel":
+                    case "tsmiSaveSocketInfo":
 
                         #region//导出到Excel
 
@@ -330,13 +336,13 @@ namespace WPELibrary
 
         private void cmsLogList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string sItemText = e.ClickedItem.Text;
+            string sItemText = e.ClickedItem.Name;
 
             try
             {
                 switch (sItemText)
                 {
-                    case "导出到Excel":
+                    case "tslToExcel":
 
                         #region//导出到Excel
 
@@ -346,7 +352,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "清空此列表":
+                    case "tslClearList":
 
                         #region//清空此列表
 
@@ -395,12 +401,14 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Socket_Operation.ShowMessageBox("没有搜索到数据！");                    
+                    sLanguage = MultiLanguage.GetDefaultLanguage("没有搜索到数据！", "No data found in search!");
+                    Socket_Operation.ShowMessageBox(sLanguage);                    
                 }
             }
             else
             {
-                Socket_Operation.ShowMessageBox("请输入搜索内容！");                
+                sLanguage = MultiLanguage.GetDefaultLanguage("请输入搜索内容！", "Please enter search content!");
+                Socket_Operation.ShowMessageBox(sLanguage);                
             }
         }
         #endregion

@@ -6,7 +6,8 @@ using EasyHook;
 namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
-    {        
+    {
+        private string sLanguage = "";
         private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSARecv;
 
         #region//user32.dll 
@@ -363,7 +364,7 @@ namespace WPELibrary.Lib
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, String InArg1)
+        public unsafe void Run(RemoteHooking.IContext InContext, String InArg)
         {
             if (Environment.OSVersion.Version.Major >= 6)
             {
@@ -372,7 +373,7 @@ namespace WPELibrary.Lib
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Socket_Form());
+            Application.Run(new Socket_Form(InArg));            
         }
 
         #endregion
@@ -400,7 +401,8 @@ namespace WPELibrary.Lib
                 lhWSARecv = LocalHook.Create(LocalHook.GetProcAddress("WS2_32.dll", "WSARecv"), new DWSARecv(WSARecv_Hook), this);
                 lhWSARecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
 
-                Socket_Operation.DoLog("开始拦截！");
+                sLanguage = MultiLanguage.GetDefaultLanguage("开始拦截！", "Start Intercepting!");
+                Socket_Operation.DoLog(sLanguage);
             }
             catch (Exception ex)
             {
@@ -419,13 +421,15 @@ namespace WPELibrary.Lib
             lhWSASend.Dispose();
             lhWSARecv.Dispose();
 
-            Socket_Operation.DoLog("结束拦截！");
+            sLanguage = MultiLanguage.GetDefaultLanguage("结束拦截！", "Stop Interception!");
+            Socket_Operation.DoLog(sLanguage);
         }
         #endregion        
 
         #region//发送封包
         public static bool SendPacket(int socket, IntPtr buffer, int length)
         {
+            string sLan = "";
             bool bReturn = false;
 
             int res = send(socket, buffer, length, 0);
@@ -433,12 +437,14 @@ namespace WPELibrary.Lib
             if (res > 0)
             {
                 bReturn = true;
-                Socket_Operation.DoLog("发送封包成功！");
+                sLan = MultiLanguage.GetDefaultLanguage("发送封包成功！", "Successfully sent packet!");
+                Socket_Operation.DoLog(sLan);
             }
             else
             {
                 bReturn = false;
-                Socket_Operation.DoLog("发送封包失败！");
+                sLan = MultiLanguage.GetDefaultLanguage("发送封包失败！", "Sending packet failed!");
+                Socket_Operation.DoLog(sLan);
             }
 
             return bReturn;            

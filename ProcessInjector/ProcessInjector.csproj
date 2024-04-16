@@ -57,7 +57,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>wpe.ico</ApplicationIcon>
+    <ApplicationIcon>Icon\wpe.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>44209FC87EBD753DD5272FF2EE1F73CA14137823</ManifestCertificateThumbprint>
@@ -111,42 +111,70 @@
     <Compile Include="Injector_Form.Designer.cs">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="LanguageList_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LanguageList_Form.Designer.cs">
+      <DependentUpon>LanguageList_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lib\Process_Injector.cs" />
     <Compile Include="ProcessList_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ProcessList_Form.Designer.cs">
       <DependentUpon>ProcessList_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="Lib\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Injector_Form.en-US.resx">
+      <DependentUpon>Injector_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Injector_Form.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Injector_Form.zh-CN.resx">
+      <DependentUpon>Injector_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Injector_Form.zh-Hans.resx">
+      <DependentUpon>Injector_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LanguageList_Form.en-US.resx">
+      <DependentUpon>LanguageList_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LanguageList_Form.resx">
+      <DependentUpon>LanguageList_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcessList_Form.en-US.resx">
+      <DependentUpon>ProcessList_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessList_Form.resx">
       <DependentUpon>ProcessList_Form.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ProcessList_Form.zh-Hans.resx">
+      <DependentUpon>ProcessList_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">
@@ -167,8 +195,11 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="help.png" />
-    <Content Include="wpe.ico" />
+    <Content Include="Icon\enUS.png" />
+    <Content Include="Icon\zhCN.png" />
+    <Content Include="Icon\help.png" />
+    <Content Include="Icon\Language.png" />
+    <Content Include="Icon\wpe.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

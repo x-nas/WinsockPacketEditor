@@ -13,7 +13,8 @@ namespace WPELibrary
 
         private int iSearchRowIndex = 0;
         private int iModifyRowIndex = 1;
-        private int iColNum = 500;                
+        private int iColNum = 500;
+        private string sLanguage = "";
 
         #region//窗体加载
         public Filter_Form()
@@ -27,7 +28,10 @@ namespace WPELibrary
             string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
             int iFilterIndex = Filter_Index + 1;
             int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-            this.Text = "滤镜 -【 序号 " + iFilterIndex + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+
+            sLanguage = MultiLanguage.GetDefaultLanguage("滤镜 -【 序号 ", "Filter -【 Num ");
+
+            this.Text = sLanguage + iFilterIndex + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
             this.txtFilterName.Text = Filter_List.dtFilterList.Rows[Filter_Index]["FilterName"].ToString().Trim();
 
@@ -61,8 +65,12 @@ namespace WPELibrary
 
                 dgvFilter.Rows.Add();
                 dgvFilter.Rows.Add();
-                dgvFilter.Rows[iSearchRowIndex].HeaderCell.Value = "搜索封包";
-                dgvFilter.Rows[iModifyRowIndex].HeaderCell.Value = "修改封包";
+
+                sLanguage = MultiLanguage.GetDefaultLanguage("搜索封包", "Search");
+                dgvFilter.Rows[iSearchRowIndex].HeaderCell.Value = sLanguage;
+
+                sLanguage = MultiLanguage.GetDefaultLanguage("修改封包", "Modify");
+                dgvFilter.Rows[iModifyRowIndex].HeaderCell.Value = sLanguage;
             }            
         }
         #endregion
@@ -92,7 +100,8 @@ namespace WPELibrary
 
             if (string.IsNullOrEmpty(sApply_FilterName))
             {
-                Socket_Operation.ShowMessageBox("滤镜名称不能为空！");
+                sLanguage = MultiLanguage.GetDefaultLanguage("滤镜名称不能为空！", "Filter name cannot be empty!");
+                Socket_Operation.ShowMessageBox(sLanguage);
                 return;
             }
 

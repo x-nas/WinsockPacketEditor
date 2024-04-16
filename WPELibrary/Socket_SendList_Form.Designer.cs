@@ -30,19 +30,19 @@ namespace WPELibrary
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_SendList_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_SendList_Form));
             this.cmsSendList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiClear = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.保存此列表数据ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.加载发送列表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiLoadList = new System.Windows.Forms.ToolStripMenuItem();
             this.ssSocketSendList = new System.Windows.Forms.StatusStrip();
             this.tlLoop_Send = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlLoop_Send_CNT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -84,59 +84,56 @@ namespace WPELibrary
             // 
             // cmsSendList
             // 
+            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiDelete,
             this.toolStripSeparator1,
             this.tsmiClear,
             this.toolStripSeparator2,
-            this.保存此列表数据ToolStripMenuItem,
+            this.tsmiSaveList,
             this.toolStripSeparator3,
-            this.加载发送列表ToolStripMenuItem});
+            this.tsmiLoadList});
             this.cmsSendList.Name = "cmsBatchSend";
-            this.cmsSendList.Size = new System.Drawing.Size(161, 110);
             this.cmsSendList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSendList_ItemClicked);
             // 
             // tsmiDelete
             // 
+            resources.ApplyResources(this.tsmiDelete, "tsmiDelete");
             this.tsmiDelete.Name = "tsmiDelete";
-            this.tsmiDelete.Size = new System.Drawing.Size(160, 22);
-            this.tsmiDelete.Text = "从列表中移除";
             // 
             // toolStripSeparator1
             // 
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
             // 
             // tsmiClear
             // 
+            resources.ApplyResources(this.tsmiClear, "tsmiClear");
             this.tsmiClear.Name = "tsmiClear";
-            this.tsmiClear.Size = new System.Drawing.Size(160, 22);
-            this.tsmiClear.Text = "清空发送列表";
             // 
             // toolStripSeparator2
             // 
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
             // 
-            // 保存此列表数据ToolStripMenuItem
+            // tsmiSaveList
             // 
-            this.保存此列表数据ToolStripMenuItem.Name = "保存此列表数据ToolStripMenuItem";
-            this.保存此列表数据ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.保存此列表数据ToolStripMenuItem.Text = "保存此列表数据";
+            resources.ApplyResources(this.tsmiSaveList, "tsmiSaveList");
+            this.tsmiSaveList.Name = "tsmiSaveList";
             // 
             // toolStripSeparator3
             // 
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(157, 6);
             // 
-            // 加载发送列表ToolStripMenuItem
+            // tsmiLoadList
             // 
-            this.加载发送列表ToolStripMenuItem.Name = "加载发送列表ToolStripMenuItem";
-            this.加载发送列表ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.加载发送列表ToolStripMenuItem.Text = "加载发送列表";
+            resources.ApplyResources(this.tsmiLoadList, "tsmiLoadList");
+            this.tsmiLoadList.Name = "tsmiLoadList";
             // 
             // ssSocketSendList
             // 
+            resources.ApplyResources(this.ssSocketSendList, "ssSocketSendList");
             this.ssSocketSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlLoop_Send,
             this.tlLoop_Send_CNT,
@@ -146,102 +143,81 @@ namespace WPELibrary
             this.toolStripStatusLabel3,
             this.tlSendList_Fail,
             this.tlSendList_Fail_CNT});
-            this.ssSocketSendList.Location = new System.Drawing.Point(0, 326);
             this.ssSocketSendList.Name = "ssSocketSendList";
-            this.ssSocketSendList.Size = new System.Drawing.Size(681, 22);
             this.ssSocketSendList.SizingGrip = false;
-            this.ssSocketSendList.TabIndex = 51;
             // 
             // tlLoop_Send
             // 
+            resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
             this.tlLoop_Send.Name = "tlLoop_Send";
-            this.tlLoop_Send.Size = new System.Drawing.Size(71, 17);
-            this.tlLoop_Send.Text = "已循环次数:";
             // 
             // tlLoop_Send_CNT
             // 
+            resources.ApplyResources(this.tlLoop_Send_CNT, "tlLoop_Send_CNT");
             this.tlLoop_Send_CNT.Name = "tlLoop_Send_CNT";
-            this.tlLoop_Send_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlLoop_Send_CNT.Text = "0";
             // 
             // tlSplit
             // 
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
-            this.tlSplit.Size = new System.Drawing.Size(11, 17);
-            this.tlSplit.Text = "|";
             // 
             // tlSendList_Success
             // 
+            resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
             this.tlSendList_Success.Name = "tlSendList_Success";
-            this.tlSendList_Success.Size = new System.Drawing.Size(59, 17);
-            this.tlSendList_Success.Text = "发送成功:";
             // 
             // tlSendList_Success_CNT
             // 
+            resources.ApplyResources(this.tlSendList_Success_CNT, "tlSendList_Success_CNT");
             this.tlSendList_Success_CNT.Name = "tlSendList_Success_CNT";
-            this.tlSendList_Success_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlSendList_Success_CNT.Text = "0";
             // 
             // toolStripStatusLabel3
             // 
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel3.Text = "|";
             // 
             // tlSendList_Fail
             // 
+            resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
             this.tlSendList_Fail.Name = "tlSendList_Fail";
-            this.tlSendList_Fail.Size = new System.Drawing.Size(59, 17);
-            this.tlSendList_Fail.Text = "发送失败:";
             // 
             // tlSendList_Fail_CNT
             // 
+            resources.ApplyResources(this.tlSendList_Fail_CNT, "tlSendList_Fail_CNT");
             this.tlSendList_Fail_CNT.Name = "tlSendList_Fail_CNT";
-            this.tlSendList_Fail_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlSendList_Fail_CNT.Text = "0";
             // 
             // gbSend_Bottom
             // 
+            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Controls.Add(this.bSendListStop);
             this.gbSend_Bottom.Controls.Add(this.bSendList);
-            this.gbSend_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.gbSend_Bottom.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gbSend_Bottom.Location = new System.Drawing.Point(0, 271);
             this.gbSend_Bottom.Name = "gbSend_Bottom";
-            this.gbSend_Bottom.Size = new System.Drawing.Size(681, 55);
-            this.gbSend_Bottom.TabIndex = 52;
             this.gbSend_Bottom.TabStop = false;
             // 
             // bSendListStop
             // 
-            this.bSendListStop.Location = new System.Drawing.Point(589, 17);
+            resources.ApplyResources(this.bSendListStop, "bSendListStop");
             this.bSendListStop.Name = "bSendListStop";
-            this.bSendListStop.Size = new System.Drawing.Size(80, 29);
-            this.bSendListStop.TabIndex = 108;
-            this.bSendListStop.Text = "停 止 (&T)";
             this.bSendListStop.UseVisualStyleBackColor = true;
             this.bSendListStop.Click += new System.EventHandler(this.bSendStop_Click);
             // 
             // bSendList
             // 
-            this.bSendList.Location = new System.Drawing.Point(484, 17);
+            resources.ApplyResources(this.bSendList, "bSendList");
             this.bSendList.Name = "bSendList";
-            this.bSendList.Size = new System.Drawing.Size(80, 29);
-            this.bSendList.TabIndex = 107;
-            this.bSendList.Text = "发 送 (&F)";
             this.bSendList.UseVisualStyleBackColor = true;
             this.bSendList.Click += new System.EventHandler(this.bSend_Click);
             // 
             // nudLoop_Int
             // 
+            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Increment = new decimal(new int[] {
             100,
             0,
             0,
             0});
-            this.nudLoop_Int.Location = new System.Drawing.Point(598, 16);
             this.nudLoop_Int.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -253,9 +229,6 @@ namespace WPELibrary
             0,
             0});
             this.nudLoop_Int.Name = "nudLoop_Int";
-            this.nudLoop_Int.Size = new System.Drawing.Size(71, 23);
-            this.nudLoop_Int.TabIndex = 112;
-            this.nudLoop_Int.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nudLoop_Int.Value = new decimal(new int[] {
             1000,
             0,
@@ -264,7 +237,7 @@ namespace WPELibrary
             // 
             // nudLoop_CNT
             // 
-            this.nudLoop_CNT.Location = new System.Drawing.Point(421, 16);
+            resources.ApplyResources(this.nudLoop_CNT, "nudLoop_CNT");
             this.nudLoop_CNT.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -276,9 +249,6 @@ namespace WPELibrary
             0,
             0});
             this.nudLoop_CNT.Name = "nudLoop_CNT";
-            this.nudLoop_CNT.Size = new System.Drawing.Size(74, 23);
-            this.nudLoop_CNT.TabIndex = 111;
-            this.nudLoop_CNT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.nudLoop_CNT.Value = new decimal(new int[] {
             1,
             0,
@@ -287,38 +257,23 @@ namespace WPELibrary
             // 
             // lLoop_Int
             // 
-            this.lLoop_Int.AutoSize = true;
-            this.lLoop_Int.Location = new System.Drawing.Point(501, 19);
+            resources.ApplyResources(this.lLoop_Int, "lLoop_Int");
             this.lLoop_Int.Name = "lLoop_Int";
-            this.lLoop_Int.Size = new System.Drawing.Size(91, 17);
-            this.lLoop_Int.TabIndex = 104;
-            this.lLoop_Int.Text = "发送间隔(毫秒):";
             // 
             // lLoop_CNT
             // 
-            this.lLoop_CNT.AutoSize = true;
-            this.lLoop_CNT.Location = new System.Drawing.Point(360, 19);
+            resources.ApplyResources(this.lLoop_CNT, "lLoop_CNT");
             this.lLoop_CNT.Name = "lLoop_CNT";
-            this.lLoop_CNT.Size = new System.Drawing.Size(68, 17);
-            this.lLoop_CNT.TabIndex = 103;
-            this.lLoop_CNT.Text = "循环次数：";
             // 
             // txtUseSocket
             // 
-            this.txtUseSocket.Location = new System.Drawing.Point(250, 16);
+            resources.ApplyResources(this.txtUseSocket, "txtUseSocket");
             this.txtUseSocket.Name = "txtUseSocket";
-            this.txtUseSocket.Size = new System.Drawing.Size(100, 23);
-            this.txtUseSocket.TabIndex = 95;
-            this.txtUseSocket.WordWrap = false;
             // 
             // cbUseSocket
             // 
-            this.cbUseSocket.AutoSize = true;
-            this.cbUseSocket.Location = new System.Drawing.Point(143, 18);
+            resources.ApplyResources(this.cbUseSocket, "cbUseSocket");
             this.cbUseSocket.Name = "cbUseSocket";
-            this.cbUseSocket.Size = new System.Drawing.Size(111, 21);
-            this.cbUseSocket.TabIndex = 94;
-            this.cbUseSocket.Text = "使用此套接字：";
             this.cbUseSocket.UseVisualStyleBackColor = true;
             // 
             // bgwSendList
@@ -334,6 +289,7 @@ namespace WPELibrary
             // 
             // dgSendList
             // 
+            resources.ApplyResources(this.dgSendList, "dgSendList");
             this.dgSendList.AllowUserToAddRows = false;
             this.dgSendList.AllowUserToDeleteRows = false;
             this.dgSendList.AllowUserToResizeRows = false;
@@ -348,8 +304,6 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgSendList.ContextMenuStrip = this.cmsSendList;
-            this.dgSendList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgSendList.Location = new System.Drawing.Point(0, 0);
             this.dgSendList.MultiSelect = false;
             this.dgSendList.Name = "dgSendList";
             this.dgSendList.RowHeadersVisible = false;
@@ -358,79 +312,72 @@ namespace WPELibrary
             this.dgSendList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
             this.dgSendList.RowTemplate.Height = 23;
             this.dgSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgSendList.Size = new System.Drawing.Size(681, 225);
-            this.dgSendList.TabIndex = 55;
             // 
             // cCheck
             // 
             this.cCheck.FalseValue = "0";
-            this.cCheck.HeaderText = "";
+            resources.ApplyResources(this.cCheck, "cCheck");
             this.cCheck.IndeterminateValue = "0";
             this.cCheck.Name = "cCheck";
             this.cCheck.TrueValue = "1";
-            this.cCheck.Width = 30;
             // 
             // cIndex
             // 
-            this.cIndex.DataPropertyName = "序号";
+            this.cIndex.DataPropertyName = "ID";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
-            this.cIndex.HeaderText = "序号";
+            resources.ApplyResources(this.cIndex, "cIndex");
             this.cIndex.Name = "cIndex";
             this.cIndex.ReadOnly = true;
             this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cIndex.Width = 50;
             // 
             // cNote
             // 
-            this.cNote.DataPropertyName = "备注";
-            this.cNote.HeaderText = "备注";
+            this.cNote.DataPropertyName = "Remark";
+            resources.ApplyResources(this.cNote, "cNote");
             this.cNote.Name = "cNote";
             // 
             // cSocket
             // 
-            this.cSocket.DataPropertyName = "套接字";
+            this.cSocket.DataPropertyName = "Socket";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.cSocket.DefaultCellStyle = dataGridViewCellStyle2;
-            this.cSocket.HeaderText = "套接字";
+            resources.ApplyResources(this.cSocket, "cSocket");
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
             this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cSocket.Width = 60;
             // 
             // cIPTo
             // 
-            this.cIPTo.DataPropertyName = "目的地址";
+            this.cIPTo.DataPropertyName = "ToAddress";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             this.cIPTo.DefaultCellStyle = dataGridViewCellStyle3;
-            this.cIPTo.HeaderText = "目的地址";
+            resources.ApplyResources(this.cIPTo, "cIPTo");
             this.cIPTo.Name = "cIPTo";
             this.cIPTo.ReadOnly = true;
             this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cIPTo.Width = 150;
             // 
             // cLen
             // 
-            this.cLen.DataPropertyName = "长度";
+            this.cLen.DataPropertyName = "Len";
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             this.cLen.DefaultCellStyle = dataGridViewCellStyle4;
-            this.cLen.HeaderText = "长度";
+            resources.ApplyResources(this.cLen, "cLen");
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
             this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cLen.Width = 50;
             // 
             // cData
             // 
-            this.cData.DataPropertyName = "数据";
-            this.cData.HeaderText = "数据";
+            this.cData.DataPropertyName = "Data";
+            resources.ApplyResources(this.cData, "cData");
             this.cData.Name = "cData";
             this.cData.ReadOnly = true;
             this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cData.Width = 340;
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.nudLoop_Int);
             this.groupBox1.Controls.Add(this.cbSelectAll);
             this.groupBox1.Controls.Add(this.nudLoop_CNT);
@@ -438,40 +385,26 @@ namespace WPELibrary
             this.groupBox1.Controls.Add(this.cbUseSocket);
             this.groupBox1.Controls.Add(this.lLoop_CNT);
             this.groupBox1.Controls.Add(this.lLoop_Int);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 225);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(681, 46);
-            this.groupBox1.TabIndex = 54;
             this.groupBox1.TabStop = false;
             // 
             // cbSelectAll
             // 
-            this.cbSelectAll.AutoSize = true;
-            this.cbSelectAll.Location = new System.Drawing.Point(15, 18);
+            resources.ApplyResources(this.cbSelectAll, "cbSelectAll");
             this.cbSelectAll.Name = "cbSelectAll";
-            this.cbSelectAll.Size = new System.Drawing.Size(88, 21);
-            this.cbSelectAll.TabIndex = 110;
-            this.cbSelectAll.Text = "全选 / 取消";
             this.cbSelectAll.UseVisualStyleBackColor = true;
             this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
             // Socket_SendList_Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(681, 348);
             this.Controls.Add(this.dgSendList);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbSend_Bottom);
             this.Controls.Add(this.ssSocketSendList);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Socket_SendList_Form";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "发送列表";
             this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SocketSendList_Form_FormClosed);
             this.Load += new System.EventHandler(this.SocketSendList_Form_Load);
@@ -514,6 +447,13 @@ namespace WPELibrary
         private System.Windows.Forms.Label lLoop_CNT;
         private System.Windows.Forms.DataGridView dgSendList;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox cbSelectAll;
+        private System.Windows.Forms.NumericUpDown nudLoop_Int;
+        private System.Windows.Forms.NumericUpDown nudLoop_CNT;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveList;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadList;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cNote;
@@ -521,12 +461,5 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
-        private System.Windows.Forms.CheckBox cbSelectAll;
-        private System.Windows.Forms.NumericUpDown nudLoop_Int;
-        private System.Windows.Forms.NumericUpDown nudLoop_CNT;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem 保存此列表数据ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem 加载发送列表ToolStripMenuItem;
     }
 }

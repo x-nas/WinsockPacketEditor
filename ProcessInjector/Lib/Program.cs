@@ -10,8 +10,8 @@ namespace ProcessInjector
 
         public static int PID = -1;
         public static string PNAME = string.Empty;
-        public static string PATH = string.Empty;        
-       
+        public static string PATH = string.Empty;
+        
         [STAThread]
         static void Main()
         {

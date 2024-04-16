@@ -8,6 +8,8 @@ namespace WPELibrary
 {
     public partial class Socket_SendList_Form : Form
     {
+        private string sLanguage = "";
+
         #region//窗体加载
         public Socket_SendList_Form()
         {
@@ -20,7 +22,9 @@ namespace WPELibrary
 
             string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
             int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-            this.Text = "发送列表 - " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";            
+
+            sLanguage = MultiLanguage.GetDefaultLanguage("发送列表 - ", "Send List - ");
+            this.Text = sLanguage + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";            
 
             this.dgSendList.AutoGenerateColumns = false;
             this.bSendList.Enabled = true;
@@ -52,11 +56,11 @@ namespace WPELibrary
         #region//右键菜单
         private void cmsSendList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string sItemText = e.ClickedItem.Text;
+            string sItemText = e.ClickedItem.Name;
 
             switch (sItemText)
             {
-                case "从列表中移除":
+                case "tsmiDelete":
 
                     if (this.dgSendList.SelectedRows.Count == 1)
                     {
@@ -66,19 +70,19 @@ namespace WPELibrary
 
                     break;
 
-                case "清空发送列表":
+                case "tsmiClear":
 
                     Socket_Cache.SocketSendList.dtSocketSendList.Rows.Clear();
 
                     break;
 
-                case "保存此列表数据":
+                case "tsmiSaveList":
 
                     Socket_Operation.SaveListToFile();
 
                     break;
 
-                case "加载发送列表":
+                case "tsmiLoadList":
 
                     Socket_Operation.LoadFileToList();
 
@@ -126,7 +130,8 @@ namespace WPELibrary
             }
             else
             {
-                Socket_Operation.ShowMessageBox("请正确设置套接字！");                
+                sLanguage = MultiLanguage.GetDefaultLanguage("请正确设置套接字!", "Please set the socket correctly!");
+                Socket_Operation.ShowMessageBox(sLanguage);                
             }
         }
         

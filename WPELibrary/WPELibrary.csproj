@@ -68,6 +68,7 @@
       <DependentUpon>Filter_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\Filter_List.cs" />
+    <Compile Include="Lib\MultiLanguage.cs" />
     <Compile Include="Lib\Socket_Log.cs" />
     <Compile Include="Socket_Form.cs">
       <SubType>Form</SubType>
@@ -120,11 +121,21 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Filter_Form.en-US.resx">
+      <DependentUpon>Filter_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filter_Form.resx">
       <DependentUpon>Filter_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filter_Form.zh-Hans.resx">
+      <DependentUpon>Filter_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_Form.en-US.resx">
+      <DependentUpon>Socket_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
@@ -133,10 +144,25 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Socket_Form.zh-Hans.resx">
+      <DependentUpon>Socket_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_SendList_Form.en-US.resx">
+      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_SendList_Form.resx">
       <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Socket_SendList_Form.zh-Hans.resx">
+      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_Send_Form.en-US.resx">
+      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_Send_Form.resx">
+      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_Send_Form.zh-Hans.resx">
       <DependentUpon>Socket_Send_Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

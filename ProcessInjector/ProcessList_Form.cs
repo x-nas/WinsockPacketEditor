@@ -1,57 +1,35 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Data;
 using System.IO;
 using System.Drawing;
+using ProcessInjector.Lib;
 using WPELibrary.Lib;
-using System.Threading;
 
 namespace ProcessInjector
 {
     public partial class ProcessList_Form : Form
     {
+        private string sLanguage = "";
+
         #region//窗体加载
         public ProcessList_Form()
         {           
-            InitializeComponent();            
+            InitializeComponent();
+                        
+            MultiLanguage.LoadLanguage(this, typeof(ProcessList_Form));
         }
 
         private void ProcessList_Form_Load(object sender, EventArgs e)
         {
-            this.GetProcess();
+            this.ShowProcess();
         }
         #endregion
 
-        #region//获取所有进程
-        public void GetProcess()
+        #region//显示所有进程
+        public void ShowProcess()
         {
-            DataTable dtProcessList = new DataTable();
-            dtProcessList.Columns.Add("ICO", typeof(Image));
-            dtProcessList.Columns.Add("PName", typeof(string));
-            dtProcessList.Columns.Add("PID", typeof(int));
-
-            Process[] procesArr = Process.GetProcesses();
-            int pCNT = procesArr.Length;
-
-            foreach (Process p in procesArr)
-            {
-                string sPName = p.ProcessName;
-                int iPID = p.Id;
-                Image iICO = IconFromFile(p);
-
-                DataRow dr = dtProcessList.NewRow();
-                dr["ICO"] = iICO;
-                dr["PName"] = sPName;
-                dr["PID"] = iPID;
-                dtProcessList.Rows.Add(dr);
-            }
-
-            DataView dv = dtProcessList.DefaultView;
-            dv.Sort = "PName";
-            dtProcessList = dv.ToTable();
-
-            dgvProcessList.DataSource = dtProcessList;
+            dgvProcessList.DataSource = Process_Injector.GetProcess();
         }
         #endregion
 
@@ -67,7 +45,8 @@ namespace ProcessInjector
             }
             else
             {
-                Socket_Operation.ShowMessageBox("请选择一个进程！");
+                sLanguage = MultiLanguage.GetDefaultLanguage("请选择一个进程", "Please select a process");
+                Socket_Operation.ShowMessageBox(sLanguage + "！");
             }
         }
         #endregion
@@ -79,81 +58,21 @@ namespace ProcessInjector
             dtClear.Rows.Clear();
             dgvProcessList.DataSource = dtClear;
 
-            GetProcess();
+            this.ShowProcess();
         }
         #endregion
-
-        #region//获取进程的图标
-        private Image IconFromFile(Process p)
-        {
-            string filePath = "";
-            Image image = null;
-
-            try
-            {
-                filePath = p.MainModule.FileName.Replace(".ni.dll", ".dll");
-            }
-            catch
-            {
-                filePath = "";
-            }
-
-            try
-            {
-                var extractor = new IconExtractor(filePath);
-                var icon = extractor.GetIcon(0);
-
-                Icon[] splitIcons = IconUtil.Split(icon);
-
-                Icon selectedIcon = null;
-
-                foreach (var item in splitIcons)
-                {
-                    if (selectedIcon == null)
-                    {
-                        selectedIcon = item;
-                    }
-                    else
-                    {
-                        if (IconUtil.GetBitCount(item) > IconUtil.GetBitCount(selectedIcon))
-                        {
-                            selectedIcon = item;
-                        }
-                        else if (IconUtil.GetBitCount(item) == IconUtil.GetBitCount(selectedIcon) && item.Width > selectedIcon.Width)
-                        {
-                            selectedIcon = item;
-                        }
-                    }
-                }
-
-                return selectedIcon.ToBitmap();
-            }
-            catch (Exception)
-            {
-                //
-            }
-
-            try
-            {
-                image = Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
-            }
-            catch
-            {
-                image = new Icon(SystemIcons.Application, 256, 256).ToBitmap();
-            }
-
-            return image;
-        }
-        #endregion        
 
         #region//选择程序
         private void bCreate_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofdCreate = new OpenFileDialog();
-            ofdCreate.Title = "请选择要注入的应用程序";
+
+            sLanguage = MultiLanguage.GetDefaultLanguage("请选择要注入的应用程序", "Please select the program to inject");
+            ofdCreate.Title = sLanguage;
             ofdCreate.Multiselect = false;
             ofdCreate.InitialDirectory = "";
-            ofdCreate.Filter = "应用程序|*.exe|所有文件|*.*";
+            sLanguage = MultiLanguage.GetDefaultLanguage("应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*");
+            ofdCreate.Filter = sLanguage;
             ofdCreate.ShowDialog();
 
             Program.PID = -1;

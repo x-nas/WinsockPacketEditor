@@ -29,11 +29,11 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Filter_Form));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgvFilter = new System.Windows.Forms.DataGridView();
             this.gbFilterName = new System.Windows.Forms.GroupBox();
             this.txtFilterName = new System.Windows.Forms.TextBox();
@@ -45,104 +45,81 @@ namespace WPELibrary
             // 
             // dgvFilter
             // 
+            resources.ApplyResources(this.dgvFilter, "dgvFilter");
             this.dgvFilter.AllowUserToAddRows = false;
             this.dgvFilter.AllowUserToDeleteRows = false;
             this.dgvFilter.AllowUserToResizeColumns = false;
             this.dgvFilter.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilter.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilter.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvFilter.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilter.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvFilter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.dgvFilter.Location = new System.Drawing.Point(0, 0);
-            this.dgvFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilter.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgvFilter.MultiSelect = false;
             this.dgvFilter.Name = "dgvFilter";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilter.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvFilter.RowHeadersWidth = 100;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilter.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dgvFilter.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFilter.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvFilter.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvFilter.RowTemplate.Height = 23;
-            this.dgvFilter.Size = new System.Drawing.Size(684, 90);
-            this.dgvFilter.TabIndex = 2;
             this.dgvFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
             // 
             // gbFilterName
             // 
+            resources.ApplyResources(this.gbFilterName, "gbFilterName");
             this.gbFilterName.Controls.Add(this.txtFilterName);
-            this.gbFilterName.Location = new System.Drawing.Point(12, 97);
             this.gbFilterName.Name = "gbFilterName";
-            this.gbFilterName.Size = new System.Drawing.Size(305, 53);
-            this.gbFilterName.TabIndex = 4;
             this.gbFilterName.TabStop = false;
-            this.gbFilterName.Text = "[ 滤镜名称 ]";
             // 
             // txtFilterName
             // 
-            this.txtFilterName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtFilterName.Location = new System.Drawing.Point(3, 19);
+            resources.ApplyResources(this.txtFilterName, "txtFilterName");
             this.txtFilterName.Name = "txtFilterName";
-            this.txtFilterName.Size = new System.Drawing.Size(299, 23);
-            this.txtFilterName.TabIndex = 4;
-            this.txtFilterName.WordWrap = false;
             // 
             // bReset
             // 
-            this.bReset.Location = new System.Drawing.Point(337, 111);
+            resources.ApplyResources(this.bReset, "bReset");
             this.bReset.Name = "bReset";
-            this.bReset.Size = new System.Drawing.Size(75, 32);
-            this.bReset.TabIndex = 5;
-            this.bReset.Text = "重 置";
             this.bReset.UseVisualStyleBackColor = true;
             this.bReset.Click += new System.EventHandler(this.bReset_Click);
             // 
             // bApply
             // 
-            this.bApply.Location = new System.Drawing.Point(597, 111);
+            resources.ApplyResources(this.bApply, "bApply");
             this.bApply.Name = "bApply";
-            this.bApply.Size = new System.Drawing.Size(75, 32);
-            this.bApply.TabIndex = 6;
-            this.bApply.Text = "应 用";
             this.bApply.UseVisualStyleBackColor = true;
             this.bApply.Click += new System.EventHandler(this.bApply_Click);
             // 
             // Filter_Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(684, 159);
             this.Controls.Add(this.bApply);
             this.Controls.Add(this.bReset);
             this.Controls.Add(this.gbFilterName);
             this.Controls.Add(this.dgvFilter);
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Filter_Form";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Filter_Form";
             this.Load += new System.EventHandler(this.Filter_Form_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).EndInit();
             this.gbFilterName.ResumeLayout(false);

@@ -6,7 +6,6 @@ using WPELibrary.Lib;
 using System.Diagnostics;
 using System.Drawing;
 using EasyHook;
-using System.Threading.Tasks;
 
 namespace WPELibrary
 {
@@ -17,6 +16,7 @@ namespace WPELibrary
         private int Send_CNT = 0;
         private int Send_Success_CNT = 0;
         private int Send_Fail_CNT = 0;
+        private string sLanguage = "";
 
         public int Select_Index = 0;
        
@@ -31,7 +31,8 @@ namespace WPELibrary
             string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
             int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
 
-            this.Text = "发送封包 -【 序号 " + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+            sLanguage = MultiLanguage.GetDefaultLanguage("发送封包 -【 序号 ", "Send -【 Num ");
+            this.Text = sLanguage + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
             this.bSend.Enabled = true;
             this.bSendStop.Enabled = false;
@@ -72,7 +73,9 @@ namespace WPELibrary
 
             dgvSocketSend.RowHeadersWidth = 100;
             dgvSocketSend.Rows.Add();
-            dgvSocketSend.Rows[0].HeaderCell.Value = "封包数据";            
+
+            sLanguage = MultiLanguage.GetDefaultLanguage("封包数据", "Data");
+            dgvSocketSend.Rows[0].HeaderCell.Value = sLanguage;            
         }
 
         private void InitSocketSendInfo()
@@ -102,7 +105,8 @@ namespace WPELibrary
 
                 if (string.IsNullOrEmpty(sStepIndex) || string.IsNullOrEmpty(sStepLen))
                 {
-                    Socket_Operation.ShowMessageBox("请正确设置递进位置!");                    
+                    sLanguage = MultiLanguage.GetDefaultLanguage("请正确设置递进位置!", "Please set the progressive position correctly!");
+                    Socket_Operation.ShowMessageBox(sLanguage);                    
                     return;
                 }
             }            
@@ -146,7 +150,8 @@ namespace WPELibrary
 
             if (iSocket == 0)
             {
-                Socket_Operation.ShowMessageBox("套接字设置错误！");                
+                sLanguage = MultiLanguage.GetDefaultLanguage("套接字设置错误!", "Socket setting error!");
+                Socket_Operation.ShowMessageBox(sLanguage);                
                 return;
             }
 
@@ -154,7 +159,8 @@ namespace WPELibrary
 
             if (sSendData.Equals(""))
             {
-                Socket_Operation.ShowMessageBox("封包数据错误！");                
+                sLanguage = MultiLanguage.GetDefaultLanguage("封包数据错误!", "Packet data error!");
+                Socket_Operation.ShowMessageBox(sLanguage);                
                 return;
             }
 
@@ -162,7 +168,8 @@ namespace WPELibrary
             {
                 if (this.lStepIndex_Value.Text.Equals("") || this.lStepLen_Value.Text.Equals(""))
                 {
-                    Socket_Operation.ShowMessageBox("递进设置错误！");                    
+                    sLanguage = MultiLanguage.GetDefaultLanguage("递进设置错误!", "Progressive setting error!");
+                    Socket_Operation.ShowMessageBox(sLanguage);                    
                     return;
                 }
             }
@@ -362,11 +369,11 @@ namespace WPELibrary
         #region//右键菜单
         private void cmsSocketSend_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            string sItemText = e.ClickedItem.Text;
+            string sItemText = e.ClickedItem.Name;
 
             switch (sItemText)
             {
-                case "添加到发送列表":
+                case "tsmiBatchSend":
 
                     int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].Index;
                     int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());

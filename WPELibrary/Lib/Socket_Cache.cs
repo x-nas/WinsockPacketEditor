@@ -8,7 +8,8 @@ using System.ComponentModel;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {        
+    {
+        private static string sLanguage = "";
         public static bool Interecept_Recv, Interecept_RecvFrom, Interecept_Send, Interecept_SendTo;
         public static bool Display_Recv, Display_RecvFrom, Display_Send, Display_SendTo;
 
@@ -180,14 +181,14 @@ namespace WPELibrary.Lib
 
             #region//初始化发送列表
             public static void InitSendList()
-            {
-                dtSocketSendList.Columns.Add("序号", typeof(int));
-                dtSocketSendList.Columns.Add("备注", typeof(string));
-                dtSocketSendList.Columns.Add("套接字", typeof(int));
-                dtSocketSendList.Columns.Add("目的地址", typeof(string));
-                dtSocketSendList.Columns.Add("长度", typeof(int));
-                dtSocketSendList.Columns.Add("数据", typeof(string));
-                dtSocketSendList.Columns.Add("字节", typeof(byte[]));
+            {                
+                dtSocketSendList.Columns.Add("ID", typeof(int));                
+                dtSocketSendList.Columns.Add("Remark", typeof(string));                
+                dtSocketSendList.Columns.Add("Socket", typeof(int));                
+                dtSocketSendList.Columns.Add("ToAddress", typeof(string));                
+                dtSocketSendList.Columns.Add("Len", typeof(int));                
+                dtSocketSendList.Columns.Add("Data", typeof(string));                
+                dtSocketSendList.Columns.Add("Bytes", typeof(byte[]));
             }
             #endregion
 
@@ -208,13 +209,14 @@ namespace WPELibrary.Lib
             public static void SendList_Add(int iIndex, string sNote, int iSocket, string sIPTo, int iResLen, string sData, byte[] bBuffer)
             {
                 DataRow dr = dtSocketSendList.NewRow();
-                dr["序号"] = iIndex;
-                dr["备注"] = sNote;
-                dr["套接字"] = iSocket;
-                dr["目的地址"] = sIPTo;
-                dr["长度"] = iResLen;
-                dr["数据"] = sData;
-                dr["字节"] = bBuffer;
+                
+                dr["ID"] = iIndex;
+                dr["Remark"] = sNote;
+                dr["Socket"] = iSocket;
+                dr["ToAddress"] = sIPTo;
+                dr["Len"] = iResLen;
+                dr["Data"] = sData;
+                dr["Bytes"] = bBuffer;
                 dtSocketSendList.Rows.Add(dr);
             }
             #endregion
@@ -226,8 +228,8 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    int iLen = (int)dtSocketSendList.Rows[iIndex]["长度"];
-                    byte[] bBuffer = (byte[])dtSocketSendList.Rows[iIndex]["字节"];
+                    int iLen = (int)dtSocketSendList.Rows[iIndex]["Len"];
+                    byte[] bBuffer = (byte[])dtSocketSendList.Rows[iIndex]["Bytes"];
 
                     if (bBuffer.Length > 0)
                     {

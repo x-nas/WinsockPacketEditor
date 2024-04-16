@@ -7,6 +7,7 @@ namespace WPELibrary.Lib
     {
         private static int FilterListNum = 10;
         private static string FilterLog = "";
+        private static string sLanguage = "";
 
         public static DataTable dtFilterList = new DataTable();
 
@@ -24,7 +25,9 @@ namespace WPELibrary.Lib
                 DataRow drFilter = dtFilterList.NewRow();
                 drFilter["ISCheck"] = false;
                 drFilter["FilterIndex"] = i.ToString();
-                drFilter["FilterName"] = "滤镜 " + (i + 1).ToString();
+
+                sLanguage = MultiLanguage.GetDefaultLanguage("滤镜 ", "Filter ");
+                drFilter["FilterName"] = sLanguage + (i + 1).ToString();
                 drFilter["FilterSearch"] = "";
                 drFilter["FilterModify"] = "";
 
@@ -46,7 +49,8 @@ namespace WPELibrary.Lib
 
                     if (Check_ISCheck(i))
                     {
-                        FilterLog += "[滤镜 " + (i + 1).ToString() + "] - ";                        
+                        sLanguage = MultiLanguage.GetDefaultLanguage("滤镜", "Filter");
+                        FilterLog += "[" + sLanguage + " " + (i + 1).ToString() + "] - ";                        
 
                         if (Check_FilterSearch(i, bBuff))
                         {
@@ -71,7 +75,8 @@ namespace WPELibrary.Lib
 
                                 if (bSetOK)
                                 {
-                                    FilterLog += "过滤完成！";
+                                    sLanguage = MultiLanguage.GetDefaultLanguage("过滤完成！", "Filter completed!");
+                                    FilterLog += sLanguage;
                                     Socket_Operation.DoLog(FilterLog);
 
                                     break;
@@ -80,7 +85,8 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            FilterLog += "不匹配！";
+                            sLanguage = MultiLanguage.GetDefaultLanguage("不匹配！", "Mismatch!");
+                            FilterLog += sLanguage;
                         }
 
                         Socket_Operation.DoLog(FilterLog);
@@ -133,7 +139,8 @@ namespace WPELibrary.Lib
             }
             else
             {
-                FilterLog += "搜索条件";
+                sLanguage = MultiLanguage.GetDefaultLanguage("搜索条件", "Search Criteria");
+                FilterLog += sLanguage;
                 bResult = false;
             }
 

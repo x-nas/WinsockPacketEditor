@@ -30,12 +30,12 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//类别（中文）
-        protected string type_cn;
-        public string Type_CN
+        #region//类别名称
+        protected string type_name;
+        public string Type_Name
         {
-            get { return type_cn; }
-            set { type_cn = value; }
+            get { return type_name; }
+            set { type_name = value; }
         }
         #endregion
 
@@ -53,7 +53,7 @@ namespace WPELibrary.Lib
         {
             this.index = index;
             this.type = type;
-            this.type_cn = Socket_Operation.GetSocketType_CN(type);
+            this.type_name = Socket_Operation.GetSocketType_Name(type);
             this.socket = socket;
             this.from = from;
             this.to = to;

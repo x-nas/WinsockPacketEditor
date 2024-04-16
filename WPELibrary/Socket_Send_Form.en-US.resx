@@ -117,470 +117,90 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;lSend_Len.Parent" xml:space="preserve">
-    <value>gbSend1</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Len.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbStep.Text" xml:space="preserve">
-    <value>递进位置：</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="lStepLen_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>14, 17</value>
-  </data>
-  <data name="gbSend_Bottom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="nudStepLen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 23</value>
-  </data>
-  <data name="&gt;&gt;lStepLen_Value.Name" xml:space="preserve">
-    <value>lStepLen_Value</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Port.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbSend2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>182, 75</value>
-  </data>
-  <data name="lStepIndex_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 17</value>
-  </data>
-  <data name="&gt;&gt;bSendStop.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="nudLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>113</value>
-  </data>
-  <data name="lSend_Port.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lLoop_Int.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtSend_IP.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudStepIndex.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txtSend_IP.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="lLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;lSend_Len.Name" xml:space="preserve">
-    <value>lSend_Len</value>
-  </data>
-  <data name="tlSend_Fail_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;lStepLen_Value.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lSend_Socket.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="lStepLen_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 48</value>
-  </data>
-  <data name="lStepLen.Text" xml:space="preserve">
-    <value>每次步长：</value>
-  </data>
-  <data name="ssSocketSend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 177</value>
-  </data>
-  <data name="gbSend1.TabIndex" type="System.Int32, mscorlib">
-    <value>36</value>
-  </data>
-  <data name="&gt;&gt;lStepLen_Value.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tlSend_Success.Text" xml:space="preserve">
-    <value>成功:</value>
-  </data>
-  <data name="dgvSocketSend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;bgwSendPacket.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Success.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Name" xml:space="preserve">
-    <value>lLoop_Int</value>
-  </data>
-  <data name="gbSend_Bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>514, 100</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Name" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="tlSendPacket_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;lSend_Port.Name" xml:space="preserve">
-    <value>lSend_Port</value>
-  </data>
-  <data name="gbSend1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 75</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Port.Name" xml:space="preserve">
-    <value>txtSend_Port</value>
-  </data>
-  <data name="&gt;&gt;gbSend1.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="nudLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>112</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="dgvSocketSend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbSend1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 99</value>
-  </data>
-  <data name="txtSend_Socket.TabIndex" type="System.Int32, mscorlib">
-    <value>70</value>
-  </data>
-  <data name="lSend_Port.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="lSend_IP.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Socket.Parent" xml:space="preserve">
-    <value>gbSend1</value>
-  </data>
-  <data name="&gt;&gt;lSend_Port.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Socket_Send_Form</value>
-  </data>
-  <data name="&gt;&gt;bSend.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Fail_CNT.Name" xml:space="preserve">
-    <value>tlSend_Fail_CNT</value>
-  </data>
-  <data name="tlSend_Success_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="&gt;&gt;tSend.Name" xml:space="preserve">
-    <value>tSend</value>
-  </data>
-  <data name="&gt;&gt;txtSend_IP.Name" xml:space="preserve">
-    <value>txtSend_IP</value>
-  </data>
-  <data name="&gt;&gt;pSend_Top.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lSend_IP.Name" xml:space="preserve">
-    <value>lSend_IP</value>
-  </data>
-  <data name="lStepIndex_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>14, 17</value>
-  </data>
-  <data name="txtSend_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 23</value>
-  </data>
-  <data name="lLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 48</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;tsmiBatchSend.Name" xml:space="preserve">
-    <value>tsmiBatchSend</value>
-  </data>
-  <data name="lLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 17</value>
-  </data>
-  <data name="&gt;&gt;dgvSocketSend.Parent" xml:space="preserve">
-    <value>pSend_Top</value>
-  </data>
-  <data name="&gt;&gt;pSend_Top.Name" xml:space="preserve">
-    <value>pSend_Top</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;tsmiBatchSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlSend_Fail.Text" xml:space="preserve">
-    <value>失败:</value>
-  </data>
-  <data name="cbStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 16</value>
-  </data>
-  <data name="tlSplit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="bSendStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 25</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Len.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="&gt;&gt;lStepLen.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;bSendStop.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;lStepLen.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="txtSend_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 23</value>
-  </data>
-  <data name="tlSendPacket_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="txtSend_Port.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="ssSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>745, 22</value>
-  </data>
-  <data name="&gt;&gt;gbSend1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbStep.Name" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="lLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
+  <data name="tlSendPacket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 17</value>
   </data>
   <data name="tlSendPacket.Text" xml:space="preserve">
-    <value>已发送:</value>
-  </data>
-  <data name="&gt;&gt;gbSend2.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 45</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Success_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lSend_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 19</value>
-  </data>
-  <data name="&gt;&gt;gbSend2.Name" xml:space="preserve">
-    <value>gbSend2</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>循环：</value>
-  </data>
-  <data name="&gt;&gt;nudStepLen.Name" xml:space="preserve">
-    <value>nudStepLen</value>
-  </data>
-  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 23</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Fail.Name" xml:space="preserve">
-    <value>tlSend_Fail</value>
-  </data>
-  <data name="lSend_Socket.Text" xml:space="preserve">
-    <value>套接字：</value>
-  </data>
-  <data name="txtSend_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>58, 16</value>
-  </data>
-  <data name="pSend_Top.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Len.Name" xml:space="preserve">
-    <value>txtSend_Len</value>
-  </data>
-  <data name="lStepIndex_Value.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Port.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lSend_Port.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
-  </data>
-  <data name="lSend_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 17</value>
-  </data>
-  <data name="&gt;&gt;lSend_Port.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tlSendPacket_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lStepLen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
-  </data>
-  <data name="bSendStop.Text" xml:space="preserve">
-    <value>停 止 (&amp;T)</value>
-  </data>
-  <data name="&gt;&gt;nudStepIndex.Name" xml:space="preserve">
-    <value>nudStepIndex</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSend.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="lStepLen_Value.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="txtSend_Port.Size" type="System.Drawing.Size, System.Drawing">
-    <value>106, 23</value>
-  </data>
-  <data name="&gt;&gt;dgvSocketSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lLoop_CNT.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Name" xml:space="preserve">
-    <value>lLoop_CNT</value>
-  </data>
-  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 17</value>
-  </data>
-  <data name="nudLoop_Int.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
-  </data>
-  <data name="pSend_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>745, 96</value>
-  </data>
-  <data name="ssSocketSend.TabIndex" type="System.Int32, mscorlib">
-    <value>34</value>
-  </data>
-  <data name="&gt;&gt;lSend_Socket.Parent" xml:space="preserve">
-    <value>gbSend1</value>
-  </data>
-  <data name="&gt;&gt;txtSend_IP.Parent" xml:space="preserve">
-    <value>gbSend2</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="bSend.TabIndex" type="System.Int32, mscorlib">
-    <value>38</value>
-  </data>
-  <data name="nudStepLen.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;tlSendPacket_CNT.Name" xml:space="preserve">
-    <value>tlSendPacket_CNT</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbStep.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;dgvSocketSend.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;nudStepLen.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="txtSend_Len.TabIndex" type="System.Int32, mscorlib">
-    <value>90</value>
+    <value>Sent :</value>
   </data>
   <data name="tlSend_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
+    <value>60, 17</value>
   </data>
-  <data name="&gt;&gt;gbSend_Bottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlSend_Success.Text" xml:space="preserve">
+    <value>Success :</value>
   </data>
-  <data name="&gt;&gt;gbStep.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 17</value>
   </data>
-  <data name="lSend_Len.Text" xml:space="preserve">
-    <value>长度：</value>
+  <data name="tlSend_Fail.Text" xml:space="preserve">
+    <value>Fail :</value>
   </data>
-  <data name="&gt;&gt;nudStepIndex.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tlSendPacket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pSend_Top.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="bSendStop.Text" xml:space="preserve">
+    <value>Stop (&amp;T)</value>
   </data>
   <data name="bSend.Text" xml:space="preserve">
-    <value>发 送 (&amp;F)</value>
+    <value>Send (&amp;F)</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lSend_Port.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 17</value>
   </data>
-  <data name="&gt;&gt;tSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lSend_Port.Text" xml:space="preserve">
+    <value>To Port</value>
   </data>
-  <data name="gbStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>328, 100</value>
-  </data>
-  <data name="&gt;&gt;bSend.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>发送封包</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Name" xml:space="preserve">
-    <value>tlSplit</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Success_CNT.Name" xml:space="preserve">
-    <value>tlSend_Success_CNT</value>
+  <data name="lSend_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 17</value>
   </data>
   <data name="lSend_IP.Text" xml:space="preserve">
-    <value>目的IP：</value>
+    <value>To IP</value>
   </data>
-  <data name="gbSend2.TabIndex" type="System.Int32, mscorlib">
-    <value>37</value>
+  <data name="lSend_Len.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
   </data>
-  <data name="&gt;&gt;nudLoop_CNT.Name" xml:space="preserve">
-    <value>nudLoop_CNT</value>
+  <data name="lSend_Len.Text" xml:space="preserve">
+    <value>Length</value>
   </data>
-  <data name="dgvSocketSend.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="lSend_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="lSend_Socket.Text" xml:space="preserve">
+    <value>Socket</value>
   </data>
   <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 17</value>
+    <value>23, 17</value>
+  </data>
+  <data name="lLoop_Int.Text" xml:space="preserve">
+    <value>Int</value>
+  </data>
+  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>38, 17</value>
+  </data>
+  <data name="lLoop_CNT.Text" xml:space="preserve">
+    <value>Loop</value>
+  </data>
+  <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 26</value>
+  </data>
+  <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 22</value>
+  </data>
+  <data name="tsmiBatchSend.Text" xml:space="preserve">
+    <value>Add to send list</value>
+  </data>
+  <data name="gbStep.Text" xml:space="preserve">
+    <value>Progressive</value>
+  </data>
+  <data name="lStepLen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>34, 17</value>
+  </data>
+  <data name="lStepLen.Text" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="cbStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 21</value>
+  </data>
+  <data name="cbStep.Text" xml:space="preserve">
+    <value>Position</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6754,391 +6374,7 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="tlSplit.Text" xml:space="preserve">
-    <value>|</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Send Packet</value>
   </data>
-  <data name="bSend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>657, 110</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Socket.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;bSendStop.Name" xml:space="preserve">
-    <value>bSendStop</value>
-  </data>
-  <data name="nudStepIndex.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;cbStep.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lSend_IP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 19</value>
-  </data>
-  <data name="&gt;&gt;dgvSocketSend.Name" xml:space="preserve">
-    <value>dgvSocketSend</value>
-  </data>
-  <data name="txtSend_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 45</value>
-  </data>
-  <data name="txtSend_IP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 16</value>
-  </data>
-  <data name="&gt;&gt;lStepIndex_Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lStepLen_Value.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;nudStepIndex.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSend.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="txtSend_Port.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;lStepIndex_Value.Name" xml:space="preserve">
-    <value>lStepIndex_Value</value>
-  </data>
-  <data name="&gt;&gt;cbStep.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="gbSend1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;txtSend_IP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSend1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 26</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Len.Parent" xml:space="preserve">
-    <value>gbSend1</value>
-  </data>
-  <data name="lSend_Socket.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>745, 199</value>
-  </data>
-  <data name="&gt;&gt;lSend_Socket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lStepIndex_Value.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tlSend_Fail_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="lSend_Len.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="bSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 25</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lSend_Socket.Name" xml:space="preserve">
-    <value>lSend_Socket</value>
-  </data>
-  <data name="nudLoop_CNT.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="lStepLen.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;gbStep.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pSend_Top.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSendStop.TabIndex" type="System.Int32, mscorlib">
-    <value>39</value>
-  </data>
-  <data name="lStepIndex_Value.Text" xml:space="preserve">
-    <value>?</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Name" xml:space="preserve">
-    <value>nudLoop_Int</value>
-  </data>
-  <data name="&gt;&gt;gbSend1.Name" xml:space="preserve">
-    <value>gbSend1</value>
-  </data>
-  <data name="tlSendPacket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="&gt;&gt;bSendStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvSocketSend.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>100</value>
-  </data>
-  <data name="lStepLen_Value.Text" xml:space="preserve">
-    <value>?</value>
-  </data>
-  <data name="pSend_Top.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
-  </data>
-  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="gbStep.TabIndex" type="System.Int32, mscorlib">
-    <value>41</value>
-  </data>
-  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 23</value>
-  </data>
-  <data name="&gt;&gt;cbStep.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="lSend_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 48</value>
-  </data>
-  <data name="&gt;&gt;lSend_IP.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="gbStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 75</value>
-  </data>
-  <data name="gbSend_Bottom.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="txtSend_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>58, 45</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
-    <value>toolStripStatusLabel3</value>
-  </data>
-  <data name="nudStepIndex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 23</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Fail.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lSend_Len.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSend.Name" xml:space="preserve">
-    <value>ssSocketSend</value>
-  </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>间隔：</value>
-  </data>
-  <data name="lStepLen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>23, 48</value>
-  </data>
-  <data name="&gt;&gt;lSend_Socket.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="txtSend_Socket.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;lSend_IP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lSend_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 48</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Port.Parent" xml:space="preserve">
-    <value>gbSend2</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;lSend_IP.Parent" xml:space="preserve">
-    <value>gbSend2</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketSend.Name" xml:space="preserve">
-    <value>cmsSocketSend</value>
-  </data>
-  <data name="&gt;&gt;lSend_Len.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="gbSend_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 75</value>
-  </data>
-  <data name="lSend_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>44, 17</value>
-  </data>
-  <data name="&gt;&gt;lStepIndex_Value.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="gbSend2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>140, 99</value>
-  </data>
-  <data name="&gt;&gt;lSend_Len.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="nudStepIndex.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;gbStep.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tsmiBatchSend.Text" xml:space="preserve">
-    <value>添加到发送列表</value>
-  </data>
-  <data name="cbStep.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;tlSendPacket.Name" xml:space="preserve">
-    <value>tlSendPacket</value>
-  </data>
-  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>45, 15</value>
-  </data>
-  <data name="lSend_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
-  </data>
-  <data name="pSend_Top.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="&gt;&gt;lStepLen_Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="nudStepIndex.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 15</value>
-  </data>
-  <data name="nudStepLen.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;gbSend2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txtSend_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 23</value>
-  </data>
-  <data name="&gt;&gt;nudStepLen.Parent" xml:space="preserve">
-    <value>gbStep</value>
-  </data>
-  <data name="lSend_IP.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;lStepIndex_Value.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;bgwSendPacket.Name" xml:space="preserve">
-    <value>bgwSendPacket</value>
-  </data>
-  <data name="&gt;&gt;lStepLen.Name" xml:space="preserve">
-    <value>lStepLen</value>
-  </data>
-  <data name="cbStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 21</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Socket.Name" xml:space="preserve">
-    <value>txtSend_Socket</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Fail_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSend_Success.Name" xml:space="preserve">
-    <value>tlSend_Success</value>
-  </data>
-  <data name="txtSend_Len.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="pSend_Top.TabIndex" type="System.Int32, mscorlib">
-    <value>44</value>
-  </data>
-  <data name="&gt;&gt;nudStepLen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlSend_Success_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="dgvSocketSend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="&gt;&gt;lSend_Port.Parent" xml:space="preserve">
-    <value>gbSend2</value>
-  </data>
-  <data name="bSendStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>657, 143</value>
-  </data>
-  <data name="dgvSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>739, 90</value>
-  </data>
-  <data name="nudStepLen.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 46</value>
-  </data>
-  <data name="&gt;&gt;bSend.Name" xml:space="preserve">
-    <value>bSend</value>
-  </data>
-  <data name="lSend_Port.Text" xml:space="preserve">
-    <value>目的端口：</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtSend_IP.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;lStepLen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSend2.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="lStepLen.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;txtSend_Socket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbStep.Name" xml:space="preserve">
-    <value>cbStep</value>
-  </data>
-  <metadata name="ssSocketSend.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="cmsSocketSend.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>333, 17</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="tSend.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>263, 17</value>
-  </metadata>
-  <metadata name="bgwSendPacket.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>133, 17</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
 </root>

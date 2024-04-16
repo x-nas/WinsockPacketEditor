@@ -30,6 +30,7 @@ namespace WPELibrary
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -39,7 +40,6 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             this.cbDisplay_SendTo = new System.Windows.Forms.CheckBox();
             this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
             this.bStopHook = new System.Windows.Forms.Button();
@@ -68,6 +68,8 @@ namespace WPELibrary
             this.rtbBIN = new System.Windows.Forms.RichTextBox();
             this.tpUNICODE = new System.Windows.Forms.TabPage();
             this.rtbUNICODE = new System.Windows.Forms.RichTextBox();
+            this.tpASCII = new System.Windows.Forms.TabPage();
+            this.rtbASCII = new System.Windows.Forms.RichTextBox();
             this.tpUTF8 = new System.Windows.Forms.TabPage();
             this.rtbUTF8 = new System.Windows.Forms.RichTextBox();
             this.tpGB2312 = new System.Windows.Forms.TabPage();
@@ -77,9 +79,9 @@ namespace WPELibrary
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.导出到ExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.清空此列表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bStartHook = new System.Windows.Forms.Button();
@@ -99,21 +101,21 @@ namespace WPELibrary
             this.tlCheck_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.ssStatusInfo_Top = new System.Windows.Forms.StatusStrip();
             this.tlSystemInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit0 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlALL = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlALL_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSplit = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlQueue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlQueue_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSend = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSend_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlRecv = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlRecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlCheck = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlInterecept = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlInterecept_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.gbRight = new System.Windows.Forms.GroupBox();
@@ -126,13 +128,6 @@ namespace WPELibrary
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lSearch = new System.Windows.Forms.Label();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
-            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.dgvFilterList = new System.Windows.Forms.DataGridView();
             this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -141,8 +136,13 @@ namespace WPELibrary
             this.cFilterSearch = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFilterModify = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
-            this.tpASCII = new System.Windows.Forms.TabPage();
-            this.rtbASCII = new System.Windows.Forms.RichTextBox();
+            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilter_Size.SuspendLayout();
             this.gbFilter_Type.SuspendLayout();
             this.gbBottom.SuspendLayout();
@@ -151,6 +151,7 @@ namespace WPELibrary
             this.tpDEC.SuspendLayout();
             this.tpBIN.SuspendLayout();
             this.tpUNICODE.SuspendLayout();
+            this.tpASCII.SuspendLayout();
             this.tpUTF8.SuspendLayout();
             this.tpGB2312.SuspendLayout();
             this.tpLog.SuspendLayout();
@@ -164,139 +165,85 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.gbFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
-            this.tpASCII.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbDisplay_SendTo
             // 
-            this.cbDisplay_SendTo.AutoSize = true;
+            resources.ApplyResources(this.cbDisplay_SendTo, "cbDisplay_SendTo");
             this.cbDisplay_SendTo.Checked = true;
             this.cbDisplay_SendTo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_SendTo.Location = new System.Drawing.Point(69, 34);
             this.cbDisplay_SendTo.Name = "cbDisplay_SendTo";
-            this.cbDisplay_SendTo.Size = new System.Drawing.Size(63, 21);
-            this.cbDisplay_SendTo.TabIndex = 1;
-            this.cbDisplay_SendTo.Text = "发送到";
             this.cbDisplay_SendTo.UseVisualStyleBackColor = true;
             this.cbDisplay_SendTo.CheckedChanged += new System.EventHandler(this.cbDisplay_SendTo_CheckedChanged);
             // 
             // cbCheck_Packet
             // 
-            this.cbCheck_Packet.AutoSize = true;
-            this.cbCheck_Packet.Location = new System.Drawing.Point(17, 81);
+            resources.ApplyResources(this.cbCheck_Packet, "cbCheck_Packet");
             this.cbCheck_Packet.Name = "cbCheck_Packet";
-            this.cbCheck_Packet.Size = new System.Drawing.Size(99, 21);
-            this.cbCheck_Packet.TabIndex = 39;
-            this.cbCheck_Packet.Text = "过滤封包内容";
             this.cbCheck_Packet.UseVisualStyleBackColor = true;
             this.cbCheck_Packet.CheckedChanged += new System.EventHandler(this.cbCheck_Packet_CheckedChanged);
             // 
             // bStopHook
             // 
-            this.bStopHook.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.bStopHook.Location = new System.Drawing.Point(796, 69);
-            this.bStopHook.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            resources.ApplyResources(this.bStopHook, "bStopHook");
             this.bStopHook.Name = "bStopHook";
-            this.bStopHook.Size = new System.Drawing.Size(75, 33);
-            this.bStopHook.TabIndex = 19;
-            this.bStopHook.Text = "结 束 (&J)";
             this.bStopHook.UseVisualStyleBackColor = true;
             this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
             // 
             // txtCheck_IP
             // 
-            this.txtCheck_IP.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCheck_IP.Location = new System.Drawing.Point(116, 51);
+            resources.ApplyResources(this.txtCheck_IP, "txtCheck_IP");
             this.txtCheck_IP.Name = "txtCheck_IP";
-            this.txtCheck_IP.Size = new System.Drawing.Size(399, 22);
-            this.txtCheck_IP.TabIndex = 38;
-            this.txtCheck_IP.Text = "0.0.0.0;127.0.0.1";
-            this.txtCheck_IP.WordWrap = false;
             // 
             // cbDisplay_RecvFrom
             // 
-            this.cbDisplay_RecvFrom.AutoSize = true;
+            resources.ApplyResources(this.cbDisplay_RecvFrom, "cbDisplay_RecvFrom");
             this.cbDisplay_RecvFrom.Checked = true;
             this.cbDisplay_RecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_RecvFrom.Location = new System.Drawing.Point(69, 78);
             this.cbDisplay_RecvFrom.Name = "cbDisplay_RecvFrom";
-            this.cbDisplay_RecvFrom.Size = new System.Drawing.Size(63, 21);
-            this.cbDisplay_RecvFrom.TabIndex = 25;
-            this.cbDisplay_RecvFrom.Text = "接收自";
             this.cbDisplay_RecvFrom.UseVisualStyleBackColor = true;
             this.cbDisplay_RecvFrom.CheckedChanged += new System.EventHandler(this.cbDisplay_RecvFrom_CheckedChanged);
             // 
             // cbCheck_Size
             // 
-            this.cbCheck_Size.AutoSize = true;
-            this.cbCheck_Size.Location = new System.Drawing.Point(10, 14);
+            resources.ApplyResources(this.cbCheck_Size, "cbCheck_Size");
             this.cbCheck_Size.Name = "cbCheck_Size";
-            this.cbCheck_Size.Size = new System.Drawing.Size(75, 21);
-            this.cbCheck_Size.TabIndex = 27;
-            this.cbCheck_Size.Text = "封包长度";
             this.cbCheck_Size.UseVisualStyleBackColor = true;
             this.cbCheck_Size.CheckedChanged += new System.EventHandler(this.cbCheck_Size_CheckedChanged);
             // 
             // txtCheck_Size_From
             // 
-            this.txtCheck_Size_From.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCheck_Size_From.Location = new System.Drawing.Point(15, 41);
+            resources.ApplyResources(this.txtCheck_Size_From, "txtCheck_Size_From");
             this.txtCheck_Size_From.Name = "txtCheck_Size_From";
-            this.txtCheck_Size_From.Size = new System.Drawing.Size(57, 22);
-            this.txtCheck_Size_From.TabIndex = 28;
-            this.txtCheck_Size_From.Text = "0";
-            this.txtCheck_Size_From.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // txtCheck_Size_To
             // 
-            this.txtCheck_Size_To.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCheck_Size_To.Location = new System.Drawing.Point(15, 74);
+            resources.ApplyResources(this.txtCheck_Size_To, "txtCheck_Size_To");
             this.txtCheck_Size_To.Name = "txtCheck_Size_To";
-            this.txtCheck_Size_To.Size = new System.Drawing.Size(57, 22);
-            this.txtCheck_Size_To.TabIndex = 29;
-            this.txtCheck_Size_To.Text = "100";
-            this.txtCheck_Size_To.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // cbInterecept_Recv
             // 
-            this.cbInterecept_Recv.AutoSize = true;
-            this.cbInterecept_Recv.Location = new System.Drawing.Point(9, 57);
+            resources.ApplyResources(this.cbInterecept_Recv, "cbInterecept_Recv");
             this.cbInterecept_Recv.Name = "cbInterecept_Recv";
-            this.cbInterecept_Recv.Size = new System.Drawing.Size(60, 21);
-            this.cbInterecept_Recv.TabIndex = 28;
-            this.cbInterecept_Recv.Text = "拦截 -";
             this.cbInterecept_Recv.UseVisualStyleBackColor = true;
             this.cbInterecept_Recv.CheckedChanged += new System.EventHandler(this.cbInterecept_Recv_CheckedChanged);
             // 
             // cbInterecept_SendTo
             // 
-            this.cbInterecept_SendTo.AutoSize = true;
-            this.cbInterecept_SendTo.Location = new System.Drawing.Point(9, 34);
+            resources.ApplyResources(this.cbInterecept_SendTo, "cbInterecept_SendTo");
             this.cbInterecept_SendTo.Name = "cbInterecept_SendTo";
-            this.cbInterecept_SendTo.Size = new System.Drawing.Size(60, 21);
-            this.cbInterecept_SendTo.TabIndex = 27;
-            this.cbInterecept_SendTo.Text = "拦截 -";
             this.cbInterecept_SendTo.UseVisualStyleBackColor = true;
             this.cbInterecept_SendTo.CheckedChanged += new System.EventHandler(this.cbInterecept_SendTo_CheckedChanged);
             // 
             // lSplit
             // 
-            this.lSplit.AutoSize = true;
-            this.lSplit.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lSplit.Location = new System.Drawing.Point(35, 59);
+            resources.ApplyResources(this.lSplit, "lSplit");
             this.lSplit.Name = "lSplit";
-            this.lSplit.Size = new System.Drawing.Size(17, 17);
-            this.lSplit.TabIndex = 30;
-            this.lSplit.Text = "~";
             // 
             // txtCheck_Packet
             // 
-            this.txtCheck_Packet.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCheck_Packet.Location = new System.Drawing.Point(116, 79);
+            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
             this.txtCheck_Packet.Name = "txtCheck_Packet";
-            this.txtCheck_Packet.Size = new System.Drawing.Size(399, 22);
-            this.txtCheck_Packet.TabIndex = 40;
-            this.txtCheck_Packet.WordWrap = false;
             // 
             // gbFilter_Size
             // 
@@ -304,10 +251,8 @@ namespace WPELibrary
             this.gbFilter_Size.Controls.Add(this.txtCheck_Size_From);
             this.gbFilter_Size.Controls.Add(this.txtCheck_Size_To);
             this.gbFilter_Size.Controls.Add(this.lSplit);
-            this.gbFilter_Size.Location = new System.Drawing.Point(520, 9);
+            resources.ApplyResources(this.gbFilter_Size, "gbFilter_Size");
             this.gbFilter_Size.Name = "gbFilter_Size";
-            this.gbFilter_Size.Size = new System.Drawing.Size(89, 101);
-            this.gbFilter_Size.TabIndex = 27;
             this.gbFilter_Size.TabStop = false;
             // 
             // gbFilter_Type
@@ -320,71 +265,47 @@ namespace WPELibrary
             this.gbFilter_Type.Controls.Add(this.cbDisplay_Recv);
             this.gbFilter_Type.Controls.Add(this.cbDisplay_SendTo);
             this.gbFilter_Type.Controls.Add(this.cbDisplay_Send);
-            this.gbFilter_Type.Location = new System.Drawing.Point(614, 9);
+            resources.ApplyResources(this.gbFilter_Type, "gbFilter_Type");
             this.gbFilter_Type.Name = "gbFilter_Type";
-            this.gbFilter_Type.Padding = new System.Windows.Forms.Padding(1);
-            this.gbFilter_Type.Size = new System.Drawing.Size(133, 101);
-            this.gbFilter_Type.TabIndex = 25;
             this.gbFilter_Type.TabStop = false;
             // 
             // cbInterecept_RecvFrom
             // 
-            this.cbInterecept_RecvFrom.AutoSize = true;
-            this.cbInterecept_RecvFrom.Location = new System.Drawing.Point(9, 78);
+            resources.ApplyResources(this.cbInterecept_RecvFrom, "cbInterecept_RecvFrom");
             this.cbInterecept_RecvFrom.Name = "cbInterecept_RecvFrom";
-            this.cbInterecept_RecvFrom.Size = new System.Drawing.Size(60, 21);
-            this.cbInterecept_RecvFrom.TabIndex = 29;
-            this.cbInterecept_RecvFrom.Text = "拦截 -";
             this.cbInterecept_RecvFrom.UseVisualStyleBackColor = true;
             this.cbInterecept_RecvFrom.CheckedChanged += new System.EventHandler(this.cbInterecept_RecvFrom_CheckedChanged);
             // 
             // cbInterecept_Send
             // 
-            this.cbInterecept_Send.AutoSize = true;
-            this.cbInterecept_Send.Location = new System.Drawing.Point(9, 11);
+            resources.ApplyResources(this.cbInterecept_Send, "cbInterecept_Send");
             this.cbInterecept_Send.Name = "cbInterecept_Send";
-            this.cbInterecept_Send.Size = new System.Drawing.Size(60, 21);
-            this.cbInterecept_Send.TabIndex = 26;
-            this.cbInterecept_Send.Text = "拦截 -";
             this.cbInterecept_Send.UseVisualStyleBackColor = true;
             this.cbInterecept_Send.CheckedChanged += new System.EventHandler(this.cbInterecept_Send_CheckedChanged);
             // 
             // cbDisplay_Recv
             // 
-            this.cbDisplay_Recv.AutoSize = true;
+            resources.ApplyResources(this.cbDisplay_Recv, "cbDisplay_Recv");
             this.cbDisplay_Recv.Checked = true;
             this.cbDisplay_Recv.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_Recv.Location = new System.Drawing.Point(69, 57);
             this.cbDisplay_Recv.Name = "cbDisplay_Recv";
-            this.cbDisplay_Recv.Size = new System.Drawing.Size(51, 21);
-            this.cbDisplay_Recv.TabIndex = 2;
-            this.cbDisplay_Recv.Text = "接收";
             this.cbDisplay_Recv.UseVisualStyleBackColor = true;
             this.cbDisplay_Recv.CheckedChanged += new System.EventHandler(this.cbDisplay_Recv_CheckedChanged);
             // 
             // cbDisplay_Send
             // 
-            this.cbDisplay_Send.AutoSize = true;
+            resources.ApplyResources(this.cbDisplay_Send, "cbDisplay_Send");
             this.cbDisplay_Send.Checked = true;
             this.cbDisplay_Send.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_Send.Location = new System.Drawing.Point(69, 11);
             this.cbDisplay_Send.Name = "cbDisplay_Send";
-            this.cbDisplay_Send.Size = new System.Drawing.Size(51, 21);
-            this.cbDisplay_Send.TabIndex = 0;
-            this.cbDisplay_Send.Text = "发送";
             this.cbDisplay_Send.UseVisualStyleBackColor = true;
             this.cbDisplay_Send.CheckedChanged += new System.EventHandler(this.cbDisplay_Send_CheckedChanged);
             // 
             // gbBottom
             // 
             this.gbBottom.Controls.Add(this.tcPacketInfo);
-            this.gbBottom.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gbBottom.Location = new System.Drawing.Point(158, 455);
-            this.gbBottom.Margin = new System.Windows.Forms.Padding(0);
+            resources.ApplyResources(this.gbBottom, "gbBottom");
             this.gbBottom.Name = "gbBottom";
-            this.gbBottom.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbBottom.Size = new System.Drawing.Size(725, 186);
-            this.gbBottom.TabIndex = 43;
             this.gbBottom.TabStop = false;
             // 
             // tcPacketInfo
@@ -397,144 +318,101 @@ namespace WPELibrary
             this.tcPacketInfo.Controls.Add(this.tpUTF8);
             this.tcPacketInfo.Controls.Add(this.tpGB2312);
             this.tcPacketInfo.Controls.Add(this.tpLog);
-            this.tcPacketInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcPacketInfo.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tcPacketInfo.Location = new System.Drawing.Point(3, 20);
+            resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
             this.tcPacketInfo.Name = "tcPacketInfo";
             this.tcPacketInfo.SelectedIndex = 0;
-            this.tcPacketInfo.Size = new System.Drawing.Size(719, 162);
-            this.tcPacketInfo.TabIndex = 10;
             this.tcPacketInfo.SelectedIndexChanged += new System.EventHandler(this.tcPacketInfo_SelectedIndexChanged);
             // 
             // tpHEX
             // 
             this.tpHEX.Controls.Add(this.rtbHEX);
-            this.tpHEX.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpHEX, "tpHEX");
             this.tpHEX.Name = "tpHEX";
-            this.tpHEX.Size = new System.Drawing.Size(711, 132);
-            this.tpHEX.TabIndex = 0;
-            this.tpHEX.Text = "十六进制";
             this.tpHEX.UseVisualStyleBackColor = true;
             // 
             // rtbHEX
             // 
             this.rtbHEX.BackColor = System.Drawing.SystemColors.Window;
-            this.rtbHEX.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbHEX.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbHEX.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbHEX, "rtbHEX");
             this.rtbHEX.Name = "rtbHEX";
-            this.rtbHEX.Size = new System.Drawing.Size(711, 132);
-            this.rtbHEX.TabIndex = 3;
-            this.rtbHEX.Text = "";
             // 
             // tpDEC
             // 
             this.tpDEC.Controls.Add(this.rtbDEC);
-            this.tpDEC.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpDEC, "tpDEC");
             this.tpDEC.Name = "tpDEC";
-            this.tpDEC.Size = new System.Drawing.Size(711, 132);
-            this.tpDEC.TabIndex = 1;
-            this.tpDEC.Text = "十进制";
             this.tpDEC.UseVisualStyleBackColor = true;
             // 
             // rtbDEC
             // 
-            this.rtbDEC.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbDEC.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbDEC.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbDEC, "rtbDEC");
             this.rtbDEC.Name = "rtbDEC";
-            this.rtbDEC.Size = new System.Drawing.Size(711, 132);
-            this.rtbDEC.TabIndex = 1;
-            this.rtbDEC.Text = "";
             // 
             // tpBIN
             // 
             this.tpBIN.Controls.Add(this.rtbBIN);
-            this.tpBIN.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpBIN, "tpBIN");
             this.tpBIN.Name = "tpBIN";
-            this.tpBIN.Size = new System.Drawing.Size(711, 132);
-            this.tpBIN.TabIndex = 2;
-            this.tpBIN.Text = "二进制";
             this.tpBIN.UseVisualStyleBackColor = true;
             // 
             // rtbBIN
             // 
-            this.rtbBIN.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbBIN.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbBIN.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbBIN, "rtbBIN");
             this.rtbBIN.Name = "rtbBIN";
-            this.rtbBIN.Size = new System.Drawing.Size(711, 132);
-            this.rtbBIN.TabIndex = 3;
-            this.rtbBIN.Text = "";
             // 
             // tpUNICODE
             // 
             this.tpUNICODE.Controls.Add(this.rtbUNICODE);
-            this.tpUNICODE.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpUNICODE, "tpUNICODE");
             this.tpUNICODE.Name = "tpUNICODE";
-            this.tpUNICODE.Size = new System.Drawing.Size(711, 132);
-            this.tpUNICODE.TabIndex = 3;
-            this.tpUNICODE.Text = "Unicode";
             this.tpUNICODE.UseVisualStyleBackColor = true;
             // 
             // rtbUNICODE
             // 
-            this.rtbUNICODE.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbUNICODE.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbUNICODE.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbUNICODE, "rtbUNICODE");
             this.rtbUNICODE.Name = "rtbUNICODE";
-            this.rtbUNICODE.Size = new System.Drawing.Size(711, 132);
-            this.rtbUNICODE.TabIndex = 2;
-            this.rtbUNICODE.Text = "";
+            // 
+            // tpASCII
+            // 
+            this.tpASCII.Controls.Add(this.rtbASCII);
+            resources.ApplyResources(this.tpASCII, "tpASCII");
+            this.tpASCII.Name = "tpASCII";
+            this.tpASCII.UseVisualStyleBackColor = true;
+            // 
+            // rtbASCII
+            // 
+            resources.ApplyResources(this.rtbASCII, "rtbASCII");
+            this.rtbASCII.Name = "rtbASCII";
             // 
             // tpUTF8
             // 
             this.tpUTF8.Controls.Add(this.rtbUTF8);
-            this.tpUTF8.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpUTF8, "tpUTF8");
             this.tpUTF8.Name = "tpUTF8";
-            this.tpUTF8.Size = new System.Drawing.Size(711, 132);
-            this.tpUTF8.TabIndex = 4;
-            this.tpUTF8.Text = "UTF-8";
             this.tpUTF8.UseVisualStyleBackColor = true;
             // 
             // rtbUTF8
             // 
-            this.rtbUTF8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbUTF8.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbUTF8.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbUTF8, "rtbUTF8");
             this.rtbUTF8.Name = "rtbUTF8";
-            this.rtbUTF8.Size = new System.Drawing.Size(711, 132);
-            this.rtbUTF8.TabIndex = 2;
-            this.rtbUTF8.Text = "";
             // 
             // tpGB2312
             // 
             this.tpGB2312.Controls.Add(this.rtbGB2312);
-            this.tpGB2312.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpGB2312, "tpGB2312");
             this.tpGB2312.Name = "tpGB2312";
-            this.tpGB2312.Size = new System.Drawing.Size(711, 132);
-            this.tpGB2312.TabIndex = 5;
-            this.tpGB2312.Text = "GB2312";
             this.tpGB2312.UseVisualStyleBackColor = true;
             // 
             // rtbGB2312
             // 
-            this.rtbGB2312.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbGB2312.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbGB2312.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.rtbGB2312, "rtbGB2312");
             this.rtbGB2312.Name = "rtbGB2312";
-            this.rtbGB2312.Size = new System.Drawing.Size(711, 132);
-            this.rtbGB2312.TabIndex = 2;
-            this.rtbGB2312.Text = "";
             // 
             // tpLog
             // 
             this.tpLog.Controls.Add(this.dgvLogList);
-            this.tpLog.Location = new System.Drawing.Point(4, 26);
+            resources.ApplyResources(this.tpLog, "tpLog");
             this.tpLog.Name = "tpLog";
-            this.tpLog.Size = new System.Drawing.Size(711, 132);
-            this.tpLog.TabIndex = 7;
-            this.tpLog.Text = "日志";
             this.tpLog.UseVisualStyleBackColor = true;
             // 
             // dgvLogList
@@ -545,7 +423,7 @@ namespace WPELibrary
             this.dgvLogList.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -556,8 +434,7 @@ namespace WPELibrary
             this.cTime,
             this.cContent});
             this.dgvLogList.ContextMenuStrip = this.cmsLogList;
-            this.dgvLogList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvLogList.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.MultiSelect = false;
             this.dgvLogList.Name = "dgvLogList";
             this.dgvLogList.ReadOnly = true;
@@ -566,51 +443,46 @@ namespace WPELibrary
             this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLogList.Size = new System.Drawing.Size(711, 132);
-            this.dgvLogList.TabIndex = 0;
             // 
             // cTime
             // 
             this.cTime.DataPropertyName = "Time";
-            this.cTime.HeaderText = "记录时间";
+            resources.ApplyResources(this.cTime, "cTime");
             this.cTime.Name = "cTime";
             this.cTime.ReadOnly = true;
-            this.cTime.Width = 120;
             // 
             // cContent
             // 
             this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cContent.DataPropertyName = "Content";
-            this.cContent.HeaderText = "日志内容";
+            resources.ApplyResources(this.cContent, "cContent");
             this.cContent.Name = "cContent";
             this.cContent.ReadOnly = true;
             // 
             // cmsLogList
             // 
             this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.导出到ExcelToolStripMenuItem,
+            this.tslToExcel,
             this.toolStripSeparator5,
-            this.清空此列表ToolStripMenuItem});
+            this.tslClearList});
             this.cmsLogList.Name = "cmsLogList";
-            this.cmsLogList.Size = new System.Drawing.Size(142, 54);
+            resources.ApplyResources(this.cmsLogList, "cmsLogList");
             this.cmsLogList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsLogList_ItemClicked);
             // 
-            // 导出到ExcelToolStripMenuItem
+            // tslToExcel
             // 
-            this.导出到ExcelToolStripMenuItem.Name = "导出到ExcelToolStripMenuItem";
-            this.导出到ExcelToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.导出到ExcelToolStripMenuItem.Text = "导出到Excel";
+            this.tslToExcel.Name = "tslToExcel";
+            resources.ApplyResources(this.tslToExcel, "tslToExcel");
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(138, 6);
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
-            // 清空此列表ToolStripMenuItem
+            // tslClearList
             // 
-            this.清空此列表ToolStripMenuItem.Name = "清空此列表ToolStripMenuItem";
-            this.清空此列表ToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
-            this.清空此列表ToolStripMenuItem.Text = "清空此列表";
+            this.tslClearList.Name = "tslClearList";
+            resources.ApplyResources(this.tslClearList, "tslClearList");
             // 
             // bgwSocketList
             // 
@@ -622,44 +494,27 @@ namespace WPELibrary
             // 
             // bStartHook
             // 
-            this.bStartHook.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.bStartHook.Location = new System.Drawing.Point(796, 18);
-            this.bStartHook.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            resources.ApplyResources(this.bStartHook, "bStartHook");
             this.bStartHook.Name = "bStartHook";
-            this.bStartHook.Size = new System.Drawing.Size(75, 33);
-            this.bStartHook.TabIndex = 18;
-            this.bStartHook.Text = "开 始 (&K)";
             this.bStartHook.UseVisualStyleBackColor = true;
             this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
             // 
             // txtCheck_Socket
             // 
-            this.txtCheck_Socket.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCheck_Socket.Location = new System.Drawing.Point(116, 24);
+            resources.ApplyResources(this.txtCheck_Socket, "txtCheck_Socket");
             this.txtCheck_Socket.Name = "txtCheck_Socket";
-            this.txtCheck_Socket.Size = new System.Drawing.Size(399, 22);
-            this.txtCheck_Socket.TabIndex = 36;
-            this.txtCheck_Socket.WordWrap = false;
             // 
             // cbCheck_Socket
             // 
-            this.cbCheck_Socket.AutoSize = true;
-            this.cbCheck_Socket.Location = new System.Drawing.Point(17, 26);
+            resources.ApplyResources(this.cbCheck_Socket, "cbCheck_Socket");
             this.cbCheck_Socket.Name = "cbCheck_Socket";
-            this.cbCheck_Socket.Size = new System.Drawing.Size(87, 21);
-            this.cbCheck_Socket.TabIndex = 35;
-            this.cbCheck_Socket.Text = "过滤套接字";
             this.cbCheck_Socket.UseVisualStyleBackColor = true;
             this.cbCheck_Socket.CheckedChanged += new System.EventHandler(this.cbCheck_Socket_CheckedChanged);
             // 
             // cbCheck_IP
             // 
-            this.cbCheck_IP.AutoSize = true;
-            this.cbCheck_IP.Location = new System.Drawing.Point(17, 53);
+            resources.ApplyResources(this.cbCheck_IP, "cbCheck_IP");
             this.cbCheck_IP.Name = "cbCheck_IP";
-            this.cbCheck_IP.Size = new System.Drawing.Size(86, 21);
-            this.cbCheck_IP.TabIndex = 37;
-            this.cbCheck_IP.Text = "过滤IP地址";
             this.cbCheck_IP.UseVisualStyleBackColor = true;
             this.cbCheck_IP.CheckedChanged += new System.EventHandler(this.cbCheck_IP_CheckedChanged);
             // 
@@ -676,215 +531,181 @@ namespace WPELibrary
             this.toolStripSeparator4,
             this.tsmiSaveSocketInfo});
             this.cmsSocketList.Name = "cmsSocketInfo";
-            this.cmsSocketList.Size = new System.Drawing.Size(161, 138);
+            resources.ApplyResources(this.cmsSocketList, "cmsSocketList");
             this.cmsSocketList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSocketInfo_ItemClicked);
             // 
             // tsmiSend
             // 
             this.tsmiSend.Name = "tsmiSend";
-            this.tsmiSend.Size = new System.Drawing.Size(160, 22);
-            this.tsmiSend.Text = "发送";
+            resources.ApplyResources(this.tsmiSend, "tsmiSend");
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(157, 6);
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // tsmiBatchSend
             // 
             this.tsmiBatchSend.Name = "tsmiBatchSend";
-            this.tsmiBatchSend.Size = new System.Drawing.Size(160, 22);
-            this.tsmiBatchSend.Text = "添加到发送列表";
+            resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(157, 6);
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // tsmiUseSocket
             // 
             this.tsmiUseSocket.Name = "tsmiUseSocket";
-            this.tsmiUseSocket.Size = new System.Drawing.Size(160, 22);
-            this.tsmiUseSocket.Text = "使用此套接字";
+            resources.ApplyResources(this.tsmiUseSocket, "tsmiUseSocket");
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(157, 6);
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // tsmiShowBatchSend
             // 
             this.tsmiShowBatchSend.Name = "tsmiShowBatchSend";
-            this.tsmiShowBatchSend.Size = new System.Drawing.Size(160, 22);
-            this.tsmiShowBatchSend.Text = "查看发送列表";
+            resources.ApplyResources(this.tsmiShowBatchSend, "tsmiShowBatchSend");
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(157, 6);
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             // 
             // tsmiSaveSocketInfo
             // 
             this.tsmiSaveSocketInfo.Name = "tsmiSaveSocketInfo";
-            this.tsmiSaveSocketInfo.Size = new System.Drawing.Size(160, 22);
-            this.tsmiSaveSocketInfo.Text = "导出到Excel";
+            resources.ApplyResources(this.tsmiSaveSocketInfo, "tsmiSaveSocketInfo");
             // 
             // tlCheck_CNT
             // 
             this.tlCheck_CNT.Name = "tlCheck_CNT";
-            this.tlCheck_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlCheck_CNT.Text = "0";
+            resources.ApplyResources(this.tlCheck_CNT, "tlCheck_CNT");
             // 
             // ssStatusInfo_Top
             // 
-            this.ssStatusInfo_Top.Dock = System.Windows.Forms.DockStyle.Top;
-            this.ssStatusInfo_Top.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            resources.ApplyResources(this.ssStatusInfo_Top, "ssStatusInfo_Top");
             this.ssStatusInfo_Top.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlSystemInfo,
-            this.toolStripStatusLabel3,
+            this.tlSplit0,
             this.tlALL,
             this.tlALL_CNT,
-            this.tlSplit,
+            this.tlSplit1,
             this.tlQueue,
             this.tlQueue_CNT,
-            this.toolStripStatusLabel5,
+            this.tlSplit2,
             this.tlSend,
             this.tlSend_CNT,
-            this.toolStripStatusLabel1,
+            this.tlSplit3,
             this.tlRecv,
             this.tlRecv_CNT,
-            this.toolStripStatusLabel2,
+            this.tlSplit4,
             this.tlCheck,
             this.tlCheck_CNT,
-            this.toolStripStatusLabel4,
+            this.tlSplit5,
             this.tlInterecept,
             this.tlInterecept_CNT});
-            this.ssStatusInfo_Top.Location = new System.Drawing.Point(0, 116);
             this.ssStatusInfo_Top.Name = "ssStatusInfo_Top";
-            this.ssStatusInfo_Top.Padding = new System.Windows.Forms.Padding(1, 0, 18, 0);
-            this.ssStatusInfo_Top.Size = new System.Drawing.Size(883, 22);
             this.ssStatusInfo_Top.SizingGrip = false;
-            this.ssStatusInfo_Top.TabIndex = 44;
-            this.ssStatusInfo_Top.Text = "statusStrip1";
             // 
             // tlSystemInfo
             // 
             this.tlSystemInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tlSystemInfo.Name = "tlSystemInfo";
-            this.tlSystemInfo.Size = new System.Drawing.Size(56, 17);
-            this.tlSystemInfo.Text = "系统信息";
+            resources.ApplyResources(this.tlSystemInfo, "tlSystemInfo");
             // 
-            // toolStripStatusLabel3
+            // tlSplit0
             // 
-            this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel3.Text = "|";
+            this.tlSplit0.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit0.Name = "tlSplit0";
+            resources.ApplyResources(this.tlSplit0, "tlSplit0");
             // 
             // tlALL
             // 
-            this.tlALL.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            resources.ApplyResources(this.tlALL, "tlALL");
             this.tlALL.Name = "tlALL";
-            this.tlALL.Size = new System.Drawing.Size(59, 17);
-            this.tlALL.Text = "封包总数:";
             // 
             // tlALL_CNT
             // 
-            this.tlALL_CNT.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            resources.ApplyResources(this.tlALL_CNT, "tlALL_CNT");
             this.tlALL_CNT.Name = "tlALL_CNT";
-            this.tlALL_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlALL_CNT.Text = "0";
             // 
-            // tlSplit
+            // tlSplit1
             // 
-            this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
-            this.tlSplit.Name = "tlSplit";
-            this.tlSplit.Size = new System.Drawing.Size(11, 17);
-            this.tlSplit.Text = "|";
+            this.tlSplit1.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit1.Name = "tlSplit1";
+            resources.ApplyResources(this.tlSplit1, "tlSplit1");
             // 
             // tlQueue
             // 
-            this.tlQueue.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            resources.ApplyResources(this.tlQueue, "tlQueue");
             this.tlQueue.Name = "tlQueue";
-            this.tlQueue.Size = new System.Drawing.Size(47, 17);
-            this.tlQueue.Text = "缓存区:";
             // 
             // tlQueue_CNT
             // 
             this.tlQueue_CNT.Name = "tlQueue_CNT";
-            this.tlQueue_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlQueue_CNT.Text = "0";
+            resources.ApplyResources(this.tlQueue_CNT, "tlQueue_CNT");
             // 
-            // toolStripStatusLabel5
+            // tlSplit2
             // 
-            this.toolStripStatusLabel5.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel5.Text = "|";
+            this.tlSplit2.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit2.Name = "tlSplit2";
+            resources.ApplyResources(this.tlSplit2, "tlSplit2");
             // 
             // tlSend
             // 
             this.tlSend.Name = "tlSend";
-            this.tlSend.Size = new System.Drawing.Size(35, 17);
-            this.tlSend.Text = "发送:";
+            resources.ApplyResources(this.tlSend, "tlSend");
             // 
             // tlSend_CNT
             // 
             this.tlSend_CNT.Name = "tlSend_CNT";
-            this.tlSend_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlSend_CNT.Text = "0";
+            resources.ApplyResources(this.tlSend_CNT, "tlSend_CNT");
             // 
-            // toolStripStatusLabel1
+            // tlSplit3
             // 
-            this.toolStripStatusLabel1.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel1.Text = "|";
+            this.tlSplit3.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit3.Name = "tlSplit3";
+            resources.ApplyResources(this.tlSplit3, "tlSplit3");
             // 
             // tlRecv
             // 
-            this.tlRecv.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            resources.ApplyResources(this.tlRecv, "tlRecv");
             this.tlRecv.Name = "tlRecv";
-            this.tlRecv.Size = new System.Drawing.Size(35, 17);
-            this.tlRecv.Text = "接收:";
             // 
             // tlRecv_CNT
             // 
             this.tlRecv_CNT.Name = "tlRecv_CNT";
-            this.tlRecv_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlRecv_CNT.Text = "0";
+            resources.ApplyResources(this.tlRecv_CNT, "tlRecv_CNT");
             // 
-            // toolStripStatusLabel2
+            // tlSplit4
             // 
-            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel2.Text = "|";
+            this.tlSplit4.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit4.Name = "tlSplit4";
+            resources.ApplyResources(this.tlSplit4, "tlSplit4");
             // 
             // tlCheck
             // 
             this.tlCheck.Name = "tlCheck";
-            this.tlCheck.Size = new System.Drawing.Size(35, 17);
-            this.tlCheck.Text = "过滤:";
+            resources.ApplyResources(this.tlCheck, "tlCheck");
             // 
-            // toolStripStatusLabel4
+            // tlSplit5
             // 
-            this.toolStripStatusLabel4.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(11, 17);
-            this.toolStripStatusLabel4.Text = "|";
+            this.tlSplit5.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit5.Name = "tlSplit5";
+            resources.ApplyResources(this.tlSplit5, "tlSplit5");
             // 
             // tlInterecept
             // 
             this.tlInterecept.Name = "tlInterecept";
-            this.tlInterecept.Size = new System.Drawing.Size(47, 17);
-            this.tlInterecept.Text = "已拦截:";
+            resources.ApplyResources(this.tlInterecept, "tlInterecept");
             // 
             // tlInterecept_CNT
             // 
             this.tlInterecept_CNT.Name = "tlInterecept_CNT";
-            this.tlInterecept_CNT.Size = new System.Drawing.Size(15, 17);
-            this.tlInterecept_CNT.Text = "0";
+            resources.ApplyResources(this.tlInterecept_CNT, "tlInterecept_CNT");
             // 
             // gbRight
             // 
@@ -899,36 +720,23 @@ namespace WPELibrary
             this.gbRight.Controls.Add(this.bStartHook);
             this.gbRight.Controls.Add(this.txtCheck_Socket);
             this.gbRight.Controls.Add(this.cbCheck_Socket);
-            this.gbRight.Dock = System.Windows.Forms.DockStyle.Top;
-            this.gbRight.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gbRight.Location = new System.Drawing.Point(0, 0);
+            resources.ApplyResources(this.gbRight, "gbRight");
             this.gbRight.Name = "gbRight";
-            this.gbRight.Size = new System.Drawing.Size(883, 116);
-            this.gbRight.TabIndex = 42;
             this.gbRight.TabStop = false;
-            this.gbRight.Text = "[ 过滤条件 ] - 支持多个内容使用 ; 分隔符";
             // 
             // gbClear
             // 
             this.gbClear.Controls.Add(this.cbReset_CNT);
-            this.gbClear.Location = new System.Drawing.Point(752, 9);
+            resources.ApplyResources(this.gbClear, "gbClear");
             this.gbClear.Name = "gbClear";
-            this.gbClear.Size = new System.Drawing.Size(29, 100);
-            this.gbClear.TabIndex = 41;
             this.gbClear.TabStop = false;
             // 
             // cbReset_CNT
             // 
-            this.cbReset_CNT.AutoSize = true;
-            this.cbReset_CNT.CheckAlign = System.Drawing.ContentAlignment.TopCenter;
+            resources.ApplyResources(this.cbReset_CNT, "cbReset_CNT");
             this.cbReset_CNT.Checked = true;
             this.cbReset_CNT.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbReset_CNT.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cbReset_CNT.Location = new System.Drawing.Point(3, 12);
             this.cbReset_CNT.Name = "cbReset_CNT";
-            this.cbReset_CNT.Size = new System.Drawing.Size(24, 86);
-            this.cbReset_CNT.TabIndex = 42;
-            this.cbReset_CNT.Text = "清\r\n空\r\n数\r\n据";
             this.cbReset_CNT.UseVisualStyleBackColor = true;
             this.cbReset_CNT.CheckedChanged += new System.EventHandler(this.cbReset_CNT_CheckedChanged);
             // 
@@ -939,61 +747,40 @@ namespace WPELibrary
             this.gbSearch_Bottom.Controls.Add(this.bSearch);
             this.gbSearch_Bottom.Controls.Add(this.txtSearch);
             this.gbSearch_Bottom.Controls.Add(this.lSearch);
-            this.gbSearch_Bottom.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gbSearch_Bottom.Location = new System.Drawing.Point(158, 417);
+            resources.ApplyResources(this.gbSearch_Bottom, "gbSearch_Bottom");
             this.gbSearch_Bottom.Name = "gbSearch_Bottom";
-            this.gbSearch_Bottom.Size = new System.Drawing.Size(725, 51);
-            this.gbSearch_Bottom.TabIndex = 48;
             this.gbSearch_Bottom.TabStop = false;
             // 
             // rbSearchFrom
             // 
-            this.rbSearchFrom.AutoSize = true;
+            resources.ApplyResources(this.rbSearchFrom, "rbSearchFrom");
             this.rbSearchFrom.Checked = true;
-            this.rbSearchFrom.Location = new System.Drawing.Point(547, 19);
             this.rbSearchFrom.Name = "rbSearchFrom";
-            this.rbSearchFrom.Size = new System.Drawing.Size(74, 21);
-            this.rbSearchFrom.TabIndex = 4;
             this.rbSearchFrom.TabStop = true;
-            this.rbSearchFrom.Text = "向下搜索";
             this.rbSearchFrom.UseVisualStyleBackColor = true;
             // 
             // rbSearchAll
             // 
-            this.rbSearchAll.AutoSize = true;
-            this.rbSearchAll.Location = new System.Drawing.Point(467, 20);
+            resources.ApplyResources(this.rbSearchAll, "rbSearchAll");
             this.rbSearchAll.Name = "rbSearchAll";
-            this.rbSearchAll.Size = new System.Drawing.Size(74, 21);
-            this.rbSearchAll.TabIndex = 3;
-            this.rbSearchAll.Text = "从头搜索";
             this.rbSearchAll.UseVisualStyleBackColor = true;
             // 
             // bSearch
             // 
-            this.bSearch.Location = new System.Drawing.Point(648, 15);
+            resources.ApplyResources(this.bSearch, "bSearch");
             this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(70, 28);
-            this.bSearch.TabIndex = 2;
-            this.bSearch.Text = "搜 索 (&S)";
             this.bSearch.UseVisualStyleBackColor = true;
             this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
             // 
             // txtSearch
             // 
-            this.txtSearch.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(131, 18);
+            resources.ApplyResources(this.txtSearch, "txtSearch");
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(320, 22);
-            this.txtSearch.TabIndex = 1;
             // 
             // lSearch
             // 
-            this.lSearch.AutoSize = true;
-            this.lSearch.Location = new System.Drawing.Point(6, 21);
+            resources.ApplyResources(this.lSearch, "lSearch");
             this.lSearch.Name = "lSearch";
-            this.lSearch.Size = new System.Drawing.Size(128, 17);
-            this.lSearch.TabIndex = 0;
-            this.lSearch.Text = "数据搜索（十六进制）";
             // 
             // dgvSocketList
             // 
@@ -1012,7 +799,7 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSocketList.ContextMenuStrip = this.cmsSocketList;
-            this.dgvSocketList.Location = new System.Drawing.Point(0, 138);
+            resources.ApplyResources(this.dgvSocketList, "dgvSocketList");
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
@@ -1023,95 +810,14 @@ namespace WPELibrary
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
             this.dgvSocketList.RowTemplate.Height = 23;
             this.dgvSocketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSocketList.Size = new System.Drawing.Size(883, 279);
-            this.dgvSocketList.TabIndex = 49;
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgSocketInfo_SelectionChanged);
-            // 
-            // cIndex
-            // 
-            this.cIndex.DataPropertyName = "Index";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle3;
-            this.cIndex.HeaderText = "序号";
-            this.cIndex.Name = "cIndex";
-            this.cIndex.ReadOnly = true;
-            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cIndex.Width = 50;
-            // 
-            // cType
-            // 
-            this.cType.DataPropertyName = "Type_CN";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle4;
-            this.cType.HeaderText = "类别";
-            this.cType.Name = "cType";
-            this.cType.ReadOnly = true;
-            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cType.Width = 65;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle5;
-            this.cSocket.HeaderText = "套接字";
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cSocket.Width = 60;
-            // 
-            // cFrom
-            // 
-            this.cFrom.DataPropertyName = "From";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle6;
-            this.cFrom.HeaderText = "源地址";
-            this.cFrom.Name = "cFrom";
-            this.cFrom.ReadOnly = true;
-            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cFrom.Width = 160;
-            // 
-            // Column5
-            // 
-            this.Column5.DataPropertyName = "To";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle7;
-            this.Column5.HeaderText = "目的地址";
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column5.Width = 160;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "ResLen";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
-            this.cLen.HeaderText = "长度";
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.cLen.Width = 50;
-            // 
-            // cData
-            // 
-            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cData.DataPropertyName = "Data";
-            this.cData.HeaderText = "数据";
-            this.cData.Name = "cData";
-            this.cData.ReadOnly = true;
-            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // gbFilterList
             // 
             this.gbFilterList.Controls.Add(this.dgvFilterList);
-            this.gbFilterList.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.gbFilterList.Location = new System.Drawing.Point(0, 417);
+            resources.ApplyResources(this.gbFilterList, "gbFilterList");
             this.gbFilterList.Name = "gbFilterList";
-            this.gbFilterList.Size = new System.Drawing.Size(155, 224);
-            this.gbFilterList.TabIndex = 53;
             this.gbFilterList.TabStop = false;
-            this.gbFilterList.Text = "[ 滤镜列表 ]";
             // 
             // dgvFilterList
             // 
@@ -1129,16 +835,12 @@ namespace WPELibrary
             this.cFilterName,
             this.cFilterSearch,
             this.cFilterModify});
-            this.dgvFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvFilterList.Location = new System.Drawing.Point(3, 19);
-            this.dgvFilterList.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
             this.dgvFilterList.MultiSelect = false;
             this.dgvFilterList.Name = "dgvFilterList";
             this.dgvFilterList.RowHeadersVisible = false;
             this.dgvFilterList.RowTemplate.Height = 23;
             this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFilterList.Size = new System.Drawing.Size(149, 202);
-            this.dgvFilterList.TabIndex = 5;
             this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
             this.dgvFilterList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellDoubleClick);
             // 
@@ -1146,72 +848,116 @@ namespace WPELibrary
             // 
             this.cCheck.DataPropertyName = "ISCheck";
             this.cCheck.FalseValue = "false";
-            this.cCheck.HeaderText = "开关";
+            resources.ApplyResources(this.cCheck, "cCheck");
             this.cCheck.Name = "cCheck";
             this.cCheck.TrueValue = "true";
-            this.cCheck.Width = 30;
             // 
             // cFilterIndex
             // 
             this.cFilterIndex.DataPropertyName = "FilterIndex";
-            this.cFilterIndex.HeaderText = "序号";
+            resources.ApplyResources(this.cFilterIndex, "cFilterIndex");
             this.cFilterIndex.Name = "cFilterIndex";
             this.cFilterIndex.ReadOnly = true;
-            this.cFilterIndex.Visible = false;
             // 
             // cFilterName
             // 
             this.cFilterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cFilterName.DataPropertyName = "FilterName";
-            this.cFilterName.HeaderText = "过滤器名称";
+            resources.ApplyResources(this.cFilterName, "cFilterName");
             this.cFilterName.Name = "cFilterName";
             this.cFilterName.ReadOnly = true;
             // 
             // cFilterSearch
             // 
             this.cFilterSearch.DataPropertyName = "FilterSearch";
-            this.cFilterSearch.HeaderText = "搜索封包";
+            resources.ApplyResources(this.cFilterSearch, "cFilterSearch");
             this.cFilterSearch.Name = "cFilterSearch";
             this.cFilterSearch.ReadOnly = true;
-            this.cFilterSearch.Visible = false;
             // 
             // cFilterModify
             // 
             this.cFilterModify.DataPropertyName = "FilterModify";
-            this.cFilterModify.HeaderText = "修改封包";
+            resources.ApplyResources(this.cFilterModify, "cFilterModify");
             this.cFilterModify.Name = "cFilterModify";
             this.cFilterModify.ReadOnly = true;
-            this.cFilterModify.Visible = false;
             // 
             // bgwLogList
             // 
             this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
             // 
-            // tpASCII
+            // cIndex
             // 
-            this.tpASCII.Controls.Add(this.rtbASCII);
-            this.tpASCII.Location = new System.Drawing.Point(4, 26);
-            this.tpASCII.Name = "tpASCII";
-            this.tpASCII.Size = new System.Drawing.Size(711, 132);
-            this.tpASCII.TabIndex = 8;
-            this.tpASCII.Text = "ASCII";
-            this.tpASCII.UseVisualStyleBackColor = true;
+            this.cIndex.DataPropertyName = "Index";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle3;
+            resources.ApplyResources(this.cIndex, "cIndex");
+            this.cIndex.Name = "cIndex";
+            this.cIndex.ReadOnly = true;
+            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // rtbASCII
+            // cType
             // 
-            this.rtbASCII.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbASCII.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rtbASCII.Location = new System.Drawing.Point(0, 0);
-            this.rtbASCII.Name = "rtbASCII";
-            this.rtbASCII.Size = new System.Drawing.Size(711, 132);
-            this.rtbASCII.TabIndex = 3;
-            this.rtbASCII.Text = "";
+            this.cType.DataPropertyName = "Type_Name";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cType, "cType");
+            this.cType.Name = "cType";
+            this.cType.ReadOnly = true;
+            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cFrom
+            // 
+            this.cFrom.DataPropertyName = "From";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.cFrom, "cFrom");
+            this.cFrom.Name = "cFrom";
+            this.cFrom.ReadOnly = true;
+            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "To";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle7;
+            resources.ApplyResources(this.Column5, "Column5");
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "ResLen";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cData
+            // 
+            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cData.DataPropertyName = "Data";
+            resources.ApplyResources(this.cData, "cData");
+            this.cData.Name = "cData";
+            this.cData.ReadOnly = true;
+            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Socket_Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(883, 641);
             this.Controls.Add(this.gbFilterList);
             this.Controls.Add(this.dgvSocketList);
             this.Controls.Add(this.gbSearch_Bottom);
@@ -1219,14 +965,9 @@ namespace WPELibrary
             this.Controls.Add(this.ssStatusInfo_Top);
             this.Controls.Add(this.gbRight);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "Socket_Form";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "封包拦截器";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DLL_Form_FormClosed);
             this.Load += new System.EventHandler(this.DLL_Form_Load);
             this.gbFilter_Size.ResumeLayout(false);
@@ -1239,6 +980,7 @@ namespace WPELibrary
             this.tpDEC.ResumeLayout(false);
             this.tpBIN.ResumeLayout(false);
             this.tpUNICODE.ResumeLayout(false);
+            this.tpASCII.ResumeLayout(false);
             this.tpUTF8.ResumeLayout(false);
             this.tpGB2312.ResumeLayout(false);
             this.tpLog.ResumeLayout(false);
@@ -1256,7 +998,6 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.gbFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
-            this.tpASCII.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1308,21 +1049,21 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlCheck_CNT;
         private System.Windows.Forms.StatusStrip ssStatusInfo_Top;
         private System.Windows.Forms.ToolStripStatusLabel tlSystemInfo;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit0;
         private System.Windows.Forms.ToolStripStatusLabel tlALL;
         private System.Windows.Forms.ToolStripStatusLabel tlALL_CNT;
-        private System.Windows.Forms.ToolStripStatusLabel tlSplit;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit1;
         private System.Windows.Forms.ToolStripStatusLabel tlQueue;
         private System.Windows.Forms.ToolStripStatusLabel tlQueue_CNT;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit2;
         private System.Windows.Forms.ToolStripStatusLabel tlSend;
         private System.Windows.Forms.ToolStripStatusLabel tlSend_CNT;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit3;
         private System.Windows.Forms.ToolStripStatusLabel tlRecv;
         private System.Windows.Forms.ToolStripStatusLabel tlRecv_CNT;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit4;
         private System.Windows.Forms.ToolStripStatusLabel tlCheck;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel tlSplit5;
         private System.Windows.Forms.ToolStripStatusLabel tlInterecept;
         private System.Windows.Forms.ToolStripStatusLabel tlInterecept_CNT;
         private System.Windows.Forms.GroupBox gbRight;
@@ -1348,14 +1089,18 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridView dgvLogList;
         private System.ComponentModel.BackgroundWorker bgwLogList;
         private System.Windows.Forms.ContextMenuStrip cmsLogList;
-        private System.Windows.Forms.ToolStripMenuItem 导出到ExcelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tslToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripMenuItem 清空此列表ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tslClearList;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFilterIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFilterName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFilterSearch;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFilterModify;
+        private System.Windows.Forms.TabPage tpASCII;
+        private System.Windows.Forms.RichTextBox rtbASCII;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
@@ -1363,9 +1108,5 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
-        private System.Windows.Forms.TabPage tpASCII;
-        private System.Windows.Forms.RichTextBox rtbASCII;
     }
 }
