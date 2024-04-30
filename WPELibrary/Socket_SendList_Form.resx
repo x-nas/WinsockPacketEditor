@@ -117,482 +117,533 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="cmsSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>166, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>681, 348</value>
+  <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;cLen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbSend_Bottom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail_CNT.Name" xml:space="preserve">
-    <value>tlSendList_Fail_CNT</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="bSendListStop.TabIndex" type="System.Int32, mscorlib">
-    <value>108</value>
-  </data>
-  <data name="cIndex.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <data name="txtUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
-    <value>cIndex</value>
-  </data>
-  <data name="&gt;&gt;tlLoop_Send_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="nudLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>112</value>
-  </data>
-  <data name="lLoop_Int.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail.Name" xml:space="preserve">
-    <value>tlSendList_Fail</value>
-  </data>
-  <data name="&gt;&gt;tlLoop_Send.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtUseSocket.Name" xml:space="preserve">
-    <value>txtUseSocket</value>
-  </data>
-  <data name="lLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>103</value>
-  </data>
-  <data name="cbUseSocket.Text" xml:space="preserve">
-    <value>使用此套接字：</value>
-  </data>
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 110</value>
-  </data>
-  <data name="cNote.HeaderText" xml:space="preserve">
-    <value>备注</value>
-  </data>
-  <data name="cbUseSocket.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tlLoop_Send.Text" xml:space="preserve">
-    <value>已循环次数:</value>
-  </data>
-  <data name="tlSendList_Success_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlSendList_Success.Text" xml:space="preserve">
-    <value>发送成功:</value>
-  </data>
-  <data name="tlLoop_Send_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="&gt;&gt;tsmiDelete.Name" xml:space="preserve">
-    <value>tsmiDelete</value>
-  </data>
-  <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>589, 17</value>
-  </data>
-  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
-    <value>cmsSendList</value>
-  </data>
-  <data name="gbSend_Bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 271</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Name" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="dgSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>681, 225</value>
-  </data>
-  <data name="cCheck.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <data name="tsmiSaveList.Text" xml:space="preserve">
-    <value>保存此列表数据</value>
-  </data>
-  <data name="nudLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>111</value>
-  </data>
-  <data name="gbSend_Bottom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Name" xml:space="preserve">
-    <value>bSendList</value>
-  </data>
-  <data name="&gt;&gt;bgwSendList.Name" xml:space="preserve">
-    <value>bgwSendList</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
-    <value>cSocket</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Name" xml:space="preserve">
-    <value>cbSelectAll</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlSendList_Fail.Text" xml:space="preserve">
-    <value>发送失败:</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Socket_SendList_Form</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cSocket.Width" type="System.Int32, mscorlib">
-    <value>60</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbSelectAll.Text" xml:space="preserve">
-    <value>全选 / 取消</value>
-  </data>
-  <data name="&gt;&gt;txtUseSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadList.Name" xml:space="preserve">
-    <value>tsmiLoadList</value>
-  </data>
-  <data name="tlSendList_Fail_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="lLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>501, 19</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="cbUseSocket.TabIndex" type="System.Int32, mscorlib">
-    <value>94</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="cbUseSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>143, 18</value>
-  </data>
-  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 326</value>
-  </data>
-  <data name="tlSplit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="tsmiDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
-  </data>
-  <data name="&gt;&gt;cNote.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
-    <value>toolStripSeparator3</value>
-  </data>
-  <data name="tsmiDelete.Text" xml:space="preserve">
+  <data name="tsmiDeleteSendList.Text" xml:space="preserve">
     <value>从列表中移除</value>
   </data>
-  <data name="lLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>104</value>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
   </data>
-  <data name="dgSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>55</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>598, 16</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;cNote.Name" xml:space="preserve">
-    <value>cNote</value>
-  </data>
-  <data name="&gt;&gt;txtUseSocket.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;cIPTo.Name" xml:space="preserve">
-    <value>cIPTo</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSendList.Text" xml:space="preserve">
-    <value>发 送 (&amp;F)</value>
-  </data>
-  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 23</value>
-  </data>
-  <data name="&gt;&gt;tsmiSaveList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>发送列表</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="cSocket.HeaderText" xml:space="preserve">
-    <value>套接字</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.Name" xml:space="preserve">
-    <value>cbUseSocket</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
-    <value>toolStripStatusLabel3</value>
-  </data>
-  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 17</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 29</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="lLoop_CNT.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>107</value>
-  </data>
-  <data name="&gt;&gt;dgSendList.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;dgSendList.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="dgSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="bSendListStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 29</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success_CNT.Name" xml:space="preserve">
-    <value>tlSendList_Success_CNT</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Name" xml:space="preserve">
-    <value>ssSocketSendList</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bgwSendList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlSendList_Success_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success.Name" xml:space="preserve">
-    <value>tlSendList_Success</value>
-  </data>
-  <data name="cbSelectAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 18</value>
-  </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 225</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="lLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>360, 19</value>
-  </data>
-  <data name="&gt;&gt;tSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tsmiLoadList.Text" xml:space="preserve">
-    <value>加载发送列表</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Name" xml:space="preserve">
-    <value>tlSplit</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;txtUseSocket.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Name" xml:space="preserve">
-    <value>nudLoop_CNT</value>
-  </data>
-  <data name="&gt;&gt;cData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="txtUseSocket.TabIndex" type="System.Int32, mscorlib">
-    <value>95</value>
-  </data>
-  <data name="&gt;&gt;dgSendList.Name" xml:space="preserve">
-    <value>dgSendList</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>681, 46</value>
-  </data>
-  <data name="tlSplit.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>循环次数：</value>
+  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
   <data name="tsmiClear.Text" xml:space="preserve">
     <value>清空发送列表</value>
   </data>
-  <data name="&gt;&gt;tlSendList_Success_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
   </data>
-  <data name="cCheck.HeaderText" xml:space="preserve">
-    <value />
+  <data name="tsmiSaveSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="&gt;&gt;nudLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tsmiSaveSendList.Text" xml:space="preserve">
+    <value>保存此列表数据</value>
   </data>
-  <data name="tsmiLoadList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
   </data>
-  <data name="&gt;&gt;lLoop_Int.Name" xml:space="preserve">
-    <value>lLoop_Int</value>
+  <data name="tsmiLoadSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiLoadSendList.Text" xml:space="preserve">
+    <value>加载发送列表</value>
+  </data>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 132</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
+    <value>cmsSendList</value>
   </data>
   <data name="&gt;&gt;cmsSendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>54</value>
+  <metadata name="ssSocketSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 17</value>
   </data>
-  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="tlLoop_Send.Text" xml:space="preserve">
+    <value>已循环次数:</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.ZOrder" xml:space="preserve">
+  <data name="tlLoop_Send_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlLoop_Send_CNT.Text" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 21</value>
+  <data name="tlSplit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
   </data>
-  <data name="&gt;&gt;tsmiDelete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="nudLoop_CNT.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="cIPTo.HeaderText" xml:space="preserve">
-    <value>目的地址</value>
-  </data>
-  <data name="cbSelectAll.TabIndex" type="System.Int32, mscorlib">
-    <value>110</value>
-  </data>
-  <data name="&gt;&gt;cIPTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ssSocketSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>51</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlSplit.Text" xml:space="preserve">
+    <value>|</value>
   </data>
   <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
   </data>
-  <data name="tsmiSaveList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="tlSendList_Success.Text" xml:space="preserve">
+    <value>发送成功:</value>
   </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="tlSendList_Success_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlSendList_Success_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="tlSendList_Fail.Text" xml:space="preserve">
+    <value>发送失败:</value>
+  </data>
+  <data name="tlSendList_Fail_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlSendList_Fail_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 326</value>
+  </data>
+  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>681, 22</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ssSocketSendList.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
+  </data>
+  <data name="&gt;&gt;ssSocketSendList.Name" xml:space="preserve">
+    <value>ssSocketSendList</value>
+  </data>
+  <data name="&gt;&gt;ssSocketSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ssSocketSendList.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;ssSocketSendList.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>589, 17</value>
+  </data>
+  <data name="bSendListStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 29</value>
+  </data>
+  <data name="bSendListStop.TabIndex" type="System.Int32, mscorlib">
+    <value>108</value>
+  </data>
+  <data name="bSendListStop.Text" xml:space="preserve">
+    <value>停 止 (&amp;T)</value>
+  </data>
+  <data name="&gt;&gt;bSendListStop.Name" xml:space="preserve">
+    <value>bSendListStop</value>
+  </data>
+  <data name="&gt;&gt;bSendListStop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSendListStop.Parent" xml:space="preserve">
+    <value>gbSend_Bottom</value>
+  </data>
+  <data name="&gt;&gt;bSendListStop.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>484, 17</value>
+  </data>
+  <data name="bSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 29</value>
+  </data>
+  <data name="bSendList.TabIndex" type="System.Int32, mscorlib">
+    <value>107</value>
+  </data>
+  <data name="bSendList.Text" xml:space="preserve">
+    <value>发 送 (&amp;F)</value>
+  </data>
+  <data name="&gt;&gt;bSendList.Name" xml:space="preserve">
+    <value>bSendList</value>
+  </data>
+  <data name="&gt;&gt;bSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSendList.Parent" xml:space="preserve">
+    <value>gbSend_Bottom</value>
+  </data>
+  <data name="&gt;&gt;bSendList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="gbSend_Bottom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="gbSend_Bottom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="gbSend_Bottom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 271</value>
+  </data>
+  <data name="gbSend_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>681, 55</value>
+  </data>
+  <data name="gbSend_Bottom.TabIndex" type="System.Int32, mscorlib">
+    <value>52</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Name" xml:space="preserve">
+    <value>gbSend_Bottom</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
+    <value>598, 16</value>
+  </data>
+  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 23</value>
+  </data>
+  <data name="nudLoop_Int.TabIndex" type="System.Int32, mscorlib">
+    <value>112</value>
+  </data>
+  <data name="nudLoop_Int.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
   <data name="&gt;&gt;nudLoop_Int.Name" xml:space="preserve">
     <value>nudLoop_Int</value>
   </data>
-  <data name="&gt;&gt;tsmiSaveList.Name" xml:space="preserve">
-    <value>tsmiSaveList</value>
+  <data name="&gt;&gt;nudLoop_Int.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="bSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>484, 17</value>
+  <data name="&gt;&gt;nudLoop_Int.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;nudLoop_Int.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>421, 16</value>
+  </data>
+  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 23</value>
+  </data>
+  <data name="nudLoop_CNT.TabIndex" type="System.Int32, mscorlib">
+    <value>111</value>
+  </data>
+  <data name="nudLoop_CNT.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudLoop_CNT.Name" xml:space="preserve">
+    <value>nudLoop_CNT</value>
+  </data>
+  <data name="&gt;&gt;nudLoop_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudLoop_CNT.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;nudLoop_CNT.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lLoop_Int.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
+    <value>501, 19</value>
+  </data>
+  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 17</value>
+  </data>
+  <data name="lLoop_Int.TabIndex" type="System.Int32, mscorlib">
+    <value>104</value>
+  </data>
+  <data name="lLoop_Int.Text" xml:space="preserve">
+    <value>发送间隔(毫秒):</value>
+  </data>
+  <data name="&gt;&gt;lLoop_Int.Name" xml:space="preserve">
+    <value>lLoop_Int</value>
+  </data>
+  <data name="&gt;&gt;lLoop_Int.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lLoop_Int.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;lLoop_Int.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lLoop_CNT.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>360, 19</value>
+  </data>
+  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 17</value>
+  </data>
+  <data name="lLoop_CNT.TabIndex" type="System.Int32, mscorlib">
+    <value>103</value>
+  </data>
+  <data name="lLoop_CNT.Text" xml:space="preserve">
+    <value>循环次数：</value>
+  </data>
+  <data name="&gt;&gt;lLoop_CNT.Name" xml:space="preserve">
+    <value>lLoop_CNT</value>
+  </data>
+  <data name="&gt;&gt;lLoop_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lLoop_CNT.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;lLoop_CNT.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>250, 16</value>
+  </data>
+  <data name="txtUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="txtUseSocket.TabIndex" type="System.Int32, mscorlib">
+    <value>95</value>
+  </data>
+  <data name="txtUseSocket.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtUseSocket.Name" xml:space="preserve">
+    <value>txtUseSocket</value>
+  </data>
+  <data name="&gt;&gt;txtUseSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtUseSocket.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;txtUseSocket.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbUseSocket.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbUseSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>143, 18</value>
+  </data>
+  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 21</value>
+  </data>
+  <data name="cbUseSocket.TabIndex" type="System.Int32, mscorlib">
+    <value>94</value>
+  </data>
+  <data name="cbUseSocket.Text" xml:space="preserve">
+    <value>使用此套接字：</value>
+  </data>
+  <data name="&gt;&gt;cbUseSocket.Name" xml:space="preserve">
+    <value>cbUseSocket</value>
+  </data>
+  <data name="&gt;&gt;cbUseSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbUseSocket.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;cbUseSocket.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <metadata name="bgwSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>288, 17</value>
+  </metadata>
+  <metadata name="tSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>418, 17</value>
+  </metadata>
+  <metadata name="cCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cCheck.HeaderText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cCheck.Width" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <metadata name="cIndex.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIndex.HeaderText" xml:space="preserve">
+    <value>序号</value>
+  </data>
+  <data name="cIndex.Width" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <metadata name="cNote.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cNote.HeaderText" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <metadata name="cSocket.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cSocket.HeaderText" xml:space="preserve">
+    <value>套接字</value>
+  </data>
+  <data name="cSocket.Width" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <metadata name="cIPTo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIPTo.HeaderText" xml:space="preserve">
+    <value>目的地址</value>
+  </data>
+  <data name="cIPTo.Width" type="System.Int32, mscorlib">
+    <value>150</value>
+  </data>
+  <metadata name="cLen.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLen.HeaderText" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="cLen.Width" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <metadata name="cData.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cData.HeaderText" xml:space="preserve">
+    <value>数据</value>
+  </data>
+  <data name="cData.Width" type="System.Int32, mscorlib">
+    <value>340</value>
+  </data>
+  <data name="dgvSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>681, 225</value>
+  </data>
+  <data name="dgvSendList.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="&gt;&gt;dgvSendList.Name" xml:space="preserve">
+    <value>dgvSendList</value>
+  </data>
+  <data name="&gt;&gt;dgvSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvSendList.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;dgvSendList.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cbSelectAll.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbSelectAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 18</value>
+  </data>
+  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 21</value>
+  </data>
+  <data name="cbSelectAll.TabIndex" type="System.Int32, mscorlib">
+    <value>110</value>
+  </data>
+  <data name="cbSelectAll.Text" xml:space="preserve">
+    <value>全选 / 取消</value>
+  </data>
+  <data name="&gt;&gt;cbSelectAll.Name" xml:space="preserve">
+    <value>cbSelectAll</value>
+  </data>
+  <data name="&gt;&gt;cbSelectAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbSelectAll.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;cbSelectAll.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 225</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>681, 46</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>54</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 35</value>
+  </data>
+  <data name="pbLoading.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 40</value>
+  </data>
+  <data name="pbLoading.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="pbLoading.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Name" xml:space="preserve">
+    <value>pbLoading</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>681, 348</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6766,50 +6817,26 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>681, 22</value>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 4</value>
   </data>
-  <data name="&gt;&gt;cCheck.Name" xml:space="preserve">
-    <value>cCheck</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
   </data>
-  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
-    <value>|</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>发送列表</value>
   </data>
-  <data name="&gt;&gt;bSendList.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;tsmiDeleteSendList.Name" xml:space="preserve">
+    <value>tsmiDeleteSendList</value>
   </data>
-  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsmiDeleteSendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="gbSend_Bottom.TabIndex" type="System.Int32, mscorlib">
-    <value>52</value>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.Name" xml:space="preserve">
-    <value>bSendListStop</value>
-  </data>
-  <data name="cIndex.HeaderText" xml:space="preserve">
-    <value>序号</value>
-  </data>
-  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>250, 16</value>
-  </data>
-  <data name="cLen.HeaderText" xml:space="preserve">
-    <value>长度</value>
-  </data>
-  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 17</value>
-  </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>发送间隔(毫秒):</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
-  </data>
-  <data name="&gt;&gt;cIndex.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmiClear.Name" xml:space="preserve">
     <value>tsmiClear</value>
@@ -6817,139 +6844,136 @@
   <data name="&gt;&gt;tsmiClear.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudLoop_Int.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
+    <value>toolStripSeparator2</value>
   </data>
-  <data name="&gt;&gt;cLen.Name" xml:space="preserve">
-    <value>cLen</value>
+  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cData.Width" type="System.Int32, mscorlib">
-    <value>340</value>
+  <data name="&gt;&gt;tsmiSaveSendList.Name" xml:space="preserve">
+    <value>tsmiSaveSendList</value>
   </data>
-  <data name="tlSendList_Fail_CNT.Text" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;tsmiSaveSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="gbSend_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>681, 55</value>
+  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
+    <value>toolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiLoadSendList.Name" xml:space="preserve">
+    <value>tsmiLoadSendList</value>
+  </data>
+  <data name="&gt;&gt;tsmiLoadSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tlLoop_Send.Name" xml:space="preserve">
     <value>tlLoop_Send</value>
   </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="cData.HeaderText" xml:space="preserve">
-    <value>数据</value>
+  <data name="&gt;&gt;tlLoop_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tlLoop_Send_CNT.Name" xml:space="preserve">
     <value>tlLoop_Send_CNT</value>
   </data>
-  <data name="&gt;&gt;lLoop_CNT.Name" xml:space="preserve">
-    <value>lLoop_CNT</value>
+  <data name="&gt;&gt;tlLoop_Send_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="nudLoop_Int.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
+  <data name="&gt;&gt;tlSplit.Name" xml:space="preserve">
+    <value>tlSplit</value>
   </data>
-  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>421, 16</value>
+  <data name="&gt;&gt;tlSplit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cData.Name" xml:space="preserve">
-    <value>cData</value>
+  <data name="&gt;&gt;tlSendList_Success.Name" xml:space="preserve">
+    <value>tlSendList_Success</value>
   </data>
   <data name="&gt;&gt;tlSendList_Success.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbUseSocket.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="&gt;&gt;tlSendList_Success_CNT.Name" xml:space="preserve">
+    <value>tlSendList_Success_CNT</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
+  <data name="&gt;&gt;tlSendList_Success_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlLoop_Send_CNT.Text" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
+    <value>toolStripStatusLabel3</value>
   </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cIPTo.Width" type="System.Int32, mscorlib">
-    <value>150</value>
+  <data name="&gt;&gt;tlSendList_Fail.Name" xml:space="preserve">
+    <value>tlSendList_Fail</value>
   </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
+  <data name="&gt;&gt;tlSendList_Fail.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudLoop_Int.Parent" xml:space="preserve">
-    <value>groupBox1</value>
+  <data name="&gt;&gt;tlSendList_Fail_CNT.Name" xml:space="preserve">
+    <value>tlSendList_Fail_CNT</value>
   </data>
-  <data name="cLen.Width" type="System.Int32, mscorlib">
-    <value>50</value>
+  <data name="&gt;&gt;tlSendList_Fail_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lLoop_CNT.Parent" xml:space="preserve">
-    <value>groupBox1</value>
+  <data name="&gt;&gt;bgwSendList.Name" xml:space="preserve">
+    <value>bgwSendList</value>
   </data>
-  <data name="txtUseSocket.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="groupBox1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSendListStop.Text" xml:space="preserve">
-    <value>停 止 (&amp;T)</value>
-  </data>
-  <data name="cbSelectAll.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="&gt;&gt;bgwSendList.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tSendList.Name" xml:space="preserve">
     <value>tSendList</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
-    <value>toolStripSeparator2</value>
+  <data name="&gt;&gt;tSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <metadata name="cIndex.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="tSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>418, 17</value>
-  </metadata>
-  <metadata name="cData.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIPTo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ssSocketSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="cSocket.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="bgwSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>288, 17</value>
-  </metadata>
-  <metadata name="cNote.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cLen.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cmsSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>166, 17</value>
-  </metadata>
+  <data name="&gt;&gt;cCheck.Name" xml:space="preserve">
+    <value>cCheck</value>
+  </data>
+  <data name="&gt;&gt;cCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
+    <value>cIndex</value>
+  </data>
+  <data name="&gt;&gt;cIndex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cNote.Name" xml:space="preserve">
+    <value>cNote</value>
+  </data>
+  <data name="&gt;&gt;cNote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
+    <value>cSocket</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIPTo.Name" xml:space="preserve">
+    <value>cIPTo</value>
+  </data>
+  <data name="&gt;&gt;cIPTo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLen.Name" xml:space="preserve">
+    <value>cLen</value>
+  </data>
+  <data name="&gt;&gt;cLen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cData.Name" xml:space="preserve">
+    <value>cData</value>
+  </data>
+  <data name="&gt;&gt;cData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Socket_SendList_Form</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -7,7 +7,7 @@ namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
     {
-        private string sLanguage = "";
+        private static string sLanguage_UI = "";
         private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSARecv;
 
         #region//user32.dll 
@@ -51,7 +51,7 @@ namespace WPELibrary.Lib
                 else
                 {
                     stSocketType = Socket_Packet.SocketType.Send;
-                    Filter_List.DoFilter(buffer, length);                    
+                    Socket_Cache.SocketFilterList.DoFilter(buffer, length);                    
                 }
 
                 res = send(socket, buffer, length, flags);
@@ -109,7 +109,7 @@ namespace WPELibrary.Lib
                 {
                     stSocketType = Socket_Packet.SocketType.WSASend;
 
-                    Filter_List.DoFilter(wsBuffer.buf, (int)wsBuffer.len);
+                    Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, (int)wsBuffer.len);
                 }
 
                 res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, dwFlags, lpOverlapped, lpCompletionRoutine);
@@ -162,7 +162,7 @@ namespace WPELibrary.Lib
                 else
                 {
                     stSocketType = Socket_Packet.SocketType.SendTo;
-                    Filter_List.DoFilter(buffer, length);
+                    Socket_Cache.SocketFilterList.DoFilter(buffer, length);
                 }
 
                 res = sendto(socket, buffer, length, flags, ref To, ref toLenth);
@@ -218,7 +218,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        Filter_List.DoFilter(buffer, length);
+                        Socket_Cache.SocketFilterList.DoFilter(buffer, length);
 
                         if (Socket_Cache.Display_Recv)
                         {
@@ -276,7 +276,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        Filter_List.DoFilter(wsBuffer.buf, wsBuffer.len);
+                        Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
 
                         if (Socket_Cache.Display_Recv)
                         {
@@ -329,7 +329,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        Filter_List.DoFilter(buffer, length);
+                        Socket_Cache.SocketFilterList.DoFilter(buffer, length);
 
                         if (Socket_Cache.Display_RecvFrom)
                         {
@@ -366,14 +366,21 @@ namespace WPELibrary.Lib
 
         public unsafe void Run(RemoteHooking.IContext InContext, String InArg)
         {
-            if (Environment.OSVersion.Version.Major >= 6)
+            try
             {
-                SetProcessDPIAware();
-            }
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    SetProcessDPIAware();
+                }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Socket_Form(InArg));            
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Socket_Form(InArg));
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }          
         }
 
         #endregion
@@ -399,10 +406,7 @@ namespace WPELibrary.Lib
                 lhWSASend.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
 
                 lhWSARecv = LocalHook.Create(LocalHook.GetProcAddress("WS2_32.dll", "WSARecv"), new DWSARecv(WSARecv_Hook), this);
-                lhWSARecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-
-                sLanguage = MultiLanguage.GetDefaultLanguage("开始拦截！", "Start Intercepting!");
-                Socket_Operation.DoLog(sLanguage);
+                lhWSARecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });                
             }
             catch (Exception ex)
             {
@@ -414,37 +418,47 @@ namespace WPELibrary.Lib
         #region//停止拦截
         public void StopHook()
         {
-            lhRecv.Dispose();
-            lhSend.Dispose();
-            lhRecvFrom.Dispose();
-            lhSendTo.Dispose();
-            lhWSASend.Dispose();
-            lhWSARecv.Dispose();
-
-            sLanguage = MultiLanguage.GetDefaultLanguage("结束拦截！", "Stop Interception!");
-            Socket_Operation.DoLog(sLanguage);
+            try
+            {
+                lhRecv.Dispose();
+                lhSend.Dispose();
+                lhRecvFrom.Dispose();
+                lhSendTo.Dispose();
+                lhWSASend.Dispose();
+                lhWSARecv.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }          
         }
         #endregion        
 
         #region//发送封包
         public static bool SendPacket(int socket, IntPtr buffer, int length)
-        {
-            string sLan = "";
+        {  
             bool bReturn = false;
 
-            int res = send(socket, buffer, length, 0);
+            try
+            {
+                int res = send(socket, buffer, length, 0);
 
-            if (res > 0)
-            {
-                bReturn = true;
-                sLan = MultiLanguage.GetDefaultLanguage("发送封包成功！", "Successfully sent packet!");
-                Socket_Operation.DoLog(sLan);
+                if (res > 0)
+                {
+                    bReturn = true;
+                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送封包成功！", "Successfully sent packet!");
+                    Socket_Operation.DoLog(sLanguage_UI);
+                }
+                else
+                {
+                    bReturn = false;
+                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送封包失败！", "Sending packet failed!");
+                    Socket_Operation.DoLog(sLanguage_UI);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                bReturn = false;
-                sLan = MultiLanguage.GetDefaultLanguage("发送封包失败！", "Sending packet failed!");
-                Socket_Operation.DoLog(sLan);
+                Socket_Operation.DoLog(ex.Message);
             }
 
             return bReturn;            

@@ -30,7 +30,7 @@ namespace ProcessInjector
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessList_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.bCreate = new System.Windows.Forms.Button();
             this.bSelected = new System.Windows.Forms.Button();
             this.bRefresh = new System.Windows.Forms.Button();
@@ -38,7 +38,10 @@ namespace ProcessInjector
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cProcessName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bgwProcessList = new System.ComponentModel.BackgroundWorker();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProcessList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // bCreate
@@ -64,21 +67,22 @@ namespace ProcessInjector
             // 
             // dgvProcessList
             // 
-            resources.ApplyResources(this.dgvProcessList, "dgvProcessList");
             this.dgvProcessList.AllowUserToAddRows = false;
             this.dgvProcessList.AllowUserToDeleteRows = false;
             this.dgvProcessList.AllowUserToResizeColumns = false;
             this.dgvProcessList.AllowUserToResizeRows = false;
+            this.dgvProcessList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvProcessList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
             this.dgvProcessList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvProcessList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvProcessList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            resources.ApplyResources(this.dgvProcessList, "dgvProcessList");
             this.dgvProcessList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvProcessList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cICO,
@@ -118,10 +122,24 @@ namespace ProcessInjector
             this.cProcessID.Name = "cProcessID";
             this.cProcessID.ReadOnly = true;
             // 
+            // bgwProcessList
+            // 
+            this.bgwProcessList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcessList_DoWork);
+            this.bgwProcessList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcessList_RunWorkerCompleted);
+            // 
+            // pbLoading
+            // 
+            this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.pbLoading, "pbLoading");
+            this.pbLoading.Image = global::ProcessInjector.Properties.Resources.loading;
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.TabStop = false;
+            // 
             // ProcessList_Form
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.dgvProcessList);
             this.Controls.Add(this.bCreate);
             this.Controls.Add(this.bSelected);
@@ -132,6 +150,7 @@ namespace ProcessInjector
             this.Name = "ProcessList_Form";
             this.Load += new System.EventHandler(this.ProcessList_Form_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvProcessList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -144,5 +163,7 @@ namespace ProcessInjector
         private System.Windows.Forms.DataGridViewImageColumn cICO;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessID;
+        private System.ComponentModel.BackgroundWorker bgwProcessList;
+        private System.Windows.Forms.PictureBox pbLoading;
     }
 }

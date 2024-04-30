@@ -9,21 +9,28 @@ namespace ProcessInjector
         #region//初始化
         public LanguageList_Form()
         {
-            InitializeComponent();            
+            InitializeComponent();
 
-            switch (Properties.Settings.Default.DefaultLanguage)
+            try
             {
-                case "zh-CN":
-                    this.rb_zhCN.Checked = true;
-                    break;
+                switch (Properties.Settings.Default.DefaultLanguage)
+                {
+                    case "zh-CN":
+                        this.rb_zhCN.Checked = true;
+                        break;
 
-                case "en-US":
-                    this.rb_enUS.Checked = true;
-                    break;
+                    case "en-US":
+                        this.rb_enUS.Checked = true;
+                        break;
 
-                default:
-                    break;
-            }          
+                    default:
+                        break;
+                }
+            }
+            catch
+            {
+                //
+            }        
         }
         #endregion
 
@@ -44,21 +51,28 @@ namespace ProcessInjector
         #region//加载所有窗体语言
         private void LoadAll()
         {
-            foreach (Form form in Application.OpenForms)
+            try
             {
-                switch (form.Name)
+                foreach (Form form in Application.OpenForms)
                 {
-                    case "Injector_Form":
-                        MultiLanguage.LoadLanguage(form, typeof(Injector_Form));
-                        break;
+                    switch (form.Name)
+                    {
+                        case "Injector_Form":
+                            MultiLanguage.LoadLanguage(form, typeof(Injector_Form));
+                            break;
 
-                    case "LanguageList_Form":
-                        MultiLanguage.LoadLanguage(form, typeof(LanguageList_Form));
-                        break;                   
+                        case "LanguageList_Form":
+                            MultiLanguage.LoadLanguage(form, typeof(LanguageList_Form));
+                            break;
 
-                    default:
-                        break;
+                        default:
+                            break;
+                    }
                 }
+            }
+            catch
+            {
+                //
             }
         }
         #endregion

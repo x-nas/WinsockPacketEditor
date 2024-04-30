@@ -36,13 +36,13 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmsSendList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDeleteSendList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiClear = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiSaveList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSaveSendList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiLoadList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiLoadSendList = new System.Windows.Forms.ToolStripMenuItem();
             this.ssSocketSendList = new System.Windows.Forms.StatusStrip();
             this.tlLoop_Send = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlLoop_Send_CNT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -63,7 +63,7 @@ namespace WPELibrary
             this.cbUseSocket = new System.Windows.Forms.CheckBox();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.tSendList = new System.Windows.Forms.Timer(this.components);
-            this.dgSendList = new System.Windows.Forms.DataGridView();
+            this.dgvSendList = new System.Windows.Forms.DataGridView();
             this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,67 +73,68 @@ namespace WPELibrary
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
             this.cmsSendList.SuspendLayout();
             this.ssSocketSendList.SuspendLayout();
             this.gbSend_Bottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_Int)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_CNT)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgSendList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).BeginInit();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // cmsSendList
             // 
-            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiDelete,
+            this.tsmiDeleteSendList,
             this.toolStripSeparator1,
             this.tsmiClear,
             this.toolStripSeparator2,
-            this.tsmiSaveList,
+            this.tsmiSaveSendList,
             this.toolStripSeparator3,
-            this.tsmiLoadList});
+            this.tsmiLoadSendList});
             this.cmsSendList.Name = "cmsBatchSend";
+            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSendList_ItemClicked);
             // 
-            // tsmiDelete
+            // tsmiDeleteSendList
             // 
-            resources.ApplyResources(this.tsmiDelete, "tsmiDelete");
-            this.tsmiDelete.Name = "tsmiDelete";
+            this.tsmiDeleteSendList.Name = "tsmiDeleteSendList";
+            resources.ApplyResources(this.tsmiDeleteSendList, "tsmiDeleteSendList");
             // 
             // toolStripSeparator1
             // 
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // tsmiClear
             // 
-            resources.ApplyResources(this.tsmiClear, "tsmiClear");
             this.tsmiClear.Name = "tsmiClear";
+            resources.ApplyResources(this.tsmiClear, "tsmiClear");
             // 
             // toolStripSeparator2
             // 
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
-            // tsmiSaveList
+            // tsmiSaveSendList
             // 
-            resources.ApplyResources(this.tsmiSaveList, "tsmiSaveList");
-            this.tsmiSaveList.Name = "tsmiSaveList";
+            this.tsmiSaveSendList.Name = "tsmiSaveSendList";
+            resources.ApplyResources(this.tsmiSaveSendList, "tsmiSaveSendList");
             // 
             // toolStripSeparator3
             // 
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
-            // tsmiLoadList
+            // tsmiLoadSendList
             // 
-            resources.ApplyResources(this.tsmiLoadList, "tsmiLoadList");
-            this.tsmiLoadList.Name = "tsmiLoadList";
+            this.tsmiLoadSendList.Name = "tsmiLoadSendList";
+            resources.ApplyResources(this.tsmiLoadSendList, "tsmiLoadSendList");
             // 
             // ssSocketSendList
             // 
-            resources.ApplyResources(this.ssSocketSendList, "ssSocketSendList");
             this.ssSocketSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlLoop_Send,
             this.tlLoop_Send_CNT,
@@ -143,56 +144,57 @@ namespace WPELibrary
             this.toolStripStatusLabel3,
             this.tlSendList_Fail,
             this.tlSendList_Fail_CNT});
+            resources.ApplyResources(this.ssSocketSendList, "ssSocketSendList");
             this.ssSocketSendList.Name = "ssSocketSendList";
             this.ssSocketSendList.SizingGrip = false;
             // 
             // tlLoop_Send
             // 
-            resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
             this.tlLoop_Send.Name = "tlLoop_Send";
+            resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
             // 
             // tlLoop_Send_CNT
             // 
-            resources.ApplyResources(this.tlLoop_Send_CNT, "tlLoop_Send_CNT");
             this.tlLoop_Send_CNT.Name = "tlLoop_Send_CNT";
+            resources.ApplyResources(this.tlLoop_Send_CNT, "tlLoop_Send_CNT");
             // 
             // tlSplit
             // 
-            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             // 
             // tlSendList_Success
             // 
-            resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
             this.tlSendList_Success.Name = "tlSendList_Success";
+            resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
             // 
             // tlSendList_Success_CNT
             // 
-            resources.ApplyResources(this.tlSendList_Success_CNT, "tlSendList_Success_CNT");
             this.tlSendList_Success_CNT.Name = "tlSendList_Success_CNT";
+            resources.ApplyResources(this.tlSendList_Success_CNT, "tlSendList_Success_CNT");
             // 
             // toolStripStatusLabel3
             // 
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // tlSendList_Fail
             // 
-            resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
             this.tlSendList_Fail.Name = "tlSendList_Fail";
+            resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
             // 
             // tlSendList_Fail_CNT
             // 
-            resources.ApplyResources(this.tlSendList_Fail_CNT, "tlSendList_Fail_CNT");
             this.tlSendList_Fail_CNT.Name = "tlSendList_Fail_CNT";
+            resources.ApplyResources(this.tlSendList_Fail_CNT, "tlSendList_Fail_CNT");
             // 
             // gbSend_Bottom
             // 
-            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Controls.Add(this.bSendListStop);
             this.gbSend_Bottom.Controls.Add(this.bSendList);
+            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Name = "gbSend_Bottom";
             this.gbSend_Bottom.TabStop = false;
             // 
@@ -212,12 +214,12 @@ namespace WPELibrary
             // 
             // nudLoop_Int
             // 
-            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Increment = new decimal(new int[] {
             100,
             0,
             0,
             0});
+            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -287,15 +289,14 @@ namespace WPELibrary
             this.tSendList.Interval = 1000;
             this.tSendList.Tick += new System.EventHandler(this.tSendList_Tick);
             // 
-            // dgSendList
+            // dgvSendList
             // 
-            resources.ApplyResources(this.dgSendList, "dgSendList");
-            this.dgSendList.AllowUserToAddRows = false;
-            this.dgSendList.AllowUserToDeleteRows = false;
-            this.dgSendList.AllowUserToResizeRows = false;
-            this.dgSendList.BackgroundColor = System.Drawing.SystemColors.ControlDark;
-            this.dgSendList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgSendList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvSendList.AllowUserToAddRows = false;
+            this.dgvSendList.AllowUserToDeleteRows = false;
+            this.dgvSendList.AllowUserToResizeRows = false;
+            this.dgvSendList.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.dgvSendList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSendList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cCheck,
             this.cIndex,
             this.cNote,
@@ -303,15 +304,16 @@ namespace WPELibrary
             this.cIPTo,
             this.cLen,
             this.cData});
-            this.dgSendList.ContextMenuStrip = this.cmsSendList;
-            this.dgSendList.MultiSelect = false;
-            this.dgSendList.Name = "dgSendList";
-            this.dgSendList.RowHeadersVisible = false;
-            this.dgSendList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
-            this.dgSendList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgSendList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
-            this.dgSendList.RowTemplate.Height = 23;
-            this.dgSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSendList.ContextMenuStrip = this.cmsSendList;
+            resources.ApplyResources(this.dgvSendList, "dgvSendList");
+            this.dgvSendList.MultiSelect = false;
+            this.dgvSendList.Name = "dgvSendList";
+            this.dgvSendList.RowHeadersVisible = false;
+            this.dgvSendList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
+            this.dgvSendList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvSendList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
+            this.dgvSendList.RowTemplate.Height = 23;
+            this.dgvSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // cCheck
             // 
@@ -377,7 +379,6 @@ namespace WPELibrary
             // 
             // groupBox1
             // 
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.nudLoop_Int);
             this.groupBox1.Controls.Add(this.cbSelectAll);
             this.groupBox1.Controls.Add(this.nudLoop_CNT);
@@ -385,6 +386,7 @@ namespace WPELibrary
             this.groupBox1.Controls.Add(this.cbUseSocket);
             this.groupBox1.Controls.Add(this.lLoop_CNT);
             this.groupBox1.Controls.Add(this.lLoop_Int);
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
@@ -395,14 +397,24 @@ namespace WPELibrary
             this.cbSelectAll.UseVisualStyleBackColor = true;
             this.cbSelectAll.CheckedChanged += new System.EventHandler(this.cbSelectAll_CheckedChanged);
             // 
+            // pbLoading
+            // 
+            this.pbLoading.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pbLoading.Image = global::WPELibrary.Properties.Resources.loading;
+            resources.ApplyResources(this.pbLoading, "pbLoading");
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.TabStop = false;
+            // 
             // Socket_SendList_Form
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.dgSendList);
+            this.Controls.Add(this.pbLoading);
+            this.Controls.Add(this.dgvSendList);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.gbSend_Bottom);
             this.Controls.Add(this.ssSocketSendList);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_SendList_Form";
             this.TopMost = true;
@@ -414,9 +426,10 @@ namespace WPELibrary
             this.gbSend_Bottom.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_Int)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_CNT)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgSendList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -434,7 +447,7 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlSendList_Fail_CNT;
         private System.Windows.Forms.GroupBox gbSend_Bottom;
         private System.Windows.Forms.ContextMenuStrip cmsSendList;
-        private System.Windows.Forms.ToolStripMenuItem tsmiDelete;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDeleteSendList;
         private System.ComponentModel.BackgroundWorker bgwSendList;
         private System.Windows.Forms.Timer tSendList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
@@ -445,15 +458,15 @@ namespace WPELibrary
         private System.Windows.Forms.Button bSendList;
         private System.Windows.Forms.Label lLoop_Int;
         private System.Windows.Forms.Label lLoop_CNT;
-        private System.Windows.Forms.DataGridView dgSendList;
+        private System.Windows.Forms.DataGridView dgvSendList;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox cbSelectAll;
         private System.Windows.Forms.NumericUpDown nudLoop_Int;
         private System.Windows.Forms.NumericUpDown nudLoop_CNT;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripMenuItem tsmiSaveList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveSendList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem tsmiLoadList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadSendList;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cNote;
@@ -461,5 +474,6 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
+        private System.Windows.Forms.PictureBox pbLoading;
     }
 }

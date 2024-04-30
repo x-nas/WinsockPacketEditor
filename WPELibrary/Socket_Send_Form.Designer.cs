@@ -31,10 +31,10 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Send_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ssSocketSend = new System.Windows.Forms.StatusStrip();
             this.tlSendPacket = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSendPacket_CNT = new System.Windows.Forms.ToolStripStatusLabel();
@@ -90,7 +90,6 @@ namespace WPELibrary
             // 
             // ssSocketSend
             // 
-            resources.ApplyResources(this.ssSocketSend, "ssSocketSend");
             this.ssSocketSend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlSendPacket,
             this.tlSendPacket_CNT,
@@ -100,50 +99,51 @@ namespace WPELibrary
             this.toolStripStatusLabel3,
             this.tlSend_Fail,
             this.tlSend_Fail_CNT});
+            resources.ApplyResources(this.ssSocketSend, "ssSocketSend");
             this.ssSocketSend.Name = "ssSocketSend";
             this.ssSocketSend.SizingGrip = false;
             // 
             // tlSendPacket
             // 
-            resources.ApplyResources(this.tlSendPacket, "tlSendPacket");
             this.tlSendPacket.Name = "tlSendPacket";
+            resources.ApplyResources(this.tlSendPacket, "tlSendPacket");
             // 
             // tlSendPacket_CNT
             // 
-            resources.ApplyResources(this.tlSendPacket_CNT, "tlSendPacket_CNT");
             this.tlSendPacket_CNT.Name = "tlSendPacket_CNT";
+            resources.ApplyResources(this.tlSendPacket_CNT, "tlSendPacket_CNT");
             // 
             // tlSplit
             // 
-            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             // 
             // tlSend_Success
             // 
-            resources.ApplyResources(this.tlSend_Success, "tlSend_Success");
             this.tlSend_Success.Name = "tlSend_Success";
+            resources.ApplyResources(this.tlSend_Success, "tlSend_Success");
             // 
             // tlSend_Success_CNT
             // 
-            resources.ApplyResources(this.tlSend_Success_CNT, "tlSend_Success_CNT");
             this.tlSend_Success_CNT.Name = "tlSend_Success_CNT";
+            resources.ApplyResources(this.tlSend_Success_CNT, "tlSend_Success_CNT");
             // 
             // toolStripStatusLabel3
             // 
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // tlSend_Fail
             // 
-            resources.ApplyResources(this.tlSend_Fail, "tlSend_Fail");
             this.tlSend_Fail.Name = "tlSend_Fail";
+            resources.ApplyResources(this.tlSend_Fail, "tlSend_Fail");
             // 
             // tlSend_Fail_CNT
             // 
-            resources.ApplyResources(this.tlSend_Fail_CNT, "tlSend_Fail_CNT");
             this.tlSend_Fail_CNT.Name = "tlSend_Fail_CNT";
+            resources.ApplyResources(this.tlSend_Fail_CNT, "tlSend_Fail_CNT");
             // 
             // bSendStop
             // 
@@ -161,11 +161,11 @@ namespace WPELibrary
             // 
             // gbSend2
             // 
-            resources.ApplyResources(this.gbSend2, "gbSend2");
             this.gbSend2.Controls.Add(this.txtSend_Port);
             this.gbSend2.Controls.Add(this.lSend_Port);
             this.gbSend2.Controls.Add(this.txtSend_IP);
             this.gbSend2.Controls.Add(this.lSend_IP);
+            resources.ApplyResources(this.gbSend2, "gbSend2");
             this.gbSend2.Name = "gbSend2";
             this.gbSend2.TabStop = false;
             // 
@@ -193,11 +193,11 @@ namespace WPELibrary
             // 
             // gbSend1
             // 
-            resources.ApplyResources(this.gbSend1, "gbSend1");
             this.gbSend1.Controls.Add(this.txtSend_Len);
             this.gbSend1.Controls.Add(this.lSend_Len);
             this.gbSend1.Controls.Add(this.txtSend_Socket);
             this.gbSend1.Controls.Add(this.lSend_Socket);
+            resources.ApplyResources(this.gbSend1, "gbSend1");
             this.gbSend1.Name = "gbSend1";
             this.gbSend1.TabStop = false;
             // 
@@ -223,22 +223,22 @@ namespace WPELibrary
             // 
             // gbSend_Bottom
             // 
-            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Controls.Add(this.nudLoop_Int);
             this.gbSend_Bottom.Controls.Add(this.nudLoop_CNT);
             this.gbSend_Bottom.Controls.Add(this.lLoop_Int);
             this.gbSend_Bottom.Controls.Add(this.lLoop_CNT);
+            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Name = "gbSend_Bottom";
             this.gbSend_Bottom.TabStop = false;
             // 
             // nudLoop_Int
             // 
-            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Increment = new decimal(new int[] {
             100,
             0,
             0,
             0});
+            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -290,19 +290,20 @@ namespace WPELibrary
             // 
             this.bgwSendPacket.WorkerSupportsCancellation = true;
             this.bgwSendPacket.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendPacket_DoWork);
+            this.bgwSendPacket.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendPacket_RunWorkerCompleted);
             // 
             // cmsSocketSend
             // 
-            resources.ApplyResources(this.cmsSocketSend, "cmsSocketSend");
             this.cmsSocketSend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiBatchSend});
             this.cmsSocketSend.Name = "cmsSocketSend";
+            resources.ApplyResources(this.cmsSocketSend, "cmsSocketSend");
             this.cmsSocketSend.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSocketSend_ItemClicked);
             // 
             // tsmiBatchSend
             // 
-            resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
             this.tsmiBatchSend.Name = "tsmiBatchSend";
+            resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
             // 
             // tSend
             // 
@@ -312,13 +313,13 @@ namespace WPELibrary
             // 
             // gbStep
             // 
-            resources.ApplyResources(this.gbStep, "gbStep");
             this.gbStep.Controls.Add(this.lStepLen_Value);
             this.gbStep.Controls.Add(this.lStepIndex_Value);
             this.gbStep.Controls.Add(this.nudStepIndex);
             this.gbStep.Controls.Add(this.nudStepLen);
             this.gbStep.Controls.Add(this.lStepLen);
             this.gbStep.Controls.Add(this.cbStep);
+            resources.ApplyResources(this.gbStep, "gbStep");
             this.gbStep.Name = "gbStep";
             this.gbStep.TabStop = false;
             // 
@@ -336,7 +337,7 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.nudStepIndex, "nudStepIndex");
             this.nudStepIndex.Maximum = new decimal(new int[] {
-            9999,
+            99999,
             0,
             0,
             0});
@@ -382,49 +383,49 @@ namespace WPELibrary
             // 
             // pSend_Top
             // 
-            resources.ApplyResources(this.pSend_Top, "pSend_Top");
             this.pSend_Top.Controls.Add(this.dgvSocketSend);
+            resources.ApplyResources(this.pSend_Top, "pSend_Top");
             this.pSend_Top.Name = "pSend_Top";
             // 
             // dgvSocketSend
             // 
-            resources.ApplyResources(this.dgvSocketSend, "dgvSocketSend");
             this.dgvSocketSend.AllowUserToAddRows = false;
             this.dgvSocketSend.AllowUserToDeleteRows = false;
             this.dgvSocketSend.AllowUserToResizeColumns = false;
             this.dgvSocketSend.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSocketSend.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSocketSend.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvSocketSend.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSocketSend.ContextMenuStrip = this.cmsSocketSend;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSocketSend.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSocketSend.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.dgvSocketSend, "dgvSocketSend");
             this.dgvSocketSend.MultiSelect = false;
             this.dgvSocketSend.Name = "dgvSocketSend";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSocketSend.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSocketSend.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvSocketSend.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvSocketSend.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvSocketSend.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvSocketSend.RowTemplate.Height = 23;
             this.dgvSocketSend.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellClick);
             this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);

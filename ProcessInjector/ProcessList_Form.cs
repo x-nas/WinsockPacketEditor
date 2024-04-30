@@ -5,48 +5,126 @@ using System.IO;
 using System.Drawing;
 using ProcessInjector.Lib;
 using WPELibrary.Lib;
+using System.Reflection;
 
 namespace ProcessInjector
 {
     public partial class ProcessList_Form : Form
     {
-        private string sLanguage = "";
+        private string sLanguage_UI = "";
 
         #region//窗体加载
         public ProcessList_Form()
         {           
             InitializeComponent();
-                        
-            MultiLanguage.LoadLanguage(this, typeof(ProcessList_Form));
+
+            try
+            {
+                pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
+                pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
+
+                dgvProcessList.AutoGenerateColumns = false;
+                dgvProcessList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProcessList, true, null);
+            }
+            catch
+            {
+                //
+            }
         }
 
         private void ProcessList_Form_Load(object sender, EventArgs e)
         {
-            this.ShowProcess();
+            this.ShowProcessList();
         }
-        #endregion
+        #endregion      
 
-        #region//显示所有进程
-        public void ShowProcess()
+        #region//显示所有进程（异步）
+        private void ShowProcessList()
         {
-            dgvProcessList.DataSource = Process_Injector.GetProcess();
+            try
+            {
+                this.bCreate.Enabled = false;
+                this.bRefresh.Enabled = false;
+                this.bSelected.Enabled = false;
+                this.pbLoading.Visible = true;
+
+                if (!bgwProcessList.IsBusy)
+                {
+                    bgwProcessList.RunWorkerAsync();
+                }
+            }
+            catch
+            {
+                //
+            }
+        }
+
+        private void bgwProcessList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                e.Result = Process_Injector.GetProcess();
+            }
+            catch
+            {
+                //
+            }
+        }
+
+        private void bgwProcessList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if (this.dgvProcessList.InvokeRequired)
+                {
+                    this.dgvProcessList.Invoke(new Action(() =>
+                    {
+                        this.dgvProcessList.DataSource = e.Result;
+
+                        this.bCreate.Enabled = true;
+                        this.bRefresh.Enabled = true;
+                        this.bSelected.Enabled = true;
+                        this.pbLoading.Visible = false;
+                    }));
+                }
+                else
+                {
+                    this.dgvProcessList.DataSource = e.Result;
+
+                    this.bCreate.Enabled = true;
+                    this.bRefresh.Enabled = true;
+                    this.bSelected.Enabled = true;
+                    this.pbLoading.Visible = false;
+                }
+            }
+            catch
+            {
+                //
+            }
         }
         #endregion
 
         #region//选中某个进程
         private void bSelected_Click(object sender, EventArgs e)
         {
-            if (dgvProcessList.SelectedRows.Count == 1)
+            try
             {
-                Program.PID = (int)dgvProcessList.SelectedRows[0].Cells["cProcessID"].Value;
-                Program.PNAME = dgvProcessList.SelectedRows[0].Cells["cProcessName"].Value.ToString();
+                if (dgvProcessList.SelectedRows.Count == 1)
+                {
+                    Program.PID = (int)dgvProcessList.SelectedRows[0].Cells["cProcessID"].Value;
+                    Program.PNAME = dgvProcessList.SelectedRows[0].Cells["cProcessName"].Value.ToString();
 
-                this.Close();
+                    this.Close();
+                }
+                else
+                {
+                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("请选择一个进程!", "Please select a process!");
+                    Socket_Operation.ShowMessageBox(sLanguage_UI);
+                }
             }
-            else
+            catch
             {
-                sLanguage = MultiLanguage.GetDefaultLanguage("请选择一个进程", "Please select a process");
-                Socket_Operation.ShowMessageBox(sLanguage + "！");
+                //
             }
         }
         #endregion
@@ -54,31 +132,46 @@ namespace ProcessInjector
         #region//刷新进程列表
         private void bRefresh_Click(object sender, EventArgs e)
         {
-            DataTable dtClear = (DataTable)dgvProcessList.DataSource;
-            dtClear.Rows.Clear();
-            dgvProcessList.DataSource = dtClear;
+            try
+            {
+                DataTable dtClear = (DataTable)dgvProcessList.DataSource;
+                dtClear.Rows.Clear();
+                dgvProcessList.DataSource = dtClear;
 
-            this.ShowProcess();
+                this.ShowProcessList();
+            }
+            catch
+            {
+                //
+            }
         }
         #endregion
 
         #region//选择程序
         private void bCreate_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofdCreate = new OpenFileDialog();
+            try
+            {
+                OpenFileDialog ofdCreate = new OpenFileDialog();
 
-            sLanguage = MultiLanguage.GetDefaultLanguage("请选择要注入的应用程序", "Please select the program to inject");
-            ofdCreate.Title = sLanguage;
-            ofdCreate.Multiselect = false;
-            ofdCreate.InitialDirectory = "";
-            sLanguage = MultiLanguage.GetDefaultLanguage("应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*");
-            ofdCreate.Filter = sLanguage;
-            ofdCreate.ShowDialog();
+                sLanguage_UI = MultiLanguage.GetDefaultLanguage("请选择要注入的应用程序", "Please select the program to inject");
+                ofdCreate.Title = sLanguage_UI;
+                ofdCreate.Multiselect = false;
+                ofdCreate.InitialDirectory = "";
 
-            Program.PID = -1;
-            Program.PATH = ofdCreate.FileName;
-            Program.PNAME = Path.GetFileName(Program.PATH);
-            base.Close();
+                sLanguage_UI = MultiLanguage.GetDefaultLanguage("应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*");
+                ofdCreate.Filter = sLanguage_UI;
+                ofdCreate.ShowDialog();
+
+                Program.PID = -1;
+                Program.PATH = ofdCreate.FileName;
+                Program.PNAME = Path.GetFileName(Program.PATH);
+                base.Close();
+            }
+            catch
+            {
+                //
+            }
         }
         #endregion
 
@@ -90,23 +183,37 @@ namespace ProcessInjector
 
         private void dgvProcessList_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            try
             {
-                if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                if (e.RowIndex >= 0)
                 {
-                    this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Control");
+                    if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                    {
+                        this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Control");
+                    }
                 }
             }
+            catch
+            {
+                //
+            }            
         }
 
         private void dgvProcessList_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            try
             {
-                if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                if (e.RowIndex >= 0)
                 {
-                    this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Window");
+                    if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                    {
+                        this.dgvProcessList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromName("Window");
+                    }
                 }
+            }
+            catch
+            {
+                //
             }
         }
         #endregion        

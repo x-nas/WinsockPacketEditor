@@ -3,109 +3,137 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace WPELibrary.Lib
-{
-    //用于编写与切换语言相关的变量和代码
+{    
     public static class MultiLanguage
-    {
-        //当前默认语言
-        public static string DefaultLanguage = "zh-CN";        
+    {        
+        public static string DefaultLanguage = "zh-CN";
 
-        /// <summary>
-        /// 加载语言
-        /// </summary>
-        /// <param name="form">加载语言的窗口</param>
-        /// <param name="formType">窗口的类型</param>
+        #region//加载语言（窗体）
+        
         public static void LoadLanguage(Form form, Type formType)
         {
-            if (form != null)
+            try
             {
-                System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(formType);
-                resources.ApplyResources(form, "$this");
-                Loading(form, resources);
+                if (form != null)
+                {
+                    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(formType);
+                    resources.ApplyResources(form, "$this");
+                    Loading(form, resources);
+                }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }            
         }
+        #endregion
 
-        /// <summary>
-        /// 加载语言
-        /// </summary>
-        /// <param name="control">控件</param>
-        /// <param name="resources">语言资源</param>
+        #region//加载语言（控件）
+       
         private static void Loading(Control control, System.ComponentModel.ComponentResourceManager resources)
         {
-            if (control is MenuStrip)
+            try
             {
-                //将资源与控件对应
-                resources.ApplyResources(control, control.Name);
-                MenuStrip ms = (MenuStrip)control;
-                if (ms.Items.Count > 0)
-                {
-                    foreach (ToolStripMenuItem c in ms.Items)
+                if (control is MenuStrip)
+                {                    
+                    resources.ApplyResources(control, control.Name);
+                    MenuStrip ms = (MenuStrip)control;
+                    if (ms.Items.Count > 0)
                     {
-                        //遍历菜单
-                        Loading(c, resources);
+                        foreach (ToolStripMenuItem c in ms.Items)
+                        {                            
+                            Loading(c, resources);
+                        }
                     }
                 }
-            }
 
-            foreach (Control c in control.Controls)
+                foreach (Control c in control.Controls)
+                {
+                    resources.ApplyResources(c, c.Name);
+                    Loading(c, resources);
+                }
+            }
+            catch (Exception ex)
             {
-                resources.ApplyResources(c, c.Name);
-                Loading(c, resources);
+                Socket_Operation.DoLog(ex.Message);
             }
         }
+        #endregion
 
-
-        /// <summary>
-        /// 遍历菜单
-        /// </summary>
-        /// <param name="item">菜单项</param>
-        /// <param name="resources">语言资源</param>
+        #region//遍历菜单
+      
         private static void Loading(ToolStripMenuItem item, System.ComponentModel.ComponentResourceManager resources)
         {
-            if (item is ToolStripMenuItem)
+            try
             {
-                resources.ApplyResources(item, item.Name);
-                ToolStripMenuItem tsmi = (ToolStripMenuItem)item;
-                if (tsmi.DropDownItems.Count > 0)
+                if (item is ToolStripMenuItem)
                 {
-                    foreach (ToolStripMenuItem c in tsmi.DropDownItems)
+                    resources.ApplyResources(item, item.Name);
+                    ToolStripMenuItem tsmi = (ToolStripMenuItem)item;
+                    if (tsmi.DropDownItems.Count > 0)
                     {
-                        Loading(c, resources);
+                        foreach (ToolStripMenuItem c in tsmi.DropDownItems)
+                        {
+                            Loading(c, resources);
+                        }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }
         }
+        #endregion
 
+        #region//设置默认语言参数
         public static void SetDefaultLanguage(string lang)
         {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
-            MultiLanguage.DefaultLanguage = lang;
+            try
+            {
+                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
+                MultiLanguage.DefaultLanguage = lang;
 
-            //Properties.Settings.Default.DefaultLanguage = lang;
-            //Properties.Settings.Default.Save();
+                Properties.Settings.Default.DefaultLanguage = lang;
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
+            }
         }
+        #endregion
 
+        #region//获取默认语言参数
         public static string GetDefaultLanguage(string zhCN, string enUS)
         {
             string sReturn = "";
 
-            switch (DefaultLanguage)
+            try
             {
-                case "zh-CN":
-                    sReturn = zhCN;
-                    break;
+                switch (DefaultLanguage)
+                {
+                    case "zh-CN":
+                        sReturn = zhCN;
+                        break;
 
-                case "en-US":
-                    sReturn = enUS;
-                    break;
+                    case "en-US":
+                        sReturn = enUS;
+                        break;
 
-                default:
-                    sReturn = DefaultLanguage;
-                    break;
+                    default:
+                        sReturn = DefaultLanguage;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(ex.Message);
             }
 
             return sReturn;
-        }        
+        }
+        #endregion
     }
 }
 

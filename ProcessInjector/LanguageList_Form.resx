@@ -136,13 +136,16 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="rb_enUS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 48</value>
+    <value>48, 38</value>
+  </data>
+  <data name="rb_enUS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="rb_enUS.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="rb_enUS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 38</value>
+    <value>88, 31</value>
   </data>
   <data name="rb_enUS.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -172,13 +175,16 @@
     <value>NoControl</value>
   </data>
   <data name="rb_zhCN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 4</value>
+    <value>48, 3</value>
+  </data>
+  <data name="rb_zhCN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="rb_zhCN.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>3, 3, 3, 3</value>
   </data>
   <data name="rb_zhCN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 37</value>
+    <value>98, 30</value>
   </data>
   <data name="rb_zhCN.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -205,13 +211,16 @@
     <value>NoControl</value>
   </data>
   <data name="pb_zhCN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 6</value>
+    <value>3, 3</value>
+  </data>
+  <data name="pb_zhCN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="pb_zhCN.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="pb_zhCN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 32</value>
+    <value>40, 30</value>
   </data>
   <data name="pb_zhCN.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>AutoSize</value>
@@ -238,13 +247,16 @@
     <value>NoControl</value>
   </data>
   <data name="pb_enUS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 51</value>
+    <value>3, 38</value>
+  </data>
+  <data name="pb_enUS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="pb_enUS.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="pb_enUS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 32</value>
+    <value>40, 30</value>
   </data>
   <data name="pb_enUS.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>AutoSize</value>
@@ -273,11 +285,14 @@
   <data name="tlpLanguage.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
+  <data name="tlpLanguage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
   <data name="tlpLanguage.RowCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="tlpLanguage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 90</value>
+    <value>220, 72</value>
   </data>
   <data name="tlpLanguage.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -301,10 +316,13 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
+    <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>275, 90</value>
+    <value>220, 72</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>

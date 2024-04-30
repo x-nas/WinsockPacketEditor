@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
 using WPELibrary.Lib;
+using System.Deployment.Application;
 
 namespace ProcessInjector.Lib
 {
@@ -23,17 +24,24 @@ namespace ProcessInjector.Lib
         {
             bool bReturn = false;
 
-            Process pProcess = Process.GetProcessById(ProcessID);
-
-            if (pProcess != null)
+            try
             {
-                if ((Environment.OSVersion.Version.Major > 5) || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
+                Process pProcess = Process.GetProcessById(ProcessID);
+
+                if (pProcess != null)
                 {
-                    bool retVal;
-                    IsWow64Process(pProcess.Handle, out retVal);
-                    bReturn = !retVal;
+                    if ((Environment.OSVersion.Version.Major > 5) || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
+                    {
+                        bool retVal;
+                        IsWow64Process(pProcess.Handle, out retVal);
+                        bReturn = !retVal;
+                    }
                 }
             }
+            catch
+            {
+                //
+            }            
 
             return bReturn;
         }
@@ -47,25 +55,32 @@ namespace ProcessInjector.Lib
             dtProcessList.Columns.Add("PName", typeof(string));
             dtProcessList.Columns.Add("PID", typeof(int));
 
-            Process[] procesArr = Process.GetProcesses();
-            int pCNT = procesArr.Length;
-
-            foreach (Process p in procesArr)
+            try
             {
-                string sPName = p.ProcessName;
-                int iPID = p.Id;
-                Image iICO = IconFromFile(p);
+                Process[] procesArr = Process.GetProcesses();
+                int pCNT = procesArr.Length;
 
-                DataRow dr = dtProcessList.NewRow();
-                dr["ICO"] = iICO;
-                dr["PName"] = sPName;
-                dr["PID"] = iPID;
-                dtProcessList.Rows.Add(dr);
+                foreach (Process p in procesArr)
+                {
+                    string sPName = p.ProcessName;
+                    int iPID = p.Id;
+                    Image iICO = IconFromFile(p);
+
+                    DataRow dr = dtProcessList.NewRow();
+                    dr["ICO"] = iICO;
+                    dr["PName"] = sPName;
+                    dr["PID"] = iPID;
+                    dtProcessList.Rows.Add(dr);
+                }
+
+                DataView dv = dtProcessList.DefaultView;
+                dv.Sort = "PName";
+                dtProcessList = dv.ToTable();
             }
-
-            DataView dv = dtProcessList.DefaultView;
-            dv.Sort = "PName";
-            dtProcessList = dv.ToTable();
+            catch
+            {
+                //
+            }
 
             return dtProcessList;
         }
@@ -116,7 +131,7 @@ namespace ProcessInjector.Lib
 
                 return selectedIcon.ToBitmap();
             }
-            catch (Exception)
+            catch
             {
                 //
             }
@@ -137,10 +152,42 @@ namespace ProcessInjector.Lib
         #region//设置默认语言
         public static void SetDefaultLanguage(string lang)
         {
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
-            MultiLanguage.DefaultLanguage = lang;
-            Properties.Settings.Default.DefaultLanguage = lang;
-            Properties.Settings.Default.Save();
+            try
+            {
+                Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
+                MultiLanguage.DefaultLanguage = lang;
+                Properties.Settings.Default.DefaultLanguage = lang;
+                Properties.Settings.Default.Save();
+            }
+            catch
+            {
+                //
+            }          
+        }
+        #endregion
+
+        #region//获取发布版本号
+        public static string GetVersion()
+        {
+            string sReturn = "";
+
+            try
+            {
+                if (ApplicationDeployment.IsNetworkDeployed)
+                {
+                    sReturn = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                }
+                else
+                {
+                    sReturn = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                }
+            }
+            catch
+            {
+                //
+            }
+
+            return sReturn;            
         }
         #endregion
     }

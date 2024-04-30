@@ -116,9 +116,10 @@ namespace ProcessInjector
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.pFill);
             this.Controls.Add(this.pTop);
+            this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "Injector_Form";            
+            this.Name = "Injector_Form";
             this.pTop.ResumeLayout(false);
             this.pTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).EndInit();

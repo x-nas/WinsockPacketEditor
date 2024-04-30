@@ -160,6 +160,9 @@
   <data name="cbInterecept_SendTo.Text" xml:space="preserve">
     <value>Block</value>
   </data>
+  <data name="gbFilter_Type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>154, 101</value>
+  </data>
   <data name="cbInterecept_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 21</value>
   </data>
@@ -184,11 +187,11 @@
   <data name="cbDisplay_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="gbFilter_Type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 101</value>
+  <data name="gbBottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>740, 186</value>
   </data>
-  <data name="rtbHEX.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
+  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>734, 162</value>
   </data>
   <data name="tpHEX.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
@@ -196,7 +199,7 @@
   <data name="tpHEX.Text" xml:space="preserve">
     <value>HEX</value>
   </data>
-  <data name="rtbDEC.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbHEX.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpDEC.Size" type="System.Drawing.Size, System.Drawing">
@@ -205,7 +208,7 @@
   <data name="tpDEC.Text" xml:space="preserve">
     <value>DEC</value>
   </data>
-  <data name="rtbBIN.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbDEC.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpBIN.Size" type="System.Drawing.Size, System.Drawing">
@@ -214,7 +217,7 @@
   <data name="tpBIN.Text" xml:space="preserve">
     <value>BIN</value>
   </data>
-  <data name="rtbUNICODE.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbBIN.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpUNICODE.Size" type="System.Drawing.Size, System.Drawing">
@@ -223,49 +226,25 @@
   <data name="tpUNICODE.Text" xml:space="preserve">
     <value>UNICODE</value>
   </data>
-  <data name="rtbASCII.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbUNICODE.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpASCII.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
-  <data name="rtbUTF8.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbASCII.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpUTF8.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
-  <data name="rtbGB2312.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbUTF8.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpGB2312.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
-  <data name="cTime.HeaderText" xml:space="preserve">
-    <value>Log Time</value>
-  </data>
-  <data name="cContent.HeaderText" xml:space="preserve">
-    <value>Content</value>
-  </data>
-  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
-  </data>
-  <data name="tslToExcel.Text" xml:space="preserve">
-    <value>Export to Excel</value>
-  </data>
-  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 6</value>
-  </data>
-  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
-  </data>
-  <data name="tslClearList.Text" xml:space="preserve">
-    <value>Clear List</value>
-  </data>
-  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 54</value>
-  </data>
-  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rtbGB2312.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
   </data>
   <data name="tpLog.Size" type="System.Drawing.Size, System.Drawing">
@@ -274,11 +253,50 @@
   <data name="tpLog.Text" xml:space="preserve">
     <value>LOG</value>
   </data>
-  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>734, 162</value>
+  <data name="cTime.HeaderText" xml:space="preserve">
+    <value>Log Time</value>
   </data>
-  <data name="gbBottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>740, 186</value>
+  <data name="cContent.HeaderText" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tslClearList.Text" xml:space="preserve">
+    <value>Clear Log List</value>
+  </data>
+  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="tsmiShowHook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiShowHook.Text" xml:space="preserve">
+    <value>Show Hook Log</value>
+  </data>
+  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="tsmiHideHook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiHideHook.Text" xml:space="preserve">
+    <value>Hide Hook Log</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tslToExcel.Text" xml:space="preserve">
+    <value>Export to Excel</value>
+  </data>
+  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 110</value>
+  </data>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>726, 132</value>
   </data>
   <data name="bStartHook.Location" type="System.Drawing.Point, System.Drawing">
     <value>812, 18</value>
@@ -297,6 +315,9 @@
   </data>
   <data name="cbCheck_IP.Text" xml:space="preserve">
     <value>IP Address</value>
+  </data>
+  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 138</value>
   </data>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>168, 22</value>
@@ -340,8 +361,8 @@
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
     <value>Export to Excel</value>
   </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 138</value>
+  <data name="ssStatusInfo_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>898, 22</value>
   </data>
   <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
     <value>76, 17</value>
@@ -421,8 +442,14 @@
   <data name="tlInterecept.Text" xml:space="preserve">
     <value>Block:</value>
   </data>
-  <data name="ssStatusInfo_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>898, 22</value>
+  <data name="gbRight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>898, 116</value>
+  </data>
+  <data name="gbRight.Text" xml:space="preserve">
+    <value>[Filter conditions] - Supports use ; as a delimiter</value>
+  </data>
+  <data name="gbClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>774, 9</value>
   </data>
   <data name="cbReset_CNT.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 12</value>
@@ -436,14 +463,8 @@ E</value>
   <data name="cbReset_CNT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
   </data>
-  <data name="gbClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>774, 9</value>
-  </data>
-  <data name="gbRight.Size" type="System.Drawing.Size, System.Drawing">
-    <value>898, 116</value>
-  </data>
-  <data name="gbRight.Text" xml:space="preserve">
-    <value>[Filter conditions] - Supports use ; as a delimiter</value>
+  <data name="gbSearch_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>740, 51</value>
   </data>
   <data name="rbSearchFrom.Location" type="System.Drawing.Point, System.Drawing">
     <value>563, 19</value>
@@ -478,9 +499,6 @@ E</value>
   <data name="lSearch.Text" xml:space="preserve">
     <value>Search Data (Hex)</value>
   </data>
-  <data name="gbSearch_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>740, 51</value>
-  </data>
   <data name="cIndex.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
@@ -507,6 +525,60 @@ E</value>
   </data>
   <data name="gbFilterList.Text" xml:space="preserve">
     <value>[ Filter List ]</value>
+  </data>
+  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 166</value>
+  </data>
+  <data name="tsmiShowFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiShowFilter.Text" xml:space="preserve">
+    <value>View Selected Filter</value>
+  </data>
+  <data name="tssSep1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 6</value>
+  </data>
+  <data name="tsmiAddFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiAddFilter.Text" xml:space="preserve">
+    <value>Add New Filter</value>
+  </data>
+  <data name="tssSep3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 6</value>
+  </data>
+  <data name="tsmiDeleteFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiDeleteFilter.Text" xml:space="preserve">
+    <value>Delete Selected Filter</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 6</value>
+  </data>
+  <data name="tsmiSaveFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiSaveFilterList.Text" xml:space="preserve">
+    <value>Save Filter List</value>
+  </data>
+  <data name="tssSep2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 6</value>
+  </data>
+  <data name="tsmiClearAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiClearAll.Text" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>195, 6</value>
+  </data>
+  <data name="tsmiLoadFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 22</value>
+  </data>
+  <data name="tsmiLoadFilterList.Text" xml:space="preserve">
+    <value>Load Filter List</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>898, 641</value>

@@ -31,15 +31,16 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cbDisplay_SendTo = new System.Windows.Forms.CheckBox();
             this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
             this.bStopHook = new System.Windows.Forms.Button();
@@ -79,9 +80,13 @@ namespace WPELibrary
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowHook = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiHideHook = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bStartHook = new System.Windows.Forms.Button();
@@ -128,14 +133,6 @@ namespace WPELibrary
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lSearch = new System.Windows.Forms.Label();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
-            this.gbFilterList = new System.Windows.Forms.GroupBox();
-            this.dgvFilterList = new System.Windows.Forms.DataGridView();
-            this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cFilterIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFilterName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFilterSearch = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFilterModify = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -143,6 +140,27 @@ namespace WPELibrary
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gbFilterList = new System.Windows.Forms.GroupBox();
+            this.dgvFilterList = new System.Windows.Forms.DataGridView();
+            this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiShowFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDeleteFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiSaveFilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiLoadFilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.bgwLogList = new System.ComponentModel.BackgroundWorker();
+            this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
+            this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.gbFilter_Size.SuspendLayout();
             this.gbFilter_Type.SuspendLayout();
             this.gbBottom.SuspendLayout();
@@ -165,6 +183,8 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.gbFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
+            this.cmsFilterList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // cbDisplay_SendTo
@@ -247,16 +267,17 @@ namespace WPELibrary
             // 
             // gbFilter_Size
             // 
+            resources.ApplyResources(this.gbFilter_Size, "gbFilter_Size");
             this.gbFilter_Size.Controls.Add(this.cbCheck_Size);
             this.gbFilter_Size.Controls.Add(this.txtCheck_Size_From);
             this.gbFilter_Size.Controls.Add(this.txtCheck_Size_To);
             this.gbFilter_Size.Controls.Add(this.lSplit);
-            resources.ApplyResources(this.gbFilter_Size, "gbFilter_Size");
             this.gbFilter_Size.Name = "gbFilter_Size";
             this.gbFilter_Size.TabStop = false;
             // 
             // gbFilter_Type
             // 
+            resources.ApplyResources(this.gbFilter_Type, "gbFilter_Type");
             this.gbFilter_Type.Controls.Add(this.cbInterecept_RecvFrom);
             this.gbFilter_Type.Controls.Add(this.cbInterecept_Recv);
             this.gbFilter_Type.Controls.Add(this.cbInterecept_SendTo);
@@ -265,7 +286,6 @@ namespace WPELibrary
             this.gbFilter_Type.Controls.Add(this.cbDisplay_Recv);
             this.gbFilter_Type.Controls.Add(this.cbDisplay_SendTo);
             this.gbFilter_Type.Controls.Add(this.cbDisplay_Send);
-            resources.ApplyResources(this.gbFilter_Type, "gbFilter_Type");
             this.gbFilter_Type.Name = "gbFilter_Type";
             this.gbFilter_Type.TabStop = false;
             // 
@@ -303,13 +323,14 @@ namespace WPELibrary
             // 
             // gbBottom
             // 
-            this.gbBottom.Controls.Add(this.tcPacketInfo);
             resources.ApplyResources(this.gbBottom, "gbBottom");
+            this.gbBottom.Controls.Add(this.tcPacketInfo);
             this.gbBottom.Name = "gbBottom";
             this.gbBottom.TabStop = false;
             // 
             // tcPacketInfo
             // 
+            resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
             this.tcPacketInfo.Controls.Add(this.tpHEX);
             this.tcPacketInfo.Controls.Add(this.tpDEC);
             this.tcPacketInfo.Controls.Add(this.tpBIN);
@@ -318,28 +339,27 @@ namespace WPELibrary
             this.tcPacketInfo.Controls.Add(this.tpUTF8);
             this.tcPacketInfo.Controls.Add(this.tpGB2312);
             this.tcPacketInfo.Controls.Add(this.tpLog);
-            resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
             this.tcPacketInfo.Name = "tcPacketInfo";
             this.tcPacketInfo.SelectedIndex = 0;
             this.tcPacketInfo.SelectedIndexChanged += new System.EventHandler(this.tcPacketInfo_SelectedIndexChanged);
             // 
             // tpHEX
             // 
-            this.tpHEX.Controls.Add(this.rtbHEX);
             resources.ApplyResources(this.tpHEX, "tpHEX");
+            this.tpHEX.Controls.Add(this.rtbHEX);
             this.tpHEX.Name = "tpHEX";
             this.tpHEX.UseVisualStyleBackColor = true;
             // 
             // rtbHEX
             // 
-            this.rtbHEX.BackColor = System.Drawing.SystemColors.Window;
             resources.ApplyResources(this.rtbHEX, "rtbHEX");
+            this.rtbHEX.BackColor = System.Drawing.SystemColors.Window;
             this.rtbHEX.Name = "rtbHEX";
             // 
             // tpDEC
             // 
-            this.tpDEC.Controls.Add(this.rtbDEC);
             resources.ApplyResources(this.tpDEC, "tpDEC");
+            this.tpDEC.Controls.Add(this.rtbDEC);
             this.tpDEC.Name = "tpDEC";
             this.tpDEC.UseVisualStyleBackColor = true;
             // 
@@ -350,8 +370,8 @@ namespace WPELibrary
             // 
             // tpBIN
             // 
-            this.tpBIN.Controls.Add(this.rtbBIN);
             resources.ApplyResources(this.tpBIN, "tpBIN");
+            this.tpBIN.Controls.Add(this.rtbBIN);
             this.tpBIN.Name = "tpBIN";
             this.tpBIN.UseVisualStyleBackColor = true;
             // 
@@ -362,8 +382,8 @@ namespace WPELibrary
             // 
             // tpUNICODE
             // 
-            this.tpUNICODE.Controls.Add(this.rtbUNICODE);
             resources.ApplyResources(this.tpUNICODE, "tpUNICODE");
+            this.tpUNICODE.Controls.Add(this.rtbUNICODE);
             this.tpUNICODE.Name = "tpUNICODE";
             this.tpUNICODE.UseVisualStyleBackColor = true;
             // 
@@ -374,8 +394,8 @@ namespace WPELibrary
             // 
             // tpASCII
             // 
-            this.tpASCII.Controls.Add(this.rtbASCII);
             resources.ApplyResources(this.tpASCII, "tpASCII");
+            this.tpASCII.Controls.Add(this.rtbASCII);
             this.tpASCII.Name = "tpASCII";
             this.tpASCII.UseVisualStyleBackColor = true;
             // 
@@ -386,8 +406,8 @@ namespace WPELibrary
             // 
             // tpUTF8
             // 
-            this.tpUTF8.Controls.Add(this.rtbUTF8);
             resources.ApplyResources(this.tpUTF8, "tpUTF8");
+            this.tpUTF8.Controls.Add(this.rtbUTF8);
             this.tpUTF8.Name = "tpUTF8";
             this.tpUTF8.UseVisualStyleBackColor = true;
             // 
@@ -398,8 +418,8 @@ namespace WPELibrary
             // 
             // tpGB2312
             // 
-            this.tpGB2312.Controls.Add(this.rtbGB2312);
             resources.ApplyResources(this.tpGB2312, "tpGB2312");
+            this.tpGB2312.Controls.Add(this.rtbGB2312);
             this.tpGB2312.Name = "tpGB2312";
             this.tpGB2312.UseVisualStyleBackColor = true;
             // 
@@ -410,43 +430,45 @@ namespace WPELibrary
             // 
             // tpLog
             // 
-            this.tpLog.Controls.Add(this.dgvLogList);
             resources.ApplyResources(this.tpLog, "tpLog");
+            this.tpLog.Controls.Add(this.dgvLogList);
             this.tpLog.Name = "tpLog";
             this.tpLog.UseVisualStyleBackColor = true;
             // 
             // dgvLogList
             // 
+            resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.AllowUserToAddRows = false;
             this.dgvLogList.AllowUserToDeleteRows = false;
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cTime,
             this.cContent});
             this.dgvLogList.ContextMenuStrip = this.cmsLogList;
-            resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.MultiSelect = false;
             this.dgvLogList.Name = "dgvLogList";
             this.dgvLogList.ReadOnly = true;
             this.dgvLogList.RowHeadersVisible = false;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // cTime
             // 
             this.cTime.DataPropertyName = "Time";
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cTime.DefaultCellStyle = dataGridViewCellStyle12;
             resources.ApplyResources(this.cTime, "cTime");
             this.cTime.Name = "cTime";
             this.cTime.ReadOnly = true;
@@ -461,28 +483,52 @@ namespace WPELibrary
             // 
             // cmsLogList
             // 
-            this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tslToExcel,
-            this.toolStripSeparator5,
-            this.tslClearList});
-            this.cmsLogList.Name = "cmsLogList";
             resources.ApplyResources(this.cmsLogList, "cmsLogList");
+            this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tslClearList,
+            this.toolStripSeparator8,
+            this.tsmiShowHook,
+            this.toolStripSeparator9,
+            this.tsmiHideHook,
+            this.toolStripSeparator5,
+            this.tslToExcel});
+            this.cmsLogList.Name = "cmsLogList";
             this.cmsLogList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsLogList_ItemClicked);
-            // 
-            // tslToExcel
-            // 
-            this.tslToExcel.Name = "tslToExcel";
-            resources.ApplyResources(this.tslToExcel, "tslToExcel");
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             // 
             // tslClearList
             // 
-            this.tslClearList.Name = "tslClearList";
             resources.ApplyResources(this.tslClearList, "tslClearList");
+            this.tslClearList.Name = "tslClearList";
+            // 
+            // toolStripSeparator8
+            // 
+            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            // 
+            // tsmiShowHook
+            // 
+            resources.ApplyResources(this.tsmiShowHook, "tsmiShowHook");
+            this.tsmiShowHook.Name = "tsmiShowHook";
+            // 
+            // toolStripSeparator9
+            // 
+            resources.ApplyResources(this.toolStripSeparator9, "toolStripSeparator9");
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            // 
+            // tsmiHideHook
+            // 
+            resources.ApplyResources(this.tsmiHideHook, "tsmiHideHook");
+            this.tsmiHideHook.Name = "tsmiHideHook";
+            // 
+            // toolStripSeparator5
+            // 
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            // 
+            // tslToExcel
+            // 
+            resources.ApplyResources(this.tslToExcel, "tslToExcel");
+            this.tslToExcel.Name = "tslToExcel";
             // 
             // bgwSocketList
             // 
@@ -520,6 +566,7 @@ namespace WPELibrary
             // 
             // cmsSocketList
             // 
+            resources.ApplyResources(this.cmsSocketList, "cmsSocketList");
             this.cmsSocketList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiSend,
             this.toolStripSeparator1,
@@ -531,58 +578,57 @@ namespace WPELibrary
             this.toolStripSeparator4,
             this.tsmiSaveSocketInfo});
             this.cmsSocketList.Name = "cmsSocketInfo";
-            resources.ApplyResources(this.cmsSocketList, "cmsSocketList");
             this.cmsSocketList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSocketInfo_ItemClicked);
             // 
             // tsmiSend
             // 
-            this.tsmiSend.Name = "tsmiSend";
             resources.ApplyResources(this.tsmiSend, "tsmiSend");
+            this.tsmiSend.Name = "tsmiSend";
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
             // 
             // tsmiBatchSend
             // 
-            this.tsmiBatchSend.Name = "tsmiBatchSend";
             resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
+            this.tsmiBatchSend.Name = "tsmiBatchSend";
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
             // 
             // tsmiUseSocket
             // 
-            this.tsmiUseSocket.Name = "tsmiUseSocket";
             resources.ApplyResources(this.tsmiUseSocket, "tsmiUseSocket");
+            this.tsmiUseSocket.Name = "tsmiUseSocket";
             // 
             // toolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
             // 
             // tsmiShowBatchSend
             // 
-            this.tsmiShowBatchSend.Name = "tsmiShowBatchSend";
             resources.ApplyResources(this.tsmiShowBatchSend, "tsmiShowBatchSend");
+            this.tsmiShowBatchSend.Name = "tsmiShowBatchSend";
             // 
             // toolStripSeparator4
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
             resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
             // 
             // tsmiSaveSocketInfo
             // 
-            this.tsmiSaveSocketInfo.Name = "tsmiSaveSocketInfo";
             resources.ApplyResources(this.tsmiSaveSocketInfo, "tsmiSaveSocketInfo");
+            this.tsmiSaveSocketInfo.Name = "tsmiSaveSocketInfo";
             // 
             // tlCheck_CNT
             // 
-            this.tlCheck_CNT.Name = "tlCheck_CNT";
             resources.ApplyResources(this.tlCheck_CNT, "tlCheck_CNT");
+            this.tlCheck_CNT.Name = "tlCheck_CNT";
             // 
             // ssStatusInfo_Top
             // 
@@ -612,15 +658,15 @@ namespace WPELibrary
             // 
             // tlSystemInfo
             // 
+            resources.ApplyResources(this.tlSystemInfo, "tlSystemInfo");
             this.tlSystemInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tlSystemInfo.Name = "tlSystemInfo";
-            resources.ApplyResources(this.tlSystemInfo, "tlSystemInfo");
             // 
             // tlSplit0
             // 
+            resources.ApplyResources(this.tlSplit0, "tlSplit0");
             this.tlSplit0.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit0.Name = "tlSplit0";
-            resources.ApplyResources(this.tlSplit0, "tlSplit0");
             // 
             // tlALL
             // 
@@ -634,9 +680,9 @@ namespace WPELibrary
             // 
             // tlSplit1
             // 
+            resources.ApplyResources(this.tlSplit1, "tlSplit1");
             this.tlSplit1.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit1.Name = "tlSplit1";
-            resources.ApplyResources(this.tlSplit1, "tlSplit1");
             // 
             // tlQueue
             // 
@@ -645,30 +691,30 @@ namespace WPELibrary
             // 
             // tlQueue_CNT
             // 
-            this.tlQueue_CNT.Name = "tlQueue_CNT";
             resources.ApplyResources(this.tlQueue_CNT, "tlQueue_CNT");
+            this.tlQueue_CNT.Name = "tlQueue_CNT";
             // 
             // tlSplit2
             // 
+            resources.ApplyResources(this.tlSplit2, "tlSplit2");
             this.tlSplit2.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit2.Name = "tlSplit2";
-            resources.ApplyResources(this.tlSplit2, "tlSplit2");
             // 
             // tlSend
             // 
-            this.tlSend.Name = "tlSend";
             resources.ApplyResources(this.tlSend, "tlSend");
+            this.tlSend.Name = "tlSend";
             // 
             // tlSend_CNT
             // 
-            this.tlSend_CNT.Name = "tlSend_CNT";
             resources.ApplyResources(this.tlSend_CNT, "tlSend_CNT");
+            this.tlSend_CNT.Name = "tlSend_CNT";
             // 
             // tlSplit3
             // 
+            resources.ApplyResources(this.tlSplit3, "tlSplit3");
             this.tlSplit3.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit3.Name = "tlSplit3";
-            resources.ApplyResources(this.tlSplit3, "tlSplit3");
             // 
             // tlRecv
             // 
@@ -677,38 +723,39 @@ namespace WPELibrary
             // 
             // tlRecv_CNT
             // 
-            this.tlRecv_CNT.Name = "tlRecv_CNT";
             resources.ApplyResources(this.tlRecv_CNT, "tlRecv_CNT");
+            this.tlRecv_CNT.Name = "tlRecv_CNT";
             // 
             // tlSplit4
             // 
+            resources.ApplyResources(this.tlSplit4, "tlSplit4");
             this.tlSplit4.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit4.Name = "tlSplit4";
-            resources.ApplyResources(this.tlSplit4, "tlSplit4");
             // 
             // tlCheck
             // 
-            this.tlCheck.Name = "tlCheck";
             resources.ApplyResources(this.tlCheck, "tlCheck");
+            this.tlCheck.Name = "tlCheck";
             // 
             // tlSplit5
             // 
+            resources.ApplyResources(this.tlSplit5, "tlSplit5");
             this.tlSplit5.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit5.Name = "tlSplit5";
-            resources.ApplyResources(this.tlSplit5, "tlSplit5");
             // 
             // tlInterecept
             // 
-            this.tlInterecept.Name = "tlInterecept";
             resources.ApplyResources(this.tlInterecept, "tlInterecept");
+            this.tlInterecept.Name = "tlInterecept";
             // 
             // tlInterecept_CNT
             // 
-            this.tlInterecept_CNT.Name = "tlInterecept_CNT";
             resources.ApplyResources(this.tlInterecept_CNT, "tlInterecept_CNT");
+            this.tlInterecept_CNT.Name = "tlInterecept_CNT";
             // 
             // gbRight
             // 
+            resources.ApplyResources(this.gbRight, "gbRight");
             this.gbRight.Controls.Add(this.gbClear);
             this.gbRight.Controls.Add(this.txtCheck_Packet);
             this.gbRight.Controls.Add(this.gbFilter_Size);
@@ -720,14 +767,13 @@ namespace WPELibrary
             this.gbRight.Controls.Add(this.bStartHook);
             this.gbRight.Controls.Add(this.txtCheck_Socket);
             this.gbRight.Controls.Add(this.cbCheck_Socket);
-            resources.ApplyResources(this.gbRight, "gbRight");
             this.gbRight.Name = "gbRight";
             this.gbRight.TabStop = false;
             // 
             // gbClear
             // 
-            this.gbClear.Controls.Add(this.cbReset_CNT);
             resources.ApplyResources(this.gbClear, "gbClear");
+            this.gbClear.Controls.Add(this.cbReset_CNT);
             this.gbClear.Name = "gbClear";
             this.gbClear.TabStop = false;
             // 
@@ -738,16 +784,15 @@ namespace WPELibrary
             this.cbReset_CNT.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbReset_CNT.Name = "cbReset_CNT";
             this.cbReset_CNT.UseVisualStyleBackColor = true;
-            this.cbReset_CNT.CheckedChanged += new System.EventHandler(this.cbReset_CNT_CheckedChanged);
             // 
             // gbSearch_Bottom
             // 
+            resources.ApplyResources(this.gbSearch_Bottom, "gbSearch_Bottom");
             this.gbSearch_Bottom.Controls.Add(this.rbSearchFrom);
             this.gbSearch_Bottom.Controls.Add(this.rbSearchAll);
             this.gbSearch_Bottom.Controls.Add(this.bSearch);
             this.gbSearch_Bottom.Controls.Add(this.txtSearch);
             this.gbSearch_Bottom.Controls.Add(this.lSearch);
-            resources.ApplyResources(this.gbSearch_Bottom, "gbSearch_Bottom");
             this.gbSearch_Bottom.Name = "gbSearch_Bottom";
             this.gbSearch_Bottom.TabStop = false;
             // 
@@ -784,6 +829,7 @@ namespace WPELibrary
             // 
             // dgvSocketList
             // 
+            resources.ApplyResources(this.dgvSocketList, "dgvSocketList");
             this.dgvSocketList.AllowUserToAddRows = false;
             this.dgvSocketList.AllowUserToDeleteRows = false;
             this.dgvSocketList.AllowUserToResizeColumns = false;
@@ -799,12 +845,11 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSocketList.ContextMenuStrip = this.cmsSocketList;
-            resources.ApplyResources(this.dgvSocketList, "dgvSocketList");
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle18;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
@@ -812,84 +857,11 @@ namespace WPELibrary
             this.dgvSocketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgSocketInfo_SelectionChanged);
             // 
-            // gbFilterList
-            // 
-            this.gbFilterList.Controls.Add(this.dgvFilterList);
-            resources.ApplyResources(this.gbFilterList, "gbFilterList");
-            this.gbFilterList.Name = "gbFilterList";
-            this.gbFilterList.TabStop = false;
-            // 
-            // dgvFilterList
-            // 
-            this.dgvFilterList.AllowUserToAddRows = false;
-            this.dgvFilterList.AllowUserToDeleteRows = false;
-            this.dgvFilterList.AllowUserToResizeColumns = false;
-            this.dgvFilterList.AllowUserToResizeRows = false;
-            this.dgvFilterList.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dgvFilterList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvFilterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFilterList.ColumnHeadersVisible = false;
-            this.dgvFilterList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cCheck,
-            this.cFilterIndex,
-            this.cFilterName,
-            this.cFilterSearch,
-            this.cFilterModify});
-            resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
-            this.dgvFilterList.MultiSelect = false;
-            this.dgvFilterList.Name = "dgvFilterList";
-            this.dgvFilterList.RowHeadersVisible = false;
-            this.dgvFilterList.RowTemplate.Height = 23;
-            this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
-            this.dgvFilterList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellDoubleClick);
-            // 
-            // cCheck
-            // 
-            this.cCheck.DataPropertyName = "ISCheck";
-            this.cCheck.FalseValue = "false";
-            resources.ApplyResources(this.cCheck, "cCheck");
-            this.cCheck.Name = "cCheck";
-            this.cCheck.TrueValue = "true";
-            // 
-            // cFilterIndex
-            // 
-            this.cFilterIndex.DataPropertyName = "FilterIndex";
-            resources.ApplyResources(this.cFilterIndex, "cFilterIndex");
-            this.cFilterIndex.Name = "cFilterIndex";
-            this.cFilterIndex.ReadOnly = true;
-            // 
-            // cFilterName
-            // 
-            this.cFilterName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cFilterName.DataPropertyName = "FilterName";
-            resources.ApplyResources(this.cFilterName, "cFilterName");
-            this.cFilterName.Name = "cFilterName";
-            this.cFilterName.ReadOnly = true;
-            // 
-            // cFilterSearch
-            // 
-            this.cFilterSearch.DataPropertyName = "FilterSearch";
-            resources.ApplyResources(this.cFilterSearch, "cFilterSearch");
-            this.cFilterSearch.Name = "cFilterSearch";
-            this.cFilterSearch.ReadOnly = true;
-            // 
-            // cFilterModify
-            // 
-            this.cFilterModify.DataPropertyName = "FilterModify";
-            resources.ApplyResources(this.cFilterModify, "cFilterModify");
-            this.cFilterModify.Name = "cFilterModify";
-            this.cFilterModify.ReadOnly = true;
-            // 
-            // bgwLogList
-            // 
-            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
-            // 
             // cIndex
             // 
             this.cIndex.DataPropertyName = "Index";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
             resources.ApplyResources(this.cIndex, "cIndex");
             this.cIndex.Name = "cIndex";
             this.cIndex.ReadOnly = true;
@@ -898,8 +870,8 @@ namespace WPELibrary
             // cType
             // 
             this.cType.DataPropertyName = "Type_Name";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.cType, "cType");
             this.cType.Name = "cType";
             this.cType.ReadOnly = true;
@@ -908,8 +880,8 @@ namespace WPELibrary
             // cSocket
             // 
             this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle14;
             resources.ApplyResources(this.cSocket, "cSocket");
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
@@ -918,8 +890,8 @@ namespace WPELibrary
             // cFrom
             // 
             this.cFrom.DataPropertyName = "From";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle15;
             resources.ApplyResources(this.cFrom, "cFrom");
             this.cFrom.Name = "cFrom";
             this.cFrom.ReadOnly = true;
@@ -928,8 +900,8 @@ namespace WPELibrary
             // Column5
             // 
             this.Column5.DataPropertyName = "To";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle16;
             resources.ApplyResources(this.Column5, "Column5");
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
@@ -938,8 +910,8 @@ namespace WPELibrary
             // cLen
             // 
             this.cLen.DataPropertyName = "ResLen";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle17;
             resources.ApplyResources(this.cLen, "cLen");
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
@@ -954,10 +926,160 @@ namespace WPELibrary
             this.cData.ReadOnly = true;
             this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // gbFilterList
+            // 
+            resources.ApplyResources(this.gbFilterList, "gbFilterList");
+            this.gbFilterList.Controls.Add(this.dgvFilterList);
+            this.gbFilterList.Name = "gbFilterList";
+            this.gbFilterList.TabStop = false;
+            // 
+            // dgvFilterList
+            // 
+            resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
+            this.dgvFilterList.AllowUserToAddRows = false;
+            this.dgvFilterList.AllowUserToDeleteRows = false;
+            this.dgvFilterList.AllowUserToResizeColumns = false;
+            this.dgvFilterList.AllowUserToResizeRows = false;
+            this.dgvFilterList.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvFilterList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvFilterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFilterList.ColumnHeadersVisible = false;
+            this.dgvFilterList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cIsCheck,
+            this.cFNum,
+            this.cFName});
+            this.dgvFilterList.ContextMenuStrip = this.cmsFilterList;
+            this.dgvFilterList.MultiSelect = false;
+            this.dgvFilterList.Name = "dgvFilterList";
+            this.dgvFilterList.RowHeadersVisible = false;
+            this.dgvFilterList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dgvFilterList.RowTemplate.Height = 23;
+            this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
+            // 
+            // cIsCheck
+            // 
+            this.cIsCheck.DataPropertyName = "IsCheck";
+            this.cIsCheck.FalseValue = "false";
+            resources.ApplyResources(this.cIsCheck, "cIsCheck");
+            this.cIsCheck.Name = "cIsCheck";
+            this.cIsCheck.TrueValue = "true";
+            // 
+            // cFNum
+            // 
+            this.cFNum.DataPropertyName = "FNum";
+            resources.ApplyResources(this.cFNum, "cFNum");
+            this.cFNum.Name = "cFNum";
+            this.cFNum.ReadOnly = true;
+            // 
+            // cFName
+            // 
+            this.cFName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cFName.DataPropertyName = "FName";
+            resources.ApplyResources(this.cFName, "cFName");
+            this.cFName.Name = "cFName";
+            this.cFName.ReadOnly = true;
+            // 
+            // cmsFilterList
+            // 
+            resources.ApplyResources(this.cmsFilterList, "cmsFilterList");
+            this.cmsFilterList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowFilter,
+            this.tssSep1,
+            this.tsmiAddFilter,
+            this.tssSep3,
+            this.tsmiDeleteFilter,
+            this.toolStripSeparator6,
+            this.tsmiSaveFilterList,
+            this.tssSep2,
+            this.tsmiClearAll,
+            this.toolStripSeparator7,
+            this.tsmiLoadFilterList});
+            this.cmsFilterList.Name = "cmsFilterList";
+            this.cmsFilterList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsFilterList_ItemClicked);
+            // 
+            // tsmiShowFilter
+            // 
+            resources.ApplyResources(this.tsmiShowFilter, "tsmiShowFilter");
+            this.tsmiShowFilter.Name = "tsmiShowFilter";
+            // 
+            // tssSep1
+            // 
+            resources.ApplyResources(this.tssSep1, "tssSep1");
+            this.tssSep1.Name = "tssSep1";
+            // 
+            // tsmiAddFilter
+            // 
+            resources.ApplyResources(this.tsmiAddFilter, "tsmiAddFilter");
+            this.tsmiAddFilter.Name = "tsmiAddFilter";
+            // 
+            // tssSep3
+            // 
+            resources.ApplyResources(this.tssSep3, "tssSep3");
+            this.tssSep3.Name = "tssSep3";
+            // 
+            // tsmiDeleteFilter
+            // 
+            resources.ApplyResources(this.tsmiDeleteFilter, "tsmiDeleteFilter");
+            this.tsmiDeleteFilter.Name = "tsmiDeleteFilter";
+            // 
+            // toolStripSeparator6
+            // 
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            // 
+            // tsmiSaveFilterList
+            // 
+            resources.ApplyResources(this.tsmiSaveFilterList, "tsmiSaveFilterList");
+            this.tsmiSaveFilterList.Name = "tsmiSaveFilterList";
+            // 
+            // tssSep2
+            // 
+            resources.ApplyResources(this.tssSep2, "tssSep2");
+            this.tssSep2.Name = "tssSep2";
+            // 
+            // tsmiClearAll
+            // 
+            resources.ApplyResources(this.tsmiClearAll, "tsmiClearAll");
+            this.tsmiClearAll.Name = "tsmiClearAll";
+            // 
+            // toolStripSeparator7
+            // 
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            // 
+            // tsmiLoadFilterList
+            // 
+            resources.ApplyResources(this.tsmiLoadFilterList, "tsmiLoadFilterList");
+            this.tsmiLoadFilterList.Name = "tsmiLoadFilterList";
+            // 
+            // bgwLogList
+            // 
+            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
+            // 
+            // bgwSendFrom
+            // 
+            this.bgwSendFrom.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendFrom_DoWork);
+            this.bgwSendFrom.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendFrom_RunWorkerCompleted);
+            // 
+            // pbLoading
+            // 
+            resources.ApplyResources(this.pbLoading, "pbLoading");
+            this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
+            this.pbLoading.Image = global::WPELibrary.Properties.Resources.loading;
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.TabStop = false;
+            // 
+            // bgwSocketInfo
+            // 
+            this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
+            this.bgwSocketInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSocketInfo_RunWorkerCompleted);
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.gbFilterList);
             this.Controls.Add(this.dgvSocketList);
             this.Controls.Add(this.gbSearch_Bottom);
@@ -998,6 +1120,8 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.gbFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
+            this.cmsFilterList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1092,15 +1216,8 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem tslToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem tslClearList;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterSearch;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFilterModify;
         private System.Windows.Forms.TabPage tpASCII;
         private System.Windows.Forms.RichTextBox rtbASCII;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
@@ -1108,5 +1225,29 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
+        private System.ComponentModel.BackgroundWorker bgwSendFrom;
+        private System.Windows.Forms.PictureBox pbLoading;
+        private System.ComponentModel.BackgroundWorker bgwSocketInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
+        private System.Windows.Forms.ContextMenuStrip cmsFilterList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowFilter;
+        private System.Windows.Forms.ToolStripSeparator tssSep1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSaveFilterList;
+        private System.Windows.Forms.ToolStripSeparator tssSep2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoadFilterList;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddFilter;
+        private System.Windows.Forms.ToolStripSeparator tssSep3;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDeleteFilter;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripMenuItem tsmiClearAll;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowHook;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHideHook;
     }
 }

@@ -117,122 +117,149 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;txtFilterName.Parent" xml:space="preserve">
-    <value>gbFilterName</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtFilterName.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="txtFilterName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;bReset.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;txtFilterName.Name" xml:space="preserve">
-    <value>txtFilterName</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Filter_Form</value>
-  </data>
-  <data name="&gt;&gt;gbFilterName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvFilter.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="bApply.Text" xml:space="preserve">
-    <value>应 用</value>
-  </data>
-  <data name="gbFilterName.Text" xml:space="preserve">
-    <value>[ 滤镜名称 ]</value>
+  <data name="dgvFilter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Top</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="txtFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>299, 23</value>
-  </data>
-  <data name="&gt;&gt;bApply.Name" xml:space="preserve">
-    <value>bApply</value>
-  </data>
-  <data name="&gt;&gt;bReset.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="dgvFilter.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
   <data name="dgvFilter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
-  <data name="txtFilterName.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="dgvFilter.RowHeadersWidth" type="System.Int32, mscorlib">
+    <value>100</value>
   </data>
-  <data name="&gt;&gt;txtFilterName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="dgvFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>684, 90</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Filter_Form</value>
+  <data name="dgvFilter.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="bApply.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 32</value>
+  <data name="&gt;&gt;dgvFilter.Name" xml:space="preserve">
+    <value>dgvFilter</value>
   </data>
-  <data name="bReset.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="&gt;&gt;dgvFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbFilterName.Parent" xml:space="preserve">
+  <data name="&gt;&gt;dgvFilter.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dgvFilter.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="&gt;&gt;bReset.Name" xml:space="preserve">
-    <value>bReset</value>
+  <data name="txtFilterName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtFilterName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>684, 159</value>
+  <data name="txtFilterName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>299, 23</value>
+  </data>
+  <data name="txtFilterName.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="txtFilterName.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtFilterName.Name" xml:space="preserve">
+    <value>txtFilterName</value>
+  </data>
+  <data name="&gt;&gt;txtFilterName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtFilterName.Parent" xml:space="preserve">
+    <value>gbFilterName</value>
   </data>
   <data name="&gt;&gt;txtFilterName.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="dgvFilter.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>100</value>
+  <data name="gbFilterName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 97</value>
   </data>
   <data name="gbFilterName.Size" type="System.Drawing.Size, System.Drawing">
     <value>305, 53</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
+  <data name="gbFilterName.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="dgvFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>684, 90</value>
+  <data name="gbFilterName.Text" xml:space="preserve">
+    <value>[ 滤镜名称 ]</value>
   </data>
-  <data name="&gt;&gt;dgvFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;gbFilterName.Name" xml:space="preserve">
+    <value>gbFilterName</value>
   </data>
-  <data name="&gt;&gt;bApply.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;gbFilterName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbFilterName.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbFilterName.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="bReset.Location" type="System.Drawing.Point, System.Drawing">
+    <value>337, 111</value>
+  </data>
+  <data name="bReset.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 32</value>
+  </data>
+  <data name="bReset.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="bReset.Text" xml:space="preserve">
+    <value>重 置</value>
+  </data>
+  <data name="&gt;&gt;bReset.Name" xml:space="preserve">
+    <value>bReset</value>
   </data>
   <data name="&gt;&gt;bReset.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="bApply.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="&gt;&gt;bReset.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="gbFilterName.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="&gt;&gt;bReset.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="bApply.Location" type="System.Drawing.Point, System.Drawing">
     <value>597, 111</value>
   </data>
-  <data name="dgvFilter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Top</value>
+  <data name="bApply.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 32</value>
+  </data>
+  <data name="bApply.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="bApply.Text" xml:space="preserve">
+    <value>应 用</value>
+  </data>
+  <data name="&gt;&gt;bApply.Name" xml:space="preserve">
+    <value>bApply</value>
+  </data>
+  <data name="&gt;&gt;bApply.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bApply.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;bApply.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>684, 159</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6409,40 +6436,13 @@
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
   </data>
-  <data name="&gt;&gt;bApply.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Filter_Form</value>
   </data>
-  <data name="&gt;&gt;gbFilterName.Name" xml:space="preserve">
-    <value>gbFilterName</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Filter_Form</value>
   </data>
-  <data name="bReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>337, 111</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="txtFilterName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="gbFilterName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 97</value>
-  </data>
-  <data name="dgvFilter.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;gbFilterName.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;dgvFilter.Name" xml:space="preserve">
-    <value>dgvFilter</value>
-  </data>
-  <data name="&gt;&gt;bApply.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bReset.Text" xml:space="preserve">
-    <value>重 置</value>
-  </data>
-  <data name="bReset.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 32</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
 </root>

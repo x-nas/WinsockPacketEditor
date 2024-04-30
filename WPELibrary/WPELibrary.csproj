@@ -61,15 +61,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Filter_Form.cs">
+    <Compile Include="Socket_Filter_Form.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Filter_Form.Designer.cs">
-      <DependentUpon>Filter_Form.cs</DependentUpon>
+    <Compile Include="Socket_Filter_Form.Designer.cs">
+      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lib\Filter_List.cs" />
     <Compile Include="Lib\MultiLanguage.cs" />
-    <Compile Include="Lib\Socket_Log.cs" />
+    <Compile Include="Lib\Socket_Filter_Info.cs" />
+    <Compile Include="Lib\Socket_Log_Info.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Socket_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,20 +124,25 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\loading.gif" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Filter_Form.en-US.resx">
-      <DependentUpon>Filter_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_Filter_Form.en-US.resx">
+      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Filter_Form.resx">
-      <DependentUpon>Filter_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_Filter_Form.resx">
+      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Filter_Form.zh-Hans.resx">
-      <DependentUpon>Filter_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_Filter_Form.zh-Hans.resx">
+      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.en-US.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
