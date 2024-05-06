@@ -8,7 +8,8 @@ using System.ComponentModel;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {        
+    {
+        private static string sLanguage_UI = "";
         public static bool Interecept_Recv, Interecept_RecvFrom, Interecept_Send, Interecept_SendTo;
         public static bool Display_Recv, Display_RecvFrom, Display_Send, Display_SendTo;
 
@@ -440,41 +441,50 @@ namespace WPELibrary.Lib
             #region//执行滤镜
             public static void DoFilter(IntPtr ipBuff, int iLen)
             {
+                int iFNum = 0;
+                string sFName = "", sFSearch = "", sModify = "";
+
                 try
                 {
                     byte[] bBuff = Socket_Operation.GetByteFromIntPtr(ipBuff, iLen);
 
-                    foreach (Socket_Filter_Info sfi in lstFilter)
+                    if (bBuff.Length > 0)
                     {
-                        bool bCheck = sfi.IsCheck;
-
-                        if (bCheck) 
+                        foreach (Socket_Filter_Info sfi in lstFilter)
                         {
-                            int iFNum = sfi.FNum;
-                            string sFName = sfi.FName;
-                            string sFSearch = sfi.FSearch;
-                            string sModify = sfi.FModify;
+                            bool bCheck = sfi.IsCheck;
 
-                            if (CheckFilterSearch_ByBuff(sFSearch, bBuff))
+                            if (bCheck)
                             {
-                                if (!string.IsNullOrEmpty(sModify))
+                                iFNum = sfi.FNum;
+                                sFName = sfi.FName;
+                                sFSearch = sfi.FSearch;
+                                sModify = sfi.FModify;
+
+                                if (!string.IsNullOrEmpty(sFSearch) && !string.IsNullOrEmpty(sModify))
                                 {
-                                    string[] ssModify = sModify.Split(',');
-
-                                    foreach (string sTemp in ssModify)
+                                    if (CheckFilterSearch_ByBuff(sFSearch, bBuff))
                                     {
-                                        string[] sModifyValue = sTemp.Split('|');
-                                        int iIndex = int.Parse(sModifyValue[0].ToString().Trim());
-                                        string sValue = sModifyValue[1].ToString().Trim();                                        
+                                        string[] ssModify = sModify.Split(',');
 
-                                        bBuff[iIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
-                                    }
+                                        foreach (string sTemp in ssModify)
+                                        {
+                                            string[] sModifyValue = sTemp.Split('-');
+                                            int iIndex = int.Parse(sModifyValue[0].ToString().Trim());
+                                            string sValue = sModifyValue[1].ToString().Trim();
 
-                                    bool bSetOK = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);
+                                            bBuff[iIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
+                                        }
 
-                                    if (bSetOK)
-                                    {
-                                        break;
+                                        bool bSetOK = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);
+
+                                        if (bSetOK)
+                                        {
+                                            sLanguage_UI = MultiLanguage.GetDefaultLanguage("执行滤镜成功: ", "Filter execution successful: ");
+                                            Socket_Operation.DoLog(sLanguage_UI + sFName);
+
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -483,7 +493,8 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("执行滤镜出错: ", "Error executing filter: ");
+                    Socket_Operation.DoLog(sLanguage_UI + sFName + " | " + ex.Message);
                 }
             }
             #endregion
@@ -491,29 +502,39 @@ namespace WPELibrary.Lib
             #region//检查是否匹配滤镜
             private static bool CheckFilterSearch_ByBuff(string FSearch, byte[] bBuff)
             {
-                bool bResult = true;                
+                bool bResult = true;
 
-                if (!string.IsNullOrEmpty(FSearch))
+                try
                 {
-                    string[] ssSearch = FSearch.Split(',');
-
-                    foreach (string sSearch in ssSearch)
+                    if (!string.IsNullOrEmpty(FSearch))
                     {
-                        string[] sSearchValue = sSearch.Split('|');
-                        int iIndex = int.Parse(sSearchValue[0].ToString().Trim());
-                        string sValue = sSearchValue[1].ToString().Trim();
+                        string[] ssSearch = FSearch.Split(',');
 
-                        string sBufferValue = bBuff[iIndex].ToString("X2");
+                        foreach (string sSearch in ssSearch)
+                        {
+                            string[] sSearchValue = sSearch.Split('-');
+                            int iIndex = int.Parse(sSearchValue[0].ToString().Trim());
+                            string sValue = sSearchValue[1].ToString().Trim();
 
-                        if (!sValue.Equals(sBufferValue))
-                        {                            
-                            bResult = false;
-                            break;
+                            string sBufferValue = bBuff[iIndex].ToString("X2");
+
+                            if (!sValue.Equals(sBufferValue))
+                            {
+                                bResult = false;
+                                break;
+                            }
                         }
                     }
+                    else
+                    {
+                        bResult = false;
+                    }
                 }
-                else
-                {                    
+                catch (Exception ex)
+                {
+                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("匹配滤镜出错: ", "Matching filter error: ");
+                    Socket_Operation.DoLog(sLanguage_UI + ex.Message);
+
                     bResult = false;
                 }
 

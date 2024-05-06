@@ -71,7 +71,7 @@ namespace WPELibrary
                 this.tlSystemInfo.Text = sInjectInfo;
 
                 Socket_Cache.SocketSendList.InitSendList();
-                Socket_Cache.SocketFilterList.InitFilterList(FilterMAXNum);             
+                Socket_Cache.SocketFilterList.InitFilterList(FilterMAXNum);            
 
                 Socket_Operation.DoLog(sInjectInfo);
             }
@@ -318,6 +318,8 @@ namespace WPELibrary
                 this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
                 this.tlInterecept_CNT.Text = Socket_Cache.SocketQueue.Interecept_CNT.ToString();
                 this.tlCheck_CNT.Text = Socket_Operation.CheckCNT.ToString();
+
+                this.dgvFilterList.Refresh();
 
                 if (!bgwSocketList.IsBusy)
                 {
