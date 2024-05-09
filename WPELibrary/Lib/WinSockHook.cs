@@ -2,12 +2,12 @@
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using EasyHook;
+using System.Reflection;
 
 namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
-    {
-        private static string sLanguage_UI = "";
+    {        
         private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSARecv;
 
         #region//user32.dll 
@@ -65,11 +65,11 @@ namespace WPELibrary.Lib
                     }
                 }
 
-                Socket_Operation.DoLog_HookInfo(stSocketType, socket, length, res);
+                Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, socket, length, res);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }           
 
             return res;
@@ -124,11 +124,11 @@ namespace WPELibrary.Lib
                     }
                 }
 
-                Socket_Operation.DoLog_HookInfo(stSocketType, Socket, wsBuffer.len, BytesSent);
+                Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, Socket, wsBuffer.len, BytesSent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return res;
@@ -176,11 +176,11 @@ namespace WPELibrary.Lib
                     }
                 }
 
-                Socket_Operation.DoLog_HookInfo(stSocketType, socket, length, res);
+                Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, socket, length, res);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return res;
@@ -228,12 +228,12 @@ namespace WPELibrary.Lib
                         }
                     }
 
-                    Socket_Operation.DoLog_HookInfo(stSocketType, socket, length, res);
+                    Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, socket, length, res);
                 }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
 
             return res;
@@ -286,12 +286,12 @@ namespace WPELibrary.Lib
                         }
                     }
 
-                    Socket_Operation.DoLog_HookInfo(stSocketType, Socket, wsBuffer.len, BytesRecvd);
+                    Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, Socket, wsBuffer.len, BytesRecvd);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return res;
@@ -339,12 +339,12 @@ namespace WPELibrary.Lib
                         }
                     }
 
-                    Socket_Operation.DoLog_HookInfo(stSocketType, socket, length, res);
+                    Socket_Operation.DoLog_HookInfo(MethodBase.GetCurrentMethod().Name, stSocketType, socket, length, res);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
             
             return res;
@@ -379,7 +379,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
 
@@ -410,7 +410,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -429,7 +429,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
         #endregion        
@@ -446,19 +446,19 @@ namespace WPELibrary.Lib
                 if (res > 0)
                 {
                     bReturn = true;
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送封包成功！", "Successfully sent packet!");
-                    Socket_Operation.DoLog(sLanguage_UI);
+                    
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
                 }
                 else
                 {
                     bReturn = false;
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送封包失败！", "Sending packet failed!");
-                    Socket_Operation.DoLog(sLanguage_UI);
+                    
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;            

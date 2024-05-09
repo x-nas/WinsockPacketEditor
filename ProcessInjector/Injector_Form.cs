@@ -11,9 +11,9 @@ namespace ProcessInjector
     public partial class Injector_Form : Form
     {        
         private string ProcessName = "";
-        private string ProcessPath = "";
-        private string sLanguage_UI = "";
+        private string ProcessPath = "";        
         private int ProcessID = -1;
+        private string sDllName = "WPELibrary.dll";
         private string HelpURL = "https://www.52pojie.cn/thread-1446781-1-1.html";
 
         private ToolTip tt = new ToolTip();
@@ -24,7 +24,7 @@ namespace ProcessInjector
         {
             Process_Injector.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
 
-            InitializeComponent();
+            InitializeComponent();                        
             
             this.rtbLog.Clear();
             this.InitToolTip();            
@@ -34,20 +34,14 @@ namespace ProcessInjector
         {
             try
             {
-                string sTTSelectProcess = MultiLanguage.GetDefaultLanguage("选择进程", "Select Process");
-                tt.SetToolTip(bSelectProcess, sTTSelectProcess);
-
-                string sTTInject = MultiLanguage.GetDefaultLanguage("注入进程", "Inject Process");
-                tt.SetToolTip(bInject, sTTInject);
-
-                string sTTHelp = MultiLanguage.GetDefaultLanguage("帮助", "Help");
-                tt.SetToolTip(pbHelp, sTTHelp);
-
-                string sTTLanguage = MultiLanguage.GetDefaultLanguage("选择语言", "Language");
-                tt.SetToolTip(pbLanguage, sTTLanguage);
-
-                string sMessage = MultiLanguage.GetDefaultLanguage("当前内核版本", "Current kernel version");
-                ShowLog(sMessage + "：" + Process_Injector.GetVersion());
+                tt.SetToolTip(bSelectProcess, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_1));
+                //tt.SetToolTip(bSelectProcess, MultiLanguage.GetDefaultLanguage(1));
+                
+                tt.SetToolTip(bInject, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_2));                
+                tt.SetToolTip(pbHelp, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_3));                
+                tt.SetToolTip(pbLanguage, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_4));
+                
+                ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_5) + "：" + Process_Injector.GetVersion());
             }
             catch (Exception ex)
             {
@@ -88,22 +82,19 @@ namespace ProcessInjector
                 ProcessID = Program.PID;
                 ProcessPath = Program.PATH;
                 ProcessName = Program.PNAME;
-                string sDllName = "WPELibrary.dll";
+                
 
                 if (string.IsNullOrEmpty(ProcessPath) && string.IsNullOrEmpty(ProcessName))
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("请先选择要注入的进程！", "Please select a process first!");
-                    Socket_Operation.ShowMessageBox(sLanguage_UI);
+                {                    
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_6));
                 }
                 else
                 {
                     string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
                     string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
 
-                    string dtTime = DateTime.Now.ToString("T") + " | ";
-
-                    sLanguage_UI = dtTime + MultiLanguage.GetDefaultLanguage("开始注入目标进程", "Start injecting target process");
-                    ShowLog(sLanguage_UI + " =>> " + ProcessName);
+                    string dtTime = DateTime.Now.ToString("T") + " | " + MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_7);                    
+                    ShowLog(dtTime + " =>> " + ProcessName);
 
                     if (ProcessID > -1)
                     {
@@ -115,23 +106,17 @@ namespace ProcessInjector
                     }
 
                     int targetPlat = Process_Injector.IsWin64Process(ProcessID) ? 64 : 32;
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("目标进程是{0}位程序，已自动调用{0}位的注入模块!", "The target process is a {0} bit program and has automatically called the {0} bit injection module!");
-                    ShowLog(string.Format(sLanguage_UI, targetPlat));
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("已成功注入目标进程", "Successfully injected into the target process");
-                    ShowLog(string.Format(sLanguage_UI + " =>> {0}[{1}]", ProcessName, ProcessID));
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("注入完成，可关闭当前注入器或注入其它进程.", "Injection completed, the current injector can be closed or inject other processes.");
-                    ShowLog(sLanguage_UI);
+                    
+                    ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_8), targetPlat));                    
+                    ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_9) + " =>> {0}[{1}]", ProcessName, ProcessID));
+                    ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_10));
 
                     MultiLanguage.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
                 }
             }
             catch (Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("出现错误", "Error");
-                ShowLog(sLanguage_UI + "：" + ex.Message);
+            {                
+                ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_11) + "：" + ex.Message);
             }
         }
         #endregion

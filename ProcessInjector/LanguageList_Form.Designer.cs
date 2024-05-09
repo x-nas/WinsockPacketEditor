@@ -89,6 +89,7 @@
             this.Name = "LanguageList_Form";
             this.ShowIcon = false;
             this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LanguageList_Form_FormClosed);
             this.tlpLanguage.ResumeLayout(false);
             this.tlpLanguage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pb_zhCN)).EndInit();

@@ -18,7 +18,7 @@ namespace WPELibrary
         private int Send_Success_CNT = 0;
         private int Send_Fail_CNT = 0;
         private int Select_Index = 0;
-        private string sLanguage_UI = "";
+        private string Select_Hex = "";
 
         #region//窗体加载
         public Socket_Send_Form(int iSelectIndex)
@@ -36,9 +36,8 @@ namespace WPELibrary
             {
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送封包 -【 序号", "Send -【 ID");
-                this.Text = sLanguage_UI + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+                
+                this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_42) + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
@@ -48,7 +47,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -74,7 +73,7 @@ namespace WPELibrary
                     {
                         Name = "col" + (i + 1).ToString("000"),
                         HeaderText = (i + 1).ToString("000"),
-                        Width = 40,
+                        Width = 50,
                         MaxInputLength = 2
                     };
                     DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
@@ -84,15 +83,14 @@ namespace WPELibrary
                     dgvSocketSend.Columns.Add(dgvColumn);
                 }
 
-                dgvSocketSend.RowHeadersWidth = 100;
+                dgvSocketSend.RowHeadersWidth = 120;
                 dgvSocketSend.Rows.Add();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("封包数据", "Data");
-                dgvSocketSend.Rows[0].HeaderCell.Value = sLanguage_UI;
+                
+                dgvSocketSend.Rows[0].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -110,7 +108,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -122,7 +120,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -132,39 +130,46 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbStep.Checked)
+                if (this.CheckSendPacket())
                 {
-                    string sStepIndex = this.lStepIndex_Value.Text.Trim();
-                    string sStepLen = this.lStepLen_Value.Text.Trim();
-
-                    if (string.IsNullOrEmpty(sStepIndex) || string.IsNullOrEmpty(sStepLen))
+                    if (this.cbStep.Checked)
                     {
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("请正确设置递进位置!", "Please set the progressive position correctly!");
-                        Socket_Operation.ShowMessageBox(sLanguage_UI);
-                        return;
+                        string sStepIndex = this.lStepIndex_Value.Text.Trim();
+                        string sStepLen = this.lStepLen_Value.Text.Trim();
+
+                        if (string.IsNullOrEmpty(sStepIndex) || string.IsNullOrEmpty(sStepLen))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_44));
+                            return;
+                        }
                     }
-                }
 
-                this.bSend.Enabled = false;
-                this.bSendStop.Enabled = true;
+                    this.bSend.Enabled = false;
+                    this.bSendStop.Enabled = true;
 
-                Send_CNT = 0;
-                Send_Success_CNT = 0;
-                Send_Fail_CNT = 0;
+                    this.gbSend1.Enabled = false;
+                    this.gbSend2.Enabled = false;
+                    this.gbSend3.Enabled = false;
+                    this.gbSend4.Enabled = false;
 
-                if (!bgwSendPacket.IsBusy)
-                {
-                    bgwSendPacket.RunWorkerAsync();
+                    Send_CNT = 0;
+                    Send_Success_CNT = 0;
+                    Send_Fail_CNT = 0;
+
+                    if (!bgwSendPacket.IsBusy)
+                    {
+                        bgwSendPacket.RunWorkerAsync();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
 
-        #region//发送停止按钮
+        #region//停止按钮
         private void bSendStop_Click(object sender, EventArgs e)
         {
             try
@@ -173,10 +178,15 @@ namespace WPELibrary
 
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
+
+                this.gbSend1.Enabled = true;
+                this.gbSend2.Enabled = true;
+                this.gbSend3.Enabled = true;
+                this.gbSend4.Enabled = true;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion        
@@ -197,26 +207,31 @@ namespace WPELibrary
 
                 for (int i = 0; i < iLen; i++)
                 {
-                    string sCell = this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim();
-
-                    if (!string.IsNullOrEmpty(sCell))
+                    if (this.dgvSocketSend.Rows[0].Cells[i].Value != null)
                     {
-                        sResult += sCell + " ";
+                        if (!string.IsNullOrEmpty(this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim()))
+                        {
+                            string sCell = this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim();
+
+                            sResult += sCell + " ";
+                        }
+                        else
+                        {
+                            return "";
+                        }
                     }
                     else
                     {
-                        sResult = "";
-                        break;
+                        return "";
                     }
                 }
 
                 sResult = sResult.Trim();
             }
             catch (Exception ex)
-            {
-                sResult = "";
-
-                Socket_Operation.DoLog(ex.Message);
+            {                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return "";
             }          
 
             return sResult;
@@ -234,16 +249,36 @@ namespace WPELibrary
             this.ShowStepValue();
         }
 
+        private void dgvSocketSend_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                object value = dgvSocketSend.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+                if (!Socket_Operation.CheckHEX(value))
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                    dgvSocketSend.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = this.Select_Hex;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void dgvSocketSend_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                int iCellIndex = this.dgvSocketSend.SelectedCells[0].ColumnIndex;
-                this.nudStepIndex.Value = iCellIndex + 1;
+                this.Select_Hex = this.dgvSocketSend.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString().Trim();
+                this.nudStepIndex.Value = e.ColumnIndex + 1;
+
+                this.ShowStepValue();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -251,19 +286,32 @@ namespace WPELibrary
         {
             try
             {
-                int iStepIndex = int.Parse(this.nudStepIndex.Value.ToString()) - 1;
-                int iStepLen = int.Parse(this.nudStepLen.Value.ToString());
-
-                if (this.dgvSocketSend.Rows[0].Cells[iStepIndex].Value != null)
+                if (this.nudStepIndex.Value > Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen)
                 {
-                    string sStepData = this.dgvSocketSend.Rows[0].Cells[iStepIndex].Value.ToString();
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_82));
 
-                    if (!string.IsNullOrEmpty(sStepData))
+                    this.nudStepIndex.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen;
+                }
+                else
+                {
+                    int iStepIndex = int.Parse(this.nudStepIndex.Value.ToString()) - 1;
+                    int iStepLen = int.Parse(this.nudStepLen.Value.ToString());
+
+                    if (this.dgvSocketSend.Rows[0].Cells[iStepIndex].Value != null)
                     {
-                        string sStepLenData = Socket_Operation.GetValueByLen_HEX(sStepData, iStepLen);
+                        if (!string.IsNullOrEmpty(this.dgvSocketSend.Rows[0].Cells[iStepIndex].Value.ToString().Trim()))
+                        {
+                            string sStepData = this.dgvSocketSend.Rows[0].Cells[iStepIndex].Value.ToString().Trim();
+                            string sStepLenData = Socket_Operation.GetValueByLen_HEX(sStepData, iStepLen);
 
-                        this.lStepIndex_Value.Text = sStepData;
-                        this.lStepLen_Value.Text = sStepLenData;
+                            this.lStepIndex_Value.Text = sStepData;
+                            this.lStepLen_Value.Text = sStepLenData;
+                        }
+                        else
+                        {
+                            this.lStepIndex_Value.Text = "";
+                            this.lStepLen_Value.Text = "";
+                        }
                     }
                     else
                     {
@@ -271,15 +319,10 @@ namespace WPELibrary
                         this.lStepLen_Value.Text = "";
                     }
                 }
-                else
-                {
-                    this.lStepIndex_Value.Text = "";
-                    this.lStepLen_Value.Text = "";
-                }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -297,7 +340,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -323,24 +366,8 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-        }
-        #endregion
-
-        #region//计时器
-        private void tSend_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                this.tlSendPacket_CNT.Text = this.Send_CNT.ToString();
-                this.tlSend_Success_CNT.Text = this.Send_Success_CNT.ToString();
-                this.tlSend_Fail_CNT.Text = this.Send_Fail_CNT.ToString();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(ex.Message);
-            }
         }
         #endregion        
 
@@ -376,9 +403,51 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+        #endregion
+
+        #region//检查发送数据
+
+        private bool CheckSendPacket()
+        { 
+            try
+            {
+                int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());
+
+                if (iSocket == 0)
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_45));
+                    return false;
+                }
+
+                string sSendData = this.GetSocketSendData();
+
+                if (sSendData.Equals(""))
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_46));
+                    return false;
+                }
+
+                if (this.cbStep.Checked)
+                {
+                    if (this.lStepIndex_Value.Text.Equals("") || this.lStepLen_Value.Text.Equals(""))
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_47));
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region//发送封包（异步）
@@ -393,10 +462,19 @@ namespace WPELibrary
             {
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
+
+                this.gbSend1.Enabled = true;
+                this.gbSend2.Enabled = true;
+                this.gbSend3.Enabled = true;
+                this.gbSend4.Enabled = true;
+
+                this.tlSendPacket_CNT.Text = this.Send_CNT.ToString();
+                this.tlSend_Success_CNT.Text = this.Send_Success_CNT.ToString();                
+                this.tlSend_Fail_CNT.Text = this.Send_Fail_CNT.ToString();                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -405,32 +483,7 @@ namespace WPELibrary
             try
             {
                 int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());
-
-                if (iSocket == 0)
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("套接字设置错误!", "Socket setting error!");
-                    Socket_Operation.ShowMessageBox(sLanguage_UI);
-                    return;
-                }
-
                 string sSendData = this.GetSocketSendData();
-
-                if (sSendData.Equals(""))
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("封包数据错误!", "Packet data error!");
-                    Socket_Operation.ShowMessageBox(sLanguage_UI);
-                    return;
-                }
-
-                if (this.cbStep.Checked)
-                {
-                    if (this.lStepIndex_Value.Text.Equals("") || this.lStepLen_Value.Text.Equals(""))
-                    {
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("递进设置错误!", "Progressive setting error!");
-                        Socket_Operation.ShowMessageBox(sLanguage_UI);
-                        return;
-                    }
-                }
 
                 Loop_CNT = (int)this.nudLoop_CNT.Value;
                 Loop_Int = (int)this.nudLoop_Int.Value;
@@ -491,7 +544,7 @@ namespace WPELibrary
                         {
                             Send_Fail_CNT++;
 
-                            Socket_Operation.DoLog(ex.Message);
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }                        
 
                         Send_CNT++;
@@ -500,9 +553,9 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-        #endregion        
+        #endregion
     }
 }

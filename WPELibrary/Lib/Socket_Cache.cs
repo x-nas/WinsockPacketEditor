@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {
-        private static string sLanguage_UI = "";
+    {        
         public static bool Interecept_Recv, Interecept_RecvFrom, Interecept_Send, Interecept_SendTo;
         public static bool Display_Recv, Display_RecvFrom, Display_Send, Display_SendTo;
 
@@ -37,7 +37,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex) 
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -54,7 +54,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }              
             }
 
@@ -73,7 +73,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             #endregion
@@ -180,7 +180,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             #endregion
@@ -193,18 +193,18 @@ namespace WPELibrary.Lib
             public static Queue<Socket_Log_Info> qSocket_Log = new Queue<Socket_Log_Info>();
 
             #region//日志入队列（多线程）
-            public static void LogToQueue(string sLogContent)
+            public static void LogToQueue(string sFuncName, string sLogContent)
             {
                 try
                 {
-                    Socket_Log_Info sli = new Socket_Log_Info(sLogContent);
+                    Socket_Log_Info sli = new Socket_Log_Info(sFuncName, sLogContent);
 
                     Thread tLog_Queue = new Thread(new ParameterizedThreadStart(LogToQueue_Thread));
                     tLog_Queue.Start(sli);
                 }
                 catch (Exception ex) 
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -221,7 +221,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }             
             }
 
@@ -236,7 +236,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             #endregion
@@ -264,7 +264,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             #endregion
@@ -289,14 +289,14 @@ namespace WPELibrary.Lib
                     for (int i = 0; i < iFilterMaxNum; i++)
                     {
                         int iFNum = i + 1;
-                        string sName = MultiLanguage.GetDefaultLanguage("滤镜", "Filter") + " " + iFNum.ToString();                     
+                        string sName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + iFNum.ToString();                     
 
                         FilterToList(iFNum, false, sName, "", "");                        
                     }
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             #endregion
@@ -349,7 +349,7 @@ namespace WPELibrary.Lib
             public static void AddFilter_New()
             {
                 int FNum = GetFilterNum_New();
-                string FName = MultiLanguage.GetDefaultLanguage("滤镜", "Filter") + " " + FNum.ToString();
+                string FName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + FNum.ToString();
 
                 AddFilter_New(FNum, false, FName, "", "");
             }
@@ -479,9 +479,8 @@ namespace WPELibrary.Lib
                                         bool bSetOK = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);
 
                                         if (bSetOK)
-                                        {
-                                            sLanguage_UI = MultiLanguage.GetDefaultLanguage("执行滤镜成功: ", "Filter execution successful: ");
-                                            Socket_Operation.DoLog(sLanguage_UI + sFName);
+                                        {                                            
+                                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
 
                                             break;
                                         }
@@ -492,9 +491,8 @@ namespace WPELibrary.Lib
                     }
                 }
                 catch (Exception ex)
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("执行滤镜出错: ", "Error executing filter: ");
-                    Socket_Operation.DoLog(sLanguage_UI + sFName + " | " + ex.Message);
+                {                    
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52) + sFName + " | " + ex.Message);
                 }
             }
             #endregion
@@ -531,9 +529,8 @@ namespace WPELibrary.Lib
                     }
                 }
                 catch (Exception ex)
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("匹配滤镜出错: ", "Matching filter error: ");
-                    Socket_Operation.DoLog(sLanguage_UI + ex.Message);
+                {                    
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
 
                     bResult = false;
                 }
@@ -560,6 +557,8 @@ namespace WPELibrary.Lib
             #region//初始化发送列表
             public static void InitSendList()
             {
+                dtSocketSendList.Columns.Clear();
+
                 dtSocketSendList.Columns.Add("ID", typeof(int));
                 dtSocketSendList.Columns.Add("Remark", typeof(string));
                 dtSocketSendList.Columns.Add("Socket", typeof(int));
@@ -642,7 +641,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return bResult;

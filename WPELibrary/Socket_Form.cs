@@ -15,8 +15,7 @@ namespace WPELibrary
         private int Select_Index = -1;
         private int Max_DataLen = 50;
         private int FilterMAXNum = 10;
-        private bool bWakeUp = true;        
-        private string sLanguage_UI = "";
+        private bool bWakeUp = true;
 
         #region//加载窗体
         public Socket_Form(string sLanguage)
@@ -34,7 +33,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -48,7 +47,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -65,19 +64,18 @@ namespace WPELibrary
                 this.pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
                 this.pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
                 this.pbLoading.Visible = false;
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("目标进程：", "Process: ");
-                string sInjectInfo = string.Format(sLanguage_UI + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
+                
+                string sInjectInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
                 this.tlSystemInfo.Text = sInjectInfo;
 
                 Socket_Cache.SocketSendList.InitSendList();
                 Socket_Cache.SocketFilterList.InitFilterList(FilterMAXNum);            
 
-                Socket_Operation.DoLog(sInjectInfo);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sInjectInfo);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -100,13 +98,12 @@ namespace WPELibrary
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.SocketFilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("初始化数据表完成!", "Initializing data table completed!");
-                Socket_Operation.DoLog(sLanguage_UI);
+                                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_21));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -150,13 +147,12 @@ namespace WPELibrary
                     Socket_Operation.CheckCNT = 0;
                     Socket_Cache.SocketQueue.ResetSocketQueue();
                 }
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("设置拦截参数完成!", "Setting interception parameters completed!");
-                Socket_Operation.DoLog(sLanguage_UI);
+                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
         #endregion        
@@ -164,98 +160,74 @@ namespace WPELibrary
         #region//设置拦截选项
         private void cbInterecept_Send_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Interecept_Send = this.cbInterecept_Send.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-发送, ", "Block-Send, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Interecept_Send.ToString());
+            Socket_Cache.Interecept_Send = this.cbInterecept_Send.Checked;            
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23) + Socket_Cache.Interecept_Send.ToString());
         }
 
         private void cbInterecept_SendTo_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Interecept_SendTo = this.cbInterecept_SendTo.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-发送到, ", "Block-SendTo, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Interecept_SendTo.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24) + Socket_Cache.Interecept_SendTo.ToString());
         }
 
         private void cbInterecept_Recv_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Interecept_Recv = this.cbInterecept_Recv.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-接收, ", "Block-Recv, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Interecept_Recv.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25) + Socket_Cache.Interecept_Recv.ToString());
         }
 
         private void cbInterecept_RecvFrom_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Interecept_RecvFrom = this.cbInterecept_RecvFrom.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-接收自, ", "Block-RecvFrom, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Interecept_RecvFrom.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26) + Socket_Cache.Interecept_RecvFrom.ToString());
         }
 
         private void cbDisplay_Send_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Display_Send = this.cbDisplay_Send.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("显示-发送, ", "Show-Send, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Display_Send.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27) + Socket_Cache.Display_Send.ToString());
         }
 
         private void cbDisplay_SendTo_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Display_SendTo = this.cbDisplay_SendTo.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("显示-发送到, ", "Show-SendTo, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Display_SendTo.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28) + Socket_Cache.Display_SendTo.ToString());
         }
 
         private void cbDisplay_Recv_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Display_Recv = this.cbDisplay_Recv.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("显示-接收, ", "Show-Recv, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Display_Recv.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29) + Socket_Cache.Display_Recv.ToString());
         }
 
         private void cbDisplay_RecvFrom_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.Display_RecvFrom = this.cbDisplay_RecvFrom.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("显示-接收自, ", "Show-RecvFrom, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Cache.Display_RecvFrom.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_30) + Socket_Cache.Display_RecvFrom.ToString());
         }
 
         private void cbCheck_Size_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Operation.IsCheck_Size = this.cbCheck_Size.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("过滤-封包长度, ", "Filter-SocketSize, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Operation.IsCheck_Size.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31) + Socket_Operation.IsCheck_Size.ToString());
         }
 
         private void cbCheck_Socket_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Operation.IsCheck_Socket = this.cbCheck_Socket.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("过滤-套接字, ", "Filter-Socket, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Operation.IsCheck_Socket.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32) + Socket_Operation.IsCheck_Socket.ToString());
         }
 
         private void cbCheck_IP_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Operation.IsCheck_IP = this.cbCheck_IP.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("过滤-IP地址, ", "Filter-IP Address, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Operation.IsCheck_IP.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_33) + Socket_Operation.IsCheck_IP.ToString());
         }
 
         private void cbCheck_Packet_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Operation.IsCheck_Packet = this.cbCheck_Packet.Checked;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("过滤-封包内容, ", "Filter-Socket Packet, ");
-            Socket_Operation.DoLog(sLanguage_UI + Socket_Operation.IsCheck_Packet.ToString());
+            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_34) + Socket_Operation.IsCheck_Packet.ToString());
         }        
         #endregion
 
@@ -276,13 +248,12 @@ namespace WPELibrary
                     RemoteHooking.WakeUpProcess();
                     this.bWakeUp = false;
                 }
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("开始拦截！", "Start Intercepting!");
-                Socket_Operation.DoLog(sLanguage_UI);
+                                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -297,12 +268,11 @@ namespace WPELibrary
 
                 ws.StopHook();
 
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("结束拦截！", "Stop Interception!");
-                Socket_Operation.DoLog(sLanguage_UI);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
         #endregion
@@ -339,7 +309,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -431,7 +401,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             } 
         }
         #endregion
@@ -496,7 +466,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -532,7 +502,7 @@ namespace WPELibrary
                         }
                         catch (Exception ex)
                         {
-                            Socket_Operation.DoLog(ex.Message);
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
 
                         #endregion
@@ -580,8 +550,7 @@ namespace WPELibrary
                         {
                             if (dgvFilterList.Rows.Count > 0)
                             {
-                                string sMessage = MultiLanguage.GetDefaultLanguage("确定删除选中的滤镜吗？", "Are you sure to delete the selected filter?");
-                                DialogResult dr = Socket_Operation.ShowSelectMessageBox(sMessage);
+                                DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                                 if (dr.Equals(DialogResult.OK))
                                 {
@@ -596,7 +565,7 @@ namespace WPELibrary
                         }
                         catch (Exception ex)
                         {
-                            Socket_Operation.DoLog(ex.Message);
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                         
                         #endregion
@@ -608,9 +577,8 @@ namespace WPELibrary
                         #region//清除所有滤镜
 
                         if (dgvFilterList.Rows.Count > 0)
-                        {
-                            string sMessage = MultiLanguage.GetDefaultLanguage("确定删除所有数据吗？", "Are you sure to delete all data?");
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(sMessage);
+                        {                            
+                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
 
                             if (dr.Equals(DialogResult.OK))
                             {
@@ -625,7 +593,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -655,23 +623,20 @@ namespace WPELibrary
                         this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iIndex].Cells[0];
                     }
                     else
-                    {
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("没有搜索到数据！", "No data found in search!");
-                        Socket_Operation.ShowMessageBox(sLanguage_UI);
+                    {                        
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_39));
                     }
                 }
                 else
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("请输入搜索内容！", "Please enter search content!");
-                    Socket_Operation.ShowMessageBox(sLanguage_UI);
+                {                    
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_40));
                 }
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("搜索完成!", "Search completed!");
-                Socket_Operation.DoLog(sLanguage_UI);
+                                
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion        
@@ -685,7 +650,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -697,7 +662,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -712,7 +677,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -720,14 +685,17 @@ namespace WPELibrary
         {
             try
             {
-                dgvLogList.Invoke(new MethodInvoker(delegate
+                if (!IsDisposed)
                 {
-                    Socket_Cache.LogList.lstRecLog.Add(sli);
-                }));
+                    dgvLogList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.LogList.lstRecLog.Add(sli);
+                    }));
+                }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion        
@@ -747,7 +715,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -760,7 +728,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -772,7 +740,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -784,7 +752,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -827,7 +795,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion                
@@ -842,7 +810,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -857,7 +825,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -881,7 +849,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion        

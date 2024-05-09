@@ -117,48 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tsmiDelete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="tsmiDelete.Text" xml:space="preserve">
-    <value>Remove from list</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 6</value>
-  </data>
-  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
   <data name="tsmiClear.Text" xml:space="preserve">
     <value>Clear send list</value>
   </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 6</value>
-  </data>
-  <data name="tsmiSaveList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="tsmiSaveList.Text" xml:space="preserve">
-    <value>Save send list</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 6</value>
-  </data>
-  <data name="tsmiLoadList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
-  <data name="tsmiLoadList.Text" xml:space="preserve">
-    <value>Load send list</value>
-  </data>
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 110</value>
-  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 17</value>
+    <value>73, 17</value>
   </data>
   <data name="tlLoop_Send.Text" xml:space="preserve">
-    <value>Loop CNT:</value>
+    <value>Total Send:</value>
   </data>
   <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 17</value>

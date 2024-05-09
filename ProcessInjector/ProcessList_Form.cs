@@ -11,8 +11,6 @@ namespace ProcessInjector
 {
     public partial class ProcessList_Form : Form
     {
-        private string sLanguage_UI = "";
-
         #region//窗体加载
         public ProcessList_Form()
         {           
@@ -26,9 +24,9 @@ namespace ProcessInjector
                 dgvProcessList.AutoGenerateColumns = false;
                 dgvProcessList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProcessList, true, null);
             }
-            catch
+            catch(Exception ex)
             {
-                //
+                string sError =ex.Message;
             }
         }
 
@@ -117,9 +115,8 @@ namespace ProcessInjector
                     this.Close();
                 }
                 else
-                {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("请选择一个进程!", "Please select a process!");
-                    Socket_Operation.ShowMessageBox(sLanguage_UI);
+                {                    
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_13));
                 }
             }
             catch
@@ -153,14 +150,11 @@ namespace ProcessInjector
             try
             {
                 OpenFileDialog ofdCreate = new OpenFileDialog();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("请选择要注入的应用程序", "Please select the program to inject");
-                ofdCreate.Title = sLanguage_UI;
+                                
+                ofdCreate.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_14);
                 ofdCreate.Multiselect = false;
-                ofdCreate.InitialDirectory = "";
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*");
-                ofdCreate.Filter = sLanguage_UI;
+                ofdCreate.InitialDirectory = "";                                
+                ofdCreate.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_15);
                 ofdCreate.ShowDialog();
 
                 Program.PID = -1;

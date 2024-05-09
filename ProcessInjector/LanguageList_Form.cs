@@ -1,4 +1,5 @@
 ﻿using ProcessInjector.Lib;
+using System.Diagnostics;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 
@@ -37,43 +38,22 @@ namespace ProcessInjector
         #region//选择语言
         private void rb_zhCN_Click(object sender, System.EventArgs e)
         {            
-            Process_Injector.SetDefaultLanguage("zh-CN");
-            this.LoadAll();            
+            Process_Injector.SetDefaultLanguage("zh-CN");          
         }
 
         private void rb_enUS_Click(object sender, System.EventArgs e)
         {
             Process_Injector.SetDefaultLanguage("en-US");
-            this.LoadAll();
         }
         #endregion
 
-        #region//加载所有窗体语言
-        private void LoadAll()
-        {
-            try
-            {
-                foreach (Form form in Application.OpenForms)
-                {
-                    switch (form.Name)
-                    {
-                        case "Injector_Form":
-                            MultiLanguage.LoadLanguage(form, typeof(Injector_Form));
-                            break;
+        #region//重启程序
+        private void LanguageList_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {            
+            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_12));
 
-                        case "LanguageList_Form":
-                            MultiLanguage.LoadLanguage(form, typeof(LanguageList_Form));
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            }
-            catch
-            {
-                //
-            }
+            Application.Restart();
+            Process.GetCurrentProcess().Kill();
         }
         #endregion
     }

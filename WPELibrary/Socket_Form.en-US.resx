@@ -256,47 +256,50 @@
   <data name="cTime.HeaderText" xml:space="preserve">
     <value>Log Time</value>
   </data>
+  <data name="cFuncName.HeaderText" xml:space="preserve">
+    <value>Module</value>
+  </data>
   <data name="cContent.HeaderText" xml:space="preserve">
     <value>Content</value>
-  </data>
-  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tslClearList.Text" xml:space="preserve">
-    <value>Clear Log List</value>
-  </data>
-  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="tsmiShowHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiShowHook.Text" xml:space="preserve">
-    <value>Show Hook Log</value>
-  </data>
-  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="tsmiHideHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tsmiHideHook.Text" xml:space="preserve">
-    <value>Hide Hook Log</value>
-  </data>
-  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="tslToExcel.Text" xml:space="preserve">
-    <value>Export to Excel</value>
   </data>
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 110</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
     <value>726, 132</value>
+  </data>
+  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
+  <data name="tslClearList.Text" xml:space="preserve">
+    <value>Clear Log List</value>
+  </data>
+  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 6</value>
+  </data>
+  <data name="tsmiShowHook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
+  <data name="tsmiShowHook.Text" xml:space="preserve">
+    <value>Show Hook Log</value>
+  </data>
+  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 6</value>
+  </data>
+  <data name="tsmiHideHook.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
+  <data name="tsmiHideHook.Text" xml:space="preserve">
+    <value>Hide Hook Log</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 6</value>
+  </data>
+  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 22</value>
+  </data>
+  <data name="tslToExcel.Text" xml:space="preserve">
+    <value>Export to Excel</value>
   </data>
   <data name="bStartHook.Location" type="System.Drawing.Point, System.Drawing">
     <value>812, 18</value>

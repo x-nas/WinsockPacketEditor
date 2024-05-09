@@ -56,7 +56,7 @@ namespace WPELibrary
             this.lSend_Len = new System.Windows.Forms.Label();
             this.txtSend_Socket = new System.Windows.Forms.TextBox();
             this.lSend_Socket = new System.Windows.Forms.Label();
-            this.gbSend_Bottom = new System.Windows.Forms.GroupBox();
+            this.gbSend4 = new System.Windows.Forms.GroupBox();
             this.nudLoop_Int = new System.Windows.Forms.NumericUpDown();
             this.nudLoop_CNT = new System.Windows.Forms.NumericUpDown();
             this.lLoop_Int = new System.Windows.Forms.Label();
@@ -64,8 +64,7 @@ namespace WPELibrary
             this.bgwSendPacket = new System.ComponentModel.BackgroundWorker();
             this.cmsSocketSend = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiBatchSend = new System.Windows.Forms.ToolStripMenuItem();
-            this.tSend = new System.Windows.Forms.Timer(this.components);
-            this.gbStep = new System.Windows.Forms.GroupBox();
+            this.gbSend3 = new System.Windows.Forms.GroupBox();
             this.lStepLen_Value = new System.Windows.Forms.Label();
             this.lStepIndex_Value = new System.Windows.Forms.Label();
             this.nudStepIndex = new System.Windows.Forms.NumericUpDown();
@@ -77,11 +76,11 @@ namespace WPELibrary
             this.ssSocketSend.SuspendLayout();
             this.gbSend2.SuspendLayout();
             this.gbSend1.SuspendLayout();
-            this.gbSend_Bottom.SuspendLayout();
+            this.gbSend4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_Int)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_CNT)).BeginInit();
             this.cmsSocketSend.SuspendLayout();
-            this.gbStep.SuspendLayout();
+            this.gbSend3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStepIndex)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStepLen)).BeginInit();
             this.pSend_Top.SuspendLayout();
@@ -110,8 +109,8 @@ namespace WPELibrary
             // 
             // tlSendPacket_CNT
             // 
-            this.tlSendPacket_CNT.Name = "tlSendPacket_CNT";
             resources.ApplyResources(this.tlSendPacket_CNT, "tlSendPacket_CNT");
+            this.tlSendPacket_CNT.Name = "tlSendPacket_CNT";
             // 
             // tlSplit
             // 
@@ -126,8 +125,9 @@ namespace WPELibrary
             // 
             // tlSend_Success_CNT
             // 
-            this.tlSend_Success_CNT.Name = "tlSend_Success_CNT";
             resources.ApplyResources(this.tlSend_Success_CNT, "tlSend_Success_CNT");
+            this.tlSend_Success_CNT.ForeColor = System.Drawing.Color.Green;
+            this.tlSend_Success_CNT.Name = "tlSend_Success_CNT";
             // 
             // toolStripStatusLabel3
             // 
@@ -142,8 +142,9 @@ namespace WPELibrary
             // 
             // tlSend_Fail_CNT
             // 
-            this.tlSend_Fail_CNT.Name = "tlSend_Fail_CNT";
             resources.ApplyResources(this.tlSend_Fail_CNT, "tlSend_Fail_CNT");
+            this.tlSend_Fail_CNT.ForeColor = System.Drawing.Color.Red;
+            this.tlSend_Fail_CNT.Name = "tlSend_Fail_CNT";
             // 
             // bSendStop
             // 
@@ -221,15 +222,15 @@ namespace WPELibrary
             resources.ApplyResources(this.lSend_Socket, "lSend_Socket");
             this.lSend_Socket.Name = "lSend_Socket";
             // 
-            // gbSend_Bottom
+            // gbSend4
             // 
-            this.gbSend_Bottom.Controls.Add(this.nudLoop_Int);
-            this.gbSend_Bottom.Controls.Add(this.nudLoop_CNT);
-            this.gbSend_Bottom.Controls.Add(this.lLoop_Int);
-            this.gbSend_Bottom.Controls.Add(this.lLoop_CNT);
-            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
-            this.gbSend_Bottom.Name = "gbSend_Bottom";
-            this.gbSend_Bottom.TabStop = false;
+            this.gbSend4.Controls.Add(this.nudLoop_Int);
+            this.gbSend4.Controls.Add(this.nudLoop_CNT);
+            this.gbSend4.Controls.Add(this.lLoop_Int);
+            this.gbSend4.Controls.Add(this.lLoop_CNT);
+            resources.ApplyResources(this.gbSend4, "gbSend4");
+            this.gbSend4.Name = "gbSend4";
+            this.gbSend4.TabStop = false;
             // 
             // nudLoop_Int
             // 
@@ -305,23 +306,17 @@ namespace WPELibrary
             this.tsmiBatchSend.Name = "tsmiBatchSend";
             resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
             // 
-            // tSend
+            // gbSend3
             // 
-            this.tSend.Enabled = true;
-            this.tSend.Interval = 1000;
-            this.tSend.Tick += new System.EventHandler(this.tSend_Tick);
-            // 
-            // gbStep
-            // 
-            this.gbStep.Controls.Add(this.lStepLen_Value);
-            this.gbStep.Controls.Add(this.lStepIndex_Value);
-            this.gbStep.Controls.Add(this.nudStepIndex);
-            this.gbStep.Controls.Add(this.nudStepLen);
-            this.gbStep.Controls.Add(this.lStepLen);
-            this.gbStep.Controls.Add(this.cbStep);
-            resources.ApplyResources(this.gbStep, "gbStep");
-            this.gbStep.Name = "gbStep";
-            this.gbStep.TabStop = false;
+            this.gbSend3.Controls.Add(this.lStepLen_Value);
+            this.gbSend3.Controls.Add(this.lStepIndex_Value);
+            this.gbSend3.Controls.Add(this.nudStepIndex);
+            this.gbSend3.Controls.Add(this.nudStepLen);
+            this.gbSend3.Controls.Add(this.lStepLen);
+            this.gbSend3.Controls.Add(this.cbStep);
+            resources.ApplyResources(this.gbSend3, "gbSend3");
+            this.gbSend3.Name = "gbSend3";
+            this.gbSend3.TabStop = false;
             // 
             // lStepLen_Value
             // 
@@ -428,6 +423,7 @@ namespace WPELibrary
             this.dgvSocketSend.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvSocketSend.RowTemplate.Height = 23;
             this.dgvSocketSend.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellClick);
+            this.dgvSocketSend.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellEndEdit);
             this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);
             this.dgvSocketSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSocketSend_KeyDown);
             // 
@@ -436,12 +432,12 @@ namespace WPELibrary
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.pSend_Top);
-            this.Controls.Add(this.gbStep);
+            this.Controls.Add(this.gbSend3);
             this.Controls.Add(this.bSendStop);
             this.Controls.Add(this.bSend);
             this.Controls.Add(this.gbSend2);
             this.Controls.Add(this.gbSend1);
-            this.Controls.Add(this.gbSend_Bottom);
+            this.Controls.Add(this.gbSend4);
             this.Controls.Add(this.ssSocketSend);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -454,13 +450,13 @@ namespace WPELibrary
             this.gbSend2.PerformLayout();
             this.gbSend1.ResumeLayout(false);
             this.gbSend1.PerformLayout();
-            this.gbSend_Bottom.ResumeLayout(false);
-            this.gbSend_Bottom.PerformLayout();
+            this.gbSend4.ResumeLayout(false);
+            this.gbSend4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_Int)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_CNT)).EndInit();
             this.cmsSocketSend.ResumeLayout(false);
-            this.gbStep.ResumeLayout(false);
-            this.gbStep.PerformLayout();
+            this.gbSend3.ResumeLayout(false);
+            this.gbSend3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudStepIndex)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStepLen)).EndInit();
             this.pSend_Top.ResumeLayout(false);
@@ -484,13 +480,12 @@ namespace WPELibrary
         private System.Windows.Forms.Label lSend_Len;
         private System.Windows.Forms.TextBox txtSend_Socket;
         private System.Windows.Forms.Label lSend_Socket;
-        private System.Windows.Forms.GroupBox gbSend_Bottom;
+        private System.Windows.Forms.GroupBox gbSend4;
         private System.Windows.Forms.Label lLoop_Int;
         private System.Windows.Forms.Label lLoop_CNT;
         private System.Windows.Forms.ToolStripStatusLabel tlSendPacket;
         private System.Windows.Forms.ToolStripStatusLabel tlSendPacket_CNT;
         private System.ComponentModel.BackgroundWorker bgwSendPacket;
-        private System.Windows.Forms.Timer tSend;
         private System.Windows.Forms.ToolStripStatusLabel tlSplit;
         private System.Windows.Forms.ToolStripStatusLabel tlSend_Success;
         private System.Windows.Forms.ToolStripStatusLabel tlSend_Success_CNT;
@@ -499,7 +494,7 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlSend_Fail_CNT;
         private System.Windows.Forms.ContextMenuStrip cmsSocketSend;
         private System.Windows.Forms.ToolStripMenuItem tsmiBatchSend;
-        private System.Windows.Forms.GroupBox gbStep;
+        private System.Windows.Forms.GroupBox gbSend3;
         private System.Windows.Forms.NumericUpDown nudStepLen;
         private System.Windows.Forms.Label lStepLen;
         private System.Windows.Forms.CheckBox cbStep;

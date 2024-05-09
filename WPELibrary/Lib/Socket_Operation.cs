@@ -3,13 +3,13 @@ using System.IO;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace WPELibrary.Lib
 {
     public static class Socket_Operation
     {
-        private static string sLanguage_UI = "";
-
         public static int CheckCNT = 0;
 
         public static bool IsCheck_Size = false;
@@ -58,7 +58,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -86,7 +86,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
 
                 return null;
             }            
@@ -100,7 +100,7 @@ namespace WPELibrary.Lib
             {
                 foreach (byte n in buffer)
                 {
-                    string strTemp = System.Convert.ToString(n, 2);
+                    string strTemp = Convert.ToString(n, 2);
                     strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
 
                     sReturn += strTemp + " ";
@@ -110,7 +110,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -127,7 +127,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -144,7 +144,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -161,7 +161,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -178,7 +178,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -195,7 +195,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -214,7 +214,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -233,7 +233,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bBuffer;
@@ -273,7 +273,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -308,7 +308,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -325,7 +325,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -342,7 +342,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -365,7 +365,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -386,7 +386,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -402,59 +402,47 @@ namespace WPELibrary.Lib
             {
                 switch (stType)
                 {
-                    case Socket_Packet.SocketType.Send:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送", "Send");
-                        sReturn = sLanguage_UI;
+                    case Socket_Packet.SocketType.Send:                        
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
                         break;
                     case Socket_Packet.SocketType.WSASend:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("WSA发送", "WSend");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
                         break;
                     case Socket_Packet.SocketType.SendTo:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("发送到", "SendTo");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
                         break;
                     case Socket_Packet.SocketType.Recv:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("接收", "Recv");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
                         break;
                     case Socket_Packet.SocketType.WSARecv:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("WSA接收", "WRecv");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
                         break;
                     case Socket_Packet.SocketType.RecvFrom:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("接收自", "RecvF");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
                         break;
                     case Socket_Packet.SocketType.Send_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-发送", "B-Send");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
                         break;
                     case Socket_Packet.SocketType.WSASend_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-WSA发送", "B-WSend");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
                         break;
                     case Socket_Packet.SocketType.SendTo_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-发送到", "B-SendTo");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62);
                         break;
                     case Socket_Packet.SocketType.Recv_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-接收", "B-Recv");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63);
                         break;
                     case Socket_Packet.SocketType.WSARecv_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-WSA接收", "B-WRecv");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64);
                         break;
                     case Socket_Packet.SocketType.RecvFrom_Interecept:
-                        sLanguage_UI = MultiLanguage.GetDefaultLanguage("拦截-接收自", "B-RecvF");
-                        sReturn = sLanguage_UI;
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -480,7 +468,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return sReturn;
@@ -506,8 +494,7 @@ namespace WPELibrary.Lib
                 bool bISShow_BySize = ISShow_BySize(iResLen);
                 if (!bISShow_BySize)
                 {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("[过滤封包大小] ", "[Filter packet size] ");
-                    DoLog(sLanguage_UI + iResLen.ToString());
+                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66) + iResLen.ToString());
                     return false;
                 }
 
@@ -515,8 +502,7 @@ namespace WPELibrary.Lib
                 bool bISShow_BySocket = ISShow_BySocket(iSocket);
                 if (!bISShow_BySocket)
                 {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("[过滤套接字] ", "[Filter sockets] ");
-                    DoLog(sLanguage_UI + iSocket.ToString());
+                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67) + iSocket.ToString());
                     return false;
                 }
 
@@ -524,8 +510,7 @@ namespace WPELibrary.Lib
                 bool bISShow_ByIP = ISShow_ByIP(sIP_From, sIP_To);
                 if (!bISShow_ByIP)
                 {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("[过滤IP地址] ", "[Filter IP addresses] ");
-                    DoLog(sLanguage_UI + sIP_From + " / " + sIP_To);
+                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68) + sIP_From + " / " + sIP_To);
                     return false;
                 }
 
@@ -534,14 +519,13 @@ namespace WPELibrary.Lib
                 bool bISShow_ByPacket = ISShow_ByPacket(sPacket);
                 if (!bISShow_ByPacket)
                 {
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("[过滤封包内容] ", "[Filter packet content] ");
-                    DoLog(sLanguage_UI + sPacket);
+                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69) + sPacket);
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -571,7 +555,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -602,7 +586,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -631,7 +615,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -660,7 +644,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -701,7 +685,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return iResult;
@@ -727,10 +711,44 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
 
             return iResult;
+        }
+        #endregion
+
+        #region//检查是否合法的十六进制
+        public static bool CheckHEX(object oHex)
+        {
+            try
+            {
+                if (oHex == null)
+                { 
+                    return false;
+                }
+                
+                if (string.IsNullOrEmpty(oHex.ToString()))
+                {
+                    return false;
+                }
+
+                string sHex = oHex.ToString();
+
+                if (sHex.Length != 2)
+                {
+                    return false;
+                }
+
+                string pattern = "^[A-Fa-f0-9]+$";
+                return Regex.IsMatch(sHex, pattern);
+            }
+            catch (Exception ex) 
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                return false;
+            }
         }
         #endregion
 
@@ -742,9 +760,8 @@ namespace WPELibrary.Lib
             try
             {
                 SaveFileDialog sfdSocketInfo = new SaveFileDialog();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("封包数据文件", "Package data file");
-                sfdSocketInfo.Filter = sLanguage_UI + "（*.sp）|*.sp";
+                                
+                sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
                 sfdSocketInfo.RestoreDirectory = true;
 
                 if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
@@ -775,7 +792,7 @@ namespace WPELibrary.Lib
                             catch(Exception ex)
                             {
                                 iFail++;
-                                DoLog(ex.Message);
+                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                             }
                         }
                     }
@@ -784,16 +801,14 @@ namespace WPELibrary.Lib
                     sw.Close();
                     fs.Close();
 
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存完毕，成功【{0}】失败【{1}】！", "Save completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));                 
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));                 
                 }
             }
             catch (Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存失败！错误：", "Save failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
+            {                
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
 
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }                            
         }
         #endregion
@@ -807,8 +822,7 @@ namespace WPELibrary.Lib
             {
                 OpenFileDialog ofdLoadSocket = new OpenFileDialog();
 
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("封包数据文件", "Package data file");
-                ofdLoadSocket.Filter = sLanguage_UI + "（*.sp）|*.sp";
+                ofdLoadSocket.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
                 ofdLoadSocket.RestoreDirectory = true;
 
                 ofdLoadSocket.ShowDialog();
@@ -843,20 +857,18 @@ namespace WPELibrary.Lib
                         {
                             iFail++;
 
-                            DoLog(ex.Message);
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }                       
                     }
 
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("加载完毕，成功【{0}】失败【{1}】！", "Load completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess, iFail));
                 }            
             }
             catch (Exception ex)
             {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("加载失败！错误：", "Load failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
 
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -871,8 +883,7 @@ namespace WPELibrary.Lib
             {
                 SaveFileDialog sfdSocketInfo = new SaveFileDialog();
 
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("滤镜数据文件", "Filter data file");
-                sfdSocketInfo.Filter = sLanguage_UI + "（*.fp）|*.fp";
+                sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
                 sfdSocketInfo.RestoreDirectory = true;
 
                 if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
@@ -901,7 +912,7 @@ namespace WPELibrary.Lib
                             {
                                 iFail++;
 
-                                DoLog(ex.Message);
+                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                             }                         
                         }
                     }
@@ -909,17 +920,15 @@ namespace WPELibrary.Lib
                     sw.Flush();
                     sw.Close();
                     fs.Close();
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存完毕，成功【{0}】失败【{1}】！", "Save completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));                
+                                        
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));                
                 }
             }
             catch (Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存失败！错误：", "Save failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
+            {                
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
 
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -932,9 +941,8 @@ namespace WPELibrary.Lib
             try
             {
                 OpenFileDialog ofdLoadSocket = new OpenFileDialog();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("滤镜数据文件", "Filter data file");
-                ofdLoadSocket.Filter = sLanguage_UI + "（*.fp）|*.fp";
+                                
+                ofdLoadSocket.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
                 ofdLoadSocket.RestoreDirectory = true;
 
                 ofdLoadSocket.ShowDialog();
@@ -965,20 +973,18 @@ namespace WPELibrary.Lib
                         {
                             iFail++;
 
-                            DoLog(ex.Message);
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }                     
                     }
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("加载完毕，成功【{0}】失败【{1}】！", "Load completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));
+                                        
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess, iFail));
                 }           
             }
             catch (Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("加载失败！错误：", "Load failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
+            {                
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
 
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -996,17 +1002,15 @@ namespace WPELibrary.Lib
                 sfdSaveToExcel.FilterIndex = 0;
                 sfdSaveToExcel.RestoreDirectory = true;
                 sfdSaveToExcel.CreatePrompt = true;
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存为Excel文件", "Save as Excel file");
-                sfdSaveToExcel.Title = sLanguage_UI;
+                                
+                sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
 
                 if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
                 {
                     Stream myStream = sfdSaveToExcel.OpenFile();
                     StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t");
-                    string sColTitle = sLanguage_UI;
+                                        
+                    string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
                     sw.WriteLine(sColTitle);
 
                     foreach (Socket_Packet_Info spi in Socket_Cache.SocketList.lstRecPacket)
@@ -1033,23 +1037,21 @@ namespace WPELibrary.Lib
                         {
                             iFail++;
 
-                            DoLog(ex.Message);
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                     }
 
                     sw.Close();
                     myStream.Close();
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存完毕，成功【{0}】失败【{1}】！", "Save completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));
+                                        
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));
                 }
             }
             catch(Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存失败！错误：", "Save failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
+            {                
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
 
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -1066,17 +1068,15 @@ namespace WPELibrary.Lib
                 sfdSaveToExcel.FilterIndex = 0;
                 sfdSaveToExcel.RestoreDirectory = true;
                 sfdSaveToExcel.CreatePrompt = true;
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存为Excel文件", "Save as Excel file");
-                sfdSaveToExcel.Title = sLanguage_UI;
+                                
+                sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
 
                 if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
                 {
                     Stream myStream = sfdSaveToExcel.OpenFile();
                     StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("记录时间\t日志内容\t", "Log Time\tLog content\t");
-                    string sColTitle = sLanguage_UI;
+                                        
+                    string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_78);
                     sw.WriteLine(sColTitle);
 
                     foreach (Socket_Log_Info sl in Socket_Cache.LogList.lstRecLog)
@@ -1086,9 +1086,10 @@ namespace WPELibrary.Lib
                             string sColValue = "";
 
                             string sTime = sl.Time;
+                            string sFuncName = sl.FuncName;
                             string sContent = sl.Content;
 
-                            sColValue += sTime + "\t" + sContent + "\t";
+                            sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
                             sw.WriteLine(sColValue);
 
                             iSuccess++;
@@ -1097,23 +1098,20 @@ namespace WPELibrary.Lib
                         {
                             iFail++;
 
-                            DoLog(ex.Message);
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                     }
 
                     sw.Close();
                     myStream.Close();
-
-                    sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存完毕，成功【{0}】失败【{1}】！", "Save completed, successful【{0}】failed【{1}】!");
-                    ShowMessageBox(string.Format(sLanguage_UI, iSuccess, iFail));
+                                        
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));
                 }
             }
             catch (Exception ex)
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("保存失败！错误：", "Save failed! Error:");
-                ShowMessageBox(sLanguage_UI + ex.Message);
-
-                DoLog(ex.Message);
+            {                
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion        
@@ -1122,13 +1120,12 @@ namespace WPELibrary.Lib
         public static void ShowMessageBox(string sMessage)
         {
             try
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("提示", "Prompt");
-                MessageBox.Show(sMessage, sLanguage_UI, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            {                
+                MessageBox.Show(sMessage, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_79), MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -1137,13 +1134,12 @@ namespace WPELibrary.Lib
             DialogResult dr = new DialogResult();
 
             try
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("提示", "Prompt");
-                dr = MessageBox.Show(sMessage, sLanguage_UI, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            {                
+                dr = MessageBox.Show(sMessage, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_79), MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return dr;
@@ -1151,7 +1147,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//记录日志
-        public static void DoLog_HookInfo(Socket_Packet.SocketType sType, int iSocket, int iLen, int iRes)
+        public static void DoLog_HookInfo(string sFuncName, Socket_Packet.SocketType sType, int iSocket, int iLen, int iRes)
         {
             try
             {
@@ -1159,27 +1155,27 @@ namespace WPELibrary.Lib
                 {
                     string sTypeName = GetSocketType_Name(sType);
                     string sLog = "[" + sTypeName + "]" + " - Socket:" + iSocket.ToString() + "，Packet:" + iRes.ToString() + "/" + iLen.ToString();
-                    DoLog(sLog);
+                    DoLog(sFuncName, sLog);
                 }
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }           
         }
 
-        public static void DoLog(string sLogContent)
+        public static void DoLog(string sFuncName, string sLogContent)
         {
             try
             {
                 if (bDoLog)
-                {
-                    Socket_Cache.LogQueue.LogToQueue(sLogContent);
+                {  
+                    Socket_Cache.LogQueue.LogToQueue(sFuncName, sLogContent);
                 }
             }
             catch (Exception ex)
             {
-                DoLog(ex.Message);
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }           
         }
         #endregion

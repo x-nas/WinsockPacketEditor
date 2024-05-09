@@ -5,9 +5,6 @@ namespace ProcessInjector
 {
     static class Program
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        private static extern bool SetProcessDPIAware();
-
         public static int PID = -1;
         public static string PNAME = string.Empty;
         public static string PATH = string.Empty;
@@ -17,11 +14,6 @@ namespace ProcessInjector
         {
             try
             {
-                if (Environment.OSVersion.Version.Major >= 6)
-                {
-                    SetProcessDPIAware();
-                }
-
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);             
                

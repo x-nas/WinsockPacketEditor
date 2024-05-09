@@ -11,8 +11,7 @@ namespace WPELibrary
     public partial class Socket_Filter_Form : Form
     {
         private int FilterNum = -1;
-        private int FilterIndex = -1;                
-        private string sLanguage_UI = "";
+        private int FilterIndex = -1;
 
         #region//窗体加载
         public Socket_Filter_Form(int FNum)
@@ -37,9 +36,8 @@ namespace WPELibrary
         {
             int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
             string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
-
-            sLanguage_UI = MultiLanguage.GetDefaultLanguage("滤镜 -【 序号", "Filter -【 ID");
-            this.Text = sLanguage_UI + FilterNum + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+            
+            this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16) + FilterNum + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
             this.txtFilterName.Text = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FName.ToString();
         }
         #endregion
@@ -55,7 +53,7 @@ namespace WPELibrary
                 {
                     Name = "col" + (i + 1).ToString("000"),
                     HeaderText = (i + 1).ToString("000"),
-                    Width = 40,
+                    Width = 50,
                     MaxInputLength = 2
                 };
 
@@ -68,16 +66,13 @@ namespace WPELibrary
 
             if (dgvFilter.Rows.Count == 0)
             {
-                dgvFilter.RowHeadersWidth = 100;
+                dgvFilter.RowHeadersWidth = 120;
 
                 dgvFilter.Rows.Add();
                 dgvFilter.Rows.Add();
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("搜索封包", "SEARCH");
-                dgvFilter.Rows[Socket_Cache.SocketFilterList.SearchRowIndex].HeaderCell.Value = sLanguage_UI;
-
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("修改封包", "MODIFY");
-                dgvFilter.Rows[Socket_Cache.SocketFilterList.ModifyRowIndex].HeaderCell.Value = sLanguage_UI;
+                
+                dgvFilter.Rows[Socket_Cache.SocketFilterList.SearchRowIndex].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_17);
+                dgvFilter.Rows[Socket_Cache.SocketFilterList.ModifyRowIndex].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18);
             }            
         }
         #endregion
@@ -183,9 +178,8 @@ namespace WPELibrary
                 this.Close();
             }
             else
-            {
-                sLanguage_UI = MultiLanguage.GetDefaultLanguage("滤镜名称不能为空！", "Filter name cannot be empty!");
-                Socket_Operation.ShowMessageBox(sLanguage_UI);                
+            {                
+                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));                
             }            
         }
         #endregion

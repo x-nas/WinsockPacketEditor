@@ -9,8 +9,6 @@ namespace WPELibrary
 {
     public partial class Socket_SendList_Form : Form
     {
-        private string sLanguage = "";
-
         #region//窗体加载
         public Socket_SendList_Form()
         {
@@ -36,7 +34,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
         #endregion
@@ -53,8 +51,7 @@ namespace WPELibrary
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
 
-                sLanguage = MultiLanguage.GetDefaultLanguage("发送列表 - ", "Send List - ");
-                this.Text = sLanguage + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+                this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_48) + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
                 this.bSendList.Enabled = true;
                 this.bSendListStop.Enabled = false;
@@ -66,7 +63,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
         #endregion
@@ -82,7 +79,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
         #endregion
@@ -131,62 +128,126 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }       
         }
         #endregion
 
-        #region//发送封包列表（异步）
+        #region//开始发送
         private void bSend_Click(object sender, EventArgs e)
         {
             try
             {
-                bool bSocketOK = true;
+                int iCheckedSendPacket = 0;
 
-                if (this.cbUseSocket.Checked)
+                for (int i = 0; i < dgvSendList.Rows.Count; i++)
                 {
-                    int iCheckSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
-
-                    if (iCheckSocket > 0)
+                    if (this.dgvSendList.Rows[i].Cells["cCheck"].Value != null)
                     {
-                        bSocketOK = true;
-                    }
-                    else
-                    {
-                        bSocketOK = false;
+                        if (this.dgvSendList.Rows[i].Cells["cCheck"].Value.ToString() == "1")
+                        {
+                            iCheckedSendPacket++;
+                        }
                     }
                 }
 
-                if (bSocketOK)
+                if (iCheckedSendPacket > 0)
                 {
-                    this.bSendList.Enabled = false;
-                    this.bSendListStop.Enabled = true;
-                    this.cbUseSocket.Enabled = false;
-                    this.txtUseSocket.Enabled = false;
+                    bool bSocketOK = true;
 
-                    Socket_Cache.SocketSendList.Loop_Send_CNT = 0;
-                    Socket_Cache.SocketSendList.SendList_Success_CNT = 0;
-                    Socket_Cache.SocketSendList.SendList_Fail_CNT = 0;
-                    Socket_Cache.SocketSendList.Loop_CNT = ((int)this.nudLoop_CNT.Value);
-                    Socket_Cache.SocketSendList.Loop_Int = ((int)this.nudLoop_Int.Value);
-
-                    if (!bgwSendList.IsBusy)
+                    if (this.cbUseSocket.Checked)
                     {
-                        bgwSendList.RunWorkerAsync();
+                        int iCheckSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
+
+                        if (iCheckSocket > 0)
+                        {
+                            bSocketOK = true;
+                        }
+                        else
+                        {
+                            bSocketOK = false;
+                        }
+                    }
+
+                    if (bSocketOK)
+                    {
+                        Socket_Cache.SocketSendList.Loop_Send_CNT = 0;
+                        Socket_Cache.SocketSendList.SendList_Success_CNT = 0;
+                        Socket_Cache.SocketSendList.SendList_Fail_CNT = 0;
+                        Socket_Cache.SocketSendList.Loop_CNT = ((int)this.nudLoop_CNT.Value);
+                        Socket_Cache.SocketSendList.Loop_Int = ((int)this.nudLoop_Int.Value);
+
+                        this.tlLoop_Send_CNT.Text = Socket_Cache.SocketSendList.Loop_Send_CNT.ToString();
+                        this.tlSendList_Success_CNT.Text = Socket_Cache.SocketSendList.SendList_Success_CNT.ToString();
+                        this.tlSendList_Fail_CNT.Text = Socket_Cache.SocketSendList.SendList_Fail_CNT.ToString();
+
+                        if (!bgwSendList.IsBusy)
+                        {
+                            bgwSendList.RunWorkerAsync();
+                        }
+
+                        this.bSendList.Enabled = false;
+                        this.bSendListStop.Enabled = true;
+                        this.gbSendList1.Enabled = false;
+                        this.pbLoading.Visible = true;
+                    }
+                    else
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_49));
                     }
                 }
                 else
                 {
-                    sLanguage = MultiLanguage.GetDefaultLanguage("请正确设置套接字!", "Please set the socket correctly!");
-                    Socket_Operation.ShowMessageBox(sLanguage);
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_84));
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-        
+        #endregion
+
+        #region//停止按钮
+        private void bSendStop_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                bgwSendList.CancelAsync();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }         
+        }
+        #endregion        
+
+        #region//全选/取消
+        private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string sSelect = "0";
+
+                if (this.cbSelectAll.Checked)
+                {
+                    sSelect = "1";
+                }
+
+                for (int i = 0; i < this.dgvSendList.Rows.Count; i++)
+                {
+                    this.dgvSendList.Rows[i].Cells["cCheck"].Value = sSelect;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+        #endregion        
+
+        #region//发送封包列表（异步）
+
         private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
@@ -223,84 +284,38 @@ namespace WPELibrary
                             }
                         }
                     }
-                    
-                    int iLoop_UnSend = Socket_Cache.SocketSendList.Loop_CNT - Socket_Cache.SocketSendList.Loop_Send_CNT;
 
-                    if (iLoop_UnSend > 0)
+                    if (this.nudLoop_CNT.Value > 1)
                     {
-                        this.nudLoop_CNT.Value = iLoop_UnSend;
-                    }
+                        this.nudLoop_CNT.Value -= 1;
+                    }                    
+
+                    this.tlLoop_Send_CNT.Text = Socket_Cache.SocketSendList.Loop_Send_CNT.ToString();
+                    this.tlSendList_Success_CNT.Text = Socket_Cache.SocketSendList.SendList_Success_CNT.ToString();
+                    this.tlSendList_Fail_CNT.Text = Socket_Cache.SocketSendList.SendList_Fail_CNT.ToString();
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-
-            this.bSendList.Enabled = true;
-            this.bSendListStop.Enabled = false;
-            this.cbUseSocket.Enabled = true;
-            this.txtUseSocket.Enabled = true;
         }
-        #endregion        
 
-        #region//停止按钮
-        private void bSendStop_Click(object sender, EventArgs e)
+        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
             {
-                bgwSendList.CancelAsync();
+                this.bSendList.Enabled = true;
+                this.bSendListStop.Enabled = false;
+                this.gbSendList1.Enabled = true;
+                this.pbLoading.Visible = false;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(ex.Message);
-            }            
-
-            this.bSendList.Enabled = true;
-            this.bSendListStop.Enabled = false;
-            this.cbUseSocket.Enabled = true;
-            this.txtUseSocket.Enabled = true;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
+
         #endregion
-
-        #region//计时器
-        private void tSendList_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                this.tlLoop_Send_CNT.Text = Socket_Cache.SocketSendList.Loop_Send_CNT.ToString();
-                this.tlSendList_Success_CNT.Text = Socket_Cache.SocketSendList.SendList_Success_CNT.ToString();
-                this.tlSendList_Fail_CNT.Text = Socket_Cache.SocketSendList.SendList_Fail_CNT.ToString();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(ex.Message);
-            }            
-        }
-        #endregion       
-
-        #region//全选/取消
-        private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                string sSelect = "0";
-
-                if (this.cbSelectAll.Checked)
-                {
-                    sSelect = "1";
-                }
-
-                for (int i = 0; i < this.dgvSendList.Rows.Count; i++)
-                {
-                    this.dgvSendList.Rows[i].Cells["cCheck"].Value = sSelect;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(ex.Message);
-            }
-        }
-        #endregion        
     }
 }
