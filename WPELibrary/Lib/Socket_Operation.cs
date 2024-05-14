@@ -60,7 +60,7 @@ namespace WPELibrary.Lib
                     DataRow drHEX = dtPacketFormat.NewRow();
 
                     drHEX[0] = "HEX";
-                    drHEX[1] = "十六进制";
+                    drHEX[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_85);
                     dtPacketFormat.Rows.Add(drHEX);
 
                     DataRow drASCII = dtPacketFormat.NewRow();
@@ -105,12 +105,12 @@ namespace WPELibrary.Lib
 
                     DataRow drBIN = dtPacketFormat.NewRow();
                     drBIN[0] = "BIN";
-                    drBIN[1] = "二进制";
+                    drBIN[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_86);
                     dtPacketFormat.Rows.Add(drBIN);
 
                     DataRow drDEC = dtPacketFormat.NewRow();
                     drDEC[0] = "DEC";
-                    drDEC[1] = "十进制";
+                    drDEC[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_87);
                     dtPacketFormat.Rows.Add(drDEC);
                 }
             }

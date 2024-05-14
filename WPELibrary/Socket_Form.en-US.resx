@@ -187,86 +187,8 @@
   <data name="cbDisplay_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="gbBottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>740, 186</value>
-  </data>
-  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>734, 162</value>
-  </data>
-  <data name="tpHEX.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpHEX.Text" xml:space="preserve">
-    <value>HEX</value>
-  </data>
-  <data name="rtbHEX.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpDEC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpDEC.Text" xml:space="preserve">
-    <value>DEC</value>
-  </data>
-  <data name="rtbDEC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpBIN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpBIN.Text" xml:space="preserve">
-    <value>BIN</value>
-  </data>
-  <data name="rtbBIN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpUNICODE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpUNICODE.Text" xml:space="preserve">
-    <value>UNICODE</value>
-  </data>
-  <data name="rtbUNICODE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpASCII.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="rtbASCII.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpUTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="rtbUTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpGB2312.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="rtbGB2312.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
-  </data>
-  <data name="tpLog.Text" xml:space="preserve">
-    <value>LOG</value>
-  </data>
-  <data name="cTime.HeaderText" xml:space="preserve">
-    <value>Log Time</value>
-  </data>
-  <data name="cFuncName.HeaderText" xml:space="preserve">
-    <value>Module</value>
-  </data>
-  <data name="cContent.HeaderText" xml:space="preserve">
-    <value>Content</value>
-  </data>
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 110</value>
-  </data>
-  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>726, 132</value>
   </data>
   <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 22</value>
@@ -373,23 +295,11 @@
   <data name="tlSystemInfo.Text" xml:space="preserve">
     <value>System Info</value>
   </data>
-  <data name="tlSplit0.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit0.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
   <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 17</value>
   </data>
   <data name="tlALL.Text" xml:space="preserve">
     <value>Total Packets:</value>
-  </data>
-  <data name="tlSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit1.Text" xml:space="preserve">
-    <value>|</value>
   </data>
   <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
     <value>46, 17</value>
@@ -397,23 +307,11 @@
   <data name="tlQueue.Text" xml:space="preserve">
     <value>Buffer:</value>
   </data>
-  <data name="tlSplit2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit2.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
   <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>40, 17</value>
   </data>
   <data name="tlSend.Text" xml:space="preserve">
     <value>Send:</value>
-  </data>
-  <data name="tlSplit3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit3.Text" xml:space="preserve">
-    <value>|</value>
   </data>
   <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 17</value>
@@ -421,23 +319,11 @@
   <data name="tlRecv.Text" xml:space="preserve">
     <value>Receive:</value>
   </data>
-  <data name="tlSplit4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit4.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
   <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 17</value>
   </data>
   <data name="tlCheck.Text" xml:space="preserve">
     <value>Filterate:</value>
-  </data>
-  <data name="tlSplit5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit5.Text" xml:space="preserve">
-    <value>|</value>
   </data>
   <data name="tlInterecept.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 17</value>
@@ -466,7 +352,7 @@ E</value>
   <data name="cbReset_CNT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
   </data>
-  <data name="gbSearch_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="gbSearch.Size" type="System.Drawing.Size, System.Drawing">
     <value>740, 51</value>
   </data>
   <data name="rbSearchFrom.Location" type="System.Drawing.Point, System.Drawing">
@@ -582,6 +468,57 @@ E</value>
   </data>
   <data name="tsmiLoadFilterList.Text" xml:space="preserve">
     <value>Load Filter List</value>
+  </data>
+  <data name="pPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>740, 166</value>
+  </data>
+  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>738, 164</value>
+  </data>
+  <data name="tpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>730, 134</value>
+  </data>
+  <data name="tpPacketInfo.Text" xml:space="preserve">
+    <value>Packet Data </value>
+  </data>
+  <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>730, 134</value>
+  </data>
+  <data name="rtbPackInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 107</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
+    <value>366, 26</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 107</value>
+  </data>
+  <data name="cbPacketInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 25</value>
+  </data>
+  <data name="cbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
+    <value>366, 1</value>
+  </data>
+  <data name="cbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
+    <value>363, 25</value>
+  </data>
+  <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>730, 134</value>
+  </data>
+  <data name="tpSystemLog.Text" xml:space="preserve">
+    <value>System Log</value>
+  </data>
+  <data name="cTime.HeaderText" xml:space="preserve">
+    <value>Log Time</value>
+  </data>
+  <data name="cFuncName.HeaderText" xml:space="preserve">
+    <value>Module</value>
+  </data>
+  <data name="cContent.HeaderText" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>730, 134</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>898, 641</value>

@@ -94,6 +94,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
         public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };
+        public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
+        public static string[] MutiLan_86 = { "二进制", "Binary" };
+        public static string[] MutiLan_87 = { "十进制", "Decimal" };
 
         #endregion
 
