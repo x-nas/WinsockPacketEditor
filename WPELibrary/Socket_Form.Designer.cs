@@ -31,17 +31,17 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle26 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cbDisplay_SendTo = new System.Windows.Forms.CheckBox();
             this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
             this.bStopHook = new System.Windows.Forms.Button();
@@ -60,24 +60,6 @@ namespace WPELibrary
             this.cbInterecept_Send = new System.Windows.Forms.CheckBox();
             this.cbDisplay_Recv = new System.Windows.Forms.CheckBox();
             this.cbDisplay_Send = new System.Windows.Forms.CheckBox();
-            this.gbBottom = new System.Windows.Forms.GroupBox();
-            this.tcPacketInfo = new System.Windows.Forms.TabControl();
-            this.tpHEX = new System.Windows.Forms.TabPage();
-            this.rtbHEX = new System.Windows.Forms.RichTextBox();
-            this.tpDEC = new System.Windows.Forms.TabPage();
-            this.rtbDEC = new System.Windows.Forms.RichTextBox();
-            this.tpBIN = new System.Windows.Forms.TabPage();
-            this.rtbBIN = new System.Windows.Forms.RichTextBox();
-            this.tpUNICODE = new System.Windows.Forms.TabPage();
-            this.rtbUNICODE = new System.Windows.Forms.RichTextBox();
-            this.tpASCII = new System.Windows.Forms.TabPage();
-            this.rtbASCII = new System.Windows.Forms.RichTextBox();
-            this.tpUTF8 = new System.Windows.Forms.TabPage();
-            this.rtbUTF8 = new System.Windows.Forms.RichTextBox();
-            this.tpGB2312 = new System.Windows.Forms.TabPage();
-            this.rtbGB2312 = new System.Windows.Forms.RichTextBox();
-            this.tpLog = new System.Windows.Forms.TabPage();
-            this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,7 +107,7 @@ namespace WPELibrary
             this.gbRight = new System.Windows.Forms.GroupBox();
             this.gbClear = new System.Windows.Forms.GroupBox();
             this.cbReset_CNT = new System.Windows.Forms.CheckBox();
-            this.gbSearch_Bottom = new System.Windows.Forms.GroupBox();
+            this.gbSearch = new System.Windows.Forms.GroupBox();
             this.rbSearchFrom = new System.Windows.Forms.RadioButton();
             this.rbSearchAll = new System.Windows.Forms.RadioButton();
             this.bSearch = new System.Windows.Forms.Button();
@@ -160,33 +142,38 @@ namespace WPELibrary
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
             this.pbLoading = new System.Windows.Forms.PictureBox();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
+            this.pPacketInfo = new System.Windows.Forms.Panel();
+            this.tcPacketInfo = new System.Windows.Forms.TabControl();
+            this.tpPacketInfo = new System.Windows.Forms.TabPage();
+            this.tlpPacketInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.rtbPackInfo_Left = new System.Windows.Forms.RichTextBox();
+            this.rtbPacketInfo_Right = new System.Windows.Forms.RichTextBox();
+            this.cbPacketInfo_Left = new System.Windows.Forms.ComboBox();
+            this.cbPacketInfo_Right = new System.Windows.Forms.ComboBox();
+            this.tpSystemLog = new System.Windows.Forms.TabPage();
+            this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilter_Size.SuspendLayout();
             this.gbFilter_Type.SuspendLayout();
-            this.gbBottom.SuspendLayout();
-            this.tcPacketInfo.SuspendLayout();
-            this.tpHEX.SuspendLayout();
-            this.tpDEC.SuspendLayout();
-            this.tpBIN.SuspendLayout();
-            this.tpUNICODE.SuspendLayout();
-            this.tpASCII.SuspendLayout();
-            this.tpUTF8.SuspendLayout();
-            this.tpGB2312.SuspendLayout();
-            this.tpLog.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.cmsLogList.SuspendLayout();
             this.cmsSocketList.SuspendLayout();
             this.ssStatusInfo_Top.SuspendLayout();
             this.gbRight.SuspendLayout();
             this.gbClear.SuspendLayout();
-            this.gbSearch_Bottom.SuspendLayout();
+            this.gbSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.gbFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
             this.cmsFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
+            this.pPacketInfo.SuspendLayout();
+            this.tcPacketInfo.SuspendLayout();
+            this.tpPacketInfo.SuspendLayout();
+            this.tlpPacketInfo.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.SuspendLayout();
             // 
             // cbDisplay_SendTo
@@ -322,150 +309,6 @@ namespace WPELibrary
             this.cbDisplay_Send.Name = "cbDisplay_Send";
             this.cbDisplay_Send.UseVisualStyleBackColor = true;
             this.cbDisplay_Send.CheckedChanged += new System.EventHandler(this.cbDisplay_Send_CheckedChanged);
-            // 
-            // gbBottom
-            // 
-            this.gbBottom.Controls.Add(this.tcPacketInfo);
-            resources.ApplyResources(this.gbBottom, "gbBottom");
-            this.gbBottom.Name = "gbBottom";
-            this.gbBottom.TabStop = false;
-            // 
-            // tcPacketInfo
-            // 
-            this.tcPacketInfo.Controls.Add(this.tpHEX);
-            this.tcPacketInfo.Controls.Add(this.tpDEC);
-            this.tcPacketInfo.Controls.Add(this.tpBIN);
-            this.tcPacketInfo.Controls.Add(this.tpUNICODE);
-            this.tcPacketInfo.Controls.Add(this.tpASCII);
-            this.tcPacketInfo.Controls.Add(this.tpUTF8);
-            this.tcPacketInfo.Controls.Add(this.tpGB2312);
-            this.tcPacketInfo.Controls.Add(this.tpLog);
-            resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
-            this.tcPacketInfo.Name = "tcPacketInfo";
-            this.tcPacketInfo.SelectedIndex = 0;
-            this.tcPacketInfo.SelectedIndexChanged += new System.EventHandler(this.tcPacketInfo_SelectedIndexChanged);
-            // 
-            // tpHEX
-            // 
-            this.tpHEX.Controls.Add(this.rtbHEX);
-            resources.ApplyResources(this.tpHEX, "tpHEX");
-            this.tpHEX.Name = "tpHEX";
-            this.tpHEX.UseVisualStyleBackColor = true;
-            // 
-            // rtbHEX
-            // 
-            this.rtbHEX.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.rtbHEX, "rtbHEX");
-            this.rtbHEX.Name = "rtbHEX";
-            // 
-            // tpDEC
-            // 
-            this.tpDEC.Controls.Add(this.rtbDEC);
-            resources.ApplyResources(this.tpDEC, "tpDEC");
-            this.tpDEC.Name = "tpDEC";
-            this.tpDEC.UseVisualStyleBackColor = true;
-            // 
-            // rtbDEC
-            // 
-            resources.ApplyResources(this.rtbDEC, "rtbDEC");
-            this.rtbDEC.Name = "rtbDEC";
-            // 
-            // tpBIN
-            // 
-            this.tpBIN.Controls.Add(this.rtbBIN);
-            resources.ApplyResources(this.tpBIN, "tpBIN");
-            this.tpBIN.Name = "tpBIN";
-            this.tpBIN.UseVisualStyleBackColor = true;
-            // 
-            // rtbBIN
-            // 
-            resources.ApplyResources(this.rtbBIN, "rtbBIN");
-            this.rtbBIN.Name = "rtbBIN";
-            // 
-            // tpUNICODE
-            // 
-            this.tpUNICODE.Controls.Add(this.rtbUNICODE);
-            resources.ApplyResources(this.tpUNICODE, "tpUNICODE");
-            this.tpUNICODE.Name = "tpUNICODE";
-            this.tpUNICODE.UseVisualStyleBackColor = true;
-            // 
-            // rtbUNICODE
-            // 
-            resources.ApplyResources(this.rtbUNICODE, "rtbUNICODE");
-            this.rtbUNICODE.Name = "rtbUNICODE";
-            // 
-            // tpASCII
-            // 
-            this.tpASCII.Controls.Add(this.rtbASCII);
-            resources.ApplyResources(this.tpASCII, "tpASCII");
-            this.tpASCII.Name = "tpASCII";
-            this.tpASCII.UseVisualStyleBackColor = true;
-            // 
-            // rtbASCII
-            // 
-            resources.ApplyResources(this.rtbASCII, "rtbASCII");
-            this.rtbASCII.Name = "rtbASCII";
-            // 
-            // tpUTF8
-            // 
-            this.tpUTF8.Controls.Add(this.rtbUTF8);
-            resources.ApplyResources(this.tpUTF8, "tpUTF8");
-            this.tpUTF8.Name = "tpUTF8";
-            this.tpUTF8.UseVisualStyleBackColor = true;
-            // 
-            // rtbUTF8
-            // 
-            resources.ApplyResources(this.rtbUTF8, "rtbUTF8");
-            this.rtbUTF8.Name = "rtbUTF8";
-            // 
-            // tpGB2312
-            // 
-            this.tpGB2312.Controls.Add(this.rtbGB2312);
-            resources.ApplyResources(this.tpGB2312, "tpGB2312");
-            this.tpGB2312.Name = "tpGB2312";
-            this.tpGB2312.UseVisualStyleBackColor = true;
-            // 
-            // rtbGB2312
-            // 
-            resources.ApplyResources(this.rtbGB2312, "rtbGB2312");
-            this.rtbGB2312.Name = "rtbGB2312";
-            // 
-            // tpLog
-            // 
-            this.tpLog.Controls.Add(this.dgvLogList);
-            resources.ApplyResources(this.tpLog, "tpLog");
-            this.tpLog.Name = "tpLog";
-            this.tpLog.UseVisualStyleBackColor = true;
-            // 
-            // dgvLogList
-            // 
-            this.dgvLogList.AllowUserToAddRows = false;
-            this.dgvLogList.AllowUserToDeleteRows = false;
-            this.dgvLogList.AllowUserToResizeColumns = false;
-            this.dgvLogList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cTime,
-            this.cFuncName,
-            this.cContent});
-            this.dgvLogList.ContextMenuStrip = this.cmsLogList;
-            resources.ApplyResources(this.dgvLogList, "dgvLogList");
-            this.dgvLogList.MultiSelect = false;
-            this.dgvLogList.Name = "dgvLogList";
-            this.dgvLogList.ReadOnly = true;
-            this.dgvLogList.RowHeadersVisible = false;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dgvLogList.RowTemplate.Height = 23;
-            this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // cmsLogList
             // 
@@ -771,16 +614,16 @@ namespace WPELibrary
             this.cbReset_CNT.Name = "cbReset_CNT";
             this.cbReset_CNT.UseVisualStyleBackColor = true;
             // 
-            // gbSearch_Bottom
+            // gbSearch
             // 
-            this.gbSearch_Bottom.Controls.Add(this.rbSearchFrom);
-            this.gbSearch_Bottom.Controls.Add(this.rbSearchAll);
-            this.gbSearch_Bottom.Controls.Add(this.bSearch);
-            this.gbSearch_Bottom.Controls.Add(this.txtSearch);
-            this.gbSearch_Bottom.Controls.Add(this.lSearch);
-            resources.ApplyResources(this.gbSearch_Bottom, "gbSearch_Bottom");
-            this.gbSearch_Bottom.Name = "gbSearch_Bottom";
-            this.gbSearch_Bottom.TabStop = false;
+            this.gbSearch.Controls.Add(this.rbSearchFrom);
+            this.gbSearch.Controls.Add(this.rbSearchAll);
+            this.gbSearch.Controls.Add(this.bSearch);
+            this.gbSearch.Controls.Add(this.txtSearch);
+            this.gbSearch.Controls.Add(this.lSearch);
+            resources.ApplyResources(this.gbSearch, "gbSearch");
+            this.gbSearch.Name = "gbSearch";
+            this.gbSearch.TabStop = false;
             // 
             // rbSearchFrom
             // 
@@ -834,8 +677,8 @@ namespace WPELibrary
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle34.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle34;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
@@ -846,8 +689,8 @@ namespace WPELibrary
             // cIndex
             // 
             this.cIndex.DataPropertyName = "Index";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.cIndex, "cIndex");
             this.cIndex.Name = "cIndex";
             this.cIndex.ReadOnly = true;
@@ -856,8 +699,8 @@ namespace WPELibrary
             // cType
             // 
             this.cType.DataPropertyName = "Type_Name";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle21;
             resources.ApplyResources(this.cType, "cType");
             this.cType.Name = "cType";
             this.cType.ReadOnly = true;
@@ -866,8 +709,8 @@ namespace WPELibrary
             // cSocket
             // 
             this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle30;
             resources.ApplyResources(this.cSocket, "cSocket");
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
@@ -876,8 +719,8 @@ namespace WPELibrary
             // cFrom
             // 
             this.cFrom.DataPropertyName = "From";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle31;
             resources.ApplyResources(this.cFrom, "cFrom");
             this.cFrom.Name = "cFrom";
             this.cFrom.ReadOnly = true;
@@ -886,8 +729,8 @@ namespace WPELibrary
             // Column5
             // 
             this.Column5.DataPropertyName = "To";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle32;
             resources.ApplyResources(this.Column5, "Column5");
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
@@ -896,8 +739,8 @@ namespace WPELibrary
             // cLen
             // 
             this.cLen.DataPropertyName = "ResLen";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle33;
             resources.ApplyResources(this.cLen, "cLen");
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
@@ -1061,11 +904,111 @@ namespace WPELibrary
             this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
             this.bgwSocketInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSocketInfo_RunWorkerCompleted);
             // 
+            // pPacketInfo
+            // 
+            this.pPacketInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pPacketInfo.Controls.Add(this.tcPacketInfo);
+            resources.ApplyResources(this.pPacketInfo, "pPacketInfo");
+            this.pPacketInfo.Name = "pPacketInfo";
+            // 
+            // tcPacketInfo
+            // 
+            this.tcPacketInfo.Controls.Add(this.tpPacketInfo);
+            this.tcPacketInfo.Controls.Add(this.tpSystemLog);
+            resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
+            this.tcPacketInfo.Multiline = true;
+            this.tcPacketInfo.Name = "tcPacketInfo";
+            this.tcPacketInfo.SelectedIndex = 0;
+            // 
+            // tpPacketInfo
+            // 
+            this.tpPacketInfo.Controls.Add(this.tlpPacketInfo);
+            resources.ApplyResources(this.tpPacketInfo, "tpPacketInfo");
+            this.tpPacketInfo.Name = "tpPacketInfo";
+            this.tpPacketInfo.UseVisualStyleBackColor = true;
+            // 
+            // tlpPacketInfo
+            // 
+            resources.ApplyResources(this.tlpPacketInfo, "tlpPacketInfo");
+            this.tlpPacketInfo.Controls.Add(this.rtbPackInfo_Left, 0, 1);
+            this.tlpPacketInfo.Controls.Add(this.rtbPacketInfo_Right, 1, 1);
+            this.tlpPacketInfo.Controls.Add(this.cbPacketInfo_Left, 0, 0);
+            this.tlpPacketInfo.Controls.Add(this.cbPacketInfo_Right, 1, 0);
+            this.tlpPacketInfo.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.tlpPacketInfo.Name = "tlpPacketInfo";
+            // 
+            // rtbPackInfo_Left
+            // 
+            this.rtbPackInfo_Left.BackColor = System.Drawing.SystemColors.Window;
+            this.rtbPackInfo_Left.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbPackInfo_Left, "rtbPackInfo_Left");
+            this.rtbPackInfo_Left.Name = "rtbPackInfo_Left";
+            // 
+            // rtbPacketInfo_Right
+            // 
+            this.rtbPacketInfo_Right.BackColor = System.Drawing.SystemColors.Window;
+            this.rtbPacketInfo_Right.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbPacketInfo_Right, "rtbPacketInfo_Right");
+            this.rtbPacketInfo_Right.Name = "rtbPacketInfo_Right";
+            // 
+            // cbPacketInfo_Left
+            // 
+            this.cbPacketInfo_Left.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.cbPacketInfo_Left, "cbPacketInfo_Left");
+            this.cbPacketInfo_Left.FormattingEnabled = true;
+            this.cbPacketInfo_Left.Name = "cbPacketInfo_Left";
+            this.cbPacketInfo_Left.SelectedIndexChanged += new System.EventHandler(this.cbPacketInfo_Left_SelectedIndexChanged);
+            // 
+            // cbPacketInfo_Right
+            // 
+            this.cbPacketInfo_Right.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.cbPacketInfo_Right, "cbPacketInfo_Right");
+            this.cbPacketInfo_Right.FormattingEnabled = true;
+            this.cbPacketInfo_Right.Name = "cbPacketInfo_Right";
+            this.cbPacketInfo_Right.SelectedIndexChanged += new System.EventHandler(this.cbPacketInfo_Right_SelectedIndexChanged);
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Controls.Add(this.dgvLogList);
+            resources.ApplyResources(this.tpSystemLog, "tpSystemLog");
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.UseVisualStyleBackColor = true;
+            // 
+            // dgvLogList
+            // 
+            this.dgvLogList.AllowUserToAddRows = false;
+            this.dgvLogList.AllowUserToDeleteRows = false;
+            this.dgvLogList.AllowUserToResizeColumns = false;
+            this.dgvLogList.AllowUserToResizeRows = false;
+            dataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle26.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle26;
+            this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cTime,
+            this.cFuncName,
+            this.cContent});
+            this.dgvLogList.ContextMenuStrip = this.cmsLogList;
+            resources.ApplyResources(this.dgvLogList, "dgvLogList");
+            this.dgvLogList.MultiSelect = false;
+            this.dgvLogList.Name = "dgvLogList";
+            this.dgvLogList.ReadOnly = true;
+            this.dgvLogList.RowHeadersVisible = false;
+            dataGridViewCellStyle37.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle37;
+            this.dgvLogList.RowTemplate.Height = 23;
+            this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            // 
             // cTime
             // 
             this.cTime.DataPropertyName = "Time";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cTime.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cTime.DefaultCellStyle = dataGridViewCellStyle35;
             resources.ApplyResources(this.cTime, "cTime");
             this.cTime.Name = "cTime";
             this.cTime.ReadOnly = true;
@@ -1073,8 +1016,8 @@ namespace WPELibrary
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle36;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -1091,11 +1034,11 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.Controls.Add(this.pPacketInfo);
             this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.gbFilterList);
             this.Controls.Add(this.dgvSocketList);
-            this.Controls.Add(this.gbSearch_Bottom);
-            this.Controls.Add(this.gbBottom);
+            this.Controls.Add(this.gbSearch);
             this.Controls.Add(this.ssStatusInfo_Top);
             this.Controls.Add(this.gbRight);
             this.DoubleBuffered = true;
@@ -1108,17 +1051,6 @@ namespace WPELibrary
             this.gbFilter_Size.PerformLayout();
             this.gbFilter_Type.ResumeLayout(false);
             this.gbFilter_Type.PerformLayout();
-            this.gbBottom.ResumeLayout(false);
-            this.tcPacketInfo.ResumeLayout(false);
-            this.tpHEX.ResumeLayout(false);
-            this.tpDEC.ResumeLayout(false);
-            this.tpBIN.ResumeLayout(false);
-            this.tpUNICODE.ResumeLayout(false);
-            this.tpASCII.ResumeLayout(false);
-            this.tpUTF8.ResumeLayout(false);
-            this.tpGB2312.ResumeLayout(false);
-            this.tpLog.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.cmsLogList.ResumeLayout(false);
             this.cmsSocketList.ResumeLayout(false);
             this.ssStatusInfo_Top.ResumeLayout(false);
@@ -1127,13 +1059,19 @@ namespace WPELibrary
             this.gbRight.PerformLayout();
             this.gbClear.ResumeLayout(false);
             this.gbClear.PerformLayout();
-            this.gbSearch_Bottom.ResumeLayout(false);
-            this.gbSearch_Bottom.PerformLayout();
+            this.gbSearch.ResumeLayout(false);
+            this.gbSearch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.gbFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
             this.cmsFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
+            this.pPacketInfo.ResumeLayout(false);
+            this.tcPacketInfo.ResumeLayout(false);
+            this.tpPacketInfo.ResumeLayout(false);
+            this.tlpPacketInfo.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1159,21 +1097,6 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbInterecept_Send;
         private System.Windows.Forms.CheckBox cbDisplay_Recv;
         private System.Windows.Forms.CheckBox cbDisplay_Send;
-        private System.Windows.Forms.GroupBox gbBottom;
-        private System.Windows.Forms.TabControl tcPacketInfo;
-        private System.Windows.Forms.TabPage tpHEX;
-        private System.Windows.Forms.RichTextBox rtbHEX;
-        private System.Windows.Forms.TabPage tpDEC;
-        private System.Windows.Forms.RichTextBox rtbDEC;
-        private System.Windows.Forms.TabPage tpBIN;
-        private System.Windows.Forms.RichTextBox rtbBIN;
-        private System.Windows.Forms.TabPage tpUNICODE;
-        private System.Windows.Forms.RichTextBox rtbUNICODE;
-        private System.Windows.Forms.TabPage tpUTF8;
-        private System.Windows.Forms.RichTextBox rtbUTF8;
-        private System.Windows.Forms.TabPage tpGB2312;
-        private System.Windows.Forms.RichTextBox rtbGB2312;
-        private System.Windows.Forms.TabPage tpLog;
         private System.ComponentModel.BackgroundWorker bgwSocketList;
         private System.Windows.Forms.Timer tSocketInfo;
         private System.Windows.Forms.Button bStartHook;
@@ -1205,7 +1128,7 @@ namespace WPELibrary
         private System.Windows.Forms.GroupBox gbRight;
         private System.Windows.Forms.GroupBox gbClear;
         private System.Windows.Forms.CheckBox cbReset_CNT;
-        private System.Windows.Forms.GroupBox gbSearch_Bottom;
+        private System.Windows.Forms.GroupBox gbSearch;
         private System.Windows.Forms.Button bSearch;
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.Label lSearch;
@@ -1222,14 +1145,11 @@ namespace WPELibrary
         private System.Windows.Forms.RadioButton rbSearchAll;
         private System.Windows.Forms.GroupBox gbFilterList;
         private System.Windows.Forms.DataGridView dgvFilterList;
-        private System.Windows.Forms.DataGridView dgvLogList;
         private System.ComponentModel.BackgroundWorker bgwLogList;
         private System.Windows.Forms.ContextMenuStrip cmsLogList;
         private System.Windows.Forms.ToolStripMenuItem tslToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem tslClearList;
-        private System.Windows.Forms.TabPage tpASCII;
-        private System.Windows.Forms.RichTextBox rtbASCII;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
@@ -1259,8 +1179,18 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem tsmiShowHook;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem tsmiHideHook;
+        private System.Windows.Forms.Panel pPacketInfo;
+        private System.Windows.Forms.TabControl tcPacketInfo;
+        private System.Windows.Forms.TabPage tpPacketInfo;
+        private System.Windows.Forms.TabPage tpSystemLog;
+        private System.Windows.Forms.DataGridView dgvLogList;
         private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo;
+        private System.Windows.Forms.RichTextBox rtbPackInfo_Left;
+        private System.Windows.Forms.RichTextBox rtbPacketInfo_Right;
+        private System.Windows.Forms.ComboBox cbPacketInfo_Left;
+        private System.Windows.Forms.ComboBox cbPacketInfo_Right;
     }
 }

@@ -16,6 +16,8 @@ namespace WPELibrary
         #region//窗体加载
         public Socket_Filter_Form(int FNum)
         {
+            MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);            
+
             InitializeComponent();
 
             this.FilterNum = FNum;
@@ -25,11 +27,11 @@ namespace WPELibrary
         }
 
         private void Filter_Form_Load(object sender, EventArgs e)
-        {
+        {  
             this.InitForm();
-            this.ShowFilterInfo();
+            this.ShowFilterInfo();            
         }
-        #endregion
+        #endregion      
 
         #region//初始化窗体
         private void InitForm()
@@ -45,7 +47,8 @@ namespace WPELibrary
         #region//初始化数据表
         private void InitDGV()
         {
-            dgvFilter.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilter, true, null);
+            dgvFilter.AutoGenerateColumns = false;
+            dgvFilter.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilter, true, null);            
 
             for (int i = 0; i < Socket_Cache.SocketFilterList.FilterLen_MAX; i++)
             {
@@ -65,14 +68,11 @@ namespace WPELibrary
             }            
 
             if (dgvFilter.Rows.Count == 0)
-            {
-                dgvFilter.RowHeadersWidth = 120;
+            {  
+                dgvFilter.Rows.Add();
+                dgvFilter.Rows.Add();
 
-                dgvFilter.Rows.Add();
-                dgvFilter.Rows.Add();
-                
-                dgvFilter.Rows[Socket_Cache.SocketFilterList.SearchRowIndex].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_17);
-                dgvFilter.Rows[Socket_Cache.SocketFilterList.ModifyRowIndex].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18);
+                this.gbFilterList1.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_17) + ", " + MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18);
             }            
         }
         #endregion

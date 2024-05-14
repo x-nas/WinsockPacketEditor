@@ -85,7 +85,6 @@ namespace WPELibrary
             // 
             // cmsSendList
             // 
-            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiDeleteSendList,
@@ -96,46 +95,46 @@ namespace WPELibrary
             this.toolStripSeparator3,
             this.tsmiLoadSendList});
             this.cmsSendList.Name = "cmsBatchSend";
+            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSendList_ItemClicked);
             // 
             // tsmiDeleteSendList
             // 
-            resources.ApplyResources(this.tsmiDeleteSendList, "tsmiDeleteSendList");
             this.tsmiDeleteSendList.Name = "tsmiDeleteSendList";
+            resources.ApplyResources(this.tsmiDeleteSendList, "tsmiDeleteSendList");
             // 
             // toolStripSeparator1
             // 
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
             // tsmiClear
             // 
-            resources.ApplyResources(this.tsmiClear, "tsmiClear");
             this.tsmiClear.Name = "tsmiClear";
+            resources.ApplyResources(this.tsmiClear, "tsmiClear");
             // 
             // toolStripSeparator2
             // 
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
             // tsmiSaveSendList
             // 
-            resources.ApplyResources(this.tsmiSaveSendList, "tsmiSaveSendList");
             this.tsmiSaveSendList.Name = "tsmiSaveSendList";
+            resources.ApplyResources(this.tsmiSaveSendList, "tsmiSaveSendList");
             // 
             // toolStripSeparator3
             // 
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             // 
             // tsmiLoadSendList
             // 
-            resources.ApplyResources(this.tsmiLoadSendList, "tsmiLoadSendList");
             this.tsmiLoadSendList.Name = "tsmiLoadSendList";
+            resources.ApplyResources(this.tsmiLoadSendList, "tsmiLoadSendList");
             // 
             // ssSocketSendList
             // 
-            resources.ApplyResources(this.ssSocketSendList, "ssSocketSendList");
             this.ssSocketSendList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.ssSocketSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlLoop_Send,
@@ -146,13 +145,14 @@ namespace WPELibrary
             this.toolStripStatusLabel3,
             this.tlSendList_Fail,
             this.tlSendList_Fail_CNT});
+            resources.ApplyResources(this.ssSocketSendList, "ssSocketSendList");
             this.ssSocketSendList.Name = "ssSocketSendList";
             this.ssSocketSendList.SizingGrip = false;
             // 
             // tlLoop_Send
             // 
-            resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
             this.tlLoop_Send.Name = "tlLoop_Send";
+            resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
             // 
             // tlLoop_Send_CNT
             // 
@@ -161,14 +161,14 @@ namespace WPELibrary
             // 
             // tlSplit
             // 
-            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             // 
             // tlSendList_Success
             // 
-            resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
             this.tlSendList_Success.Name = "tlSendList_Success";
+            resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
             // 
             // tlSendList_Success_CNT
             // 
@@ -178,14 +178,14 @@ namespace WPELibrary
             // 
             // toolStripStatusLabel3
             // 
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // tlSendList_Fail
             // 
-            resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
             this.tlSendList_Fail.Name = "tlSendList_Fail";
+            resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
             // 
             // tlSendList_Fail_CNT
             // 
@@ -195,9 +195,9 @@ namespace WPELibrary
             // 
             // gbSend_Bottom
             // 
-            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Controls.Add(this.bSendListStop);
             this.gbSend_Bottom.Controls.Add(this.bSendList);
+            resources.ApplyResources(this.gbSend_Bottom, "gbSend_Bottom");
             this.gbSend_Bottom.Name = "gbSend_Bottom";
             this.gbSend_Bottom.TabStop = false;
             // 
@@ -217,12 +217,12 @@ namespace WPELibrary
             // 
             // nudLoop_Int
             // 
-            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Increment = new decimal(new int[] {
             100,
             0,
             0,
             0});
+            resources.ApplyResources(this.nudLoop_Int, "nudLoop_Int");
             this.nudLoop_Int.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -289,7 +289,6 @@ namespace WPELibrary
             // 
             // dgvSendList
             // 
-            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.AllowUserToAddRows = false;
             this.dgvSendList.AllowUserToDeleteRows = false;
             this.dgvSendList.AllowUserToResizeRows = false;
@@ -304,6 +303,7 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSendList.ContextMenuStrip = this.cmsSendList;
+            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.MultiSelect = false;
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
@@ -378,7 +378,6 @@ namespace WPELibrary
             // 
             // gbSendList1
             // 
-            resources.ApplyResources(this.gbSendList1, "gbSendList1");
             this.gbSendList1.Controls.Add(this.nudLoop_Int);
             this.gbSendList1.Controls.Add(this.cbSelectAll);
             this.gbSendList1.Controls.Add(this.nudLoop_CNT);
@@ -386,6 +385,7 @@ namespace WPELibrary
             this.gbSendList1.Controls.Add(this.cbUseSocket);
             this.gbSendList1.Controls.Add(this.lLoop_CNT);
             this.gbSendList1.Controls.Add(this.lLoop_Int);
+            resources.ApplyResources(this.gbSendList1, "gbSendList1");
             this.gbSendList1.Name = "gbSendList1";
             this.gbSendList1.TabStop = false;
             // 
@@ -398,9 +398,9 @@ namespace WPELibrary
             // 
             // pbLoading
             // 
-            resources.ApplyResources(this.pbLoading, "pbLoading");
             this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
             this.pbLoading.Image = global::WPELibrary.Properties.Resources.loading;
+            resources.ApplyResources(this.pbLoading, "pbLoading");
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 

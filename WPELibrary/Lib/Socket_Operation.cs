@@ -5,13 +5,12 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Data;
 
 namespace WPELibrary.Lib
-{
+{   
     public static class Socket_Operation
     {
-        public static int CheckCNT = 0;
-
         public static bool IsCheck_Size = false;
         public static bool IsCheck_Socket = false;
         public static bool IsCheck_IP = false;
@@ -24,6 +23,8 @@ namespace WPELibrary.Lib
         public static string Check_Socket_txt = "";
         public static string Check_IP_txt = "";
         public static string Check_Packet_txt = "";
+
+        public static DataTable dtPacketFormat = new DataTable();         
 
         #region//ws2_32.dll API        
 
@@ -41,20 +42,163 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//进制转换        
+        #region//数据格式转换
 
-        public static string Byte_To_Hex(byte[] buffer)
+        #region//初始化封包数据格式
+        public static void InitPacketFormat()
+        {
+            try
+            {
+                if (dtPacketFormat.Columns.Count == 0)
+                {
+                    dtPacketFormat.Columns.Add("Key", typeof(string));
+                    dtPacketFormat.Columns.Add("Value", typeof(string));
+                }
+
+                if (dtPacketFormat.Rows.Count == 0)
+                {
+                    DataRow drHEX = dtPacketFormat.NewRow();
+
+                    drHEX[0] = "HEX";
+                    drHEX[1] = "十六进制";
+                    dtPacketFormat.Rows.Add(drHEX);
+
+                    DataRow drASCII = dtPacketFormat.NewRow();
+                    drASCII[0] = "ASCII";
+                    drASCII[1] = "ASCII";
+                    dtPacketFormat.Rows.Add(drASCII);                  
+
+                    DataRow drUnicode = dtPacketFormat.NewRow();
+                    drUnicode[0] = "UNICODE";
+                    drUnicode[1] = "UNICODE";
+                    dtPacketFormat.Rows.Add(drUnicode);
+
+                    DataRow drUTF7 = dtPacketFormat.NewRow();
+                    drUTF7[0] = "UTF-7";
+                    drUTF7[1] = "UTF-7";
+                    dtPacketFormat.Rows.Add(drUTF7);
+
+                    DataRow drUTF8 = dtPacketFormat.NewRow();
+                    drUTF8[0] = "UTF-8";
+                    drUTF8[1] = "UTF-8";
+                    dtPacketFormat.Rows.Add(drUTF8);
+
+                    DataRow drUTF16LE = dtPacketFormat.NewRow();
+                    drUTF16LE[0] = "UTF-16-LE";
+                    drUTF16LE[1] = "UTF-16（LE）";
+                    dtPacketFormat.Rows.Add(drUTF16LE);
+
+                    DataRow drUTF16BE = dtPacketFormat.NewRow();
+                    drUTF16BE[0] = "UTF-16-BE";
+                    drUTF16BE[1] = "UTF-16（BE）";
+                    dtPacketFormat.Rows.Add(drUTF16BE);
+
+                    DataRow drUTF32LE = dtPacketFormat.NewRow();
+                    drUTF32LE[0] = "UTF-32-LE";
+                    drUTF32LE[1] = "UTF-32（LE）";
+                    dtPacketFormat.Rows.Add(drUTF32LE);
+
+                    DataRow drUTF32BE = dtPacketFormat.NewRow();
+                    drUTF32BE[0] = "UTF-32-BE";
+                    drUTF32BE[1] = "UTF-32（BE）";
+                    dtPacketFormat.Rows.Add(drUTF32BE);
+
+                    DataRow drBIN = dtPacketFormat.NewRow();
+                    drBIN[0] = "BIN";
+                    drBIN[1] = "二进制";
+                    dtPacketFormat.Rows.Add(drBIN);
+
+                    DataRow drDEC = dtPacketFormat.NewRow();
+                    drDEC[0] = "DEC";
+                    drDEC[1] = "十进制";
+                    dtPacketFormat.Rows.Add(drDEC);
+                }
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }          
+        }
+
+        #endregion
+
+        #region//字节转字符串
+        public static string ByteToString(string EncodingFormat, byte[] buffer)
         {
             string sReturn = "";
 
             try
             {
-                foreach (byte n in buffer)
-                {
-                    sReturn += n.ToString("X2") + " ";
-                }
+                string sFormat = "";
 
-                sReturn = sReturn.Trim();
+                switch (EncodingFormat)
+                {
+                    case "HEX":
+                        foreach (byte b in buffer)
+                        {
+                            sReturn += b.ToString("X2") + " ";
+                        }
+                        sReturn = sReturn.Trim();
+                        break;
+                    case "ASCII":
+                        sFormat = Encoding.ASCII.GetString(buffer);
+                        break;
+                    case "UNICODE":
+                        sFormat = Encoding.Unicode.GetString(buffer);
+                        break;
+                    case "UTF-7":
+                        sFormat = Encoding.UTF7.GetString(buffer);
+                        break;
+                    case "UTF-8":
+                        sFormat = Encoding.UTF8.GetString(buffer);
+                        break;
+                    case "UTF-16-LE":
+                        sFormat = Encoding.Unicode.GetString(buffer);
+                        break;
+                    case "UTF-16-BE":
+                        sFormat = Encoding.BigEndianUnicode.GetString(buffer);
+                        break;
+                    case "UTF-32-LE":
+                        sFormat = Encoding.UTF32.GetString(buffer);
+                        break;
+                    case "UTF-32-BE":
+                        byte[] copiedBuffer = new byte[buffer.Length];
+                        Array.Copy(buffer, copiedBuffer, buffer.Length);
+                        Array.Reverse(copiedBuffer);
+                        sFormat = Encoding.UTF32.GetString(copiedBuffer);
+                        break;
+                    case "BIN":
+                        foreach (byte b in buffer)
+                        {
+                            string strTemp = Convert.ToString(b, 2);
+                            strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
+                            sReturn += strTemp + " ";
+                        }
+                        sReturn = sReturn.Trim();
+                        break;
+                    case "DEC":
+                        foreach (byte n in buffer)
+                        {
+                            sReturn += n.ToString("D") + " ";
+                        }
+                        sReturn = sReturn.Trim();
+                        break;
+                    default:
+                        sFormat = Encoding.Default.GetString(buffer);
+                        break;
+                }                
+
+                foreach (char c in sFormat)
+                {
+                    if ((int)c > 31)
+                    {
+                        sReturn += c.ToString();
+                    }
+                    else
+                    {
+                        sReturn += "\u0001";
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -64,6 +208,9 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
+        #endregion
+
+        #region//十六进制字符串转字节
         public static byte[] Hex_To_Byte(string hexString)
         {
             try
@@ -89,136 +236,9 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
 
                 return null;
-            }            
+            }
         }
-
-        public static string Byte_To_Bin(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                foreach (byte n in buffer)
-                {
-                    string strTemp = Convert.ToString(n, 2);
-                    strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
-
-                    sReturn += strTemp + " ";
-                }
-
-                sReturn = sReturn.Trim();
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_UTF8(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                Encoding chs = Encoding.GetEncoding("utf-8");
-                sReturn = chs.GetString(buffer);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_Unicode(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                Encoding chs = Encoding.GetEncoding("utf-16");
-                sReturn = chs.GetString(buffer);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_Ascii(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                Encoding chs = Encoding.GetEncoding("Ascii");
-                sReturn = chs.GetString(buffer);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_GB2312(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                Encoding chs = Encoding.GetEncoding("gb2312");
-                sReturn = chs.GetString(buffer);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_Default(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                Encoding chs = Encoding.Default;
-                sReturn = chs.GetString(buffer);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static string Byte_To_Dec(byte[] buffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                foreach (byte n in buffer)
-                {
-                    sReturn += n.ToString("D") + " ";
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
+        #endregion    
 
         #endregion
 
@@ -477,15 +497,12 @@ namespace WPELibrary.Lib
 
         #region//是否显示封包（过滤条件）        
 
-        public static bool ISShow_SocketInfo(Socket_Packet s)
+        public static bool ISFilterSocketPacket(int iSocket, IntPtr ipBuff, int iLen, Socket_Packet.SocketType sType, Socket_Packet.sockaddr sAddr, int iResLen)
         {
-            bool bReturn = true;
-
             try
             {
-                int iSocket = s.Socket;
-                byte[] bBuffer = s.Buffer;
-                int iResLen = s.ResLen;
+                byte[] bBuffer = new byte[iResLen];
+                Marshal.Copy(ipBuff, bBuffer, 0, iResLen);                
 
                 string sIP_From = GetSocketIP(iSocket, Socket_Packet.IPType.From);
                 string sIP_To = GetSocketIP(iSocket, Socket_Packet.IPType.To);
@@ -515,7 +532,7 @@ namespace WPELibrary.Lib
                 }
 
                 //封包内容
-                string sPacket = Byte_To_Hex(bBuffer);
+                string sPacket = ByteToString("HEX", bBuffer);
                 bool bISShow_ByPacket = ISShow_ByPacket(sPacket);
                 if (!bISShow_ByPacket)
                 {
@@ -528,8 +545,8 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
-        }
+            return true;
+        }        
 
         #region//检测封包大小
         private static bool ISShow_BySize(int iLength)
@@ -671,7 +688,7 @@ namespace WPELibrary.Lib
                             for (int i = iFrom; i < iListCNT; i++)
                             {
                                 byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].Buffer;
-                                string sSearch = Byte_To_Hex(bSearch);
+                                string sSearch = ByteToString("HEX", bSearch);
 
                                 if (sSearch.IndexOf(sHex) >= 0)
                                 {
@@ -781,7 +798,7 @@ namespace WPELibrary.Lib
                                 string sIPTo = Socket_Cache.SocketSendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
                                 string sLen = Socket_Cache.SocketSendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
                                 byte[] bBuffer = (byte[])Socket_Cache.SocketSendList.dtSocketSendList.Rows[i]["Bytes"];
-                                string sData = Byte_To_Hex(bBuffer);
+                                string sData = ByteToString("HEX", bBuffer);
 
                                 string sSave = sIndex + "|" + sNote + "|" + sSocket + "|" + sIPTo + "|" + sLen + "|" + sData;
 
@@ -1026,7 +1043,7 @@ namespace WPELibrary.Lib
                             string sTo = spi.To;
                             string sLen = spi.ResLen.ToString();
                             byte[] bBuff = spi.Buffer;
-                            string sData = Byte_To_Hex(bBuff);
+                            string sData = ByteToString("HEX", bBuff);
 
                             sColValue += sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                             sw.WriteLine(sColValue);

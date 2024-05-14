@@ -417,11 +417,11 @@ namespace WPELibrary
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvSocketSend.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvSocketSend.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dgvSocketSend.RowHeadersVisible = false;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvSocketSend.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dgvSocketSend.RowTemplate.Height = 23;
+            this.dgvSocketSend.RowTemplate.Height = 30;
             this.dgvSocketSend.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellClick);
             this.dgvSocketSend.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellEndEdit);
             this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);

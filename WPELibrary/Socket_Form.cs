@@ -20,14 +20,21 @@ namespace WPELibrary
         #region//加载窗体
         public Socket_Form(string sLanguage)
         {
-            MultiLanguage.SetDefaultLanguage(sLanguage);
-            InitializeComponent();
-        }
+            try
+            {
+                MultiLanguage.SetDefaultLanguage(sLanguage);
+                InitializeComponent();                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
+            }
+        }        
 
         private void DLL_Form_Load(object sender, EventArgs e)
         {
             try
-            {
+            {                
                 this.InitSocketDGV();
                 this.InitSocketForm();                
             }
@@ -64,6 +71,9 @@ namespace WPELibrary
                 this.pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
                 this.pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
                 this.pbLoading.Visible = false;
+
+                this.cbPacketInfo_Left.SelectedIndex = 0;
+                this.cbPacketInfo_Right.SelectedIndex = 1;
                 
                 string sInjectInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
                 this.tlSystemInfo.Text = sInjectInfo;
@@ -85,6 +95,14 @@ namespace WPELibrary
         {
             try
             {
+                Socket_Operation.InitPacketFormat();
+                this.cbPacketInfo_Left.DataSource = Socket_Operation.dtPacketFormat.Copy();
+                this.cbPacketInfo_Left.ValueMember = "Key";
+                this.cbPacketInfo_Left.DisplayMember = "Value";
+                this.cbPacketInfo_Right.DataSource = Socket_Operation.dtPacketFormat.Copy();
+                this.cbPacketInfo_Right.ValueMember = "Key";
+                this.cbPacketInfo_Right.DisplayMember = "Value";
+
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstRecLog;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
@@ -104,6 +122,8 @@ namespace WPELibrary
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                Socket_Operation.ShowMessageBox(ex.Message);
             }            
         }
         #endregion
@@ -135,16 +155,10 @@ namespace WPELibrary
                 {
                     this.Select_Index = -1;
 
-                    this.rtbHEX.Clear();
-                    this.rtbDEC.Clear();
-                    this.rtbBIN.Clear();
-                    this.rtbUNICODE.Clear();
-                    this.rtbASCII.Clear();
-                    this.rtbUTF8.Clear();
-                    this.rtbGB2312.Clear();
+                    this.rtbPackInfo_Left.Clear();
+                    this.rtbPacketInfo_Right.Clear();                    
                     this.dgvSocketList.Rows.Clear();
-
-                    Socket_Operation.CheckCNT = 0;
+                    
                     Socket_Cache.SocketQueue.ResetSocketQueue();
                 }
                 
@@ -287,7 +301,7 @@ namespace WPELibrary
                 this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
                 this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
                 this.tlInterecept_CNT.Text = Socket_Cache.SocketQueue.Interecept_CNT.ToString();
-                this.tlCheck_CNT.Text = Socket_Operation.CheckCNT.ToString();
+                this.tlCheck_CNT.Text = Socket_Cache.SocketQueue.Filter_CNT.ToString();
 
                 this.dgvFilterList.Refresh();
 
@@ -475,7 +489,7 @@ namespace WPELibrary
         private void cmsFilterList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             this.dgvFilterList.EndEdit();
-            string sItemText = e.ClickedItem.Name;
+            string sItemText = e.ClickedItem.Name;            
 
             cmsFilterList.Close();
 
@@ -490,8 +504,8 @@ namespace WPELibrary
                         try
                         {
                             if (dgvFilterList.Rows.Count > 0)
-                            {
-                                int iFNum = int.Parse(this.dgvFilterList.CurrentRow.Cells["cFNum"].Value.ToString().Trim());
+                            {                                
+                                int iFNum = int.Parse(this.dgvFilterList.CurrentRow.Cells["cFNum"].Value.ToString().Trim());                                
 
                                 if (iFNum > 0)
                                 {
@@ -641,7 +655,7 @@ namespace WPELibrary
         }
         #endregion        
 
-        #region//显示数据列表（异步）
+        #region//显示封包列表（异步）
         private void bgwSocketList_DoWork(object sender, DoWorkEventArgs e)
         {
             try
@@ -700,7 +714,31 @@ namespace WPELibrary
         }
         #endregion        
 
-        #region//显示数据方式（异步）
+        #region//显示封包数据（异步）
+        private void cbPacketInfo_Left_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
+            {
+                this.rtbPackInfo_Left.Clear();
+                this.rtbPacketInfo_Right.Clear();
+                this.pbLoading.Visible = true;
+
+                bgwSocketInfo.RunWorkerAsync();
+            }
+        }
+
+        private void cbPacketInfo_Right_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
+            {
+                this.rtbPackInfo_Left.Clear();
+                this.rtbPacketInfo_Right.Clear();
+                this.pbLoading.Visible = true;
+
+                bgwSocketInfo.RunWorkerAsync();
+            }
+        }
+
         private void dgSocketInfo_SelectionChanged(object sender, EventArgs e)
         {
             try
@@ -709,28 +747,21 @@ namespace WPELibrary
                 {
                     Select_Index = dgvSocketList.SelectedRows[0].Index;
 
-                    this.pbLoading.Visible = true;
-                    bgwSocketInfo.RunWorkerAsync();
+                    if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
+                    {
+                        this.rtbPackInfo_Left.Clear();
+                        this.rtbPacketInfo_Right.Clear();
+                        this.pbLoading.Visible = true;
+
+                        bgwSocketInfo.RunWorkerAsync();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void tcPacketInfo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                this.pbLoading.Visible = true;
-                bgwSocketInfo.RunWorkerAsync();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         private void bgwSocketInfo_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -766,30 +797,11 @@ namespace WPELibrary
                     {
                         byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer;
 
-                        switch (tcPacketInfo.SelectedIndex)
-                        {
-                            case 0:
-                                this.rtbHEX.Invoke((MethodInvoker)delegate { this.rtbHEX.Text = Socket_Operation.Byte_To_Hex(bSelected); });
-                                break;
-                            case 1:
-                                this.rtbDEC.Invoke((MethodInvoker)delegate { this.rtbDEC.Text = Socket_Operation.Byte_To_Dec(bSelected); });
-                                break;
-                            case 2:
-                                this.rtbBIN.Invoke((MethodInvoker)delegate { this.rtbBIN.Text = Socket_Operation.Byte_To_Bin(bSelected); });
-                                break;
-                            case 3:
-                                this.rtbUNICODE.Invoke((MethodInvoker)delegate { this.rtbUNICODE.Text = Socket_Operation.Byte_To_Unicode(bSelected); });
-                                break;
-                            case 4:
-                                this.rtbASCII.Invoke((MethodInvoker)delegate { this.rtbASCII.Text = Socket_Operation.Byte_To_Ascii(bSelected); });
-                                break;
-                            case 5:
-                                this.rtbUTF8.Invoke((MethodInvoker)delegate { this.rtbUTF8.Text = Socket_Operation.Byte_To_UTF8(bSelected); });
-                                break;
-                            case 6:
-                                this.rtbGB2312.Invoke((MethodInvoker)delegate { this.rtbGB2312.Text = Socket_Operation.Byte_To_GB2312(bSelected); });
-                                break;
-                        }
+                        string sKey_Left = this.cbPacketInfo_Left.SelectedValue.ToString();
+                        string sLey_Right =this.cbPacketInfo_Right.SelectedValue.ToString();
+
+                        this.rtbPackInfo_Left.Invoke((MethodInvoker)delegate { this.rtbPackInfo_Left.Text = Socket_Operation.ByteToString(sKey_Left, bSelected); });
+                        this.rtbPacketInfo_Right.Invoke((MethodInvoker)delegate { this.rtbPacketInfo_Right.Text = Socket_Operation.ByteToString(sLey_Right, bSelected); });
                     }
                 }
             }
@@ -852,6 +864,6 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-        #endregion        
+        #endregion
     }
 }

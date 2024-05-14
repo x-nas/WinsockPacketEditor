@@ -26,8 +26,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
         public static string[] MutiLan_15 = { "应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*" };
         public static string[] MutiLan_16 = { "滤镜 -【 序号", "Filter -【 ID" };
-        public static string[] MutiLan_17 = { "搜索封包", "SEARCH" };
-        public static string[] MutiLan_18 = { "修改封包", "MODIFY" };
+        public static string[] MutiLan_17 = { "第1行：搜索内容", "First Row: Search" };
+        public static string[] MutiLan_18 = { "第2行：修改内容", "Second Row: Modify" };
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
         public static string[] MutiLan_20 = { "目标进程：", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
@@ -52,7 +52,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_40 = { "请输入搜索内容", "Please enter search content" };
         public static string[] MutiLan_41 = { "搜索完成!", "Search completed!" };
         public static string[] MutiLan_42 = { "发送封包 -【 序号", "Send -【 ID" };
-        public static string[] MutiLan_43 = { "封包数据", "Data" };
+        public static string[] MutiLan_43 = { "", "" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
@@ -103,14 +103,11 @@ namespace WPELibrary.Lib
             try
             {
                 Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
-                MultiLanguage.DefaultLanguage = lang;
-
-                Properties.Settings.Default.DefaultLanguage = lang;
-                Properties.Settings.Default.Save();
+                MultiLanguage.DefaultLanguage = lang;                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
         }
         #endregion

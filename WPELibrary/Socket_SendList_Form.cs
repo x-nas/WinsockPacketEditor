@@ -12,6 +12,8 @@ namespace WPELibrary
         #region//窗体加载
         public Socket_SendList_Form()
         {
+            MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
+
             InitializeComponent();
 
             Socket_Cache.SocketSendList.bShow_SendListForm = false;

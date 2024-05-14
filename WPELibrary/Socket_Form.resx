@@ -480,6 +480,78 @@
   <data name="&gt;&gt;gbFilter_Size.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="&gt;&gt;cbInterecept_RecvFrom.Name" xml:space="preserve">
+    <value>cbInterecept_RecvFrom</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_RecvFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_RecvFrom.Parent" xml:space="preserve">
+    <value>gbFilter_Type</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_RecvFrom.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_Send.Name" xml:space="preserve">
+    <value>cbInterecept_Send</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_Send.Parent" xml:space="preserve">
+    <value>gbFilter_Type</value>
+  </data>
+  <data name="&gt;&gt;cbInterecept_Send.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Recv.Name" xml:space="preserve">
+    <value>cbDisplay_Recv</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Recv.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Recv.Parent" xml:space="preserve">
+    <value>gbFilter_Type</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Recv.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Send.Name" xml:space="preserve">
+    <value>cbDisplay_Send</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Send.Parent" xml:space="preserve">
+    <value>gbFilter_Type</value>
+  </data>
+  <data name="&gt;&gt;cbDisplay_Send.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="gbFilter_Type.Location" type="System.Drawing.Point, System.Drawing">
+    <value>614, 9</value>
+  </data>
+  <data name="gbFilter_Type.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="gbFilter_Type.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 101</value>
+  </data>
+  <data name="gbFilter_Type.TabIndex" type="System.Int32, mscorlib">
+    <value>25</value>
+  </data>
+  <data name="&gt;&gt;gbFilter_Type.Name" xml:space="preserve">
+    <value>gbFilter_Type</value>
+  </data>
+  <data name="&gt;&gt;gbFilter_Type.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbFilter_Type.Parent" xml:space="preserve">
+    <value>gbRight</value>
+  </data>
+  <data name="&gt;&gt;gbFilter_Type.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="cbInterecept_RecvFrom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -588,435 +660,18 @@
   <data name="&gt;&gt;cbDisplay_Send.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="gbFilter_Type.Location" type="System.Drawing.Point, System.Drawing">
-    <value>614, 9</value>
-  </data>
-  <data name="gbFilter_Type.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="gbFilter_Type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>133, 101</value>
-  </data>
-  <data name="gbFilter_Type.TabIndex" type="System.Int32, mscorlib">
-    <value>25</value>
-  </data>
-  <data name="&gt;&gt;gbFilter_Type.Name" xml:space="preserve">
-    <value>gbFilter_Type</value>
-  </data>
-  <data name="&gt;&gt;gbFilter_Type.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbFilter_Type.Parent" xml:space="preserve">
-    <value>gbRight</value>
-  </data>
-  <data name="&gt;&gt;gbFilter_Type.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="rtbHEX.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbHEX.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbHEX.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbHEX.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbHEX.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="rtbHEX.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbHEX.Name" xml:space="preserve">
-    <value>rtbHEX</value>
-  </data>
-  <data name="&gt;&gt;rtbHEX.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbHEX.Parent" xml:space="preserve">
-    <value>tpHEX</value>
-  </data>
-  <data name="&gt;&gt;rtbHEX.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpHEX.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpHEX.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpHEX.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tpHEX.Text" xml:space="preserve">
-    <value>十六进制</value>
-  </data>
-  <data name="&gt;&gt;tpHEX.Name" xml:space="preserve">
-    <value>tpHEX</value>
-  </data>
-  <data name="&gt;&gt;tpHEX.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpHEX.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpHEX.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rtbDEC.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbDEC.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbDEC.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbDEC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbDEC.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rtbDEC.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbDEC.Name" xml:space="preserve">
-    <value>rtbDEC</value>
-  </data>
-  <data name="&gt;&gt;rtbDEC.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbDEC.Parent" xml:space="preserve">
-    <value>tpDEC</value>
-  </data>
-  <data name="&gt;&gt;rtbDEC.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpDEC.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpDEC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpDEC.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tpDEC.Text" xml:space="preserve">
-    <value>十进制</value>
-  </data>
-  <data name="&gt;&gt;tpDEC.Name" xml:space="preserve">
-    <value>tpDEC</value>
-  </data>
-  <data name="&gt;&gt;tpDEC.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpDEC.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpDEC.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="rtbBIN.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbBIN.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbBIN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbBIN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbBIN.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="rtbBIN.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbBIN.Name" xml:space="preserve">
-    <value>rtbBIN</value>
-  </data>
-  <data name="&gt;&gt;rtbBIN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbBIN.Parent" xml:space="preserve">
-    <value>tpBIN</value>
-  </data>
-  <data name="&gt;&gt;rtbBIN.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpBIN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpBIN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpBIN.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tpBIN.Text" xml:space="preserve">
-    <value>二进制</value>
-  </data>
-  <data name="&gt;&gt;tpBIN.Name" xml:space="preserve">
-    <value>tpBIN</value>
-  </data>
-  <data name="&gt;&gt;tpBIN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpBIN.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpBIN.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="rtbUNICODE.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbUNICODE.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbUNICODE.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbUNICODE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbUNICODE.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rtbUNICODE.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbUNICODE.Name" xml:space="preserve">
-    <value>rtbUNICODE</value>
-  </data>
-  <data name="&gt;&gt;rtbUNICODE.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbUNICODE.Parent" xml:space="preserve">
-    <value>tpUNICODE</value>
-  </data>
-  <data name="&gt;&gt;rtbUNICODE.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpUNICODE.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpUNICODE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpUNICODE.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tpUNICODE.Text" xml:space="preserve">
-    <value>Unicode</value>
-  </data>
-  <data name="&gt;&gt;tpUNICODE.Name" xml:space="preserve">
-    <value>tpUNICODE</value>
-  </data>
-  <data name="&gt;&gt;tpUNICODE.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpUNICODE.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpUNICODE.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="rtbASCII.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbASCII.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbASCII.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbASCII.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbASCII.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="rtbASCII.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbASCII.Name" xml:space="preserve">
-    <value>rtbASCII</value>
-  </data>
-  <data name="&gt;&gt;rtbASCII.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbASCII.Parent" xml:space="preserve">
-    <value>tpASCII</value>
-  </data>
-  <data name="&gt;&gt;rtbASCII.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpASCII.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpASCII.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpASCII.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tpASCII.Text" xml:space="preserve">
-    <value>ASCII</value>
-  </data>
-  <data name="&gt;&gt;tpASCII.Name" xml:space="preserve">
-    <value>tpASCII</value>
-  </data>
-  <data name="&gt;&gt;tpASCII.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpASCII.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpASCII.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="rtbUTF8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbUTF8.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbUTF8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbUTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbUTF8.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rtbUTF8.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbUTF8.Name" xml:space="preserve">
-    <value>rtbUTF8</value>
-  </data>
-  <data name="&gt;&gt;rtbUTF8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbUTF8.Parent" xml:space="preserve">
-    <value>tpUTF8</value>
-  </data>
-  <data name="&gt;&gt;rtbUTF8.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpUTF8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpUTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpUTF8.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="tpUTF8.Text" xml:space="preserve">
-    <value>UTF-8</value>
-  </data>
-  <data name="&gt;&gt;tpUTF8.Name" xml:space="preserve">
-    <value>tpUTF8</value>
-  </data>
-  <data name="&gt;&gt;tpUTF8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpUTF8.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpUTF8.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="rtbGB2312.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbGB2312.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
-  </data>
-  <data name="rtbGB2312.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="rtbGB2312.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="rtbGB2312.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rtbGB2312.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbGB2312.Name" xml:space="preserve">
-    <value>rtbGB2312</value>
-  </data>
-  <data name="&gt;&gt;rtbGB2312.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbGB2312.Parent" xml:space="preserve">
-    <value>tpGB2312</value>
-  </data>
-  <data name="&gt;&gt;rtbGB2312.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpGB2312.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpGB2312.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpGB2312.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tpGB2312.Text" xml:space="preserve">
-    <value>GB2312</value>
-  </data>
-  <data name="&gt;&gt;tpGB2312.Name" xml:space="preserve">
-    <value>tpGB2312</value>
-  </data>
-  <data name="&gt;&gt;tpGB2312.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpGB2312.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpGB2312.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <metadata name="cTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cTime.HeaderText" xml:space="preserve">
-    <value>记录时间</value>
-  </data>
-  <data name="cTime.Width" type="System.Int32, mscorlib">
-    <value>80</value>
-  </data>
-  <metadata name="cFuncName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cFuncName.HeaderText" xml:space="preserve">
-    <value>模块</value>
-  </data>
-  <data name="cFuncName.Width" type="System.Int32, mscorlib">
-    <value>130</value>
-  </data>
-  <metadata name="cContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cContent.HeaderText" xml:space="preserve">
-    <value>日志内容</value>
-  </data>
   <metadata name="cmsLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>718, 17</value>
   </metadata>
+  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 110</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList.Name" xml:space="preserve">
+    <value>cmsLogList</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 22</value>
   </data>
@@ -1049,120 +704,6 @@
   </data>
   <data name="tslToExcel.Text" xml:space="preserve">
     <value>导出到Excel</value>
-  </data>
-  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 110</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList.Name" xml:space="preserve">
-    <value>cmsLogList</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvLogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dgvLogList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.Name" xml:space="preserve">
-    <value>dgvLogList</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.Parent" xml:space="preserve">
-    <value>tpLog</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>711, 132</value>
-  </data>
-  <data name="tpLog.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="tpLog.Text" xml:space="preserve">
-    <value>日志</value>
-  </data>
-  <data name="&gt;&gt;tpLog.Name" xml:space="preserve">
-    <value>tpLog</value>
-  </data>
-  <data name="&gt;&gt;tpLog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpLog.Parent" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tpLog.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tcPacketInfo.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tcPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 20</value>
-  </data>
-  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>719, 162</value>
-  </data>
-  <data name="tcPacketInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;tcPacketInfo.Name" xml:space="preserve">
-    <value>tcPacketInfo</value>
-  </data>
-  <data name="&gt;&gt;tcPacketInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tcPacketInfo.Parent" xml:space="preserve">
-    <value>gbBottom</value>
-  </data>
-  <data name="&gt;&gt;tcPacketInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbBottom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbBottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 455</value>
-  </data>
-  <data name="gbBottom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="gbBottom.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="gbBottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>725, 186</value>
-  </data>
-  <data name="gbBottom.TabIndex" type="System.Int32, mscorlib">
-    <value>43</value>
-  </data>
-  <data name="&gt;&gt;gbBottom.Name" xml:space="preserve">
-    <value>gbBottom</value>
-  </data>
-  <data name="&gt;&gt;gbBottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbBottom.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;gbBottom.ZOrder" xml:space="preserve">
-    <value>7</value>
   </data>
   <metadata name="bgwSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -1284,6 +825,15 @@
   <metadata name="cmsSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>598, 17</value>
   </metadata>
+  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 138</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
+    <value>cmsSocketList</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>
@@ -1326,15 +876,6 @@
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
     <value>导出到Excel</value>
   </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 138</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
-    <value>cmsSocketList</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="tlCheck_CNT.Size" type="System.Drawing.Size, System.Drawing">
     <value>15, 17</value>
   </data>
@@ -1349,108 +890,6 @@
   </data>
   <data name="ssStatusInfo_Top.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
-  </data>
-  <data name="tlSystemInfo.Text" xml:space="preserve">
-    <value>系统信息</value>
-  </data>
-  <data name="tlSplit0.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlALL.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
-  <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="tlALL.Text" xml:space="preserve">
-    <value>封包总数:</value>
-  </data>
-  <data name="tlALL_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
-  <data name="tlALL_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlALL_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlQueue.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="tlQueue.Text" xml:space="preserve">
-    <value>缓存区:</value>
-  </data>
-  <data name="tlQueue_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlQueue_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlSplit2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="tlSend.Text" xml:space="preserve">
-    <value>发送:</value>
-  </data>
-  <data name="tlSend_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlSend_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlSplit3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlRecv.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="tlRecv.Text" xml:space="preserve">
-    <value>接收:</value>
-  </data>
-  <data name="tlRecv_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlRecv_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlSplit4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="tlCheck.Text" xml:space="preserve">
-    <value>过滤:</value>
-  </data>
-  <data name="tlSplit5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
-  </data>
-  <data name="tlInterecept.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="tlInterecept.Text" xml:space="preserve">
-    <value>已拦截:</value>
-  </data>
-  <data name="tlInterecept_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlInterecept_CNT.Text" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="ssStatusInfo_Top.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 116</value>
@@ -1479,50 +918,125 @@
   <data name="&gt;&gt;ssStatusInfo_Top.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <data name="cbReset_CNT.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
   </data>
-  <data name="cbReset_CNT.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopCenter</value>
+  <data name="tlSystemInfo.Text" xml:space="preserve">
+    <value>系统信息</value>
   </data>
-  <data name="cbReset_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="tlSplit0.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
   </data>
-  <data name="cbReset_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 12</value>
+  <data name="tlSplit0.Text" xml:space="preserve">
+    <value>|</value>
   </data>
-  <data name="cbReset_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 86</value>
+  <data name="tlALL.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
   </data>
-  <data name="cbReset_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>42</value>
+  <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
   </data>
-  <data name="cbReset_CNT.Text" xml:space="preserve">
-    <value>清
-空
-数
-据</value>
+  <data name="tlALL.Text" xml:space="preserve">
+    <value>封包总数:</value>
   </data>
-  <data name="&gt;&gt;cbReset_CNT.Name" xml:space="preserve">
-    <value>cbReset_CNT</value>
+  <data name="tlALL_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
   </data>
-  <data name="&gt;&gt;cbReset_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlALL_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
   </data>
-  <data name="&gt;&gt;cbReset_CNT.Parent" xml:space="preserve">
-    <value>gbClear</value>
-  </data>
-  <data name="&gt;&gt;cbReset_CNT.ZOrder" xml:space="preserve">
+  <data name="tlALL_CNT.Text" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="gbClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>752, 9</value>
+  <data name="tlSplit1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
   </data>
-  <data name="gbClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 100</value>
+  <data name="tlSplit1.Text" xml:space="preserve">
+    <value>|</value>
   </data>
-  <data name="gbClear.TabIndex" type="System.Int32, mscorlib">
-    <value>41</value>
+  <data name="tlQueue.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="tlQueue.Text" xml:space="preserve">
+    <value>缓存区:</value>
+  </data>
+  <data name="tlQueue_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlQueue_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlSplit2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tlSplit2.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="tlSend.Text" xml:space="preserve">
+    <value>发送:</value>
+  </data>
+  <data name="tlSend_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlSend_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlSplit3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tlSplit3.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlRecv.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="tlRecv.Text" xml:space="preserve">
+    <value>接收:</value>
+  </data>
+  <data name="tlRecv_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlRecv_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlSplit4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tlSplit4.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="tlCheck.Text" xml:space="preserve">
+    <value>过滤:</value>
+  </data>
+  <data name="tlSplit5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tlSplit5.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlInterecept.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="tlInterecept.Text" xml:space="preserve">
+    <value>已拦截:</value>
+  </data>
+  <data name="tlInterecept_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlInterecept_CNT.Text" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="&gt;&gt;gbClear.Name" xml:space="preserve">
     <value>gbClear</value>
@@ -1566,6 +1080,159 @@
   <data name="&gt;&gt;gbRight.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
+  <data name="&gt;&gt;cbReset_CNT.Name" xml:space="preserve">
+    <value>cbReset_CNT</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.Parent" xml:space="preserve">
+    <value>gbClear</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="gbClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>752, 9</value>
+  </data>
+  <data name="gbClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 100</value>
+  </data>
+  <data name="gbClear.TabIndex" type="System.Int32, mscorlib">
+    <value>41</value>
+  </data>
+  <data name="&gt;&gt;gbClear.Name" xml:space="preserve">
+    <value>gbClear</value>
+  </data>
+  <data name="&gt;&gt;gbClear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbClear.Parent" xml:space="preserve">
+    <value>gbRight</value>
+  </data>
+  <data name="&gt;&gt;gbClear.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbReset_CNT.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbReset_CNT.CheckAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopCenter</value>
+  </data>
+  <data name="cbReset_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="cbReset_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
+  </data>
+  <data name="cbReset_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>24, 86</value>
+  </data>
+  <data name="cbReset_CNT.TabIndex" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="cbReset_CNT.Text" xml:space="preserve">
+    <value>清
+空
+数
+据</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.Name" xml:space="preserve">
+    <value>cbReset_CNT</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.Parent" xml:space="preserve">
+    <value>gbClear</value>
+  </data>
+  <data name="&gt;&gt;cbReset_CNT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbSearchFrom.Name" xml:space="preserve">
+    <value>rbSearchFrom</value>
+  </data>
+  <data name="&gt;&gt;rbSearchFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbSearchFrom.Parent" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;rbSearchFrom.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbSearchAll.Name" xml:space="preserve">
+    <value>rbSearchAll</value>
+  </data>
+  <data name="&gt;&gt;rbSearchAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbSearchAll.Parent" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;rbSearchAll.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;bSearch.Name" xml:space="preserve">
+    <value>bSearch</value>
+  </data>
+  <data name="&gt;&gt;bSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSearch.Parent" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;bSearch.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Name" xml:space="preserve">
+    <value>txtSearch</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;lSearch.Name" xml:space="preserve">
+    <value>lSearch</value>
+  </data>
+  <data name="&gt;&gt;lSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSearch.Parent" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;lSearch.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="gbSearch.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="gbSearch.Location" type="System.Drawing.Point, System.Drawing">
+    <value>158, 417</value>
+  </data>
+  <data name="gbSearch.Size" type="System.Drawing.Size, System.Drawing">
+    <value>724, 51</value>
+  </data>
+  <data name="gbSearch.TabIndex" type="System.Int32, mscorlib">
+    <value>48</value>
+  </data>
+  <data name="&gt;&gt;gbSearch.Name" xml:space="preserve">
+    <value>gbSearch</value>
+  </data>
+  <data name="&gt;&gt;gbSearch.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSearch.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbSearch.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
   <data name="rbSearchFrom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1588,7 +1255,7 @@
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rbSearchFrom.Parent" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
+    <value>gbSearch</value>
   </data>
   <data name="&gt;&gt;rbSearchFrom.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -1615,7 +1282,7 @@
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;rbSearchAll.Parent" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
+    <value>gbSearch</value>
   </data>
   <data name="&gt;&gt;rbSearchAll.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -1639,7 +1306,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;bSearch.Parent" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
+    <value>gbSearch</value>
   </data>
   <data name="&gt;&gt;bSearch.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -1663,7 +1330,7 @@
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtSearch.Parent" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
+    <value>gbSearch</value>
   </data>
   <data name="&gt;&gt;txtSearch.ZOrder" xml:space="preserve">
     <value>3</value>
@@ -1690,34 +1357,10 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lSearch.Parent" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
+    <value>gbSearch</value>
   </data>
   <data name="&gt;&gt;lSearch.ZOrder" xml:space="preserve">
     <value>4</value>
-  </data>
-  <data name="gbSearch_Bottom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbSearch_Bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 417</value>
-  </data>
-  <data name="gbSearch_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>725, 51</value>
-  </data>
-  <data name="gbSearch_Bottom.TabIndex" type="System.Int32, mscorlib">
-    <value>48</value>
-  </data>
-  <data name="&gt;&gt;gbSearch_Bottom.Name" xml:space="preserve">
-    <value>gbSearch_Bottom</value>
-  </data>
-  <data name="&gt;&gt;gbSearch_Bottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSearch_Bottom.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;gbSearch_Bottom.ZOrder" xml:space="preserve">
-    <value>6</value>
   </data>
   <metadata name="cIndex.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -1798,6 +1441,45 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dgvSocketList.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
+    <value>dgvFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
+    <value>gbFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 417</value>
+  </data>
+  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>155, 224</value>
+  </data>
+  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>53</value>
+  </data>
+  <data name="gbFilterList.Text" xml:space="preserve">
+    <value>[ 滤镜列表 ]</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
+    <value>gbFilterList</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
   <metadata name="cIsCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -1830,6 +1512,42 @@
   <metadata name="cmsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>821, 17</value>
   </metadata>
+  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 166</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
+    <value>cmsFilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="dgvFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 4</value>
+  </data>
+  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 202</value>
+  </data>
+  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
+    <value>dgvFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
+    <value>gbFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="tsmiShowFilter.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>
@@ -1881,69 +1599,6 @@
   <data name="tsmiLoadFilterList.Text" xml:space="preserve">
     <value>加载滤镜列表</value>
   </data>
-  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 166</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
-    <value>cmsFilterList</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="dgvFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 202</value>
-  </data>
-  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
-    <value>dgvFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 417</value>
-  </data>
-  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 224</value>
-  </data>
-  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>53</value>
-  </data>
-  <data name="gbFilterList.Text" xml:space="preserve">
-    <value>[ 滤镜列表 ]</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
   <metadata name="bgwLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>139, 17</value>
   </metadata>
@@ -1972,11 +1627,341 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pbLoading.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <metadata name="bgwSocketInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>367, 17</value>
   </metadata>
+  <data name="tlpPacketInfo.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rtbPackInfo_Left.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbPackInfo_Left.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rtbPackInfo_Left.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 26</value>
+  </data>
+  <data name="rtbPackInfo_Left.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="rtbPackInfo_Left.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
+    <value>ForcedVertical</value>
+  </data>
+  <data name="rtbPackInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 107</value>
+  </data>
+  <data name="rtbPackInfo_Left.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="rtbPackInfo_Left.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbPackInfo_Left.Name" xml:space="preserve">
+    <value>rtbPackInfo_Left</value>
+  </data>
+  <data name="&gt;&gt;rtbPackInfo_Left.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbPackInfo_Left.Parent" xml:space="preserve">
+    <value>tlpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;rtbPackInfo_Left.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
+    <value>358, 26</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="rtbPacketInfo_Right.ScrollBars" type="System.Windows.Forms.RichTextBoxScrollBars, System.Windows.Forms">
+    <value>ForcedVertical</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 107</value>
+  </data>
+  <data name="rtbPacketInfo_Right.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rtbPacketInfo_Right.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbPacketInfo_Right.Name" xml:space="preserve">
+    <value>rtbPacketInfo_Right</value>
+  </data>
+  <data name="&gt;&gt;rtbPacketInfo_Right.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbPacketInfo_Right.Parent" xml:space="preserve">
+    <value>tlpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;rtbPacketInfo_Right.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cbPacketInfo_Left.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbPacketInfo_Left.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="cbPacketInfo_Left.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 1</value>
+  </data>
+  <data name="cbPacketInfo_Left.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="cbPacketInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 25</value>
+  </data>
+  <data name="cbPacketInfo_Left.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Left.Name" xml:space="preserve">
+    <value>cbPacketInfo_Left</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Left.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Left.Parent" xml:space="preserve">
+    <value>tlpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Left.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="cbPacketInfo_Right.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbPacketInfo_Right.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>System</value>
+  </data>
+  <data name="cbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
+    <value>358, 1</value>
+  </data>
+  <data name="cbPacketInfo_Right.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="cbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 25</value>
+  </data>
+  <data name="cbPacketInfo_Right.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Right.Name" xml:space="preserve">
+    <value>cbPacketInfo_Right</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Right.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Right.Parent" xml:space="preserve">
+    <value>tlpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;cbPacketInfo_Right.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpPacketInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpPacketInfo.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>714, 134</value>
+  </data>
+  <data name="tlpPacketInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo.Name" xml:space="preserve">
+    <value>tlpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo.Parent" xml:space="preserve">
+    <value>tpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpPacketInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rtbPackInfo_Left" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rtbPacketInfo_Right" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbPacketInfo_Left" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbPacketInfo_Right" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,19.40298,Percent,80.59702" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>714, 134</value>
+  </data>
+  <data name="tpPacketInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpPacketInfo.Text" xml:space="preserve">
+    <value>封包数据</value>
+  </data>
+  <data name="&gt;&gt;tpPacketInfo.Name" xml:space="preserve">
+    <value>tpPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpPacketInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpPacketInfo.Parent" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpPacketInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Name" xml:space="preserve">
+    <value>dgvLogList</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Parent" xml:space="preserve">
+    <value>tpSystemLog</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tpSystemLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>714, 134</value>
+  </data>
+  <data name="tpSystemLog.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tpSystemLog.Text" xml:space="preserve">
+    <value>系统日志</value>
+  </data>
+  <data name="&gt;&gt;tpSystemLog.Name" xml:space="preserve">
+    <value>tpSystemLog</value>
+  </data>
+  <data name="&gt;&gt;tpSystemLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpSystemLog.Parent" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpSystemLog.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcPacketInfo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tcPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tcPacketInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>722, 164</value>
+  </data>
+  <data name="tcPacketInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;tcPacketInfo.Name" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tcPacketInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcPacketInfo.Parent" xml:space="preserve">
+    <value>pPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tcPacketInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="pPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>158, 472</value>
+  </data>
+  <data name="pPacketInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="pPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>724, 166</value>
+  </data>
+  <data name="pPacketInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="&gt;&gt;pPacketInfo.Name" xml:space="preserve">
+    <value>pPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;pPacketInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pPacketInfo.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;pPacketInfo.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <metadata name="cTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cTime.HeaderText" xml:space="preserve">
+    <value>记录时间</value>
+  </data>
+  <data name="cTime.Width" type="System.Int32, mscorlib">
+    <value>80</value>
+  </data>
+  <metadata name="cFuncName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cFuncName.HeaderText" xml:space="preserve">
+    <value>模块</value>
+  </data>
+  <data name="cFuncName.Width" type="System.Int32, mscorlib">
+    <value>130</value>
+  </data>
+  <metadata name="cContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cContent.HeaderText" xml:space="preserve">
+    <value>日志内容</value>
+  </data>
+  <data name="dgvLogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvLogList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>714, 134</value>
+  </data>
+  <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Name" xml:space="preserve">
+    <value>dgvLogList</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Parent" xml:space="preserve">
+    <value>tpSystemLog</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

@@ -60,8 +60,16 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.Display_Send && !Socket_Cache.Interecept_Send)
                     {
-                        Socket_Cache.SocketQueue.Send_CNT++;
-                        Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);
+                        if (Socket_Operation.ISFilterSocketPacket(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res))
+                        {
+                            Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);
+                            Socket_Cache.SocketQueue.Send_CNT++;
+                        }
+                        else
+                        {
+                            Socket_Cache.SocketQueue.Filter_CNT++;
+                            
+                        }                        
                     }
                 }
 
@@ -108,7 +116,6 @@ namespace WPELibrary.Lib
                 else
                 {
                     stSocketType = Socket_Packet.SocketType.WSASend;
-
                     Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, (int)wsBuffer.len);
                 }
 
@@ -119,8 +126,15 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.Display_Send && !Socket_Cache.Interecept_Send)
                     {
-                        Socket_Cache.SocketQueue.Send_CNT++;                        
-                        Socket_Cache.SocketQueue.SocketToQueue(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesSent);                        
+                        if (Socket_Operation.ISFilterSocketPacket(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesSent))
+                        {                            
+                            Socket_Cache.SocketQueue.SocketToQueue(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesSent);
+                            Socket_Cache.SocketQueue.Send_CNT++;
+                        }
+                        else
+                        {
+                            Socket_Cache.SocketQueue.Filter_CNT++;
+                        }                      
                     }
                 }
 
@@ -171,8 +185,16 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.Display_SendTo)
                     {
-                        Socket_Cache.SocketQueue.Send_CNT++;                        
-                        Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, To, res);
+
+                        if (Socket_Operation.ISFilterSocketPacket(socket, buffer, length, stSocketType, To, res))
+                        {                            
+                            Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, To, res);
+                            Socket_Cache.SocketQueue.Send_CNT++;
+                        }
+                        else
+                        {
+                            Socket_Cache.SocketQueue.Filter_CNT++;
+                        }
                     }
                 }
 
@@ -218,13 +240,20 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
+                        stSocketType = Socket_Packet.SocketType.Recv;
                         Socket_Cache.SocketFilterList.DoFilter(buffer, length);
 
                         if (Socket_Cache.Display_Recv)
                         {
-                            Socket_Cache.SocketQueue.Recv_CNT++;
-                            stSocketType = Socket_Packet.SocketType.Recv;
-                            Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);
+                            if (Socket_Operation.ISFilterSocketPacket(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res))
+                            {                                
+                                Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);
+                                Socket_Cache.SocketQueue.Recv_CNT++;
+                            }
+                            else
+                            {
+                                Socket_Cache.SocketQueue.Filter_CNT++;
+                            }                            
                         }
                     }
 
@@ -276,13 +305,21 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
+                        stSocketType = Socket_Packet.SocketType.WSARecv;
                         Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
 
                         if (Socket_Cache.Display_Recv)
                         {
-                            Socket_Cache.SocketQueue.Recv_CNT++;
-                            stSocketType = Socket_Packet.SocketType.WSARecv;
-                            Socket_Cache.SocketQueue.SocketToQueue(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesRecvd);
+
+                            if (Socket_Operation.ISFilterSocketPacket(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesRecvd))
+                            {  
+                                Socket_Cache.SocketQueue.SocketToQueue(Socket, wsBuffer.buf, wsBuffer.len, stSocketType, new Socket_Packet.sockaddr(), BytesRecvd);
+                                Socket_Cache.SocketQueue.Recv_CNT++;
+                            }
+                            else
+                            {
+                                Socket_Cache.SocketQueue.Filter_CNT++;
+                            }                            
                         }
                     }
 
@@ -329,13 +366,20 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
+                        stSocketType = Socket_Packet.SocketType.RecvFrom;
                         Socket_Cache.SocketFilterList.DoFilter(buffer, length);
 
                         if (Socket_Cache.Display_RecvFrom)
                         {
-                            Socket_Cache.SocketQueue.Recv_CNT++;
-                            stSocketType = Socket_Packet.SocketType.RecvFrom;
-                            Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, from, res);
+                            if (Socket_Operation.ISFilterSocketPacket(socket, buffer, length, stSocketType, from, res))
+                            {  
+                                Socket_Cache.SocketQueue.SocketToQueue(socket, buffer, length, stSocketType, from, res);
+                                Socket_Cache.SocketQueue.Recv_CNT++;
+                            }
+                            else
+                            {
+                                Socket_Cache.SocketQueue.Filter_CNT++;
+                            }
                         }
                     }
 
@@ -368,14 +412,9 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (Environment.OSVersion.Version.Major >= 6)
-                {
-                    SetProcessDPIAware();
-                }
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Socket_Form(InArg));
+                Application.EnableVisualStyles();                
+                Application.SetCompatibleTextRenderingDefault(false);                
+                Application.Run(new Socket_Form(InArg));                
             }
             catch (Exception ex)
             {

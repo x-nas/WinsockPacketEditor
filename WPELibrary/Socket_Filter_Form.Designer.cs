@@ -29,19 +29,64 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Filter_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Filter_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dgvFilter = new System.Windows.Forms.DataGridView();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.bApply = new System.Windows.Forms.Button();
+            this.bReset = new System.Windows.Forms.Button();
             this.gbFilterName = new System.Windows.Forms.GroupBox();
             this.txtFilterName = new System.Windows.Forms.TextBox();
-            this.bReset = new System.Windows.Forms.Button();
-            this.bApply = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).BeginInit();
+            this.gbFilterList1 = new System.Windows.Forms.GroupBox();
+            this.dgvFilter = new System.Windows.Forms.DataGridView();
+            this.panel1.SuspendLayout();
             this.gbFilterName.SuspendLayout();
+            this.gbFilterList1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).BeginInit();
             this.SuspendLayout();
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.bApply);
+            this.panel1.Controls.Add(this.bReset);
+            this.panel1.Controls.Add(this.gbFilterName);
+            resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Name = "panel1";
+            // 
+            // bApply
+            // 
+            resources.ApplyResources(this.bApply, "bApply");
+            this.bApply.Name = "bApply";
+            this.bApply.UseVisualStyleBackColor = true;
+            this.bApply.Click += new System.EventHandler(this.bApply_Click);
+            // 
+            // bReset
+            // 
+            resources.ApplyResources(this.bReset, "bReset");
+            this.bReset.Name = "bReset";
+            this.bReset.UseVisualStyleBackColor = true;
+            this.bReset.Click += new System.EventHandler(this.bReset_Click);
+            // 
+            // gbFilterName
+            // 
+            this.gbFilterName.Controls.Add(this.txtFilterName);
+            resources.ApplyResources(this.gbFilterName, "gbFilterName");
+            this.gbFilterName.Name = "gbFilterName";
+            this.gbFilterName.TabStop = false;
+            // 
+            // txtFilterName
+            // 
+            resources.ApplyResources(this.txtFilterName, "txtFilterName");
+            this.txtFilterName.Name = "txtFilterName";
+            // 
+            // gbFilterList1
+            // 
+            this.gbFilterList1.Controls.Add(this.dgvFilter);
+            resources.ApplyResources(this.gbFilterList1, "gbFilterList1");
+            this.gbFilterList1.Name = "gbFilterList1";
+            this.gbFilterList1.TabStop = false;
             // 
             // dgvFilter
             // 
@@ -77,64 +122,40 @@ namespace WPELibrary
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilter.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvFilter.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.dgvFilter.RowHeadersVisible = false;
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFilter.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dgvFilter.RowTemplate.Height = 23;
+            this.dgvFilter.RowTemplate.Height = 30;
             this.dgvFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
             // 
-            // gbFilterName
-            // 
-            this.gbFilterName.Controls.Add(this.txtFilterName);
-            resources.ApplyResources(this.gbFilterName, "gbFilterName");
-            this.gbFilterName.Name = "gbFilterName";
-            this.gbFilterName.TabStop = false;
-            // 
-            // txtFilterName
-            // 
-            resources.ApplyResources(this.txtFilterName, "txtFilterName");
-            this.txtFilterName.Name = "txtFilterName";
-            // 
-            // bReset
-            // 
-            resources.ApplyResources(this.bReset, "bReset");
-            this.bReset.Name = "bReset";
-            this.bReset.UseVisualStyleBackColor = true;
-            this.bReset.Click += new System.EventHandler(this.bReset_Click);
-            // 
-            // bApply
-            // 
-            resources.ApplyResources(this.bApply, "bApply");
-            this.bApply.Name = "bApply";
-            this.bApply.UseVisualStyleBackColor = true;
-            this.bApply.Click += new System.EventHandler(this.bApply_Click);
-            // 
-            // Filter_Form
+            // Socket_Filter_Form
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.bApply);
-            this.Controls.Add(this.bReset);
-            this.Controls.Add(this.gbFilterName);
-            this.Controls.Add(this.dgvFilter);
+            this.Controls.Add(this.gbFilterList1);
+            this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Filter_Form";
+            this.Name = "Socket_Filter_Form";
             this.Load += new System.EventHandler(this.Filter_Form_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.gbFilterName.ResumeLayout(false);
             this.gbFilterName.PerformLayout();
+            this.gbFilterList1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFilter)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dgvFilter;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button bApply;
+        private System.Windows.Forms.Button bReset;
         private System.Windows.Forms.GroupBox gbFilterName;
         private System.Windows.Forms.TextBox txtFilterName;
-        private System.Windows.Forms.Button bReset;
-        private System.Windows.Forms.Button bApply;
+        private System.Windows.Forms.GroupBox gbFilterList1;
+        private System.Windows.Forms.DataGridView dgvFilter;
     }
 }

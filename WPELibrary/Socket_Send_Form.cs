@@ -23,10 +23,11 @@ namespace WPELibrary
         #region//窗体加载
         public Socket_Send_Form(int iSelectIndex)
         {
+            MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
+
             InitializeComponent();
 
             this.Select_Index = iSelectIndex;
-
             this.InitSocketSendDGV();
         }
 
@@ -36,11 +37,11 @@ namespace WPELibrary
             {
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-                
+
                 this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_42) + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
                 this.bSend.Enabled = true;
-                this.bSendStop.Enabled = false;
+                this.bSendStop.Enabled = false;                
 
                 this.InitSocketSendInfo();
                 this.ShowStepValue();
@@ -76,17 +77,15 @@ namespace WPELibrary
                         Width = 50,
                         MaxInputLength = 2
                     };
+
                     DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
                     dgvColumn.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
                     dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
 
                     dgvSocketSend.Columns.Add(dgvColumn);
                 }
-
-                dgvSocketSend.RowHeadersWidth = 120;
-                dgvSocketSend.Rows.Add();
                 
-                dgvSocketSend.Rows[0].HeaderCell.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43);
+                dgvSocketSend.Rows.Add();                
             }
             catch (Exception ex)
             {
@@ -103,7 +102,8 @@ namespace WPELibrary
                 this.txtSend_IP.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].To.Split(':')[0];
                 this.txtSend_Port.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].To.Split(':')[1];
 
-                string sData = Socket_Operation.Byte_To_Hex(Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer);
+                string sData = Socket_Operation.ByteToString("HEX", Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer);
+
                 ShowSocketSendData(sData);
             }
             catch (Exception ex)
