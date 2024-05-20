@@ -74,6 +74,8 @@ namespace WPELibrary
 
                 this.cbPacketInfo_Left.SelectedIndex = 0;
                 this.cbPacketInfo_Right.SelectedIndex = 1;
+                this.cbSearchType.SelectedIndex = 0;
+                this.cbSearchOrder.SelectedIndex = 0;
                 
                 string sInjectInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
                 this.tlSystemInfo.Text = sInjectInfo;
@@ -96,6 +98,9 @@ namespace WPELibrary
             try
             {
                 Socket_Operation.InitPacketFormat();
+                this.cbSearchType.DataSource = Socket_Operation.dtPacketFormat.Copy();
+                this.cbSearchType.ValueMember = "Key";
+                this.cbSearchType.DisplayMember = "Value";
                 this.cbPacketInfo_Left.DataSource = Socket_Operation.dtPacketFormat.Copy();
                 this.cbPacketInfo_Left.ValueMember = "Key";
                 this.cbPacketInfo_Left.DisplayMember = "Value";
@@ -132,36 +137,27 @@ namespace WPELibrary
         private void SetSocketParam()
         {
             try
-            {
-                Socket_Cache.Interecept_Recv = cbInterecept_Recv.Checked;
-                Socket_Cache.Interecept_RecvFrom = cbInterecept_RecvFrom.Checked;
-                Socket_Cache.Interecept_Send = cbInterecept_Send.Checked;
-                Socket_Cache.Interecept_SendTo = cbInterecept_SendTo.Checked;
-                Socket_Cache.Display_Recv = cbDisplay_Recv.Checked;
-                Socket_Cache.Display_RecvFrom = cbDisplay_RecvFrom.Checked;
-                Socket_Cache.Display_Send = cbDisplay_Send.Checked;
-                Socket_Cache.Display_SendTo = cbDisplay_SendTo.Checked;
-                Socket_Operation.IsCheck_Size = cbCheck_Size.Checked;
-                Socket_Operation.IsCheck_Socket = cbCheck_Socket.Checked;
-                Socket_Operation.IsCheck_IP = cbCheck_IP.Checked;
-                Socket_Operation.IsCheck_Packet = cbCheck_Packet.Checked;
-                Socket_Operation.Check_Size_From = this.txtCheck_Size_From.Text.Trim();
-                Socket_Operation.Check_Size_To = this.txtCheck_Size_To.Text.Trim();
-                Socket_Operation.Check_Socket_txt = this.txtCheck_Socket.Text.Trim();
-                Socket_Operation.Check_IP_txt = this.txtCheck_IP.Text.Trim();
-                Socket_Operation.Check_Packet_txt = this.txtCheck_Packet.Text.Trim();
-
-                if (cbReset_CNT.Checked)
-                {
-                    this.Select_Index = -1;
-
-                    this.rtbPackInfo_Left.Clear();
-                    this.rtbPacketInfo_Right.Clear();                    
-                    this.dgvSocketList.Rows.Clear();
-                    
-                    Socket_Cache.SocketQueue.ResetSocketQueue();
-                }
+            {  
+                Socket_Cache.Hook_Send = cbHook_Send.Checked;
+                Socket_Cache.Hook_SendTo = cbHook_SendTo.Checked;
+                Socket_Cache.Hook_Recv = cbHook_Recv.Checked;
+                Socket_Cache.Hook_RecvFrom = cbHook_RecvFrom.Checked;
+                Socket_Cache.Hook_WSASend = cbHook_WSASend.Checked;
+                Socket_Cache.Hook_WSASendTo = cbHook_WSASendTo.Checked;
+                Socket_Cache.Hook_WSARecv = cbHook_WSARecv.Checked;
+                Socket_Cache.Hook_WSARecvFrom = cbHook_WSARecvFrom.Checked;
                 
+                Socket_Cache.Check_Socket = cbCheck_Socket.Checked;
+                Socket_Cache.Check_IP = cbCheck_IP.Checked;
+                Socket_Cache.Check_Packet = cbCheck_Packet.Checked;
+                Socket_Cache.Check_Size = cbCheck_Size.Checked;
+
+                Socket_Cache.txtCheck_Socket = this.txtCheck_Socket.Text.Trim();
+                Socket_Cache.txtCheck_IP = this.txtCheck_IP.Text.Trim();
+                Socket_Cache.txtCheck_Packet = this.txtCheck_Packet.Text.Trim();
+                Socket_Cache.txtCheck_Size_From = this.nudCheck_Size_From.Value;
+                Socket_Cache.txtCheck_Size_To = this.nudCheck_Size_To.Value;                
+
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
             }
             catch (Exception ex)
@@ -172,77 +168,106 @@ namespace WPELibrary
         #endregion        
 
         #region//设置拦截选项
-        private void cbInterecept_Send_CheckedChanged(object sender, EventArgs e)
+
+        //Send
+        private void cbHook_Send_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Interecept_Send = this.cbInterecept_Send.Checked;            
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23) + Socket_Cache.Interecept_Send.ToString());
+            Socket_Cache.Hook_Send = this.cbHook_Send.Checked;            
         }
 
-        private void cbInterecept_SendTo_CheckedChanged(object sender, EventArgs e)
+        //SendTo
+        private void cbHook_SendTo_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Interecept_SendTo = this.cbInterecept_SendTo.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24) + Socket_Cache.Interecept_SendTo.ToString());
+            Socket_Cache.Hook_SendTo = this.cbHook_SendTo.Checked;            
         }
 
-        private void cbInterecept_Recv_CheckedChanged(object sender, EventArgs e)
+        //Recv
+        private void cbHook_Recv_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Interecept_Recv = this.cbInterecept_Recv.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25) + Socket_Cache.Interecept_Recv.ToString());
+            Socket_Cache.Hook_Recv = this.cbHook_Recv.Checked;            
         }
 
-        private void cbInterecept_RecvFrom_CheckedChanged(object sender, EventArgs e)
+        //RecvFrom
+        private void cbHook_RecvFrom_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Interecept_RecvFrom = this.cbInterecept_RecvFrom.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26) + Socket_Cache.Interecept_RecvFrom.ToString());
+            Socket_Cache.Hook_RecvFrom = this.cbHook_RecvFrom.Checked;            
         }
 
-        private void cbDisplay_Send_CheckedChanged(object sender, EventArgs e)
+        //WSASend
+        private void cbHook_WSASend_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Display_Send = this.cbDisplay_Send.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27) + Socket_Cache.Display_Send.ToString());
+            Socket_Cache.Hook_WSASend = this.cbHook_WSASend.Checked;
         }
 
-        private void cbDisplay_SendTo_CheckedChanged(object sender, EventArgs e)
+        //WSASendTo
+        private void cbHook_WSASendTo_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Display_SendTo = this.cbDisplay_SendTo.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28) + Socket_Cache.Display_SendTo.ToString());
+            Socket_Cache.Hook_WSASendTo = this.cbHook_WSASendTo.Checked;
         }
 
-        private void cbDisplay_Recv_CheckedChanged(object sender, EventArgs e)
+        //WSARecv
+        private void cbHook_WSARecv_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Display_Recv = this.cbDisplay_Recv.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29) + Socket_Cache.Display_Recv.ToString());
+            Socket_Cache.Hook_WSARecv = this.cbHook_WSARecv.Checked;
         }
 
-        private void cbDisplay_RecvFrom_CheckedChanged(object sender, EventArgs e)
+        //WSARecvFrom
+        private void cbHook_WSARecvFrom_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.Display_RecvFrom = this.cbDisplay_RecvFrom.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_30) + Socket_Cache.Display_RecvFrom.ToString());
+            Socket_Cache.Hook_WSARecvFrom = this.cbHook_WSARecvFrom.Checked;
         }
 
+        //过滤封包大小
         private void cbCheck_Size_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Operation.IsCheck_Size = this.cbCheck_Size.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31) + Socket_Operation.IsCheck_Size.ToString());
+            Socket_Cache.Check_Size = this.cbCheck_Size.Checked;            
         }
 
+        //过滤套接字
         private void cbCheck_Socket_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Operation.IsCheck_Socket = this.cbCheck_Socket.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32) + Socket_Operation.IsCheck_Socket.ToString());
+            Socket_Cache.Check_Socket = this.cbCheck_Socket.Checked;            
         }
 
+        //过滤IP
         private void cbCheck_IP_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Operation.IsCheck_IP = this.cbCheck_IP.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_33) + Socket_Operation.IsCheck_IP.ToString());
+            Socket_Cache.Check_IP = this.cbCheck_IP.Checked;            
         }
 
+        //过滤封包数据
         private void cbCheck_Packet_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Operation.IsCheck_Packet = this.cbCheck_Packet.Checked;
-            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_34) + Socket_Operation.IsCheck_Packet.ToString());
-        }        
+            Socket_Cache.Check_Packet = this.cbCheck_Packet.Checked;            
+        }
+
+        #endregion
+
+        #region//清空数据
+
+        private void bClear_Click(object sender, EventArgs e)
+        {
+            this.ClearSocketList();
+        }
+
+        private void ClearSocketList()
+        {
+            try
+            {
+                this.Select_Index = -1;
+
+                this.rtbPackInfo_Left.Clear();
+                this.rtbPacketInfo_Right.Clear();
+                this.dgvSocketList.Rows.Clear();
+
+                Socket_Cache.SocketQueue.ResetSocketQueue();
+            }
+            catch(Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//开始拦截
@@ -252,6 +277,8 @@ namespace WPELibrary
             {
                 this.SetSocketParam();
 
+                this.tlpFilterSet.Enabled = false;                                
+                this.gbHookType.Enabled = false;
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
 
@@ -277,6 +304,8 @@ namespace WPELibrary
         {
             try
             {
+                this.tlpFilterSet.Enabled = true;
+                this.gbHookType.Enabled = true;
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
 
@@ -299,8 +328,7 @@ namespace WPELibrary
                 this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_Packet.Count.ToString();
                 this.tlALL_CNT.Text = (Socket_Cache.SocketQueue.Recv_CNT + Socket_Cache.SocketQueue.Send_CNT).ToString();
                 this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
-                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
-                this.tlInterecept_CNT.Text = Socket_Cache.SocketQueue.Interecept_CNT.ToString();
+                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();                
                 this.tlCheck_CNT.Text = Socket_Cache.SocketQueue.Filter_CNT.ToString();
 
                 this.dgvFilterList.Refresh();
@@ -615,21 +643,23 @@ namespace WPELibrary
         #endregion
 
         #region//搜索按钮
-        private void bSearch_Click(object sender, EventArgs e)
+        private void bSearchData_Click(object sender, EventArgs e)
         {
             try
             {
                 int iFrom = 0;
-                string sSearch = this.txtSearch.Text.Trim();
+                string sSearchType = this.cbSearchType.SelectedValue.ToString();
+                string sSearchData = this.txtSearchData.Text.Trim();
+                int iSearchOrder = this.cbSearchOrder.SelectedIndex;
 
-                if (!string.IsNullOrEmpty(sSearch))
+                if (!string.IsNullOrEmpty(sSearchData))
                 {
-                    if (this.rbSearchFrom.Checked)
+                    if (iSearchOrder == 1)
                     {
                         iFrom = Select_Index + 1;
                     }
 
-                    int iIndex = Socket_Operation.SearchSocketListByHex(iFrom, sSearch);
+                    int iIndex = Socket_Operation.SearchSocketList(sSearchType, iFrom, sSearchData);
 
                     if (iIndex >= 0)
                     {
@@ -645,8 +675,6 @@ namespace WPELibrary
                 {                    
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_40));
                 }
-                                
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
             }
             catch (Exception ex)
             {

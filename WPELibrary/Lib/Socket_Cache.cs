@@ -9,54 +9,45 @@ using System.Reflection;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {        
-        public static bool Interecept_Recv, Interecept_RecvFrom, Interecept_Send, Interecept_SendTo;
-        public static bool Display_Recv, Display_RecvFrom, Display_Send, Display_SendTo;
+    {  
+        public static bool Hook_Send, Hook_SendTo, Hook_Recv, Hook_RecvFrom, Hook_WSASend, Hook_WSASendTo, Hook_WSARecv, Hook_WSARecvFrom;
+        public static bool Check_Size, Check_Socket, Check_IP, Check_Packet;
+        public static string txtCheck_Socket, txtCheck_IP, txtCheck_Packet;
+        public static decimal txtCheck_Size_From, txtCheck_Size_To;
 
         #region//封包队列
         public static class SocketQueue
-        {
-            public static int Interecept_CNT = 0;
+        {  
             public static int Filter_CNT = 0;
             public static int Recv_CNT = 0;
             public static int Send_CNT = 0;
 
             public static Queue<Socket_Packet> qSocket_Packet = new Queue<Socket_Packet>();
 
-            #region//封包入队列（多线程）
-            public static void SocketToQueue(int iSocket, IntPtr ipBuff, int iLen, Socket_Packet.SocketType sType, Socket_Packet.sockaddr sAddr, int iResLen)
-            {
-                try
-                {
-                    byte[] bBuffer = new byte[iResLen];
-                    Marshal.Copy(ipBuff, bBuffer, 0, iResLen);
+            #region//封包入队列
 
-                    Socket_Packet sp = new Socket_Packet(iSocket, ipBuff, iLen, sType, sAddr, bBuffer, iResLen);
-
-                    Thread tSocket_Queue = new Thread(new ParameterizedThreadStart(SocketToQueue_Thread));
-                    tSocket_Queue.Start(sp);
-                }
-                catch (Exception ex) 
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            private static void SocketToQueue_Thread(object ob)
+            public static void SocketToQueue_Thread(object ob)
             {
                 try
                 {
                     Socket_Packet sp = (Socket_Packet)ob;
 
-                    lock (qSocket_Packet)
+                    if (Socket_Operation.ISShowSocketPacket_ByFilter(sp))
                     {
-                        qSocket_Packet.Enqueue(sp);
+                        lock (qSocket_Packet)
+                        {
+                            qSocket_Packet.Enqueue(sp);
+                        }
+                    }
+                    else
+                    {
+                        Filter_CNT++;
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }              
+                }                
             }
 
             #endregion
@@ -65,8 +56,7 @@ namespace WPELibrary.Lib
             public static void ResetSocketQueue()
             {
                 try
-                {
-                    Interecept_CNT = 0;
+                {                    
                     Filter_CNT = 0;
                     Recv_CNT = 0;
                     Send_CNT = 0;
@@ -128,44 +118,48 @@ namespace WPELibrary.Lib
                         string sIP_From = "", sIP_To = "";
 
                         switch (sType)
-                        {
-                            case Socket_Packet.SocketType.Recv:
-
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-
-                                break;
-                            case Socket_Packet.SocketType.WSARecv:
-
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-
-                                break;
+                        {  
                             case Socket_Packet.SocketType.Send:
-
+                                SocketQueue.Send_CNT++;
                                 sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
                                 sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-
-                                break;
-                            case Socket_Packet.SocketType.WSASend:
-
-                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
-
                                 break;
                             case Socket_Packet.SocketType.SendTo:
-
+                                SocketQueue.Send_CNT++;
                                 sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
                                 sIP_To = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
-
+                                break;
+                            case Socket_Packet.SocketType.Recv:
+                                SocketQueue.Recv_CNT++;
+                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
                                 break;
                             case Socket_Packet.SocketType.RecvFrom:
-
+                                SocketQueue.Recv_CNT++;
                                 sIP_From = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
                                 sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
-
                                 break;
-                        }
+                            case Socket_Packet.SocketType.WSASend:
+                                SocketQueue.Send_CNT++;
+                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+                                break;
+                            case Socket_Packet.SocketType.WSASendTo:
+                                SocketQueue.Send_CNT++;
+                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                sIP_To = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
+                                break;
+                            case Socket_Packet.SocketType.WSARecv:
+                                SocketQueue.Recv_CNT++;
+                                sIP_From = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.To);
+                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                break;
+                            case Socket_Packet.SocketType.WSARecvFrom:
+                                SocketQueue.Recv_CNT++;
+                                sIP_From = Socket_Operation.GetSocketIP(sAddr.sin_addr, sAddr.sin_port);
+                                sIP_To = Socket_Operation.GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                                break;
+                        }                     
 
                         Socket_Packet_Info spi = new Socket_Packet_Info(iIndex, sType, iSocket, sIP_From, sIP_To, iResLen, sData, bBuffer);
                         RecSocketPacket?.Invoke(spi);

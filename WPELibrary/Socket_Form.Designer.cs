@@ -32,34 +32,16 @@ namespace WPELibrary
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.cbDisplay_SendTo = new System.Windows.Forms.CheckBox();
-            this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
-            this.bStopHook = new System.Windows.Forms.Button();
-            this.txtCheck_IP = new System.Windows.Forms.TextBox();
-            this.cbDisplay_RecvFrom = new System.Windows.Forms.CheckBox();
-            this.cbCheck_Size = new System.Windows.Forms.CheckBox();
-            this.txtCheck_Size_From = new System.Windows.Forms.TextBox();
-            this.txtCheck_Size_To = new System.Windows.Forms.TextBox();
-            this.cbInterecept_Recv = new System.Windows.Forms.CheckBox();
-            this.cbInterecept_SendTo = new System.Windows.Forms.CheckBox();
-            this.lSplit = new System.Windows.Forms.Label();
-            this.txtCheck_Packet = new System.Windows.Forms.TextBox();
-            this.gbFilter_Size = new System.Windows.Forms.GroupBox();
-            this.gbFilter_Type = new System.Windows.Forms.GroupBox();
-            this.cbInterecept_RecvFrom = new System.Windows.Forms.CheckBox();
-            this.cbInterecept_Send = new System.Windows.Forms.CheckBox();
-            this.cbDisplay_Recv = new System.Windows.Forms.CheckBox();
-            this.cbDisplay_Send = new System.Windows.Forms.CheckBox();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
@@ -70,10 +52,6 @@ namespace WPELibrary
             this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
-            this.bStartHook = new System.Windows.Forms.Button();
-            this.txtCheck_Socket = new System.Windows.Forms.TextBox();
-            this.cbCheck_Socket = new System.Windows.Forms.CheckBox();
-            this.cbCheck_IP = new System.Windows.Forms.CheckBox();
             this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiSend = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -101,26 +79,39 @@ namespace WPELibrary
             this.tlRecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlCheck = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSplit5 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlInterecept = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlInterecept_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.gbRight = new System.Windows.Forms.GroupBox();
-            this.gbClear = new System.Windows.Forms.GroupBox();
-            this.cbReset_CNT = new System.Windows.Forms.CheckBox();
-            this.gbSearch = new System.Windows.Forms.GroupBox();
-            this.rbSearchFrom = new System.Windows.Forms.RadioButton();
-            this.rbSearchAll = new System.Windows.Forms.RadioButton();
-            this.bSearch = new System.Windows.Forms.Button();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.lSearch = new System.Windows.Forms.Label();
+            this.gbFilterSet = new System.Windows.Forms.GroupBox();
+            this.tlpClear = new System.Windows.Forms.TableLayoutPanel();
+            this.bClear = new System.Windows.Forms.Button();
+            this.tlpHook = new System.Windows.Forms.TableLayoutPanel();
+            this.bStartHook = new System.Windows.Forms.Button();
+            this.bStopHook = new System.Windows.Forms.Button();
+            this.gbHookType = new System.Windows.Forms.GroupBox();
+            this.tlpHookType = new System.Windows.Forms.TableLayoutPanel();
+            this.cbHook_RecvFrom = new System.Windows.Forms.CheckBox();
+            this.cbHook_Send = new System.Windows.Forms.CheckBox();
+            this.cbHook_SendTo = new System.Windows.Forms.CheckBox();
+            this.cbHook_Recv = new System.Windows.Forms.CheckBox();
+            this.cbHook_WSASend = new System.Windows.Forms.CheckBox();
+            this.cbHook_WSASendTo = new System.Windows.Forms.CheckBox();
+            this.cbHook_WSARecv = new System.Windows.Forms.CheckBox();
+            this.cbHook_WSARecvFrom = new System.Windows.Forms.CheckBox();
+            this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
+            this.cbCheck_Socket = new System.Windows.Forms.CheckBox();
+            this.cbCheck_IP = new System.Windows.Forms.CheckBox();
+            this.txtCheck_Socket = new System.Windows.Forms.TextBox();
+            this.txtCheck_IP = new System.Windows.Forms.TextBox();
+            this.txtCheck_Packet = new System.Windows.Forms.TextBox();
+            this.cbCheck_Size = new System.Windows.Forms.CheckBox();
+            this.nudCheck_Size_From = new System.Windows.Forms.NumericUpDown();
+            this.nudCheck_Size_To = new System.Windows.Forms.NumericUpDown();
+            this.gbSearchData = new System.Windows.Forms.GroupBox();
+            this.tlpSearchData = new System.Windows.Forms.TableLayoutPanel();
+            this.bSearchData = new System.Windows.Forms.Button();
+            this.txtSearchData = new System.Windows.Forms.TextBox();
+            this.cbSearchType = new System.Windows.Forms.ComboBox();
+            this.cbSearchOrder = new System.Windows.Forms.ComboBox();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
-            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.dgvFilterList = new System.Windows.Forms.DataGridView();
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -140,7 +131,6 @@ namespace WPELibrary
             this.tsmiLoadFilterList = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
-            this.pbLoading = new System.Windows.Forms.PictureBox();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.pPacketInfo = new System.Windows.Forms.Panel();
             this.tcPacketInfo = new System.Windows.Forms.TabControl();
@@ -155,160 +145,39 @@ namespace WPELibrary
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.gbFilter_Size.SuspendLayout();
-            this.gbFilter_Type.SuspendLayout();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
+            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList.SuspendLayout();
             this.cmsSocketList.SuspendLayout();
             this.ssStatusInfo_Top.SuspendLayout();
-            this.gbRight.SuspendLayout();
-            this.gbClear.SuspendLayout();
-            this.gbSearch.SuspendLayout();
+            this.gbFilterSet.SuspendLayout();
+            this.tlpClear.SuspendLayout();
+            this.tlpHook.SuspendLayout();
+            this.gbHookType.SuspendLayout();
+            this.tlpHookType.SuspendLayout();
+            this.tlpFilterSet.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).BeginInit();
+            this.gbSearchData.SuspendLayout();
+            this.tlpSearchData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.gbFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
             this.cmsFilterList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.pPacketInfo.SuspendLayout();
             this.tcPacketInfo.SuspendLayout();
             this.tpPacketInfo.SuspendLayout();
             this.tlpPacketInfo.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
-            // 
-            // cbDisplay_SendTo
-            // 
-            resources.ApplyResources(this.cbDisplay_SendTo, "cbDisplay_SendTo");
-            this.cbDisplay_SendTo.Checked = true;
-            this.cbDisplay_SendTo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_SendTo.Name = "cbDisplay_SendTo";
-            this.cbDisplay_SendTo.UseVisualStyleBackColor = true;
-            this.cbDisplay_SendTo.CheckedChanged += new System.EventHandler(this.cbDisplay_SendTo_CheckedChanged);
-            // 
-            // cbCheck_Packet
-            // 
-            resources.ApplyResources(this.cbCheck_Packet, "cbCheck_Packet");
-            this.cbCheck_Packet.Name = "cbCheck_Packet";
-            this.cbCheck_Packet.UseVisualStyleBackColor = true;
-            this.cbCheck_Packet.CheckedChanged += new System.EventHandler(this.cbCheck_Packet_CheckedChanged);
-            // 
-            // bStopHook
-            // 
-            resources.ApplyResources(this.bStopHook, "bStopHook");
-            this.bStopHook.Name = "bStopHook";
-            this.bStopHook.UseVisualStyleBackColor = true;
-            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
-            // 
-            // txtCheck_IP
-            // 
-            resources.ApplyResources(this.txtCheck_IP, "txtCheck_IP");
-            this.txtCheck_IP.Name = "txtCheck_IP";
-            // 
-            // cbDisplay_RecvFrom
-            // 
-            resources.ApplyResources(this.cbDisplay_RecvFrom, "cbDisplay_RecvFrom");
-            this.cbDisplay_RecvFrom.Checked = true;
-            this.cbDisplay_RecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_RecvFrom.Name = "cbDisplay_RecvFrom";
-            this.cbDisplay_RecvFrom.UseVisualStyleBackColor = true;
-            this.cbDisplay_RecvFrom.CheckedChanged += new System.EventHandler(this.cbDisplay_RecvFrom_CheckedChanged);
-            // 
-            // cbCheck_Size
-            // 
-            resources.ApplyResources(this.cbCheck_Size, "cbCheck_Size");
-            this.cbCheck_Size.Name = "cbCheck_Size";
-            this.cbCheck_Size.UseVisualStyleBackColor = true;
-            this.cbCheck_Size.CheckedChanged += new System.EventHandler(this.cbCheck_Size_CheckedChanged);
-            // 
-            // txtCheck_Size_From
-            // 
-            resources.ApplyResources(this.txtCheck_Size_From, "txtCheck_Size_From");
-            this.txtCheck_Size_From.Name = "txtCheck_Size_From";
-            // 
-            // txtCheck_Size_To
-            // 
-            resources.ApplyResources(this.txtCheck_Size_To, "txtCheck_Size_To");
-            this.txtCheck_Size_To.Name = "txtCheck_Size_To";
-            // 
-            // cbInterecept_Recv
-            // 
-            resources.ApplyResources(this.cbInterecept_Recv, "cbInterecept_Recv");
-            this.cbInterecept_Recv.Name = "cbInterecept_Recv";
-            this.cbInterecept_Recv.UseVisualStyleBackColor = true;
-            this.cbInterecept_Recv.CheckedChanged += new System.EventHandler(this.cbInterecept_Recv_CheckedChanged);
-            // 
-            // cbInterecept_SendTo
-            // 
-            resources.ApplyResources(this.cbInterecept_SendTo, "cbInterecept_SendTo");
-            this.cbInterecept_SendTo.Name = "cbInterecept_SendTo";
-            this.cbInterecept_SendTo.UseVisualStyleBackColor = true;
-            this.cbInterecept_SendTo.CheckedChanged += new System.EventHandler(this.cbInterecept_SendTo_CheckedChanged);
-            // 
-            // lSplit
-            // 
-            resources.ApplyResources(this.lSplit, "lSplit");
-            this.lSplit.Name = "lSplit";
-            // 
-            // txtCheck_Packet
-            // 
-            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
-            this.txtCheck_Packet.Name = "txtCheck_Packet";
-            // 
-            // gbFilter_Size
-            // 
-            this.gbFilter_Size.Controls.Add(this.cbCheck_Size);
-            this.gbFilter_Size.Controls.Add(this.txtCheck_Size_From);
-            this.gbFilter_Size.Controls.Add(this.txtCheck_Size_To);
-            this.gbFilter_Size.Controls.Add(this.lSplit);
-            resources.ApplyResources(this.gbFilter_Size, "gbFilter_Size");
-            this.gbFilter_Size.Name = "gbFilter_Size";
-            this.gbFilter_Size.TabStop = false;
-            // 
-            // gbFilter_Type
-            // 
-            this.gbFilter_Type.Controls.Add(this.cbInterecept_RecvFrom);
-            this.gbFilter_Type.Controls.Add(this.cbInterecept_Recv);
-            this.gbFilter_Type.Controls.Add(this.cbInterecept_SendTo);
-            this.gbFilter_Type.Controls.Add(this.cbInterecept_Send);
-            this.gbFilter_Type.Controls.Add(this.cbDisplay_RecvFrom);
-            this.gbFilter_Type.Controls.Add(this.cbDisplay_Recv);
-            this.gbFilter_Type.Controls.Add(this.cbDisplay_SendTo);
-            this.gbFilter_Type.Controls.Add(this.cbDisplay_Send);
-            resources.ApplyResources(this.gbFilter_Type, "gbFilter_Type");
-            this.gbFilter_Type.Name = "gbFilter_Type";
-            this.gbFilter_Type.TabStop = false;
-            // 
-            // cbInterecept_RecvFrom
-            // 
-            resources.ApplyResources(this.cbInterecept_RecvFrom, "cbInterecept_RecvFrom");
-            this.cbInterecept_RecvFrom.Name = "cbInterecept_RecvFrom";
-            this.cbInterecept_RecvFrom.UseVisualStyleBackColor = true;
-            this.cbInterecept_RecvFrom.CheckedChanged += new System.EventHandler(this.cbInterecept_RecvFrom_CheckedChanged);
-            // 
-            // cbInterecept_Send
-            // 
-            resources.ApplyResources(this.cbInterecept_Send, "cbInterecept_Send");
-            this.cbInterecept_Send.Name = "cbInterecept_Send";
-            this.cbInterecept_Send.UseVisualStyleBackColor = true;
-            this.cbInterecept_Send.CheckedChanged += new System.EventHandler(this.cbInterecept_Send_CheckedChanged);
-            // 
-            // cbDisplay_Recv
-            // 
-            resources.ApplyResources(this.cbDisplay_Recv, "cbDisplay_Recv");
-            this.cbDisplay_Recv.Checked = true;
-            this.cbDisplay_Recv.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_Recv.Name = "cbDisplay_Recv";
-            this.cbDisplay_Recv.UseVisualStyleBackColor = true;
-            this.cbDisplay_Recv.CheckedChanged += new System.EventHandler(this.cbDisplay_Recv_CheckedChanged);
-            // 
-            // cbDisplay_Send
-            // 
-            resources.ApplyResources(this.cbDisplay_Send, "cbDisplay_Send");
-            this.cbDisplay_Send.Checked = true;
-            this.cbDisplay_Send.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDisplay_Send.Name = "cbDisplay_Send";
-            this.cbDisplay_Send.UseVisualStyleBackColor = true;
-            this.cbDisplay_Send.CheckedChanged += new System.EventHandler(this.cbDisplay_Send_CheckedChanged);
             // 
             // cmsLogList
             // 
@@ -366,32 +235,6 @@ namespace WPELibrary
             // tSocketInfo
             // 
             this.tSocketInfo.Tick += new System.EventHandler(this.tSocketInfo_Tick);
-            // 
-            // bStartHook
-            // 
-            resources.ApplyResources(this.bStartHook, "bStartHook");
-            this.bStartHook.Name = "bStartHook";
-            this.bStartHook.UseVisualStyleBackColor = true;
-            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
-            // 
-            // txtCheck_Socket
-            // 
-            resources.ApplyResources(this.txtCheck_Socket, "txtCheck_Socket");
-            this.txtCheck_Socket.Name = "txtCheck_Socket";
-            // 
-            // cbCheck_Socket
-            // 
-            resources.ApplyResources(this.cbCheck_Socket, "cbCheck_Socket");
-            this.cbCheck_Socket.Name = "cbCheck_Socket";
-            this.cbCheck_Socket.UseVisualStyleBackColor = true;
-            this.cbCheck_Socket.CheckedChanged += new System.EventHandler(this.cbCheck_Socket_CheckedChanged);
-            // 
-            // cbCheck_IP
-            // 
-            resources.ApplyResources(this.cbCheck_IP, "cbCheck_IP");
-            this.cbCheck_IP.Name = "cbCheck_IP";
-            this.cbCheck_IP.UseVisualStyleBackColor = true;
-            this.cbCheck_IP.CheckedChanged += new System.EventHandler(this.cbCheck_IP_CheckedChanged);
             // 
             // cmsSocketList
             // 
@@ -456,8 +299,8 @@ namespace WPELibrary
             // 
             // tlCheck_CNT
             // 
-            this.tlCheck_CNT.Name = "tlCheck_CNT";
             resources.ApplyResources(this.tlCheck_CNT, "tlCheck_CNT");
+            this.tlCheck_CNT.Name = "tlCheck_CNT";
             // 
             // ssStatusInfo_Top
             // 
@@ -478,10 +321,7 @@ namespace WPELibrary
             this.tlRecv_CNT,
             this.tlSplit4,
             this.tlCheck,
-            this.tlCheck_CNT,
-            this.tlSplit5,
-            this.tlInterecept,
-            this.tlInterecept_CNT});
+            this.tlCheck_CNT});
             this.ssStatusInfo_Top.Name = "ssStatusInfo_Top";
             this.ssStatusInfo_Top.SizingGrip = false;
             // 
@@ -520,8 +360,8 @@ namespace WPELibrary
             // 
             // tlQueue_CNT
             // 
-            this.tlQueue_CNT.Name = "tlQueue_CNT";
             resources.ApplyResources(this.tlQueue_CNT, "tlQueue_CNT");
+            this.tlQueue_CNT.Name = "tlQueue_CNT";
             // 
             // tlSplit2
             // 
@@ -536,8 +376,8 @@ namespace WPELibrary
             // 
             // tlSend_CNT
             // 
-            this.tlSend_CNT.Name = "tlSend_CNT";
             resources.ApplyResources(this.tlSend_CNT, "tlSend_CNT");
+            this.tlSend_CNT.Name = "tlSend_CNT";
             // 
             // tlSplit3
             // 
@@ -552,8 +392,8 @@ namespace WPELibrary
             // 
             // tlRecv_CNT
             // 
-            this.tlRecv_CNT.Name = "tlRecv_CNT";
             resources.ApplyResources(this.tlRecv_CNT, "tlRecv_CNT");
+            this.tlRecv_CNT.Name = "tlRecv_CNT";
             // 
             // tlSplit4
             // 
@@ -566,95 +406,268 @@ namespace WPELibrary
             this.tlCheck.Name = "tlCheck";
             resources.ApplyResources(this.tlCheck, "tlCheck");
             // 
-            // tlSplit5
+            // gbFilterSet
             // 
-            this.tlSplit5.ForeColor = System.Drawing.Color.DarkGray;
-            this.tlSplit5.Name = "tlSplit5";
-            resources.ApplyResources(this.tlSplit5, "tlSplit5");
+            this.gbFilterSet.Controls.Add(this.tlpClear);
+            this.gbFilterSet.Controls.Add(this.tlpHook);
+            this.gbFilterSet.Controls.Add(this.gbHookType);
+            this.gbFilterSet.Controls.Add(this.tlpFilterSet);
+            resources.ApplyResources(this.gbFilterSet, "gbFilterSet");
+            this.gbFilterSet.Name = "gbFilterSet";
+            this.gbFilterSet.TabStop = false;
             // 
-            // tlInterecept
+            // tlpClear
             // 
-            this.tlInterecept.Name = "tlInterecept";
-            resources.ApplyResources(this.tlInterecept, "tlInterecept");
+            resources.ApplyResources(this.tlpClear, "tlpClear");
+            this.tlpClear.Controls.Add(this.bClear, 0, 0);
+            this.tlpClear.Name = "tlpClear";
             // 
-            // tlInterecept_CNT
+            // bClear
             // 
-            this.tlInterecept_CNT.Name = "tlInterecept_CNT";
-            resources.ApplyResources(this.tlInterecept_CNT, "tlInterecept_CNT");
+            resources.ApplyResources(this.bClear, "bClear");
+            this.bClear.Name = "bClear";
+            this.bClear.UseVisualStyleBackColor = true;
+            this.bClear.Click += new System.EventHandler(this.bClear_Click);
             // 
-            // gbRight
+            // tlpHook
             // 
-            this.gbRight.Controls.Add(this.gbClear);
-            this.gbRight.Controls.Add(this.txtCheck_Packet);
-            this.gbRight.Controls.Add(this.gbFilter_Size);
-            this.gbRight.Controls.Add(this.cbCheck_Packet);
-            this.gbRight.Controls.Add(this.bStopHook);
-            this.gbRight.Controls.Add(this.txtCheck_IP);
-            this.gbRight.Controls.Add(this.gbFilter_Type);
-            this.gbRight.Controls.Add(this.cbCheck_IP);
-            this.gbRight.Controls.Add(this.bStartHook);
-            this.gbRight.Controls.Add(this.txtCheck_Socket);
-            this.gbRight.Controls.Add(this.cbCheck_Socket);
-            resources.ApplyResources(this.gbRight, "gbRight");
-            this.gbRight.Name = "gbRight";
-            this.gbRight.TabStop = false;
+            resources.ApplyResources(this.tlpHook, "tlpHook");
+            this.tlpHook.Controls.Add(this.bStartHook, 0, 0);
+            this.tlpHook.Controls.Add(this.bStopHook, 0, 2);
+            this.tlpHook.Name = "tlpHook";
             // 
-            // gbClear
+            // bStartHook
             // 
-            this.gbClear.Controls.Add(this.cbReset_CNT);
-            resources.ApplyResources(this.gbClear, "gbClear");
-            this.gbClear.Name = "gbClear";
-            this.gbClear.TabStop = false;
+            resources.ApplyResources(this.bStartHook, "bStartHook");
+            this.bStartHook.Name = "bStartHook";
+            this.bStartHook.UseVisualStyleBackColor = true;
+            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
             // 
-            // cbReset_CNT
+            // bStopHook
             // 
-            resources.ApplyResources(this.cbReset_CNT, "cbReset_CNT");
-            this.cbReset_CNT.Checked = true;
-            this.cbReset_CNT.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbReset_CNT.Name = "cbReset_CNT";
-            this.cbReset_CNT.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.bStopHook, "bStopHook");
+            this.bStopHook.Name = "bStopHook";
+            this.bStopHook.UseVisualStyleBackColor = true;
+            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
             // 
-            // gbSearch
+            // gbHookType
             // 
-            this.gbSearch.Controls.Add(this.rbSearchFrom);
-            this.gbSearch.Controls.Add(this.rbSearchAll);
-            this.gbSearch.Controls.Add(this.bSearch);
-            this.gbSearch.Controls.Add(this.txtSearch);
-            this.gbSearch.Controls.Add(this.lSearch);
-            resources.ApplyResources(this.gbSearch, "gbSearch");
-            this.gbSearch.Name = "gbSearch";
-            this.gbSearch.TabStop = false;
+            this.gbHookType.Controls.Add(this.tlpHookType);
+            resources.ApplyResources(this.gbHookType, "gbHookType");
+            this.gbHookType.Name = "gbHookType";
+            this.gbHookType.TabStop = false;
             // 
-            // rbSearchFrom
+            // tlpHookType
             // 
-            resources.ApplyResources(this.rbSearchFrom, "rbSearchFrom");
-            this.rbSearchFrom.Checked = true;
-            this.rbSearchFrom.Name = "rbSearchFrom";
-            this.rbSearchFrom.TabStop = true;
-            this.rbSearchFrom.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.tlpHookType, "tlpHookType");
+            this.tlpHookType.Controls.Add(this.cbHook_RecvFrom, 1, 3);
+            this.tlpHookType.Controls.Add(this.cbHook_Send, 1, 0);
+            this.tlpHookType.Controls.Add(this.cbHook_SendTo, 1, 1);
+            this.tlpHookType.Controls.Add(this.cbHook_Recv, 1, 2);
+            this.tlpHookType.Controls.Add(this.cbHook_WSASend, 2, 0);
+            this.tlpHookType.Controls.Add(this.cbHook_WSASendTo, 2, 1);
+            this.tlpHookType.Controls.Add(this.cbHook_WSARecv, 2, 2);
+            this.tlpHookType.Controls.Add(this.cbHook_WSARecvFrom, 2, 3);
+            this.tlpHookType.Name = "tlpHookType";
             // 
-            // rbSearchAll
+            // cbHook_RecvFrom
             // 
-            resources.ApplyResources(this.rbSearchAll, "rbSearchAll");
-            this.rbSearchAll.Name = "rbSearchAll";
-            this.rbSearchAll.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHook_RecvFrom, "cbHook_RecvFrom");
+            this.cbHook_RecvFrom.Checked = true;
+            this.cbHook_RecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_RecvFrom.Name = "cbHook_RecvFrom";
+            this.cbHook_RecvFrom.UseVisualStyleBackColor = true;
+            this.cbHook_RecvFrom.CheckedChanged += new System.EventHandler(this.cbHook_RecvFrom_CheckedChanged);
             // 
-            // bSearch
+            // cbHook_Send
             // 
-            resources.ApplyResources(this.bSearch, "bSearch");
-            this.bSearch.Name = "bSearch";
-            this.bSearch.UseVisualStyleBackColor = true;
-            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
+            resources.ApplyResources(this.cbHook_Send, "cbHook_Send");
+            this.cbHook_Send.Checked = true;
+            this.cbHook_Send.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_Send.Name = "cbHook_Send";
+            this.cbHook_Send.UseVisualStyleBackColor = true;
+            this.cbHook_Send.CheckedChanged += new System.EventHandler(this.cbHook_Send_CheckedChanged);
             // 
-            // txtSearch
+            // cbHook_SendTo
             // 
-            resources.ApplyResources(this.txtSearch, "txtSearch");
-            this.txtSearch.Name = "txtSearch";
+            resources.ApplyResources(this.cbHook_SendTo, "cbHook_SendTo");
+            this.cbHook_SendTo.Checked = true;
+            this.cbHook_SendTo.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_SendTo.Name = "cbHook_SendTo";
+            this.cbHook_SendTo.UseVisualStyleBackColor = true;
+            this.cbHook_SendTo.CheckedChanged += new System.EventHandler(this.cbHook_SendTo_CheckedChanged);
             // 
-            // lSearch
+            // cbHook_Recv
             // 
-            resources.ApplyResources(this.lSearch, "lSearch");
-            this.lSearch.Name = "lSearch";
+            resources.ApplyResources(this.cbHook_Recv, "cbHook_Recv");
+            this.cbHook_Recv.Checked = true;
+            this.cbHook_Recv.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_Recv.Name = "cbHook_Recv";
+            this.cbHook_Recv.UseVisualStyleBackColor = true;
+            this.cbHook_Recv.CheckedChanged += new System.EventHandler(this.cbHook_Recv_CheckedChanged);
+            // 
+            // cbHook_WSASend
+            // 
+            resources.ApplyResources(this.cbHook_WSASend, "cbHook_WSASend");
+            this.cbHook_WSASend.Checked = true;
+            this.cbHook_WSASend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_WSASend.Name = "cbHook_WSASend";
+            this.cbHook_WSASend.UseVisualStyleBackColor = true;
+            this.cbHook_WSASend.CheckedChanged += new System.EventHandler(this.cbHook_WSASend_CheckedChanged);
+            // 
+            // cbHook_WSASendTo
+            // 
+            resources.ApplyResources(this.cbHook_WSASendTo, "cbHook_WSASendTo");
+            this.cbHook_WSASendTo.Checked = true;
+            this.cbHook_WSASendTo.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_WSASendTo.Name = "cbHook_WSASendTo";
+            this.cbHook_WSASendTo.UseVisualStyleBackColor = true;
+            this.cbHook_WSASendTo.CheckedChanged += new System.EventHandler(this.cbHook_WSASendTo_CheckedChanged);
+            // 
+            // cbHook_WSARecv
+            // 
+            resources.ApplyResources(this.cbHook_WSARecv, "cbHook_WSARecv");
+            this.cbHook_WSARecv.Checked = true;
+            this.cbHook_WSARecv.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_WSARecv.Name = "cbHook_WSARecv";
+            this.cbHook_WSARecv.UseVisualStyleBackColor = true;
+            this.cbHook_WSARecv.CheckedChanged += new System.EventHandler(this.cbHook_WSARecv_CheckedChanged);
+            // 
+            // cbHook_WSARecvFrom
+            // 
+            resources.ApplyResources(this.cbHook_WSARecvFrom, "cbHook_WSARecvFrom");
+            this.cbHook_WSARecvFrom.Checked = true;
+            this.cbHook_WSARecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHook_WSARecvFrom.Name = "cbHook_WSARecvFrom";
+            this.cbHook_WSARecvFrom.UseVisualStyleBackColor = true;
+            this.cbHook_WSARecvFrom.CheckedChanged += new System.EventHandler(this.cbHook_WSARecvFrom_CheckedChanged);
+            // 
+            // tlpFilterSet
+            // 
+            resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
+            this.tlpFilterSet.Controls.Add(this.cbCheck_Packet, 1, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheck_Socket, 1, 0);
+            this.tlpFilterSet.Controls.Add(this.cbCheck_IP, 1, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheck_Socket, 2, 0);
+            this.tlpFilterSet.Controls.Add(this.txtCheck_IP, 2, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheck_Packet, 2, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheck_Size, 4, 0);
+            this.tlpFilterSet.Controls.Add(this.nudCheck_Size_From, 4, 1);
+            this.tlpFilterSet.Controls.Add(this.nudCheck_Size_To, 4, 2);
+            this.tlpFilterSet.Name = "tlpFilterSet";
+            // 
+            // cbCheck_Packet
+            // 
+            resources.ApplyResources(this.cbCheck_Packet, "cbCheck_Packet");
+            this.cbCheck_Packet.Name = "cbCheck_Packet";
+            this.cbCheck_Packet.UseVisualStyleBackColor = true;
+            this.cbCheck_Packet.CheckedChanged += new System.EventHandler(this.cbCheck_Packet_CheckedChanged);
+            // 
+            // cbCheck_Socket
+            // 
+            resources.ApplyResources(this.cbCheck_Socket, "cbCheck_Socket");
+            this.cbCheck_Socket.Name = "cbCheck_Socket";
+            this.cbCheck_Socket.UseVisualStyleBackColor = true;
+            this.cbCheck_Socket.CheckedChanged += new System.EventHandler(this.cbCheck_Socket_CheckedChanged);
+            // 
+            // cbCheck_IP
+            // 
+            resources.ApplyResources(this.cbCheck_IP, "cbCheck_IP");
+            this.cbCheck_IP.Name = "cbCheck_IP";
+            this.cbCheck_IP.UseVisualStyleBackColor = true;
+            this.cbCheck_IP.CheckedChanged += new System.EventHandler(this.cbCheck_IP_CheckedChanged);
+            // 
+            // txtCheck_Socket
+            // 
+            resources.ApplyResources(this.txtCheck_Socket, "txtCheck_Socket");
+            this.txtCheck_Socket.Name = "txtCheck_Socket";
+            // 
+            // txtCheck_IP
+            // 
+            resources.ApplyResources(this.txtCheck_IP, "txtCheck_IP");
+            this.txtCheck_IP.Name = "txtCheck_IP";
+            // 
+            // txtCheck_Packet
+            // 
+            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
+            this.txtCheck_Packet.Name = "txtCheck_Packet";
+            // 
+            // cbCheck_Size
+            // 
+            resources.ApplyResources(this.cbCheck_Size, "cbCheck_Size");
+            this.cbCheck_Size.Name = "cbCheck_Size";
+            this.cbCheck_Size.UseVisualStyleBackColor = true;
+            this.cbCheck_Size.CheckedChanged += new System.EventHandler(this.cbCheck_Size_CheckedChanged);
+            // 
+            // nudCheck_Size_From
+            // 
+            resources.ApplyResources(this.nudCheck_Size_From, "nudCheck_Size_From");
+            this.nudCheck_Size_From.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudCheck_Size_From.Name = "nudCheck_Size_From";
+            // 
+            // nudCheck_Size_To
+            // 
+            resources.ApplyResources(this.nudCheck_Size_To, "nudCheck_Size_To");
+            this.nudCheck_Size_To.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudCheck_Size_To.Name = "nudCheck_Size_To";
+            this.nudCheck_Size_To.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // gbSearchData
+            // 
+            this.gbSearchData.Controls.Add(this.tlpSearchData);
+            resources.ApplyResources(this.gbSearchData, "gbSearchData");
+            this.gbSearchData.Name = "gbSearchData";
+            this.gbSearchData.TabStop = false;
+            // 
+            // tlpSearchData
+            // 
+            resources.ApplyResources(this.tlpSearchData, "tlpSearchData");
+            this.tlpSearchData.Controls.Add(this.bSearchData, 6, 0);
+            this.tlpSearchData.Controls.Add(this.txtSearchData, 2, 0);
+            this.tlpSearchData.Controls.Add(this.cbSearchType, 0, 0);
+            this.tlpSearchData.Controls.Add(this.cbSearchOrder, 4, 0);
+            this.tlpSearchData.Name = "tlpSearchData";
+            // 
+            // bSearchData
+            // 
+            resources.ApplyResources(this.bSearchData, "bSearchData");
+            this.bSearchData.Name = "bSearchData";
+            this.bSearchData.UseVisualStyleBackColor = true;
+            this.bSearchData.Click += new System.EventHandler(this.bSearchData_Click);
+            // 
+            // txtSearchData
+            // 
+            resources.ApplyResources(this.txtSearchData, "txtSearchData");
+            this.txtSearchData.Name = "txtSearchData";
+            // 
+            // cbSearchType
+            // 
+            this.cbSearchType.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.cbSearchType, "cbSearchType");
+            this.cbSearchType.FormattingEnabled = true;
+            this.cbSearchType.Name = "cbSearchType";
+            // 
+            // cbSearchOrder
+            // 
+            this.cbSearchOrder.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.cbSearchOrder, "cbSearchOrder");
+            this.cbSearchOrder.FormattingEnabled = true;
+            this.cbSearchOrder.Items.AddRange(new object[] {
+            resources.GetString("cbSearchOrder.Items"),
+            resources.GetString("cbSearchOrder.Items1")});
+            this.cbSearchOrder.Name = "cbSearchOrder";
             // 
             // dgvSocketList
             // 
@@ -685,75 +698,6 @@ namespace WPELibrary
             this.dgvSocketList.RowTemplate.Height = 23;
             this.dgvSocketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgSocketInfo_SelectionChanged);
-            // 
-            // cIndex
-            // 
-            this.cIndex.DataPropertyName = "Index";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
-            resources.ApplyResources(this.cIndex, "cIndex");
-            this.cIndex.Name = "cIndex";
-            this.cIndex.ReadOnly = true;
-            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cType
-            // 
-            this.cType.DataPropertyName = "Type_Name";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cType, "cType");
-            this.cType.Name = "cType";
-            this.cType.ReadOnly = true;
-            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cFrom
-            // 
-            this.cFrom.DataPropertyName = "From";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle4;
-            resources.ApplyResources(this.cFrom, "cFrom");
-            this.cFrom.Name = "cFrom";
-            this.cFrom.ReadOnly = true;
-            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column5
-            // 
-            this.Column5.DataPropertyName = "To";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle5;
-            resources.ApplyResources(this.Column5, "Column5");
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "ResLen";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle6;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cData
-            // 
-            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cData.DataPropertyName = "Data";
-            resources.ApplyResources(this.cData, "cData");
-            this.cData.Name = "cData";
-            this.cData.ReadOnly = true;
-            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // gbFilterList
             // 
@@ -891,14 +835,6 @@ namespace WPELibrary
             this.bgwSendFrom.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendFrom_DoWork);
             this.bgwSendFrom.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendFrom_RunWorkerCompleted);
             // 
-            // pbLoading
-            // 
-            this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
-            this.pbLoading.Image = global::WPELibrary.Properties.Resources.loading;
-            resources.ApplyResources(this.pbLoading, "pbLoading");
-            this.pbLoading.Name = "pbLoading";
-            this.pbLoading.TabStop = false;
-            // 
             // bgwSocketInfo
             // 
             this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
@@ -1030,6 +966,83 @@ namespace WPELibrary
             this.cContent.Name = "cContent";
             this.cContent.ReadOnly = true;
             // 
+            // pbLoading
+            // 
+            this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
+            this.pbLoading.Image = global::WPELibrary.Properties.Resources.loading;
+            resources.ApplyResources(this.pbLoading, "pbLoading");
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.TabStop = false;
+            // 
+            // cIndex
+            // 
+            this.cIndex.DataPropertyName = "Index";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
+            resources.ApplyResources(this.cIndex, "cIndex");
+            this.cIndex.Name = "cIndex";
+            this.cIndex.ReadOnly = true;
+            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cType
+            // 
+            this.cType.DataPropertyName = "Type_Name";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cType, "cType");
+            this.cType.Name = "cType";
+            this.cType.ReadOnly = true;
+            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle3;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cFrom
+            // 
+            this.cFrom.DataPropertyName = "From";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cFrom, "cFrom");
+            this.cFrom.Name = "cFrom";
+            this.cFrom.ReadOnly = true;
+            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "To";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.Column5, "Column5");
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "ResLen";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cData
+            // 
+            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cData.DataPropertyName = "Data";
+            resources.ApplyResources(this.cData, "cData");
+            this.cData.Name = "cData";
+            this.cData.ReadOnly = true;
+            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1038,71 +1051,51 @@ namespace WPELibrary
             this.Controls.Add(this.pbLoading);
             this.Controls.Add(this.gbFilterList);
             this.Controls.Add(this.dgvSocketList);
-            this.Controls.Add(this.gbSearch);
+            this.Controls.Add(this.gbSearchData);
             this.Controls.Add(this.ssStatusInfo_Top);
-            this.Controls.Add(this.gbRight);
+            this.Controls.Add(this.gbFilterSet);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Socket_Form";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DLL_Form_FormClosed);
             this.Load += new System.EventHandler(this.DLL_Form_Load);
-            this.gbFilter_Size.ResumeLayout(false);
-            this.gbFilter_Size.PerformLayout();
-            this.gbFilter_Type.ResumeLayout(false);
-            this.gbFilter_Type.PerformLayout();
             this.cmsLogList.ResumeLayout(false);
             this.cmsSocketList.ResumeLayout(false);
             this.ssStatusInfo_Top.ResumeLayout(false);
             this.ssStatusInfo_Top.PerformLayout();
-            this.gbRight.ResumeLayout(false);
-            this.gbRight.PerformLayout();
-            this.gbClear.ResumeLayout(false);
-            this.gbClear.PerformLayout();
-            this.gbSearch.ResumeLayout(false);
-            this.gbSearch.PerformLayout();
+            this.gbFilterSet.ResumeLayout(false);
+            this.tlpClear.ResumeLayout(false);
+            this.tlpHook.ResumeLayout(false);
+            this.gbHookType.ResumeLayout(false);
+            this.tlpHookType.ResumeLayout(false);
+            this.tlpHookType.PerformLayout();
+            this.tlpFilterSet.ResumeLayout(false);
+            this.tlpFilterSet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).EndInit();
+            this.gbSearchData.ResumeLayout(false);
+            this.tlpSearchData.ResumeLayout(false);
+            this.tlpSearchData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.gbFilterList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
             this.cmsFilterList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.pPacketInfo.ResumeLayout(false);
             this.tcPacketInfo.ResumeLayout(false);
             this.tpPacketInfo.ResumeLayout(false);
             this.tlpPacketInfo.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.CheckBox cbDisplay_SendTo;
-        private System.Windows.Forms.CheckBox cbCheck_Packet;
-        private System.Windows.Forms.Button bStopHook;
-        private System.Windows.Forms.TextBox txtCheck_IP;
-        private System.Windows.Forms.CheckBox cbDisplay_RecvFrom;
-        private System.Windows.Forms.CheckBox cbCheck_Size;
-        private System.Windows.Forms.TextBox txtCheck_Size_From;
-        private System.Windows.Forms.TextBox txtCheck_Size_To;
-        private System.Windows.Forms.CheckBox cbInterecept_Recv;
-        private System.Windows.Forms.CheckBox cbInterecept_SendTo;
-        private System.Windows.Forms.Label lSplit;
-        private System.Windows.Forms.TextBox txtCheck_Packet;
-        private System.Windows.Forms.GroupBox gbFilter_Size;
-        private System.Windows.Forms.GroupBox gbFilter_Type;
-        private System.Windows.Forms.CheckBox cbInterecept_RecvFrom;
-        private System.Windows.Forms.CheckBox cbInterecept_Send;
-        private System.Windows.Forms.CheckBox cbDisplay_Recv;
-        private System.Windows.Forms.CheckBox cbDisplay_Send;
         private System.ComponentModel.BackgroundWorker bgwSocketList;
         private System.Windows.Forms.Timer tSocketInfo;
-        private System.Windows.Forms.Button bStartHook;
-        private System.Windows.Forms.TextBox txtCheck_Socket;
-        private System.Windows.Forms.CheckBox cbCheck_Socket;
-        private System.Windows.Forms.CheckBox cbCheck_IP;
         private System.Windows.Forms.ContextMenuStrip cmsSocketList;
         private System.Windows.Forms.ToolStripMenuItem tsmiSend;
         private System.Windows.Forms.ToolStripStatusLabel tlCheck_CNT;
@@ -1122,16 +1115,8 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlRecv_CNT;
         private System.Windows.Forms.ToolStripStatusLabel tlSplit4;
         private System.Windows.Forms.ToolStripStatusLabel tlCheck;
-        private System.Windows.Forms.ToolStripStatusLabel tlSplit5;
-        private System.Windows.Forms.ToolStripStatusLabel tlInterecept;
-        private System.Windows.Forms.ToolStripStatusLabel tlInterecept_CNT;
-        private System.Windows.Forms.GroupBox gbRight;
-        private System.Windows.Forms.GroupBox gbClear;
-        private System.Windows.Forms.CheckBox cbReset_CNT;
-        private System.Windows.Forms.GroupBox gbSearch;
-        private System.Windows.Forms.Button bSearch;
-        private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.Label lSearch;
+        private System.Windows.Forms.GroupBox gbFilterSet;
+        private System.Windows.Forms.GroupBox gbSearchData;
         private System.Windows.Forms.DataGridView dgvSocketList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiBatchSend;
@@ -1141,8 +1126,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem tsmiSaveSocketInfo;
-        private System.Windows.Forms.RadioButton rbSearchFrom;
-        private System.Windows.Forms.RadioButton rbSearchAll;
         private System.Windows.Forms.GroupBox gbFilterList;
         private System.Windows.Forms.DataGridView dgvFilterList;
         private System.ComponentModel.BackgroundWorker bgwLogList;
@@ -1150,13 +1133,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem tslToExcel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem tslClearList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
         private System.ComponentModel.BackgroundWorker bgwSendFrom;
         private System.Windows.Forms.PictureBox pbLoading;
         private System.ComponentModel.BackgroundWorker bgwSocketInfo;
@@ -1192,5 +1168,42 @@ namespace WPELibrary
         private System.Windows.Forms.RichTextBox rtbPacketInfo_Right;
         private System.Windows.Forms.ComboBox cbPacketInfo_Left;
         private System.Windows.Forms.ComboBox cbPacketInfo_Right;
+        private System.Windows.Forms.TableLayoutPanel tlpSearchData;
+        private System.Windows.Forms.Button bSearchData;
+        private System.Windows.Forms.TextBox txtSearchData;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
+        private System.Windows.Forms.CheckBox cbCheck_Socket;
+        private System.Windows.Forms.TextBox txtCheck_Socket;
+        private System.Windows.Forms.CheckBox cbCheck_IP;
+        private System.Windows.Forms.TextBox txtCheck_IP;
+        private System.Windows.Forms.CheckBox cbCheck_Packet;
+        private System.Windows.Forms.TextBox txtCheck_Packet;
+        private System.Windows.Forms.CheckBox cbCheck_Size;
+        private System.Windows.Forms.GroupBox gbHookType;
+        private System.Windows.Forms.TableLayoutPanel tlpHookType;
+        private System.Windows.Forms.CheckBox cbHook_Send;
+        private System.Windows.Forms.CheckBox cbHook_SendTo;
+        private System.Windows.Forms.CheckBox cbHook_Recv;
+        private System.Windows.Forms.CheckBox cbHook_RecvFrom;
+        private System.Windows.Forms.CheckBox cbHook_WSASend;
+        private System.Windows.Forms.CheckBox cbHook_WSASendTo;
+        private System.Windows.Forms.CheckBox cbHook_WSARecv;
+        private System.Windows.Forms.CheckBox cbHook_WSARecvFrom;
+        private System.Windows.Forms.TableLayoutPanel tlpHook;
+        private System.Windows.Forms.Button bStartHook;
+        private System.Windows.Forms.Button bStopHook;
+        private System.Windows.Forms.TableLayoutPanel tlpClear;
+        private System.Windows.Forms.Button bClear;
+        private System.Windows.Forms.NumericUpDown nudCheck_Size_From;
+        private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
+        private System.Windows.Forms.ComboBox cbSearchType;
+        private System.Windows.Forms.ComboBox cbSearchOrder;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
     }
 }

@@ -53,7 +53,7 @@ namespace WPELibrary.Lib
         {
             this.index = index;
             this.type = type;
-            this.type_name = Socket_Operation.GetSocketType_Name(type);
+            this.type_name = type.ToString();
             this.socket = socket;
             this.from = from;
             this.to = to;

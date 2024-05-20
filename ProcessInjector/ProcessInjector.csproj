@@ -28,7 +28,7 @@
     <PublisherName>X-NAS</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>31</ApplicationRevision>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -137,12 +137,6 @@
     <EmbeddedResource Include="Injector_Form.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Injector_Form.zh-CN.resx">
-      <DependentUpon>Injector_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Injector_Form.zh-Hans.resx">
-      <DependentUpon>Injector_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="LanguageList_Form.en-US.resx">
       <DependentUpon>LanguageList_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -153,9 +147,6 @@
       <DependentUpon>ProcessList_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessList_Form.resx">
-      <DependentUpon>ProcessList_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProcessList_Form.zh-Hans.resx">
       <DependentUpon>ProcessList_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

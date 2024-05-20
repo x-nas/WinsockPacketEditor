@@ -10,19 +10,9 @@ using System.Data;
 namespace WPELibrary.Lib
 {   
     public static class Socket_Operation
-    {
-        public static bool IsCheck_Size = false;
-        public static bool IsCheck_Socket = false;
-        public static bool IsCheck_IP = false;
-        public static bool IsCheck_Packet = false;
+    {        
         public static bool bDoLog = true;
-        public static bool bDoLog_Hook = false;
-
-        public static string Check_Size_From = "";
-        public static string Check_Size_To = "";
-        public static string Check_Socket_txt = "";
-        public static string Check_IP_txt = "";
-        public static string Check_Packet_txt = "";
+        public static bool bDoLog_Hook = false;        
 
         public static DataTable dtPacketFormat = new DataTable();         
 
@@ -134,40 +124,59 @@ namespace WPELibrary.Lib
                 switch (EncodingFormat)
                 {
                     case "HEX":
+
                         foreach (byte b in buffer)
                         {
                             sReturn += b.ToString("X2") + " ";
                         }
                         sReturn = sReturn.Trim();
                         break;
+
                     case "ASCII":
+
                         sFormat = Encoding.ASCII.GetString(buffer);
                         break;
+
                     case "UNICODE":
+
                         sFormat = Encoding.Unicode.GetString(buffer);
                         break;
+
                     case "UTF-7":
+
                         sFormat = Encoding.UTF7.GetString(buffer);
                         break;
+
                     case "UTF-8":
+
                         sFormat = Encoding.UTF8.GetString(buffer);
                         break;
+
                     case "UTF-16-LE":
+
                         sFormat = Encoding.Unicode.GetString(buffer);
                         break;
+
                     case "UTF-16-BE":
+
                         sFormat = Encoding.BigEndianUnicode.GetString(buffer);
                         break;
+
                     case "UTF-32-LE":
+
                         sFormat = Encoding.UTF32.GetString(buffer);
                         break;
+
                     case "UTF-32-BE":
+
                         byte[] copiedBuffer = new byte[buffer.Length];
                         Array.Copy(buffer, copiedBuffer, buffer.Length);
                         Array.Reverse(copiedBuffer);
                         sFormat = Encoding.UTF32.GetString(copiedBuffer);
                         break;
+
                     case "BIN":
+
                         foreach (byte b in buffer)
                         {
                             string strTemp = Convert.ToString(b, 2);
@@ -176,13 +185,16 @@ namespace WPELibrary.Lib
                         }
                         sReturn = sReturn.Trim();
                         break;
+
                     case "DEC":
+
                         foreach (byte n in buffer)
                         {
                             sReturn += n.ToString("D") + " ";
                         }
                         sReturn = sReturn.Trim();
                         break;
+
                     default:
                         sFormat = Encoding.Default.GetString(buffer);
                         break;
@@ -411,63 +423,7 @@ namespace WPELibrary.Lib
 
             return sReturn;
         }
-        #endregion
-
-        #region//获取枚举类型的名称
-        public static string GetSocketType_Name(Socket_Packet.SocketType stType)
-        {
-            string sReturn = "";
-
-            try
-            {
-                switch (stType)
-                {
-                    case Socket_Packet.SocketType.Send:                        
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
-                        break;
-                    case Socket_Packet.SocketType.WSASend:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
-                        break;
-                    case Socket_Packet.SocketType.SendTo:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
-                        break;
-                    case Socket_Packet.SocketType.Recv:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
-                        break;
-                    case Socket_Packet.SocketType.WSARecv:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
-                        break;
-                    case Socket_Packet.SocketType.RecvFrom:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                        break;
-                    case Socket_Packet.SocketType.Send_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
-                        break;
-                    case Socket_Packet.SocketType.WSASend_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
-                        break;
-                    case Socket_Packet.SocketType.SendTo_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62);
-                        break;
-                    case Socket_Packet.SocketType.Recv_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63);
-                        break;
-                    case Socket_Packet.SocketType.WSARecv_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64);
-                        break;
-                    case Socket_Packet.SocketType.RecvFrom_Interecept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-        #endregion
+        #endregion        
 
         #region//替换封包指定位置的16进制数据值
         public static string ReplaceValueByIndexAndLen_HEX(string sHex, int iIndex, int iLen)
@@ -497,47 +453,44 @@ namespace WPELibrary.Lib
 
         #region//是否显示封包（过滤条件）        
 
-        public static bool ISFilterSocketPacket(int iSocket, IntPtr ipBuff, int iLen, Socket_Packet.SocketType sType, Socket_Packet.sockaddr sAddr, int iResLen)
+        public static bool ISShowSocketPacket_ByFilter(Socket_Packet sp)
         {
             try
             {
-                byte[] bBuffer = new byte[iResLen];
-                Marshal.Copy(ipBuff, bBuffer, 0, iResLen);                
-
-                string sIP_From = GetSocketIP(iSocket, Socket_Packet.IPType.From);
-                string sIP_To = GetSocketIP(iSocket, Socket_Packet.IPType.To);
-
-                //封包大小
-                bool bISShow_BySize = ISShow_BySize(iResLen);
-                if (!bISShow_BySize)
-                {
-                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66) + iResLen.ToString());
-                    return false;
-                }
-
                 //套接字
-                bool bISShow_BySocket = ISShow_BySocket(iSocket);
-                if (!bISShow_BySocket)
+                if (Socket_Cache.Check_Socket)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67) + iSocket.ToString());
-                    return false;
+                    if (ISFilter_BySocket(sp.Socket))
+                    {                        
+                        return false;
+                    }
                 }
 
                 //IP地址
-                bool bISShow_ByIP = ISShow_ByIP(sIP_From, sIP_To);
-                if (!bISShow_ByIP)
-                {
-                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68) + sIP_From + " / " + sIP_To);
-                    return false;
+                if (Socket_Cache.Check_IP)
+                {                    
+                    if (ISFilter_ByIP(sp.Socket))
+                    {                        
+                        return false;
+                    }
                 }
 
                 //封包内容
-                string sPacket = ByteToString("HEX", bBuffer);
-                bool bISShow_ByPacket = ISShow_ByPacket(sPacket);
-                if (!bISShow_ByPacket)
+                if (Socket_Cache.Check_Packet)
+                {  
+                    if (ISFilter_ByPacket(sp.Buffer))
+                    {                        
+                        return false;
+                    }
+                }
+
+                //封包大小
+                if (Socket_Cache.Check_Size)
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69) + sPacket);
-                    return false;
+                    if (ISFilter_BySize(sp.Len))
+                    {
+                        return false;
+                    }
                 }
             }
             catch (Exception ex)
@@ -546,49 +499,18 @@ namespace WPELibrary.Lib
             }
 
             return true;
-        }        
-
-        #region//检测封包大小
-        private static bool ISShow_BySize(int iLength)
-        {
-            bool bReturn = true;
-
-            try
-            {
-                if (IsCheck_Size)
-                {
-                    int iFrom = int.Parse(Check_Size_From);
-                    int iTo = int.Parse(Check_Size_To);
-
-                    if (iLength >= iFrom && iLength <= iTo)
-                    {
-                        bReturn = true;
-                    }
-                    else
-                    {
-                        bReturn = false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
         }
-        #endregion
 
         #region//检测套接字
-        private static bool ISShow_BySocket(int iSocket)
+        private static bool ISFilter_BySocket(int iSocket)
         {
-            bool bReturn = true;
+            bool bReturn = false;
 
             try
             {
-                if (IsCheck_Socket)
+                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Socket))
                 {
-                    string[] sSocketArr = Check_Socket_txt.Split(';');
+                    string[] sSocketArr = Socket_Cache.txtCheck_Socket.Split(';');
 
                     foreach (string sSocket in sSocketArr)
                     {
@@ -596,8 +518,8 @@ namespace WPELibrary.Lib
 
                         if (iSocket == iSocketCheck)
                         {
-                            return false;
-                        }
+                            return true;
+                        }                        
                     }
                 }
             }
@@ -611,24 +533,27 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//检测IP地址
-        private static bool ISShow_ByIP(string sIP_From, string sIP_To)
+        private static bool ISFilter_ByIP(int iSocket)
         {
-            bool bReturn = true;
+            bool bReturn = false;
 
             try
             {
-                if (IsCheck_IP)
+                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_IP))
                 {
-                    string[] sIPArr = Check_IP_txt.Split(';');
+                    string sIP_From = GetSocketIP(iSocket, Socket_Packet.IPType.From);
+                    string sIP_To = GetSocketIP(iSocket, Socket_Packet.IPType.To);
+
+                    string[] sIPArr = Socket_Cache.txtCheck_IP.Split(';');
 
                     foreach (string sIP in sIPArr)
                     {
                         if (sIP_From.IndexOf(sIP) >= 0 || sIP_To.IndexOf(sIP) >= 0)
                         {
-                            return false;
+                            return true;
                         }
                     }
-                }
+                }                    
             }
             catch (Exception ex)
             {
@@ -640,23 +565,46 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//检测封包内容
-        private static bool ISShow_ByPacket(string sPacket)
+        private static bool ISFilter_ByPacket(byte[] bBuffer)
         {
-            bool bReturn = true;
+            bool bReturn = false;
 
             try
             {
-                if (IsCheck_Packet)
+                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Packet))
                 {
-                    string[] sPacketArr = Check_Packet_txt.Split(';');
+                    string sPacket = ByteToString("HEX", bBuffer);
+
+                    string[] sPacketArr = Socket_Cache.txtCheck_Packet.Split(';');
 
                     foreach (string sPacketCheck in sPacketArr)
                     {
                         if (sPacket.IndexOf(sPacketCheck) >= 0)
                         {
-                            return false;
+                            return true;
                         }
                     }
+                }                    
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+        #endregion
+
+        #region//检测封包大小
+        private static bool ISFilter_BySize(int iLength)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (iLength >= Socket_Cache.txtCheck_Size_From && iLength <= Socket_Cache.txtCheck_Size_To)
+                {
+                    bReturn = true;
                 }
             }
             catch (Exception ex)
@@ -670,35 +618,35 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//搜索封包数据（十六进制）
-        public static int SearchSocketListByHex(int iFrom, string sHex)
+        #region//搜索封包数据
+        public static int SearchSocketList(string sSearchType, int iFromIndex, string sSearchData)
         {
             int iResult = -1;
 
             try
             {
-                if (!string.IsNullOrEmpty(sHex))
+                if (!string.IsNullOrEmpty(sSearchData))
                 {
                     int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
 
-                    if (iListCNT > 0)
+                    if (iListCNT > 0 && iFromIndex < iListCNT)
                     {
-                        if (iFrom < iListCNT)
-                        {
-                            for (int i = iFrom; i < iListCNT; i++)
-                            {
-                                byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].Buffer;
-                                string sSearch = ByteToString("HEX", bSearch);
+                        string sSearch = "";
 
-                                if (sSearch.IndexOf(sHex) >= 0)
-                                {
-                                    iResult = i;
-                                    break;
-                                }
+                        for (int i = iFromIndex; i < iListCNT; i++)
+                        {
+                            byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].Buffer;
+
+                            sSearch = ByteToString(sSearchType, bSearch);
+
+                            if (sSearch.IndexOf(sSearchData) >= 0)
+                            {
+                                iResult = i;
+                                break;
                             }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -1037,7 +985,7 @@ namespace WPELibrary.Lib
                             string sColValue = "";
 
                             string sIndex = spi.Index.ToString();
-                            string sType = GetSocketType_Name(spi.Type); ;
+                            string sType = spi.Type.ToString();
                             string sSocket = spi.Socket.ToString();
                             string sFrom = spi.From;
                             string sTo = spi.To;
@@ -1170,7 +1118,7 @@ namespace WPELibrary.Lib
             {
                 if (bDoLog_Hook)
                 {
-                    string sTypeName = GetSocketType_Name(sType);
+                    string sTypeName = sType.ToString();
                     string sLog = "[" + sTypeName + "]" + " - Socket:" + iSocket.ToString() + "，Packet:" + iRes.ToString() + "/" + iLen.ToString();
                     DoLog(sFuncName, sLog);
                 }

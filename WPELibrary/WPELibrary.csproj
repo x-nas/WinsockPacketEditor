@@ -145,9 +145,6 @@
     <EmbeddedResource Include="Socket_Filter_Form.resx">
       <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Filter_Form.zh-Hans.resx">
-      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.en-US.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -158,25 +155,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Form.zh-Hans.resx">
-      <DependentUpon>Socket_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Socket_SendList_Form.en-US.resx">
       <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_SendList_Form.resx">
       <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_SendList_Form.zh-Hans.resx">
-      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Socket_Send_Form.en-US.resx">
       <DependentUpon>Socket_Send_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_Send_Form.resx">
-      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Send_Form.zh-Hans.resx">
       <DependentUpon>Socket_Send_Form.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

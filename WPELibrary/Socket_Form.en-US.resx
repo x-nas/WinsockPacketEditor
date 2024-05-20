@@ -118,78 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cbDisplay_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 21</value>
-  </data>
-  <data name="cbDisplay_SendTo.Text" xml:space="preserve">
-    <value>SendTo</value>
-  </data>
-  <data name="cbCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
-  </data>
-  <data name="cbCheck_Packet.Text" xml:space="preserve">
-    <value>Data</value>
-  </data>
-  <data name="bStopHook.Location" type="System.Drawing.Point, System.Drawing">
-    <value>812, 69</value>
-  </data>
-  <data name="bStopHook.Text" xml:space="preserve">
-    <value>Stop (&amp;J)</value>
-  </data>
-  <data name="cbDisplay_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 21</value>
-  </data>
-  <data name="cbDisplay_RecvFrom.Text" xml:space="preserve">
-    <value>RecvFrom</value>
-  </data>
-  <data name="cbCheck_Size.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 21</value>
-  </data>
-  <data name="cbCheck_Size.Text" xml:space="preserve">
-    <value>Length</value>
-  </data>
-  <data name="cbInterecept_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 21</value>
-  </data>
-  <data name="cbInterecept_Recv.Text" xml:space="preserve">
-    <value>Block</value>
-  </data>
-  <data name="cbInterecept_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 21</value>
-  </data>
-  <data name="cbInterecept_SendTo.Text" xml:space="preserve">
-    <value>Block</value>
-  </data>
-  <data name="gbFilter_Type.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 101</value>
-  </data>
-  <data name="cbInterecept_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 21</value>
-  </data>
-  <data name="cbInterecept_RecvFrom.Text" xml:space="preserve">
-    <value>Block</value>
-  </data>
-  <data name="cbInterecept_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 21</value>
-  </data>
-  <data name="cbInterecept_Send.Text" xml:space="preserve">
-    <value>Block</value>
-  </data>
-  <data name="cbDisplay_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
-  </data>
-  <data name="cbDisplay_Recv.Text" xml:space="preserve">
-    <value>Recv</value>
-  </data>
-  <data name="cbDisplay_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 21</value>
-  </data>
-  <data name="cbDisplay_Send.Text" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 110</value>
-  </data>
   <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 22</value>
   </data>
@@ -223,23 +151,8 @@
   <data name="tslToExcel.Text" xml:space="preserve">
     <value>Export to Excel</value>
   </data>
-  <data name="bStartHook.Location" type="System.Drawing.Point, System.Drawing">
-    <value>812, 18</value>
-  </data>
-  <data name="bStartHook.Text" xml:space="preserve">
-    <value>Start (&amp;K)</value>
-  </data>
-  <data name="cbCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 21</value>
-  </data>
-  <data name="cbCheck_Socket.Text" xml:space="preserve">
-    <value>Sockets</value>
-  </data>
-  <data name="cbCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 21</value>
-  </data>
-  <data name="cbCheck_IP.Text" xml:space="preserve">
-    <value>IP Address</value>
+  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 110</value>
   </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 138</value>
@@ -325,68 +238,70 @@
   <data name="tlCheck.Text" xml:space="preserve">
     <value>Filterate:</value>
   </data>
-  <data name="tlInterecept.Size" type="System.Drawing.Size, System.Drawing">
-    <value>43, 17</value>
-  </data>
-  <data name="tlInterecept.Text" xml:space="preserve">
-    <value>Block:</value>
-  </data>
-  <data name="gbRight.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="gbFilterSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>898, 116</value>
   </data>
-  <data name="gbRight.Text" xml:space="preserve">
-    <value>[Filter conditions] - Supports use ; as a delimiter</value>
+  <data name="gbFilterSet.Text" xml:space="preserve">
+    <value>[ Interception settings ]</value>
   </data>
-  <data name="gbClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>774, 9</value>
+  <data name="tlpClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>741, 17</value>
   </data>
-  <data name="cbReset_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 12</value>
+  <data name="bClear.Text" xml:space="preserve">
+    <value>Clear
+Data
+(&amp;C)</value>
   </data>
-  <data name="cbReset_CNT.Text" xml:space="preserve">
-    <value>W
-I
-P
-E</value>
+  <data name="tlpHook.Location" type="System.Drawing.Point, System.Drawing">
+    <value>810, 17</value>
   </data>
-  <data name="cbReset_CNT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="bStartHook.Text" xml:space="preserve">
+    <value>START (&amp;K)</value>
   </data>
-  <data name="gbSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>740, 51</value>
+  <data name="bStopHook.Text" xml:space="preserve">
+    <value>STOP (&amp;J)</value>
   </data>
-  <data name="rbSearchFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>563, 19</value>
+  <data name="cbCheck_Packet.Text" xml:space="preserve">
+    <value>Filter Data</value>
   </data>
-  <data name="rbSearchFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 21</value>
+  <data name="cbCheck_Socket.Text" xml:space="preserve">
+    <value>Filter Sockets</value>
   </data>
-  <data name="rbSearchFrom.Text" xml:space="preserve">
-    <value>Seek Down</value>
+  <data name="cbCheck_IP.Text" xml:space="preserve">
+    <value>Filter IP</value>
   </data>
-  <data name="rbSearchAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>457, 19</value>
+  <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 23</value>
   </data>
-  <data name="rbSearchAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 21</value>
+  <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 23</value>
   </data>
-  <data name="rbSearchAll.Text" xml:space="preserve">
-    <value>From Scratch</value>
+  <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>248, 23</value>
   </data>
-  <data name="bSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>654, 15</value>
+  <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
+    <value>384, 1</value>
   </data>
-  <data name="bSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 28</value>
+  <data name="cbCheck_Size.Text" xml:space="preserve">
+    <value>Length</value>
   </data>
-  <data name="bSearch.Text" xml:space="preserve">
+  <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>386, 35</value>
+  </data>
+  <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>386, 67</value>
+  </data>
+  <data name="gbSearchData.Text" xml:space="preserve">
+    <value>[ Search Data ]</value>
+  </data>
+  <data name="bSearchData.Text" xml:space="preserve">
     <value>Search (&amp;S)</value>
   </data>
-  <data name="lSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 17</value>
+  <data name="cbSearchOrder.Items" xml:space="preserve">
+    <value>From Scratch</value>
   </data>
-  <data name="lSearch.Text" xml:space="preserve">
-    <value>Search Data (Hex)</value>
+  <data name="cbSearchOrder.Items1" xml:space="preserve">
+    <value>Search Down</value>
   </data>
   <data name="cIndex.HeaderText" xml:space="preserve">
     <value>ID</value>

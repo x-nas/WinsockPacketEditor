@@ -245,11 +245,6 @@ namespace WPELibrary
             0,
             0,
             0});
-            this.nudLoop_Int.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
             this.nudLoop_Int.Name = "nudLoop_Int";
             this.nudLoop_Int.Value = new decimal(new int[] {
             1000,
