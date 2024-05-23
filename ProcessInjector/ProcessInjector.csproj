@@ -28,7 +28,7 @@
     <PublisherName>X-NAS</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>32</ApplicationRevision>
+    <ApplicationRevision>33</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -102,6 +102,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutFrom.Designer.cs">
+      <DependentUpon>AboutFrom.cs</DependentUpon>
+    </Compile>
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="IconExtractor\NativeMethods.cs" />
@@ -131,6 +137,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="AboutFrom.en-US.resx">
+      <DependentUpon>AboutFrom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AboutFrom.resx">
+      <DependentUpon>AboutFrom.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>

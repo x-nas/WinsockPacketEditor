@@ -242,7 +242,7 @@
     <value>898, 116</value>
   </data>
   <data name="gbFilterSet.Text" xml:space="preserve">
-    <value>[ Interception settings ]</value>
+    <value>[ Filter Settings ]</value>
   </data>
   <data name="tlpClear.Location" type="System.Drawing.Point, System.Drawing">
     <value>741, 17</value>
@@ -261,6 +261,9 @@ Data
   <data name="bStopHook.Text" xml:space="preserve">
     <value>STOP (&amp;J)</value>
   </data>
+  <data name="gbHookType.Text" xml:space="preserve">
+    <value>[ Hook Settings ]</value>
+  </data>
   <data name="cbCheck_Packet.Text" xml:space="preserve">
     <value>Filter Data</value>
   </data>
@@ -271,25 +274,25 @@ Data
     <value>Filter IP</value>
   </data>
   <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>384, 1</value>
+    <value>381, 1</value>
   </data>
   <data name="cbCheck_Size.Text" xml:space="preserve">
     <value>Length</value>
   </data>
   <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
-    <value>386, 35</value>
+    <value>383, 35</value>
   </data>
   <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>386, 67</value>
+    <value>383, 67</value>
   </data>
   <data name="gbSearchData.Text" xml:space="preserve">
     <value>[ Search Data ]</value>

@@ -31,53 +31,48 @@ namespace ProcessInjector
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Injector_Form));
             this.pTop = new System.Windows.Forms.Panel();
-            this.pbLanguage = new System.Windows.Forms.PictureBox();
-            this.pbHelp = new System.Windows.Forms.PictureBox();
-            this.bInject = new System.Windows.Forms.Button();
-            this.bSelectProcess = new System.Windows.Forms.Button();
-            this.tbProcessID = new System.Windows.Forms.TextBox();
+            this.tlpProcessInject = new System.Windows.Forms.TableLayoutPanel();
             this.lProcessName = new System.Windows.Forms.Label();
+            this.tbProcessID = new System.Windows.Forms.TextBox();
+            this.bSelectProcess = new System.Windows.Forms.Button();
+            this.bInject = new System.Windows.Forms.Button();
+            this.pbLanguage = new System.Windows.Forms.PictureBox();
+            this.pbAbout = new System.Windows.Forms.PictureBox();
             this.pFill = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.pTop.SuspendLayout();
+            this.tlpProcessInject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHelp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).BeginInit();
             this.pFill.SuspendLayout();
             this.SuspendLayout();
             // 
             // pTop
             // 
-            this.pTop.Controls.Add(this.pbLanguage);
-            this.pTop.Controls.Add(this.pbHelp);
-            this.pTop.Controls.Add(this.bInject);
-            this.pTop.Controls.Add(this.bSelectProcess);
-            this.pTop.Controls.Add(this.tbProcessID);
-            this.pTop.Controls.Add(this.lProcessName);
             resources.ApplyResources(this.pTop, "pTop");
+            this.pTop.Controls.Add(this.tlpProcessInject);
             this.pTop.Name = "pTop";
             // 
-            // pbLanguage
+            // tlpProcessInject
             // 
-            this.pbLanguage.Image = global::ProcessInjector.Properties.Resources.Language;
-            resources.ApplyResources(this.pbLanguage, "pbLanguage");
-            this.pbLanguage.Name = "pbLanguage";
-            this.pbLanguage.TabStop = false;
-            this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
+            resources.ApplyResources(this.tlpProcessInject, "tlpProcessInject");
+            this.tlpProcessInject.Controls.Add(this.lProcessName, 0, 1);
+            this.tlpProcessInject.Controls.Add(this.tbProcessID, 1, 1);
+            this.tlpProcessInject.Controls.Add(this.bSelectProcess, 2, 1);
+            this.tlpProcessInject.Controls.Add(this.bInject, 3, 1);
+            this.tlpProcessInject.Controls.Add(this.pbLanguage, 4, 1);
+            this.tlpProcessInject.Controls.Add(this.pbAbout, 5, 1);
+            this.tlpProcessInject.Name = "tlpProcessInject";
             // 
-            // pbHelp
+            // lProcessName
             // 
-            this.pbHelp.Image = global::ProcessInjector.Properties.Resources.help;
-            resources.ApplyResources(this.pbHelp, "pbHelp");
-            this.pbHelp.Name = "pbHelp";
-            this.pbHelp.TabStop = false;
-            this.pbHelp.Click += new System.EventHandler(this.pbHelp_Click);
+            resources.ApplyResources(this.lProcessName, "lProcessName");
+            this.lProcessName.Name = "lProcessName";
             // 
-            // bInject
+            // tbProcessID
             // 
-            resources.ApplyResources(this.bInject, "bInject");
-            this.bInject.Name = "bInject";
-            this.bInject.UseVisualStyleBackColor = true;
-            this.bInject.Click += new System.EventHandler(this.bInject_Click);
+            resources.ApplyResources(this.tbProcessID, "tbProcessID");
+            this.tbProcessID.Name = "tbProcessID";
             // 
             // bSelectProcess
             // 
@@ -86,26 +81,39 @@ namespace ProcessInjector
             this.bSelectProcess.UseVisualStyleBackColor = true;
             this.bSelectProcess.Click += new System.EventHandler(this.bSelectProcess_Click);
             // 
-            // tbProcessID
+            // bInject
             // 
-            resources.ApplyResources(this.tbProcessID, "tbProcessID");
-            this.tbProcessID.Name = "tbProcessID";
+            resources.ApplyResources(this.bInject, "bInject");
+            this.bInject.Name = "bInject";
+            this.bInject.UseVisualStyleBackColor = true;
+            this.bInject.Click += new System.EventHandler(this.bInject_Click);
             // 
-            // lProcessName
+            // pbLanguage
             // 
-            resources.ApplyResources(this.lProcessName, "lProcessName");
-            this.lProcessName.Name = "lProcessName";
+            resources.ApplyResources(this.pbLanguage, "pbLanguage");
+            this.pbLanguage.Image = global::ProcessInjector.Properties.Resources.Language;
+            this.pbLanguage.Name = "pbLanguage";
+            this.pbLanguage.TabStop = false;
+            this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
+            // 
+            // pbAbout
+            // 
+            resources.ApplyResources(this.pbAbout, "pbAbout");
+            this.pbAbout.Image = global::ProcessInjector.Properties.Resources.help;
+            this.pbAbout.Name = "pbAbout";
+            this.pbAbout.TabStop = false;
+            this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
             // 
             // pFill
             // 
-            this.pFill.Controls.Add(this.rtbLog);
             resources.ApplyResources(this.pFill, "pFill");
+            this.pFill.Controls.Add(this.rtbLog);
             this.pFill.Name = "pFill";
             // 
             // rtbLog
             // 
-            this.rtbLog.BackColor = System.Drawing.Color.Black;
             resources.ApplyResources(this.rtbLog, "rtbLog");
+            this.rtbLog.BackColor = System.Drawing.Color.Black;
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
@@ -121,9 +129,10 @@ namespace ProcessInjector
             this.MaximizeBox = false;
             this.Name = "Injector_Form";
             this.pTop.ResumeLayout(false);
-            this.pTop.PerformLayout();
+            this.tlpProcessInject.ResumeLayout(false);
+            this.tlpProcessInject.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbHelp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).EndInit();
             this.pFill.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -132,14 +141,15 @@ namespace ProcessInjector
         #endregion
 
         private System.Windows.Forms.Panel pTop;
-        private System.Windows.Forms.Button bSelectProcess;
-        private System.Windows.Forms.TextBox tbProcessID;
-        private System.Windows.Forms.Label lProcessName;
         private System.Windows.Forms.Panel pFill;
         private System.Windows.Forms.RichTextBox rtbLog;
+        private System.Windows.Forms.TableLayoutPanel tlpProcessInject;
+        private System.Windows.Forms.Label lProcessName;
+        private System.Windows.Forms.TextBox tbProcessID;
+        private System.Windows.Forms.Button bSelectProcess;
         private System.Windows.Forms.Button bInject;
-        private System.Windows.Forms.PictureBox pbHelp;
         private System.Windows.Forms.PictureBox pbLanguage;
+        private System.Windows.Forms.PictureBox pbAbout;
     }
 }
 

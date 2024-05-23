@@ -483,27 +483,7 @@ namespace WPELibrary
 
                         #endregion
 
-                        break;
-
-                    case "tsmiShowHook":
-
-                        #region//显示拦截日志
-
-                        Socket_Operation.bDoLog_Hook = true;
-
-                        #endregion
-
-                        break;
-
-                    case "tsmiHideHook":
-
-                        #region//隐藏拦截日志
-
-                        Socket_Operation.bDoLog_Hook = false;
-
-                        #endregion
-
-                        break;
+                        break;                   
                 }
             }
             catch (Exception ex)

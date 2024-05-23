@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
 using WPELibrary.Lib;
-using System.Deployment.Application;
+using System.Reflection;
 
 namespace ProcessInjector.Lib
 {
@@ -166,28 +166,83 @@ namespace ProcessInjector.Lib
         }
         #endregion
 
-        #region//获取发布版本号
-        public static string GetVersion()
+        #region 程序集特性访问器
+
+        public static string AssemblyTitle
         {
-            string sReturn = "";
-
-            try
+            get
             {
-                if (ApplicationDeployment.IsNetworkDeployed)
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                if (attributes.Length > 0)
                 {
-                    sReturn = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                    if (titleAttribute.Title != "")
+                    {
+                        return titleAttribute.Title;
+                    }
                 }
-                else
-                {
-                    sReturn = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                }
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
             }
-            catch
-            {
-                //
-            }
+        }
 
-            return sReturn;            
+        public static string AssemblyVersion
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
+        public static string AssemblyDescription
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+            }
+        }
+
+        public static string AssemblyProduct
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyProductAttribute)attributes[0]).Product;
+            }
+        }
+
+        public static string AssemblyCopyright
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+            }
+        }
+
+        public static string AssemblyCompany
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyCompanyAttribute)attributes[0]).Company;
+            }
         }
         #endregion
     }

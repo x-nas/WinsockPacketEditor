@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using System.Diagnostics;
 using ProcessInjector.Lib;
 using WPELibrary.Lib;
 using EasyHook;
@@ -14,7 +13,6 @@ namespace ProcessInjector
         private string ProcessPath = "";        
         private int ProcessID = -1;
         private string sDllName = "WPELibrary.dll";
-        private string HelpURL = "https://www.52pojie.cn/thread-1446781-1-1.html";
 
         private ToolTip tt = new ToolTip();
 
@@ -35,13 +33,11 @@ namespace ProcessInjector
             try
             {
                 tt.SetToolTip(bSelectProcess, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_1));
-                //tt.SetToolTip(bSelectProcess, MultiLanguage.GetDefaultLanguage(1));
-                
                 tt.SetToolTip(bInject, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_2));                
-                tt.SetToolTip(pbHelp, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_3));                
+                tt.SetToolTip(pbAbout, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_3));                
                 tt.SetToolTip(pbLanguage, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_4));
-                
-                ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_5) + "：" + Process_Injector.GetVersion());
+                                
+                ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_5) + "：" + Process_Injector.AssemblyVersion);
             }
             catch (Exception ex)
             {
@@ -121,12 +117,13 @@ namespace ProcessInjector
         }
         #endregion
 
-        #region//帮助, 选择语言
-        private void pbHelp_Click(object sender, EventArgs e)
+        #region//关于, 选择语言
+        private void pbAbout_Click(object sender, EventArgs e)
         {
             try
             {
-                Process.Start(HelpURL);
+                AboutFrom aboutFrom = new AboutFrom();
+                aboutFrom.ShowDialog();
             }
             catch (Exception ex)
             {
@@ -140,8 +137,6 @@ namespace ProcessInjector
             {
                 LanguageList_Form llf = new LanguageList_Form();
                 llf.ShowDialog();
-
-                this.InitToolTip();
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("X-NAS")]
-[assembly: AssemblyProduct("ProcessInjector")]
+[assembly: AssemblyProduct("Winsock Packet Editor")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,6 +31,6 @@ using System.Runtime.InteropServices;
 //
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值
 //通过使用 "*"，如下所示:
-[assembly: AssemblyVersion("1.0.0.31")]
+[assembly: AssemblyVersion("1.0.0.32")]
 //[assembly: AssemblyVersion("1.0.0.21")]
 //[assembly: AssemblyFileVersion("1.0.0.21")]

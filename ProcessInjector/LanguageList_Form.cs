@@ -7,6 +7,8 @@ namespace ProcessInjector
 {
     public partial class LanguageList_Form : Form
     {
+        private string SelectLanguage = "zh-CN";
+
         #region//初始化
         public LanguageList_Form()
         {
@@ -37,23 +39,35 @@ namespace ProcessInjector
 
         #region//选择语言
         private void rb_zhCN_Click(object sender, System.EventArgs e)
-        {            
-            Process_Injector.SetDefaultLanguage("zh-CN");          
+        {
+            this.SelectLanguage = "zh-CN";
         }
 
         private void rb_enUS_Click(object sender, System.EventArgs e)
         {
-            Process_Injector.SetDefaultLanguage("en-US");
+            this.SelectLanguage = "en-US";
         }
         #endregion
 
         #region//重启程序
         private void LanguageList_Form_FormClosed(object sender, FormClosedEventArgs e)
-        {            
-            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_12));
+        {
+            try
+            {
+                if (!Properties.Settings.Default.DefaultLanguage.Equals(SelectLanguage))
+                {
+                    Process_Injector.SetDefaultLanguage(SelectLanguage);
 
-            Application.Restart();
-            Process.GetCurrentProcess().Kill();
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_12));
+
+                    Application.Restart();
+                    Process.GetCurrentProcess().Kill();
+                }
+            }
+            catch
+            { 
+                //
+            }            
         }
         #endregion
     }

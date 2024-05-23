@@ -32,22 +32,18 @@ namespace WPELibrary
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiShowHook = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiHideHook = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
@@ -112,6 +108,13 @@ namespace WPELibrary
             this.cbSearchType = new System.Windows.Forms.ComboBox();
             this.cbSearchOrder = new System.Windows.Forms.ComboBox();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
+            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.dgvFilterList = new System.Windows.Forms.DataGridView();
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -146,13 +149,6 @@ namespace WPELibrary
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pbLoading = new System.Windows.Forms.PictureBox();
-            this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFrom = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList.SuspendLayout();
             this.cmsSocketList.SuspendLayout();
             this.ssStatusInfo_Top.SuspendLayout();
@@ -183,10 +179,6 @@ namespace WPELibrary
             // 
             this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslClearList,
-            this.toolStripSeparator8,
-            this.tsmiShowHook,
-            this.toolStripSeparator9,
-            this.tsmiHideHook,
             this.toolStripSeparator5,
             this.tslToExcel});
             this.cmsLogList.Name = "cmsLogList";
@@ -197,26 +189,6 @@ namespace WPELibrary
             // 
             this.tslClearList.Name = "tslClearList";
             resources.ApplyResources(this.tslClearList, "tslClearList");
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
-            // 
-            // tsmiShowHook
-            // 
-            this.tsmiShowHook.Name = "tsmiShowHook";
-            resources.ApplyResources(this.tsmiShowHook, "tsmiShowHook");
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            resources.ApplyResources(this.toolStripSeparator9, "toolStripSeparator9");
-            // 
-            // tsmiHideHook
-            // 
-            this.tsmiHideHook.Name = "tsmiHideHook";
-            resources.ApplyResources(this.tsmiHideHook, "tsmiHideHook");
             // 
             // toolStripSeparator5
             // 
@@ -699,6 +671,75 @@ namespace WPELibrary
             this.dgvSocketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgSocketInfo_SelectionChanged);
             // 
+            // cIndex
+            // 
+            this.cIndex.DataPropertyName = "Index";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
+            resources.ApplyResources(this.cIndex, "cIndex");
+            this.cIndex.Name = "cIndex";
+            this.cIndex.ReadOnly = true;
+            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cType
+            // 
+            this.cType.DataPropertyName = "Type_Name";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cType, "cType");
+            this.cType.Name = "cType";
+            this.cType.ReadOnly = true;
+            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle3;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cFrom
+            // 
+            this.cFrom.DataPropertyName = "From";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cFrom, "cFrom");
+            this.cFrom.Name = "cFrom";
+            this.cFrom.ReadOnly = true;
+            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "To";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.Column5.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.Column5, "Column5");
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "ResLen";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cData
+            // 
+            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cData.DataPropertyName = "Data";
+            resources.ApplyResources(this.cData, "cData");
+            this.cData.Name = "cData";
+            this.cData.ReadOnly = true;
+            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // gbFilterList
             // 
             this.gbFilterList.Controls.Add(this.dgvFilterList);
@@ -974,75 +1015,6 @@ namespace WPELibrary
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 
-            // cIndex
-            // 
-            this.cIndex.DataPropertyName = "Index";
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle1;
-            resources.ApplyResources(this.cIndex, "cIndex");
-            this.cIndex.Name = "cIndex";
-            this.cIndex.ReadOnly = true;
-            this.cIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cType
-            // 
-            this.cType.DataPropertyName = "Type_Name";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cType, "cType");
-            this.cType.Name = "cType";
-            this.cType.ReadOnly = true;
-            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cFrom
-            // 
-            this.cFrom.DataPropertyName = "From";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle4;
-            resources.ApplyResources(this.cFrom, "cFrom");
-            this.cFrom.Name = "cFrom";
-            this.cFrom.ReadOnly = true;
-            this.cFrom.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column5
-            // 
-            this.Column5.DataPropertyName = "To";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.Column5.DefaultCellStyle = dataGridViewCellStyle5;
-            resources.ApplyResources(this.Column5, "Column5");
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "ResLen";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle6;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cData
-            // 
-            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cData.DataPropertyName = "Data";
-            resources.ApplyResources(this.cData, "cData");
-            this.cData.Name = "cData";
-            this.cData.ReadOnly = true;
-            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1151,10 +1123,6 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripMenuItem tsmiShowHook;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHideHook;
         private System.Windows.Forms.Panel pPacketInfo;
         private System.Windows.Forms.TabControl tcPacketInfo;
         private System.Windows.Forms.TabPage tpPacketInfo;

@@ -6,14 +6,13 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Data;
+using System.Linq;
 
 namespace WPELibrary.Lib
 {   
     public static class Socket_Operation
     {        
         public static bool bDoLog = true;
-        public static bool bDoLog_Hook = false;        
-
         public static DataTable dtPacketFormat = new DataTable();         
 
         #region//ws2_32.dll API        
@@ -424,6 +423,43 @@ namespace WPELibrary.Lib
             return sReturn;
         }
         #endregion        
+
+        #region//获取WSABUF数组的字节
+        public static unsafe byte[] GetByteFromWSABUF(IntPtr lpBuffers, Int32 dwBufferCount, int BytesCNT)
+        {
+            byte[] bByteBuff = new byte[0];
+
+            int BytesLeft = BytesCNT;
+
+            for (int i = 0; i < dwBufferCount; i++)
+            {
+                Socket_Packet.WSABUF wsBuffer = (Socket_Packet.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Packet.WSABUF) * i), typeof(Socket_Packet.WSABUF));
+                Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
+
+                if (wsBuffer.len >= BytesLeft)
+                {
+                    byte[] bBuffer = new byte[BytesLeft];
+                    Marshal.Copy(wsBuffer.buf, bBuffer, 0, bBuffer.Length);
+
+                    bByteBuff = bByteBuff.Concat(bBuffer).ToArray();
+
+                    break;
+                }
+                else
+                {
+                    byte[] bBuffer = new byte[wsBuffer.len];
+                    Marshal.Copy(wsBuffer.buf, bBuffer, 0, bBuffer.Length);
+
+                    bByteBuff = bByteBuff.Concat(bBuffer).ToArray();
+
+                    BytesLeft -= wsBuffer.len;
+                }
+            }
+
+            return bByteBuff;
+        }
+
+        #endregion
 
         #region//替换封包指定位置的16进制数据值
         public static string ReplaceValueByIndexAndLen_HEX(string sHex, int iIndex, int iLen)
@@ -1111,23 +1147,7 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//记录日志
-        public static void DoLog_HookInfo(string sFuncName, Socket_Packet.SocketType sType, int iSocket, int iLen, int iRes)
-        {
-            try
-            {
-                if (bDoLog_Hook)
-                {
-                    string sTypeName = sType.ToString();
-                    string sLog = "[" + sTypeName + "]" + " - Socket:" + iSocket.ToString() + "，Packet:" + iRes.ToString() + "/" + iLen.ToString();
-                    DoLog(sFuncName, sLog);
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }           
-        }
+        #region//记录日志        
 
         public static void DoLog(string sFuncName, string sLogContent)
         {

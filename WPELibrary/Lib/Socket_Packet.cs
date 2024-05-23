@@ -28,6 +28,16 @@ namespace WPELibrary.Lib
             public IntPtr buf;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct OVERLAPPED
+        {
+            public IntPtr InternalLow;
+            public IntPtr InternalHigh;
+            public int OffsetLow;
+            public int OffsetHigh;
+            public IntPtr EventHandle;
+        }
+
         public enum SocketType
         {
             Send = 1,

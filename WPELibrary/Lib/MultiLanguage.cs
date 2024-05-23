@@ -12,7 +12,7 @@ namespace WPELibrary.Lib
 
         public static string[] MutiLan_1 = { "选择进程", "Select Process" };
         public static string[] MutiLan_2 = { "注入进程", "Inject Process" };
-        public static string[] MutiLan_3 = { "帮助", "Help" };
+        public static string[] MutiLan_3 = { "关于", "about" };
         public static string[] MutiLan_4 = { "选择语言", "Language" };
         public static string[] MutiLan_5 = { "当前内核版本", "Current kernel version" };
         public static string[] MutiLan_6 = { "请先选择要注入的进程", "Please select a process first" };
@@ -32,10 +32,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_20 = { "目标进程：", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
-        //public static string[] MutiLan_23 = { "拦截-发送, ", "Block-Send, " };
-        //public static string[] MutiLan_24 = { "拦截-发送到, ", "Block-SendTo, " };
-        //public static string[] MutiLan_25 = { "拦截-接收, ", "Block-Recv, " };
-        //public static string[] MutiLan_26 = { "拦截-接收自, ", "Block-RecvFrom, " };
+        public static string[] MutiLan_23 = { "网络封包拦截器", "Winsock Packet Editor" };
+        public static string[] MutiLan_24 = { "安装文件下载：", "Setup DownLoad: " };
+        public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
+        public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
         //public static string[] MutiLan_27 = { "显示-发送, ", "Show-Send, " };
         //public static string[] MutiLan_28 = { "显示-发送到, ", "Show-SendTo, " };
         //public static string[] MutiLan_29 = { "显示-接收, ", "Show-Recv, " };

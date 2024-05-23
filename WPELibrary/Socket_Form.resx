@@ -127,24 +127,6 @@
   <data name="tslClearList.Text" xml:space="preserve">
     <value>清空日志列表</value>
   </data>
-  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 6</value>
-  </data>
-  <data name="tsmiShowHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="tsmiShowHook.Text" xml:space="preserve">
-    <value>显示拦截日志</value>
-  </data>
-  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 6</value>
-  </data>
-  <data name="tsmiHideHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 22</value>
-  </data>
-  <data name="tsmiHideHook.Text" xml:space="preserve">
-    <value>隐藏拦截日志</value>
-  </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
     <value>145, 6</value>
   </data>
@@ -155,7 +137,7 @@
     <value>导出到Excel</value>
   </data>
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 110</value>
+    <value>149, 54</value>
   </data>
   <data name="&gt;&gt;cmsLogList.Name" xml:space="preserve">
     <value>cmsLogList</value>
@@ -397,8 +379,8 @@
     <value>0</value>
   </data>
   <data name="bClear.Text" xml:space="preserve">
-    <value>清空
-数据(&amp;C)</value>
+    <value>清 空
+数 据(&amp;C)</value>
   </data>
   <data name="&gt;&gt;bClear.Name" xml:space="preserve">
     <value>bClear</value>
@@ -563,10 +545,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 72</value>
+    <value>13, 75</value>
   </data>
   <data name="cbHook_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 19</value>
+    <value>101, 20</value>
   </data>
   <data name="cbHook_RecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -599,7 +581,7 @@
     <value>13, 3</value>
   </data>
   <data name="cbHook_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 17</value>
+    <value>101, 18</value>
   </data>
   <data name="cbHook_Send.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -629,10 +611,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_SendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 26</value>
+    <value>13, 27</value>
   </data>
   <data name="cbHook_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 17</value>
+    <value>101, 18</value>
   </data>
   <data name="cbHook_SendTo.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -662,10 +644,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 49</value>
+    <value>13, 51</value>
   </data>
   <data name="cbHook_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 17</value>
+    <value>101, 18</value>
   </data>
   <data name="cbHook_Recv.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -695,10 +677,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSASend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 3</value>
+    <value>120, 3</value>
   </data>
   <data name="cbHook_WSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 17</value>
+    <value>126, 18</value>
   </data>
   <data name="cbHook_WSASend.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -725,10 +707,10 @@
     <value>Fill</value>
   </data>
   <data name="cbHook_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 26</value>
+    <value>120, 27</value>
   </data>
   <data name="cbHook_WSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 17</value>
+    <value>126, 18</value>
   </data>
   <data name="cbHook_WSASendTo.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -755,10 +737,10 @@
     <value>Fill</value>
   </data>
   <data name="cbHook_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 49</value>
+    <value>120, 51</value>
   </data>
   <data name="cbHook_WSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 17</value>
+    <value>126, 18</value>
   </data>
   <data name="cbHook_WSARecv.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
@@ -785,10 +767,10 @@
     <value>Fill</value>
   </data>
   <data name="cbHook_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 72</value>
+    <value>120, 75</value>
   </data>
   <data name="cbHook_WSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 19</value>
+    <value>126, 20</value>
   </data>
   <data name="cbHook_WSARecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
@@ -812,7 +794,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpHookType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
+    <value>1, 17</value>
   </data>
   <data name="tlpHookType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
@@ -821,7 +803,7 @@
     <value>4</value>
   </data>
   <data name="tlpHookType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>245, 94</value>
+    <value>249, 98</value>
   </data>
   <data name="tlpHookType.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -847,11 +829,17 @@
   <data name="gbHookType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
+  <data name="gbHookType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
   <data name="gbHookType.Size" type="System.Drawing.Size, System.Drawing">
     <value>251, 116</value>
   </data>
   <data name="gbHookType.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
+  </data>
+  <data name="gbHookType.Text" xml:space="preserve">
+    <value>[ 拦截设置 ]</value>
   </data>
   <data name="&gt;&gt;gbHookType.Name" xml:space="preserve">
     <value>gbHookType</value>
@@ -986,7 +974,7 @@
     <value>121, 3</value>
   </data>
   <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="txtCheck_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -1016,7 +1004,7 @@
     <value>121, 35</value>
   </data>
   <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="txtCheck_IP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
@@ -1049,7 +1037,7 @@
     <value>121, 67</value>
   </data>
   <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 23</value>
+    <value>246, 23</value>
   </data>
   <data name="txtCheck_Packet.TabIndex" type="System.Int32, mscorlib">
     <value>48</value>
@@ -1079,7 +1067,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 1</value>
+    <value>381, 1</value>
   </data>
   <data name="cbCheck_Size.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
@@ -1106,7 +1094,7 @@
     <value>6</value>
   </data>
   <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
-    <value>385, 35</value>
+    <value>383, 35</value>
   </data>
   <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 23</value>
@@ -1130,7 +1118,7 @@
     <value>7</value>
   </data>
   <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>385, 67</value>
+    <value>383, 67</value>
   </data>
   <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 23</value>
@@ -1184,7 +1172,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbCheck_Packet" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Socket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_IP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Socket" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_IP" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Packet" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Size" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_From" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_To" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,10,Percent,30,Percent,70,Absolute,10,Absolute,80,Absolute,7" /&gt;&lt;Rows Styles="Percent,33.33333,Percent,33.33333,Percent,33.33333" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbCheck_Packet" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Socket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_IP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Socket" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_IP" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Packet" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Size" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_From" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_To" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,10,Percent,30,Percent,70,Absolute,10,Absolute,80,Absolute,10" /&gt;&lt;Rows Styles="Percent,33.33333,Percent,33.33333,Percent,33.33333" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -1208,7 +1196,7 @@
     <value>42</value>
   </data>
   <data name="gbFilterSet.Text" xml:space="preserve">
-    <value>[ 拦截设置 ]</value>
+    <value>[ 过滤设置 ]</value>
   </data>
   <data name="&gt;&gt;gbFilterSet.Name" xml:space="preserve">
     <value>gbFilterSet</value>
@@ -1868,7 +1856,7 @@
     <value>0, 0</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>716, 136</value>
+    <value>714, 134</value>
   </data>
   <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1889,7 +1877,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>716, 136</value>
+    <value>714, 134</value>
   </data>
   <data name="tpSystemLog.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -8195,30 +8183,6 @@
   <data name="&gt;&gt;tslClearList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator8.Name" xml:space="preserve">
-    <value>toolStripSeparator8</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiShowHook.Name" xml:space="preserve">
-    <value>tsmiShowHook</value>
-  </data>
-  <data name="&gt;&gt;tsmiShowHook.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator9.Name" xml:space="preserve">
-    <value>toolStripSeparator9</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator9.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiHideHook.Name" xml:space="preserve">
-    <value>tsmiHideHook</value>
-  </data>
-  <data name="&gt;&gt;tsmiHideHook.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
     <value>toolStripSeparator5</value>
   </data>
@@ -8393,6 +8357,48 @@
   <data name="&gt;&gt;tlCheck.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
+    <value>cIndex</value>
+  </data>
+  <data name="&gt;&gt;cIndex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cType.Name" xml:space="preserve">
+    <value>cType</value>
+  </data>
+  <data name="&gt;&gt;cType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
+    <value>cSocket</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFrom.Name" xml:space="preserve">
+    <value>cFrom</value>
+  </data>
+  <data name="&gt;&gt;cFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Column5.Name" xml:space="preserve">
+    <value>Column5</value>
+  </data>
+  <data name="&gt;&gt;Column5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLen.Name" xml:space="preserve">
+    <value>cLen</value>
+  </data>
+  <data name="&gt;&gt;cLen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cData.Name" xml:space="preserve">
+    <value>cData</value>
+  </data>
+  <data name="&gt;&gt;cData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
     <value>cIsCheck</value>
   </data>
@@ -8511,48 +8517,6 @@
     <value>cContent</value>
   </data>
   <data name="&gt;&gt;cContent.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
-    <value>cIndex</value>
-  </data>
-  <data name="&gt;&gt;cIndex.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cType.Name" xml:space="preserve">
-    <value>cType</value>
-  </data>
-  <data name="&gt;&gt;cType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
-    <value>cSocket</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFrom.Name" xml:space="preserve">
-    <value>cFrom</value>
-  </data>
-  <data name="&gt;&gt;cFrom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Column5.Name" xml:space="preserve">
-    <value>Column5</value>
-  </data>
-  <data name="&gt;&gt;Column5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cLen.Name" xml:space="preserve">
-    <value>cLen</value>
-  </data>
-  <data name="&gt;&gt;cLen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cData.Name" xml:space="preserve">
-    <value>cData</value>
-  </data>
-  <data name="&gt;&gt;cData.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

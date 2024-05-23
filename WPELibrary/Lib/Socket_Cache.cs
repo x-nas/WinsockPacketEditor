@@ -9,7 +9,8 @@ using System.Reflection;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {  
+    {
+        public static byte[] bByteBuff = new byte[0];
         public static bool Hook_Send, Hook_SendTo, Hook_Recv, Hook_RecvFrom, Hook_WSASend, Hook_WSASendTo, Hook_WSARecv, Hook_WSARecvFrom;
         public static bool Check_Size, Check_Socket, Check_IP, Check_Packet;
         public static string txtCheck_Socket, txtCheck_IP, txtCheck_Packet;
@@ -26,11 +27,38 @@ namespace WPELibrary.Lib
 
             #region//封包入队列
 
-            public static void SocketToQueue_Thread(object ob)
+            public static void SocketPacketToQueue(int iSocket, byte[] bBuffByte, Socket_Packet.SocketType sType, Socket_Packet.sockaddr sAddr)
             {
                 try
                 {
-                    Socket_Packet sp = (Socket_Packet)ob;
+                    Socket_Packet sp = new Socket_Packet(iSocket, IntPtr.Zero, bBuffByte.Length, sType, sAddr, bBuffByte, bBuffByte.Length);
+
+                    if (Socket_Operation.ISShowSocketPacket_ByFilter(sp))
+                    {
+                        lock (qSocket_Packet)
+                        {
+                            qSocket_Packet.Enqueue(sp);
+                        }
+                    }
+                    else
+                    {
+                        Filter_CNT++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void SocketPacketToQueue(int iSocket, IntPtr ipBuff, int iLen, Socket_Packet.SocketType sType, Socket_Packet.sockaddr sAddr, int iResLen)
+            {
+                try
+                {
+                    byte[] bBuffer = new byte[iResLen];
+                    Marshal.Copy(ipBuff, bBuffer, 0, iResLen);
+
+                    Socket_Packet sp = new Socket_Packet(iSocket, ipBuff, iLen, sType, sAddr, bBuffer, iResLen);
 
                     if (Socket_Operation.ISShowSocketPacket_ByFilter(sp))
                     {
@@ -179,38 +207,24 @@ namespace WPELibrary.Lib
         {
             public static Queue<Socket_Log_Info> qSocket_Log = new Queue<Socket_Log_Info>();
 
-            #region//日志入队列（多线程）
+            #region//日志入队列
+
             public static void LogToQueue(string sFuncName, string sLogContent)
             {
                 try
                 {
                     Socket_Log_Info sli = new Socket_Log_Info(sFuncName, sLogContent);
 
-                    Thread tLog_Queue = new Thread(new ParameterizedThreadStart(LogToQueue_Thread));
-                    tLog_Queue.Start(sli);
+                    lock (qSocket_Log)
+                    {
+                        qSocket_Log.Enqueue(sli);
+                    }                 
                 }
                 catch (Exception ex) 
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
-
-            private static void LogToQueue_Thread(object ob)
-            {
-                try
-                {
-                    Socket_Log_Info sli = (Socket_Log_Info)ob;
-
-                    lock (qSocket_Log)
-                    {
-                        qSocket_Log.Enqueue(sli);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }             
-            }
+            }            
 
             #endregion
 
