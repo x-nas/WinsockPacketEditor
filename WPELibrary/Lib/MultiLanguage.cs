@@ -33,7 +33,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
         public static string[] MutiLan_23 = { "网络封包拦截器", "Winsock Packet Editor" };
-        public static string[] MutiLan_24 = { "安装文件下载：", "Setup DownLoad: " };
+        public static string[] MutiLan_24 = { "下载安装：", "DownLoad Setup: " };
         public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
         public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
         //public static string[] MutiLan_27 = { "显示-发送, ", "Show-Send, " };

@@ -30,17 +30,21 @@ namespace ProcessInjector
 
             this.rtbDescription.Text = "";
 
-            //Github
-            this.rtbDescription.Text += "GitHub: ";
-            this.rtbDescription.Text += "https://github.com/x-nas/WinPacketsEdit" + "\r\n";
-
-            //安装文件下载
+            //安装下载
             this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24);
             this.rtbDescription.Text += "https://www.x-nas.com/wpe/publish.htm" + "\r\n";
 
             //使用说明
             this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25);
             this.rtbDescription.Text += "https://www.52pojie.cn/thread-1446781-1-1.html" + "\r\n";
+
+            //Github
+            this.rtbDescription.Text += "GitHub: ";
+            this.rtbDescription.Text += "https://github.com/x-nas/WinPacketsEdit" + "\r\n";
+
+            //Gitee
+            this.rtbDescription.Text += "Gitee: ";
+            this.rtbDescription.Text += "https://gitee.com/X-NAS/WinPacketsEdit" + "\r\n";
 
             //联系作者
             this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26);
