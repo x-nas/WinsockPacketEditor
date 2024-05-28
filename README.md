@@ -1,9 +1,9 @@
-# WinPacketsEdit
+# Winsock Packet Editor
 
 网络封包拦截器，可拦截手游封包，支持32位及64位程序
 用C#自己开发了一个仿WPE的封包拦截器，可以自适应32位和64位的软件，且wpe常用的功能都有了，开发中使用了多线程技术，测试了拦截1万+的封包不会卡死或退出，软件不定期会更新功能，每次启动的时候支持在线自动更新，欢迎大家一起完善和改进！
 
-Winsocket packet interceptor, which can intercept mobile game  with simulator, supports 32 bit and 64 bit App
+Winsocket packet Editor, which can intercept mobile game  with simulator, supports 32 bit and 64 bit App
 I have developed a WPE like packet interceptor using C #, which can adapt to 32-bit and 64 bit software, and has all the commonly used functions of WPE. During development, I used multithreading technology and tested intercepting more than 10000 packets without getting stuck or exiting. The software updates its functions periodically and supports online automatic updates every time it starts. We welcome everyone to improve and perfect together!
 
 Download setup.exe: https://www.x-nas.com/wpe/publish.htm
