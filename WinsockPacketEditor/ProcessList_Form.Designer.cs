@@ -1,5 +1,5 @@
 ﻿
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     partial class ProcessList_Form
     {
@@ -131,7 +131,7 @@ namespace ProcessInjector
             // 
             this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
             resources.ApplyResources(this.pbLoading, "pbLoading");
-            this.pbLoading.Image = global::ProcessInjector.Properties.Resources.loading;
+            this.pbLoading.Image = global::WinsockPacketEditor.Properties.Resources.loading;
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 

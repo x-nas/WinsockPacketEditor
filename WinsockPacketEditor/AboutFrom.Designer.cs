@@ -1,4 +1,4 @@
-﻿namespace ProcessInjector
+﻿namespace WinsockPacketEditor
 {
     partial class AboutFrom
     {

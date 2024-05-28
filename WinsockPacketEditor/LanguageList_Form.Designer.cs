@@ -1,4 +1,4 @@
-﻿namespace ProcessInjector
+﻿namespace WinsockPacketEditor
 {
     partial class LanguageList_Form
     {
@@ -68,14 +68,14 @@
             // pb_zhCN
             // 
             resources.ApplyResources(this.pb_zhCN, "pb_zhCN");
-            this.pb_zhCN.Image = global::ProcessInjector.Properties.Resources.zhCN;
+            this.pb_zhCN.Image = global::WinsockPacketEditor.Properties.Resources.zhCN;
             this.pb_zhCN.Name = "pb_zhCN";
             this.pb_zhCN.TabStop = false;
             // 
             // pb_enUS
             // 
             resources.ApplyResources(this.pb_enUS, "pb_enUS");
-            this.pb_enUS.Image = global::ProcessInjector.Properties.Resources.enUS;
+            this.pb_enUS.Image = global::WinsockPacketEditor.Properties.Resources.enUS;
             this.pb_enUS.Name = "pb_enUS";
             this.pb_enUS.TabStop = false;
             // 

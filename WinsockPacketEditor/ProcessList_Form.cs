@@ -3,11 +3,11 @@ using System.Windows.Forms;
 using System.Data;
 using System.IO;
 using System.Drawing;
-using ProcessInjector.Lib;
+using WinsockPacketEditor.Lib;
 using WPELibrary.Lib;
 using System.Reflection;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     public partial class ProcessList_Form : Form
     {

@@ -1,9 +1,9 @@
-﻿using ProcessInjector.Lib;
+﻿using WinsockPacketEditor.Lib;
 using System.Diagnostics;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     public partial class LanguageList_Form : Form
     {

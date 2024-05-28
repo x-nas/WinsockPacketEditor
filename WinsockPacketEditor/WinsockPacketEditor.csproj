@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B5ED16ED-ABD5-438B-A589-E8ACC2377432}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ProcessInjector</RootNamespace>
-    <AssemblyName>ProcessInjector</AssemblyName>
+    <RootNamespace>WinsockPacketEditor</RootNamespace>
+    <AssemblyName>WinsockPacketEditor</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
@@ -76,7 +76,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ProcessInjector.Program</StartupObject>
+    <StartupObject>WinsockPacketEditor.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>

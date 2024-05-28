@@ -7,7 +7,7 @@ using System.Threading;
 using WPELibrary.Lib;
 using System.Reflection;
 
-namespace ProcessInjector.Lib
+namespace WinsockPacketEditor.Lib
 {
     internal class Process_Injector
     {

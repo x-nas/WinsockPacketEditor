@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using ProcessInjector.Lib;
+using WinsockPacketEditor.Lib;
 using WPELibrary.Lib;
 using EasyHook;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     public partial class Injector_Form : Form
     {        

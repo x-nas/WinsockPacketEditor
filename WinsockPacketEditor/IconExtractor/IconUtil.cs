@@ -5,7 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     public static class IconUtil
     {

@@ -1,9 +1,9 @@
-﻿using ProcessInjector.Lib;
+﻿using WinsockPacketEditor.Lib;
 using System;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     partial class AboutFrom : Form
     {

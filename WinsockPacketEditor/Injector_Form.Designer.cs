@@ -1,5 +1,5 @@
 ﻿
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     partial class Injector_Form
     {
@@ -91,7 +91,7 @@ namespace ProcessInjector
             // pbLanguage
             // 
             resources.ApplyResources(this.pbLanguage, "pbLanguage");
-            this.pbLanguage.Image = global::ProcessInjector.Properties.Resources.Language;
+            this.pbLanguage.Image = global::WinsockPacketEditor.Properties.Resources.Language;
             this.pbLanguage.Name = "pbLanguage";
             this.pbLanguage.TabStop = false;
             this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
@@ -99,7 +99,7 @@ namespace ProcessInjector
             // pbAbout
             // 
             resources.ApplyResources(this.pbAbout, "pbAbout");
-            this.pbAbout.Image = global::ProcessInjector.Properties.Resources.help;
+            this.pbAbout.Image = global::WinsockPacketEditor.Properties.Resources.help;
             this.pbAbout.Name = "pbAbout";
             this.pbAbout.TabStop = false;
             this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);

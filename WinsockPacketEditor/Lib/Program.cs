@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ProcessInjector
+namespace WinsockPacketEditor
 {
     static class Program
     {
