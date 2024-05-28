@@ -149,6 +149,8 @@ namespace WPELibrary
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pbLoading = new System.Windows.Forms.PictureBox();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsLogList.SuspendLayout();
             this.cmsSocketList.SuspendLayout();
             this.ssStatusInfo_Top.SuspendLayout();
@@ -215,6 +217,8 @@ namespace WPELibrary
             this.toolStripSeparator1,
             this.tsmiBatchSend,
             this.toolStripSeparator2,
+            this.tsmiAddToFilter,
+            this.toolStripSeparator8,
             this.tsmiUseSocket,
             this.toolStripSeparator3,
             this.tsmiShowBatchSend,
@@ -1015,6 +1019,16 @@ namespace WPELibrary
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
+            // 
+            // tsmiAddToFilter
+            // 
+            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
+            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1173,5 +1187,7 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddToFilter;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
     }
 }

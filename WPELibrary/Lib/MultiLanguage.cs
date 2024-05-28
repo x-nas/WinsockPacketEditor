@@ -26,8 +26,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
         public static string[] MutiLan_15 = { "应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*" };
         public static string[] MutiLan_16 = { "滤镜 -【 序号", "Filter -【 ID" };
-        public static string[] MutiLan_17 = { "第1行：搜索内容", "First Row: Search" };
-        public static string[] MutiLan_18 = { "第2行：修改内容", "Second Row: Modify" };
+        public static string[] MutiLan_17 = { "[ 第1行：搜索内容", "[ First Row: Search" };
+        public static string[] MutiLan_18 = { "第2行：修改内容 ]", "Second Row: Modify ]" };
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
         public static string[] MutiLan_20 = { "目标进程：", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
@@ -36,7 +36,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_24 = { "下载安装：", "DownLoad Setup: " };
         public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
         public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
-        //public static string[] MutiLan_27 = { "显示-发送, ", "Show-Send, " };
+        public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         //public static string[] MutiLan_28 = { "显示-发送到, ", "Show-SendTo, " };
         //public static string[] MutiLan_29 = { "显示-接收, ", "Show-Recv, " };
         //public static string[] MutiLan_30 = { "显示-接收自, ", "Show-RecvFrom, " };

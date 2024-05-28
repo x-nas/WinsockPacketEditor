@@ -191,8 +191,8 @@ namespace WPELibrary
         }
         #endregion        
 
-        #region//获取封包数据
-        private string GetSocketSendData()
+        #region//获取发送数据
+        private string GetSendData()
         {
             string sResult = "";
 
@@ -205,13 +205,15 @@ namespace WPELibrary
                     iLen = this.dgvSocketSend.Columns.Count;
                 }
 
+                string sCell = "";
+
                 for (int i = 0; i < iLen; i++)
                 {
                     if (this.dgvSocketSend.Rows[0].Cells[i].Value != null)
                     {
                         if (!string.IsNullOrEmpty(this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim()))
                         {
-                            string sCell = this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim();
+                            sCell = this.dgvSocketSend.Rows[0].Cells[i].Value.ToString().Trim();
 
                             sResult += sCell + " ";
                         }
@@ -379,14 +381,16 @@ namespace WPELibrary
                 string sItemText = e.ClickedItem.Name;
                 this.cmsSocketSend.Close();
 
+                int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].Index;
+                string sData = this.GetSendData();
+
                 switch (sItemText)
                 {
+                    //添加到发送列表
                     case "tsmiBatchSend":
-
-                        int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].Index;
+                        
                         int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());
-                        string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].To;
-                        string sData = this.GetSocketSendData();
+                        string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].To;                        
                         byte[] bBuff = Socket_Operation.Hex_To_Byte(sData);
                         int iResLen = bBuff.Length;
 
@@ -397,6 +401,18 @@ namespace WPELibrary
                             Socket_SendList_Form sslForm = new Socket_SendList_Form();
                             sslForm.Show();
                         }
+
+                        break;
+
+                    //添加到滤镜列表
+                    case "tsmiAddToFilter":
+                        
+                        string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
+                        string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
+
+                        Socket_Cache.SocketFilterList.AddFilter_New(sFName, sFSearch, "", false);
+
+                        Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
 
                         break;
                 }
@@ -422,7 +438,7 @@ namespace WPELibrary
                     return false;
                 }
 
-                string sSendData = this.GetSocketSendData();
+                string sSendData = this.GetSendData();
 
                 if (sSendData.Equals(""))
                 {
@@ -483,7 +499,7 @@ namespace WPELibrary
             try
             {
                 int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());
-                string sSendData = this.GetSocketSendData();
+                string sSendData = this.GetSendData();
 
                 Loop_CNT = (int)this.nudLoop_CNT.Value;
                 Loop_Int = (int)this.nudLoop_Int.Value;

@@ -12,6 +12,7 @@ namespace WPELibrary
     {
         private int FilterNum = -1;
         private int FilterIndex = -1;
+        private int FilterLen = -1;
 
         #region//窗体加载
         public Socket_Filter_Form(int FNum)
@@ -22,6 +23,7 @@ namespace WPELibrary
 
             this.FilterNum = FNum;
             this.FilterIndex = Socket_Cache.SocketFilterList.GetFilterIndex_ByFilterNum(FilterNum);
+            this.FilterLen = Socket_Cache.SocketFilterList.GetFilterLen_ByFilterNum(FilterNum);
 
             this.InitDGV();
         }
@@ -45,12 +47,13 @@ namespace WPELibrary
         #endregion
 
         #region//初始化数据表
+
         private void InitDGV()
         {
             dgvFilter.AutoGenerateColumns = false;
             dgvFilter.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilter, true, null);            
 
-            for (int i = 0; i < Socket_Cache.SocketFilterList.FilterLen_MAX; i++)
+            for (int i = 0; i < FilterLen; i++)
             {
                 DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
                 {
@@ -72,39 +75,59 @@ namespace WPELibrary
                 dgvFilter.Rows.Add();
                 dgvFilter.Rows.Add();
 
-                this.gbFilterList1.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_17) + ", " + MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18);
+                this.gbFilterList.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_17) + ", " + MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18);
             }            
         }
+
+        private void dgvFilter_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            try
+            {
+                e.Column.FillWeight = 1;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//显示滤镜内容
         private void ShowFilterInfo()
         {
-            string sSearch = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearch.ToString().Trim();
-            string sModify = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModify.ToString().Trim();
-
-            if (!string.IsNullOrEmpty(sSearch))
+            try
             {
-                string[] sSearchAll = sSearch.Split(',');
-                foreach (string sText in sSearchAll)
+                string sSearch = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearch.ToString().Trim();
+                string sModify = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModify.ToString().Trim();
+
+                if (!string.IsNullOrEmpty(sSearch))
                 {
-                    string[] sSplitText = sText.Split('-');
-                    int iIndex = int.Parse(sSplitText[0].ToString().Trim());
-                    string sValue = sSplitText[1].ToString().Trim();
-                    this.dgvFilter.Rows[Socket_Cache.SocketFilterList.SearchRowIndex].Cells[iIndex].Value = sValue;
+                    string[] sSearchAll = sSearch.Split(',');
+                    foreach (string sText in sSearchAll)
+                    {
+                        string[] sSplitText = sText.Split('-');
+                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
+                        string sValue = sSplitText[1].ToString().Trim();
+                        this.dgvFilter.Rows[Socket_Cache.SocketFilterList.SearchRowIndex].Cells[iIndex].Value = sValue;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(sModify))
+                {
+                    string[] sModifyAll = sModify.Split(',');
+                    foreach (string sText in sModifyAll)
+                    {
+                        string[] sSplitText = sText.Split('-');
+                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
+                        string sValue = sSplitText[1].ToString().Trim();
+                        this.dgvFilter.Rows[Socket_Cache.SocketFilterList.ModifyRowIndex].Cells[iIndex].Value = sValue;
+                    }
                 }
             }
-
-            if (!string.IsNullOrEmpty(sModify))
+            catch (Exception ex)
             {
-                string[] sModifyAll = sModify.Split(',');
-                foreach (string sText in sModifyAll)
-                {
-                    string[] sSplitText = sText.Split('-');
-                    int iIndex = int.Parse(sSplitText[0].ToString().Trim());
-                    string sValue = sSplitText[1].ToString().Trim();
-                    this.dgvFilter.Rows[Socket_Cache.SocketFilterList.ModifyRowIndex].Cells[iIndex].Value = sValue;
-                }
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -212,6 +235,6 @@ namespace WPELibrary
                 }
             }
         }
-        #endregion        
+        #endregion
     }
 }

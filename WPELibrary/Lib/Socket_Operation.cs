@@ -966,7 +966,7 @@ namespace WPELibrary.Lib
                             string sFSearch = ss[2];
                             string sFModify = ss[3];
 
-                            Socket_Cache.SocketFilterList.AddFilter_New(iFNum, false, sFName, sFSearch, sFModify);
+                            Socket_Cache.SocketFilterList.AddFilter_New(sFName, sFSearch, sFModify, false);
 
                             iSuccess++;
                         }
@@ -987,6 +987,35 @@ namespace WPELibrary.Lib
 
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//获取滤镜字符串
+
+        public static string GetFilterString_ByHEX(string sHEX)
+        {
+            string sReturn = "";
+
+            try
+            {
+                string[] slHex = sHEX.Split(' ');
+
+                for (int i = 0; i < slHex.Length; i++)
+                {
+                    string sCell = slHex[i];
+                    sReturn += i.ToString() + "-" + sCell + ",";
+                }
+
+                sReturn = sReturn.Trim(',');
+            }
+            catch (Exception ex)
+            {
+                sReturn = "";
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion

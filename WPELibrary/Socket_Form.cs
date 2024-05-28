@@ -14,7 +14,7 @@ namespace WPELibrary
 
         private int Select_Index = -1;
         private int Max_DataLen = 50;
-        private int FilterMAXNum = 10;
+        private int FilterMAXNum = 3;
         private bool bWakeUp = true;
 
         #region//加载窗体
@@ -396,6 +396,27 @@ namespace WPELibrary
                                 sslForm.Show();
                             };
                         }
+
+                        #endregion
+
+                        break;
+
+                    case "tsmiAddToFilter":
+
+                        #region//添加到滤镜列表
+
+                        if (Select_Index > -1)
+                        {
+                            int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].Index;
+                            string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
+                            byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer;
+                            string sData = Socket_Operation.ByteToString("HEX", bBuffer);
+                            string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
+
+                            Socket_Cache.SocketFilterList.AddFilter_New(sFName, sFSearch, "", false);
+
+                            Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
+                        }  
 
                         #endregion
 

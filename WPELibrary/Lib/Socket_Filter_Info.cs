@@ -3,7 +3,7 @@
 namespace WPELibrary.Lib
 {
     public class Socket_Filter_Info
-    {        
+    {
         #region//序号
         protected int fnum;
         public int FNum

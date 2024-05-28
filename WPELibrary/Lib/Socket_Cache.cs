@@ -288,11 +288,8 @@ namespace WPELibrary.Lib
                     lstFilter.Clear();
 
                     for (int i = 0; i < iFilterMaxNum; i++)
-                    {
-                        int iFNum = i + 1;
-                        string sName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + iFNum.ToString();                     
-
-                        FilterToList(iFNum, false, sName, "", "");                        
+                    {                        
+                        AddFilter_New();
                     }
                 }
                 catch (Exception ex)
@@ -302,141 +299,287 @@ namespace WPELibrary.Lib
             }
             #endregion
 
-            #region//滤镜入列表
-            public static void FilterToList(int iFNum, bool bCheck, string sName, string sSearch, string sModify)
-            {
-                Socket_Filter_Info sf = new Socket_Filter_Info(iFNum, bCheck, sName, sSearch, sModify);
-
-                lstFilter.Add(sf);
-            }
-            #endregion
-
             #region//清空滤镜列表
+
             public static void FilterListClear()
             {
-                lstFilter.Clear();
+                try
+                {
+                    lstFilter.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
+
             #endregion
 
             #region//设置滤镜是否启用
+
             public static void SetIsCheck_ByFilterNum(int FNum, bool bCheck)
             {
-                if (FNum > 0)
+                try
                 {
-                    int iFIndex = GetFilterIndex_ByFilterNum(FNum);
+                    if (FNum > 0)
+                    {
+                        int iFIndex = GetFilterIndex_ByFilterNum(FNum);
 
-                    lstFilter[iFIndex].IsCheck = bCheck;
+                        lstFilter[iFIndex].IsCheck = bCheck;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
+
             #endregion
 
             #region//获取滤镜是否启用
+
             public static bool GetIsCheck_ByFilterNum(int FNum)
             {
                 bool bReturn = false;
 
-                if (FNum > 0)
+                try
                 {
-                    int iFIndex = GetFilterIndex_ByFilterNum(FNum);
+                    if (FNum > 0)
+                    {
+                        int iFIndex = GetFilterIndex_ByFilterNum(FNum);
 
-                    bReturn = lstFilter[iFIndex].IsCheck;
+                        bReturn = lstFilter[iFIndex].IsCheck;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return bReturn;                
             }
+
+            #endregion
+
+            #region//返回滤镜长度
+
+            public static int GetFilterLen_ByFilterNum(int FNum)
+            {
+                int iReturn = 0;
+
+                try
+                {
+                    if (FNum > 0)
+                    {
+                        int iFIndex = GetFilterIndex_ByFilterNum(FNum);
+
+                        string sFSearch = lstFilter[iFIndex].FSearch;
+                        string sFModify = lstFilter[iFIndex].FModify;
+
+
+                        int iFSearch = 0, iFModify = 0;
+
+                        if (string.IsNullOrEmpty(sFSearch) && string.IsNullOrEmpty(sFModify))
+                        {
+                            iReturn = FilterLen_MAX;
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(sFSearch))
+                            {
+                                string[] slFSearch = sFSearch.Split(',');
+                                string[] slTemp = slFSearch[slFSearch.Length - 1].ToString().Split('-');
+                                iFSearch = int.Parse(slTemp[0].ToString());
+                            }
+
+                            if (!string.IsNullOrEmpty(sFModify))
+                            {
+                                string[] slFModify = sFModify.Split(',');
+                                string[] slTemp = slFModify[slFModify.Length - 1].ToString().Split('-');
+                                iFModify = int.Parse(slTemp[0].ToString());
+                            }
+
+                            if (iFSearch >= iFModify)
+                            {
+                                iReturn = iFSearch + 1;
+                            }
+                            else
+                            {
+                                iReturn = iFModify + 1;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
             #endregion
 
             #region//滤镜列表操作（新增，修改，删除）
+
+            //新增滤镜
             public static void AddFilter_New()
             {
-                int FNum = GetFilterNum_New();
-                string FName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + FNum.ToString();
-
-                AddFilter_New(FNum, false, FName, "", "");
+                try
+                {
+                    AddFilter_New("", "", "", false);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
-
-            public static void AddFilter_New(int FNum, bool bCheck, string FName, string FSearch, string FModify)
+            
+            public static void AddFilter_New(string FName, string FSearch, string FModify, bool bCheck)
             {
-                Socket_Filter_Info sc = new Socket_Filter_Info(FNum, bCheck,FName, FSearch, FModify);
-                lstFilter.Add(sc);
-            }
+                try
+                {
+                    int FNum = GetFilterNum_New();
 
+                    if (string.IsNullOrEmpty(FName))
+                    {
+                        FName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + FNum.ToString();
+                    }
+
+                    Socket_Filter_Info sc = new Socket_Filter_Info(FNum, bCheck, FName, FSearch, FModify);
+
+                    lstFilter.Add(sc);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+            
             private static int GetFilterNum_New()
             {
                 int iReturn = 0;
 
-                for (int i = 0; i < lstFilter.Count; i++)
+                try
                 {
-                    int iFNum = lstFilter[i].FNum;
-
-                    if (iFNum > iReturn)
+                    for (int i = 0; i < lstFilter.Count; i++)
                     {
-                        iReturn = iFNum;
-                    }
-                }
+                        int iFNum = lstFilter[i].FNum;
 
-                return iReturn + 1;
+                        if (iFNum > iReturn)
+                        {
+                            iReturn = iFNum;
+                        }
+                    }
+
+                    iReturn = iReturn + 1;
+                }
+                catch (Exception ex)
+                {
+                    iReturn = 0;
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
+
+                return iReturn;
             }
 
+            //删除滤镜
             public static void DeleteFilter_ByFilterNum(int FNum)
             {
-                if (FNum > 0)
+                try
                 {
-                    int iFIndex = GetFilterIndex_ByFilterNum(FNum);
-
-                    if (iFIndex > -1)
+                    if (FNum > 0)
                     {
-                        lstFilter.RemoveAt(iFIndex);
+                        int iFIndex = GetFilterIndex_ByFilterNum(FNum);
+
+                        if (iFIndex > -1)
+                        {
+                            lstFilter.RemoveAt(iFIndex);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
+            //修改滤镜
             public static void UpdateFilter_ByFilterNum(int FNum, string FName, string FSearch, string FModify)
             {
-                if (FNum > 0 && !string.IsNullOrEmpty(FName))
+                try
                 {
-                    int iFIndex = GetFilterIndex_ByFilterNum(FNum);
-
-                    if (iFIndex > -1)
+                    if (FNum > 0 && !string.IsNullOrEmpty(FName))
                     {
-                        lstFilter[iFIndex].FName = FName;
-                        lstFilter[iFIndex].FSearch = FSearch;
-                        lstFilter[iFIndex].FModify = FModify;
+                        int iFIndex = GetFilterIndex_ByFilterNum(FNum);
+
+                        if (iFIndex > -1)
+                        {
+                            lstFilter[iFIndex].FName = FName;
+                            lstFilter[iFIndex].FSearch = FSearch;
+                            lstFilter[iFIndex].FModify = FModify;
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
+            //获取滤镜序号
             public static int GetFilterIndex_ByFilterNum(int FNum)
             {
                 int iReturn = -1;
 
-                for (int i = 0; i < lstFilter.Count; i++)
+                try
                 {
-                    int iFNum = lstFilter[i].FNum;
-
-                    if (iFNum == FNum)
+                    for (int i = 0; i < lstFilter.Count; i++)
                     {
-                        iReturn = i;
-                        break;
+                        int iFNum = lstFilter[i].FNum;
+
+                        if (iFNum == FNum)
+                        {
+                            iReturn = i;
+                            break;
+                        }
                     }
                 }
-
-                return iReturn;
-            }
-
-            public static int GetFilterNum_ByFilterIndex(int FIndex)
-            {
-                int iReturn = 0;
-
-                int iFNum = lstFilter[FIndex].FNum;
-
-                if (iFNum > 0)
+                catch (Exception ex)
                 {
-                    iReturn = iFNum;
+                    iReturn = -1;
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return iReturn;
             }
+
+            //获取滤镜编号
+            public static int GetFilterNum_ByFilterIndex(int FIndex)
+            {
+                int iReturn = -1;
+
+                try
+                {
+                    int iFNum = lstFilter[FIndex].FNum;
+
+                    if (iFNum > 0)
+                    {
+                        iReturn = iFNum;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    iReturn = -1;
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
             #endregion
 
             #region//执行滤镜

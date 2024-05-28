@@ -73,6 +73,8 @@ namespace WPELibrary
             this.cbStep = new System.Windows.Forms.CheckBox();
             this.pSend_Top = new System.Windows.Forms.Panel();
             this.dgvSocketSend = new System.Windows.Forms.DataGridView();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.ssSocketSend.SuspendLayout();
             this.gbSend2.SuspendLayout();
             this.gbSend1.SuspendLayout();
@@ -291,7 +293,9 @@ namespace WPELibrary
             // cmsSocketSend
             // 
             this.cmsSocketSend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiBatchSend});
+            this.tsmiBatchSend,
+            this.toolStripSeparator1,
+            this.tsmiAddToFilter});
             this.cmsSocketSend.Name = "cmsSocketSend";
             resources.ApplyResources(this.cmsSocketSend, "cmsSocketSend");
             this.cmsSocketSend.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSocketSend_ItemClicked);
@@ -422,6 +426,16 @@ namespace WPELibrary
             this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);
             this.dgvSocketSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSocketSend_KeyDown);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // tsmiAddToFilter
+            // 
+            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
+            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
+            // 
             // Socket_Send_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -500,5 +514,7 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudLoop_CNT;
         private System.Windows.Forms.NumericUpDown nudLoop_Int;
         private System.Windows.Forms.DataGridView dgvSocketSend;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddToFilter;
     }
 }

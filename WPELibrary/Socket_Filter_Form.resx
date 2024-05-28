@@ -253,13 +253,16 @@
     <value>Fill</value>
   </data>
   <data name="dgvFilter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
+    <value>1, 17</value>
+  </data>
+  <data name="dgvFilter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
   </data>
   <data name="dgvFilter.RowHeadersWidth" type="System.Int32, mscorlib">
     <value>100</value>
   </data>
   <data name="dgvFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>678, 116</value>
+    <value>682, 120</value>
   </data>
   <data name="dgvFilter.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -271,33 +274,39 @@
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dgvFilter.Parent" xml:space="preserve">
-    <value>gbFilterList1</value>
+    <value>gbFilterList</value>
   </data>
   <data name="&gt;&gt;dgvFilter.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="gbFilterList1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="gbFilterList1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="gbFilterList1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="gbFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="gbFilterList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>684, 138</value>
   </data>
-  <data name="gbFilterList1.TabIndex" type="System.Int32, mscorlib">
+  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
-  <data name="&gt;&gt;gbFilterList1.Name" xml:space="preserve">
-    <value>gbFilterList1</value>
+  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
+    <value>gbFilterList</value>
   </data>
-  <data name="&gt;&gt;gbFilterList1.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbFilterList1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;gbFilterList1.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
