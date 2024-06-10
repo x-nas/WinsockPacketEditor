@@ -40,11 +40,11 @@ namespace WinsockPacketEditor
 
             //Github
             this.rtbDescription.Text += "GitHub: ";
-            this.rtbDescription.Text += "https://github.com/x-nas/WinPacketsEdit" + "\r\n";
+            this.rtbDescription.Text += "https://github.com/x-nas/WinsockPacketEditor" + "\r\n";
 
             //Gitee
             this.rtbDescription.Text += "Gitee: ";
-            this.rtbDescription.Text += "https://gitee.com/X-NAS/WinPacketsEdit" + "\r\n";
+            this.rtbDescription.Text += "https://gitee.com/X-NAS/WinsockPacketEditor" + "\r\n";
 
             //联系作者
             this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26);

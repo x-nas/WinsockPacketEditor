@@ -49,8 +49,8 @@ namespace WinsockPacketEditor
             // 
             // pTop
             // 
-            resources.ApplyResources(this.pTop, "pTop");
             this.pTop.Controls.Add(this.tlpProcessInject);
+            resources.ApplyResources(this.pTop, "pTop");
             this.pTop.Name = "pTop";
             // 
             // tlpProcessInject
@@ -99,21 +99,20 @@ namespace WinsockPacketEditor
             // pbAbout
             // 
             resources.ApplyResources(this.pbAbout, "pbAbout");
-            this.pbAbout.Image = global::WinsockPacketEditor.Properties.Resources.help;
             this.pbAbout.Name = "pbAbout";
             this.pbAbout.TabStop = false;
             this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
             // 
             // pFill
             // 
-            resources.ApplyResources(this.pFill, "pFill");
             this.pFill.Controls.Add(this.rtbLog);
+            resources.ApplyResources(this.pFill, "pFill");
             this.pFill.Name = "pFill";
             // 
             // rtbLog
             // 
-            resources.ApplyResources(this.rtbLog, "rtbLog");
             this.rtbLog.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.rtbLog, "rtbLog");
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;

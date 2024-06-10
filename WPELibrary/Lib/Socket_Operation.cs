@@ -523,7 +523,7 @@ namespace WPELibrary.Lib
                 //封包大小
                 if (Socket_Cache.Check_Size)
                 {
-                    if (ISFilter_BySize(sp.Len))
+                    if (ISFilter_BySize(sp.ResLen))
                     {
                         return false;
                     }
