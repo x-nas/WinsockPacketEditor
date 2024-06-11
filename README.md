@@ -6,6 +6,10 @@
 Winsocket packet Editor, which can intercept mobile game  with simulator, supports 32 bit and 64 bit App
 I have developed a WPE like packet interceptor using C #, which can adapt to 32-bit and 64 bit software, and has all the commonly used functions of WPE. During development, I used multithreading technology and tested intercepting more than 10000 packets without getting stuck or exiting. The software updates its functions periodically and supports online automatic updates every time it starts. We welcome everyone to improve and perfect together!
 
+重要告知：由于系统架构升级 1.0.0.32 及以前版本需要卸载后，重新下载安装文件才能升级到 1.0.0.33 及以后版本！
+
+Notice: Due to the system architecture upgrade of 1.0.0.32 and earlier versions, it is necessary to uninstall and download the setup.exe again in order to upgrade to 1.0.0.33 and later versions!
+
 Download setup.exe: https://www.x-nas.com/wpe/publish.htm
 
 ![111](https://github.com/x-nas/WinPacketsEdit/assets/67667226/5f45ae94-fdcb-42de-abf9-3cf7aefad08d)
