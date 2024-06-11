@@ -64,6 +64,8 @@ namespace WPELibrary
             this.bgwSendPacket = new System.ComponentModel.BackgroundWorker();
             this.cmsSocketSend = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiBatchSend = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.gbSend3 = new System.Windows.Forms.GroupBox();
             this.lStepLen_Value = new System.Windows.Forms.Label();
             this.lStepIndex_Value = new System.Windows.Forms.Label();
@@ -73,8 +75,6 @@ namespace WPELibrary
             this.cbStep = new System.Windows.Forms.CheckBox();
             this.pSend_Top = new System.Windows.Forms.Panel();
             this.dgvSocketSend = new System.Windows.Forms.DataGridView();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.ssSocketSend.SuspendLayout();
             this.gbSend2.SuspendLayout();
             this.gbSend1.SuspendLayout();
@@ -258,7 +258,7 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.nudLoop_CNT, "nudLoop_CNT");
             this.nudLoop_CNT.Maximum = new decimal(new int[] {
-            99999,
+            999999,
             0,
             0,
             0});
@@ -304,6 +304,16 @@ namespace WPELibrary
             // 
             this.tsmiBatchSend.Name = "tsmiBatchSend";
             resources.ApplyResources(this.tsmiBatchSend, "tsmiBatchSend");
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // tsmiAddToFilter
+            // 
+            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
+            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
             // 
             // gbSend3
             // 
@@ -425,16 +435,6 @@ namespace WPELibrary
             this.dgvSocketSend.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSocketSend_CellEndEdit);
             this.dgvSocketSend.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvSocketSend_ColumnAdded);
             this.dgvSocketSend.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvSocketSend_KeyDown);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
-            // 
-            // tsmiAddToFilter
-            // 
-            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
-            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
             // 
             // Socket_Send_Form
             // 

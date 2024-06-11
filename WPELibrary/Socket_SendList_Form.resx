@@ -121,15 +121,6 @@
     <value>166, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 110</value>
-  </data>
-  <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
-    <value>cmsSendList</value>
-  </data>
-  <data name="&gt;&gt;cmsSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
   </data>
@@ -163,31 +154,18 @@
   <data name="tsmiLoadSendList.Text" xml:space="preserve">
     <value>加载发送列表</value>
   </data>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 110</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
+    <value>cmsSendList</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <metadata name="ssSocketSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 239</value>
-  </data>
-  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>685, 22</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ssSocketSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>51</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Name" xml:space="preserve">
-    <value>ssSocketSendList</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
   <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
   </data>
@@ -245,57 +223,27 @@
   <data name="tlSendList_Fail_CNT.Text" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.Name" xml:space="preserve">
-    <value>bSendListStop</value>
+  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 239</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>685, 22</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ssSocketSendList.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
   </data>
-  <data name="&gt;&gt;bSendListStop.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;ssSocketSendList.Name" xml:space="preserve">
+    <value>ssSocketSendList</value>
   </data>
-  <data name="&gt;&gt;bSendList.Name" xml:space="preserve">
-    <value>bSendList</value>
+  <data name="&gt;&gt;ssSocketSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;bSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Parent" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;bSendList.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="gbSend_Bottom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Bottom</value>
-  </data>
-  <data name="gbSend_Bottom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbSend_Bottom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 184</value>
-  </data>
-  <data name="gbSend_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>685, 55</value>
-  </data>
-  <data name="gbSend_Bottom.TabIndex" type="System.Int32, mscorlib">
-    <value>52</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Name" xml:space="preserve">
-    <value>gbSend_Bottom</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSend_Bottom.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ssSocketSendList.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;gbSend_Bottom.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="&gt;&gt;ssSocketSendList.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
     <value>589, 17</value>
@@ -344,6 +292,34 @@
   </data>
   <data name="&gt;&gt;bSendList.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="gbSend_Bottom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Bottom</value>
+  </data>
+  <data name="gbSend_Bottom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="gbSend_Bottom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 184</value>
+  </data>
+  <data name="gbSend_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>685, 55</value>
+  </data>
+  <data name="gbSend_Bottom.TabIndex" type="System.Int32, mscorlib">
+    <value>52</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Name" xml:space="preserve">
+    <value>gbSend_Bottom</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbSend_Bottom.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
     <value>598, 16</value>
@@ -582,6 +558,21 @@
   <data name="&gt;&gt;dgvSendList.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="cbSelectAll.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbSelectAll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 18</value>
+  </data>
+  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 21</value>
+  </data>
+  <data name="cbSelectAll.TabIndex" type="System.Int32, mscorlib">
+    <value>110</value>
+  </data>
+  <data name="cbSelectAll.Text" xml:space="preserve">
+    <value>全选 / 取消</value>
+  </data>
   <data name="&gt;&gt;cbSelectAll.Name" xml:space="preserve">
     <value>cbSelectAll</value>
   </data>
@@ -617,33 +608,6 @@
   </data>
   <data name="&gt;&gt;gbSendList1.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="cbSelectAll.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbSelectAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 18</value>
-  </data>
-  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
-  </data>
-  <data name="cbSelectAll.TabIndex" type="System.Int32, mscorlib">
-    <value>110</value>
-  </data>
-  <data name="cbSelectAll.Text" xml:space="preserve">
-    <value>全选 / 取消</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Name" xml:space="preserve">
-    <value>cbSelectAll</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Parent" xml:space="preserve">
-    <value>gbSendList1</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 35</value>

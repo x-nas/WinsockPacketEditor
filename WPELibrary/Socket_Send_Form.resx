@@ -631,22 +631,22 @@
     <value>264, 17</value>
   </metadata>
   <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>160, 22</value>
   </data>
   <data name="tsmiBatchSend.Text" xml:space="preserve">
     <value>添加到发送列表</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>157, 6</value>
   </data>
   <data name="tsmiAddToFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>160, 22</value>
   </data>
   <data name="tsmiAddToFilter.Text" xml:space="preserve">
     <value>添加到滤镜列表</value>
   </data>
   <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 76</value>
+    <value>161, 54</value>
   </data>
   <data name="&gt;&gt;cmsSocketSend.Name" xml:space="preserve">
     <value>cmsSocketSend</value>
