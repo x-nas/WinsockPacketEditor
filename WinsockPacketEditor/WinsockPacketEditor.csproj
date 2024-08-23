@@ -200,6 +200,7 @@
     </Content>
     <Content Include="Icon\enUS.png" />
     <Content Include="Icon\loading.gif" />
+    <None Include="Icon\Search.png" />
     <Content Include="Icon\zhCN.png" />
     <Content Include="Icon\help.png" />
     <Content Include="Icon\Language.png" />

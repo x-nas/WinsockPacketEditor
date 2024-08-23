@@ -31,39 +31,38 @@ namespace WinsockPacketEditor
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessList_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.bCreate = new System.Windows.Forms.Button();
-            this.bSelected = new System.Windows.Forms.Button();
-            this.bRefresh = new System.Windows.Forms.Button();
+            this.bgwProcessList = new System.ComponentModel.BackgroundWorker();
+            this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.dgvProcessList = new System.Windows.Forms.DataGridView();
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cProcessName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.bgwProcessList = new System.ComponentModel.BackgroundWorker();
-            this.pbLoading = new System.Windows.Forms.PictureBox();
+            this.tlpProcessInfoButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSelected = new System.Windows.Forms.Button();
+            this.bRefresh = new System.Windows.Forms.Button();
+            this.bCreate = new System.Windows.Forms.Button();
+            this.tlpProcessInfoSearch = new System.Windows.Forms.TableLayoutPanel();
+            this.txtProcessSearch = new System.Windows.Forms.TextBox();
+            this.pbProcessSearch = new System.Windows.Forms.PictureBox();
+            this.tlpProcessInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProcessList)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
+            this.tlpProcessInfoButton.SuspendLayout();
+            this.tlpProcessInfoSearch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbProcessSearch)).BeginInit();
             this.SuspendLayout();
             // 
-            // bCreate
+            // bgwProcessList
             // 
-            resources.ApplyResources(this.bCreate, "bCreate");
-            this.bCreate.Name = "bCreate";
-            this.bCreate.UseVisualStyleBackColor = true;
-            this.bCreate.Click += new System.EventHandler(this.bCreate_Click);
+            this.bgwProcessList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcessList_DoWork);
+            this.bgwProcessList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcessList_RunWorkerCompleted);
             // 
-            // bSelected
+            // tlpProcessInfo
             // 
-            resources.ApplyResources(this.bSelected, "bSelected");
-            this.bSelected.Name = "bSelected";
-            this.bSelected.UseVisualStyleBackColor = true;
-            this.bSelected.Click += new System.EventHandler(this.bSelected_Click);
-            // 
-            // bRefresh
-            // 
-            resources.ApplyResources(this.bRefresh, "bRefresh");
-            this.bRefresh.Name = "bRefresh";
-            this.bRefresh.UseVisualStyleBackColor = true;
-            this.bRefresh.Click += new System.EventHandler(this.bRefresh_Click);
+            resources.ApplyResources(this.tlpProcessInfo, "tlpProcessInfo");
+            this.tlpProcessInfo.Controls.Add(this.dgvProcessList, 0, 3);
+            this.tlpProcessInfo.Controls.Add(this.tlpProcessInfoButton, 0, 5);
+            this.tlpProcessInfo.Controls.Add(this.tlpProcessInfoSearch, 0, 1);
+            this.tlpProcessInfo.Name = "tlpProcessInfo";
             // 
             // dgvProcessList
             // 
@@ -122,48 +121,89 @@ namespace WinsockPacketEditor
             this.cProcessID.Name = "cProcessID";
             this.cProcessID.ReadOnly = true;
             // 
-            // bgwProcessList
+            // tlpProcessInfoButton
             // 
-            this.bgwProcessList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcessList_DoWork);
-            this.bgwProcessList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcessList_RunWorkerCompleted);
+            resources.ApplyResources(this.tlpProcessInfoButton, "tlpProcessInfoButton");
+            this.tlpProcessInfoButton.Controls.Add(this.bSelected, 2, 0);
+            this.tlpProcessInfoButton.Controls.Add(this.bRefresh, 1, 0);
+            this.tlpProcessInfoButton.Controls.Add(this.bCreate, 0, 0);
+            this.tlpProcessInfoButton.Name = "tlpProcessInfoButton";
             // 
-            // pbLoading
+            // bSelected
             // 
-            this.pbLoading.BackColor = System.Drawing.SystemColors.Control;
-            resources.ApplyResources(this.pbLoading, "pbLoading");
-            this.pbLoading.Image = global::WinsockPacketEditor.Properties.Resources.loading;
-            this.pbLoading.Name = "pbLoading";
-            this.pbLoading.TabStop = false;
+            resources.ApplyResources(this.bSelected, "bSelected");
+            this.bSelected.Name = "bSelected";
+            this.bSelected.UseVisualStyleBackColor = true;
+            this.bSelected.Click += new System.EventHandler(this.bSelected_Click);
+            // 
+            // bRefresh
+            // 
+            resources.ApplyResources(this.bRefresh, "bRefresh");
+            this.bRefresh.Name = "bRefresh";
+            this.bRefresh.UseVisualStyleBackColor = true;
+            this.bRefresh.Click += new System.EventHandler(this.bRefresh_Click);
+            // 
+            // bCreate
+            // 
+            resources.ApplyResources(this.bCreate, "bCreate");
+            this.bCreate.Name = "bCreate";
+            this.bCreate.UseVisualStyleBackColor = true;
+            this.bCreate.Click += new System.EventHandler(this.bCreate_Click);
+            // 
+            // tlpProcessInfoSearch
+            // 
+            resources.ApplyResources(this.tlpProcessInfoSearch, "tlpProcessInfoSearch");
+            this.tlpProcessInfoSearch.Controls.Add(this.txtProcessSearch, 1, 0);
+            this.tlpProcessInfoSearch.Controls.Add(this.pbProcessSearch, 2, 0);
+            this.tlpProcessInfoSearch.Name = "tlpProcessInfoSearch";
+            // 
+            // txtProcessSearch
+            // 
+            this.txtProcessSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtProcessSearch, "txtProcessSearch");
+            this.txtProcessSearch.Name = "txtProcessSearch";
+            this.txtProcessSearch.TextChanged += new System.EventHandler(this.txtProcessSearch_TextChanged);
+            // 
+            // pbProcessSearch
+            // 
+            resources.ApplyResources(this.pbProcessSearch, "pbProcessSearch");
+            this.pbProcessSearch.Image = global::WinsockPacketEditor.Properties.Resources.Search;
+            this.pbProcessSearch.Name = "pbProcessSearch";
+            this.pbProcessSearch.TabStop = false;
             // 
             // ProcessList_Form
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.pbLoading);
-            this.Controls.Add(this.dgvProcessList);
-            this.Controls.Add(this.bCreate);
-            this.Controls.Add(this.bSelected);
-            this.Controls.Add(this.bRefresh);
+            this.Controls.Add(this.tlpProcessInfo);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
             this.Name = "ProcessList_Form";
             this.Load += new System.EventHandler(this.ProcessList_Form_Load);
+            this.tlpProcessInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvProcessList)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
+            this.tlpProcessInfoButton.ResumeLayout(false);
+            this.tlpProcessInfoSearch.ResumeLayout(false);
+            this.tlpProcessInfoSearch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbProcessSearch)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Button bCreate;
-        private System.Windows.Forms.Button bSelected;
-        private System.Windows.Forms.Button bRefresh;
+        private System.ComponentModel.BackgroundWorker bgwProcessList;
+        private System.Windows.Forms.TableLayoutPanel tlpProcessInfo;
         private System.Windows.Forms.DataGridView dgvProcessList;
         private System.Windows.Forms.DataGridViewImageColumn cICO;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessID;
-        private System.ComponentModel.BackgroundWorker bgwProcessList;
-        private System.Windows.Forms.PictureBox pbLoading;
+        private System.Windows.Forms.TableLayoutPanel tlpProcessInfoButton;
+        private System.Windows.Forms.Button bCreate;
+        private System.Windows.Forms.Button bRefresh;
+        private System.Windows.Forms.Button bSelected;
+        private System.Windows.Forms.TableLayoutPanel tlpProcessInfoSearch;
+        private System.Windows.Forms.TextBox txtProcessSearch;
+        private System.Windows.Forms.PictureBox pbProcessSearch;
     }
 }

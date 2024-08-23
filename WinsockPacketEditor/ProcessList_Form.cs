@@ -18,9 +18,6 @@ namespace WinsockPacketEditor
 
             try
             {
-                pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
-                pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
-
                 dgvProcessList.AutoGenerateColumns = false;
                 dgvProcessList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProcessList, true, null);
             }
@@ -44,7 +41,7 @@ namespace WinsockPacketEditor
                 this.bCreate.Enabled = false;
                 this.bRefresh.Enabled = false;
                 this.bSelected.Enabled = false;
-                this.pbLoading.Visible = true;
+                this.txtProcessSearch.Enabled = false;
 
                 if (!bgwProcessList.IsBusy)
                 {
@@ -76,13 +73,13 @@ namespace WinsockPacketEditor
                 if (this.dgvProcessList.InvokeRequired)
                 {
                     this.dgvProcessList.Invoke(new Action(() =>
-                    {
-                        this.dgvProcessList.DataSource = e.Result;
+                    {                       
+                        this.dgvProcessList.DataSource = e.Result;                        
 
                         this.bCreate.Enabled = true;
                         this.bRefresh.Enabled = true;
                         this.bSelected.Enabled = true;
-                        this.pbLoading.Visible = false;
+                        this.txtProcessSearch.Enabled = true;
                     }));
                 }
                 else
@@ -92,7 +89,7 @@ namespace WinsockPacketEditor
                     this.bCreate.Enabled = true;
                     this.bRefresh.Enabled = true;
                     this.bSelected.Enabled = true;
-                    this.pbLoading.Visible = false;
+                    this.txtProcessSearch.Enabled = true;
                 }
             }
             catch
@@ -135,6 +132,7 @@ namespace WinsockPacketEditor
                 dtClear.Rows.Clear();
                 dgvProcessList.DataSource = dtClear;
 
+                this.txtProcessSearch.Text = "";
                 this.ShowProcessList();
             }
             catch
@@ -210,6 +208,36 @@ namespace WinsockPacketEditor
                 //
             }
         }
-        #endregion        
+        #endregion
+
+        #region//筛选进程
+        private void txtProcessSearch_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                string sSearchText = this.txtProcessSearch.Text.Trim();
+
+                if (String.IsNullOrEmpty(sSearchText))
+                {
+                    DataTable dtClear = (DataTable)dgvProcessList.DataSource;
+                    dtClear.Rows.Clear();
+                    dgvProcessList.DataSource = dtClear;
+
+                    this.ShowProcessList();
+                }
+                else
+                {
+                    DataTable dtSearch = (DataTable)dgvProcessList.DataSource;
+                    DataView dvSearch = new DataView(dtSearch);
+                    dvSearch.RowFilter = "PName like '" + sSearchText + "%'";
+                    dgvProcessList.DataSource = dvSearch.ToTable();
+                }
+            }
+            catch
+            { 
+                //
+            }
+        }
+        #endregion
     }
 }
