@@ -172,7 +172,7 @@
     <value>51</value>
   </data>
   <data name="dgvProcessList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>400, 382</value>
+    <value>400, 127</value>
   </data>
   <data name="dgvProcessList.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -190,7 +190,7 @@
     <value>0</value>
   </data>
   <data name="tlpProcessInfoButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="bSelected.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -199,7 +199,7 @@
     <value>NoControl</value>
   </data>
   <data name="bSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>314, 4</value>
+    <value>306, 4</value>
   </data>
   <data name="bSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -232,7 +232,7 @@
     <value>NoControl</value>
   </data>
   <data name="bRefresh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>138, 4</value>
+    <value>135, 4</value>
   </data>
   <data name="bRefresh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -265,7 +265,7 @@
     <value>NoControl</value>
   </data>
   <data name="bCreate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>17, 4</value>
+    <value>16, 4</value>
   </data>
   <data name="bCreate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -295,7 +295,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpProcessInfoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 431</value>
+    <value>0, 426</value>
   </data>
   <data name="tlpProcessInfoButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -322,7 +322,7 @@
     <value>1</value>
   </data>
   <data name="tlpProcessInfoButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,7" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpProcessInfoSearch.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
@@ -334,10 +334,10 @@
     <value>Segoe UI, 10.5pt</value>
   </data>
   <data name="txtProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>53, 3</value>
+    <value>57, 3</value>
   </data>
   <data name="txtProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 26</value>
+    <value>248, 26</value>
   </data>
   <data name="txtProcessSearch.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -364,7 +364,7 @@
     <value>NoControl</value>
   </data>
   <data name="pbProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>316, 2</value>
+    <value>310, 2</value>
   </data>
   <data name="pbProcessSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -421,7 +421,37 @@
     <value>2</value>
   </data>
   <data name="tlpProcessInfoSearch.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,50,Percent,100,Absolute,40,Absolute,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,70,Absolute,40,Percent,15" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="pbLoading.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 171</value>
+  </data>
+  <data name="pbLoading.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 200</value>
+  </data>
+  <data name="pbLoading.Size" type="System.Drawing.Size, System.Drawing">
+    <value>404, 50</value>
+  </data>
+  <data name="pbLoading.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="pbLoading.TabIndex" type="System.Int32, mscorlib">
+    <value>23</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Name" xml:space="preserve">
+    <value>pbLoading</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.Parent" xml:space="preserve">
+    <value>tlpProcessInfo</value>
+  </data>
+  <data name="&gt;&gt;pbLoading.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="tlpProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -430,10 +460,10 @@
     <value>0, 0</value>
   </data>
   <data name="tlpProcessInfo.RowCount" type="System.Int32, mscorlib">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="tlpProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 476</value>
+    <value>404, 471</value>
   </data>
   <data name="tlpProcessInfo.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -451,7 +481,7 @@
     <value>0</value>
   </data>
   <data name="tlpProcessInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvProcessList" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoButton" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoSearch" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,30,Absolute,5,Percent,100,Absolute,5,Absolute,40,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvProcessList" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoButton" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoSearch" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbLoading" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,30,Absolute,5,Percent,100,AutoSize,0,Absolute,5,Absolute,40,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -460,7 +490,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>404, 476</value>
+    <value>404, 471</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>

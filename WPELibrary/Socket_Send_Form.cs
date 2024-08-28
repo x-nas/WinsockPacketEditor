@@ -408,9 +408,12 @@ namespace WPELibrary
                     case "tsmiAddToFilter":
                         
                         string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
+                        Socket_Filter_Info.FilterMode FMode = Socket_Filter_Info.FilterMode.Normal;                        
+                        Socket_Filter_Info.StartFrom FStartFrom = Socket_Filter_Info.StartFrom.Head;
                         string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
+                        int iFSearchLen = int.Parse(this.txtSend_Len.Text.Trim());                        
 
-                        Socket_Cache.SocketFilterList.AddFilter_New(sFName, sFSearch, "", false);
+                        Socket_Cache.SocketFilterList.AddFilter_New(sFName, FMode, FStartFrom, sFSearch, iFSearchLen, "", iFSearchLen, false);
 
                         Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
 

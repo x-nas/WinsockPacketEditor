@@ -11,6 +11,8 @@ namespace WinsockPacketEditor.Lib
 {
     internal class Process_Injector
     {
+        public static DataTable ProcessTable { get; private set; }
+
         #region//DLL 引用
 
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
@@ -76,6 +78,8 @@ namespace WinsockPacketEditor.Lib
                 DataView dv = dtProcessList.DefaultView;
                 dv.Sort = "PName";
                 dtProcessList = dv.ToTable();
+
+                ProcessTable = dv.ToTable();
             }
             catch
             {

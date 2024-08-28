@@ -8240,6 +8240,18 @@
   <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tsmiAddToFilter.Name" xml:space="preserve">
+    <value>tsmiAddToFilter</value>
+  </data>
+  <data name="&gt;&gt;tsmiAddToFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator8.Name" xml:space="preserve">
+    <value>toolStripSeparator8</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tsmiUseSocket.Name" xml:space="preserve">
     <value>tsmiUseSocket</value>
   </data>
@@ -8408,24 +8420,6 @@
   <data name="&gt;&gt;cData.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
-    <value>cIsCheck</value>
-  </data>
-  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Name" xml:space="preserve">
-    <value>cFNum</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
-    <value>cFName</value>
-  </data>
-  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;tsmiShowFilter.Name" xml:space="preserve">
     <value>tsmiShowFilter</value>
   </data>
@@ -8528,17 +8522,23 @@
   <data name="&gt;&gt;cContent.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator8.Name" xml:space="preserve">
-    <value>toolStripSeparator8</value>
+  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
+    <value>cIsCheck</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiAddToFilter.Name" xml:space="preserve">
-    <value>tsmiAddToFilter</value>
+  <data name="&gt;&gt;cFNum.Name" xml:space="preserve">
+    <value>cFNum</value>
   </data>
-  <data name="&gt;&gt;tsmiAddToFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cFNum.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
+    <value>cFName</value>
+  </data>
+  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

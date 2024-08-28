@@ -38,10 +38,11 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -53,6 +54,8 @@ namespace WPELibrary
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiBatchSend = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiUseSocket = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiShowBatchSend = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,9 +120,6 @@ namespace WPELibrary
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.dgvFilterList = new System.Windows.Forms.DataGridView();
-            this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiShowFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
@@ -149,8 +149,9 @@ namespace WPELibrary
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pbLoading = new System.Windows.Forms.PictureBox();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiAddToFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList.SuspendLayout();
             this.cmsSocketList.SuspendLayout();
             this.ssStatusInfo_Top.SuspendLayout();
@@ -179,6 +180,7 @@ namespace WPELibrary
             // 
             // cmsLogList
             // 
+            this.cmsLogList.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsLogList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tslClearList,
             this.toolStripSeparator5,
@@ -212,6 +214,7 @@ namespace WPELibrary
             // 
             // cmsSocketList
             // 
+            this.cmsSocketList.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsSocketList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiSend,
             this.toolStripSeparator1,
@@ -248,6 +251,16 @@ namespace WPELibrary
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
             // 
+            // tsmiAddToFilter
+            // 
+            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
+            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
+            // 
             // tsmiUseSocket
             // 
             this.tsmiUseSocket.Name = "tsmiUseSocket";
@@ -281,6 +294,7 @@ namespace WPELibrary
             // ssStatusInfo_Top
             // 
             resources.ApplyResources(this.ssStatusInfo_Top, "ssStatusInfo_Top");
+            this.ssStatusInfo_Top.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.ssStatusInfo_Top.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlSystemInfo,
             this.tlSplit0,
@@ -771,35 +785,13 @@ namespace WPELibrary
             this.dgvFilterList.Name = "dgvFilterList";
             this.dgvFilterList.RowHeadersVisible = false;
             this.dgvFilterList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dgvFilterList.RowTemplate.Height = 23;
+            this.dgvFilterList.RowTemplate.Height = 25;
             this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
             // 
-            // cIsCheck
-            // 
-            this.cIsCheck.DataPropertyName = "IsCheck";
-            this.cIsCheck.FalseValue = "false";
-            resources.ApplyResources(this.cIsCheck, "cIsCheck");
-            this.cIsCheck.Name = "cIsCheck";
-            this.cIsCheck.TrueValue = "true";
-            // 
-            // cFNum
-            // 
-            this.cFNum.DataPropertyName = "FNum";
-            resources.ApplyResources(this.cFNum, "cFNum");
-            this.cFNum.Name = "cFNum";
-            this.cFNum.ReadOnly = true;
-            // 
-            // cFName
-            // 
-            this.cFName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cFName.DataPropertyName = "FName";
-            resources.ApplyResources(this.cFName, "cFName");
-            this.cFName.Name = "cFName";
-            this.cFName.ReadOnly = true;
-            // 
             // cmsFilterList
             // 
+            this.cmsFilterList.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsFilterList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiShowFilter,
             this.tssSep1,
@@ -961,14 +953,14 @@ namespace WPELibrary
             this.dgvLogList.AllowUserToDeleteRows = false;
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cTime,
@@ -980,16 +972,16 @@ namespace WPELibrary
             this.dgvLogList.Name = "dgvLogList";
             this.dgvLogList.ReadOnly = true;
             this.dgvLogList.RowHeadersVisible = false;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             // 
             // cTime
             // 
             this.cTime.DataPropertyName = "Time";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cTime.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cTime.DefaultCellStyle = dataGridViewCellStyle10;
             resources.ApplyResources(this.cTime, "cTime");
             this.cTime.Name = "cTime";
             this.cTime.ReadOnly = true;
@@ -997,8 +989,8 @@ namespace WPELibrary
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle11;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -1019,15 +1011,32 @@ namespace WPELibrary
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 
-            // toolStripSeparator8
+            // cIsCheck
             // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
+            this.cIsCheck.DataPropertyName = "IsCheck";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.NullValue = false;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle8;
+            this.cIsCheck.FalseValue = "false";
+            resources.ApplyResources(this.cIsCheck, "cIsCheck");
+            this.cIsCheck.Name = "cIsCheck";
+            this.cIsCheck.TrueValue = "true";
             // 
-            // tsmiAddToFilter
+            // cFNum
             // 
-            this.tsmiAddToFilter.Name = "tsmiAddToFilter";
-            resources.ApplyResources(this.tsmiAddToFilter, "tsmiAddToFilter");
+            this.cFNum.DataPropertyName = "FNum";
+            resources.ApplyResources(this.cFNum, "cFNum");
+            this.cFNum.Name = "cFNum";
+            this.cFNum.ReadOnly = true;
+            // 
+            // cFName
+            // 
+            this.cFName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cFName.DataPropertyName = "FName";
+            resources.ApplyResources(this.cFName, "cFName");
+            this.cFName.Name = "cFName";
+            this.cFName.ReadOnly = true;
             // 
             // Socket_Form
             // 
@@ -1134,9 +1143,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem tsmiClearAll;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
         private System.Windows.Forms.Panel pPacketInfo;
         private System.Windows.Forms.TabControl tcPacketInfo;
         private System.Windows.Forms.TabPage tpPacketInfo;
@@ -1189,5 +1195,8 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cData;
         private System.Windows.Forms.ToolStripMenuItem tsmiAddToFilter;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
     }
 }

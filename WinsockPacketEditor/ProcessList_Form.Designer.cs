@@ -44,11 +44,13 @@ namespace WinsockPacketEditor
             this.tlpProcessInfoSearch = new System.Windows.Forms.TableLayoutPanel();
             this.txtProcessSearch = new System.Windows.Forms.TextBox();
             this.pbProcessSearch = new System.Windows.Forms.PictureBox();
+            this.pbLoading = new System.Windows.Forms.PictureBox();
             this.tlpProcessInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvProcessList)).BeginInit();
             this.tlpProcessInfoButton.SuspendLayout();
             this.tlpProcessInfoSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessSearch)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
             // 
             // bgwProcessList
@@ -60,8 +62,9 @@ namespace WinsockPacketEditor
             // 
             resources.ApplyResources(this.tlpProcessInfo, "tlpProcessInfo");
             this.tlpProcessInfo.Controls.Add(this.dgvProcessList, 0, 3);
-            this.tlpProcessInfo.Controls.Add(this.tlpProcessInfoButton, 0, 5);
+            this.tlpProcessInfo.Controls.Add(this.tlpProcessInfoButton, 0, 6);
             this.tlpProcessInfo.Controls.Add(this.tlpProcessInfoSearch, 0, 1);
+            this.tlpProcessInfo.Controls.Add(this.pbLoading, 0, 4);
             this.tlpProcessInfo.Name = "tlpProcessInfo";
             // 
             // dgvProcessList
@@ -171,6 +174,13 @@ namespace WinsockPacketEditor
             this.pbProcessSearch.Name = "pbProcessSearch";
             this.pbProcessSearch.TabStop = false;
             // 
+            // pbLoading
+            // 
+            resources.ApplyResources(this.pbLoading, "pbLoading");
+            this.pbLoading.Image = global::WinsockPacketEditor.Properties.Resources.loading;
+            this.pbLoading.Name = "pbLoading";
+            this.pbLoading.TabStop = false;
+            // 
             // ProcessList_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -187,6 +197,7 @@ namespace WinsockPacketEditor
             this.tlpProcessInfoSearch.ResumeLayout(false);
             this.tlpProcessInfoSearch.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessSearch)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -205,5 +216,6 @@ namespace WinsockPacketEditor
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfoSearch;
         private System.Windows.Forms.TextBox txtProcessSearch;
         private System.Windows.Forms.PictureBox pbProcessSearch;
+        private System.Windows.Forms.PictureBox pbLoading;
     }
 }

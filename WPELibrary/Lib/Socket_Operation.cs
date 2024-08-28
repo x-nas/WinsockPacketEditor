@@ -900,10 +900,14 @@ namespace WPELibrary.Lib
                             {
                                 string sFNum = Socket_Cache.SocketFilterList.lstFilter[i].FNum.ToString();
                                 string sFName = Socket_Cache.SocketFilterList.lstFilter[i].FName.ToString();
+                                string sFMode = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FMode).ToString();                                
+                                string sFStartFrom = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FStartFrom).ToString();
                                 string sFSearch = Socket_Cache.SocketFilterList.lstFilter[i].FSearch.ToString();
+                                string sFSearchLen = Socket_Cache.SocketFilterList.lstFilter[i].FSearchLen.ToString();
                                 string sModify = Socket_Cache.SocketFilterList.lstFilter[i].FModify.ToString();
+                                string sModifyLen = Socket_Cache.SocketFilterList.lstFilter[i].FModifyLen.ToString();
 
-                                string sSave = sFNum + "|" + sFName + "|" + sFSearch + "|" + sModify;
+                                string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" +sModifyLen;
 
                                 sw.WriteLine(sSave);
 
@@ -963,10 +967,14 @@ namespace WPELibrary.Lib
 
                             int iFNum = int.Parse(ss[0]);
                             string sFName = ss[1];
-                            string sFSearch = ss[2];
-                            string sFModify = ss[3];
+                            Socket_Filter_Info.FilterMode FMode = GetFilterMode_ByString(ss[2]);                            
+                            Socket_Filter_Info.StartFrom FStartFrom = GetFilterStartFrom_ByString(ss[3]);
+                            string sFSearch = ss[4];
+                            int iFSearchLen = int.Parse(ss[5]);
+                            string sFModify = ss[6];
+                            int iFModifyLen = int.Parse(ss[7]);
 
-                            Socket_Cache.SocketFilterList.AddFilter_New(sFName, sFSearch, sFModify, false);
+                            Socket_Cache.SocketFilterList.AddFilter_New(sFName, FMode, FStartFrom, sFSearch, iFSearchLen, sFModify, iFModifyLen, false);
 
                             iSuccess++;
                         }
@@ -1016,6 +1024,44 @@ namespace WPELibrary.Lib
             }
 
             return sReturn;
+        }
+
+        #endregion
+
+        #region//获取滤镜选项
+
+        public static Socket_Filter_Info.FilterMode GetFilterMode_ByString(string sFMode)
+        {
+            Socket_Filter_Info.FilterMode FMode;
+
+            try
+            {
+                FMode = (Socket_Filter_Info.FilterMode)Enum.Parse(typeof(Socket_Filter_Info.FilterMode), sFMode);
+            }
+            catch (Exception ex)
+            {
+                FMode = Socket_Filter_Info.FilterMode.Normal;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }                       
+
+            return FMode;
+        }        
+
+        public static Socket_Filter_Info.StartFrom GetFilterStartFrom_ByString(string sFStartFrom)
+        {
+            Socket_Filter_Info.StartFrom FStartFrom;
+
+            try
+            {
+                FStartFrom = (Socket_Filter_Info.StartFrom)Enum.Parse(typeof(Socket_Filter_Info.StartFrom), sFStartFrom);
+            }
+            catch (Exception ex)
+            {
+                FStartFrom = Socket_Filter_Info.StartFrom.Head;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return FStartFrom;
         }
 
         #endregion

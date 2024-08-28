@@ -9,7 +9,7 @@ namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
     {        
-        private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSASendTo, lhWSARecv, lhWSARecvFrom;        
+        private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSASendTo, lhWSARecv, lhWSARecvFrom;
 
         #region//user32.dll 
 
@@ -324,6 +324,11 @@ namespace WPELibrary.Lib
         {
             try
             {
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    SetProcessDPIAware();
+                }
+
                 Application.EnableVisualStyles();                
                 Application.SetCompatibleTextRenderingDefault(false);                
                 Application.Run(new Socket_Form(InArg));                

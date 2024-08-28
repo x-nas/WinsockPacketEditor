@@ -8,12 +8,20 @@ namespace WinsockPacketEditor
         public static int PID = -1;
         public static string PNAME = string.Empty;
         public static string PATH = string.Empty;
-        
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool SetProcessDPIAware();
+
         [STAThread]
         static void Main()
         {
             try
             {
+                if (Environment.OSVersion.Version.Major >= 6)
+                {
+                    SetProcessDPIAware();
+                }
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);             
                

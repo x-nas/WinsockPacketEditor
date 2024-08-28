@@ -43,6 +43,9 @@ namespace WinsockPacketEditor
                 this.bSelected.Enabled = false;
                 this.txtProcessSearch.Enabled = false;
 
+                this.pbLoading.Visible = true;
+                this.dgvProcessList.Visible = false;             
+
                 if (!bgwProcessList.IsBusy)
                 {
                     bgwProcessList.RunWorkerAsync();
@@ -80,6 +83,9 @@ namespace WinsockPacketEditor
                         this.bRefresh.Enabled = true;
                         this.bSelected.Enabled = true;
                         this.txtProcessSearch.Enabled = true;
+
+                        this.pbLoading.Visible = false;
+                        this.dgvProcessList.Visible = true;
                     }));
                 }
                 else
@@ -90,6 +96,9 @@ namespace WinsockPacketEditor
                     this.bRefresh.Enabled = true;
                     this.bSelected.Enabled = true;
                     this.txtProcessSearch.Enabled = true;
+
+                    this.pbLoading.Visible = false;
+                    this.dgvProcessList.Visible = true;
                 }
             }
             catch
@@ -219,16 +228,11 @@ namespace WinsockPacketEditor
 
                 if (String.IsNullOrEmpty(sSearchText))
                 {
-                    DataTable dtClear = (DataTable)dgvProcessList.DataSource;
-                    dtClear.Rows.Clear();
-                    dgvProcessList.DataSource = dtClear;
-
-                    this.ShowProcessList();
+                    dgvProcessList.DataSource = Process_Injector.ProcessTable;
                 }
                 else
-                {
-                    DataTable dtSearch = (DataTable)dgvProcessList.DataSource;
-                    DataView dvSearch = new DataView(dtSearch);
+                {                   
+                    DataView dvSearch = new DataView(Process_Injector.ProcessTable);
                     dvSearch.RowFilter = "PName like '" + sSearchText + "%'";
                     dgvProcessList.DataSource = dvSearch.ToTable();
                 }
