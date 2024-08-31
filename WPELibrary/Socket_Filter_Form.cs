@@ -13,6 +13,7 @@ namespace WPELibrary
         bool bFinishInit = false;
         private string FilterName = "";
         private int FilterNum = -1, FilterIndex = -1;
+        private int FilterModifyCNT = 0;
         private string FilterSearch = "", FilterModify = "";
         private int FilterSearchLen = -1, FilterModifyLen = -1;
         private Socket_Filter_Info.FilterDGVType FilterDGVType_Init;
@@ -59,6 +60,7 @@ namespace WPELibrary
                     this.FilterName = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FName.ToString();
                     this.FilterMode = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FMode;                    
                     this.FilterStartFrom = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FStartFrom;
+                    this.FilterModifyCNT = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModifyCNT;
                     this.FilterSearch = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearch.ToString().Trim();
                     this.FilterSearchLen = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearchLen;
                     this.FilterModify = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModify.ToString().Trim();
@@ -90,8 +92,9 @@ namespace WPELibrary
                     }
                     this.StartFromChange();
                                        
-                    this.PacketLengthChange();                    
+                    this.PacketLengthChange();
 
+                    this.nudModifyCNT.Value = FilterModifyCNT;
                     this.nudPacketLength.Value = FilterSearchLen;
                     this.nudModifyLength.Value = FilterModifyLen;
                 }
@@ -249,13 +252,17 @@ namespace WPELibrary
                                 break;                            
                         }
 
+                        int iFModifyCNT_New = int.Parse(this.nudModifyCNT.Value.ToString());
+
                         sSearch_New = sSearch_New.TrimEnd(',');
                         sModify_New = sModify_New.TrimEnd(',');
 
                         iSearchLen_New = int.Parse(this.nudPacketLength.Value.ToString());
                         iModifyLen_New = int.Parse(this.nudModifyLength.Value.ToString());
 
-                        Socket_Cache.SocketFilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, FMode_New, FStartFrom_New, sSearch_New, iSearchLen_New, sModify_New, iModifyLen_New);
+                        Socket_Cache.SocketFilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, FMode_New, FStartFrom_New, iFModifyCNT_New, sSearch_New, iSearchLen_New, sModify_New, iModifyLen_New);
+
+                        Socket_Operation.SaveFilterList("");
 
                         this.Close();
                     }

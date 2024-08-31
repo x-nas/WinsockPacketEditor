@@ -80,9 +80,9 @@ namespace WPELibrary.Lib
         //public static string[] MutiLan_68 = { "[过滤IP地址] ", "[Filter IP addresses] " };
         //public static string[] MutiLan_69 = { "[过滤封包内容] ", "[Filter packet content] " };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
-        public static string[] MutiLan_71 = { "保存完毕，成功【{0}】失败【{1}】", "Save completed, successful【{0}】failed【{1}】" };
+        public static string[] MutiLan_71 = { "保存完毕: 成功 {0}", "Save completed: successful {0}" };
         public static string[] MutiLan_72 = { "保存失败！错误：", "Save failed! Error: " };
-        public static string[] MutiLan_73 = { "加载完毕，成功【{0}】失败【{1}】", "Load completed, successful【{0}】failed【{1}】" };
+        public static string[] MutiLan_73 = { "加载完毕: 成功 {0}", "Load completed: successful {0}" };
         public static string[] MutiLan_74 = { "加载失败！错误：", "Load failed! Error: " };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };

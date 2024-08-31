@@ -562,7 +562,7 @@ namespace WPELibrary
 
                         if (dgvFilterList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveFilterListToFile();
+                            Socket_Operation.SaveDialog_FilterList();
                         }
 
                         #endregion
@@ -573,7 +573,7 @@ namespace WPELibrary
 
                         #region//加载滤镜列表
 
-                        Socket_Operation.LoadFileToFilterList();
+                        Socket_Operation.LoadDialog_FilterList();
 
                         #endregion
 
@@ -584,6 +584,7 @@ namespace WPELibrary
                         #region//添加新滤镜
 
                         Socket_Cache.SocketFilterList.AddFilter_New();
+                        Socket_Operation.SaveFilterList("");
 
                         #endregion
 
@@ -606,6 +607,7 @@ namespace WPELibrary
                                     if (iFNum > 0)
                                     {
                                         Socket_Cache.SocketFilterList.DeleteFilter_ByFilterNum(iFNum);
+                                        Socket_Operation.SaveFilterList("");
                                     }
                                 }
                             }
@@ -630,6 +632,7 @@ namespace WPELibrary
                             if (dr.Equals(DialogResult.OK))
                             {
                                 Socket_Cache.SocketFilterList.FilterListClear();
+                                Socket_Operation.SaveFilterList("");
                             }
                         }                        
 

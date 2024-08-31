@@ -285,12 +285,17 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    lstFilter.Clear();
+                    int iFilterList = Socket_Operation.LoadFilterList("");
 
-                    for (int i = 0; i < iFilterMaxNum; i++)
-                    {                        
-                        AddFilter_New();
-                    }
+                    if (iFilterList == 0)
+                    {
+                        FilterListClear();
+
+                        for (int i = 0; i < iFilterMaxNum; i++)
+                        {
+                            AddFilter_New();
+                        }
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -516,7 +521,7 @@ namespace WPELibrary.Lib
             }
 
             //修改滤镜
-            public static void UpdateFilter_ByFilterNum(int FNum, string FName, Socket_Filter_Info.FilterMode FMode, Socket_Filter_Info.StartFrom FStartFrom, string FSearch, int FSearchLen, string FModify, int FModifyLen)
+            public static void UpdateFilter_ByFilterNum(int FNum, string FName, Socket_Filter_Info.FilterMode FMode, Socket_Filter_Info.StartFrom FStartFrom, int FModifyCNT, string FSearch, int FSearchLen, string FModify, int FModifyLen)
             {
                 try
                 {
@@ -529,6 +534,7 @@ namespace WPELibrary.Lib
                             lstFilter[iFIndex].FName = FName;
                             lstFilter[iFIndex].FMode = FMode;                            
                             lstFilter[iFIndex].FStartFrom = FStartFrom;
+                            lstFilter[iFIndex].FModifyCNT = FModifyCNT;
                             lstFilter[iFIndex].FSearch = FSearch;
                             lstFilter[iFIndex].FSearchLen = FSearchLen;
                             lstFilter[iFIndex].FModify = FModify;

@@ -755,8 +755,8 @@ namespace WPELibrary.Lib
 
         #region//保存发送列表数据
         public static void SaveSendListToFile()
-        {            
-            int iSuccess = 0, iFail = 0;
+        {
+            int iSuccess = 0;
 
             try
             {
@@ -791,8 +791,7 @@ namespace WPELibrary.Lib
                                 iSuccess++;
                             }
                             catch(Exception ex)
-                            {
-                                iFail++;
+                            {                                
                                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                             }
                         }
@@ -802,7 +801,7 @@ namespace WPELibrary.Lib
                     sw.Close();
                     fs.Close();
 
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));                 
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));                 
                 }
             }
             catch (Exception ex)
@@ -817,7 +816,7 @@ namespace WPELibrary.Lib
         #region//加载发送列表数据
         public static void LoadFileToSendList()
         {
-            int iSuccess = 0, iFail = 0;
+            int iSuccess = 0;
 
             try
             {
@@ -856,13 +855,11 @@ namespace WPELibrary.Lib
                         }
                         catch (Exception ex)
                         {
-                            iFail++;
-
                             DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }                       
                     }
 
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess, iFail));
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess));
                 }            
             }
             catch (Exception ex)
@@ -876,9 +873,10 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//保存滤镜列表数据
-        public static void SaveFilterListToFile()
+
+        public static void SaveDialog_FilterList()
         {
-            int iSuccess = 0, iFail = 0;
+            int iSuccess = 0;
 
             try
             {
@@ -889,65 +887,84 @@ namespace WPELibrary.Lib
 
                 if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
                 {
-                    FileStream fs = new FileStream(sfdSocketInfo.FileName, FileMode.Create);
-                    StreamWriter sw = new StreamWriter(fs);
-
-                    if (Socket_Cache.SocketFilterList.lstFilter.Count > 0)
-                    {
-                        for (int i = 0; i < Socket_Cache.SocketFilterList.lstFilter.Count; i++)
-                        {
-                            try
-                            {
-                                string sFNum = Socket_Cache.SocketFilterList.lstFilter[i].FNum.ToString();
-                                string sFName = Socket_Cache.SocketFilterList.lstFilter[i].FName.ToString();
-                                string sFMode = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FMode).ToString();                                
-                                string sFStartFrom = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FStartFrom).ToString();
-                                string sFModifyCNT = Socket_Cache.SocketFilterList.lstFilter[i].FModifyCNT.ToString();
-                                string sFSearch = Socket_Cache.SocketFilterList.lstFilter[i].FSearch.ToString();
-                                string sFSearchLen = Socket_Cache.SocketFilterList.lstFilter[i].FSearchLen.ToString();
-                                string sModify = Socket_Cache.SocketFilterList.lstFilter[i].FModify.ToString();
-                                string sModifyLen = Socket_Cache.SocketFilterList.lstFilter[i].FModifyLen.ToString();
-
-                                string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" +sModifyLen;
-
-                                sw.WriteLine(sSave);
-
-                                iSuccess++;
-                            }
-                            catch (Exception ex)
-                            {
-                                iFail++;
-
-                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }                         
-                        }
-                    }
-
-                    sw.Flush();
-                    sw.Close();
-                    fs.Close();
-                                        
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));                
+                    iSuccess = SaveFilterList(sfdSocketInfo.FileName);
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
-
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        public static int SaveFilterList(string FilePath)
+        {
+            int iReturn = 0;
+
+            try
+            {
+                if (string.IsNullOrEmpty(FilePath))
+                {
+                    FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                }
+
+                FileStream fs = new FileStream(FilePath, FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs);
+
+                if (Socket_Cache.SocketFilterList.lstFilter.Count > 0)
+                {
+                    for (int i = 0; i < Socket_Cache.SocketFilterList.lstFilter.Count; i++)
+                    {
+                        try
+                        {
+                            string sFNum = Socket_Cache.SocketFilterList.lstFilter[i].FNum.ToString();
+                            string sFName = Socket_Cache.SocketFilterList.lstFilter[i].FName.ToString();
+                            string sFMode = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FMode).ToString();
+                            string sFStartFrom = ((int)Socket_Cache.SocketFilterList.lstFilter[i].FStartFrom).ToString();
+                            string sFModifyCNT = Socket_Cache.SocketFilterList.lstFilter[i].FModifyCNT.ToString();
+                            string sFSearch = Socket_Cache.SocketFilterList.lstFilter[i].FSearch.ToString();
+                            string sFSearchLen = Socket_Cache.SocketFilterList.lstFilter[i].FSearchLen.ToString();
+                            string sModify = Socket_Cache.SocketFilterList.lstFilter[i].FModify.ToString();
+                            string sModifyLen = Socket_Cache.SocketFilterList.lstFilter[i].FModifyLen.ToString();
+
+                            string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" + sModifyLen;
+
+                            sw.WriteLine(sSave);
+
+                            iReturn++;
+                        }
+                        catch (Exception ex)
+                        {
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        }
+                    }
+                }
+
+                sw.Flush();
+                sw.Close();
+                fs.Close();                
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return iReturn;
+        }
+
         #endregion
 
         #region//加载滤镜列表数据
-        public static void LoadFileToFilterList()
+
+        public static void LoadDialog_FilterList()
         {
-            int iSuccess = 0, iFail = 0;
+            int iSuccess = 0;
 
             try
             {
                 OpenFileDialog ofdLoadSocket = new OpenFileDialog();
-                                
+
                 ofdLoadSocket.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
                 ofdLoadSocket.RestoreDirectory = true;
 
@@ -956,7 +973,33 @@ namespace WPELibrary.Lib
 
                 if (!string.IsNullOrEmpty(filePath))
                 {
-                    string[] slFilter = File.ReadAllLines(filePath, Encoding.UTF8);
+                    iSuccess = LoadFilterList(filePath);
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess));
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static int LoadFilterList(string FilePath)
+        {
+            int iReturn = 0;            
+
+            try
+            {
+                if (string.IsNullOrEmpty(FilePath))
+                {
+                    FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                }
+
+                bool bFilterList = System.IO.File.Exists(FilePath);
+
+                if (bFilterList)
+                {
+                    string[] slFilter = File.ReadAllLines(FilePath, Encoding.UTF8);
 
                     Socket_Cache.SocketFilterList.FilterListClear();
 
@@ -968,7 +1011,7 @@ namespace WPELibrary.Lib
 
                             int iFNum = int.Parse(ss[0]);
                             string sFName = ss[1];
-                            Socket_Filter_Info.FilterMode FMode = GetFilterMode_ByString(ss[2]);                            
+                            Socket_Filter_Info.FilterMode FMode = GetFilterMode_ByString(ss[2]);
                             Socket_Filter_Info.StartFrom FStartFrom = GetFilterStartFrom_ByString(ss[3]);
                             int iFModifyCNT = int.Parse(ss[4]);
                             string sFSearch = ss[5];
@@ -978,25 +1021,21 @@ namespace WPELibrary.Lib
 
                             Socket_Cache.SocketFilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, sFModify, iFModifyLen, false);
 
-                            iSuccess++;
+                            iReturn++;
                         }
                         catch (Exception ex)
                         {
-                            iFail++;
-
                             DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }                     
+                        }
                     }
-                                        
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess, iFail));
-                }           
+                }
             }
             catch (Exception ex)
-            {                
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
-
+            {
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            return iReturn;
         }
 
         #endregion
@@ -1071,7 +1110,7 @@ namespace WPELibrary.Lib
         #region//保存封包列表为Excel
         public static void SaveSocketListToExcel()
         {
-            int iSuccess = 0, iFail = 0;
+            int iSuccess = 0;
 
             try
             {
@@ -1113,8 +1152,6 @@ namespace WPELibrary.Lib
                         }
                         catch (Exception ex)
                         {
-                            iFail++;
-
                             DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                     }
@@ -1122,7 +1159,7 @@ namespace WPELibrary.Lib
                     sw.Close();
                     myStream.Close();
                                         
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                 }
             }
             catch(Exception ex)
@@ -1137,7 +1174,7 @@ namespace WPELibrary.Lib
         #region//保存日志列表为Excel        
         public static void SaveLogListToExcel()
         {
-            int iSuccess = 0, iFail = 0;
+            int iSuccess = 0;
 
             try
             {
@@ -1174,8 +1211,6 @@ namespace WPELibrary.Lib
                         }
                         catch (Exception ex)
                         {
-                            iFail++;
-
                             DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                     }
@@ -1183,7 +1218,7 @@ namespace WPELibrary.Lib
                     sw.Close();
                     myStream.Close();
                                         
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess, iFail));
+                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                 }
             }
             catch (Exception ex)
