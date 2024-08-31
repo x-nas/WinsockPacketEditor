@@ -43,10 +43,6 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpFilterInfo_Function = new System.Windows.Forms.TableLayoutPanel();
-            this.gbModifyLength = new System.Windows.Forms.GroupBox();
-            this.tlpSearchLength = new System.Windows.Forms.TableLayoutPanel();
-            this.bModifyLength = new System.Windows.Forms.Button();
-            this.nudModifyLength = new System.Windows.Forms.NumericUpDown();
             this.gbStartModify = new System.Windows.Forms.GroupBox();
             this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
             this.rbFromPosition = new System.Windows.Forms.RadioButton();
@@ -67,6 +63,14 @@ namespace WPELibrary
             this.nudPacketLength = new System.Windows.Forms.NumericUpDown();
             this.rbPacketLength_Custom = new System.Windows.Forms.RadioButton();
             this.rbPacketLength_NoModify = new System.Windows.Forms.RadioButton();
+            this.tlpModifyFunction = new System.Windows.Forms.TableLayoutPanel();
+            this.gbModifyLength = new System.Windows.Forms.GroupBox();
+            this.tlpSearchLength = new System.Windows.Forms.TableLayoutPanel();
+            this.bModifyLength = new System.Windows.Forms.Button();
+            this.nudModifyLength = new System.Windows.Forms.NumericUpDown();
+            this.gbModifyCNT = new System.Windows.Forms.GroupBox();
+            this.tlpModifyCNT = new System.Windows.Forms.TableLayoutPanel();
+            this.nudModifyCNT = new System.Windows.Forms.NumericUpDown();
             this.bgwFilterInfo = new System.ComponentModel.BackgroundWorker();
             this.tlpFilterInfo = new System.Windows.Forms.TableLayoutPanel();
             this.tcFilterInfo = new System.Windows.Forms.TabControl();
@@ -78,9 +82,6 @@ namespace WPELibrary
             this.dgvFilter_Advanced_Search = new System.Windows.Forms.DataGridView();
             this.pbLoading = new System.Windows.Forms.PictureBox();
             this.tlpFilterInfo_Function.SuspendLayout();
-            this.gbModifyLength.SuspendLayout();
-            this.tlpSearchLength.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudModifyLength)).BeginInit();
             this.gbStartModify.SuspendLayout();
             this.tlpFilterModifyFrom.SuspendLayout();
             this.tlpFilterButton.SuspendLayout();
@@ -91,6 +92,13 @@ namespace WPELibrary
             this.gbPacketLength.SuspendLayout();
             this.tlpPacketLength.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPacketLength)).BeginInit();
+            this.tlpModifyFunction.SuspendLayout();
+            this.gbModifyLength.SuspendLayout();
+            this.tlpSearchLength.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudModifyLength)).BeginInit();
+            this.gbModifyCNT.SuspendLayout();
+            this.tlpModifyCNT.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudModifyCNT)).BeginInit();
             this.tlpFilterInfo.SuspendLayout();
             this.tcFilterInfo.SuspendLayout();
             this.tpNormal.SuspendLayout();
@@ -105,56 +113,13 @@ namespace WPELibrary
             // tlpFilterInfo_Function
             // 
             resources.ApplyResources(this.tlpFilterInfo_Function, "tlpFilterInfo_Function");
-            this.tlpFilterInfo_Function.Controls.Add(this.gbModifyLength, 2, 1);
             this.tlpFilterInfo_Function.Controls.Add(this.gbStartModify, 1, 1);
             this.tlpFilterInfo_Function.Controls.Add(this.tlpFilterButton, 0, 1);
             this.tlpFilterInfo_Function.Controls.Add(this.gbFilterName, 1, 0);
             this.tlpFilterInfo_Function.Controls.Add(this.gbFilterMode, 0, 0);
             this.tlpFilterInfo_Function.Controls.Add(this.gbPacketLength, 2, 0);
+            this.tlpFilterInfo_Function.Controls.Add(this.tlpModifyFunction, 2, 1);
             this.tlpFilterInfo_Function.Name = "tlpFilterInfo_Function";
-            // 
-            // gbModifyLength
-            // 
-            this.gbModifyLength.Controls.Add(this.tlpSearchLength);
-            resources.ApplyResources(this.gbModifyLength, "gbModifyLength");
-            this.gbModifyLength.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbModifyLength.Name = "gbModifyLength";
-            this.gbModifyLength.TabStop = false;
-            // 
-            // tlpSearchLength
-            // 
-            resources.ApplyResources(this.tlpSearchLength, "tlpSearchLength");
-            this.tlpSearchLength.Controls.Add(this.bModifyLength, 3, 1);
-            this.tlpSearchLength.Controls.Add(this.nudModifyLength, 1, 1);
-            this.tlpSearchLength.Name = "tlpSearchLength";
-            // 
-            // bModifyLength
-            // 
-            resources.ApplyResources(this.bModifyLength, "bModifyLength");
-            this.bModifyLength.Name = "bModifyLength";
-            this.bModifyLength.UseVisualStyleBackColor = true;
-            this.bModifyLength.Click += new System.EventHandler(this.bModifyLength_Click);
-            // 
-            // nudModifyLength
-            // 
-            this.nudModifyLength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.nudModifyLength, "nudModifyLength");
-            this.nudModifyLength.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudModifyLength.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudModifyLength.Name = "nudModifyLength";
-            this.nudModifyLength.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // gbStartModify
             // 
@@ -176,7 +141,7 @@ namespace WPELibrary
             resources.ApplyResources(this.rbFromPosition, "rbFromPosition");
             this.rbFromPosition.Name = "rbFromPosition";
             this.rbFromPosition.UseVisualStyleBackColor = true;
-            this.rbFromPosition.CheckedChanged += new System.EventHandler(this.rbFromPosition_CheckedChanged);
+            this.rbFromPosition.CheckedChanged += new System.EventHandler(this.rbStartFrom_CheckedChanged);
             // 
             // rbFromHead
             // 
@@ -185,7 +150,7 @@ namespace WPELibrary
             this.rbFromHead.Name = "rbFromHead";
             this.rbFromHead.TabStop = true;
             this.rbFromHead.UseVisualStyleBackColor = true;
-            this.rbFromHead.CheckedChanged += new System.EventHandler(this.rbFromHead_CheckedChanged);
+            this.rbFromHead.CheckedChanged += new System.EventHandler(this.rbStartFrom_CheckedChanged);
             // 
             // tlpFilterButton
             // 
@@ -317,6 +282,91 @@ namespace WPELibrary
             this.rbPacketLength_NoModify.TabStop = true;
             this.rbPacketLength_NoModify.UseVisualStyleBackColor = true;
             this.rbPacketLength_NoModify.CheckedChanged += new System.EventHandler(this.rbPacketLength_CheckedChanged);
+            // 
+            // tlpModifyFunction
+            // 
+            resources.ApplyResources(this.tlpModifyFunction, "tlpModifyFunction");
+            this.tlpModifyFunction.Controls.Add(this.gbModifyLength, 1, 0);
+            this.tlpModifyFunction.Controls.Add(this.gbModifyCNT, 0, 0);
+            this.tlpModifyFunction.Name = "tlpModifyFunction";
+            // 
+            // gbModifyLength
+            // 
+            this.gbModifyLength.Controls.Add(this.tlpSearchLength);
+            resources.ApplyResources(this.gbModifyLength, "gbModifyLength");
+            this.gbModifyLength.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbModifyLength.Name = "gbModifyLength";
+            this.gbModifyLength.TabStop = false;
+            // 
+            // tlpSearchLength
+            // 
+            resources.ApplyResources(this.tlpSearchLength, "tlpSearchLength");
+            this.tlpSearchLength.Controls.Add(this.bModifyLength, 1, 2);
+            this.tlpSearchLength.Controls.Add(this.nudModifyLength, 1, 0);
+            this.tlpSearchLength.Name = "tlpSearchLength";
+            // 
+            // bModifyLength
+            // 
+            resources.ApplyResources(this.bModifyLength, "bModifyLength");
+            this.bModifyLength.Name = "bModifyLength";
+            this.bModifyLength.UseVisualStyleBackColor = true;
+            this.bModifyLength.Click += new System.EventHandler(this.bModifyLength_Click);
+            // 
+            // nudModifyLength
+            // 
+            this.nudModifyLength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.nudModifyLength, "nudModifyLength");
+            this.nudModifyLength.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudModifyLength.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudModifyLength.Name = "nudModifyLength";
+            this.nudModifyLength.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // gbModifyCNT
+            // 
+            this.gbModifyCNT.Controls.Add(this.tlpModifyCNT);
+            this.gbModifyCNT.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            resources.ApplyResources(this.gbModifyCNT, "gbModifyCNT");
+            this.gbModifyCNT.Name = "gbModifyCNT";
+            this.gbModifyCNT.TabStop = false;
+            // 
+            // tlpModifyCNT
+            // 
+            resources.ApplyResources(this.tlpModifyCNT, "tlpModifyCNT");
+            this.tlpModifyCNT.Controls.Add(this.nudModifyCNT, 1, 1);
+            this.tlpModifyCNT.Name = "tlpModifyCNT";
+            // 
+            // nudModifyCNT
+            // 
+            this.nudModifyCNT.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.nudModifyCNT, "nudModifyCNT");
+            this.nudModifyCNT.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudModifyCNT.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudModifyCNT.Name = "nudModifyCNT";
+            this.nudModifyCNT.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // bgwFilterInfo
             // 
@@ -502,9 +552,6 @@ namespace WPELibrary
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_Filter_Form";
             this.tlpFilterInfo_Function.ResumeLayout(false);
-            this.gbModifyLength.ResumeLayout(false);
-            this.tlpSearchLength.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudModifyLength)).EndInit();
             this.gbStartModify.ResumeLayout(false);
             this.tlpFilterModifyFrom.ResumeLayout(false);
             this.tlpFilterModifyFrom.PerformLayout();
@@ -519,6 +566,13 @@ namespace WPELibrary
             this.tlpPacketLength.ResumeLayout(false);
             this.tlpPacketLength.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPacketLength)).EndInit();
+            this.tlpModifyFunction.ResumeLayout(false);
+            this.gbModifyLength.ResumeLayout(false);
+            this.tlpSearchLength.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudModifyLength)).EndInit();
+            this.gbModifyCNT.ResumeLayout(false);
+            this.tlpModifyCNT.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudModifyCNT)).EndInit();
             this.tlpFilterInfo.ResumeLayout(false);
             this.tcFilterInfo.ResumeLayout(false);
             this.tpNormal.ResumeLayout(false);
@@ -547,14 +601,11 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpFilterMode;
         private System.Windows.Forms.RadioButton rbAdvanced;
         private System.Windows.Forms.RadioButton rbNormal;
-        private System.Windows.Forms.GroupBox gbModifyLength;
         private System.Windows.Forms.GroupBox gbPacketLength;
         private System.Windows.Forms.TableLayoutPanel tlpPacketLength;
         private System.Windows.Forms.RadioButton rbPacketLength_Custom;
         private System.Windows.Forms.RadioButton rbPacketLength_NoModify;
         private System.Windows.Forms.NumericUpDown nudPacketLength;
-        private System.Windows.Forms.TableLayoutPanel tlpSearchLength;
-        private System.Windows.Forms.NumericUpDown nudModifyLength;
         private System.Windows.Forms.TableLayoutPanel tlpFilterName;
         private System.Windows.Forms.TextBox txtFilterName;
         private System.Windows.Forms.Button bPacketLength;
@@ -568,6 +619,13 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpFilterAdvanced;
         private System.Windows.Forms.DataGridView dgvFilter_Advanced_Modify;
         private System.Windows.Forms.DataGridView dgvFilter_Advanced_Search;
+        private System.Windows.Forms.TableLayoutPanel tlpModifyFunction;
+        private System.Windows.Forms.GroupBox gbModifyLength;
+        private System.Windows.Forms.TableLayoutPanel tlpSearchLength;
         private System.Windows.Forms.Button bModifyLength;
+        private System.Windows.Forms.NumericUpDown nudModifyLength;
+        private System.Windows.Forms.GroupBox gbModifyCNT;
+        private System.Windows.Forms.TableLayoutPanel tlpModifyCNT;
+        private System.Windows.Forms.NumericUpDown nudModifyCNT;
     }
 }

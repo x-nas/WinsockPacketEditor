@@ -427,7 +427,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    AddFilter_New("", Socket_Filter_Info.FilterMode.Normal, Socket_Filter_Info.StartFrom.Head, "", FilterSearchLen_New, "", FilterModifyLen_New, false);
+                    AddFilter_New("", Socket_Filter_Info.FilterMode.Normal, Socket_Filter_Info.StartFrom.Head, 1, "", FilterSearchLen_New, "", FilterModifyLen_New, false);
                 }
                 catch (Exception ex)
                 {
@@ -435,7 +435,7 @@ namespace WPELibrary.Lib
                 }
             }
             
-            public static void AddFilter_New(string FName, Socket_Filter_Info.FilterMode FMode, Socket_Filter_Info.StartFrom FStartFrom, string FSearch, int FSearchLen, string FModify, int FModifyLen, bool bCheck)
+            public static void AddFilter_New(string FName, Socket_Filter_Info.FilterMode FMode, Socket_Filter_Info.StartFrom FStartFrom, int FModifyCNT, string FSearch, int FSearchLen, string FModify, int FModifyLen, bool bCheck)
             {
                 try
                 {
@@ -456,7 +456,7 @@ namespace WPELibrary.Lib
                         FModifyLen = FilterModifyLen_New;
                     }
 
-                    Socket_Filter_Info sc = new Socket_Filter_Info(FNum, bCheck, FName, FMode, FStartFrom, FSearch, FSearchLen, FModify, FModifyLen);
+                    Socket_Filter_Info sc = new Socket_Filter_Info(FNum, bCheck, FName, FMode, FStartFrom, FModifyCNT, FSearch, FSearchLen, FModify, FModifyLen);
 
                     lstFilter.Add(sc);
                 }
@@ -638,19 +638,24 @@ namespace WPELibrary.Lib
 
                                     case Socket_Filter_Info.FilterMode.Advanced:
 
-                                        int iMatch = CheckFilterIsMatch_Adcanced(sfi, bBuff);                                        
+                                        DataTable dtReturn = CheckFilterIsMatch_Adcanced(sfi, bBuff);
 
-                                        if (iMatch > -1)
+                                        if (dtReturn.Rows.Count > 0)
                                         {
-                                            bool bOK = DoFilter_Advanced(sfi, iMatch, ipBuff, iLen);
-
-                                            if (bOK)
+                                            for (int i = 0; i < dtReturn.Rows.Count; i++) 
                                             {
-                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
+                                                int iMatch = int.Parse(dtReturn.Rows[i][0].ToString());
 
-                                                break;
+                                                bool bOK = DoFilter_Advanced(sfi, iMatch, ipBuff, iLen);
+
+                                                if (bOK)
+                                                {
+                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
+                                                }
                                             }
-                                        }
+
+                                            break;
+                                        }                                     
 
                                         break;
                                 }
@@ -681,7 +686,10 @@ namespace WPELibrary.Lib
                         int iIndex = int.Parse(sModifyValue[0].ToString().Trim());
                         string sValue = sModifyValue[1].ToString().Trim();
 
-                        bBuff[iIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
+                        if (iIndex >= 0 && iIndex < bBuff.Length)
+                        {
+                            bBuff[iIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
+                        }
                     }
 
                     bReturn = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);                  
@@ -793,14 +801,16 @@ namespace WPELibrary.Lib
                 return bResult;
             }
 
-            private static int CheckFilterIsMatch_Adcanced(Socket_Filter_Info sfi, byte[] bBuff)
+            private static DataTable CheckFilterIsMatch_Adcanced(Socket_Filter_Info sfi, byte[] bBuff)
             {
-                int iReturn = -1;                
+                DataTable dtReturn = new DataTable();
+                dtReturn.Columns.Add("MatchIndex", typeof(int));
 
                 try
                 {
-                    int iPosition = -1;
-                    int iInterval = 0;                    
+                    int iStartPosition = -1;
+                    int iInterval = 0;
+                    int iFModifyCNT = sfi.FModifyCNT;
                     string sFSearch = sfi.FSearch;
                     string sModify = sfi.FModify;
 
@@ -810,6 +820,7 @@ namespace WPELibrary.Lib
 
                         for (int i = 0; i < bBuff.Length; i++)
                         {
+                            int iEndPosition = -1;
                             for (int j = 0; j < ssSearch.Length; j++)
                             {
                                 string[] ssSearchString = ssSearch[j].Split('-');
@@ -818,9 +829,9 @@ namespace WPELibrary.Lib
 
                                 if (j > 0)
                                 {
-                                    string[] ssSearchString_Prev = ssSearch[j - 1].Split('-');
-                                    int iSearchString_Prev_Index = int.Parse(ssSearchString_Prev[0].ToString().Trim());
-                                    string sSearchString_Prev_Value = ssSearchString_Prev[1].ToString().Trim();
+                                    string[] ssSearchString_Head = ssSearch[0].Split('-');
+                                    int iSearchString_Prev_Index = int.Parse(ssSearchString_Head[0].ToString().Trim());
+                                    string sSearchString_Prev_Value = ssSearchString_Head[1].ToString().Trim();
 
                                     iInterval = iSearchString_Index - iSearchString_Prev_Index;
                                 }
@@ -829,23 +840,45 @@ namespace WPELibrary.Lib
                                     iInterval = 0;
                                 }
 
-                                string sBufferValue = bBuff[i + iInterval].ToString("X2");                 
+                                iEndPosition = i + iInterval;
 
-                                if (sBufferValue.Equals(sSearchString_Value))
+                                if (iEndPosition >= 0 && iEndPosition < bBuff.Length)
                                 {
-                                    iPosition = i;
+                                    string sBufferValue = bBuff[iEndPosition].ToString("X2");
+
+                                    if (sBufferValue.Equals(sSearchString_Value))
+                                    {
+                                        iStartPosition = i;
+                                    }
+                                    else
+                                    {
+                                        iStartPosition = -1;
+                                        break;
+                                    }
                                 }
                                 else
                                 {
-                                    iPosition = -1;
+                                    iStartPosition = -1;
                                     break;
                                 }
                             }                            
 
-                            if (iPosition > -1)
+                            if (iStartPosition > -1)
                             {
-                                iReturn = iPosition;
-                                break;
+                                if (iFModifyCNT > 0)
+                                {
+                                    DataRow dr = dtReturn.NewRow();
+                                    dr[0] = iStartPosition;
+                                    dtReturn.Rows.Add(dr);
+
+                                    iFModifyCNT = iFModifyCNT - 1;
+
+                                    i = iEndPosition;
+                                }
+                                else
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -853,11 +886,9 @@ namespace WPELibrary.Lib
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-                    
-                    iReturn = -1;
                 }
 
-                return iReturn;
+                return dtReturn;
             }
 
             #endregion

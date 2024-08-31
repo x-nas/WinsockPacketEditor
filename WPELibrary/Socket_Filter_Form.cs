@@ -75,7 +75,8 @@ namespace WPELibrary
                         case Socket_Filter_Info.FilterMode.Advanced:
                             this.rbAdvanced.Checked = true;
                             break;
-                    }                    
+                    }
+                    this.FilterModeChange();
 
                     switch (FilterStartFrom)
                     {
@@ -87,8 +88,8 @@ namespace WPELibrary
                             this.rbFromPosition.Checked = true;
                             break;
                     }
-
-                    this.FilterModeChange();                    
+                    this.StartFromChange();
+                                       
                     this.PacketLengthChange();                    
 
                     this.nudPacketLength.Value = FilterSearchLen;
@@ -288,6 +289,7 @@ namespace WPELibrary
                     this.tpAdvanced.Parent = null;
 
                     this.gbStartModify.Enabled = false;
+                    this.gbModifyCNT.Enabled = false;
                     this.gbModifyLength.Enabled = false;
                 }
                 else if (rbAdvanced.Checked)
@@ -297,6 +299,11 @@ namespace WPELibrary
 
                     this.gbStartModify.Enabled = true;
                     this.gbModifyLength.Enabled = true;
+
+                    if (rbFromPosition.Checked)
+                    {
+                        this.gbModifyCNT.Enabled = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -473,27 +480,28 @@ namespace WPELibrary
 
         #region//修改起始于切换
 
-        private void rbFromHead_CheckedChanged(object sender, EventArgs e)
+        private void rbStartFrom_CheckedChanged(object sender, EventArgs e)
         {
-            if (rbFromHead.Checked && bFinishInit)
-            {
-                this.StartFromChange();
-            }
-        }
-
-        private void rbFromPosition_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbFromPosition.Checked && bFinishInit)
-            {
-                this.StartFromChange();
-            }
-        }        
+            this.StartFromChange();
+        }       
 
         private void StartFromChange()
         {
             try
             {
-                this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.Modify);
+                if (rbFromHead.Checked)
+                {
+                    this.gbModifyCNT.Enabled = false;
+                }
+                else if (rbFromPosition.Checked)
+                {
+                    this.gbModifyCNT.Enabled = true;
+                }
+
+                if (bFinishInit)
+                {
+                    this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.Modify);
+                }
             }
             catch (Exception ex)
             {

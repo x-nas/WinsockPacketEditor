@@ -121,146 +121,17 @@
   <data name="tlpFilterInfo_Function.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="tlpSearchLength.ColumnCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="bModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bModifyLength.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="bModifyLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 10</value>
-  </data>
-  <data name="bModifyLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="bModifyLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 26</value>
-  </data>
-  <data name="bModifyLength.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="bModifyLength.Text" xml:space="preserve">
-    <value>应用</value>
-  </data>
-  <data name="&gt;&gt;bModifyLength.Name" xml:space="preserve">
-    <value>bModifyLength</value>
-  </data>
-  <data name="&gt;&gt;bModifyLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bModifyLength.Parent" xml:space="preserve">
-    <value>tlpSearchLength</value>
-  </data>
-  <data name="&gt;&gt;bModifyLength.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="nudModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudModifyLength.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="nudModifyLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 10</value>
-  </data>
-  <data name="nudModifyLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="nudModifyLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 23</value>
-  </data>
-  <data name="nudModifyLength.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="nudModifyLength.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudModifyLength.Name" xml:space="preserve">
-    <value>nudModifyLength</value>
-  </data>
-  <data name="&gt;&gt;nudModifyLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudModifyLength.Parent" xml:space="preserve">
-    <value>tlpSearchLength</value>
-  </data>
-  <data name="&gt;&gt;nudModifyLength.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSearchLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSearchLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpSearchLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSearchLength.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tlpSearchLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>245, 52</value>
-  </data>
-  <data name="tlpSearchLength.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpSearchLength.Name" xml:space="preserve">
-    <value>tlpSearchLength</value>
-  </data>
-  <data name="&gt;&gt;tlpSearchLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSearchLength.Parent" xml:space="preserve">
-    <value>gbModifyLength</value>
-  </data>
-  <data name="&gt;&gt;tlpSearchLength.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpSearchLength.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bModifyLength" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudModifyLength" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,10,Percent,40,Percent,15,Percent,25,Percent,10" /&gt;&lt;Rows Styles="Percent,20,Percent,50,Percent,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbModifyLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>606, 88</value>
-  </data>
-  <data name="gbModifyLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>251, 74</value>
-  </data>
-  <data name="gbModifyLength.TabIndex" type="System.Int32, mscorlib">
-    <value>18</value>
-  </data>
-  <data name="gbModifyLength.Text" xml:space="preserve">
-    <value>[ 修改长度 ]</value>
-  </data>
-  <data name="&gt;&gt;gbModifyLength.Name" xml:space="preserve">
-    <value>gbModifyLength</value>
-  </data>
-  <data name="&gt;&gt;gbModifyLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbModifyLength.Parent" xml:space="preserve">
-    <value>tlpFilterInfo_Function</value>
-  </data>
-  <data name="&gt;&gt;gbModifyLength.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="tlpFilterModifyFrom.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="rbFromPosition.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="rbFromPosition.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="rbFromPosition.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
@@ -268,7 +139,7 @@
     <value>NoControl</value>
   </data>
   <data name="rbFromPosition.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 26</value>
+    <value>8, 30</value>
   </data>
   <data name="rbFromPosition.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -346,7 +217,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterModifyFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 52</value>
+    <value>330, 60</value>
   </data>
   <data name="tlpFilterModifyFrom.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -370,10 +241,10 @@
     <value>Fill</value>
   </data>
   <data name="gbStartModify.Location" type="System.Drawing.Point, System.Drawing">
-    <value>264, 88</value>
+    <value>264, 96</value>
   </data>
   <data name="gbStartModify.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 74</value>
+    <value>336, 82</value>
   </data>
   <data name="gbStartModify.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -391,7 +262,7 @@
     <value>tlpFilterInfo_Function</value>
   </data>
   <data name="&gt;&gt;gbStartModify.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="tlpFilterButton.ColumnCount" type="System.Int32, mscorlib">
     <value>5</value>
@@ -403,13 +274,13 @@
     <value>NoControl</value>
   </data>
   <data name="bSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>148, 23</value>
+    <value>148, 25</value>
   </data>
   <data name="bSave.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bSave.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 27</value>
+    <value>85, 30</value>
   </data>
   <data name="bSave.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -436,13 +307,13 @@
     <value>NoControl</value>
   </data>
   <data name="bReset.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 23</value>
+    <value>15, 25</value>
   </data>
   <data name="bReset.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bReset.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 27</value>
+    <value>85, 30</value>
   </data>
   <data name="bReset.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -466,7 +337,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpFilterButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 88</value>
+    <value>8, 96</value>
   </data>
   <data name="tlpFilterButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -475,7 +346,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 74</value>
+    <value>250, 82</value>
   </data>
   <data name="tlpFilterButton.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -490,7 +361,7 @@
     <value>tlpFilterInfo_Function</value>
   </data>
   <data name="&gt;&gt;tlpFilterButton.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tlpFilterButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSave" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bReset" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,5,Percent,35,Percent,20,Percent,35,Percent,5" /&gt;&lt;Rows Styles="Percent,30,Percent,40,Percent,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
@@ -505,7 +376,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtFilterName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 10</value>
+    <value>16, 12</value>
   </data>
   <data name="txtFilterName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -544,7 +415,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>330, 52</value>
+    <value>330, 60</value>
   </data>
   <data name="tlpFilterName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -571,7 +442,7 @@
     <value>264, 8</value>
   </data>
   <data name="gbFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>336, 74</value>
+    <value>336, 82</value>
   </data>
   <data name="gbFilterName.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -589,7 +460,7 @@
     <value>tlpFilterInfo_Function</value>
   </data>
   <data name="&gt;&gt;gbFilterName.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="tlpFilterMode.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
@@ -607,13 +478,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbAdvanced.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 26</value>
+    <value>3, 30</value>
   </data>
   <data name="rbAdvanced.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="rbAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 23</value>
+    <value>238, 27</value>
   </data>
   <data name="rbAdvanced.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -652,7 +523,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="rbNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 23</value>
+    <value>238, 27</value>
   </data>
   <data name="rbNormal.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -685,7 +556,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>244, 52</value>
+    <value>244, 60</value>
   </data>
   <data name="tlpFilterMode.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -712,7 +583,7 @@
     <value>8, 8</value>
   </data>
   <data name="gbFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 74</value>
+    <value>250, 82</value>
   </data>
   <data name="gbFilterMode.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -730,7 +601,7 @@
     <value>tlpFilterInfo_Function</value>
   </data>
   <data name="&gt;&gt;gbFilterMode.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="tlpPacketLength.ColumnCount" type="System.Int32, mscorlib">
     <value>5</value>
@@ -742,19 +613,19 @@
     <value>NoControl</value>
   </data>
   <data name="bPacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 26</value>
+    <value>185, 27</value>
   </data>
   <data name="bPacketLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 23</value>
+    <value>57, 24</value>
   </data>
   <data name="bPacketLength.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
   </data>
   <data name="bPacketLength.Text" xml:space="preserve">
-    <value>应用</value>
+    <value>应 用</value>
   </data>
   <data name="&gt;&gt;bPacketLength.Name" xml:space="preserve">
     <value>bPacketLength</value>
@@ -775,13 +646,13 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudPacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 26</value>
+    <value>108, 27</value>
   </data>
   <data name="nudPacketLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="nudPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
+    <value>67, 23</value>
   </data>
   <data name="nudPacketLength.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -814,13 +685,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbPacketLength_Custom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 26</value>
+    <value>8, 27</value>
   </data>
   <data name="rbPacketLength_Custom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="rbPacketLength_Custom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 23</value>
+    <value>100, 24</value>
   </data>
   <data name="rbPacketLength_Custom.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -859,7 +730,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="rbPacketLength_NoModify.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 23</value>
+    <value>100, 24</value>
   </data>
   <data name="rbPacketLength_NoModify.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -889,10 +760,10 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tlpPacketLength.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>245, 52</value>
+    <value>245, 60</value>
   </data>
   <data name="tlpPacketLength.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -910,7 +781,7 @@
     <value>0</value>
   </data>
   <data name="tlpPacketLength.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bPacketLength" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="nudPacketLength" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbPacketLength_Custom" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbPacketLength_NoModify" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,5,Percent,40,Percent,35,Absolute,20,Percent,25" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bPacketLength" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="nudPacketLength" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbPacketLength_Custom" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbPacketLength_NoModify" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,5,Percent,45,Percent,30,Absolute,10,Percent,25" /&gt;&lt;Rows Styles="Percent,50,Percent,50,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbPacketLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -919,7 +790,7 @@
     <value>606, 8</value>
   </data>
   <data name="gbPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>251, 74</value>
+    <value>251, 82</value>
   </data>
   <data name="gbPacketLength.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -937,13 +808,271 @@
     <value>tlpFilterInfo_Function</value>
   </data>
   <data name="&gt;&gt;gbPacketLength.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tlpModifyFunction.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpSearchLength.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bModifyLength.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bModifyLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 30</value>
+  </data>
+  <data name="bModifyLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bModifyLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 25</value>
+  </data>
+  <data name="bModifyLength.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="bModifyLength.Text" xml:space="preserve">
+    <value>应 用</value>
+  </data>
+  <data name="&gt;&gt;bModifyLength.Name" xml:space="preserve">
+    <value>bModifyLength</value>
+  </data>
+  <data name="&gt;&gt;bModifyLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bModifyLength.Parent" xml:space="preserve">
+    <value>tlpSearchLength</value>
+  </data>
+  <data name="&gt;&gt;bModifyLength.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nudModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudModifyLength.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudModifyLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 0</value>
+  </data>
+  <data name="nudModifyLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudModifyLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 23</value>
+  </data>
+  <data name="nudModifyLength.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="nudModifyLength.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudModifyLength.Name" xml:space="preserve">
+    <value>nudModifyLength</value>
+  </data>
+  <data name="&gt;&gt;nudModifyLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudModifyLength.Parent" xml:space="preserve">
+    <value>tlpSearchLength</value>
+  </data>
+  <data name="&gt;&gt;nudModifyLength.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpSearchLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSearchLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpSearchLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSearchLength.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpSearchLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>117, 60</value>
+  </data>
+  <data name="tlpSearchLength.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpSearchLength.Name" xml:space="preserve">
+    <value>tlpSearchLength</value>
+  </data>
+  <data name="&gt;&gt;tlpSearchLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSearchLength.Parent" xml:space="preserve">
+    <value>gbModifyLength</value>
+  </data>
+  <data name="&gt;&gt;tlpSearchLength.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSearchLength.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bModifyLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudModifyLength" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,60,Percent,20" /&gt;&lt;Rows Styles="Percent,50,Absolute,5,Percent,50,Absolute,5,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbModifyLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbModifyLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>131, 3</value>
+  </data>
+  <data name="gbModifyLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 82</value>
+  </data>
+  <data name="gbModifyLength.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
+  </data>
+  <data name="gbModifyLength.Text" xml:space="preserve">
+    <value>[ 修改长度 ]</value>
+  </data>
+  <data name="&gt;&gt;gbModifyLength.Name" xml:space="preserve">
+    <value>gbModifyLength</value>
+  </data>
+  <data name="&gt;&gt;gbModifyLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbModifyLength.Parent" xml:space="preserve">
+    <value>tlpModifyFunction</value>
+  </data>
+  <data name="&gt;&gt;gbModifyLength.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpModifyCNT.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="nudModifyCNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudModifyCNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudModifyCNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 12</value>
+  </data>
+  <data name="nudModifyCNT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudModifyCNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 23</value>
+  </data>
+  <data name="nudModifyCNT.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="nudModifyCNT.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudModifyCNT.Name" xml:space="preserve">
+    <value>nudModifyCNT</value>
+  </data>
+  <data name="&gt;&gt;nudModifyCNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudModifyCNT.Parent" xml:space="preserve">
+    <value>tlpModifyCNT</value>
+  </data>
+  <data name="&gt;&gt;nudModifyCNT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpModifyCNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpModifyCNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpModifyCNT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpModifyCNT.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpModifyCNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>116, 60</value>
+  </data>
+  <data name="tlpModifyCNT.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyCNT.Name" xml:space="preserve">
+    <value>tlpModifyCNT</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyCNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyCNT.Parent" xml:space="preserve">
+    <value>gbModifyCNT</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyCNT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpModifyCNT.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudModifyCNT" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,60,Percent,20" /&gt;&lt;Rows Styles="Percent,20,Percent,60,Percent,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbModifyCNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbModifyCNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 82</value>
+  </data>
+  <data name="gbModifyCNT.TabIndex" type="System.Int32, mscorlib">
+    <value>22</value>
+  </data>
+  <data name="gbModifyCNT.Text" xml:space="preserve">
+    <value>[ 修改次数 ]</value>
+  </data>
+  <data name="&gt;&gt;gbModifyCNT.Name" xml:space="preserve">
+    <value>gbModifyCNT</value>
+  </data>
+  <data name="&gt;&gt;gbModifyCNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbModifyCNT.Parent" xml:space="preserve">
+    <value>tlpModifyFunction</value>
+  </data>
+  <data name="&gt;&gt;gbModifyCNT.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpModifyFunction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpModifyFunction.Location" type="System.Drawing.Point, System.Drawing">
+    <value>603, 93</value>
+  </data>
+  <data name="tlpModifyFunction.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpModifyFunction.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpModifyFunction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>257, 88</value>
+  </data>
+  <data name="tlpModifyFunction.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyFunction.Name" xml:space="preserve">
+    <value>tlpModifyFunction</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyFunction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyFunction.Parent" xml:space="preserve">
+    <value>tlpFilterInfo_Function</value>
+  </data>
+  <data name="&gt;&gt;tlpModifyFunction.ZOrder" xml:space="preserve">
     <value>5</value>
+  </data>
+  <data name="tlpModifyFunction.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbModifyLength" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbModifyCNT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,88" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpFilterInfo_Function.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
   </data>
   <data name="tlpFilterInfo_Function.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 228</value>
+    <value>0, 225</value>
   </data>
   <data name="tlpFilterInfo_Function.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -955,7 +1084,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterInfo_Function.Size" type="System.Drawing.Size, System.Drawing">
-    <value>865, 170</value>
+    <value>865, 186</value>
   </data>
   <data name="tlpFilterInfo_Function.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -973,7 +1102,7 @@
     <value>1</value>
   </data>
   <data name="tlpFilterInfo_Function.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbModifyLength" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbStartModify" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterButton" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterMode" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbPacketLength" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,40,Percent,30" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbStartModify" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterButton" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterMode" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbPacketLength" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tlpModifyFunction" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,40,Percent,30" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="bgwFilterInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -994,7 +1123,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilter_Normal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>851, 82</value>
+    <value>851, 79</value>
   </data>
   <data name="dgvFilter_Normal.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -1018,7 +1147,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tpNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>857, 88</value>
+    <value>857, 85</value>
   </data>
   <data name="tpNormal.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1045,7 +1174,7 @@
     <value>Fill</value>
   </data>
   <data name="dgvFilter_Advanced_Modify.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 42</value>
+    <value>0, 40</value>
   </data>
   <data name="dgvFilter_Advanced_Modify.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 1, 0, 1</value>
@@ -1054,7 +1183,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilter_Advanced_Modify.Size" type="System.Drawing.Size, System.Drawing">
-    <value>851, 39</value>
+    <value>851, 38</value>
   </data>
   <data name="dgvFilter_Advanced_Modify.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1084,7 +1213,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilter_Advanced_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>851, 39</value>
+    <value>851, 37</value>
   </data>
   <data name="dgvFilter_Advanced_Search.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1114,7 +1243,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>851, 82</value>
+    <value>851, 79</value>
   </data>
   <data name="tlpFilterAdvanced.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1144,7 +1273,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tpAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>857, 88</value>
+    <value>857, 85</value>
   </data>
   <data name="tpAdvanced.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1177,7 +1306,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tcFilterInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>865, 118</value>
+    <value>865, 115</value>
   </data>
   <data name="tcFilterInfo.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1197,8 +1326,11 @@
   <data name="pbLoading.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="pbLoading.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 118</value>
+    <value>0, 115</value>
   </data>
   <data name="pbLoading.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 60</value>
@@ -1234,7 +1366,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>865, 228</value>
+    <value>865, 225</value>
   </data>
   <data name="tlpFilterInfo.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1264,7 +1396,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>865, 398</value>
+    <value>865, 411</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
