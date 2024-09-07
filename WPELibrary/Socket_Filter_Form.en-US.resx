@@ -117,23 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gbStartModify.Text" xml:space="preserve">
-    <value>[ Starting Modify ]</value>
-  </data>
-  <data name="gbFilterName.Text" xml:space="preserve">
-    <value>[ Filter Name ]</value>
-  </data>
-  <data name="gbFilterMode.Text" xml:space="preserve">
-    <value>[ Filter Mode ]</value>
-  </data>
-  <data name="gbPacketLength.Text" xml:space="preserve">
-    <value>[ Packet Length ]</value>
-  </data>
   <data name="rbFromPosition.Text" xml:space="preserve">
     <value>From the position of chain</value>
   </data>
   <data name="rbFromHead.Text" xml:space="preserve">
     <value>From the beginning of the packet</value>
+  </data>
+  <data name="gbStartModify.Text" xml:space="preserve">
+    <value>[ Starting Modify ]</value>
   </data>
   <data name="bSave.Text" xml:space="preserve">
     <value>Save</value>
@@ -141,11 +132,17 @@
   <data name="bReset.Text" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="gbFilterName.Text" xml:space="preserve">
+    <value>[ Filter Name ]</value>
+  </data>
   <data name="rbAdvanced.Text" xml:space="preserve">
     <value>Advanced（ match to 'data' ）</value>
   </data>
   <data name="rbNormal.Text" xml:space="preserve">
     <value>Normal（ match to 'offset' ）</value>
+  </data>
+  <data name="gbFilterMode.Text" xml:space="preserve">
+    <value>[ Filter Mode ]</value>
   </data>
   <data name="bPacketLength.Text" xml:space="preserve">
     <value>Apply</value>
@@ -156,11 +153,14 @@
   <data name="rbPacketLength_NoModify.Text" xml:space="preserve">
     <value>Dont modify</value>
   </data>
-  <data name="gbModifyLength.Text" xml:space="preserve">
-    <value>[ Modify Length]</value>
+  <data name="gbPacketLength.Text" xml:space="preserve">
+    <value>[ Packet Length ]</value>
   </data>
   <data name="bModifyLength.Text" xml:space="preserve">
     <value>Apply</value>
+  </data>
+  <data name="gbModifyLength.Text" xml:space="preserve">
+    <value>[ Modify Length]</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="gbModifyCNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">

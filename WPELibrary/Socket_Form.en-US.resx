@@ -119,85 +119,76 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 22</value>
+    <value>163, 22</value>
   </data>
   <data name="tslClearList.Text" xml:space="preserve">
     <value>Clear Log List</value>
   </data>
-  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 6</value>
-  </data>
-  <data name="tsmiShowHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 22</value>
-  </data>
-  <data name="tsmiShowHook.Text" xml:space="preserve">
-    <value>Show Hook Log</value>
-  </data>
-  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 6</value>
-  </data>
-  <data name="tsmiHideHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 22</value>
-  </data>
-  <data name="tsmiHideHook.Text" xml:space="preserve">
-    <value>Hide Hook Log</value>
-  </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 6</value>
+    <value>160, 6</value>
   </data>
   <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 22</value>
+    <value>163, 22</value>
   </data>
   <data name="tslToExcel.Text" xml:space="preserve">
     <value>Export to Excel</value>
   </data>
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 110</value>
-  </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 138</value>
+    <value>164, 54</value>
   </data>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiSend.Text" xml:space="preserve">
     <value>Send</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiBatchSend.Text" xml:space="preserve">
     <value>Add to send list</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 6</value>
+    <value>177, 6</value>
+  </data>
+  <data name="tsmiAddToFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiAddToFilter.Text" xml:space="preserve">
+    <value>Add to filter list</value>
+  </data>
+  <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
   </data>
   <data name="tsmiUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiUseSocket.Text" xml:space="preserve">
     <value>Use this socket</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="tsmiShowBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiShowBatchSend.Text" xml:space="preserve">
     <value>Send list</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 6</value>
+    <value>177, 6</value>
   </data>
   <data name="tsmiSaveSocketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>168, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
     <value>Export to Excel</value>
+  </data>
+  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 166</value>
   </data>
   <data name="ssStatusInfo_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>898, 22</value>
@@ -273,26 +264,8 @@ Data
   <data name="cbCheck_IP.Text" xml:space="preserve">
     <value>Filter IP</value>
   </data>
-  <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 23</value>
-  </data>
-  <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 23</value>
-  </data>
-  <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 23</value>
-  </data>
-  <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>381, 1</value>
-  </data>
   <data name="cbCheck_Size.Text" xml:space="preserve">
     <value>Length</value>
-  </data>
-  <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 35</value>
-  </data>
-  <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 67</value>
   </data>
   <data name="gbSearchData.Text" xml:space="preserve">
     <value>[ Search Data ]</value>
