@@ -142,35 +142,16 @@
     <value>Reset</value>
   </data>
   <data name="rbAdvanced.Text" xml:space="preserve">
-    <value>Advanced（ match 'data' ）</value>
+    <value>Advanced（ match to 'data' ）</value>
   </data>
   <data name="rbNormal.Text" xml:space="preserve">
-    <value>Normal（ match 'offset' ）</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="bPacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>185, 27</value>
-  </data>
-  <data name="bPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 24</value>
+    <value>Normal（ match to 'offset' ）</value>
   </data>
   <data name="bPacketLength.Text" xml:space="preserve">
     <value>Apply</value>
   </data>
-  <data name="nudPacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>108, 27</value>
-  </data>
-  <data name="nudPacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 23</value>
-  </data>
-  <data name="rbPacketLength_Custom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
-  </data>
   <data name="rbPacketLength_Custom.Text" xml:space="preserve">
     <value>Custom</value>
-  </data>
-  <data name="rbPacketLength_NoModify.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
   </data>
   <data name="rbPacketLength_NoModify.Text" xml:space="preserve">
     <value>Dont modify</value>
@@ -186,7 +167,7 @@
     <value>Fill</value>
   </data>
   <data name="gbModifyCNT.Text" xml:space="preserve">
-    <value>[ Modify CNT ]</value>
+    <value>[ Modify Cnt ]</value>
   </data>
   <data name="tpNormal.Text" xml:space="preserve">
     <value>[First row 'search', second row 'modify']</value>
@@ -194,6 +175,7 @@
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAoIAQAZgAAAICAAAABACAAKAgBAI4gBABAQAAAAQAgAChCAAC2KAUAMDAAAAEA
