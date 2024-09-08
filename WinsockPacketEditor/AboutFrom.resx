@@ -1704,7 +1704,7 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="logoPictureBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 303</value>
+    <value>166, 259</value>
   </data>
   <data name="logoPictureBox.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>StretchImage</value>
@@ -1728,7 +1728,7 @@
     <value>Fill</value>
   </data>
   <data name="labelProductName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>199, 0</value>
+    <value>181, 0</value>
   </data>
   <data name="labelProductName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>7, 0, 4, 0</value>
@@ -1737,13 +1737,13 @@
     <value>0, 23</value>
   </data>
   <data name="labelProductName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 23</value>
+    <value>344, 23</value>
   </data>
   <data name="labelProductName.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
   </data>
   <data name="labelProductName.Text" xml:space="preserve">
-    <value>产品名称</value>
+    <value>WinSockPacketEditor 网络封包拦截器 </value>
   </data>
   <data name="labelProductName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -1764,7 +1764,7 @@
     <value>Fill</value>
   </data>
   <data name="labelVersion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>199, 30</value>
+    <value>181, 30</value>
   </data>
   <data name="labelVersion.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>7, 0, 4, 0</value>
@@ -1773,7 +1773,7 @@
     <value>0, 23</value>
   </data>
   <data name="labelVersion.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 23</value>
+    <value>344, 23</value>
   </data>
   <data name="labelVersion.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1800,7 +1800,7 @@
     <value>Fill</value>
   </data>
   <data name="labelCopyright.Location" type="System.Drawing.Point, System.Drawing">
-    <value>199, 60</value>
+    <value>181, 60</value>
   </data>
   <data name="labelCopyright.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>7, 0, 4, 0</value>
@@ -1809,7 +1809,7 @@
     <value>0, 23</value>
   </data>
   <data name="labelCopyright.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 23</value>
+    <value>344, 23</value>
   </data>
   <data name="labelCopyright.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -1836,7 +1836,7 @@
     <value>Fill</value>
   </data>
   <data name="labelCompanyName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>199, 90</value>
+    <value>181, 90</value>
   </data>
   <data name="labelCompanyName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>7, 0, 4, 0</value>
@@ -1845,7 +1845,7 @@
     <value>0, 23</value>
   </data>
   <data name="labelCompanyName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 23</value>
+    <value>344, 23</value>
   </data>
   <data name="labelCompanyName.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -1868,68 +1868,293 @@
   <data name="&gt;&gt;labelCompanyName.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Bottom, Right</value>
+  <data name="tlpAbout.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>492, 281</value>
+  <data name="llContact.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="okButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
-  <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 26</value>
-  </data>
-  <data name="okButton.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
-  </data>
-  <data name="okButton.Text" xml:space="preserve">
-    <value>确定(&amp;O)</value>
-  </data>
-  <data name="&gt;&gt;okButton.Name" xml:space="preserve">
-    <value>okButton</value>
-  </data>
-  <data name="&gt;&gt;okButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;okButton.Parent" xml:space="preserve">
-    <value>tableLayoutPanel</value>
-  </data>
-  <data name="&gt;&gt;okButton.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="rtbDescription.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="llContact.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rtbDescription.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="llContact.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
   </data>
-  <data name="rtbDescription.Location" type="System.Drawing.Point, System.Drawing">
-    <value>196, 124</value>
+  <data name="llContact.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="rtbDescription.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+  <data name="llContact.Location" type="System.Drawing.Point, System.Drawing">
+    <value>180, 93</value>
   </data>
-  <data name="rtbDescription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 148</value>
+  <data name="llContact.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="rtbDescription.TabIndex" type="System.Int32, mscorlib">
+  <data name="llContact.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 41</value>
+  </data>
+  <data name="llContact.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="llContact.Text" xml:space="preserve">
+    <value>[ 联系作者 ]</value>
+  </data>
+  <data name="llContact.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llContact.Name" xml:space="preserve">
+    <value>llContact</value>
+  </data>
+  <data name="&gt;&gt;llContact.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llContact.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llContact.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="llGitee.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llGitee.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="llGitee.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
+  </data>
+  <data name="llGitee.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="llGitee.Location" type="System.Drawing.Point, System.Drawing">
+    <value>180, 48</value>
+  </data>
+  <data name="llGitee.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="llGitee.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 39</value>
+  </data>
+  <data name="llGitee.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="llGitee.Text" xml:space="preserve">
+    <value>[ Gitee ]</value>
+  </data>
+  <data name="llGitee.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llGitee.Name" xml:space="preserve">
+    <value>llGitee</value>
+  </data>
+  <data name="&gt;&gt;llGitee.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llGitee.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llGitee.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="llGitHub.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llGitHub.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="llGitHub.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
+  </data>
+  <data name="llGitHub.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="llGitHub.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 48</value>
+  </data>
+  <data name="llGitHub.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="llGitHub.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 39</value>
+  </data>
+  <data name="llGitHub.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="llGitHub.Text" xml:space="preserve">
+    <value>[ GitHub ]</value>
+  </data>
+  <data name="llGitHub.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llGitHub.Name" xml:space="preserve">
+    <value>llGitHub</value>
+  </data>
+  <data name="&gt;&gt;llGitHub.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llGitHub.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llGitHub.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="llInstructions.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llInstructions.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="llInstructions.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
+  </data>
+  <data name="llInstructions.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="llInstructions.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 93</value>
+  </data>
+  <data name="llInstructions.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="llInstructions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 41</value>
+  </data>
+  <data name="llInstructions.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="llInstructions.Text" xml:space="preserve">
+    <value>[ 使用说明 ]</value>
+  </data>
+  <data name="llInstructions.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llInstructions.Name" xml:space="preserve">
+    <value>llInstructions</value>
+  </data>
+  <data name="&gt;&gt;llInstructions.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llInstructions.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llInstructions.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="llOffline.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llOffline.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="llOffline.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
+  </data>
+  <data name="llOffline.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="llOffline.Location" type="System.Drawing.Point, System.Drawing">
+    <value>180, 3</value>
+  </data>
+  <data name="llOffline.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="llOffline.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 39</value>
+  </data>
+  <data name="llOffline.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="llOffline.Text" xml:space="preserve">
+    <value>[ 离线打包版 ]</value>
+  </data>
+  <data name="llOffline.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llOffline.Name" xml:space="preserve">
+    <value>llOffline</value>
+  </data>
+  <data name="&gt;&gt;llOffline.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llOffline.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llOffline.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="llSetup.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="llSetup.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="llSetup.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 10.5pt</value>
+  </data>
+  <data name="llSetup.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="llSetup.Location" type="System.Drawing.Point, System.Drawing">
+    <value>23, 3</value>
+  </data>
+  <data name="llSetup.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="llSetup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 39</value>
+  </data>
+  <data name="llSetup.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="llSetup.Text" xml:space="preserve">
+    <value>[ 在线安装版 ]</value>
+  </data>
+  <data name="llSetup.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;llSetup.Name" xml:space="preserve">
+    <value>llSetup</value>
+  </data>
+  <data name="&gt;&gt;llSetup.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;llSetup.Parent" xml:space="preserve">
+    <value>tlpAbout</value>
+  </data>
+  <data name="&gt;&gt;llSetup.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpAbout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpAbout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>174, 120</value>
+  </data>
+  <data name="tlpAbout.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAbout.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 137</value>
+  </data>
+  <data name="tlpAbout.TabIndex" type="System.Int32, mscorlib">
     <value>25</value>
   </data>
-  <data name="rtbDescription.Text" xml:space="preserve">
-    <value />
+  <data name="&gt;&gt;tlpAbout.Name" xml:space="preserve">
+    <value>tlpAbout</value>
   </data>
-  <data name="&gt;&gt;rtbDescription.Name" xml:space="preserve">
-    <value>rtbDescription</value>
+  <data name="&gt;&gt;tlpAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rtbDescription.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbDescription.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tlpAbout.Parent" xml:space="preserve">
     <value>tableLayoutPanel</value>
   </data>
-  <data name="&gt;&gt;rtbDescription.ZOrder" xml:space="preserve">
-    <value>6</value>
+  <data name="&gt;&gt;tlpAbout.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpAbout.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="llContact" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="llGitee" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="llGitHub" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="llInstructions" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="llOffline" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="llSetup" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,33.33333,Percent,33.33333,Percent,33.33333,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tableLayoutPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1944,7 +2169,7 @@
     <value>6</value>
   </data>
   <data name="tableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>584, 311</value>
+    <value>529, 267</value>
   </data>
   <data name="tableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1962,16 +2187,16 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="logoPictureBox" Row="0" RowSpan="6" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelProductName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelVersion" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyright" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelCompanyName" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="okButton" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rtbDescription" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33,Percent,67" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Absolute,30,Percent,100,Absolute,35" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="logoPictureBox" Row="0" RowSpan="6" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="labelProductName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelVersion" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelCopyright" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="labelCompanyName" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpAbout" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33,Percent,67" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Absolute,30,Percent,100,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>7, 17</value>
+    <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>604, 333</value>
+    <value>549, 289</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>

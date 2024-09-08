@@ -34,10 +34,16 @@
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
-            this.okButton = new System.Windows.Forms.Button();
-            this.rtbDescription = new System.Windows.Forms.RichTextBox();
+            this.tlpAbout = new System.Windows.Forms.TableLayoutPanel();
+            this.llContact = new System.Windows.Forms.LinkLabel();
+            this.llGitee = new System.Windows.Forms.LinkLabel();
+            this.llGitHub = new System.Windows.Forms.LinkLabel();
+            this.llInstructions = new System.Windows.Forms.LinkLabel();
+            this.llOffline = new System.Windows.Forms.LinkLabel();
+            this.llSetup = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
+            this.tlpAbout.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel
@@ -48,8 +54,7 @@
             this.tableLayoutPanel.Controls.Add(this.labelVersion, 1, 1);
             this.tableLayoutPanel.Controls.Add(this.labelCopyright, 1, 2);
             this.tableLayoutPanel.Controls.Add(this.labelCompanyName, 1, 3);
-            this.tableLayoutPanel.Controls.Add(this.okButton, 1, 5);
-            this.tableLayoutPanel.Controls.Add(this.rtbDescription, 1, 4);
+            this.tableLayoutPanel.Controls.Add(this.tlpAbout, 1, 4);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             // 
             // logoPictureBox
@@ -79,25 +84,75 @@
             resources.ApplyResources(this.labelCompanyName, "labelCompanyName");
             this.labelCompanyName.Name = "labelCompanyName";
             // 
-            // okButton
+            // tlpAbout
             // 
-            resources.ApplyResources(this.okButton, "okButton");
-            this.okButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.okButton.Name = "okButton";
+            resources.ApplyResources(this.tlpAbout, "tlpAbout");
+            this.tlpAbout.Controls.Add(this.llContact, 2, 2);
+            this.tlpAbout.Controls.Add(this.llGitee, 2, 1);
+            this.tlpAbout.Controls.Add(this.llGitHub, 1, 1);
+            this.tlpAbout.Controls.Add(this.llInstructions, 1, 2);
+            this.tlpAbout.Controls.Add(this.llOffline, 2, 0);
+            this.tlpAbout.Controls.Add(this.llSetup, 1, 0);
+            this.tlpAbout.Name = "tlpAbout";
             // 
-            // rtbDescription
+            // llContact
             // 
-            this.rtbDescription.BackColor = System.Drawing.SystemColors.Control;
-            this.rtbDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbDescription, "rtbDescription");
-            this.rtbDescription.Name = "rtbDescription";
-            this.rtbDescription.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbDescription_LinkClicked);
+            resources.ApplyResources(this.llContact, "llContact");
+            this.llContact.LinkColor = System.Drawing.Color.Green;
+            this.llContact.Name = "llContact";
+            this.llContact.TabStop = true;
+            this.llContact.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llContact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llContact_LinkClicked);
+            // 
+            // llGitee
+            // 
+            resources.ApplyResources(this.llGitee, "llGitee");
+            this.llGitee.LinkColor = System.Drawing.Color.Green;
+            this.llGitee.Name = "llGitee";
+            this.llGitee.TabStop = true;
+            this.llGitee.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llGitee.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llGitee_LinkClicked);
+            // 
+            // llGitHub
+            // 
+            resources.ApplyResources(this.llGitHub, "llGitHub");
+            this.llGitHub.LinkColor = System.Drawing.Color.Green;
+            this.llGitHub.Name = "llGitHub";
+            this.llGitHub.TabStop = true;
+            this.llGitHub.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llGitHub_LinkClicked);
+            // 
+            // llInstructions
+            // 
+            resources.ApplyResources(this.llInstructions, "llInstructions");
+            this.llInstructions.LinkColor = System.Drawing.Color.Green;
+            this.llInstructions.Name = "llInstructions";
+            this.llInstructions.TabStop = true;
+            this.llInstructions.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llInstructions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llInstructions_LinkClicked);
+            // 
+            // llOffline
+            // 
+            resources.ApplyResources(this.llOffline, "llOffline");
+            this.llOffline.LinkColor = System.Drawing.Color.Green;
+            this.llOffline.Name = "llOffline";
+            this.llOffline.TabStop = true;
+            this.llOffline.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llOffline.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOffline_LinkClicked);
+            // 
+            // llSetup
+            // 
+            resources.ApplyResources(this.llSetup, "llSetup");
+            this.llSetup.LinkColor = System.Drawing.Color.Green;
+            this.llSetup.Name = "llSetup";
+            this.llSetup.TabStop = true;
+            this.llSetup.VisitedLinkColor = System.Drawing.Color.Green;
+            this.llSetup.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSetup_LinkClicked);
             // 
             // AboutFrom
             // 
-            this.AcceptButton = this.okButton;
             resources.ApplyResources(this, "$this");
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -107,6 +162,8 @@
             this.ShowInTaskbar = false;
             this.tableLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
+            this.tlpAbout.ResumeLayout(false);
+            this.tlpAbout.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -119,7 +176,12 @@
         private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelCompanyName;
-        private System.Windows.Forms.Button okButton;
-        private System.Windows.Forms.RichTextBox rtbDescription;
+        private System.Windows.Forms.TableLayoutPanel tlpAbout;
+        private System.Windows.Forms.LinkLabel llSetup;
+        private System.Windows.Forms.LinkLabel llOffline;
+        private System.Windows.Forms.LinkLabel llInstructions;
+        private System.Windows.Forms.LinkLabel llGitee;
+        private System.Windows.Forms.LinkLabel llGitHub;
+        private System.Windows.Forms.LinkLabel llContact;
     }
 }

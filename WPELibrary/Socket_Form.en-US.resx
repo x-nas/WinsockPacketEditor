@@ -136,59 +136,59 @@
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 54</value>
   </data>
+  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 166</value>
+  </data>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiSend.Text" xml:space="preserve">
     <value>Send</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>165, 6</value>
   </data>
   <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiBatchSend.Text" xml:space="preserve">
     <value>Add to send list</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>165, 6</value>
   </data>
   <data name="tsmiAddToFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiAddToFilter.Text" xml:space="preserve">
     <value>Add to filter list</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>165, 6</value>
   </data>
   <data name="tsmiUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiUseSocket.Text" xml:space="preserve">
     <value>Use this socket</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>165, 6</value>
   </data>
   <data name="tsmiShowBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiShowBatchSend.Text" xml:space="preserve">
-    <value>Send list</value>
+    <value>Show send list</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>165, 6</value>
   </data>
   <data name="tsmiSaveSocketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>168, 22</value>
   </data>
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
-    <value>Export to Excel</value>
-  </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 166</value>
+    <value>Export to excel</value>
   </data>
   <data name="ssStatusInfo_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>898, 22</value>

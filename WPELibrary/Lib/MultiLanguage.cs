@@ -32,10 +32,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_20 = { "目标进程：", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
-        public static string[] MutiLan_23 = { "网络封包拦截器", "Winsock Packet Editor" };
-        public static string[] MutiLan_24 = { "下载安装：", "DownLoad Setup: " };
-        public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
-        public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
+        //public static string[] MutiLan_23 = { "网络封包拦截器", "Winsock Packet Editor" };
+        //public static string[] MutiLan_24 = { "下载安装：", "DownLoad Setup: " };
+        //public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
+        //public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         //public static string[] MutiLan_29 = { "显示-接收, ", "Show-Recv, " };

@@ -1693,25 +1693,100 @@
   <data name="logoPictureBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="logoPictureBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 259</value>
+  </data>
   <data name="labelProductName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
+  </data>
+  <data name="labelProductName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 0</value>
+  </data>
+  <data name="labelProductName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 23</value>
+  </data>
+  <data name="labelProductName.Text" xml:space="preserve">
+    <value>WinSock Packet Editor</value>
   </data>
   <data name="labelVersion.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="labelVersion.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 30</value>
+  </data>
+  <data name="labelVersion.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 23</value>
+  </data>
   <data name="labelCopyright.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
+  </data>
+  <data name="labelCopyright.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 60</value>
+  </data>
+  <data name="labelCopyright.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 23</value>
   </data>
   <data name="labelCompanyName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="okButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="labelCompanyName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 90</value>
   </data>
-  <data name="okButton.Text" xml:space="preserve">
-    <value>OK (&amp;O)</value>
+  <data name="labelCompanyName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>355, 23</value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="tlpAbout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>179, 120</value>
+  </data>
+  <data name="tlpAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>366, 137</value>
+  </data>
+  <data name="tableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>545, 267</value>
+  </data>
+  <data name="llContact.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 93</value>
+  </data>
+  <data name="llContact.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 41</value>
+  </data>
+  <data name="llContact.Text" xml:space="preserve">
+    <value>[ Contact Author ]</value>
+  </data>
+  <data name="llGitee.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 48</value>
+  </data>
+  <data name="llGitee.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 39</value>
+  </data>
+  <data name="llGitHub.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 39</value>
+  </data>
+  <data name="llInstructions.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 41</value>
+  </data>
+  <data name="llInstructions.Text" xml:space="preserve">
+    <value>[ Instructions ]</value>
+  </data>
+  <data name="llOffline.Location" type="System.Drawing.Point, System.Drawing">
+    <value>186, 3</value>
+  </data>
+  <data name="llOffline.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 39</value>
+  </data>
+  <data name="llOffline.Text" xml:space="preserve">
+    <value>[ Offline packaged ]</value>
+  </data>
+  <data name="llSetup.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 39</value>
+  </data>
+  <data name="llSetup.Text" xml:space="preserve">
+    <value>[ Online installation ]</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>565, 289</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>About</value>
   </data>
 </root>

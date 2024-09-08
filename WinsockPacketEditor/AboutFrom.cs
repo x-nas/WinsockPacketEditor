@@ -1,7 +1,5 @@
 ﻿using WinsockPacketEditor.Lib;
-using System;
 using System.Windows.Forms;
-using WPELibrary.Lib;
 
 namespace WinsockPacketEditor
 {
@@ -17,49 +15,52 @@ namespace WinsockPacketEditor
         #region//初始化关于信息
 
         private void InitFrom()
-        {
-            this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_3);
-
-            this.labelProductName.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23);
-
-            this.labelVersion.Text = String.Format("版本 {0}", Process_Injector.AssemblyVersion);
-
+        { 
+            this.labelVersion.Text = Process_Injector.AssemblyVersion;
             this.labelCopyright.Text = Process_Injector.AssemblyCopyright;
-
             this.labelCompanyName.Text = Process_Injector.AssemblyCompany;
-
-            this.rtbDescription.Text = "";
-
-            //安装下载
-            this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24);
-            this.rtbDescription.Text += "https://www.x-nas.com/wpe/publish.htm" + "\r\n";
-
-            //使用说明
-            this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25);
-            this.rtbDescription.Text += "https://www.52pojie.cn/thread-1446781-1-1.html" + "\r\n";
-
-            //Github
-            this.rtbDescription.Text += "GitHub: ";
-            this.rtbDescription.Text += "https://github.com/x-nas/WinsockPacketEditor" + "\r\n";
-
-            //Gitee
-            this.rtbDescription.Text += "Gitee: ";
-            this.rtbDescription.Text += "https://gitee.com/X-NAS/WinsockPacketEditor" + "\r\n";
-
-            //联系作者
-            this.rtbDescription.Text += MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26);
-            this.rtbDescription.Text += "MailTo:263659@qq.com" + "\r\n";
         }
 
         #endregion
 
         #region//打开超链接
 
-        private void rtbDescription_LinkClicked(object sender, LinkClickedEventArgs e)
+        //在线安装版
+        private void llSetup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            System.Diagnostics.Process.Start("https://www.x-nas.com/wpe/publish.htm");
         }
 
-        #endregion
+        //离线打包版
+        private void llOffline_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://pan.baidu.com/s/1xB8TT395PeIpCjP5bIu42Q?pwd=wspe");
+        }
+
+        //使用说明
+        private void llInstructions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://pan.baidu.com/s/1jbCv9fhO25WnWSF2kB078w?pwd=wspe");
+        }
+
+        //Github
+        private void llGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/x-nas/WinsockPacketEditor");
+        }
+
+        //Gitee
+        private void llGitee_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://gitee.com/X-NAS/WinsockPacketEditor");
+        }
+
+        //联系作者
+        private void llContact_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("MailTo:263659@qq.com");
+        }
+
+        #endregion      
     }
 }
