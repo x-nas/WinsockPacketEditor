@@ -16,7 +16,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 在线安装版（支持自动在线更新）
 Online installation version (supports automatic online updates)
 
-https://www.x-nas.com/wpe/publish.htm
+http://www.x-nas.com:8888/wpe/publish.htm
 
 离线打包版（不支持自动在线更新）
 Offline packaged version (does not support automatic online updates)
