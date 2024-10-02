@@ -1,69 +1,33 @@
-# Winsock Packet Editor
+WinSock Packet Editor 网络封包拦截器
 
-网络封包拦截器，可拦截手游封包，支持32位及64位程序
-用C#自己开发了一个仿WPE的封包拦截器，可以自适应32位和64位的软件，且wpe常用的功能都有了，开发中使用了多线程技术，测试了拦截1万+的封包不会卡死或退出，软件不定期会更新功能，每次启动的时候支持在线自动更新，欢迎大家一起完善和改进！
+WinSockPacketEditor（网络封包拦截器），是一款可以拦截并修改WinSock封包的windows软件，自适应支持32位及64位的目标程序，软件具有批量发送和高级滤镜等功能，开发中使用了C#的多线程和消息队列技术，测试拦截了1万+的封包不会卡死或退出，软件不定期会修复bug和更新功能，每次启动的时候支持在线自动更新，欢迎大家提出宝贵意见一起完善和改进，谢谢！
 
-Winsocket packet Editor, which can intercept mobile game  with simulator, supports 32 bit and 64 bit App
-I have developed a WPE like packet interceptor using C #, which can adapt to 32-bit and 64 bit software, and has all the commonly used functions of WPE. During development, I used multithreading technology and tested intercepting more than 10000 packets without getting stuck or exiting. The software updates its functions periodically and supports online automatic updates every time it starts. We welcome everyone to improve and perfect together!
+WinSockPacketEditor is a Windows software that can intercept and modify WinSock packets. It adaptively supports 32-bit and 64 bit target programs, and has functions such as batch sending and advanced filters. C #'s multithreading and message queue technology were used in development, and more than 10000 packets were intercepted without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it is launched. We welcome valuable feedback to improve and enhance together. 
+Thank you!
 
-重要告知：由于系统架构升级 1.0.0.32 及以前版本需要卸载后，重新下载安装文件才能升级到 1.0.0.33 及以后版本！
+下载和安装
 
-Notice: Due to the system architecture upgrade of 1.0.0.32 and earlier versions, it is necessary to uninstall and download the setup.exe again in order to upgrade to 1.0.0.33 and later versions!
+本软件使用了微软的VS2022集成开发环境，.NET Framework 4.8开发框架，以及ClickOnce部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
 
-Download setup.exe: https://www.x-nas.com/wpe/publish.htm
+Download and Install
 
-![111](https://github.com/x-nas/WinPacketsEdit/assets/67667226/5f45ae94-fdcb-42de-abf9-3cf7aefad08d)
+This software uses Microsoft's VS2022 integrated development environment NET Framework 4.8 development framework, as well as GTK deployment resources. After each version update, the latest version will be automatically downloaded when the program is launched. If the update server is unavailable, it will not cause the program to be unusable. Of course, if you do not want automatic updates, you can manually turn off automatic updates at startup or download the offline packaged version directly for use.
 
-![222](https://github.com/x-nas/WinPacketsEdit/assets/67667226/031edea5-4a40-4f04-a10e-5c84f843e673)
+在线安装版（支持自动在线更新）
+Online installation version (supports automatic online updates)
+
+http://www.x-nas.com:8888/WPE/Downloads/Releases/publish.htm
+
+离线打包版（不支持自动在线更新）
+Offline packaged version (does not support automatic online updates)
+
+https://pan.baidu.com/s/1xB8TT395PeIpCjP5bIu42Q?pwd=wspe
+
+使用说明 Instructions
+
+https://pan.baidu.com/s/1jbCv9fhO25WnWSF2kB078w?pwd=wspe
 
 
-安装版本使用方法：  
-  1. 下载解压缩后双击运行安装程序图标 
-  
-  ![1](https://user-images.githubusercontent.com/67667226/161364663-ce7a01aa-f359-458c-ae9b-b7468803b19d.jpg)
+![111](https://github.com/user-attachments/assets/3983ecdc-c062-4e6b-b95d-3dfb2d392860)
 
-  
-  2. 如有提示请选择 “更多信息”，并点击 “仍要运行” 
-  
-  ![2](https://user-images.githubusercontent.com/67667226/161364780-101447f1-ed3e-4c76-9980-43605a45711a.jpg)
-
-  
-  3. 安装程序会自动检测操作系统的运行环境，如有需要会提示安装相关运行库（比如.net 4.0等），点击下载及安装即可.
-  
-  ![3](https://user-images.githubusercontent.com/67667226/161364787-0d028d2d-95b7-4771-a0f6-650542709f44.jpg)
-
-  
-  4. 安装完成后启动时如有提示，请选择 “更多信息”，并点击 “仍要运行”
-    
-  ![4](https://user-images.githubusercontent.com/67667226/161364794-11c37f22-39f6-4c52-86cc-0acd41a7362f.jpg)
- 
-启动并注入进程：
-  1. 双击软件图标启动程序后，会提示以管理员权限运行，点击确定后显示进程注入界面，点击 “...” 按钮选择进程
-  
-  ![5](https://user-images.githubusercontent.com/67667226/161364836-3c089719-ae78-4089-ac2f-48d797600cde.jpg)
-
-  
-  2. 选择需要拦截封包的进程名称，点击“确定”，如下面图示选择的为雷电模拟的进程
-  
-  ![6](https://user-images.githubusercontent.com/67667226/161364842-a1c97049-296a-4bfc-ac29-9cd03679d427.jpg)
-
-  
-  3. 选择进程后，点击 “注入” 按钮
-  
-  ![7](https://user-images.githubusercontent.com/67667226/161364853-2c8760bd-4632-4dac-b76d-74f41a81876e.jpg)
-
-  
-  4. 如下图出现红框内文字时代表注入进程成功，否则会提示相关错误信息（并不是所有进程都可以实现注入，各类手游模拟器及CCProxy等代{过}{滤}理软件经测试可以成功注入）
-  
-  ![8](https://user-images.githubusercontent.com/67667226/161364857-e3a00761-866d-41f5-9cde-b2a621f335d6.jpg)
-
-  
-  5. 成功注入进程后，即可弹出封包拦截主界面，这时候即可关闭上图的进程注入器了
- 
-  封包拦截器的使用：  
-  封包拦截器是仿WPE的常用功能很容易上手我就不做详细的说明了，如果后期有需要的话我再补充这块的说明。
-  
-  软件的更新及卸载：
-  1. 软件在每次启动的时候会自动更新，我会不定期的修改bug和完善功能。
-  
-  2. 卸载软件 “控制面板” - “卸载软件” - “封包拦截器”
+![222](https://github.com/user-attachments/assets/97a0091f-b33d-4f85-b340-771d9c276ae1)
