@@ -28,7 +28,7 @@ namespace WinsockPacketEditor
         //在线安装版
         private void llSetup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.x-nas.com/wpe/publish.htm");
+            System.Diagnostics.Process.Start("http://www.x-nas.com:8888/WPE/Downloads/Releases/publish.htm");
         }
 
         //离线打包版
