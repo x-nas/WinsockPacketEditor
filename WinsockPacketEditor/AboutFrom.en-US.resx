@@ -1744,44 +1744,23 @@
   <data name="tableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
     <value>545, 267</value>
   </data>
-  <data name="llContact.Location" type="System.Drawing.Point, System.Drawing">
-    <value>186, 93</value>
-  </data>
-  <data name="llContact.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 41</value>
-  </data>
-  <data name="llContact.Text" xml:space="preserve">
-    <value>[ Contact Author ]</value>
-  </data>
-  <data name="llGitee.Location" type="System.Drawing.Point, System.Drawing">
-    <value>186, 48</value>
-  </data>
   <data name="llGitee.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 39</value>
+    <value>320, 41</value>
+  </data>
+  <data name="llGitee.Text" xml:space="preserve">
+    <value>[ View this project on Gitee ]</value>
   </data>
   <data name="llGitHub.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 39</value>
+    <value>320, 39</value>
   </data>
-  <data name="llInstructions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 41</value>
-  </data>
-  <data name="llInstructions.Text" xml:space="preserve">
-    <value>[ Instructions ]</value>
-  </data>
-  <data name="llOffline.Location" type="System.Drawing.Point, System.Drawing">
-    <value>186, 3</value>
-  </data>
-  <data name="llOffline.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 39</value>
-  </data>
-  <data name="llOffline.Text" xml:space="preserve">
-    <value>[ Offline packaged ]</value>
+  <data name="llGitHub.Text" xml:space="preserve">
+    <value>[ View this project on GitHub ]</value>
   </data>
   <data name="llSetup.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 39</value>
+    <value>320, 39</value>
   </data>
   <data name="llSetup.Text" xml:space="preserve">
-    <value>[ Online installation ]</value>
+    <value>[ Winsock Packet Editor WebSite ]</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>565, 289</value>

@@ -35,11 +35,8 @@
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.tlpAbout = new System.Windows.Forms.TableLayoutPanel();
-            this.llContact = new System.Windows.Forms.LinkLabel();
             this.llGitee = new System.Windows.Forms.LinkLabel();
             this.llGitHub = new System.Windows.Forms.LinkLabel();
-            this.llInstructions = new System.Windows.Forms.LinkLabel();
-            this.llOffline = new System.Windows.Forms.LinkLabel();
             this.llSetup = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).BeginInit();
@@ -87,22 +84,10 @@
             // tlpAbout
             // 
             resources.ApplyResources(this.tlpAbout, "tlpAbout");
-            this.tlpAbout.Controls.Add(this.llContact, 2, 2);
-            this.tlpAbout.Controls.Add(this.llGitee, 2, 1);
+            this.tlpAbout.Controls.Add(this.llGitee, 1, 2);
             this.tlpAbout.Controls.Add(this.llGitHub, 1, 1);
-            this.tlpAbout.Controls.Add(this.llInstructions, 1, 2);
-            this.tlpAbout.Controls.Add(this.llOffline, 2, 0);
             this.tlpAbout.Controls.Add(this.llSetup, 1, 0);
             this.tlpAbout.Name = "tlpAbout";
-            // 
-            // llContact
-            // 
-            resources.ApplyResources(this.llContact, "llContact");
-            this.llContact.LinkColor = System.Drawing.Color.Green;
-            this.llContact.Name = "llContact";
-            this.llContact.TabStop = true;
-            this.llContact.VisitedLinkColor = System.Drawing.Color.Green;
-            this.llContact.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llContact_LinkClicked);
             // 
             // llGitee
             // 
@@ -121,24 +106,6 @@
             this.llGitHub.TabStop = true;
             this.llGitHub.VisitedLinkColor = System.Drawing.Color.Green;
             this.llGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llGitHub_LinkClicked);
-            // 
-            // llInstructions
-            // 
-            resources.ApplyResources(this.llInstructions, "llInstructions");
-            this.llInstructions.LinkColor = System.Drawing.Color.Green;
-            this.llInstructions.Name = "llInstructions";
-            this.llInstructions.TabStop = true;
-            this.llInstructions.VisitedLinkColor = System.Drawing.Color.Green;
-            this.llInstructions.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llInstructions_LinkClicked);
-            // 
-            // llOffline
-            // 
-            resources.ApplyResources(this.llOffline, "llOffline");
-            this.llOffline.LinkColor = System.Drawing.Color.Green;
-            this.llOffline.Name = "llOffline";
-            this.llOffline.TabStop = true;
-            this.llOffline.VisitedLinkColor = System.Drawing.Color.Green;
-            this.llOffline.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOffline_LinkClicked);
             // 
             // llSetup
             // 
@@ -178,10 +145,7 @@
         private System.Windows.Forms.Label labelCompanyName;
         private System.Windows.Forms.TableLayoutPanel tlpAbout;
         private System.Windows.Forms.LinkLabel llSetup;
-        private System.Windows.Forms.LinkLabel llOffline;
-        private System.Windows.Forms.LinkLabel llInstructions;
         private System.Windows.Forms.LinkLabel llGitee;
         private System.Windows.Forms.LinkLabel llGitHub;
-        private System.Windows.Forms.LinkLabel llContact;
     }
 }

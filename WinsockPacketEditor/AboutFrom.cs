@@ -25,23 +25,11 @@ namespace WinsockPacketEditor
 
         #region//打开超链接
 
-        //在线安装版
+        //网站
         private void llSetup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.x-nas.com:8888/WPE/Downloads/Releases/publish.htm");
-        }
-
-        //离线打包版
-        private void llOffline_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://pan.baidu.com/s/1xB8TT395PeIpCjP5bIu42Q?pwd=wspe");
-        }
-
-        //使用说明
-        private void llInstructions_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://pan.baidu.com/s/1jbCv9fhO25WnWSF2kB078w?pwd=wspe");
-        }
+            System.Diagnostics.Process.Start("http://www.x-nas.com:8888/WPE/index.html");
+        }      
 
         //Github
         private void llGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -53,12 +41,6 @@ namespace WinsockPacketEditor
         private void llGitee_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://gitee.com/X-NAS/WinsockPacketEditor");
-        }
-
-        //联系作者
-        private void llContact_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("MailTo:263659@qq.com");
         }
 
         #endregion      
