@@ -68,9 +68,9 @@ namespace WPELibrary
                 this.bStopHook.Enabled = false;
                 this.tSocketInfo.Enabled = true;
 
-                this.pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
-                this.pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
-                this.pbLoading.Visible = false;
+                //this.pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
+                //this.pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
+                //this.pbLoading.Visible = false;
 
                 this.cbPacketInfo_Left.SelectedIndex = 0;
                 this.cbPacketInfo_Right.SelectedIndex = 1;
@@ -165,82 +165,6 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
-        #endregion        
-
-        #region//设置拦截选项
-
-        //Send
-        private void cbHook_Send_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_Send = this.cbHook_Send.Checked;            
-        }
-
-        //SendTo
-        private void cbHook_SendTo_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_SendTo = this.cbHook_SendTo.Checked;            
-        }
-
-        //Recv
-        private void cbHook_Recv_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_Recv = this.cbHook_Recv.Checked;            
-        }
-
-        //RecvFrom
-        private void cbHook_RecvFrom_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_RecvFrom = this.cbHook_RecvFrom.Checked;            
-        }
-
-        //WSASend
-        private void cbHook_WSASend_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_WSASend = this.cbHook_WSASend.Checked;
-        }
-
-        //WSASendTo
-        private void cbHook_WSASendTo_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_WSASendTo = this.cbHook_WSASendTo.Checked;
-        }
-
-        //WSARecv
-        private void cbHook_WSARecv_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_WSARecv = this.cbHook_WSARecv.Checked;
-        }
-
-        //WSARecvFrom
-        private void cbHook_WSARecvFrom_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Hook_WSARecvFrom = this.cbHook_WSARecvFrom.Checked;
-        }
-
-        //过滤封包大小
-        private void cbCheck_Size_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Check_Size = this.cbCheck_Size.Checked;            
-        }
-
-        //过滤套接字
-        private void cbCheck_Socket_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Check_Socket = this.cbCheck_Socket.Checked;            
-        }
-
-        //过滤IP
-        private void cbCheck_IP_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Check_IP = this.cbCheck_IP.Checked;            
-        }
-
-        //过滤封包数据
-        private void cbCheck_Packet_CheckedChanged(object sender, EventArgs e)
-        {
-            Socket_Cache.Check_Packet = this.cbCheck_Packet.Checked;            
-        }
-
         #endregion
 
         #region//清空数据
@@ -359,7 +283,7 @@ namespace WPELibrary
         #region//右键菜单
 
         #region//发送列表菜单
-        private void cmsSocketInfo_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void cmsSocketList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             string sItemText = e.ClickedItem.Name;
             this.cmsSocketList.Close();
@@ -431,7 +355,7 @@ namespace WPELibrary
                         #region//发送
                         if (Select_Index > -1)
                         {
-                            this.pbLoading.Visible = true;
+                            //this.pbLoading.Visible = true;
 
                             bgwSendFrom.RunWorkerAsync();
                         }
@@ -756,8 +680,7 @@ namespace WPELibrary
             if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
             {
                 this.rtbPackInfo_Left.Clear();
-                this.rtbPacketInfo_Right.Clear();
-                this.pbLoading.Visible = true;
+                this.rtbPacketInfo_Right.Clear();                
 
                 bgwSocketInfo.RunWorkerAsync();
             }
@@ -768,14 +691,13 @@ namespace WPELibrary
             if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
             {
                 this.rtbPackInfo_Left.Clear();
-                this.rtbPacketInfo_Right.Clear();
-                this.pbLoading.Visible = true;
+                this.rtbPacketInfo_Right.Clear();                
 
                 bgwSocketInfo.RunWorkerAsync();
             }
         }
 
-        private void dgSocketInfo_SelectionChanged(object sender, EventArgs e)
+        private void dgvSocketInfo_SelectionChanged(object sender, EventArgs e)
         {
             try
             {
@@ -786,8 +708,7 @@ namespace WPELibrary
                     if (Select_Index > -1 && !bgwSocketInfo.IsBusy)
                     {
                         this.rtbPackInfo_Left.Clear();
-                        this.rtbPacketInfo_Right.Clear();
-                        this.pbLoading.Visible = true;
+                        this.rtbPacketInfo_Right.Clear();                        
 
                         bgwSocketInfo.RunWorkerAsync();
                     }
@@ -809,19 +730,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void bgwSocketInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                this.pbLoading.Visible = false;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         private void ShowPacketInfo()
         {
@@ -866,8 +775,6 @@ namespace WPELibrary
         {
             try
             {
-                this.pbLoading.Visible = false;
-
                 Socket_Send_Form ssForm = e.Result as Socket_Send_Form;
                 ssForm.Show();
             }

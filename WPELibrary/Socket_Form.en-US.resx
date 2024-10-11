@@ -117,25 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="cIndex.HeaderText" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="cType.HeaderText" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="cSocket.HeaderText" xml:space="preserve">
+    <value>Socket</value>
+  </data>
+  <data name="cFrom.HeaderText" xml:space="preserve">
+    <value>From Address</value>
+  </data>
+  <data name="Column5.HeaderText" xml:space="preserve">
+    <value>To Address</value>
+  </data>
+  <data name="cLen.HeaderText" xml:space="preserve">
+    <value>Len</value>
+  </data>
+  <data name="cData.HeaderText" xml:space="preserve">
+    <value>Data</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
-  </data>
-  <data name="tslClearList.Text" xml:space="preserve">
-    <value>Clear Log List</value>
-  </data>
-  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 6</value>
-  </data>
-  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
-  </data>
-  <data name="tslToExcel.Text" xml:space="preserve">
-    <value>Export to Excel</value>
-  </data>
-  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 54</value>
-  </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 166</value>
   </data>
@@ -190,61 +193,122 @@
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
     <value>Export to excel</value>
   </data>
-  <data name="ssStatusInfo_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>898, 22</value>
-  </data>
   <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 17</value>
+    <value>76, 19</value>
   </data>
   <data name="tlSystemInfo.Text" xml:space="preserve">
     <value>System Info</value>
   </data>
   <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 17</value>
+    <value>88, 19</value>
   </data>
   <data name="tlALL.Text" xml:space="preserve">
     <value>Total Packets:</value>
   </data>
   <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 17</value>
+    <value>46, 19</value>
   </data>
   <data name="tlQueue.Text" xml:space="preserve">
     <value>Buffer:</value>
   </data>
   <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 17</value>
+    <value>40, 19</value>
   </data>
   <data name="tlSend.Text" xml:space="preserve">
     <value>Send:</value>
   </data>
   <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 17</value>
+    <value>55, 19</value>
   </data>
   <data name="tlRecv.Text" xml:space="preserve">
     <value>Receive:</value>
   </data>
   <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 17</value>
+    <value>57, 19</value>
   </data>
   <data name="tlCheck.Text" xml:space="preserve">
     <value>Filterate:</value>
   </data>
   <data name="gbFilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>898, 116</value>
+    <value>591, 124</value>
   </data>
   <data name="gbFilterSet.Text" xml:space="preserve">
     <value>[ Filter Settings ]</value>
   </data>
-  <data name="tlpClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>741, 17</value>
+  <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>585, 102</value>
   </data>
-  <data name="bClear.Text" xml:space="preserve">
-    <value>Clear
-Data
-(&amp;C)</value>
+  <data name="cbCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 30</value>
   </data>
-  <data name="tlpHook.Location" type="System.Drawing.Point, System.Drawing">
-    <value>810, 17</value>
+  <data name="cbCheck_Packet.Text" xml:space="preserve">
+    <value>Filter Data</value>
+  </data>
+  <data name="cbCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 30</value>
+  </data>
+  <data name="cbCheck_Socket.Text" xml:space="preserve">
+    <value>Filter Sockets</value>
+  </data>
+  <data name="cbCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 30</value>
+  </data>
+  <data name="cbCheck_IP.Text" xml:space="preserve">
+    <value>Filter IP</value>
+  </data>
+  <data name="txtCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 6</value>
+  </data>
+  <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>335, 23</value>
+  </data>
+  <data name="txtCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 38</value>
+  </data>
+  <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>335, 23</value>
+  </data>
+  <data name="txtCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 70</value>
+  </data>
+  <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>335, 23</value>
+  </data>
+  <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
+    <value>468, 4</value>
+  </data>
+  <data name="cbCheck_Size.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 30</value>
+  </data>
+  <data name="cbCheck_Size.Text" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>470, 38</value>
+  </data>
+  <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 23</value>
+  </data>
+  <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>470, 70</value>
+  </data>
+  <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 23</value>
+  </data>
+  <data name="gbHookType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>600, 3</value>
+  </data>
+  <data name="gbHookType.Text" xml:space="preserve">
+    <value>[ Hook Settings ]</value>
+  </data>
+  <data name="tlpHookButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>856, 3</value>
+  </data>
+  <data name="tlpHookButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 124</value>
+  </data>
+  <data name="tlpHookButton_Start.Location" type="System.Drawing.Point, System.Drawing">
+    <value>78, 0</value>
   </data>
   <data name="bStartHook.Text" xml:space="preserve">
     <value>START (&amp;K)</value>
@@ -252,56 +316,13 @@ Data
   <data name="bStopHook.Text" xml:space="preserve">
     <value>STOP (&amp;J)</value>
   </data>
-  <data name="gbHookType.Text" xml:space="preserve">
-    <value>[ Hook Settings ]</value>
+  <data name="bClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 118</value>
   </data>
-  <data name="cbCheck_Packet.Text" xml:space="preserve">
-    <value>Filter Data</value>
-  </data>
-  <data name="cbCheck_Socket.Text" xml:space="preserve">
-    <value>Filter Sockets</value>
-  </data>
-  <data name="cbCheck_IP.Text" xml:space="preserve">
-    <value>Filter IP</value>
-  </data>
-  <data name="cbCheck_Size.Text" xml:space="preserve">
-    <value>Length</value>
-  </data>
-  <data name="gbSearchData.Text" xml:space="preserve">
-    <value>[ Search Data ]</value>
-  </data>
-  <data name="bSearchData.Text" xml:space="preserve">
-    <value>Search (&amp;S)</value>
-  </data>
-  <data name="cbSearchOrder.Items" xml:space="preserve">
-    <value>From Scratch</value>
-  </data>
-  <data name="cbSearchOrder.Items1" xml:space="preserve">
-    <value>Search Down</value>
-  </data>
-  <data name="cIndex.HeaderText" xml:space="preserve">
-    <value>ID</value>
-  </data>
-  <data name="cType.HeaderText" xml:space="preserve">
-    <value>Category</value>
-  </data>
-  <data name="cSocket.HeaderText" xml:space="preserve">
-    <value>Socket</value>
-  </data>
-  <data name="cFrom.HeaderText" xml:space="preserve">
-    <value>From Address</value>
-  </data>
-  <data name="Column5.HeaderText" xml:space="preserve">
-    <value>To Address</value>
-  </data>
-  <data name="cLen.HeaderText" xml:space="preserve">
-    <value>Len</value>
-  </data>
-  <data name="cData.HeaderText" xml:space="preserve">
-    <value>Data</value>
-  </data>
-  <data name="dgvSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>898, 279</value>
+  <data name="bClear.Text" xml:space="preserve">
+    <value>Clear
+Data
+(&amp;C)</value>
   </data>
   <data name="gbFilterList.Text" xml:space="preserve">
     <value>[ Filter List ]</value>
@@ -360,41 +381,11 @@ Data
   <data name="tsmiLoadFilterList.Text" xml:space="preserve">
     <value>Load Filter List</value>
   </data>
-  <data name="pPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>740, 166</value>
-  </data>
-  <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>738, 164</value>
-  </data>
-  <data name="tpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>730, 134</value>
-  </data>
   <data name="tpPacketInfo.Text" xml:space="preserve">
     <value>Packet Data </value>
   </data>
-  <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>730, 134</value>
-  </data>
-  <data name="rtbPackInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
-    <value>363, 107</value>
-  </data>
-  <data name="rtbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
-    <value>366, 26</value>
-  </data>
-  <data name="rtbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
-    <value>363, 107</value>
-  </data>
-  <data name="cbPacketInfo_Left.Size" type="System.Drawing.Size, System.Drawing">
-    <value>363, 25</value>
-  </data>
-  <data name="cbPacketInfo_Right.Location" type="System.Drawing.Point, System.Drawing">
-    <value>366, 1</value>
-  </data>
-  <data name="cbPacketInfo_Right.Size" type="System.Drawing.Size, System.Drawing">
-    <value>363, 25</value>
-  </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>730, 134</value>
+    <value>779, 180</value>
   </data>
   <data name="tpSystemLog.Text" xml:space="preserve">
     <value>System Log</value>
@@ -408,11 +399,38 @@ Data
   <data name="cContent.HeaderText" xml:space="preserve">
     <value>Content</value>
   </data>
-  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>730, 134</value>
+  <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 54</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>898, 641</value>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>779, 180</value>
+  </data>
+  <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 22</value>
+  </data>
+  <data name="tslClearList.Text" xml:space="preserve">
+    <value>Clear Log List</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 6</value>
+  </data>
+  <data name="tslToExcel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 22</value>
+  </data>
+  <data name="tslToExcel.Text" xml:space="preserve">
+    <value>Export to Excel</value>
+  </data>
+  <data name="gbSearchData.Text" xml:space="preserve">
+    <value>[ Search Data ]</value>
+  </data>
+  <data name="bSearchData.Text" xml:space="preserve">
+    <value>Search (&amp;S)</value>
+  </data>
+  <data name="cbSearchOrder.Items" xml:space="preserve">
+    <value>From Scratch</value>
+  </data>
+  <data name="cbSearchOrder.Items1" xml:space="preserve">
+    <value>Search Down</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6585,8 +6603,5 @@ Data
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>Winsock Packet Editor</value>
   </data>
 </root>
