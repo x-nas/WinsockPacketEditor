@@ -38,7 +38,7 @@ namespace WPELibrary
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
 
-                this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_42) + Socket_Cache.SocketList.lstRecPacket[Select_Index].Index.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+                this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_42) + Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex.ToString() + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;                
@@ -61,7 +61,7 @@ namespace WPELibrary
             {
                 dgvSocketSend.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketSend, true, null);
 
-                int iColNum = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen;
+                int iColNum = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen;
 
                 if (iColNum >= 65535)
                 {
@@ -97,12 +97,12 @@ namespace WPELibrary
         {
             try
             {
-                this.txtSend_Socket.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].Socket.ToString();
-                this.txtSend_Len.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen.ToString();
-                this.txtSend_IP.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].To.Split(':')[0];
-                this.txtSend_Port.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].To.Split(':')[1];
+                this.txtSend_Socket.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket.ToString();
+                this.txtSend_Len.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen.ToString();
+                this.txtSend_IP.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[0];
+                this.txtSend_Port.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[1];
 
-                string sData = Socket_Operation.ByteToString("HEX", Socket_Cache.SocketList.lstRecPacket[Select_Index].Buffer);
+                string sData = Socket_Operation.ByteToString("HEX", Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
 
                 ShowSocketSendData(sData);
             }
@@ -288,11 +288,11 @@ namespace WPELibrary
         {
             try
             {
-                if (this.nudStepIndex.Value > Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen)
+                if (this.nudStepIndex.Value > Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen)
                 {
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_82));
 
-                    this.nudStepIndex.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].ResLen;
+                    this.nudStepIndex.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen;
                 }
                 else
                 {
@@ -374,6 +374,7 @@ namespace WPELibrary
         #endregion        
 
         #region//右键菜单
+
         private void cmsSocketSend_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
@@ -381,7 +382,7 @@ namespace WPELibrary
                 string sItemText = e.ClickedItem.Name;
                 this.cmsSocketSend.Close();
 
-                int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].Index;
+                int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex;
                 string sData = this.GetSendData();
 
                 switch (sItemText)
@@ -390,13 +391,13 @@ namespace WPELibrary
                     case "tsmiBatchSend":
                         
                         int iSocket = Socket_Operation.CheckSocket(this.txtSend_Socket.Text.Trim());
-                        string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].To;                        
+                        string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;                        
                         byte[] bBuff = Socket_Operation.Hex_To_Byte(sData);
                         int iResLen = bBuff.Length;
 
-                        Socket_Cache.SocketSendList.AddSendList_New(iIndex, "", iSocket, sIPTo, iResLen, sData, bBuff);
+                        Socket_Cache.SendList.AddSendList_New(iIndex, "", iSocket, sIPTo, iResLen, sData, bBuff);
 
-                        if (Socket_Cache.SocketSendList.bShow_SendListForm)
+                        if (Socket_Cache.SendList.bShow_SendListForm)
                         {
                             Socket_SendList_Form sslForm = new Socket_SendList_Form();
                             sslForm.Show();
@@ -408,13 +409,13 @@ namespace WPELibrary
                     case "tsmiAddToFilter":
                         
                         string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
-                        Socket_Filter_Info.FilterMode FMode = Socket_Filter_Info.FilterMode.Normal;                        
-                        Socket_Filter_Info.StartFrom FStartFrom = Socket_Filter_Info.StartFrom.Head;
+                        Socket_FilterInfo.FilterMode FMode = Socket_FilterInfo.FilterMode.Normal;                        
+                        Socket_FilterInfo.StartFrom FStartFrom = Socket_FilterInfo.StartFrom.Head;
                         int iFModifyCNT = 1;
                         string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
                         int iFSearchLen = int.Parse(this.txtSend_Len.Text.Trim());                        
 
-                        Socket_Cache.SocketFilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, "", iFSearchLen, false);
+                        Socket_Cache.FilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, "", iFSearchLen, false);
 
                         Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
 
@@ -426,6 +427,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion
 
         #region//检查发送数据
@@ -471,6 +473,7 @@ namespace WPELibrary
         #endregion
 
         #region//发送封包（异步）
+
         private void bgwSendPacket_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             SendPacket();            
@@ -576,6 +579,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
     }
 }

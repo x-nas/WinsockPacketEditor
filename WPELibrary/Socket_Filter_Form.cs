@@ -16,9 +16,9 @@ namespace WPELibrary
         private int FilterModifyCNT = 0;
         private string FilterSearch = "", FilterModify = "";
         private int FilterSearchLen = -1, FilterModifyLen = -1;
-        private Socket_Filter_Info.FilterDGVType FilterDGVType_Init;
-        private Socket_Filter_Info.FilterMode FilterMode;        
-        private Socket_Filter_Info.StartFrom FilterStartFrom;
+        private Socket_FilterInfo.FilterDGVType FilterDGVType_Init;
+        private Socket_FilterInfo.FilterMode FilterMode;        
+        private Socket_FilterInfo.StartFrom FilterStartFrom;
 
         #region//窗体加载
 
@@ -37,13 +37,13 @@ namespace WPELibrary
                 dgvFilter_Advanced_Modify.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilter_Advanced_Modify, true, null);
 
                 this.FilterNum = FNum;
-                this.FilterIndex = Socket_Cache.SocketFilterList.GetFilterIndex_ByFilterNum(FilterNum);
+                this.FilterIndex = Socket_Cache.FilterList.GetFilterIndex_ByFilterNum(FilterNum);
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16) + FilterNum + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
 
                 this.InitFrom();
-                this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.All);
+                this.InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType.All);
             }
             catch (Exception ex)
             {
@@ -57,24 +57,24 @@ namespace WPELibrary
             {
                 if (FilterIndex >= 0)
                 {
-                    this.FilterName = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FName.ToString();
-                    this.FilterMode = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FMode;                    
-                    this.FilterStartFrom = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FStartFrom;
-                    this.FilterModifyCNT = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModifyCNT;
-                    this.FilterSearch = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearch.ToString().Trim();
-                    this.FilterSearchLen = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FSearchLen;
-                    this.FilterModify = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModify.ToString().Trim();
-                    this.FilterModifyLen = Socket_Cache.SocketFilterList.lstFilter[FilterIndex].FModifyLen;
+                    this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName.ToString();
+                    this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;                    
+                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
+                    this.FilterModifyCNT = Socket_Cache.FilterList.lstFilter[FilterIndex].FModifyCNT;
+                    this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch.ToString().Trim();
+                    this.FilterSearchLen = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearchLen;
+                    this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify.ToString().Trim();
+                    this.FilterModifyLen = Socket_Cache.FilterList.lstFilter[FilterIndex].FModifyLen;
 
                     this.txtFilterName.Text = FilterName;
 
                     switch (FilterMode)
                     {
-                        case Socket_Filter_Info.FilterMode.Normal:
+                        case Socket_FilterInfo.FilterMode.Normal:
                             this.rbNormal.Checked = true;
                             break;
 
-                        case Socket_Filter_Info.FilterMode.Advanced:
+                        case Socket_FilterInfo.FilterMode.Advanced:
                             this.rbAdvanced.Checked = true;
                             break;
                     }
@@ -82,11 +82,11 @@ namespace WPELibrary
 
                     switch (FilterStartFrom)
                     {
-                        case Socket_Filter_Info.StartFrom.Head:
+                        case Socket_FilterInfo.StartFrom.Head:
                             this.rbFromHead.Checked = true;
                             break;
 
-                        case Socket_Filter_Info.StartFrom.Position:
+                        case Socket_FilterInfo.StartFrom.Position:
                             this.rbFromPosition.Checked = true;
                             break;
                     }
@@ -113,6 +113,7 @@ namespace WPELibrary
         #endregion
 
         #region//重置按钮
+
         private void bReset_Click(object sender, EventArgs e)
         {
             try
@@ -122,7 +123,7 @@ namespace WPELibrary
                 if (dr.Equals(DialogResult.OK))
                 {
                     this.InitFrom();
-                    this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.All);
+                    this.InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType.All);
                 }
             }
             catch (Exception ex)
@@ -130,9 +131,11 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//保存按钮
+
         private void bSave_Click(object sender, EventArgs e)
         {
             try
@@ -143,8 +146,8 @@ namespace WPELibrary
                 {
                     string sSearch_New = "", sModify_New = "";
                     int iSearchLen_New = 0, iModifyLen_New = 0;
-                    Socket_Filter_Info.FilterMode FMode_New;                    
-                    Socket_Filter_Info.StartFrom FStartFrom_New;
+                    Socket_FilterInfo.FilterMode FMode_New;                    
+                    Socket_FilterInfo.StartFrom FStartFrom_New;
 
                     string sFName_New = this.txtFilterName.Text.Trim();
 
@@ -152,25 +155,25 @@ namespace WPELibrary
                     {  
                         if (rbNormal.Checked)
                         {
-                            FMode_New = Socket_Filter_Info.FilterMode.Normal;                                                       
+                            FMode_New = Socket_FilterInfo.FilterMode.Normal;                                                       
                         }
                         else
                         {
-                            FMode_New = Socket_Filter_Info.FilterMode.Advanced;                            
+                            FMode_New = Socket_FilterInfo.FilterMode.Advanced;                            
                         }                     
 
                         if (rbFromHead.Checked)
                         {
-                            FStartFrom_New = Socket_Filter_Info.StartFrom.Head;
+                            FStartFrom_New = Socket_FilterInfo.StartFrom.Head;
                         }
                         else
                         {
-                            FStartFrom_New = Socket_Filter_Info.StartFrom.Position;
+                            FStartFrom_New = Socket_FilterInfo.StartFrom.Position;
                         }
 
                         switch (FMode_New)
                         {
-                            case Socket_Filter_Info.FilterMode.Normal:
+                            case Socket_FilterInfo.FilterMode.Normal:
 
                                 for (int i = 0; i < this.dgvFilter_Normal.Columns.Count; i++)
                                 {
@@ -178,7 +181,7 @@ namespace WPELibrary
 
                                     try
                                     {
-                                        sSearchValue = dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_SearchRowIndex].Cells[i].Value.ToString().Trim();
+                                        sSearchValue = dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells[i].Value.ToString().Trim();
                                     }
                                     catch
                                     {
@@ -194,7 +197,7 @@ namespace WPELibrary
 
                                     try
                                     {
-                                        sModifyValue = dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_ModifyRowIndex].Cells[i].Value.ToString().Trim();
+                                        sModifyValue = dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells[i].Value.ToString().Trim();
                                     }
                                     catch
                                     {
@@ -209,7 +212,7 @@ namespace WPELibrary
 
                                 break;
 
-                            case Socket_Filter_Info.FilterMode.Advanced:
+                            case Socket_FilterInfo.FilterMode.Advanced:
 
                                 for (int i = 0; i < this.dgvFilter_Advanced_Search.Columns.Count; i++)
                                 {
@@ -217,7 +220,7 @@ namespace WPELibrary
 
                                     try
                                     {
-                                        sSearchValue = dgvFilter_Advanced_Search.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_SearchRowIndex].Cells[i].Value.ToString().Trim();
+                                        sSearchValue = dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells[i].Value.ToString().Trim();
                                     }
                                     catch
                                     {
@@ -236,7 +239,7 @@ namespace WPELibrary
 
                                     try
                                     {
-                                        sModifyValue = dgvFilter_Advanced_Modify.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_ModifyRowIndex].Cells[i].Value.ToString().Trim();
+                                        sModifyValue = dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells[i].Value.ToString().Trim();
                                     }
                                     catch
                                     {
@@ -260,7 +263,7 @@ namespace WPELibrary
                         iSearchLen_New = int.Parse(this.nudPacketLength.Value.ToString());
                         iModifyLen_New = int.Parse(this.nudModifyLength.Value.ToString());
 
-                        Socket_Cache.SocketFilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, FMode_New, FStartFrom_New, iFModifyCNT_New, sSearch_New, iSearchLen_New, sModify_New, iModifyLen_New);
+                        Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, FMode_New, FStartFrom_New, iFModifyCNT_New, sSearch_New, iSearchLen_New, sModify_New, iModifyLen_New);
 
                         Socket_Operation.SaveFilterList("");
 
@@ -277,6 +280,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//模式切换
@@ -322,6 +326,7 @@ namespace WPELibrary
         #endregion
 
         #region//黏贴封包数据
+
         private void dgvFilterList_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -415,6 +420,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//封包大小
@@ -433,7 +439,7 @@ namespace WPELibrary
                 if (iPacketLength_New != this.dgvFilter_Normal.ColumnCount)
                 {
                     this.FilterSearchLen = iPacketLength_New;
-                    this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.Search);
+                    this.InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType.Search);
                 }
             }
             catch (Exception ex)
@@ -475,7 +481,7 @@ namespace WPELibrary
             {
                 this.FilterModifyLen = int.Parse(nudModifyLength.Value.ToString());
 
-                this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.Modify);
+                this.InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType.Modify);
             }
             catch (Exception ex)
             {
@@ -507,7 +513,7 @@ namespace WPELibrary
 
                 if (bFinishInit)
                 {
-                    this.InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType.Modify);
+                    this.InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType.Modify);
                 }
             }
             catch (Exception ex)
@@ -673,17 +679,17 @@ namespace WPELibrary
 
                         if (this.dgvFilter_Normal.Rows.Count == 2)
                         {
-                            if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_SearchRowIndex].Cells.Count)
+                            if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells.Count)
                             {
-                                this.dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_SearchRowIndex].Cells[iIndex].Value = sValue;
+                                this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells[iIndex].Value = sValue;
                             }
                         }
 
                         if (this.dgvFilter_Advanced_Search.Rows.Count == 1)
                         {
-                            if (iIndex < this.dgvFilter_Advanced_Search.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_SearchRowIndex].Cells.Count)
+                            if (iIndex < this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells.Count)
                             {
-                                this.dgvFilter_Advanced_Search.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_SearchRowIndex].Cells[iIndex].Value = sValue;
+                                this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells[iIndex].Value = sValue;
                             }
                         }
                     }
@@ -708,20 +714,20 @@ namespace WPELibrary
 
                         switch (FilterMode)
                         {
-                            case Socket_Filter_Info.FilterMode.Normal:
+                            case Socket_FilterInfo.FilterMode.Normal:
 
-                                if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_ModifyRowIndex].Cells.Count)
+                                if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells.Count)
                                 {
-                                    this.dgvFilter_Normal.Rows[Socket_Cache.SocketFilterList.FilterNormal_ModifyRowIndex].Cells[iIndex].Value = sValue;
+                                    this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells[iIndex].Value = sValue;
                                 }
 
                                 break;
 
-                            case Socket_Filter_Info.FilterMode.Advanced:
+                            case Socket_FilterInfo.FilterMode.Advanced:
 
-                                if (iIndex < this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_ModifyRowIndex].Cells.Count)
+                                if (iIndex < this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells.Count)
                                 {
-                                    this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.SocketFilterList.FilterAdvanced_ModifyRowIndex].Cells[iIndex].Value = sValue;
+                                    this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells[iIndex].Value = sValue;
                                 }
 
                                 break;
@@ -739,7 +745,7 @@ namespace WPELibrary
 
         #region//初始化数据表并显示滤镜内容（异步）
 
-        private void InitDGVAndShowFilterInfo(Socket_Filter_Info.FilterDGVType FDGVType)
+        private void InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType FDGVType)
         {
             try
             {
@@ -766,19 +772,19 @@ namespace WPELibrary
             {
                 switch (this.FilterDGVType_Init)
                 {
-                    case Socket_Filter_Info.FilterDGVType.Search:
+                    case Socket_FilterInfo.FilterDGVType.Search:
 
                         this.InitDGV_Search(FilterSearchLen);
 
                         break;
 
-                    case Socket_Filter_Info.FilterDGVType.Modify:
+                    case Socket_FilterInfo.FilterDGVType.Modify:
 
                         this.InitDGV_Modify(FilterModifyLen);
 
                         break;
 
-                    case Socket_Filter_Info.FilterDGVType.All:
+                    case Socket_FilterInfo.FilterDGVType.All:
 
                         this.InitDGV_Search(FilterSearchLen);
                         this.InitDGV_Modify(FilterModifyLen);

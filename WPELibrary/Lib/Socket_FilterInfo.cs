@@ -2,7 +2,7 @@
 
 namespace WPELibrary.Lib
 {
-    public class Socket_Filter_Info
+    public class Socket_FilterInfo
     {
         #region//定义结构
 
@@ -117,9 +117,9 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//Socket_Filter
+        #region//Socket_FilterInfo
 
-        public Socket_Filter_Info(int FNum,bool IsCheck, string FName, FilterMode FMode, StartFrom FStartFrom, int FModifyCNT, string FSearch, int FSearchLen, string FModify, int FModifyLen) 
+        public Socket_FilterInfo(int FNum,bool IsCheck, string FName, FilterMode FMode, StartFrom FStartFrom, int FModifyCNT, string FSearch, int FSearchLen, string FModify, int FModifyLen) 
         {
             this.fnum = FNum;
             this.ischeck = IsCheck;

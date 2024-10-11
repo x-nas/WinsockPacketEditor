@@ -71,8 +71,8 @@
       <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\MultiLanguage.cs" />
-    <Compile Include="Lib\Socket_Filter_Info.cs" />
-    <Compile Include="Lib\Socket_Log_Info.cs" />
+    <Compile Include="Lib\Socket_FilterInfo.cs" />
+    <Compile Include="Lib\Socket_LogInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -85,8 +85,7 @@
       <DependentUpon>Socket_Form.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\Socket_Operation.cs" />
-    <Compile Include="Lib\Socket_Packet.cs" />
-    <Compile Include="Lib\Socket_Packet_Info.cs" />
+    <Compile Include="Lib\Socket_PacketInfo.cs" />
     <Compile Include="Lib\Socket_Cache.cs" />
     <Compile Include="Lib\WinSockHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

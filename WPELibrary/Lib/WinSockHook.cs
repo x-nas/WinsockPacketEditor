@@ -39,13 +39,14 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.Send;
-                Socket_Cache.SocketFilterList.DoFilter(buffer, length);
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.Send;
+                Socket_Cache.FilterList.DoFilter(buffer, length);
                 res = send(socket, buffer, length, flags);
 
                 if (res > 0 && length > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);
+                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), res);
                 }
             }
             catch (Exception ex)
@@ -61,23 +62,24 @@ namespace WPELibrary.Lib
         #region//ws2_32.dll SendTo Hook
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        private unsafe static extern Int32 sendto(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr To, ref Int32 toLenth);
+        private unsafe static extern Int32 sendto(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-        unsafe delegate Int32 DSendTo(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr To, ref Int32 toLenth);
-        private static unsafe Int32 SendTo_Hook(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr To, ref Int32 toLenth)
+        unsafe delegate Int32 DSendTo(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth);
+        private static unsafe Int32 SendTo_Hook(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth)
         {  
             Int32 res = 0;
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.SendTo;
-                Socket_Cache.SocketFilterList.DoFilter(buffer, length);
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.SendTo;
+                Socket_Cache.FilterList.DoFilter(buffer, length);
                 res = sendto(socket, buffer, length, flags, ref To, ref toLenth);
 
                 if (res > 0 && length > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(socket, buffer, length, stSocketType, To, res);
+                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, To, res);
                 }                
             }
             catch (Exception ex)
@@ -104,13 +106,15 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.Recv;                
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.Recv;                
                 res = recv(socket, buffer, length, flags);
 
                 if (res > 0)
                 {
-                    Socket_Cache.SocketFilterList.DoFilter(buffer, res);
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(socket, buffer, length, stSocketType, new Socket_Packet.sockaddr(), res);                    
+                    Socket_Cache.FilterList.DoFilter(buffer, res);
+
+                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), res);                    
                 }
             }
             catch (Exception ex)
@@ -126,24 +130,26 @@ namespace WPELibrary.Lib
         #region//ws2_32.dll RecvFrom Hook
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        private unsafe static extern Int32 recvfrom(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen);
+        private unsafe static extern Int32 recvfrom(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-        unsafe delegate Int32 DRecvFrom(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen);
+        unsafe delegate Int32 DRecvFrom(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen);
 
-        private static unsafe Int32 RecvFrom_Hook(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen)
+        private static unsafe Int32 RecvFrom_Hook(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen)
         {
             Int32 res = 0;
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.RecvFrom;                
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.RecvFrom;                
                 res = recvfrom(socket, buffer, length, flags, ref from, ref fromLen);
 
                 if (res > 0)
                 {
-                    Socket_Cache.SocketFilterList.DoFilter(buffer, res);
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(socket, buffer, length, stSocketType, from, res);                    
+                    Socket_Cache.FilterList.DoFilter(buffer, res);
+
+                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, from, res);                    
                 }
             }
             catch (Exception ex)
@@ -171,12 +177,12 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.WSASend;
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.WSASend;
 
                 for (int i = 0; i < dwBufferCount; i++)
                 {
-                    Socket_Packet.WSABUF wsBuffer = (Socket_Packet.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Packet.WSABUF) * i), typeof(Socket_Packet.WSABUF));
-                    Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
+                    Socket_Cache.SocketPacket.WSABUF wsBuffer = (Socket_Cache.SocketPacket.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i), typeof(Socket_Cache.SocketPacket.WSABUF));
+                    Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
                 }
 
                 res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, lpOverlapped, lpCompletionRoutine);
@@ -184,7 +190,8 @@ namespace WPELibrary.Lib
 
                 if (res == ((int)SocketError.Success) && BytesSent > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(Socket, Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent), stSocketType, new Socket_Packet.sockaddr());
+                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
                 }
             }
             catch (Exception ex)
@@ -200,24 +207,24 @@ namespace WPELibrary.Lib
         #region//ws2_32.dll WSASendTo Hook
 
         [DllImport("ws2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        private unsafe static extern Int32 WSASendTo(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Packet.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine);
+        private unsafe static extern Int32 WSASendTo(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-        unsafe delegate Int32 DWSASendTo(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Packet.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine);
+        unsafe delegate Int32 DWSASendTo(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine);
 
-        private static unsafe Int32 WSASendTo_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Packet.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine)
+        private static unsafe Int32 WSASendTo_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, ref Socket_Cache.SocketPacket.sockaddr To, ref Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine)
         {
             Int32 res = 0;
             int BytesSent = 0;
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.WSASendTo;
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.WSASendTo;
 
                 for (int i = 0; i < dwBufferCount; i++)
                 {
-                    Socket_Packet.WSABUF wsBuffer = (Socket_Packet.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Packet.WSABUF) * i), typeof(Socket_Packet.WSABUF));
-                    Socket_Cache.SocketFilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
+                    Socket_Cache.SocketPacket.WSABUF wsBuffer = (Socket_Cache.SocketPacket.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i), typeof(Socket_Cache.SocketPacket.WSABUF));
+                    Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
                 }
 
                 res = WSASendTo(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, ref To, ref toLenth, lpOverlapped, lpCompletionRoutine);
@@ -225,7 +232,8 @@ namespace WPELibrary.Lib
 
                 if (res == ((int)SocketError.Success) && BytesSent > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(Socket, Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent), stSocketType, To);
+                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, To, bBuff.Length);
                 }
             }
             catch (Exception ex)
@@ -253,14 +261,15 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.WSARecv;               
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.WSARecv;               
                 
                 res = WSARecv(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, overlapped, completionRoutine);
                 BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);                
 
                 if (res == ((int)SocketError.Success) && BytesRecvd > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(Socket, Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd), stSocketType, new Socket_Packet.sockaddr());
+                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
                 }
             }
             catch (Exception ex)
@@ -276,26 +285,27 @@ namespace WPELibrary.Lib
         #region//ws2_32.dll WSARecvFrom Hook
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        private unsafe static extern Int32 WSARecvFrom(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine);
+        private unsafe static extern Int32 WSARecvFrom(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine);
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
-        unsafe delegate Int32 DWSARecvFrom(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine);
+        unsafe delegate Int32 DWSARecvFrom(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine);
 
-        private static unsafe Int32 WSARecvFrom_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Packet.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine)
+        private static unsafe Int32 WSARecvFrom_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, ref Socket_Cache.SocketPacket.sockaddr from, ref Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine)
         {
             Int32 res = 0;
             int BytesRecvd = 0;
 
             try
             {
-                Socket_Packet.SocketType stSocketType = Socket_Packet.SocketType.WSARecvFrom;                
+                Socket_Cache.SocketPacket.SocketType stSocketType = Socket_Cache.SocketPacket.SocketType.WSARecvFrom;                
 
                 res = WSARecvFrom(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, ref from, ref fromLen, overlapped, completionRoutine);
                 BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
 
                 if (res == ((int)SocketError.Success) && BytesRecvd > 0)
                 {
-                    Socket_Cache.SocketQueue.SocketPacketToQueue(Socket, Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd), stSocketType, from);                    
+                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, from, bBuff.Length);                    
                 }                
             }
             catch (Exception ex)

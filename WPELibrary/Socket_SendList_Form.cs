@@ -16,7 +16,7 @@ namespace WPELibrary
 
             InitializeComponent();
 
-            Socket_Cache.SocketSendList.bShow_SendListForm = false;
+            Socket_Cache.SendList.bShow_SendListForm = false;
 
             this.InitSendListDGV();
         }
@@ -32,7 +32,7 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketSendList.bShow_SendListForm = true;
+                Socket_Cache.SendList.bShow_SendListForm = true;
             }
             catch (Exception ex)
             {
@@ -58,9 +58,9 @@ namespace WPELibrary
                 this.bSendList.Enabled = true;
                 this.bSendListStop.Enabled = false;
 
-                if (Socket_Cache.SocketSendList.UseSocket > 0)
+                if (Socket_Cache.SendList.UseSocket > 0)
                 {
-                    this.txtUseSocket.Text = Socket_Cache.SocketSendList.UseSocket.ToString();
+                    this.txtUseSocket.Text = Socket_Cache.SendList.UseSocket.ToString();
                 }
             }
             catch (Exception ex)
@@ -77,7 +77,7 @@ namespace WPELibrary
             {
                 dgvSendList.AutoGenerateColumns = false;
                 dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
-                dgvSendList.DataSource = Socket_Cache.SocketSendList.dtSocketSendList;
+                dgvSendList.DataSource = Socket_Cache.SendList.dtSocketSendList;
             }
             catch (Exception ex)
             {
@@ -101,14 +101,14 @@ namespace WPELibrary
                         if (this.dgvSendList.SelectedRows.Count == 1)
                         {
                             int iSelectIndex = this.dgvSendList.SelectedRows[0].Index;
-                            Socket_Cache.SocketSendList.DeleteSendList_ByIndex(iSelectIndex);
+                            Socket_Cache.SendList.DeleteSendList_ByIndex(iSelectIndex);
                         }
 
                         break;
 
                     case "tsmiClear":
 
-                        Socket_Cache.SocketSendList.SendListClear();
+                        Socket_Cache.SendList.SendListClear();
 
                         break;
 
@@ -173,15 +173,15 @@ namespace WPELibrary
 
                     if (bSocketOK)
                     {
-                        Socket_Cache.SocketSendList.Loop_Send_CNT = 0;
-                        Socket_Cache.SocketSendList.SendList_Success_CNT = 0;
-                        Socket_Cache.SocketSendList.SendList_Fail_CNT = 0;
-                        Socket_Cache.SocketSendList.Loop_CNT = ((int)this.nudLoop_CNT.Value);
-                        Socket_Cache.SocketSendList.Loop_Int = ((int)this.nudLoop_Int.Value);
+                        Socket_Cache.SendList.Loop_Send_CNT = 0;
+                        Socket_Cache.SendList.SendList_Success_CNT = 0;
+                        Socket_Cache.SendList.SendList_Fail_CNT = 0;
+                        Socket_Cache.SendList.Loop_CNT = ((int)this.nudLoop_CNT.Value);
+                        Socket_Cache.SendList.Loop_Int = ((int)this.nudLoop_Int.Value);
 
-                        this.tlLoop_Send_CNT.Text = Socket_Cache.SocketSendList.Loop_Send_CNT.ToString();
-                        this.tlSendList_Success_CNT.Text = Socket_Cache.SocketSendList.SendList_Success_CNT.ToString();
-                        this.tlSendList_Fail_CNT.Text = Socket_Cache.SocketSendList.SendList_Fail_CNT.ToString();
+                        this.tlLoop_Send_CNT.Text = Socket_Cache.SendList.Loop_Send_CNT.ToString();
+                        this.tlSendList_Success_CNT.Text = Socket_Cache.SendList.SendList_Success_CNT.ToString();
+                        this.tlSendList_Fail_CNT.Text = Socket_Cache.SendList.SendList_Fail_CNT.ToString();
 
                         if (!bgwSendList.IsBusy)
                         {
@@ -254,7 +254,7 @@ namespace WPELibrary
         {
             try
             {
-                for (int i = 0; i < Socket_Cache.SocketSendList.Loop_CNT; i++)
+                for (int i = 0; i < Socket_Cache.SendList.Loop_CNT; i++)
                 {
                     for (int j = 0; j < dgvSendList.Rows.Count; j++)
                     {
@@ -279,9 +279,9 @@ namespace WPELibrary
                                         iSocket = Socket_Operation.CheckSocket(this.dgvSendList.Rows[j].Cells["cSocket"].Value.ToString().Trim());
                                     }
 
-                                    Socket_Cache.SocketSendList.SendPacketList_ByIndex(iSocket, j);
+                                    Socket_Cache.SendList.SendPacketList_ByIndex(iSocket, j);
 
-                                    Socket_Cache.SocketSendList.Loop_Send_CNT++;
+                                    Socket_Cache.SendList.Loop_Send_CNT++;
                                 }
                             }
                         }
@@ -292,9 +292,9 @@ namespace WPELibrary
                         this.nudLoop_CNT.Value -= 1;
                     }                    
 
-                    this.tlLoop_Send_CNT.Text = Socket_Cache.SocketSendList.Loop_Send_CNT.ToString();
-                    this.tlSendList_Success_CNT.Text = Socket_Cache.SocketSendList.SendList_Success_CNT.ToString();
-                    this.tlSendList_Fail_CNT.Text = Socket_Cache.SocketSendList.SendList_Fail_CNT.ToString();
+                    this.tlLoop_Send_CNT.Text = Socket_Cache.SendList.Loop_Send_CNT.ToString();
+                    this.tlSendList_Success_CNT.Text = Socket_Cache.SendList.SendList_Success_CNT.ToString();
+                    this.tlSendList_Fail_CNT.Text = Socket_Cache.SendList.SendList_Fail_CNT.ToString();
                 }
             }
             catch (Exception ex)

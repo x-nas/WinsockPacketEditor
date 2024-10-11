@@ -2,7 +2,7 @@
 
 namespace WPELibrary.Lib
 {
-    public class Socket_Log_Info
+    public class Socket_LogInfo
     {
         #region//时间
         protected string time;
@@ -31,13 +31,15 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//Socket_Log
-        public Socket_Log_Info(string funcname, string content)
+        #region//Socket_LogInfo
+
+        public Socket_LogInfo(string funcname, string content)
         {
             this.time = DateTime.Now.ToString("T");
             this.funcname = funcname;
             this.content = content;           
         }
+
         #endregion        
     }
 }
