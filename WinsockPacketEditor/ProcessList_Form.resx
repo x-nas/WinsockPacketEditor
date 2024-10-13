@@ -199,7 +199,7 @@
     <value>NoControl</value>
   </data>
   <data name="bSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>306, 4</value>
+    <value>304, 4</value>
   </data>
   <data name="bSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -232,7 +232,7 @@
     <value>NoControl</value>
   </data>
   <data name="bRefresh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>135, 4</value>
+    <value>133, 4</value>
   </data>
   <data name="bRefresh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -265,7 +265,7 @@
     <value>NoControl</value>
   </data>
   <data name="bCreate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 4</value>
+    <value>15, 4</value>
   </data>
   <data name="bCreate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
@@ -322,7 +322,7 @@
     <value>1</value>
   </data>
   <data name="tlpProcessInfoButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,7" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,8" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpProcessInfoSearch.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>

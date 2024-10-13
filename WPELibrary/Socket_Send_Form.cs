@@ -21,6 +21,7 @@ namespace WPELibrary
         private string Select_Hex = "";
 
         #region//窗体加载
+
         public Socket_Send_Form(int iSelectIndex)
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
@@ -55,6 +56,7 @@ namespace WPELibrary
         #endregion
 
         #region//初始化数据表
+
         private void InitSocketSendDGV()
         {
             try
@@ -123,9 +125,11 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//发送按钮
+
         private void bSend_Click(object sender, EventArgs e)
         {
             try
@@ -147,10 +151,10 @@ namespace WPELibrary
                     this.bSend.Enabled = false;
                     this.bSendStop.Enabled = true;
 
-                    this.gbSend1.Enabled = false;
-                    this.gbSend2.Enabled = false;
-                    this.gbSend3.Enabled = false;
-                    this.gbSend4.Enabled = false;
+                    this.gbSendForm1.Enabled = false;
+                    this.gbSendForm2.Enabled = false;
+                    this.gbSendForm3.Enabled = false;
+                    this.gbSendForm4.Enabled = false;
 
                     Send_CNT = 0;
                     Send_Success_CNT = 0;
@@ -167,9 +171,11 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//停止按钮
+
         private void bSendStop_Click(object sender, EventArgs e)
         {
             try
@@ -179,19 +185,21 @@ namespace WPELibrary
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
 
-                this.gbSend1.Enabled = true;
-                this.gbSend2.Enabled = true;
-                this.gbSend3.Enabled = true;
-                this.gbSend4.Enabled = true;
+                this.gbSendForm1.Enabled = true;
+                this.gbSendForm2.Enabled = true;
+                this.gbSendForm3.Enabled = true;
+                this.gbSendForm4.Enabled = true;
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion        
 
         #region//获取发送数据
+
         private string GetSendData()
         {
             string sResult = "";
@@ -238,9 +246,11 @@ namespace WPELibrary
 
             return sResult;
         }
+
         #endregion
 
         #region//显示递进数据
+
         private void nudStepIndex_ValueChanged(object sender, EventArgs e)
         {
             this.ShowStepValue();                        
@@ -327,9 +337,11 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion
 
         #region//黏贴封包数据
+
         private void dgvSocketSend_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -371,6 +383,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion        
 
         #region//右键菜单
@@ -486,10 +499,10 @@ namespace WPELibrary
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
 
-                this.gbSend1.Enabled = true;
-                this.gbSend2.Enabled = true;
-                this.gbSend3.Enabled = true;
-                this.gbSend4.Enabled = true;
+                this.gbSendForm1.Enabled = true;
+                this.gbSendForm2.Enabled = true;
+                this.gbSendForm3.Enabled = true;
+                this.gbSendForm4.Enabled = true;
 
                 this.tlSendPacket_CNT.Text = this.Send_CNT.ToString();
                 this.tlSend_Success_CNT.Text = this.Send_Success_CNT.ToString();                

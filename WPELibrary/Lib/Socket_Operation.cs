@@ -290,7 +290,7 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//获取套接字对应的IP地址和端口
+        #region//获取封包的IP地址和端口
 
         public static string GetSocketPacketIP(int pSocket, Socket_Cache.SocketPacket.sockaddr pAddr, Socket_Cache.SocketPacket.SocketType pType)
         {

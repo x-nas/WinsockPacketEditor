@@ -44,9 +44,11 @@ namespace WinsockPacketEditor
                 ShowLog(ex.Message);
             }            
         }
+
         #endregion
 
         #region//选择进程
+
         private void bSelectProcess_Click(object sender, EventArgs e)
         {
             try
@@ -68,9 +70,11 @@ namespace WinsockPacketEditor
                 ShowLog(ex.Message);
             }
         }
+
         #endregion
 
         #region//注入
+
         private void bInject_Click(object sender, EventArgs e)
         {
             try
@@ -115,15 +119,16 @@ namespace WinsockPacketEditor
                 ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_11) + "：" + ex.Message);
             }
         }
+
         #endregion
 
         #region//关于, 选择语言
+
         private void pbAbout_Click(object sender, EventArgs e)
         {
             try
             {
-                AboutFrom aboutFrom = new AboutFrom();
-                aboutFrom.ShowDialog();
+                System.Diagnostics.Process.Start("https://www.wpe64.com");
             }
             catch (Exception ex)
             {
@@ -143,9 +148,11 @@ namespace WinsockPacketEditor
                 ShowLog(ex.Message);
             }            
         }
+
         #endregion        
 
         #region//显示日志
+
         private void ShowLog(string ShowInfo)
         {
             try
@@ -164,6 +171,7 @@ namespace WinsockPacketEditor
                 ShowLog(ex.Message);
             }
         }
+
         #endregion
     }
 }

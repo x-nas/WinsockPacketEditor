@@ -118,6 +118,57 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>961, 28</value>
+  </data>
+  <data name="cIndex.HeaderText" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="cNote.HeaderText" xml:space="preserve">
+    <value>Remark</value>
+  </data>
+  <data name="cSocket.HeaderText" xml:space="preserve">
+    <value>Socket</value>
+  </data>
+  <data name="cIPTo.HeaderText" xml:space="preserve">
+    <value>To Address</value>
+  </data>
+  <data name="cLen.HeaderText" xml:space="preserve">
+    <value>Len</value>
+  </data>
+  <data name="cData.HeaderText" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 110</value>
+  </data>
+  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>961, 216</value>
+  </data>
+  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 54</value>
+  </data>
+  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 304</value>
+  </data>
+  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 23</value>
+  </data>
+  <data name="tlLoop_Send.Text" xml:space="preserve">
+    <value>Total Send:</value>
+  </data>
+  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 23</value>
+  </data>
+  <data name="tlSendList_Success.Text" xml:space="preserve">
+    <value>Success:</value>
+  </data>
+  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 23</value>
+  </data>
+  <data name="tlSendList_Fail.Text" xml:space="preserve">
+    <value>Fail:</value>
+  </data>
   <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>175, 22</value>
   </data>
@@ -151,26 +202,86 @@
   <data name="tsmiLoadSendList.Text" xml:space="preserve">
     <value>Load send list</value>
   </data>
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 110</value>
+  <data name="gbSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>575, 0</value>
   </data>
-  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 17</value>
+  <data name="gbSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 54</value>
   </data>
-  <data name="tlLoop_Send.Text" xml:space="preserve">
-    <value>Total Send:</value>
+  <data name="tlpSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 35</value>
   </data>
-  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
+  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 6</value>
   </data>
-  <data name="tlSendList_Success.Text" xml:space="preserve">
-    <value>Success:</value>
+  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 23</value>
   </data>
-  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 17</value>
+  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 29</value>
   </data>
-  <data name="tlSendList_Fail.Text" xml:space="preserve">
-    <value>Fail:</value>
+  <data name="lLoop_Int.Text" xml:space="preserve">
+    <value>Interval：</value>
+  </data>
+  <data name="gbSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>384, 0</value>
+  </data>
+  <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 54</value>
+  </data>
+  <data name="tlpSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 35</value>
+  </data>
+  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 6</value>
+  </data>
+  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 23</value>
+  </data>
+  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 29</value>
+  </data>
+  <data name="lLoop_CNT.Text" xml:space="preserve">
+    <value>Loop：</value>
+  </data>
+  <data name="gbSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>155, 0</value>
+  </data>
+  <data name="gbSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 54</value>
+  </data>
+  <data name="tlpSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>217, 35</value>
+  </data>
+  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>132, 6</value>
+  </data>
+  <data name="txtUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 23</value>
+  </data>
+  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 23</value>
+  </data>
+  <data name="cbUseSocket.Text" xml:space="preserve">
+    <value>Use Socket：</value>
+  </data>
+  <data name="gbSendListForm1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 54</value>
+  </data>
+  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 32</value>
+  </data>
+  <data name="cbSelectAll.Text" xml:space="preserve">
+    <value>Select All / None</value>
+  </data>
+  <data name="tlpSendListForm5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>766, 3</value>
+  </data>
+  <data name="tlpSendListForm5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 48</value>
+  </data>
+  <data name="bSendListStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 36</value>
   </data>
   <data name="bSendListStop.Text" xml:space="preserve">
     <value>Stop (&amp;T)</value>
@@ -178,59 +289,8 @@
   <data name="bSendList.Text" xml:space="preserve">
     <value>Send (&amp;F)</value>
   </data>
-  <data name="lLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>512, 19</value>
-  </data>
-  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 17</value>
-  </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>Send interval:</value>
-  </data>
-  <data name="lLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>349, 19</value>
-  </data>
-  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>79, 17</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>Loop CNT：</value>
-  </data>
-  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>239, 16</value>
-  </data>
-  <data name="cbUseSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 18</value>
-  </data>
-  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 21</value>
-  </data>
-  <data name="cbUseSocket.Text" xml:space="preserve">
-    <value>Use Socket：</value>
-  </data>
-  <data name="cIndex.HeaderText" xml:space="preserve">
-    <value>ID</value>
-  </data>
-  <data name="cNote.HeaderText" xml:space="preserve">
-    <value>Remark</value>
-  </data>
-  <data name="cSocket.HeaderText" xml:space="preserve">
-    <value>Socket</value>
-  </data>
-  <data name="cIPTo.HeaderText" xml:space="preserve">
-    <value>To Address</value>
-  </data>
-  <data name="cLen.HeaderText" xml:space="preserve">
-    <value>Len</value>
-  </data>
-  <data name="cData.HeaderText" xml:space="preserve">
-    <value>Data</value>
-  </data>
-  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 21</value>
-  </data>
-  <data name="cbSelectAll.Text" xml:space="preserve">
-    <value>Select All / None</value>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>967, 304</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6403,6 +6463,10 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Send List</value>

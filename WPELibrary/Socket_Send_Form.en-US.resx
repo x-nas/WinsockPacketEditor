@@ -118,68 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 54</value>
+  </data>
   <data name="tlSendPacket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 17</value>
+    <value>49, 23</value>
   </data>
   <data name="tlSendPacket.Text" xml:space="preserve">
-    <value>Sent :</value>
+    <value>Total：</value>
   </data>
   <data name="tlSend_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 17</value>
+    <value>65, 23</value>
   </data>
   <data name="tlSend_Success.Text" xml:space="preserve">
-    <value>Success :</value>
+    <value>Success：</value>
   </data>
   <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 17</value>
+    <value>39, 23</value>
   </data>
   <data name="tlSend_Fail.Text" xml:space="preserve">
-    <value>Fail :</value>
-  </data>
-  <data name="bSendStop.Text" xml:space="preserve">
-    <value>Stop (&amp;T)</value>
-  </data>
-  <data name="bSend.Text" xml:space="preserve">
-    <value>Send (&amp;F)</value>
-  </data>
-  <data name="lSend_Port.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 17</value>
-  </data>
-  <data name="lSend_Port.Text" xml:space="preserve">
-    <value>To Port</value>
-  </data>
-  <data name="lSend_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>38, 17</value>
-  </data>
-  <data name="lSend_IP.Text" xml:space="preserve">
-    <value>To IP</value>
-  </data>
-  <data name="lSend_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="lSend_Len.Text" xml:space="preserve">
-    <value>Length</value>
-  </data>
-  <data name="lSend_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 17</value>
-  </data>
-  <data name="lSend_Socket.Text" xml:space="preserve">
-    <value>Socket</value>
-  </data>
-  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 17</value>
-  </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>Int</value>
-  </data>
-  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>38, 17</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>Loop</value>
-  </data>
-  <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 26</value>
+    <value>Fail：</value>
   </data>
   <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>168, 22</value>
@@ -187,20 +145,41 @@
   <data name="tsmiBatchSend.Text" xml:space="preserve">
     <value>Add to send list</value>
   </data>
-  <data name="gbStep.Text" xml:space="preserve">
-    <value>Progressive</value>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 6</value>
   </data>
-  <data name="lStepLen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 17</value>
+  <data name="tsmiAddToFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 22</value>
+  </data>
+  <data name="bSendStop.Text" xml:space="preserve">
+    <value>Stop (&amp;T)</value>
+  </data>
+  <data name="bSend.Text" xml:space="preserve">
+    <value>Send (&amp;F)</value>
+  </data>
+  <data name="lLoop_Int.Text" xml:space="preserve">
+    <value>Int(ms)：</value>
+  </data>
+  <data name="lLoop_CNT.Text" xml:space="preserve">
+    <value>Loop：</value>
   </data>
   <data name="lStepLen.Text" xml:space="preserve">
-    <value>Step</value>
-  </data>
-  <data name="cbStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 21</value>
+    <value>Prog Step：</value>
   </data>
   <data name="cbStep.Text" xml:space="preserve">
-    <value>Position</value>
+    <value>Progressive</value>
+  </data>
+  <data name="lSend_Port.Text" xml:space="preserve">
+    <value>To Port：</value>
+  </data>
+  <data name="lSend_IP.Text" xml:space="preserve">
+    <value>To IP：</value>
+  </data>
+  <data name="lSend_Len.Text" xml:space="preserve">
+    <value>Length：</value>
+  </data>
+  <data name="lSend_Socket.Text" xml:space="preserve">
+    <value>Socket：</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

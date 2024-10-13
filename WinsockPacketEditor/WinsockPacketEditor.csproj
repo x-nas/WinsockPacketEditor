@@ -103,12 +103,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutFrom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AboutFrom.Designer.cs">
-      <DependentUpon>AboutFrom.cs</DependentUpon>
-    </Compile>
     <Compile Include="IconExtractor\IconExtractor.cs" />
     <Compile Include="IconExtractor\IconUtil.cs" />
     <Compile Include="IconExtractor\NativeMethods.cs" />
@@ -138,12 +132,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AboutFrom.en-US.resx">
-      <DependentUpon>AboutFrom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AboutFrom.resx">
-      <DependentUpon>AboutFrom.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>

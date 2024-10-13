@@ -46,10 +46,6 @@ namespace WPELibrary
         {
             try
             {
-                this.pbLoading.Top = (ClientRectangle.Height - pbLoading.Height) / 2;
-                this.pbLoading.Left = (ClientRectangle.Width - pbLoading.Width) / 2;
-                this.pbLoading.Visible = false;
-
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
 
@@ -190,8 +186,10 @@ namespace WPELibrary
 
                         this.bSendList.Enabled = false;
                         this.bSendListStop.Enabled = true;
-                        this.gbSendList1.Enabled = false;
-                        this.pbLoading.Visible = true;
+                        this.gbSendListForm1.Enabled = false;
+                        this.gbSendListForm2.Enabled = false;
+                        this.gbSendListForm3.Enabled = false;
+                        this.gbSendListForm4.Enabled = false;
                     }
                     else
                     {
@@ -309,8 +307,10 @@ namespace WPELibrary
             {
                 this.bSendList.Enabled = true;
                 this.bSendListStop.Enabled = false;
-                this.gbSendList1.Enabled = true;
-                this.pbLoading.Visible = false;
+                this.gbSendListForm1.Enabled = true;
+                this.gbSendListForm2.Enabled = true;
+                this.gbSendListForm3.Enabled = true;
+                this.gbSendListForm4.Enabled = true;
             }
             catch (Exception ex)
             {
