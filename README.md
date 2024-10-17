@@ -18,6 +18,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 http://www.x-nas.com:8888/WPE/index.html
 
 
-![111](https://github.com/user-attachments/assets/3983ecdc-c062-4e6b-b95d-3dfb2d392860)
+![1](https://github.com/user-attachments/assets/0e53bea6-5618-4236-9e5a-8a98af0e0331)
 
-![222](https://github.com/user-attachments/assets/97a0091f-b33d-4f85-b340-771d9c276ae1)
+
+![2](https://github.com/user-attachments/assets/19920f0b-ff51-4aed-a75b-1039f7b3adb2)
