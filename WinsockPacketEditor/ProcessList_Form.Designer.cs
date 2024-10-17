@@ -78,7 +78,7 @@ namespace WinsockPacketEditor
             this.dgvProcessList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -206,9 +206,6 @@ namespace WinsockPacketEditor
         private System.ComponentModel.BackgroundWorker bgwProcessList;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfo;
         private System.Windows.Forms.DataGridView dgvProcessList;
-        private System.Windows.Forms.DataGridViewImageColumn cICO;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cProcessName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cProcessID;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfoButton;
         private System.Windows.Forms.Button bCreate;
         private System.Windows.Forms.Button bRefresh;
@@ -217,5 +214,8 @@ namespace WinsockPacketEditor
         private System.Windows.Forms.TextBox txtProcessSearch;
         private System.Windows.Forms.PictureBox pbProcessSearch;
         private System.Windows.Forms.PictureBox pbLoading;
+        private System.Windows.Forms.DataGridViewImageColumn cICO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cProcessName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cProcessID;
     }
 }

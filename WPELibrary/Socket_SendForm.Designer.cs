@@ -1,7 +1,7 @@
 ﻿
 namespace WPELibrary
 {
-    partial class Socket_Send_Form
+    partial class Socket_SendForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace WPELibrary
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Send_Form));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_SendForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -491,14 +491,14 @@ namespace WPELibrary
             this.bgwSendPacket.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendPacket_DoWork);
             this.bgwSendPacket.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendPacket_RunWorkerCompleted);
             // 
-            // Socket_Send_Form
+            // Socket_SendForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.tlpSendForm);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Socket_Send_Form";
+            this.Name = "Socket_SendForm";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SocketSend_Form_Load);
             this.tlpSendForm.ResumeLayout(false);

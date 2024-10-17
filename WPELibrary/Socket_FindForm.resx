@@ -117,374 +117,476 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="bgwProcessList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpProcessInfo.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="tlpFindForm.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="dgvProcessList.ColumnHeadersHeight" type="System.Int32, mscorlib">
-    <value>29</value>
+  <data name="hexFind.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
   </data>
-  <metadata name="cICO.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cICO.HeaderText" xml:space="preserve">
-    <value />
+  <data name="hexFind.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
   </data>
-  <data name="cICO.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
+  <data name="hexFind.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
   </data>
-  <data name="cICO.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <metadata name="cProcessName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cProcessName.HeaderText" xml:space="preserve">
-    <value>进程名称</value>
-  </data>
-  <data name="cProcessName.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <metadata name="cProcessID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cProcessID.HeaderText" xml:space="preserve">
-    <value>进程编号</value>
-  </data>
-  <data name="cProcessID.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="cProcessID.Width" type="System.Int32, mscorlib">
-    <value>120</value>
+  <data name="hexFind.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvProcessList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="hexFind.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="dgvProcessList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 42</value>
+  <data name="hexFind.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
-  <data name="dgvProcessList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="hexFind.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 102</value>
   </data>
-  <data name="dgvProcessList.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>51</value>
-  </data>
-  <data name="dgvProcessList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>400, 127</value>
-  </data>
-  <data name="dgvProcessList.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="&gt;&gt;dgvProcessList.Name" xml:space="preserve">
-    <value>dgvProcessList</value>
-  </data>
-  <data name="&gt;&gt;dgvProcessList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvProcessList.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;dgvProcessList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpProcessInfoButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="bSelected.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Right</value>
-  </data>
-  <data name="bSelected.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>300, 4</value>
-  </data>
-  <data name="bSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="bSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
-  </data>
-  <data name="bSelected.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="bSelected.Text" xml:space="preserve">
-    <value>确定</value>
-  </data>
-  <data name="&gt;&gt;bSelected.Name" xml:space="preserve">
-    <value>bSelected</value>
-  </data>
-  <data name="&gt;&gt;bSelected.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSelected.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
-  </data>
-  <data name="&gt;&gt;bSelected.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
-  </data>
-  <data name="bRefresh.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bRefresh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>132, 4</value>
-  </data>
-  <data name="bRefresh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="bRefresh.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
-  </data>
-  <data name="bRefresh.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
-  </data>
-  <data name="bRefresh.Text" xml:space="preserve">
-    <value>刷新</value>
-  </data>
-  <data name="&gt;&gt;bRefresh.Name" xml:space="preserve">
-    <value>bRefresh</value>
-  </data>
-  <data name="&gt;&gt;bRefresh.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bRefresh.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
-  </data>
-  <data name="&gt;&gt;bRefresh.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bCreate.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
-  </data>
-  <data name="bCreate.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bCreate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 4</value>
-  </data>
-  <data name="bCreate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="bCreate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
-  </data>
-  <data name="bCreate.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="bCreate.Text" xml:space="preserve">
-    <value>选择程序</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Name" xml:space="preserve">
-    <value>bCreate</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
-  </data>
-  <data name="&gt;&gt;bCreate.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpProcessInfoButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 426</value>
-  </data>
-  <data name="tlpProcessInfoButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="hexFind.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="tlpProcessInfoButton.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="hexFind.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 190</value>
   </data>
-  <data name="tlpProcessInfoButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 40</value>
+  <data name="hexFind.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
-  <data name="tlpProcessInfoButton.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
+  <data name="&gt;&gt;hexFind.Name" xml:space="preserve">
+    <value>hexFind</value>
   </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Name" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
+  <data name="&gt;&gt;hexFind.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;hexFind.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
   </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
+  <data name="&gt;&gt;hexFind.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,14" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpProcessInfoSearch.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="txtProcessSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtFind.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtProcessSearch.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 10.5pt</value>
+  <data name="txtFind.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 68</value>
   </data>
-  <data name="txtProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>57, 3</value>
+  <data name="txtFind.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
-  <data name="txtProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 26</value>
+  <data name="txtFind.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 23</value>
   </data>
-  <data name="txtProcessSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
+  <data name="txtFind.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="txtProcessSearch.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;txtFind.Name" xml:space="preserve">
+    <value>txtFind</value>
   </data>
-  <data name="&gt;&gt;txtProcessSearch.Name" xml:space="preserve">
-    <value>txtProcessSearch</value>
-  </data>
-  <data name="&gt;&gt;txtProcessSearch.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtFind.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtProcessSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
+  <data name="&gt;&gt;txtFind.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
   </data>
-  <data name="&gt;&gt;txtProcessSearch.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="pbProcessSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pbProcessSearch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="pbProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 2</value>
-  </data>
-  <data name="pbProcessSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pbProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 26</value>
-  </data>
-  <data name="pbProcessSearch.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="pbProcessSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Name" xml:space="preserve">
-    <value>pbProcessSearch</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtFind.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpProcessInfoSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 5</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpProcessInfoSearch.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 30</value>
-  </data>
-  <data name="tlpProcessInfoSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Name" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.ZOrder" xml:space="preserve">
+  <data name="tlpLine.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tlpProcessInfoSearch.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,70,Absolute,40,Percent,15" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="lFind.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="pbLoading.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lFind.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 171</value>
+  <data name="lFind.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
-  <data name="pbLoading.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 200</value>
+  <data name="lFind.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="pbLoading.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 50</value>
+  <data name="lFind.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 28</value>
   </data>
-  <data name="pbLoading.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="pbLoading.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Name" xml:space="preserve">
-    <value>pbLoading</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpProcessInfo.RowCount" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tlpProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
-  </data>
-  <data name="tlpProcessInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Name" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.ZOrder" xml:space="preserve">
+  <data name="lFind.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="tlpProcessInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvProcessList" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoButton" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoSearch" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbLoading" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,30,Absolute,5,Percent,100,AutoSize,0,Absolute,5,Absolute,40,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="lFind.Text" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="lFind.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="&gt;&gt;lFind.Name" xml:space="preserve">
+    <value>lFind</value>
+  </data>
+  <data name="&gt;&gt;lFind.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lFind.Parent" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;lFind.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="pLine.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="pLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>41, 16</value>
+  </data>
+  <data name="pLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>364, 1</value>
+  </data>
+  <data name="pLine.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;pLine.Name" xml:space="preserve">
+    <value>pLine</value>
+  </data>
+  <data name="&gt;&gt;pLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pLine.Parent" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;pLine.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpLine.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 0</value>
+  </data>
+  <data name="tlpLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpLine.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="tlpLine.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Name" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpLine.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lFind" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnCancel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="btnCancel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="btnCancel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>314, 13</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 33</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>取 消（&amp;C）</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnOK.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="btnOK.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="btnOK.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>197, 13</value>
+  </data>
+  <data name="btnOK.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 33</value>
+  </data>
+  <data name="btnOK.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnOK.Text" xml:space="preserve">
+    <value>查 找（&amp;F）</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Name" xml:space="preserve">
+    <value>btnOK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 292</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 54</value>
+  </data>
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="btnCancel" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="btnOK" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,25,Absolute,20,Percent,25" /&gt;&lt;Rows Styles="Absolute,10,Percent,100,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpFindType.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="chkMatchCase.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkMatchCase.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="chkMatchCase.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="chkMatchCase.Location" type="System.Drawing.Point, System.Drawing">
+    <value>315, 6</value>
+  </data>
+  <data name="chkMatchCase.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 22</value>
+  </data>
+  <data name="chkMatchCase.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="chkMatchCase.Text" xml:space="preserve">
+    <value>匹配大小写</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Name" xml:space="preserve">
+    <value>chkMatchCase</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbHex.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbHex.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbHex.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbHex.Location" type="System.Drawing.Point, System.Drawing">
+    <value>86, 6</value>
+  </data>
+  <data name="rbHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="rbHex.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="rbHex.Text" xml:space="preserve">
+    <value>十六进制</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Name" xml:space="preserve">
+    <value>rbHex</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;rbHex.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rbString.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbString.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbString.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbString.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="rbString.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 22</value>
+  </data>
+  <data name="rbString.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="rbString.Text" xml:space="preserve">
+    <value>文本</value>
+  </data>
+  <data name="&gt;&gt;rbString.Name" xml:space="preserve">
+    <value>rbString</value>
+  </data>
+  <data name="&gt;&gt;rbString.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbString.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;rbString.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFindType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFindType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tlpFindType.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpFindType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="tlpFindType.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Name" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Parent" xml:space="preserve">
+    <value>pFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFindType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="chkMatchCase" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbHex" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbString" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,20,Percent,60" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="pFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pFindType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 34</value>
+  </data>
+  <data name="pFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="pFindType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="pFindType.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Name" xml:space="preserve">
+    <value>pFindType</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;pFindType.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tlpFindForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFindForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFindForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFindForm.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tlpFindForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>448, 346</value>
+  </data>
+  <data name="tlpFindForm.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Name" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFindForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hexFind" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtFind" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pFindType" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,10,Percent,10,Percent,10,Percent,55,Percent,15,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -493,7 +595,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
+    <value>448, 346</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -6670,41 +6772,14 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>进程列表</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Name" xml:space="preserve">
-    <value>bgwProcessList</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cICO.Name" xml:space="preserve">
-    <value>cICO</value>
-  </data>
-  <data name="&gt;&gt;cICO.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cProcessName.Name" xml:space="preserve">
-    <value>cProcessName</value>
-  </data>
-  <data name="&gt;&gt;cProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cProcessID.Name" xml:space="preserve">
-    <value>cProcessID</value>
-  </data>
-  <data name="&gt;&gt;cProcessID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>查找</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ProcessList_Form</value>
+    <value>Socket_FindForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

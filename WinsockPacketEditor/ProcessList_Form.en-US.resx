@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="bCreate.Text" xml:space="preserve">
-    <value>Program</value>
+  <data name="cProcessName.HeaderText" xml:space="preserve">
+    <value>Process</value>
+  </data>
+  <data name="cProcessID.HeaderText" xml:space="preserve">
+    <value>Process ID</value>
   </data>
   <data name="bSelected.Text" xml:space="preserve">
     <value>OK</value>
@@ -126,11 +129,8 @@
   <data name="bRefresh.Text" xml:space="preserve">
     <value>Refresh</value>
   </data>
-  <data name="cProcessName.HeaderText" xml:space="preserve">
-    <value>Process</value>
-  </data>
-  <data name="cProcessID.HeaderText" xml:space="preserve">
-    <value>Process ID</value>
+  <data name="bCreate.Text" xml:space="preserve">
+    <value>Program</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

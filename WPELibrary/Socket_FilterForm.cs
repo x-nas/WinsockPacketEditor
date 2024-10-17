@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace WPELibrary
 {
-    public partial class Socket_Filter_Form : Form
+    public partial class Socket_FilterForm : Form
     {
         bool bFinishInit = false;
         private string FilterName = "";
@@ -22,7 +22,7 @@ namespace WPELibrary
 
         #region//窗体加载
 
-        public Socket_Filter_Form(int FNum)
+        public Socket_FilterForm(int FNum)
         {
             try
             {

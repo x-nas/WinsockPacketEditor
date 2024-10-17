@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace WPELibrary
 {
-    public partial class Socket_Send_Form : Form
+    public partial class Socket_SendForm : Form
     {
         private int Loop_CNT = 0;
         private int Loop_Int = 0;
@@ -22,7 +22,7 @@ namespace WPELibrary
 
         #region//窗体加载
 
-        public Socket_Send_Form(int iSelectIndex)
+        public Socket_SendForm(int iSelectIndex)
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
 
@@ -412,7 +412,7 @@ namespace WPELibrary
 
                         if (Socket_Cache.SendList.bShow_SendListForm)
                         {
-                            Socket_SendList_Form sslForm = new Socket_SendList_Form();
+                            Socket_SendListForm sslForm = new Socket_SendListForm();
                             sslForm.Show();
                         }
 

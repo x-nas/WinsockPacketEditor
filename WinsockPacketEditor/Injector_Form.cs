@@ -25,7 +25,7 @@ namespace WinsockPacketEditor
             InitializeComponent();                        
             
             this.rtbLog.Clear();
-            this.InitToolTip();            
+            this.InitToolTip();
         }
 
         private void InitToolTip()
@@ -82,7 +82,6 @@ namespace WinsockPacketEditor
                 ProcessID = Program.PID;
                 ProcessPath = Program.PATH;
                 ProcessName = Program.PNAME;
-                
 
                 if (string.IsNullOrEmpty(ProcessPath) && string.IsNullOrEmpty(ProcessName))
                 {                    
@@ -92,9 +91,9 @@ namespace WinsockPacketEditor
                 {
                     string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
                     string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
-
-                    string dtTime = DateTime.Now.ToString("T") + " | " + MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_7);                    
-                    ShowLog(dtTime + " =>> " + ProcessName);
+                                        
+                    ShowLog(DateTime.Now.ToString("G"));
+                    ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_7) + " =>> " + ProcessName);
 
                     if (ProcessID > -1)
                     {

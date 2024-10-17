@@ -13,6 +13,7 @@ namespace WPELibrary.Lib
     public static class Socket_Operation
     {        
         public static bool bDoLog = true;
+        public static DataTable dtSearchFrom = new DataTable();
         public static DataTable dtPacketFormat = new DataTable();         
 
         #region//ws2_32.dll API        
@@ -33,7 +34,8 @@ namespace WPELibrary.Lib
 
         #region//数据格式转换
 
-        #region//初始化封包数据格式
+        #region//初始化封包数据格式表        
+
         public static void InitPacketFormat()
         {
             try
@@ -46,11 +48,10 @@ namespace WPELibrary.Lib
 
                 if (dtPacketFormat.Rows.Count == 0)
                 {
-                    DataRow drHEX = dtPacketFormat.NewRow();
-
-                    drHEX[0] = "HEX";
-                    drHEX[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_85);
-                    dtPacketFormat.Rows.Add(drHEX);
+                    DataRow drUTF7 = dtPacketFormat.NewRow();
+                    drUTF7[0] = "UTF-7";
+                    drUTF7[1] = "UTF-7";
+                    dtPacketFormat.Rows.Add(drUTF7);
 
                     DataRow drASCII = dtPacketFormat.NewRow();
                     drASCII[0] = "ASCII";
@@ -60,12 +61,7 @@ namespace WPELibrary.Lib
                     DataRow drUnicode = dtPacketFormat.NewRow();
                     drUnicode[0] = "UNICODE";
                     drUnicode[1] = "UNICODE";
-                    dtPacketFormat.Rows.Add(drUnicode);
-
-                    DataRow drUTF7 = dtPacketFormat.NewRow();
-                    drUTF7[0] = "UTF-7";
-                    drUTF7[1] = "UTF-7";
-                    dtPacketFormat.Rows.Add(drUTF7);
+                    dtPacketFormat.Rows.Add(drUnicode);                    
 
                     DataRow drUTF8 = dtPacketFormat.NewRow();
                     drUTF8[0] = "UTF-8";
@@ -101,6 +97,11 @@ namespace WPELibrary.Lib
                     drDEC[0] = "DEC";
                     drDEC[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_87);
                     dtPacketFormat.Rows.Add(drDEC);
+
+                    DataRow drHEX = dtPacketFormat.NewRow();
+                    drHEX[0] = "HEX";
+                    drHEX[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_85);
+                    dtPacketFormat.Rows.Add(drHEX);
                 }
             }
             catch (Exception ex)
@@ -111,10 +112,11 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//字节转字符串
+        #region//Byte转字符串
+
         public static string ByteToString(string EncodingFormat, byte[] buffer)
         {
-            string sReturn = "";
+            string sReturn = string.Empty;
 
             try
             {
@@ -128,46 +130,43 @@ namespace WPELibrary.Lib
                         {
                             sReturn += b.ToString("X2") + " ";
                         }
+
                         sReturn = sReturn.Trim();
                         break;
 
-                    case "ASCII":
+                    case "ANSI":
+                        sFormat = Encoding.Default.GetString(buffer);
+                        break;
 
+                    case "ASCII":
                         sFormat = Encoding.ASCII.GetString(buffer);
                         break;
 
                     case "UNICODE":
-
                         sFormat = Encoding.Unicode.GetString(buffer);
                         break;
 
                     case "UTF-7":
-
                         sFormat = Encoding.UTF7.GetString(buffer);
                         break;
 
                     case "UTF-8":
-
                         sFormat = Encoding.UTF8.GetString(buffer);
                         break;
 
                     case "UTF-16-LE":
-
                         sFormat = Encoding.Unicode.GetString(buffer);
                         break;
 
                     case "UTF-16-BE":
-
                         sFormat = Encoding.BigEndianUnicode.GetString(buffer);
                         break;
 
                     case "UTF-32-LE":
-
                         sFormat = Encoding.UTF32.GetString(buffer);
                         break;
 
                     case "UTF-32-BE":
-
                         byte[] copiedBuffer = new byte[buffer.Length];
                         Array.Copy(buffer, copiedBuffer, buffer.Length);
                         Array.Reverse(copiedBuffer);
@@ -175,7 +174,6 @@ namespace WPELibrary.Lib
                         break;
 
                     case "BIN":
-
                         foreach (byte b in buffer)
                         {
                             string strTemp = Convert.ToString(b, 2);
@@ -186,7 +184,6 @@ namespace WPELibrary.Lib
                         break;
 
                     case "DEC":
-
                         foreach (byte n in buffer)
                         {
                             sReturn += n.ToString("D") + " ";
@@ -197,17 +194,20 @@ namespace WPELibrary.Lib
                     default:
                         sFormat = Encoding.Default.GetString(buffer);
                         break;
-                }                
+                }
 
-                foreach (char c in sFormat)
+                if (!string.IsNullOrEmpty(sFormat) && string.IsNullOrEmpty(sReturn))
                 {
-                    if ((int)c > 31)
+                    foreach (char c in sFormat)
                     {
-                        sReturn += c.ToString();
-                    }
-                    else
-                    {
-                        sReturn += "\u0001";
+                        if ((int)c > 31)
+                        {
+                            sReturn += c.ToString();           
+                        }
+                        else
+                        {
+                            sReturn += ". ";
+                        }                      
                     }
                 }
             }
@@ -444,7 +444,43 @@ namespace WPELibrary.Lib
 
             return sReturn;
         }
-        #endregion        
+        #endregion
+
+        #region//获取封包数据字符串（十六进制）
+
+        public static string GetPacketData_Hex(byte[] bBuff, int Max_DataLen)
+        {
+            string sReturn = "";
+
+            try
+            {
+                int iPacketLen = bBuff.Length;
+
+                if (iPacketLen > Max_DataLen)
+                {
+                    byte[] bTemp = new byte[Max_DataLen];
+
+                    for (int j = 0; j < Max_DataLen; j++)
+                    {
+                        bTemp[j] = bBuff[j];
+                    }
+
+                    sReturn = Socket_Operation.ByteToString("HEX", bTemp) + " ...";
+                }
+                else
+                {
+                    sReturn = Socket_Operation.ByteToString("HEX", bBuff);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
 
         #region//获取WSABUF数组的字节        
 
@@ -561,6 +597,7 @@ namespace WPELibrary.Lib
         }
 
         #region//检测套接字
+
         private static bool ISFilter_BySocket(int iSocket)
         {
             bool bReturn = false;
@@ -589,9 +626,11 @@ namespace WPELibrary.Lib
 
             return bReturn;
         }
+
         #endregion
 
         #region//检测IP地址
+
         private static bool ISFilter_ByIP(string sCheckIP)
         {
             bool bReturn = false;
@@ -618,9 +657,11 @@ namespace WPELibrary.Lib
 
             return bReturn;
         }
+
         #endregion
 
         #region//检测封包内容
+
         private static bool ISFilter_ByPacket(byte[] bBuffer)
         {
             bool bReturn = false;
@@ -649,6 +690,7 @@ namespace WPELibrary.Lib
 
             return bReturn;
         }
+
         #endregion
 
         #region//检测封包大小
@@ -674,28 +716,34 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//搜索封包数据
-        public static int SearchSocketList(string sSearchType, int iFromIndex, string sSearchData)
+        #region//搜索封包数据        
+
+        public static int SearchSocketList(string SearchType, int FromIndex, string SearchData, bool MatchCase)
         {
             int iResult = -1;
 
             try
             {
-                if (!string.IsNullOrEmpty(sSearchData))
+                if (!string.IsNullOrEmpty(SearchData))
                 {
                     int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
 
-                    if (iListCNT > 0 && iFromIndex < iListCNT)
+                    if (iListCNT > 0 && FromIndex < iListCNT)
                     {
                         string sSearch = "";
 
-                        for (int i = iFromIndex; i < iListCNT; i++)
+                        for (int i = FromIndex; i < iListCNT; i++)
                         {
                             byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
+                            sSearch = ByteToString(SearchType, bSearch);
 
-                            sSearch = ByteToString(sSearchType, bSearch);
+                            if (!MatchCase)
+                            {
+                                sSearch = sSearch.ToLower();
+                                SearchData = SearchData.ToLower();
+                            }
 
-                            if (sSearch.IndexOf(sSearchData) >= 0)
+                            if (sSearch.IndexOf(SearchData) >= 0)
                             {
                                 iResult = i;
                                 break;
@@ -711,6 +759,7 @@ namespace WPELibrary.Lib
 
             return iResult;
         }
+
         #endregion
 
         #region//检查套接字是否正确
@@ -774,6 +823,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//保存发送列表数据
+
         public static void SaveSendListToFile()
         {
             int iSuccess = 0;
@@ -831,6 +881,7 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }                            
         }
+
         #endregion
 
         #region//加载发送列表数据
@@ -1128,6 +1179,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//保存封包列表为Excel
+
         public static void SaveSocketListToExcel()
         {
             int iSuccess = 0;
@@ -1156,6 +1208,7 @@ namespace WPELibrary.Lib
                         {
                             string sColValue = "";
 
+                            string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fff");
                             string sIndex = spi.PacketIndex.ToString();
                             string sType = spi.PacketType.ToString();
                             string sSocket = spi.PacketSocket.ToString();
@@ -1165,7 +1218,7 @@ namespace WPELibrary.Lib
                             byte[] bBuff = spi.PacketBuffer;
                             string sData = ByteToString("HEX", bBuff);
 
-                            sColValue += sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
+                            sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                             sw.WriteLine(sColValue);
 
                             iSuccess++;
@@ -1189,6 +1242,7 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion
 
         #region//保存日志列表为Excel        

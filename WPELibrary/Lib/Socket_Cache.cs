@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.ComponentModel;
 using System.Reflection;
+using Be.Windows.Forms;
 
 namespace WPELibrary.Lib
 {
@@ -15,6 +16,9 @@ namespace WPELibrary.Lib
         public static bool Check_Size, Check_Socket, Check_IP, Check_Packet;
         public static string txtCheck_Socket, txtCheck_IP, txtCheck_Packet;
         public static decimal txtCheck_Size_From, txtCheck_Size_To;
+
+        public static FindOptions FindOptions = new FindOptions();
+        public static bool DoSearch;
 
         #region//封包
 
@@ -170,23 +174,8 @@ namespace WPELibrary.Lib
                         int iResLen = spi.PacketLen;
                         byte[] bBuffer = spi.PacketBuffer;
 
-                        spi.PacketIndex = lstRecPacket.Count + 1;                        
-
-                        if (iResLen > iMax_DataLen)
-                        {
-                            byte[] bTemp = new byte[iMax_DataLen];
-
-                            for (int j = 0; j < iMax_DataLen; j++)
-                            {
-                                bTemp[j] = bBuffer[j];
-                            }
-
-                            spi.PacketData = Socket_Operation.ByteToString("HEX", bTemp) + " ...";
-                        }
-                        else
-                        {
-                            spi.PacketData = Socket_Operation.ByteToString("HEX", bBuffer);
-                        }
+                        spi.PacketIndex = lstRecPacket.Count + 1;
+                        spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);                       
 
                         switch (sType)
                         {
@@ -936,6 +925,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//封包发送列表
+
         public static class SendList
         {
             public static int Loop_CNT = 0;//循环次数
@@ -949,6 +939,7 @@ namespace WPELibrary.Lib
             public static DataTable dtSocketSendList = new DataTable();
 
             #region//初始化发送列表
+
             public static void InitSendList()
             {
                 dtSocketSendList.Columns.Clear();
@@ -961,9 +952,11 @@ namespace WPELibrary.Lib
                 dtSocketSendList.Columns.Add("Data", typeof(string));
                 dtSocketSendList.Columns.Add("Bytes", typeof(byte[]));
             }
+
             #endregion            
 
             #region//发送列表操作（新增，删除）
+
             public static void AddSendList_BySocketListIndex(int iSLIndex)
             {
                 AddSendList_New(
@@ -995,16 +988,20 @@ namespace WPELibrary.Lib
             {
                 dtSocketSendList.Rows[SIndex].Delete();
             }
+
             #endregion
 
             #region//清空发送列表
+
             public static void SendListClear()
             {
                 dtSocketSendList.Rows.Clear();
             }
+
             #endregion
 
             #region//发送列表
+
             public static bool SendPacketList_ByIndex(int iSocket, int iIndex)
             {
                 bool bResult = false;
@@ -1040,8 +1037,10 @@ namespace WPELibrary.Lib
 
                 return bResult;
             }
+
             #endregion
         }
+
         #endregion
     }
 }

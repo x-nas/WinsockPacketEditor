@@ -1,7 +1,7 @@
 ﻿
 namespace WPELibrary
 {
-    partial class Socket_Filter_Form
+    partial class Socket_FilterForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Filter_Form));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_FilterForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -542,7 +542,7 @@ namespace WPELibrary
             this.pbLoading.Name = "pbLoading";
             this.pbLoading.TabStop = false;
             // 
-            // Socket_Filter_Form
+            // Socket_FilterForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -550,7 +550,7 @@ namespace WPELibrary
             this.Controls.Add(this.tlpFilterInfo_Function);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Socket_Filter_Form";
+            this.Name = "Socket_FilterForm";
             this.tlpFilterInfo_Function.ResumeLayout(false);
             this.gbStartModify.ResumeLayout(false);
             this.tlpFilterModifyFrom.ResumeLayout(false);

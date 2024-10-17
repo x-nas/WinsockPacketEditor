@@ -7,10 +7,11 @@ using System.Reflection;
 
 namespace WPELibrary
 {
-    public partial class Socket_SendList_Form : Form
+    public partial class Socket_SendListForm : Form
     {
         #region//窗体加载
-        public Socket_SendList_Form()
+
+        public Socket_SendListForm()
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
 
@@ -25,9 +26,11 @@ namespace WPELibrary
         {
             this.InitSendListForm();            
         }
+
         #endregion
 
         #region//关闭窗体后
+
         private void SocketSendList_Form_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
@@ -39,6 +42,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion
 
         #region//初始化窗体

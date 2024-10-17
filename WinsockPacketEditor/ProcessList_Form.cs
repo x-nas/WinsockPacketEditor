@@ -12,6 +12,7 @@ namespace WinsockPacketEditor
     public partial class ProcessList_Form : Form
     {
         #region//窗体加载
+
         public ProcessList_Form()
         {           
             InitializeComponent();
@@ -31,9 +32,11 @@ namespace WinsockPacketEditor
         {
             this.ShowProcessList();
         }
+
         #endregion      
 
         #region//显示所有进程（异步）
+
         private void ShowProcessList()
         {
             try
@@ -106,9 +109,11 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
 
         #region//选中某个进程
+
         private void bSelected_Click(object sender, EventArgs e)
         {
             try
@@ -130,9 +135,11 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
 
         #region//刷新进程列表
+
         private void bRefresh_Click(object sender, EventArgs e)
         {
             try
@@ -149,9 +156,11 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
 
         #region//选择程序
+
         private void bCreate_Click(object sender, EventArgs e)
         {
             try
@@ -174,9 +183,11 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
 
         #region//列表样式
+
         private void dgvProcessList_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         {
             dgvProcessList.ClearSelection();
@@ -217,9 +228,11 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
 
         #region//筛选进程
+
         private void txtProcessSearch_TextChanged(object sender, EventArgs e)
         {
             try
@@ -242,6 +255,7 @@ namespace WinsockPacketEditor
                 //
             }
         }
+
         #endregion
     }
 }

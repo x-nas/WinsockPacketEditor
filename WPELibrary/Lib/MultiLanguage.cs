@@ -32,10 +32,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_20 = { "目标进程：", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
-        //public static string[] MutiLan_23 = { "网络封包拦截器", "Winsock Packet Editor" };
-        //public static string[] MutiLan_24 = { "下载安装：", "DownLoad Setup: " };
-        //public static string[] MutiLan_25 = { "使用说明：", "Instructions: " };
-        //public static string[] MutiLan_26 = { "联系作者：", "Contact author: " };
+        public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
+        public static string[] MutiLan_24 = { "行 {0}  列 {1}", "Ln {0}  Col {1}" };
+        public static string[] MutiLan_25 = { "查找", "Find" };
+        public static string[] MutiLan_26 = { "查找下一个", "Find Next" };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         //public static string[] MutiLan_29 = { "显示-接收, ", "Show-Recv, " };
@@ -48,8 +48,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_36 = { "结束拦截！", "Stop Interception!" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
-        public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };
-        public static string[] MutiLan_40 = { "请输入搜索内容", "Please enter search content" };
+        //public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };
+        //public static string[] MutiLan_40 = { "请输入搜索内容", "Please enter search content" };
         //public static string[] MutiLan_41 = { "搜索完成!", "Search completed!" };
         public static string[] MutiLan_42 = { "发送封包 -【 序号", "Send -【 ID" };
         //public static string[] MutiLan_43 = { "", "" };

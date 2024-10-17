@@ -142,6 +142,42 @@
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
     <value>169, 166</value>
   </data>
+  <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 17</value>
+  </data>
+  <data name="tlSystemInfo.Text" xml:space="preserve">
+    <value>System Info</value>
+  </data>
+  <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 17</value>
+  </data>
+  <data name="tlALL.Text" xml:space="preserve">
+    <value>Total Packets:</value>
+  </data>
+  <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 17</value>
+  </data>
+  <data name="tlQueue.Text" xml:space="preserve">
+    <value>Buffer:</value>
+  </data>
+  <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 17</value>
+  </data>
+  <data name="tlSend.Text" xml:space="preserve">
+    <value>Send:</value>
+  </data>
+  <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 17</value>
+  </data>
+  <data name="tlRecv.Text" xml:space="preserve">
+    <value>Receive:</value>
+  </data>
+  <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 17</value>
+  </data>
+  <data name="tlCheck.Text" xml:space="preserve">
+    <value>Filterate:</value>
+  </data>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>168, 22</value>
   </data>
@@ -193,42 +229,6 @@
   <data name="tsmiSaveSocketInfo.Text" xml:space="preserve">
     <value>Export to excel</value>
   </data>
-  <data name="tlSystemInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 19</value>
-  </data>
-  <data name="tlSystemInfo.Text" xml:space="preserve">
-    <value>System Info</value>
-  </data>
-  <data name="tlALL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 19</value>
-  </data>
-  <data name="tlALL.Text" xml:space="preserve">
-    <value>Total Packets:</value>
-  </data>
-  <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 19</value>
-  </data>
-  <data name="tlQueue.Text" xml:space="preserve">
-    <value>Buffer:</value>
-  </data>
-  <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 19</value>
-  </data>
-  <data name="tlSend.Text" xml:space="preserve">
-    <value>Send:</value>
-  </data>
-  <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 19</value>
-  </data>
-  <data name="tlRecv.Text" xml:space="preserve">
-    <value>Receive:</value>
-  </data>
-  <data name="tlCheck.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 19</value>
-  </data>
-  <data name="tlCheck.Text" xml:space="preserve">
-    <value>Filterate:</value>
-  </data>
   <data name="gbFilterSet.Text" xml:space="preserve">
     <value>[ Filter Settings ]</value>
   </data>
@@ -247,15 +247,24 @@
   <data name="gbHookType.Text" xml:space="preserve">
     <value>[ Hook Settings ]</value>
   </data>
-  <data name="bStartHook.Text" xml:space="preserve">
-    <value>START (&amp;K)</value>
+  <data name="gbHookButton_Search.Text" xml:space="preserve">
+    <value>[ Search ]</value>
+  </data>
+  <data name="rbFromIndex.Text" xml:space="preserve">
+    <value>Seek Down</value>
+  </data>
+  <data name="rbFromHead.Text" xml:space="preserve">
+    <value>From Top</value>
   </data>
   <data name="bStopHook.Text" xml:space="preserve">
     <value>STOP (&amp;J)</value>
   </data>
-  <data name="bClear.Text" xml:space="preserve">
-    <value>Clear
-Data
+  <data name="bStartHook.Text" xml:space="preserve">
+    <value>START (&amp;K)</value>
+  </data>
+  <data name="bCleanUp.Text" xml:space="preserve">
+    <value>Clean
+Up
 (&amp;C)</value>
   </data>
   <data name="gbFilterList.Text" xml:space="preserve">
@@ -315,8 +324,68 @@ Data
   <data name="tsmiLoadFilterList.Text" xml:space="preserve">
     <value>Load Filter List</value>
   </data>
-  <data name="tpPacketInfo.Text" xml:space="preserve">
-    <value>Packet Data </value>
+  <data name="tpPacketData.Text" xml:space="preserve">
+    <value>[ Packet Data ]</value>
+  </data>
+  <data name="tsbSave.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="tsbCut.Text" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="tsbCopy.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="tsmiCopy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiCopy.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="tsmiCopyHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiCopyHex.Text" xml:space="preserve">
+    <value>Copy Hex</value>
+  </data>
+  <data name="tsbPaste.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="tsmiPaste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiPaste.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="tsmiPasteHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsmiPasteHex.Text" xml:space="preserve">
+    <value>Paste Hex</value>
+  </data>
+  <data name="tsbFind.Text" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="tsbFindNext.Text" xml:space="preserve">
+    <value>Find Next</value>
+  </data>
+  <data name="tscbPerLine.Items" xml:space="preserve">
+    <value>Adaptive</value>
+  </data>
+  <data name="tscbPerLine.Items1" xml:space="preserve">
+    <value>Fixed Arrange</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>Select All</value>
   </data>
   <data name="tpSystemLog.Text" xml:space="preserve">
     <value>System Log</value>
@@ -347,18 +416,6 @@ Data
   </data>
   <data name="tslToExcel.Text" xml:space="preserve">
     <value>Export to Excel</value>
-  </data>
-  <data name="gbSearchData.Text" xml:space="preserve">
-    <value>[ Search Data ]</value>
-  </data>
-  <data name="bSearchData.Text" xml:space="preserve">
-    <value>Search (&amp;S)</value>
-  </data>
-  <data name="cbSearchOrder.Items" xml:space="preserve">
-    <value>From Scratch</value>
-  </data>
-  <data name="cbSearchOrder.Items1" xml:space="preserve">
-    <value>Search Down</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

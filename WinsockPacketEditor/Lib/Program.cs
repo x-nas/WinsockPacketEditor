@@ -10,9 +10,11 @@ namespace WinsockPacketEditor
         public static string PATH = string.Empty;
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
+
         private static extern bool SetProcessDPIAware();
 
         [STAThread]
+
         static void Main()
         {
             try

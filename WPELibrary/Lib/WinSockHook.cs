@@ -352,6 +352,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//开始拦截
+
         public void StartHook()
         {
             try
@@ -409,9 +410,11 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
+
         #endregion
 
         #region//停止拦截
+
         public void StopHook()
         {
             try
@@ -461,7 +464,25 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
-        #endregion        
+
+        #endregion
+
+        #region//退出
+
+        public void ExitHook()
+        {
+            try
+            {
+                this.StopHook();
+                LocalHook.Release();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//发送封包（Send）
         public static bool SendPacket(int socket, IntPtr buffer, int length)

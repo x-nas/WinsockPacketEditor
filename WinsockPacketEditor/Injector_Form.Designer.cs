@@ -30,7 +30,7 @@ namespace WinsockPacketEditor
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Injector_Form));
-            this.pTop = new System.Windows.Forms.Panel();
+            this.tlpInjectorForm = new System.Windows.Forms.TableLayoutPanel();
             this.tlpProcessInject = new System.Windows.Forms.TableLayoutPanel();
             this.lProcessName = new System.Windows.Forms.Label();
             this.tbProcessID = new System.Windows.Forms.TextBox();
@@ -38,30 +38,29 @@ namespace WinsockPacketEditor
             this.bInject = new System.Windows.Forms.Button();
             this.pbLanguage = new System.Windows.Forms.PictureBox();
             this.pbAbout = new System.Windows.Forms.PictureBox();
-            this.pFill = new System.Windows.Forms.Panel();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.pTop.SuspendLayout();
+            this.tlpInjectorForm.SuspendLayout();
             this.tlpProcessInject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).BeginInit();
-            this.pFill.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pTop
+            // tlpInjectorForm
             // 
-            this.pTop.Controls.Add(this.tlpProcessInject);
-            resources.ApplyResources(this.pTop, "pTop");
-            this.pTop.Name = "pTop";
+            resources.ApplyResources(this.tlpInjectorForm, "tlpInjectorForm");
+            this.tlpInjectorForm.Controls.Add(this.tlpProcessInject, 0, 1);
+            this.tlpInjectorForm.Controls.Add(this.rtbLog, 0, 2);
+            this.tlpInjectorForm.Name = "tlpInjectorForm";
             // 
             // tlpProcessInject
             // 
             resources.ApplyResources(this.tlpProcessInject, "tlpProcessInject");
-            this.tlpProcessInject.Controls.Add(this.lProcessName, 0, 1);
-            this.tlpProcessInject.Controls.Add(this.tbProcessID, 1, 1);
-            this.tlpProcessInject.Controls.Add(this.bSelectProcess, 2, 1);
-            this.tlpProcessInject.Controls.Add(this.bInject, 3, 1);
-            this.tlpProcessInject.Controls.Add(this.pbLanguage, 4, 1);
-            this.tlpProcessInject.Controls.Add(this.pbAbout, 5, 1);
+            this.tlpProcessInject.Controls.Add(this.lProcessName, 0, 0);
+            this.tlpProcessInject.Controls.Add(this.tbProcessID, 1, 0);
+            this.tlpProcessInject.Controls.Add(this.bSelectProcess, 2, 0);
+            this.tlpProcessInject.Controls.Add(this.bInject, 3, 0);
+            this.tlpProcessInject.Controls.Add(this.pbLanguage, 4, 0);
+            this.tlpProcessInject.Controls.Add(this.pbAbout, 5, 0);
             this.tlpProcessInject.Name = "tlpProcessInject";
             // 
             // lProcessName
@@ -72,6 +71,7 @@ namespace WinsockPacketEditor
             // tbProcessID
             // 
             resources.ApplyResources(this.tbProcessID, "tbProcessID");
+            this.tbProcessID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tbProcessID.Name = "tbProcessID";
             // 
             // bSelectProcess
@@ -103,16 +103,10 @@ namespace WinsockPacketEditor
             this.pbAbout.TabStop = false;
             this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
             // 
-            // pFill
-            // 
-            this.pFill.Controls.Add(this.rtbLog);
-            resources.ApplyResources(this.pFill, "pFill");
-            this.pFill.Name = "pFill";
-            // 
             // rtbLog
             // 
-            this.rtbLog.BackColor = System.Drawing.Color.Black;
             resources.ApplyResources(this.rtbLog, "rtbLog");
+            this.rtbLog.BackColor = System.Drawing.Color.Black;
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
@@ -121,26 +115,23 @@ namespace WinsockPacketEditor
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.Controls.Add(this.pFill);
-            this.Controls.Add(this.pTop);
+            this.Controls.Add(this.tlpInjectorForm);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Injector_Form";
-            this.pTop.ResumeLayout(false);
+            this.tlpInjectorForm.ResumeLayout(false);
             this.tlpProcessInject.ResumeLayout(false);
             this.tlpProcessInject.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).EndInit();
-            this.pFill.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel pTop;
-        private System.Windows.Forms.Panel pFill;
+        private System.Windows.Forms.TableLayoutPanel tlpInjectorForm;
         private System.Windows.Forms.RichTextBox rtbLog;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInject;
         private System.Windows.Forms.Label lProcessName;

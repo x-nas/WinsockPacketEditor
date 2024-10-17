@@ -117,386 +117,186 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="bgwProcessList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpProcessInfo.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="dgvProcessList.ColumnHeadersHeight" type="System.Int32, mscorlib">
-    <value>29</value>
-  </data>
-  <metadata name="cICO.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cICO.HeaderText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cICO.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="cICO.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <metadata name="cProcessName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cProcessName.HeaderText" xml:space="preserve">
-    <value>进程名称</value>
-  </data>
-  <data name="cProcessName.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <metadata name="cProcessID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cProcessID.HeaderText" xml:space="preserve">
-    <value>进程编号</value>
-  </data>
-  <data name="cProcessID.MinimumWidth" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="cProcessID.Width" type="System.Int32, mscorlib">
-    <value>120</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvProcessList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="dgvProcessList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 42</value>
+  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 17</value>
   </data>
-  <data name="dgvProcessList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="tlLoop_Send.Text" xml:space="preserve">
+    <value>Total Send:</value>
   </data>
-  <data name="dgvProcessList.RowHeadersWidth" type="System.Int32, mscorlib">
-    <value>51</value>
+  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
   </data>
-  <data name="dgvProcessList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>400, 127</value>
+  <data name="tlSendList_Success.Text" xml:space="preserve">
+    <value>Success:</value>
   </data>
-  <data name="dgvProcessList.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
+  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 17</value>
   </data>
-  <data name="&gt;&gt;dgvProcessList.Name" xml:space="preserve">
-    <value>dgvProcessList</value>
+  <data name="tlSendList_Fail.Text" xml:space="preserve">
+    <value>Fail:</value>
   </data>
-  <data name="&gt;&gt;dgvProcessList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>961, 22</value>
   </data>
-  <data name="&gt;&gt;dgvProcessList.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
+  <data name="cIndex.HeaderText" xml:space="preserve">
+    <value>ID</value>
   </data>
-  <data name="&gt;&gt;dgvProcessList.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="cNote.HeaderText" xml:space="preserve">
+    <value>Remark</value>
   </data>
-  <data name="tlpProcessInfoButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="cSocket.HeaderText" xml:space="preserve">
+    <value>Socket</value>
   </data>
-  <data name="bSelected.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Right</value>
+  <data name="cIPTo.HeaderText" xml:space="preserve">
+    <value>To Address</value>
   </data>
-  <data name="bSelected.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="cLen.HeaderText" xml:space="preserve">
+    <value>Len</value>
   </data>
-  <data name="bSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>300, 4</value>
+  <data name="cData.HeaderText" xml:space="preserve">
+    <value>Data</value>
   </data>
-  <data name="bSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
+  <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
   </data>
-  <data name="bSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
+  <data name="tsmiDeleteSendList.Text" xml:space="preserve">
+    <value>Remove from list</value>
   </data>
-  <data name="bSelected.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
   </data>
-  <data name="bSelected.Text" xml:space="preserve">
-    <value>确定</value>
+  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
   </data>
-  <data name="&gt;&gt;bSelected.Name" xml:space="preserve">
-    <value>bSelected</value>
+  <data name="tsmiClear.Text" xml:space="preserve">
+    <value>Clear send list</value>
   </data>
-  <data name="&gt;&gt;bSelected.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
   </data>
-  <data name="&gt;&gt;bSelected.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
+  <data name="tsmiSaveSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
   </data>
-  <data name="&gt;&gt;bSelected.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="tsmiSaveSendList.Text" xml:space="preserve">
+    <value>Save send list</value>
   </data>
-  <data name="bRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
   </data>
-  <data name="bRefresh.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="tsmiLoadSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
   </data>
-  <data name="bRefresh.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tsmiLoadSendList.Text" xml:space="preserve">
+    <value>Load send list</value>
+  </data>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 110</value>
+  </data>
+  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>961, 226</value>
+  </data>
+  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 4</value>
+  </data>
+  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 23</value>
+  </data>
+  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 29</value>
+  </data>
+  <data name="lLoop_Int.Text" xml:space="preserve">
+    <value>Interval：</value>
+  </data>
+  <data name="tlpSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 31</value>
+  </data>
+  <data name="gbSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>573, 0</value>
+  </data>
+  <data name="gbSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 50</value>
+  </data>
+  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 4</value>
+  </data>
+  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 23</value>
+  </data>
+  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 29</value>
+  </data>
+  <data name="lLoop_CNT.Text" xml:space="preserve">
+    <value>Loop：</value>
+  </data>
+  <data name="tlpSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 31</value>
+  </data>
+  <data name="gbSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>383, 0</value>
+  </data>
+  <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 50</value>
+  </data>
+  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>132, 4</value>
   </data>
-  <data name="bRefresh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
+  <data name="txtUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
   </data>
-  <data name="bRefresh.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>122, 23</value>
+  </data>
+  <data name="cbUseSocket.Text" xml:space="preserve">
+    <value>Use Socket：</value>
+  </data>
+  <data name="tlpSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 31</value>
+  </data>
+  <data name="gbSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>155, 0</value>
+  </data>
+  <data name="gbSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 50</value>
+  </data>
+  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 28</value>
+  </data>
+  <data name="cbSelectAll.Text" xml:space="preserve">
+    <value>Select All / None</value>
+  </data>
+  <data name="gbSendListForm1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 50</value>
+  </data>
+  <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>108, 6</value>
+  </data>
+  <data name="bSendListStop.Size" type="System.Drawing.Size, System.Drawing">
     <value>87, 32</value>
   </data>
-  <data name="bRefresh.TabIndex" type="System.Int32, mscorlib">
-    <value>20</value>
+  <data name="bSendListStop.Text" xml:space="preserve">
+    <value>Stop (&amp;T)</value>
   </data>
-  <data name="bRefresh.Text" xml:space="preserve">
-    <value>刷新</value>
+  <data name="bSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>86, 32</value>
   </data>
-  <data name="&gt;&gt;bRefresh.Name" xml:space="preserve">
-    <value>bRefresh</value>
+  <data name="bSendList.Text" xml:space="preserve">
+    <value>Send (&amp;F)</value>
   </data>
-  <data name="&gt;&gt;bRefresh.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlpSendListForm5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>763, 3</value>
   </data>
-  <data name="&gt;&gt;bRefresh.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
+  <data name="tlpSendListForm5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>201, 44</value>
   </data>
-  <data name="&gt;&gt;bRefresh.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 50</value>
   </data>
-  <data name="bCreate.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
-  </data>
-  <data name="bCreate.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bCreate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 4</value>
-  </data>
-  <data name="bCreate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="bCreate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
-  </data>
-  <data name="bCreate.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="bCreate.Text" xml:space="preserve">
-    <value>选择程序</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Name" xml:space="preserve">
-    <value>bCreate</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bCreate.Parent" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
-  </data>
-  <data name="&gt;&gt;bCreate.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpProcessInfoButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfoButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 426</value>
-  </data>
-  <data name="tlpProcessInfoButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpProcessInfoButton.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 40</value>
-  </data>
-  <data name="tlpProcessInfoButton.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Name" xml:space="preserve">
-    <value>tlpProcessInfoButton</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoButton.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,14" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpProcessInfoSearch.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="txtProcessSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtProcessSearch.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Segoe UI, 10.5pt</value>
-  </data>
-  <data name="txtProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>57, 3</value>
-  </data>
-  <data name="txtProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 26</value>
-  </data>
-  <data name="txtProcessSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
-  </data>
-  <data name="txtProcessSearch.WordWrap" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;txtProcessSearch.Name" xml:space="preserve">
-    <value>txtProcessSearch</value>
-  </data>
-  <data name="&gt;&gt;txtProcessSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtProcessSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
-  </data>
-  <data name="&gt;&gt;txtProcessSearch.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="pbProcessSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pbProcessSearch.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="pbProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 2</value>
-  </data>
-  <data name="pbProcessSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pbProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>36, 26</value>
-  </data>
-  <data name="pbProcessSearch.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="pbProcessSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>24</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Name" xml:space="preserve">
-    <value>pbProcessSearch</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
-  </data>
-  <data name="&gt;&gt;pbProcessSearch.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 5</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpProcessInfoSearch.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInfoSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 30</value>
-  </data>
-  <data name="tlpProcessInfoSearch.TabIndex" type="System.Int32, mscorlib">
-    <value>22</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Name" xml:space="preserve">
-    <value>tlpProcessInfoSearch</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfoSearch.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpProcessInfoSearch.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,70,Absolute,40,Percent,15" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="pbLoading.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pbLoading.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 171</value>
-  </data>
-  <data name="pbLoading.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 200</value>
-  </data>
-  <data name="pbLoading.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 50</value>
-  </data>
-  <data name="pbLoading.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="pbLoading.TabIndex" type="System.Int32, mscorlib">
-    <value>23</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Name" xml:space="preserve">
-    <value>pbLoading</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.Parent" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;pbLoading.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpProcessInfo.RowCount" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="tlpProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
-  </data>
-  <data name="tlpProcessInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Name" xml:space="preserve">
-    <value>tlpProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpProcessInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvProcessList" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoButton" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpProcessInfoSearch" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pbLoading" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,30,Absolute,5,Percent,100,AutoSize,0,Absolute,5,Absolute,40,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
+  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 304</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+    <value>967, 304</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6670,43 +6470,7 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>进程列表</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Name" xml:space="preserve">
-    <value>bgwProcessList</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cICO.Name" xml:space="preserve">
-    <value>cICO</value>
-  </data>
-  <data name="&gt;&gt;cICO.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cProcessName.Name" xml:space="preserve">
-    <value>cProcessName</value>
-  </data>
-  <data name="&gt;&gt;cProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cProcessID.Name" xml:space="preserve">
-    <value>cProcessID</value>
-  </data>
-  <data name="&gt;&gt;cProcessID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>ProcessList_Form</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>Send List</value>
   </data>
 </root>

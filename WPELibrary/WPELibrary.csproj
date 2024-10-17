@@ -48,6 +48,9 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
+    </Reference>
     <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
     </Reference>
@@ -64,11 +67,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Socket_Filter_Form.cs">
+    <Compile Include="Lib\Socket_BitInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Socket_FilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Socket_Filter_Form.Designer.cs">
-      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
+    <Compile Include="Socket_FilterForm.Designer.cs">
+      <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\MultiLanguage.cs" />
     <Compile Include="Lib\Socket_FilterInfo.cs" />
@@ -77,6 +86,12 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Socket_FindForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Socket_FindForm.Designer.cs">
+      <DependentUpon>Socket_FindForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_Form.cs">
       <SubType>Form</SubType>
@@ -89,22 +104,17 @@
     <Compile Include="Lib\Socket_Cache.cs" />
     <Compile Include="Lib\WinSockHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Socket_SendList_Form.cs">
+    <Compile Include="Socket_SendListForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Socket_SendList_Form.Designer.cs">
-      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
+    <Compile Include="Socket_SendListForm.Designer.cs">
+      <DependentUpon>Socket_SendListForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Socket_Send_Form.cs">
+    <Compile Include="Socket_SendForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Socket_Send_Form.Designer.cs">
-      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
+    <Compile Include="Socket_SendForm.Designer.cs">
+      <DependentUpon>Socket_SendForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +136,12 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\saveHS.png" />
+    <None Include="Resources\PasteHS.png" />
+    <None Include="Resources\FindNextHS.png" />
+    <None Include="Resources\FindHS.png" />
+    <None Include="Resources\CutHS.png" />
+    <None Include="Resources\CopyHS.png" />
     <None Include="Properties\app.manifest" />
     <None Include="Resources\loading.gif" />
   </ItemGroup>
@@ -138,11 +154,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Socket_Filter_Form.en-US.resx">
-      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_FilterForm.en-US.resx">
+      <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Filter_Form.resx">
-      <DependentUpon>Socket_Filter_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_FilterForm.resx">
+      <DependentUpon>Socket_FilterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_FindForm.en-US.resx">
+      <DependentUpon>Socket_FindForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_FindForm.resx">
+      <DependentUpon>Socket_FindForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.en-US.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
@@ -152,19 +174,20 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_SendList_Form.en-US.resx">
-      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_SendListForm.en-US.resx">
+      <DependentUpon>Socket_SendListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_SendList_Form.resx">
-      <DependentUpon>Socket_SendList_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_SendListForm.resx">
+      <DependentUpon>Socket_SendListForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Send_Form.en-US.resx">
-      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_SendForm.en-US.resx">
+      <DependentUpon>Socket_SendForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_Send_Form.resx">
-      <DependentUpon>Socket_Send_Form.cs</DependentUpon>
+    <EmbeddedResource Include="Socket_SendForm.resx">
+      <DependentUpon>Socket_SendForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
