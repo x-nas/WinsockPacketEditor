@@ -127,7 +127,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                System.Diagnostics.Process.Start("https://www.wpe64.com");
+                System.Diagnostics.Process.Start("http://101.132.222.195");
             }
             catch (Exception ex)
             {

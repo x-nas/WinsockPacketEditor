@@ -29,6 +29,7 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -69,7 +70,7 @@ namespace WPELibrary
             this.cTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiSend = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiBatchSend = new System.Windows.Forms.ToolStripMenuItem();
@@ -122,7 +123,7 @@ namespace WPELibrary
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiShowFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAddFilter = new System.Windows.Forms.ToolStripMenuItem();
@@ -171,12 +172,12 @@ namespace WPELibrary
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip();
+            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
-            this.tSocketInfo = new System.Windows.Forms.Timer();
+            this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchPacketData = new System.ComponentModel.BackgroundWorker();
@@ -1282,6 +1283,7 @@ namespace WPELibrary
             // 
             // tSocketInfo
             // 
+            this.tSocketInfo.Interval = 10;
             this.tSocketInfo.Tick += new System.EventHandler(this.tSocketInfo_Tick);
             // 
             // bgwLogList
