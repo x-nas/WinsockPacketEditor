@@ -15,7 +15,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 
 安装下载以及使用说明   Installation, download, and instructions
 
-http://www.x-nas.com:8888/WPE/index.html
+http://101.132.222.195
 
 
 ![1](https://github.com/user-attachments/assets/0e53bea6-5618-4236-9e5a-8a98af0e0331)
