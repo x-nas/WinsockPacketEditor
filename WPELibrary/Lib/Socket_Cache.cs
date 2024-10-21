@@ -10,8 +10,9 @@ using Be.Windows.Forms;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {
+    {  
         public static byte[] bByteBuff = new byte[0];
+        public static bool Support_WS1, Support_WS2;
         public static bool Hook_Send, Hook_SendTo, Hook_Recv, Hook_RecvFrom, Hook_WSASend, Hook_WSASendTo, Hook_WSARecv, Hook_WSARecvFrom;
         public static bool Check_Size, Check_Socket, Check_IP, Check_Packet;
         public static string txtCheck_Socket, txtCheck_IP, txtCheck_Packet;
@@ -63,7 +64,7 @@ namespace WPELibrary.Lib
                 Send = 1,
                 SendTo = 2,
                 Recv = 3,
-                RecvFrom = 4,
+                RecvFrom = 4,                
                 WSASend = 5,
                 WSASendTo = 6,
                 WSARecv = 7,
@@ -84,10 +85,16 @@ namespace WPELibrary.Lib
         #region//封包队列
 
         public static class SocketQueue
-        {  
-            public static int Filter_CNT = 0;
-            public static int Recv_CNT = 0;
+        {
             public static int Send_CNT = 0;
+            public static int SendTo_CNT = 0;
+            public static int Recv_CNT = 0;
+            public static int RecvFrom_CNT = 0;
+            public static int WSASend_CNT = 0;
+            public static int WSASendTo_CNT = 0;
+            public static int WSARecv_CNT = 0;
+            public static int WSARecvFrom_CNT = 0;
+            public static int Filter_CNT = 0;
 
             public static Queue<Socket_PacketInfo> qSocket_PacketInfo = new Queue<Socket_PacketInfo>();
 
@@ -110,6 +117,34 @@ namespace WPELibrary.Lib
 
                         if (Socket_Operation.ISShowSocketPacket_ByFilter(spi))
                         {
+                            switch (stType)
+                            {
+                                case Socket_Cache.SocketPacket.SocketType.Send:
+                                    SocketQueue.Send_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.SendTo:
+                                    SocketQueue.SendTo_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.Recv:
+                                    SocketQueue.Recv_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.RecvFrom:
+                                    SocketQueue.RecvFrom_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.WSASend:
+                                    SocketQueue.WSASend_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.WSASendTo:
+                                    SocketQueue.WSASendTo_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.WSARecv:
+                                    SocketQueue.WSARecv_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
+                                    SocketQueue.WSARecvFrom_CNT++;
+                                    break;
+                            }
+
                             lock (qSocket_PacketInfo)
                             {
                                 qSocket_PacketInfo.Enqueue(spi);
@@ -175,35 +210,7 @@ namespace WPELibrary.Lib
                         byte[] bBuffer = spi.PacketBuffer;
 
                         spi.PacketIndex = lstRecPacket.Count + 1;
-                        spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);                       
-
-                        switch (sType)
-                        {
-                            case Socket_Cache.SocketPacket.SocketType.Send:
-                                SocketQueue.Send_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.SendTo:
-                                SocketQueue.Send_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.Recv:
-                                SocketQueue.Recv_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.RecvFrom:
-                                SocketQueue.Recv_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.WSASend:
-                                SocketQueue.Send_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.WSASendTo:
-                                SocketQueue.Send_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.WSARecv:
-                                SocketQueue.Recv_CNT++;
-                                break;
-                            case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
-                                SocketQueue.Recv_CNT++;
-                                break;
-                        }
+                        spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
 
                         RecSocketPacket?.Invoke(spi);                        
                     }

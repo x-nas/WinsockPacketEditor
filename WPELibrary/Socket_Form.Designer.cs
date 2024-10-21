@@ -45,9 +45,7 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
-            this.ssStatusInfo = new System.Windows.Forms.StatusStrip();
-            this.tlSystemInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSplit0 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlALL = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlALL_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -60,8 +58,8 @@ namespace WPELibrary
             this.tlRecv = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlRecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlCheck = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlCheck_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilter = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilter_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -181,8 +179,30 @@ namespace WPELibrary
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchPacketData = new System.ComponentModel.BackgroundWorker();
+            this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
+            this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslWinsock = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSendTo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlRecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlRecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASend = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASend_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel11 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecv = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel14 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASendTo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel17 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketForm.SuspendLayout();
-            this.ssStatusInfo.SuspendLayout();
+            this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.cmsSocketList.SuspendLayout();
             this.tlpParameter.SuspendLayout();
@@ -212,52 +232,58 @@ namespace WPELibrary
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.cmsLogList.SuspendLayout();
+            this.ssProcessInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSocketForm
             // 
             resources.ApplyResources(this.tlpSocketForm, "tlpSocketForm");
-            this.tlpSocketForm.Controls.Add(this.ssStatusInfo, 0, 1);
+            this.tlpSocketForm.Controls.Add(this.ssSocketList, 0, 1);
             this.tlpSocketForm.Controls.Add(this.dgvSocketList, 0, 2);
             this.tlpSocketForm.Controls.Add(this.tlpParameter, 0, 0);
             this.tlpSocketForm.Controls.Add(this.tlpInformation, 0, 3);
+            this.tlpSocketForm.Controls.Add(this.ssProcessInfo, 0, 4);
             this.tlpSocketForm.Name = "tlpSocketForm";
             // 
-            // ssStatusInfo
+            // ssSocketList
             // 
-            resources.ApplyResources(this.ssStatusInfo, "ssStatusInfo");
-            this.ssStatusInfo.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.ssStatusInfo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tlSystemInfo,
-            this.tlSplit0,
+            resources.ApplyResources(this.ssSocketList, "ssSocketList");
+            this.ssSocketList.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.ssSocketList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlALL,
             this.tlALL_CNT,
             this.tlSplit1,
             this.tlQueue,
             this.tlQueue_CNT,
             this.tlSplit2,
+            this.tlFilter,
+            this.tlFilter_CNT,
+            this.tlSplit4,
             this.tlSend,
             this.tlSend_CNT,
             this.tlSplit3,
             this.tlRecv,
             this.tlRecv_CNT,
-            this.tlSplit4,
-            this.tlCheck,
-            this.tlCheck_CNT});
-            this.ssStatusInfo.Name = "ssStatusInfo";
-            this.ssStatusInfo.SizingGrip = false;
-            // 
-            // tlSystemInfo
-            // 
-            this.tlSystemInfo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tlSystemInfo.Name = "tlSystemInfo";
-            resources.ApplyResources(this.tlSystemInfo, "tlSystemInfo");
-            // 
-            // tlSplit0
-            // 
-            this.tlSplit0.ForeColor = System.Drawing.Color.DarkGray;
-            this.tlSplit0.Name = "tlSplit0";
-            resources.ApplyResources(this.tlSplit0, "tlSplit0");
+            this.toolStripStatusLabel2,
+            this.tlSendTo,
+            this.tlSendTo_CNT,
+            this.toolStripStatusLabel5,
+            this.tlRecvFrom,
+            this.tlRecvFrom_CNT,
+            this.toolStripStatusLabel8,
+            this.tlWSASend,
+            this.tlWSASend_CNT,
+            this.toolStripStatusLabel11,
+            this.tlWSARecv,
+            this.tlWSARecv_CNT,
+            this.toolStripStatusLabel14,
+            this.tlWSASendTo,
+            this.tlWSASendTo_CNT,
+            this.toolStripStatusLabel17,
+            this.tlWSARecvFrom,
+            this.tlWSARecvFrom_CNT});
+            this.ssSocketList.Name = "ssSocketList";
+            this.ssSocketList.SizingGrip = false;
             // 
             // tlALL
             // 
@@ -293,8 +319,8 @@ namespace WPELibrary
             // 
             // tlSend
             // 
-            this.tlSend.Name = "tlSend";
             resources.ApplyResources(this.tlSend, "tlSend");
+            this.tlSend.Name = "tlSend";
             // 
             // tlSend_CNT
             // 
@@ -323,15 +349,15 @@ namespace WPELibrary
             this.tlSplit4.Name = "tlSplit4";
             resources.ApplyResources(this.tlSplit4, "tlSplit4");
             // 
-            // tlCheck
+            // tlFilter
             // 
-            this.tlCheck.Name = "tlCheck";
-            resources.ApplyResources(this.tlCheck, "tlCheck");
+            this.tlFilter.Name = "tlFilter";
+            resources.ApplyResources(this.tlFilter, "tlFilter");
             // 
-            // tlCheck_CNT
+            // tlFilter_CNT
             // 
-            resources.ApplyResources(this.tlCheck_CNT, "tlCheck_CNT");
-            this.tlCheck_CNT.Name = "tlCheck_CNT";
+            resources.ApplyResources(this.tlFilter_CNT, "tlFilter_CNT");
+            this.tlFilter_CNT.Name = "tlFilter_CNT";
             // 
             // dgvSocketList
             // 
@@ -968,6 +994,7 @@ namespace WPELibrary
             this.tsslBitInfo});
             this.ssPacketData.Name = "ssPacketData";
             this.ssPacketData.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
+            this.ssPacketData.SizingGrip = false;
             // 
             // tsslPositionInfo
             // 
@@ -1300,6 +1327,127 @@ namespace WPELibrary
             this.bgwSearchPacketData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketData_DoWork);
             this.bgwSearchPacketData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketData_RunWorkerCompleted);
             // 
+            // ssProcessInfo
+            // 
+            this.ssProcessInfo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslProcessName,
+            this.toolStripStatusLabel1,
+            this.tsslWinsock});
+            resources.ApplyResources(this.ssProcessInfo, "ssProcessInfo");
+            this.ssProcessInfo.Name = "ssProcessInfo";
+            // 
+            // tsslProcessName
+            // 
+            this.tsslProcessName.Name = "tsslProcessName";
+            resources.ApplyResources(this.tsslProcessName, "tsslProcessName");
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
+            // 
+            // tsslWinsock
+            // 
+            this.tsslWinsock.Name = "tsslWinsock";
+            resources.ApplyResources(this.tsslWinsock, "tsslWinsock");
+            // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            resources.ApplyResources(this.toolStripStatusLabel2, "toolStripStatusLabel2");
+            // 
+            // tlSendTo
+            // 
+            resources.ApplyResources(this.tlSendTo, "tlSendTo");
+            this.tlSendTo.Name = "tlSendTo";
+            // 
+            // tlSendTo_CNT
+            // 
+            resources.ApplyResources(this.tlSendTo_CNT, "tlSendTo_CNT");
+            this.tlSendTo_CNT.Name = "tlSendTo_CNT";
+            // 
+            // toolStripStatusLabel5
+            // 
+            this.toolStripStatusLabel5.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            resources.ApplyResources(this.toolStripStatusLabel5, "toolStripStatusLabel5");
+            // 
+            // tlRecvFrom
+            // 
+            resources.ApplyResources(this.tlRecvFrom, "tlRecvFrom");
+            this.tlRecvFrom.Name = "tlRecvFrom";
+            // 
+            // tlRecvFrom_CNT
+            // 
+            resources.ApplyResources(this.tlRecvFrom_CNT, "tlRecvFrom_CNT");
+            this.tlRecvFrom_CNT.Name = "tlRecvFrom_CNT";
+            // 
+            // toolStripStatusLabel8
+            // 
+            this.toolStripStatusLabel8.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
+            resources.ApplyResources(this.toolStripStatusLabel8, "toolStripStatusLabel8");
+            // 
+            // tlWSASend
+            // 
+            resources.ApplyResources(this.tlWSASend, "tlWSASend");
+            this.tlWSASend.Name = "tlWSASend";
+            // 
+            // tlWSASend_CNT
+            // 
+            resources.ApplyResources(this.tlWSASend_CNT, "tlWSASend_CNT");
+            this.tlWSASend_CNT.Name = "tlWSASend_CNT";
+            // 
+            // toolStripStatusLabel11
+            // 
+            this.toolStripStatusLabel11.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel11.Name = "toolStripStatusLabel11";
+            resources.ApplyResources(this.toolStripStatusLabel11, "toolStripStatusLabel11");
+            // 
+            // tlWSARecv
+            // 
+            resources.ApplyResources(this.tlWSARecv, "tlWSARecv");
+            this.tlWSARecv.Name = "tlWSARecv";
+            // 
+            // tlWSARecv_CNT
+            // 
+            resources.ApplyResources(this.tlWSARecv_CNT, "tlWSARecv_CNT");
+            this.tlWSARecv_CNT.Name = "tlWSARecv_CNT";
+            // 
+            // toolStripStatusLabel14
+            // 
+            this.toolStripStatusLabel14.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel14.Name = "toolStripStatusLabel14";
+            resources.ApplyResources(this.toolStripStatusLabel14, "toolStripStatusLabel14");
+            // 
+            // tlWSASendTo
+            // 
+            resources.ApplyResources(this.tlWSASendTo, "tlWSASendTo");
+            this.tlWSASendTo.Name = "tlWSASendTo";
+            // 
+            // tlWSASendTo_CNT
+            // 
+            resources.ApplyResources(this.tlWSASendTo_CNT, "tlWSASendTo_CNT");
+            this.tlWSASendTo_CNT.Name = "tlWSASendTo_CNT";
+            // 
+            // toolStripStatusLabel17
+            // 
+            this.toolStripStatusLabel17.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel17.Name = "toolStripStatusLabel17";
+            resources.ApplyResources(this.toolStripStatusLabel17, "toolStripStatusLabel17");
+            // 
+            // tlWSARecvFrom
+            // 
+            resources.ApplyResources(this.tlWSARecvFrom, "tlWSARecvFrom");
+            this.tlWSARecvFrom.Name = "tlWSARecvFrom";
+            // 
+            // tlWSARecvFrom_CNT
+            // 
+            resources.ApplyResources(this.tlWSARecvFrom_CNT, "tlWSARecvFrom_CNT");
+            this.tlWSARecvFrom_CNT.Name = "tlWSARecvFrom_CNT";
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1311,8 +1459,8 @@ namespace WPELibrary
             this.Load += new System.EventHandler(this.DLL_Form_Load);
             this.tlpSocketForm.ResumeLayout(false);
             this.tlpSocketForm.PerformLayout();
-            this.ssStatusInfo.ResumeLayout(false);
-            this.ssStatusInfo.PerformLayout();
+            this.ssSocketList.ResumeLayout(false);
+            this.ssSocketList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.cmsSocketList.ResumeLayout(false);
             this.tlpParameter.ResumeLayout(false);
@@ -1349,6 +1497,8 @@ namespace WPELibrary
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.cmsLogList.ResumeLayout(false);
+            this.ssProcessInfo.ResumeLayout(false);
+            this.ssProcessInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1461,9 +1611,7 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripComboBox tscbEncoding;
         private System.Windows.Forms.ToolStripComboBox tscbPerLine;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator15;
-        private System.Windows.Forms.StatusStrip ssStatusInfo;
-        private System.Windows.Forms.ToolStripStatusLabel tlSystemInfo;
-        private System.Windows.Forms.ToolStripStatusLabel tlSplit0;
+        private System.Windows.Forms.StatusStrip ssSocketList;
         private System.Windows.Forms.ToolStripStatusLabel tlALL;
         private System.Windows.Forms.ToolStripStatusLabel tlALL_CNT;
         private System.Windows.Forms.ToolStripStatusLabel tlSplit1;
@@ -1476,8 +1624,8 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlRecv;
         private System.Windows.Forms.ToolStripStatusLabel tlRecv_CNT;
         private System.Windows.Forms.ToolStripStatusLabel tlSplit4;
-        private System.Windows.Forms.ToolStripStatusLabel tlCheck;
-        private System.Windows.Forms.ToolStripStatusLabel tlCheck_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel tlFilter;
+        private System.Windows.Forms.ToolStripStatusLabel tlFilter_CNT;
         private System.Windows.Forms.GroupBox gbHookButton_Search;
         private System.Windows.Forms.TableLayoutPanel tlpHookButton;
         private System.Windows.Forms.Button bCleanUp;
@@ -1492,5 +1640,27 @@ namespace WPELibrary
         private System.Windows.Forms.Button bSearchNext;
         private System.Windows.Forms.Button bSearch;
         private System.ComponentModel.BackgroundWorker bgwSearchPacketData;
+        private System.Windows.Forms.StatusStrip ssProcessInfo;
+        private System.Windows.Forms.ToolStripStatusLabel tsslProcessName;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel tsslWinsock;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
+        private System.Windows.Forms.ToolStripStatusLabel tlSendTo;
+        private System.Windows.Forms.ToolStripStatusLabel tlSendTo_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripStatusLabel tlRecvFrom;
+        private System.Windows.Forms.ToolStripStatusLabel tlRecvFrom_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSASend;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSASend_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel11;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSARecv;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSARecv_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel14;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSASendTo;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSASendTo_CNT;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel17;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSARecvFrom;
+        private System.Windows.Forms.ToolStripStatusLabel tlWSARecvFrom_CNT;
     }
 }

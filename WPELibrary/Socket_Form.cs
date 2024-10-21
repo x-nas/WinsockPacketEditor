@@ -75,16 +75,29 @@ namespace WPELibrary
         {
             try
             {  
-                string sInjectInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + " {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
-                this.tlSystemInfo.Text = sInjectInfo;
+                string sProcessInfo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + string.Format(" {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
+                this.tsslProcessName.Text = sProcessInfo;
+
+                Socket_Operation.InitProcessWinSockSupport();
+                string sWinSock = "WinSock";
+                if (Socket_Cache.Support_WS1)
+                {
+                    sWinSock += " 1.1";
+                }
+
+                if (Socket_Cache.Support_WS2)
+                {
+                    sWinSock += " 2.0";
+                }
+                this.tsslWinsock.Text =  sWinSock;
 
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
-                this.tSocketInfo.Enabled = true;                
-
+                this.tSocketInfo.Enabled = true;
+                
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(FilterMAXNum);
 
@@ -96,7 +109,7 @@ namespace WPELibrary
                 tscbPerLine.SelectedIndex = 0;
                 tsslPositionInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine);
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sInjectInfo);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessInfo + " " + sWinSock);
             }
             catch (Exception ex)
             {
@@ -276,11 +289,29 @@ namespace WPELibrary
         {
             try
             {
-                this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
-                this.tlALL_CNT.Text = (Socket_Cache.SocketQueue.Recv_CNT + Socket_Cache.SocketQueue.Send_CNT).ToString();
-                this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
-                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();                
-                this.tlCheck_CNT.Text = Socket_Cache.SocketQueue.Filter_CNT.ToString();
+                int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
+                int iFilter_CNT = Socket_Cache.SocketQueue.Filter_CNT;
+                int iSend_CNT = Socket_Cache.SocketQueue.Send_CNT;
+                int iRecv_CNT = Socket_Cache.SocketQueue.Recv_CNT;
+                int iSendTo_CNT = Socket_Cache.SocketQueue.SendTo_CNT;
+                int iRecvFrom_CNT = Socket_Cache.SocketQueue.RecvFrom_CNT;
+                int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
+                int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
+                int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
+                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
+                int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
+
+                this.tlALL_CNT.Text = iAll_CNT.ToString();
+                this.tlQueue_CNT.Text = iQueue_CNT.ToString();
+                this.tlSend_CNT.Text = iSend_CNT.ToString();
+                this.tlRecv_CNT.Text = iRecv_CNT.ToString();
+                this.tlSendTo_CNT.Text = iSendTo_CNT.ToString();
+                this.tlRecvFrom_CNT.Text = iRecvFrom_CNT.ToString();
+                this.tlWSASend_CNT.Text = iWSASend_CNT.ToString();
+                this.tlWSARecv_CNT.Text = iWSARecv_CNT.ToString();
+                this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
+                this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
+                this.tlFilter_CNT.Text = iFilter_CNT.ToString();
 
                 this.dgvFilterList.Refresh();
 

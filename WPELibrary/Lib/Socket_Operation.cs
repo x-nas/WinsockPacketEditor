@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Data;
 using System.Linq;
+using System.Diagnostics;
 
 namespace WPELibrary.Lib
 {   
@@ -14,23 +15,7 @@ namespace WPELibrary.Lib
     {        
         public static bool bDoLog = true;
         public static DataTable dtSearchFrom = new DataTable();
-        public static DataTable dtPacketFormat = new DataTable();         
-
-        #region//ws2_32.dll API        
-
-        [DllImport("ws2_32.dll")]
-        private static extern int getsockname(int s, ref Socket_Cache.SocketPacket.sockaddr Address, ref int namelen);
-
-        [DllImport("ws2_32.dll")]
-        private static extern int getpeername(int s, ref Socket_Cache.SocketPacket.sockaddr Address, ref int namelen);
-
-        [DllImport("ws2_32.dll")]
-        private static extern IntPtr inet_ntoa(Socket_Cache.SocketPacket.in_addr a);
-
-        [DllImport("ws2_32.dll")]
-        private static extern ushort ntohs(ushort netshort);
-
-        #endregion
+        public static DataTable dtPacketFormat = new DataTable();
 
         #region//数据格式转换
 
@@ -249,7 +234,41 @@ namespace WPELibrary.Lib
                 return null;
             }
         }
-        #endregion    
+        #endregion
+
+        #endregion
+
+        #region//初始化进程支持的Winsock版本
+
+        public static void InitProcessWinSockSupport()
+        {
+            try
+            {
+                Socket_Cache.Support_WS1 = false;
+                Socket_Cache.Support_WS2 = false;
+
+                ProcessModuleCollection modules = Process.GetCurrentProcess().Modules;
+
+                foreach (ProcessModule module in modules)
+                {
+                    string sModuleName = module.ModuleName;
+
+                    if (sModuleName.Equals(WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Socket_Cache.Support_WS1 = true;                        
+                    }
+
+                    if (sModuleName.Equals(WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Socket_Cache.Support_WS2 = true;                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion
 
@@ -317,7 +336,7 @@ namespace WPELibrary.Lib
                     case Socket_Cache.SocketPacket.SocketType.RecvFrom:                        
                         sIP_From = Socket_Operation.GetIP_ByAddr(pAddr);
                         sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        break;
+                        break;                    
                     case Socket_Cache.SocketPacket.SocketType.WSASend:                        
                         sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
                         sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
@@ -355,8 +374,8 @@ namespace WPELibrary.Lib
 
             try
             {
-                string sIP = Marshal.PtrToStringAnsi(inet_ntoa(saAddr.sin_addr));
-                string sPort = ntohs(saAddr.sin_port).ToString();
+                string sIP = Marshal.PtrToStringAnsi(WS2_32.inet_ntoa(saAddr.sin_addr));
+                string sPort = WS2_32.ntohs(saAddr.sin_port).ToString();
 
                 sReturn = sIP + ":" + sPort;
             }
@@ -380,15 +399,15 @@ namespace WPELibrary.Lib
                 switch (IPType)
                 {
                     case Socket_Cache.SocketPacket.IPType.From:
-                        getsockname(iSocket, ref saAddr, ref iAddrLen);
+                        WS2_32.getsockname(iSocket, ref saAddr, ref iAddrLen);
                         break;
                     case Socket_Cache.SocketPacket.IPType.To:
-                        getpeername(iSocket, ref saAddr, ref iAddrLen);
+                        WS2_32.getpeername(iSocket, ref saAddr, ref iAddrLen);
                         break;                    
                 }
 
-                string sIP = Marshal.PtrToStringAnsi(inet_ntoa(saAddr.sin_addr));
-                string sPort = ntohs(saAddr.sin_port).ToString();
+                string sIP = Marshal.PtrToStringAnsi(WS2_32.inet_ntoa(saAddr.sin_addr));
+                string sPort = WS2_32.ntohs(saAddr.sin_port).ToString();
 
                 sReturn = sIP + ":" + sPort;
             }

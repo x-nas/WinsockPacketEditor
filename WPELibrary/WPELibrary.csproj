@@ -68,6 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lib\Socket_BitInfo.cs" />
+    <Compile Include="Lib\User32.cs" />
+    <Compile Include="Lib\WS2_32.cs" />
+    <Compile Include="Lib\WSock32.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
