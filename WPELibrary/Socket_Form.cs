@@ -12,7 +12,7 @@ namespace WPELibrary
 {
     public partial class Socket_Form : Form
     {
-        private WinSockHook ws = new WinSockHook();    
+        private WinSockHook ws = new WinSockHook();
 
         private int Select_Index = -1;
         private int Search_Index = -1;
@@ -76,11 +76,16 @@ namespace WPELibrary
         private void InitSocketForm()
         {
             try
-            {  
-                string sProcessInfo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + string.Format(" {0} [{1}]", Process.GetCurrentProcess().ProcessName, RemoteHooking.GetCurrentProcessId());
-                this.tsslProcessName.Text = sProcessInfo;
+            {
+                Process pProcess = Process.GetCurrentProcess();
+                Socket_Operation.InitProcessWinSockSupport();                
 
-                Socket_Operation.InitProcessWinSockSupport();
+                string sProcessName = string.Format("{0}{1} [{2}]", MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20), pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());                                
+                this.tsslProcessName.Text = sProcessName;
+
+                string sProcessInfo = string.Format("{0} 句柄: {1}", pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                this.tsslProcessInfo.Text = sProcessInfo;
+
                 string sWinSock = "WinSock";
                 if (Socket_Cache.Support_WS1)
                 {
@@ -91,7 +96,7 @@ namespace WPELibrary
                 {
                     sWinSock += " 2.0";
                 }
-                this.tsslWinsock.Text =  sWinSock;
+                this.tsslWinSock.Text = sWinSock;                
 
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
@@ -109,9 +114,9 @@ namespace WPELibrary
                 tscbEncoding.Items.Add(defConverter);
                 tscbEncoding.Items.Add(ebcdicConverter);          
                 tscbEncoding.SelectedIndex = 0;
-                tscbPerLine.SelectedIndex = 0;                
+                tscbPerLine.SelectedIndex = 1;                
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessInfo + " " + sWinSock);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
             catch (Exception ex)
             {
@@ -224,6 +229,18 @@ namespace WPELibrary
                 this.Select_Index = -1;
                 this.dgvSocketList.Rows.Clear();
                 Socket_Cache.SocketQueue.ResetSocketQueue();
+
+                Socket_Cache.SocketQueue.Filter_CNT = 0;
+                Socket_Cache.SocketQueue.Send_CNT = 0;
+                Socket_Cache.SocketQueue.Recv_CNT = 0;
+                Socket_Cache.SocketQueue.SendTo_CNT = 0;
+                Socket_Cache.SocketQueue.RecvFrom_CNT = 0;
+                Socket_Cache.SocketQueue.WSASend_CNT = 0;
+                Socket_Cache.SocketQueue.WSARecv_CNT = 0;
+                Socket_Cache.SocketQueue.WSASendTo_CNT = 0;
+                Socket_Cache.SocketQueue.WSARecvFrom_CNT = 0;
+                Socket_Cache.SocketQueue.Total_SendBytes = 0;
+                Socket_Cache.SocketQueue.Total_RecvBytes = 0;
             }
             catch(Exception ex)
             {
@@ -322,6 +339,8 @@ namespace WPELibrary
                 int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
                 int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
                 int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
+                int iTotal_SendBytes = Socket_Cache.SocketQueue.Total_SendBytes;
+                int iTotal_RecvBytes = Socket_Cache.SocketQueue.Total_RecvBytes;
 
                 this.tlALL_CNT.Text = iAll_CNT.ToString();
                 this.tlQueue_CNT.Text = iQueue_CNT.ToString();
@@ -334,6 +353,7 @@ namespace WPELibrary
                 this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
                 this.tlFilter_CNT.Text = iFilter_CNT.ToString();
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());                
 
                 this.dgvFilterList.Refresh();
 
@@ -669,6 +689,7 @@ namespace WPELibrary
 
             if (Socket_Cache.DoSearch)
             {
+                this.bSearchNext.Focus();
                 this.SearchSocketListNext();
             }
         }

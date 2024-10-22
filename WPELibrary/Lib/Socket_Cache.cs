@@ -112,6 +112,8 @@ namespace WPELibrary.Lib
             public static int WSARecv_CNT = 0;
             public static int WSARecvFrom_CNT = 0;
             public static int Filter_CNT = 0;
+            public static int Total_SendBytes = 0;
+            public static int Total_RecvBytes = 0;
 
             public static Queue<Socket_PacketInfo> qSocket_PacketInfo = new Queue<Socket_PacketInfo>();
 
@@ -137,27 +139,35 @@ namespace WPELibrary.Lib
                             switch (stType)
                             {
                                 case Socket_Cache.SocketPacket.SocketType.Send:
-                                    SocketQueue.Send_CNT++;
+                                    Total_SendBytes += iResLen;
+                                    SocketQueue.Send_CNT++;                                    
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.SendTo:
+                                    Total_SendBytes += iResLen;
                                     SocketQueue.SendTo_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.Recv:
+                                    Total_RecvBytes += iResLen;
                                     SocketQueue.Recv_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.RecvFrom:
+                                    Total_RecvBytes += iResLen;
                                     SocketQueue.RecvFrom_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.WSASend:
+                                    Total_SendBytes += iResLen;
                                     SocketQueue.WSASend_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.WSASendTo:
+                                    Total_SendBytes += iResLen;
                                     SocketQueue.WSASendTo_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.WSARecv:
+                                    Total_RecvBytes += iResLen;
                                     SocketQueue.WSARecv_CNT++;
                                     break;
                                 case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
+                                    Total_RecvBytes += iResLen;
                                     SocketQueue.WSARecvFrom_CNT++;
                                     break;
                             }
@@ -186,11 +196,7 @@ namespace WPELibrary.Lib
             public static void ResetSocketQueue()
             {
                 try
-                {                    
-                    Filter_CNT = 0;
-                    Recv_CNT = 0;
-                    Send_CNT = 0;
-
+                {
                     qSocket_PacketInfo.Clear();
                 }
                 catch (Exception ex)

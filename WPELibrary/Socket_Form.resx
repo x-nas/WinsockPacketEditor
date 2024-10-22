@@ -567,7 +567,7 @@
     <value>3, 155</value>
   </data>
   <data name="dgvSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1178, 269</value>
+    <value>1178, 261</value>
   </data>
   <data name="dgvSocketList.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -1814,13 +1814,13 @@
     <value>NoControl</value>
   </data>
   <data name="lBits_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 0</value>
+    <value>53, 0</value>
   </data>
   <data name="lBits_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lBits_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lBits_Value.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -1859,7 +1859,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lBits.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lBits.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -1892,13 +1892,13 @@
     <value>NoControl</value>
   </data>
   <data name="lDouble_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 180</value>
+    <value>53, 180</value>
   </data>
   <data name="lDouble_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lDouble_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lDouble_Value.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -1937,7 +1937,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lDouble.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lDouble.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -1970,13 +1970,13 @@
     <value>NoControl</value>
   </data>
   <data name="lFloat_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 160</value>
+    <value>53, 160</value>
   </data>
   <data name="lFloat_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lFloat_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lFloat_Value.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -2015,7 +2015,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lFloat.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lFloat.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -2048,13 +2048,13 @@
     <value>NoControl</value>
   </data>
   <data name="lUInt64_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 140</value>
+    <value>53, 140</value>
   </data>
   <data name="lUInt64_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUInt64_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lUInt64_Value.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
@@ -2093,7 +2093,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUInt64.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lUInt64.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -2126,13 +2126,13 @@
     <value>NoControl</value>
   </data>
   <data name="lInt64_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 120</value>
+    <value>53, 120</value>
   </data>
   <data name="lInt64_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lInt64_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lInt64_Value.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -2171,7 +2171,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lInt64.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lInt64.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -2204,13 +2204,13 @@
     <value>NoControl</value>
   </data>
   <data name="lUInt32_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 100</value>
+    <value>53, 100</value>
   </data>
   <data name="lUInt32_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUInt32_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lUInt32_Value.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -2249,7 +2249,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUInt32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lUInt32.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -2282,13 +2282,13 @@
     <value>NoControl</value>
   </data>
   <data name="lInt32_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 80</value>
+    <value>53, 80</value>
   </data>
   <data name="lInt32_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lInt32_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lInt32_Value.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -2327,7 +2327,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lInt32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lInt32.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -2360,13 +2360,13 @@
     <value>NoControl</value>
   </data>
   <data name="lUShort_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 60</value>
+    <value>53, 60</value>
   </data>
   <data name="lUShort_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUShort_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lUShort_Value.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -2405,7 +2405,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lUShort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lUShort.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -2438,13 +2438,13 @@
     <value>NoControl</value>
   </data>
   <data name="lShort_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 40</value>
+    <value>53, 40</value>
   </data>
   <data name="lShort_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lShort_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lShort_Value.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -2483,7 +2483,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lShort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lShort.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -2516,13 +2516,13 @@
     <value>NoControl</value>
   </data>
   <data name="lByte_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lByte_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lByte_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 20</value>
+    <value>151, 20</value>
   </data>
   <data name="lByte_Value.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2561,7 +2561,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="lByte.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 20</value>
+    <value>53, 20</value>
   </data>
   <data name="lByte.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2588,13 +2588,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlpConversion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>753, 32</value>
+    <value>763, 32</value>
   </data>
   <data name="tlpConversion.RowCount" type="System.Int32, mscorlib">
     <value>11</value>
   </data>
   <data name="tlpConversion.Size" type="System.Drawing.Size, System.Drawing">
-    <value>214, 207</value>
+    <value>204, 199</value>
   </data>
   <data name="tlpConversion.TabIndex" type="System.Int32, mscorlib">
     <value>71</value>
@@ -2612,7 +2612,7 @@
     <value>0</value>
   </data>
   <data name="tlpConversion.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lBits_Value" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lBits" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lDouble_Value" Row="9" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lDouble" Row="9" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lFloat_Value" Row="8" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lFloat" Row="8" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64_Value" Row="7" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64" Row="7" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt64_Value" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt64" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32_Value" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt32_Value" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt32" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUShort_Value" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUShort" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lShort_Value" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lShort" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lByte_Value" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lByte" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,55,Percent,100" /&gt;&lt;Rows Styles="Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lBits_Value" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lBits" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lDouble_Value" Row="9" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lDouble" Row="9" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lFloat_Value" Row="8" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lFloat" Row="8" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64_Value" Row="7" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64" Row="7" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt64_Value" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt64" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32_Value" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt32_Value" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt32" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUShort_Value" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUShort" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lShort_Value" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lShort" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lByte_Value" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lByte" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="tsPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>804, 17</value>
@@ -2756,7 +2756,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tsPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>739, 25</value>
+    <value>749, 25</value>
   </data>
   <data name="tsPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2798,7 +2798,7 @@
     <value>3, 32</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>739, 207</value>
+    <value>749, 199</value>
   </data>
   <data name="hbPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2825,13 +2825,13 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="lPacketDataPosition.Location" type="System.Drawing.Point, System.Drawing">
-    <value>753, 3</value>
+    <value>763, 3</value>
   </data>
   <data name="lPacketDataPosition.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lPacketDataPosition.Size" type="System.Drawing.Size, System.Drawing">
-    <value>214, 23</value>
+    <value>204, 23</value>
   </data>
   <data name="lPacketDataPosition.TabIndex" type="System.Int32, mscorlib">
     <value>72</value>
@@ -2867,7 +2867,7 @@
     <value>2</value>
   </data>
   <data name="tlpHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>970, 242</value>
+    <value>970, 234</value>
   </data>
   <data name="tlpHexBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2885,7 +2885,7 @@
     <value>0</value>
   </data>
   <data name="tlpHexBox.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpConversion" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tsPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbPacketData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lPacketDataPosition" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,5,Absolute,220" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpConversion" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tsPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbPacketData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lPacketDataPosition" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,5,Absolute,210" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2900,7 +2900,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>970, 242</value>
+    <value>970, 234</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2924,7 +2924,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>970, 242</value>
+    <value>970, 234</value>
   </data>
   <data name="tpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -3056,7 +3056,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>978, 272</value>
+    <value>978, 264</value>
   </data>
   <data name="tcPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -3086,7 +3086,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>984, 275</value>
+    <value>984, 267</value>
   </data>
   <data name="tlpPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -3206,7 +3206,7 @@
     <value>3, 19</value>
   </data>
   <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 250</value>
+    <value>191, 242</value>
   </data>
   <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -3236,7 +3236,7 @@
     <value>3, 3, 0, 0</value>
   </data>
   <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 272</value>
+    <value>197, 264</value>
   </data>
   <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>67</value>
@@ -3269,7 +3269,7 @@
     <value>1</value>
   </data>
   <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 275</value>
+    <value>200, 267</value>
   </data>
   <data name="tlpFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>63</value>
@@ -3293,7 +3293,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpInformation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 427</value>
+    <value>0, 419</value>
   </data>
   <data name="tlpInformation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -3302,7 +3302,7 @@
     <value>1</value>
   </data>
   <data name="tlpInformation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 275</value>
+    <value>1184, 267</value>
   </data>
   <data name="tlpInformation.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -3337,17 +3337,41 @@
   <data name="toolStripStatusLabel1.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tsslWinsock.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsslProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 17</value>
+  </data>
+  <data name="tsslProcessInfo.Text" xml:space="preserve">
+    <value>ProcessInfo</value>
+  </data>
+  <data name="toolStripStatusLabel4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel4.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tsslWinSock.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 17</value>
   </data>
-  <data name="tsslWinsock.Text" xml:space="preserve">
+  <data name="tsslWinSock.Text" xml:space="preserve">
     <value>WinSock</value>
   </data>
+  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tsslTotalBytes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 17</value>
+  </data>
+  <data name="tsslTotalBytes.Text" xml:space="preserve">
+    <value>TotalBytes</value>
+  </data>
   <data name="ssProcessInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 702</value>
+    <value>3, 686</value>
   </data>
   <data name="ssProcessInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 0</value>
+    <value>3, 0, 3, 3</value>
   </data>
   <data name="ssProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
     <value>1178, 22</value>
@@ -3380,7 +3404,7 @@
     <value>5</value>
   </data>
   <data name="tlpSocketForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 724</value>
+    <value>1184, 711</value>
   </data>
   <data name="tlpSocketForm.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3451,7 +3475,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 724</value>
+    <value>1184, 711</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -10195,12 +10219,6 @@
   <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsslWinsock.Name" xml:space="preserve">
-    <value>tsslWinsock</value>
-  </data>
-  <data name="&gt;&gt;tsslWinsock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;bgwSocketList.Name" xml:space="preserve">
     <value>bgwSocketList</value>
   </data>
@@ -10242,6 +10260,36 @@
   </data>
   <data name="&gt;&gt;toolStripSeparator16.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslTotalBytes.Name" xml:space="preserve">
+    <value>tsslTotalBytes</value>
+  </data>
+  <data name="&gt;&gt;tsslTotalBytes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Name" xml:space="preserve">
+    <value>toolStripStatusLabel4</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslProcessInfo.Name" xml:space="preserve">
+    <value>tsslProcessInfo</value>
+  </data>
+  <data name="&gt;&gt;tsslProcessInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
+    <value>toolStripStatusLabel3</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslWinSock.Name" xml:space="preserve">
+    <value>tsslWinSock</value>
+  </data>
+  <data name="&gt;&gt;tsslWinSock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

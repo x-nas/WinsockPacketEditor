@@ -29,7 +29,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_17 = { "确定重置为上次保存时的数据吗?", "Are you sure to reset to the last saved data?" };
         public static string[] MutiLan_18 = { "确定保存当前数据吗?", "Are you sure to save the current data?" };
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
-        public static string[] MutiLan_20 = { "目标进程：", "Process: " };
+        public static string[] MutiLan_20 = { "目标进程: ", "Process: " };
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
@@ -40,8 +40,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
-        //public static string[] MutiLan_31 = { "过滤-封包长度, ", "Filter-SocketSize, " };
-        //public static string[] MutiLan_32 = { "过滤-套接字, ", "Filter-Socket, " };
+        public static string[] MutiLan_31 = { "已发送: {0} 字节  接收: {1} 字节", "Sent: {0} Bytes  Received: {1} Bytes" };
+        //public static string[] MutiLan_32 = { "总计接收 {0} 字节", "Total Recv {0} Bytes" };
         //public static string[] MutiLan_33 = { "过滤-IP地址, ", "Filter-IP Address, " };
         //public static string[] MutiLan_34 = { "过滤-封包内容, ", "Filter-Socket Packet, " };
         public static string[] MutiLan_35 = { "开始拦截！", "Start Intercepting!" };
