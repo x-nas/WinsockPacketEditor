@@ -8,6 +8,8 @@ namespace WPELibrary
 {
     public partial class Socket_FindForm : Form
     {
+        private bool isValid = false;
+
         #region//窗体初始化
 
         public Socket_FindForm()
@@ -42,7 +44,7 @@ namespace WPELibrary
                 {
                     byte[] bNew = new byte[0];
                     hexFind.ByteProvider = new DynamicByteProvider(bNew);
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -54,21 +56,11 @@ namespace WPELibrary
 
         #region//数据校验
 
-        private void txtFind_TextChanged(object sender, EventArgs e)
-        {
-            this.ValidateFind();
-        }
-
-        private void hexFind_ByteProviderChanged(object sender, EventArgs e)
-        {
-            this.ValidateFind();
-        }
-
         private void ValidateFind()
         {
             try
-            {
-                bool isValid = false;
+            {                
+                isValid = false;                               
 
                 if (rbString.Checked && txtFind.Text.Length > 0)
                 {
@@ -76,11 +68,9 @@ namespace WPELibrary
                 }
 
                 if (rbHex.Checked && hexFind.ByteProvider.Length > 0)
-                {
+                {                    
                     isValid = true;
-                }
-
-                this.btnOK.Enabled = isValid;
+                }                
             }
             catch (Exception ex)
             {
@@ -96,28 +86,37 @@ namespace WPELibrary
         {
             try
             {
-                if (rbString.Checked)
+                this.ValidateFind();
+
+                if (this.isValid)
                 {
-                    Socket_Cache.FindOptions.Type = FindType.Text;                    
+                    if (rbString.Checked)
+                    {
+                        Socket_Cache.FindOptions.Type = FindType.Text;
+                    }
+                    else
+                    {
+                        Socket_Cache.FindOptions.Type = FindType.Hex;
+                    }
+
+                    Socket_Cache.FindOptions.Text = txtFind.Text;
+                    Socket_Cache.FindOptions.MatchCase = chkMatchCase.Checked;
+
+                    DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
+
+                    if (dbp != null && dbp.Bytes.Count > 0)
+                    {
+                        Socket_Cache.FindOptions.Hex = dbp.Bytes.ToArray();
+                    }
+
+                    Socket_Cache.FindOptions.IsValid = true;
+                    Socket_Cache.DoSearch = true;
+                    this.Close();
                 }
                 else
                 {
-                    Socket_Cache.FindOptions.Type = FindType.Hex;                    
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_30));
                 }
-
-                Socket_Cache.FindOptions.Text = txtFind.Text;
-                Socket_Cache.FindOptions.MatchCase = chkMatchCase.Checked;
-
-                DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
-
-                if (dbp != null && dbp.Bytes.Count > 0)
-                {
-                    Socket_Cache.FindOptions.Hex = dbp.Bytes.ToArray();
-                }
-
-                Socket_Cache.FindOptions.IsValid = true;
-                Socket_Cache.DoSearch = true;
-                this.Close();
             }
             catch (Exception ex)
             {
@@ -172,7 +171,7 @@ namespace WPELibrary
                     this.txtFind.Enabled = false;
 
                     this.hexFind.Focus();
-                }
+                }                
             }
             catch (Exception ex)
             {

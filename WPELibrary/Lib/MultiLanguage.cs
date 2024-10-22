@@ -39,7 +39,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
-        //public static string[] MutiLan_30 = { "显示-接收自, ", "Show-RecvFrom, " };
+        public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         //public static string[] MutiLan_31 = { "过滤-封包长度, ", "Filter-SocketSize, " };
         //public static string[] MutiLan_32 = { "过滤-套接字, ", "Filter-Socket, " };
         //public static string[] MutiLan_33 = { "过滤-IP地址, ", "Filter-IP Address, " };

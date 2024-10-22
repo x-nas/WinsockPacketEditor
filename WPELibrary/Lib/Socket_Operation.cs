@@ -197,70 +197,12 @@ namespace WPELibrary.Lib
 
                     case EncodingFormat.UTF7:
                         sReturn = Encoding.UTF7.GetString(buffer);
-                        break;
-
-                    //case "ASCII":
-                    //    sFormat = Encoding.ASCII.GetString(buffer);
-                    //    break;
-
-                    //case "UNICODE":
-                    //    sFormat = Encoding.Unicode.GetString(buffer);
-                    //    break;
-
-
-
-                    //case "UTF-8":
-                    //    sFormat = Encoding.UTF8.GetString(buffer);
-                    //    break;
-
-                    //case "UTF-16-LE":
-                    //    sFormat = Encoding.Unicode.GetString(buffer);
-                    //    break;
-
-                    //case "UTF-16-BE":
-                    //    sFormat = Encoding.BigEndianUnicode.GetString(buffer);
-                    //    break;
-
-                    //case "UTF-32-LE":
-                    //    sFormat = Encoding.UTF32.GetString(buffer);
-                    //    break;
-
-                    //case "UTF-32-BE":
-                    //    byte[] copiedBuffer = new byte[buffer.Length];
-                    //    Array.Copy(buffer, copiedBuffer, buffer.Length);
-                    //    Array.Reverse(copiedBuffer);
-                    //    sFormat = Encoding.UTF32.GetString(copiedBuffer);
-                    //    break;
-
-                    
-
-                    //case "DEC":
-                    //    foreach (byte n in buffer)
-                    //    {
-                    //        sReturn += n.ToString("D") + " ";
-                    //    }
-                    //    sReturn = sReturn.Trim();
-                    //    break;
+                        break;                 
 
                     default:
                         sReturn = Encoding.Default.GetString(buffer);
                         break;
                 }
-
-                //if (!string.IsNullOrEmpty(sFormat) && string.IsNullOrEmpty(sReturn))
-                //{
-                //    foreach (char c in sFormat)
-                //    {
-                //        if ((int)c > 31)
-                //        {
-                //            sReturn += c.ToString();           
-                //        }
-                //        else
-                //        {
-                //            sReturn += ". ";
-                //        }                      
-                //    }
-                //}
             }
             catch (Exception ex)
             {

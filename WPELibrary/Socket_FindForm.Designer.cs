@@ -76,13 +76,11 @@
             this.hexFind.InfoForeColor = System.Drawing.Color.Empty;
             this.hexFind.Name = "hexFind";
             this.hexFind.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hexFind.ByteProviderChanged += new System.EventHandler(this.hexFind_ByteProviderChanged);
             // 
             // txtFind
             // 
             resources.ApplyResources(this.txtFind, "txtFind");
             this.txtFind.Name = "txtFind";
-            this.txtFind.TextChanged += new System.EventHandler(this.txtFind_TextChanged);
             // 
             // tlpLine
             // 
