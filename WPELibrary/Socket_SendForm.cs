@@ -104,7 +104,7 @@ namespace WPELibrary
                 this.txtSend_IP.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[0];
                 this.txtSend_Port.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[1];
 
-                string sData = Socket_Operation.ByteToString("HEX", Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
 
                 ShowSocketSendData(sData);
             }

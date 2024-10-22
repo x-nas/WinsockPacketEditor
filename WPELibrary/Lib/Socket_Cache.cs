@@ -61,20 +61,37 @@ namespace WPELibrary.Lib
 
             public enum SocketType
             {
-                Send = 1,
-                SendTo = 2,
-                Recv = 3,
-                RecvFrom = 4,                
-                WSASend = 5,
-                WSASendTo = 6,
-                WSARecv = 7,
-                WSARecvFrom = 8,
+                Send,
+                SendTo,
+                Recv,
+                RecvFrom,                
+                WSASend,
+                WSASendTo,
+                WSARecv,
+                WSARecvFrom,
             }
 
             public enum IPType
             {
-                From = 1,
-                To = 2,
+                From,
+                To,
+            }
+
+            public enum EncodingFormat
+            {
+                Char,
+                Byte,
+                Short,
+                UShort,
+                Int32,
+                UInt32,
+                Int64,
+                UInt64,
+                Float,
+                Double,
+                Bin,
+                Hex,
+                UTF7,
             }
 
             #endregion

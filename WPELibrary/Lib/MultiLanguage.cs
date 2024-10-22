@@ -33,12 +33,12 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
-        public static string[] MutiLan_24 = { "行 {0}  列 {1}", "Ln {0}  Col {1}" };
+        public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
         public static string[] MutiLan_25 = { "查找", "Find" };
         public static string[] MutiLan_26 = { "查找下一个", "Find Next" };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
-        //public static string[] MutiLan_29 = { "显示-接收, ", "Show-Recv, " };
+        public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
         //public static string[] MutiLan_30 = { "显示-接收自, ", "Show-RecvFrom, " };
         //public static string[] MutiLan_31 = { "过滤-封包长度, ", "Filter-SocketSize, " };
         //public static string[] MutiLan_32 = { "过滤-套接字, ", "Filter-Socket, " };

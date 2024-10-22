@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Data;
 using System.Linq;
 using System.Diagnostics;
+using System.Drawing;
+using static WPELibrary.Lib.Socket_Cache.SocketPacket;
 
 namespace WPELibrary.Lib
 {   
@@ -97,68 +99,85 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Byte转字符串
+        #region//Byte数组转字符串
 
-        public static string ByteToString(string EncodingFormat, byte[] buffer)
+        public static string BytesToString(EncodingFormat efFormat, byte[] buffer)
         {
             string sReturn = string.Empty;
 
             try
-            {
-                string sFormat = "";
-
-                switch (EncodingFormat)
+            {                
+                switch (efFormat)
                 {
-                    case "HEX":
-
-                        foreach (byte b in buffer)
+                    case EncodingFormat.Char:
+                        char c = Convert.ToChar(buffer[0]);
+                        if ((int)c > 31)
                         {
-                            sReturn += b.ToString("X2") + " ";
+                            sReturn = c.ToString();
                         }
-
-                        sReturn = sReturn.Trim();
                         break;
 
-                    case "ANSI":
-                        sFormat = Encoding.Default.GetString(buffer);
+                    case EncodingFormat.Byte:
+                        sReturn = buffer[0].ToString();
                         break;
 
-                    case "ASCII":
-                        sFormat = Encoding.ASCII.GetString(buffer);
+                    case EncodingFormat.Short:
+                        if (buffer.Length >= 2)
+                        {
+                            sReturn = BitConverter.ToInt16(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UNICODE":
-                        sFormat = Encoding.Unicode.GetString(buffer);
+                    case EncodingFormat.UShort:
+                        if (buffer.Length >= 2)
+                        {
+                            sReturn = BitConverter.ToUInt16(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-7":
-                        sFormat = Encoding.UTF7.GetString(buffer);
+                    case EncodingFormat.Int32:
+                        if (buffer.Length >= 4)
+                        {
+                            sReturn = BitConverter.ToInt32(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-8":
-                        sFormat = Encoding.UTF8.GetString(buffer);
+                    case EncodingFormat.UInt32:
+                        if (buffer.Length >= 4)
+                        {
+                            sReturn = BitConverter.ToUInt32(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-16-LE":
-                        sFormat = Encoding.Unicode.GetString(buffer);
+                    case EncodingFormat.Int64:
+                        if (buffer.Length >= 8)
+                        {
+                            sReturn = BitConverter.ToInt64(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-16-BE":
-                        sFormat = Encoding.BigEndianUnicode.GetString(buffer);
+                    case EncodingFormat.UInt64:
+                        if (buffer.Length >= 8)
+                        {
+                            sReturn = BitConverter.ToUInt64(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-32-LE":
-                        sFormat = Encoding.UTF32.GetString(buffer);
+                    case EncodingFormat.Float:
+                        if (buffer.Length >= 4)
+                        {
+                            sReturn = BitConverter.ToSingle(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "UTF-32-BE":
-                        byte[] copiedBuffer = new byte[buffer.Length];
-                        Array.Copy(buffer, copiedBuffer, buffer.Length);
-                        Array.Reverse(copiedBuffer);
-                        sFormat = Encoding.UTF32.GetString(copiedBuffer);
+                    case EncodingFormat.Double:
+                        if (buffer.Length >= 8)
+                        {
+                            sReturn = BitConverter.ToDouble(buffer, 0).ToString();
+                        }
                         break;
 
-                    case "BIN":
+                    case EncodingFormat.Bin:
                         foreach (byte b in buffer)
                         {
                             string strTemp = Convert.ToString(b, 2);
@@ -168,33 +187,80 @@ namespace WPELibrary.Lib
                         sReturn = sReturn.Trim();
                         break;
 
-                    case "DEC":
-                        foreach (byte n in buffer)
+                    case EncodingFormat.Hex:
+                        foreach (byte b in buffer)
                         {
-                            sReturn += n.ToString("D") + " ";
+                            sReturn += b.ToString("X2") + " ";
                         }
                         sReturn = sReturn.Trim();
                         break;
 
+                    case EncodingFormat.UTF7:
+                        sReturn = Encoding.UTF7.GetString(buffer);
+                        break;
+
+                    //case "ASCII":
+                    //    sFormat = Encoding.ASCII.GetString(buffer);
+                    //    break;
+
+                    //case "UNICODE":
+                    //    sFormat = Encoding.Unicode.GetString(buffer);
+                    //    break;
+
+
+
+                    //case "UTF-8":
+                    //    sFormat = Encoding.UTF8.GetString(buffer);
+                    //    break;
+
+                    //case "UTF-16-LE":
+                    //    sFormat = Encoding.Unicode.GetString(buffer);
+                    //    break;
+
+                    //case "UTF-16-BE":
+                    //    sFormat = Encoding.BigEndianUnicode.GetString(buffer);
+                    //    break;
+
+                    //case "UTF-32-LE":
+                    //    sFormat = Encoding.UTF32.GetString(buffer);
+                    //    break;
+
+                    //case "UTF-32-BE":
+                    //    byte[] copiedBuffer = new byte[buffer.Length];
+                    //    Array.Copy(buffer, copiedBuffer, buffer.Length);
+                    //    Array.Reverse(copiedBuffer);
+                    //    sFormat = Encoding.UTF32.GetString(copiedBuffer);
+                    //    break;
+
+                    
+
+                    //case "DEC":
+                    //    foreach (byte n in buffer)
+                    //    {
+                    //        sReturn += n.ToString("D") + " ";
+                    //    }
+                    //    sReturn = sReturn.Trim();
+                    //    break;
+
                     default:
-                        sFormat = Encoding.Default.GetString(buffer);
+                        sReturn = Encoding.Default.GetString(buffer);
                         break;
                 }
 
-                if (!string.IsNullOrEmpty(sFormat) && string.IsNullOrEmpty(sReturn))
-                {
-                    foreach (char c in sFormat)
-                    {
-                        if ((int)c > 31)
-                        {
-                            sReturn += c.ToString();           
-                        }
-                        else
-                        {
-                            sReturn += ". ";
-                        }                      
-                    }
-                }
+                //if (!string.IsNullOrEmpty(sFormat) && string.IsNullOrEmpty(sReturn))
+                //{
+                //    foreach (char c in sFormat)
+                //    {
+                //        if ((int)c > 31)
+                //        {
+                //            sReturn += c.ToString();           
+                //        }
+                //        else
+                //        {
+                //            sReturn += ". ";
+                //        }                      
+                //    }
+                //}
             }
             catch (Exception ex)
             {
@@ -484,11 +550,11 @@ namespace WPELibrary.Lib
                         bTemp[j] = bBuff[j];
                     }
 
-                    sReturn = Socket_Operation.ByteToString("HEX", bTemp) + " ...";
+                    sReturn = Socket_Operation.BytesToString(EncodingFormat.Hex, bTemp) + " ...";
                 }
                 else
                 {
-                    sReturn = Socket_Operation.ByteToString("HEX", bBuff);
+                    sReturn = Socket_Operation.BytesToString(EncodingFormat.Hex, bBuff);
                 }
             }
             catch (Exception ex)
@@ -535,6 +601,55 @@ namespace WPELibrary.Lib
             }
 
             return bByteBuff;
+        }
+
+        #endregion
+
+        #region//获取封包类型对应的标识图片
+
+        public static Image GetPacketTypeImg(Socket_Cache.SocketPacket.SocketType stType)
+        {
+            Image imgReturn = null;
+
+            try
+            {
+                switch (stType)
+                {
+                    case Socket_Cache.SocketPacket.SocketType.Send:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.Recv:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.SendTo:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.RecvFrom:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.WSASend:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.WSARecv:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.WSASendTo:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    default:
+                        imgReturn = Properties.Resources.Info16;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return imgReturn;
         }
 
         #endregion
@@ -689,7 +804,7 @@ namespace WPELibrary.Lib
             {
                 if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Packet))
                 {
-                    string sPacket = ByteToString("HEX", bBuffer);
+                    string sPacket = BytesToString(EncodingFormat.Hex, bBuffer);
 
                     string[] sPacketArr = Socket_Cache.txtCheck_Packet.Split(';');
 
@@ -737,7 +852,7 @@ namespace WPELibrary.Lib
 
         #region//搜索封包数据        
 
-        public static int SearchSocketList(string SearchType, int FromIndex, string SearchData, bool MatchCase)
+        public static int FindSocketList(EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
         {
             int iResult = -1;
 
@@ -754,7 +869,7 @@ namespace WPELibrary.Lib
                         for (int i = FromIndex; i < iListCNT; i++)
                         {
                             byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
-                            sSearch = ByteToString(SearchType, bSearch);
+                            sSearch = BytesToString(efFormat, bSearch);
 
                             if (!MatchCase)
                             {
@@ -871,7 +986,7 @@ namespace WPELibrary.Lib
                                 string sIPTo = Socket_Cache.SendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
                                 string sLen = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
                                 byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSocketSendList.Rows[i]["Bytes"];
-                                string sData = ByteToString("HEX", bBuffer);
+                                string sData = BytesToString(EncodingFormat.Hex, bBuffer);
 
                                 string sSave = sIndex + "|" + sNote + "|" + sSocket + "|" + sIPTo + "|" + sLen + "|" + sData;
 
@@ -1235,7 +1350,7 @@ namespace WPELibrary.Lib
                             string sTo = spi.PacketTo;
                             string sLen = spi.PacketLen.ToString();
                             byte[] bBuff = spi.PacketBuffer;
-                            string sData = ByteToString("HEX", bBuff);
+                            string sData = BytesToString(EncodingFormat.Hex, bBuff);
 
                             sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                             sw.WriteLine(sColValue);

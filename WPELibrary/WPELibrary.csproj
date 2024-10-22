@@ -139,6 +139,9 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Info16.png" />
+    <None Include="Resources\sent.png" />
+    <None Include="Resources\received.png" />
     <None Include="Resources\saveHS.png" />
     <None Include="Resources\PasteHS.png" />
     <None Include="Resources\FindNextHS.png" />

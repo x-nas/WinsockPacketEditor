@@ -6,6 +6,7 @@ using System.Reflection;
 using WPELibrary.Lib;
 using EasyHook;
 using Be.Windows.Forms;
+using static WPELibrary.Lib.Socket_Cache.SocketPacket;
 
 namespace WPELibrary
 {
@@ -43,6 +44,7 @@ namespace WPELibrary
             {                
                 this.InitSocketDGV();
                 this.InitSocketForm();
+                this.CleanUp_Conversion();
                 this.HexBox_ManageAbility();
             }
             catch (Exception ex)
@@ -97,7 +99,8 @@ namespace WPELibrary
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
                 this.tSocketInfo.Enabled = true;
-                
+                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
+
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(FilterMAXNum);
 
@@ -106,8 +109,7 @@ namespace WPELibrary
                 tscbEncoding.Items.Add(defConverter);
                 tscbEncoding.Items.Add(ebcdicConverter);          
                 tscbEncoding.SelectedIndex = 0;
-                tscbPerLine.SelectedIndex = 0;
-                tsslPositionInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine);
+                tscbPerLine.SelectedIndex = 0;                
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessInfo + " " + sWinSock);
             }
@@ -190,6 +192,29 @@ namespace WPELibrary
         {
             this.CleanUp_SocketList();
             this.CleanUp_HexBox();
+            this.CleanUp_Conversion();
+        }
+
+        private void CleanUp_Conversion()
+        {
+            try
+            {
+                this.lPacketDataPosition.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), 0, 0, 0);
+                this.lBits_Value.Text = string.Empty;
+                this.lByte_Value.Text = string.Empty;
+                this.lShort_Value.Text = string.Empty;
+                this.lUShort_Value.Text = string.Empty;
+                this.lInt32_Value.Text = string.Empty;
+                this.lUInt32_Value.Text = string.Empty;
+                this.lInt64_Value.Text = string.Empty;
+                this.lUInt64_Value.Text = string.Empty;
+                this.lFloat_Value.Text = string.Empty;
+                this.lDouble_Value.Text = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void CleanUp_SocketList()
@@ -219,11 +244,8 @@ namespace WPELibrary
 
                 hbPacketData.ByteProvider = null;
             }
-
-            this.tsslPositionInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), 0, 0);
-            this.tsslPacketLen.Text = "0 Bytes";
-            this.tsslBitInfo.Text = "";            
-
+            
+            this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
             this.HexBox_ManageAbility();
         }
 
@@ -397,7 +419,7 @@ namespace WPELibrary
                             Socket_FilterInfo.StartFrom FStartFrom = Socket_FilterInfo.StartFrom.Head;
                             int iFModifyCNT = 1;
                             byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
-                            string sData = Socket_Operation.ByteToString("HEX", bBuffer);
+                            string sData = Socket_Operation.BytesToString(EncodingFormat.Hex, bBuffer);
                             string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
                             int iFSearchLen = bBuffer.Length;
 
@@ -666,19 +688,22 @@ namespace WPELibrary
                     {
                         string sSearch_Text = string.Empty;
                         string sSearch_Type = string.Empty;
+
                         FindType fType = Socket_Cache.FindOptions.Type;
+
+                        EncodingFormat efFormat = new EncodingFormat();
 
                         switch (fType)
                         {
                             case FindType.Text:
-                                sSearch_Type = "UTF-7";
+                                efFormat = EncodingFormat.UTF7;
                                 sSearch_Text = Socket_Cache.FindOptions.Text;
                                 break;
 
                             case FindType.Hex:
-                                sSearch_Type = "HEX";
+                                efFormat = EncodingFormat.Hex;
                                 byte[] bSearch_Hex = Socket_Cache.FindOptions.Hex;
-                                sSearch_Text = Socket_Operation.ByteToString("HEX", bSearch_Hex);
+                                sSearch_Text = Socket_Operation.BytesToString(EncodingFormat.Hex, bSearch_Hex);
                                 break;
                         }
 
@@ -688,7 +713,7 @@ namespace WPELibrary
                             this.rbFromIndex.Checked = true;
                         }
 
-                        int iIndex = Socket_Operation.SearchSocketList(sSearch_Type, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
+                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -788,7 +813,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         private void Event_RecSocketPacket(Socket_PacketInfo spi)
         {
@@ -815,6 +840,23 @@ namespace WPELibrary
                     {
                         Socket_Cache.LogList.lstRecLog.Add(sli);
                     }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
+                {
+                    Socket_Cache.SocketPacket.SocketType stType = (Socket_Cache.SocketPacket.SocketType)dgvSocketList.Rows[e.RowIndex].Cells["cType"].Value;
+                    e.Value = Socket_Operation.GetPacketTypeImg(stType);
+                    e.FormattingApplied = true;
                 }
             }
             catch (Exception ex)
@@ -965,11 +1007,11 @@ namespace WPELibrary
         {
             if (this.hbPacketData.ByteProvider == null)
             {
-                this.tsslPacketLen.Text = "0 Bytes";
+                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
             }
             else
             {
-                this.tsslPacketLen.Text = this.hbPacketData.ByteProvider.Length.ToString() + " Bytes";
+                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), this.hbPacketData.ByteProvider.Length);
             }
         }
 
@@ -977,26 +1019,51 @@ namespace WPELibrary
         {
             try
             {
-                this.tsslPositionInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine);
-
                 string bitPresentation = string.Empty;
+                string sConversion = string.Empty;                
 
-                byte? currentByte = hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > hbPacketData.SelectionStart
-                    ? hbPacketData.ByteProvider.ReadByte(hbPacketData.SelectionStart)
-                    : (byte?)null;
-
-                Socket_BitInfo bitInfo = currentByte != null ? new Socket_BitInfo((byte)currentByte, hbPacketData.SelectionStart) : null;
-
-                if (bitInfo != null)
+                if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > hbPacketData.SelectionStart)
                 {
-                    byte currentByteNotNull = (byte)currentByte;
-                    bitPresentation = string.Format("Bits of Byte {0}: {1}"
-                        , hbPacketData.SelectionStart
-                        , bitInfo.ToString()
-                        );
-                }
+                    byte bSelected = hbPacketData.ByteProvider.ReadByte(hbPacketData.SelectionStart);
 
-                this.tsslBitInfo.Text = bitPresentation;             
+                    Socket_BitInfo bitInfo = new Socket_BitInfo(bSelected, hbPacketData.SelectionStart);
+
+                    if (bitInfo != null)
+                    {
+                        long start = hbPacketData.SelectionStart;
+                        long selected = hbPacketData.SelectionLength;
+
+                        if (selected == 0 || selected > 8)
+                        {
+                            selected = 8;
+                        }
+
+                        long last = hbPacketData.ByteProvider.Length;
+                        long end = Math.Min(start + selected, last);
+
+                        byte[] buffer64 = new byte[8];
+                        int iBuffIndex = 0;
+
+                        for (long i = start; i < end; i++)
+                        {
+                            buffer64[iBuffIndex] = hbPacketData.ByteProvider.ReadByte(i);
+                            iBuffIndex++;
+                        }
+
+                        this.lPacketDataPosition.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine, hbPacketData.SelectionStart);
+
+                        this.lBits_Value.Text = bitInfo.ToString();                        
+                        this.lByte_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Byte, buffer64);
+                        this.lShort_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Short, buffer64);
+                        this.lUShort_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UShort, buffer64);
+                        this.lInt32_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Int32, buffer64);
+                        this.lUInt32_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UInt32, buffer64);
+                        this.lInt64_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Int64, buffer64);
+                        this.lUInt64_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UInt64, buffer64);
+                        this.lFloat_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Float, buffer64);
+                        this.lDouble_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Double, buffer64);
+                    }
+                }
             }
             catch (Exception ex)
             {

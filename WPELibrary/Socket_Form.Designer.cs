@@ -32,18 +32,20 @@ namespace WPELibrary
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlALL = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,15 +54,34 @@ namespace WPELibrary
             this.tlQueue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlQueue_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilter = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilter_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSend = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSend_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlRecv = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlRecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilter = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilter_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSendTo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlSendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlRecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlRecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASend = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASend_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel11 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecv = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel14 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASendTo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSASendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel17 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlWSARecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
+            this.cTypeImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -116,34 +137,32 @@ namespace WPELibrary
             this.bStartHook = new System.Windows.Forms.Button();
             this.bCleanUp = new System.Windows.Forms.Button();
             this.tlpInformation = new System.Windows.Forms.TableLayoutPanel();
-            this.gbFilterList = new System.Windows.Forms.GroupBox();
-            this.dgvFilterList = new System.Windows.Forms.DataGridView();
-            this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tsmiShowFilter = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiAddFilter = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSep3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiDeleteFilter = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiSaveFilterList = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiClearAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiLoadFilterList = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpPacketInfo = new System.Windows.Forms.TableLayoutPanel();
             this.tcPacketInfo = new System.Windows.Forms.TabControl();
             this.tpPacketData = new System.Windows.Forms.TabPage();
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
-            this.ssPacketData = new System.Windows.Forms.StatusStrip();
-            this.tsslPositionInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.split1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslPacketLen = new System.Windows.Forms.ToolStripStatusLabel();
-            this.split2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslBitInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpHexBox = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpConversion = new System.Windows.Forms.TableLayoutPanel();
+            this.lBits_Value = new System.Windows.Forms.Label();
+            this.lBits = new System.Windows.Forms.Label();
+            this.lDouble_Value = new System.Windows.Forms.Label();
+            this.lDouble = new System.Windows.Forms.Label();
+            this.lFloat_Value = new System.Windows.Forms.Label();
+            this.lFloat = new System.Windows.Forms.Label();
+            this.lUInt64_Value = new System.Windows.Forms.Label();
+            this.lUInt64 = new System.Windows.Forms.Label();
+            this.lInt64_Value = new System.Windows.Forms.Label();
+            this.lInt64 = new System.Windows.Forms.Label();
+            this.lUInt32_Value = new System.Windows.Forms.Label();
+            this.lUInt32 = new System.Windows.Forms.Label();
+            this.lInt32_Value = new System.Windows.Forms.Label();
+            this.lInt32 = new System.Windows.Forms.Label();
+            this.lUShort_Value = new System.Windows.Forms.Label();
+            this.lUShort = new System.Windows.Forms.Label();
+            this.lShort_Value = new System.Windows.Forms.Label();
+            this.lShort = new System.Windows.Forms.Label();
+            this.lByte_Value = new System.Windows.Forms.Label();
+            this.lByte = new System.Windows.Forms.Label();
             this.tsPacketData = new System.Windows.Forms.ToolStrip();
             this.tsbSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -164,7 +183,9 @@ namespace WPELibrary
             this.tscbEncoding = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.tscbPerLine = new System.Windows.Forms.ToolStripComboBox();
+            this.tslPacketLen = new System.Windows.Forms.ToolStripLabel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
+            this.lPacketDataPosition = new System.Windows.Forms.Label();
             this.tpSystemLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -174,33 +195,35 @@ namespace WPELibrary
             this.tslClearList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tslToExcel = new System.Windows.Forms.ToolStripMenuItem();
+            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
+            this.gbFilterList = new System.Windows.Forms.GroupBox();
+            this.dgvFilterList = new System.Windows.Forms.DataGridView();
+            this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiShowFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiDeleteFilter = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiSaveFilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssSep2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiClearAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiLoadFilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
+            this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslWinsock = new System.Windows.Forms.ToolStripStatusLabel();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchPacketData = new System.ComponentModel.BackgroundWorker();
-            this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
-            this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslWinsock = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSendTo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlSendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlRecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlRecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSASend = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSASend_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel11 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSARecv = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSARecv_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel14 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSASendTo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSASendTo_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel17 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSARecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlWSARecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -219,19 +242,20 @@ namespace WPELibrary
             this.tlpHookButton.SuspendLayout();
             this.tlpHookButton_Start.SuspendLayout();
             this.tlpInformation.SuspendLayout();
-            this.gbFilterList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
-            this.cmsFilterList.SuspendLayout();
             this.tlpPacketInfo.SuspendLayout();
             this.tcPacketInfo.SuspendLayout();
             this.tpPacketData.SuspendLayout();
             this.tlpPacketData.SuspendLayout();
-            this.ssPacketData.SuspendLayout();
             this.tlpHexBox.SuspendLayout();
+            this.tlpConversion.SuspendLayout();
             this.tsPacketData.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.cmsLogList.SuspendLayout();
+            this.tlpFilterList.SuspendLayout();
+            this.gbFilterList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
+            this.cmsFilterList.SuspendLayout();
             this.ssProcessInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -317,6 +341,22 @@ namespace WPELibrary
             this.tlSplit2.Name = "tlSplit2";
             resources.ApplyResources(this.tlSplit2, "tlSplit2");
             // 
+            // tlFilter
+            // 
+            this.tlFilter.Name = "tlFilter";
+            resources.ApplyResources(this.tlFilter, "tlFilter");
+            // 
+            // tlFilter_CNT
+            // 
+            resources.ApplyResources(this.tlFilter_CNT, "tlFilter_CNT");
+            this.tlFilter_CNT.Name = "tlFilter_CNT";
+            // 
+            // tlSplit4
+            // 
+            this.tlSplit4.ForeColor = System.Drawing.Color.DarkGray;
+            this.tlSplit4.Name = "tlSplit4";
+            resources.ApplyResources(this.tlSplit4, "tlSplit4");
+            // 
             // tlSend
             // 
             resources.ApplyResources(this.tlSend, "tlSend");
@@ -343,21 +383,101 @@ namespace WPELibrary
             resources.ApplyResources(this.tlRecv_CNT, "tlRecv_CNT");
             this.tlRecv_CNT.Name = "tlRecv_CNT";
             // 
-            // tlSplit4
+            // toolStripStatusLabel2
             // 
-            this.tlSplit4.ForeColor = System.Drawing.Color.DarkGray;
-            this.tlSplit4.Name = "tlSplit4";
-            resources.ApplyResources(this.tlSplit4, "tlSplit4");
+            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            resources.ApplyResources(this.toolStripStatusLabel2, "toolStripStatusLabel2");
             // 
-            // tlFilter
+            // tlSendTo
             // 
-            this.tlFilter.Name = "tlFilter";
-            resources.ApplyResources(this.tlFilter, "tlFilter");
+            resources.ApplyResources(this.tlSendTo, "tlSendTo");
+            this.tlSendTo.Name = "tlSendTo";
             // 
-            // tlFilter_CNT
+            // tlSendTo_CNT
             // 
-            resources.ApplyResources(this.tlFilter_CNT, "tlFilter_CNT");
-            this.tlFilter_CNT.Name = "tlFilter_CNT";
+            resources.ApplyResources(this.tlSendTo_CNT, "tlSendTo_CNT");
+            this.tlSendTo_CNT.Name = "tlSendTo_CNT";
+            // 
+            // toolStripStatusLabel5
+            // 
+            this.toolStripStatusLabel5.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
+            resources.ApplyResources(this.toolStripStatusLabel5, "toolStripStatusLabel5");
+            // 
+            // tlRecvFrom
+            // 
+            resources.ApplyResources(this.tlRecvFrom, "tlRecvFrom");
+            this.tlRecvFrom.Name = "tlRecvFrom";
+            // 
+            // tlRecvFrom_CNT
+            // 
+            resources.ApplyResources(this.tlRecvFrom_CNT, "tlRecvFrom_CNT");
+            this.tlRecvFrom_CNT.Name = "tlRecvFrom_CNT";
+            // 
+            // toolStripStatusLabel8
+            // 
+            this.toolStripStatusLabel8.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
+            resources.ApplyResources(this.toolStripStatusLabel8, "toolStripStatusLabel8");
+            // 
+            // tlWSASend
+            // 
+            resources.ApplyResources(this.tlWSASend, "tlWSASend");
+            this.tlWSASend.Name = "tlWSASend";
+            // 
+            // tlWSASend_CNT
+            // 
+            resources.ApplyResources(this.tlWSASend_CNT, "tlWSASend_CNT");
+            this.tlWSASend_CNT.Name = "tlWSASend_CNT";
+            // 
+            // toolStripStatusLabel11
+            // 
+            this.toolStripStatusLabel11.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel11.Name = "toolStripStatusLabel11";
+            resources.ApplyResources(this.toolStripStatusLabel11, "toolStripStatusLabel11");
+            // 
+            // tlWSARecv
+            // 
+            resources.ApplyResources(this.tlWSARecv, "tlWSARecv");
+            this.tlWSARecv.Name = "tlWSARecv";
+            // 
+            // tlWSARecv_CNT
+            // 
+            resources.ApplyResources(this.tlWSARecv_CNT, "tlWSARecv_CNT");
+            this.tlWSARecv_CNT.Name = "tlWSARecv_CNT";
+            // 
+            // toolStripStatusLabel14
+            // 
+            this.toolStripStatusLabel14.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel14.Name = "toolStripStatusLabel14";
+            resources.ApplyResources(this.toolStripStatusLabel14, "toolStripStatusLabel14");
+            // 
+            // tlWSASendTo
+            // 
+            resources.ApplyResources(this.tlWSASendTo, "tlWSASendTo");
+            this.tlWSASendTo.Name = "tlWSASendTo";
+            // 
+            // tlWSASendTo_CNT
+            // 
+            resources.ApplyResources(this.tlWSASendTo_CNT, "tlWSASendTo_CNT");
+            this.tlWSASendTo_CNT.Name = "tlWSASendTo_CNT";
+            // 
+            // toolStripStatusLabel17
+            // 
+            this.toolStripStatusLabel17.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel17.Name = "toolStripStatusLabel17";
+            resources.ApplyResources(this.toolStripStatusLabel17, "toolStripStatusLabel17");
+            // 
+            // tlWSARecvFrom
+            // 
+            resources.ApplyResources(this.tlWSARecvFrom, "tlWSARecvFrom");
+            this.tlWSARecvFrom.Name = "tlWSARecvFrom";
+            // 
+            // tlWSARecvFrom_CNT
+            // 
+            resources.ApplyResources(this.tlWSARecvFrom_CNT, "tlWSARecvFrom_CNT");
+            this.tlWSARecvFrom_CNT.Name = "tlWSARecvFrom_CNT";
             // 
             // dgvSocketList
             // 
@@ -375,6 +495,7 @@ namespace WPELibrary
             this.dgvSocketList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvSocketList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSocketList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cTypeImg,
             this.cIndex,
             this.cType,
             this.cSocket,
@@ -387,20 +508,33 @@ namespace WPELibrary
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
             this.dgvSocketList.RowTemplate.Height = 23;
             this.dgvSocketList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvSocketList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSocketList_CellFormatting);
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgvSocketInfo_SelectionChanged);
+            // 
+            // cTypeImg
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cTypeImg, "cTypeImg");
+            this.cTypeImg.Image = global::WPELibrary.Properties.Resources.Info16;
+            this.cTypeImg.Name = "cTypeImg";
+            this.cTypeImg.ReadOnly = true;
+            this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // cIndex
             // 
             this.cIndex.DataPropertyName = "PacketIndex";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIndex.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIndex.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.cIndex, "cIndex");
             this.cIndex.Name = "cIndex";
             this.cIndex.ReadOnly = true;
@@ -409,8 +543,8 @@ namespace WPELibrary
             // cType
             // 
             this.cType.DataPropertyName = "PacketType";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(this.cType, "cType");
             this.cType.Name = "cType";
             this.cType.ReadOnly = true;
@@ -419,8 +553,8 @@ namespace WPELibrary
             // cSocket
             // 
             this.cSocket.DataPropertyName = "PacketSocket";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.cSocket, "cSocket");
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
@@ -429,8 +563,8 @@ namespace WPELibrary
             // cFrom
             // 
             this.cFrom.DataPropertyName = "PacketFrom";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cFrom, "cFrom");
             this.cFrom.Name = "cFrom";
             this.cFrom.ReadOnly = true;
@@ -439,8 +573,8 @@ namespace WPELibrary
             // cTo
             // 
             this.cTo.DataPropertyName = "PacketTo";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cTo.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cTo.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.cTo, "cTo");
             this.cTo.Name = "cTo";
             this.cTo.ReadOnly = true;
@@ -449,8 +583,8 @@ namespace WPELibrary
             // cLen
             // 
             this.cLen.DataPropertyName = "PacketLen";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(this.cLen, "cLen");
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
@@ -816,142 +950,9 @@ namespace WPELibrary
             // tlpInformation
             // 
             resources.ApplyResources(this.tlpInformation, "tlpInformation");
-            this.tlpInformation.Controls.Add(this.gbFilterList, 0, 0);
             this.tlpInformation.Controls.Add(this.tlpPacketInfo, 1, 0);
+            this.tlpInformation.Controls.Add(this.tlpFilterList, 0, 0);
             this.tlpInformation.Name = "tlpInformation";
-            // 
-            // gbFilterList
-            // 
-            this.gbFilterList.Controls.Add(this.dgvFilterList);
-            resources.ApplyResources(this.gbFilterList, "gbFilterList");
-            this.gbFilterList.Name = "gbFilterList";
-            this.gbFilterList.TabStop = false;
-            // 
-            // dgvFilterList
-            // 
-            this.dgvFilterList.AllowUserToAddRows = false;
-            this.dgvFilterList.AllowUserToDeleteRows = false;
-            this.dgvFilterList.AllowUserToResizeColumns = false;
-            this.dgvFilterList.AllowUserToResizeRows = false;
-            this.dgvFilterList.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dgvFilterList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvFilterList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
-            this.dgvFilterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFilterList.ColumnHeadersVisible = false;
-            this.dgvFilterList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cIsCheck,
-            this.cFNum,
-            this.cFName});
-            this.dgvFilterList.ContextMenuStrip = this.cmsFilterList;
-            resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
-            this.dgvFilterList.MultiSelect = false;
-            this.dgvFilterList.Name = "dgvFilterList";
-            this.dgvFilterList.RowHeadersVisible = false;
-            this.dgvFilterList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dgvFilterList.RowTemplate.Height = 25;
-            this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
-            // 
-            // cIsCheck
-            // 
-            this.cIsCheck.DataPropertyName = "IsCheck";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.NullValue = false;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle9;
-            this.cIsCheck.FalseValue = "false";
-            resources.ApplyResources(this.cIsCheck, "cIsCheck");
-            this.cIsCheck.Name = "cIsCheck";
-            this.cIsCheck.TrueValue = "true";
-            // 
-            // cFNum
-            // 
-            this.cFNum.DataPropertyName = "FNum";
-            resources.ApplyResources(this.cFNum, "cFNum");
-            this.cFNum.Name = "cFNum";
-            this.cFNum.ReadOnly = true;
-            // 
-            // cFName
-            // 
-            this.cFName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cFName.DataPropertyName = "FName";
-            resources.ApplyResources(this.cFName, "cFName");
-            this.cFName.Name = "cFName";
-            this.cFName.ReadOnly = true;
-            // 
-            // cmsFilterList
-            // 
-            this.cmsFilterList.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.cmsFilterList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiShowFilter,
-            this.tssSep1,
-            this.tsmiAddFilter,
-            this.tssSep3,
-            this.tsmiDeleteFilter,
-            this.toolStripSeparator6,
-            this.tsmiSaveFilterList,
-            this.tssSep2,
-            this.tsmiClearAll,
-            this.toolStripSeparator7,
-            this.tsmiLoadFilterList});
-            this.cmsFilterList.Name = "cmsFilterList";
-            resources.ApplyResources(this.cmsFilterList, "cmsFilterList");
-            this.cmsFilterList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsFilterList_ItemClicked);
-            // 
-            // tsmiShowFilter
-            // 
-            this.tsmiShowFilter.Name = "tsmiShowFilter";
-            resources.ApplyResources(this.tsmiShowFilter, "tsmiShowFilter");
-            // 
-            // tssSep1
-            // 
-            this.tssSep1.Name = "tssSep1";
-            resources.ApplyResources(this.tssSep1, "tssSep1");
-            // 
-            // tsmiAddFilter
-            // 
-            this.tsmiAddFilter.Name = "tsmiAddFilter";
-            resources.ApplyResources(this.tsmiAddFilter, "tsmiAddFilter");
-            // 
-            // tssSep3
-            // 
-            this.tssSep3.Name = "tssSep3";
-            resources.ApplyResources(this.tssSep3, "tssSep3");
-            // 
-            // tsmiDeleteFilter
-            // 
-            this.tsmiDeleteFilter.Name = "tsmiDeleteFilter";
-            resources.ApplyResources(this.tsmiDeleteFilter, "tsmiDeleteFilter");
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
-            // 
-            // tsmiSaveFilterList
-            // 
-            this.tsmiSaveFilterList.Name = "tsmiSaveFilterList";
-            resources.ApplyResources(this.tsmiSaveFilterList, "tsmiSaveFilterList");
-            // 
-            // tssSep2
-            // 
-            this.tssSep2.Name = "tssSep2";
-            resources.ApplyResources(this.tssSep2, "tssSep2");
-            // 
-            // tsmiClearAll
-            // 
-            this.tsmiClearAll.Name = "tsmiClearAll";
-            resources.ApplyResources(this.tsmiClearAll, "tsmiClearAll");
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
-            // 
-            // tsmiLoadFilterList
-            // 
-            this.tsmiLoadFilterList.Name = "tsmiLoadFilterList";
-            resources.ApplyResources(this.tsmiLoadFilterList, "tsmiLoadFilterList");
             // 
             // tlpPacketInfo
             // 
@@ -977,58 +978,144 @@ namespace WPELibrary
             // 
             // tlpPacketData
             // 
+            this.tlpPacketData.BackColor = System.Drawing.SystemColors.Control;
             resources.ApplyResources(this.tlpPacketData, "tlpPacketData");
-            this.tlpPacketData.Controls.Add(this.ssPacketData, 0, 1);
             this.tlpPacketData.Controls.Add(this.tlpHexBox, 0, 0);
             this.tlpPacketData.Name = "tlpPacketData";
-            // 
-            // ssPacketData
-            // 
-            resources.ApplyResources(this.ssPacketData, "ssPacketData");
-            this.ssPacketData.ImageScalingSize = new System.Drawing.Size(28, 28);
-            this.ssPacketData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsslPositionInfo,
-            this.split1,
-            this.tsslPacketLen,
-            this.split2,
-            this.tsslBitInfo});
-            this.ssPacketData.Name = "ssPacketData";
-            this.ssPacketData.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
-            this.ssPacketData.SizingGrip = false;
-            // 
-            // tsslPositionInfo
-            // 
-            this.tsslPositionInfo.Name = "tsslPositionInfo";
-            resources.ApplyResources(this.tsslPositionInfo, "tsslPositionInfo");
-            // 
-            // split1
-            // 
-            this.split1.ForeColor = System.Drawing.Color.DarkGray;
-            this.split1.Name = "split1";
-            resources.ApplyResources(this.split1, "split1");
-            // 
-            // tsslPacketLen
-            // 
-            this.tsslPacketLen.Name = "tsslPacketLen";
-            resources.ApplyResources(this.tsslPacketLen, "tsslPacketLen");
-            // 
-            // split2
-            // 
-            this.split2.ForeColor = System.Drawing.Color.DarkGray;
-            this.split2.Name = "split2";
-            resources.ApplyResources(this.split2, "split2");
-            // 
-            // tsslBitInfo
-            // 
-            this.tsslBitInfo.Name = "tsslBitInfo";
-            resources.ApplyResources(this.tsslBitInfo, "tsslBitInfo");
             // 
             // tlpHexBox
             // 
             resources.ApplyResources(this.tlpHexBox, "tlpHexBox");
+            this.tlpHexBox.Controls.Add(this.tlpConversion, 2, 1);
             this.tlpHexBox.Controls.Add(this.tsPacketData, 0, 0);
             this.tlpHexBox.Controls.Add(this.hbPacketData, 0, 1);
+            this.tlpHexBox.Controls.Add(this.lPacketDataPosition, 2, 0);
             this.tlpHexBox.Name = "tlpHexBox";
+            // 
+            // tlpConversion
+            // 
+            resources.ApplyResources(this.tlpConversion, "tlpConversion");
+            this.tlpConversion.Controls.Add(this.lBits_Value, 1, 0);
+            this.tlpConversion.Controls.Add(this.lBits, 0, 0);
+            this.tlpConversion.Controls.Add(this.lDouble_Value, 1, 9);
+            this.tlpConversion.Controls.Add(this.lDouble, 0, 9);
+            this.tlpConversion.Controls.Add(this.lFloat_Value, 1, 8);
+            this.tlpConversion.Controls.Add(this.lFloat, 0, 8);
+            this.tlpConversion.Controls.Add(this.lUInt64_Value, 1, 7);
+            this.tlpConversion.Controls.Add(this.lUInt64, 0, 7);
+            this.tlpConversion.Controls.Add(this.lInt64_Value, 1, 6);
+            this.tlpConversion.Controls.Add(this.lInt64, 0, 6);
+            this.tlpConversion.Controls.Add(this.lUInt32_Value, 1, 5);
+            this.tlpConversion.Controls.Add(this.lUInt32, 0, 5);
+            this.tlpConversion.Controls.Add(this.lInt32_Value, 1, 4);
+            this.tlpConversion.Controls.Add(this.lInt32, 0, 4);
+            this.tlpConversion.Controls.Add(this.lUShort_Value, 1, 3);
+            this.tlpConversion.Controls.Add(this.lUShort, 0, 3);
+            this.tlpConversion.Controls.Add(this.lShort_Value, 1, 2);
+            this.tlpConversion.Controls.Add(this.lShort, 0, 2);
+            this.tlpConversion.Controls.Add(this.lByte_Value, 1, 1);
+            this.tlpConversion.Controls.Add(this.lByte, 0, 1);
+            this.tlpConversion.Name = "tlpConversion";
+            // 
+            // lBits_Value
+            // 
+            resources.ApplyResources(this.lBits_Value, "lBits_Value");
+            this.lBits_Value.Name = "lBits_Value";
+            // 
+            // lBits
+            // 
+            resources.ApplyResources(this.lBits, "lBits");
+            this.lBits.Name = "lBits";
+            // 
+            // lDouble_Value
+            // 
+            resources.ApplyResources(this.lDouble_Value, "lDouble_Value");
+            this.lDouble_Value.Name = "lDouble_Value";
+            // 
+            // lDouble
+            // 
+            resources.ApplyResources(this.lDouble, "lDouble");
+            this.lDouble.Name = "lDouble";
+            // 
+            // lFloat_Value
+            // 
+            resources.ApplyResources(this.lFloat_Value, "lFloat_Value");
+            this.lFloat_Value.Name = "lFloat_Value";
+            // 
+            // lFloat
+            // 
+            resources.ApplyResources(this.lFloat, "lFloat");
+            this.lFloat.Name = "lFloat";
+            // 
+            // lUInt64_Value
+            // 
+            resources.ApplyResources(this.lUInt64_Value, "lUInt64_Value");
+            this.lUInt64_Value.Name = "lUInt64_Value";
+            // 
+            // lUInt64
+            // 
+            resources.ApplyResources(this.lUInt64, "lUInt64");
+            this.lUInt64.Name = "lUInt64";
+            // 
+            // lInt64_Value
+            // 
+            resources.ApplyResources(this.lInt64_Value, "lInt64_Value");
+            this.lInt64_Value.Name = "lInt64_Value";
+            // 
+            // lInt64
+            // 
+            resources.ApplyResources(this.lInt64, "lInt64");
+            this.lInt64.Name = "lInt64";
+            // 
+            // lUInt32_Value
+            // 
+            resources.ApplyResources(this.lUInt32_Value, "lUInt32_Value");
+            this.lUInt32_Value.Name = "lUInt32_Value";
+            // 
+            // lUInt32
+            // 
+            resources.ApplyResources(this.lUInt32, "lUInt32");
+            this.lUInt32.Name = "lUInt32";
+            // 
+            // lInt32_Value
+            // 
+            resources.ApplyResources(this.lInt32_Value, "lInt32_Value");
+            this.lInt32_Value.Name = "lInt32_Value";
+            // 
+            // lInt32
+            // 
+            resources.ApplyResources(this.lInt32, "lInt32");
+            this.lInt32.Name = "lInt32";
+            // 
+            // lUShort_Value
+            // 
+            resources.ApplyResources(this.lUShort_Value, "lUShort_Value");
+            this.lUShort_Value.Name = "lUShort_Value";
+            // 
+            // lUShort
+            // 
+            resources.ApplyResources(this.lUShort, "lUShort");
+            this.lUShort.Name = "lUShort";
+            // 
+            // lShort_Value
+            // 
+            resources.ApplyResources(this.lShort_Value, "lShort_Value");
+            this.lShort_Value.Name = "lShort_Value";
+            // 
+            // lShort
+            // 
+            resources.ApplyResources(this.lShort, "lShort");
+            this.lShort.Name = "lShort";
+            // 
+            // lByte_Value
+            // 
+            resources.ApplyResources(this.lByte_Value, "lByte_Value");
+            this.lByte_Value.Name = "lByte_Value";
+            // 
+            // lByte
+            // 
+            resources.ApplyResources(this.lByte, "lByte");
+            this.lByte.Name = "lByte";
             // 
             // tsPacketData
             // 
@@ -1047,7 +1134,9 @@ namespace WPELibrary
             this.toolStripSeparator14,
             this.tscbEncoding,
             this.toolStripSeparator15,
-            this.tscbPerLine});
+            this.tscbPerLine,
+            this.toolStripSeparator16,
+            this.tslPacketLen});
             resources.ApplyResources(this.tsPacketData, "tsPacketData");
             this.tsPacketData.Name = "tsPacketData";
             // 
@@ -1187,6 +1276,11 @@ namespace WPELibrary
             this.tscbPerLine.Name = "tscbPerLine";
             this.tscbPerLine.SelectedIndexChanged += new System.EventHandler(this.tscbPerLine_SelectedIndexChanged);
             // 
+            // tslPacketLen
+            // 
+            resources.ApplyResources(this.tslPacketLen, "tslPacketLen");
+            this.tslPacketLen.Name = "tslPacketLen";
+            // 
             // hbPacketData
             // 
             this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -1213,6 +1307,11 @@ namespace WPELibrary
             this.hbPacketData.CurrentPositionInLineChanged += new System.EventHandler(this.hbPacketData_CurrentPositionInLineChanged);
             this.hbPacketData.Copied += new System.EventHandler(this.hbPacketData_Copied);
             this.hbPacketData.CopiedHex += new System.EventHandler(this.hbPacketData_CopiedHex);
+            // 
+            // lPacketDataPosition
+            // 
+            resources.ApplyResources(this.lPacketDataPosition, "lPacketDataPosition");
+            this.lPacketDataPosition.Name = "lPacketDataPosition";
             // 
             // tpSystemLog
             // 
@@ -1304,28 +1403,145 @@ namespace WPELibrary
             this.tslToExcel.Name = "tslToExcel";
             resources.ApplyResources(this.tslToExcel, "tslToExcel");
             // 
-            // bgwSocketList
+            // tlpFilterList
             // 
-            this.bgwSocketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketList_DoWork);
+            resources.ApplyResources(this.tlpFilterList, "tlpFilterList");
+            this.tlpFilterList.Controls.Add(this.gbFilterList, 0, 0);
+            this.tlpFilterList.Name = "tlpFilterList";
             // 
-            // tSocketInfo
+            // gbFilterList
             // 
-            this.tSocketInfo.Interval = 10;
-            this.tSocketInfo.Tick += new System.EventHandler(this.tSocketInfo_Tick);
+            this.gbFilterList.Controls.Add(this.dgvFilterList);
+            resources.ApplyResources(this.gbFilterList, "gbFilterList");
+            this.gbFilterList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterList.Name = "gbFilterList";
+            this.gbFilterList.TabStop = false;
             // 
-            // bgwLogList
+            // dgvFilterList
             // 
-            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
+            this.dgvFilterList.AllowUserToAddRows = false;
+            this.dgvFilterList.AllowUserToDeleteRows = false;
+            this.dgvFilterList.AllowUserToResizeColumns = false;
+            this.dgvFilterList.AllowUserToResizeRows = false;
+            this.dgvFilterList.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvFilterList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvFilterList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvFilterList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFilterList.ColumnHeadersVisible = false;
+            this.dgvFilterList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cIsCheck,
+            this.cFNum,
+            this.cFName});
+            this.dgvFilterList.ContextMenuStrip = this.cmsFilterList;
+            resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
+            this.dgvFilterList.MultiSelect = false;
+            this.dgvFilterList.Name = "dgvFilterList";
+            this.dgvFilterList.RowHeadersVisible = false;
+            this.dgvFilterList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dgvFilterList.RowTemplate.Height = 25;
+            this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
             // 
-            // bgwSendFrom
+            // cIsCheck
             // 
-            this.bgwSendFrom.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendFrom_DoWork);
-            this.bgwSendFrom.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendFrom_RunWorkerCompleted);
+            this.cIsCheck.DataPropertyName = "IsCheck";
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.NullValue = false;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle14;
+            this.cIsCheck.FalseValue = "false";
+            resources.ApplyResources(this.cIsCheck, "cIsCheck");
+            this.cIsCheck.Name = "cIsCheck";
+            this.cIsCheck.TrueValue = "true";
             // 
-            // bgwSearchPacketData
+            // cFNum
             // 
-            this.bgwSearchPacketData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketData_DoWork);
-            this.bgwSearchPacketData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketData_RunWorkerCompleted);
+            this.cFNum.DataPropertyName = "FNum";
+            resources.ApplyResources(this.cFNum, "cFNum");
+            this.cFNum.Name = "cFNum";
+            this.cFNum.ReadOnly = true;
+            // 
+            // cFName
+            // 
+            this.cFName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cFName.DataPropertyName = "FName";
+            resources.ApplyResources(this.cFName, "cFName");
+            this.cFName.Name = "cFName";
+            this.cFName.ReadOnly = true;
+            // 
+            // cmsFilterList
+            // 
+            this.cmsFilterList.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmsFilterList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowFilter,
+            this.tssSep1,
+            this.tsmiAddFilter,
+            this.tssSep3,
+            this.tsmiDeleteFilter,
+            this.toolStripSeparator6,
+            this.tsmiSaveFilterList,
+            this.tssSep2,
+            this.tsmiClearAll,
+            this.toolStripSeparator7,
+            this.tsmiLoadFilterList});
+            this.cmsFilterList.Name = "cmsFilterList";
+            resources.ApplyResources(this.cmsFilterList, "cmsFilterList");
+            this.cmsFilterList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsFilterList_ItemClicked);
+            // 
+            // tsmiShowFilter
+            // 
+            this.tsmiShowFilter.Name = "tsmiShowFilter";
+            resources.ApplyResources(this.tsmiShowFilter, "tsmiShowFilter");
+            // 
+            // tssSep1
+            // 
+            this.tssSep1.Name = "tssSep1";
+            resources.ApplyResources(this.tssSep1, "tssSep1");
+            // 
+            // tsmiAddFilter
+            // 
+            this.tsmiAddFilter.Name = "tsmiAddFilter";
+            resources.ApplyResources(this.tsmiAddFilter, "tsmiAddFilter");
+            // 
+            // tssSep3
+            // 
+            this.tssSep3.Name = "tssSep3";
+            resources.ApplyResources(this.tssSep3, "tssSep3");
+            // 
+            // tsmiDeleteFilter
+            // 
+            this.tsmiDeleteFilter.Name = "tsmiDeleteFilter";
+            resources.ApplyResources(this.tsmiDeleteFilter, "tsmiDeleteFilter");
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
+            // 
+            // tsmiSaveFilterList
+            // 
+            this.tsmiSaveFilterList.Name = "tsmiSaveFilterList";
+            resources.ApplyResources(this.tsmiSaveFilterList, "tsmiSaveFilterList");
+            // 
+            // tssSep2
+            // 
+            this.tssSep2.Name = "tssSep2";
+            resources.ApplyResources(this.tssSep2, "tssSep2");
+            // 
+            // tsmiClearAll
+            // 
+            this.tsmiClearAll.Name = "tsmiClearAll";
+            resources.ApplyResources(this.tsmiClearAll, "tsmiClearAll");
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
+            // 
+            // tsmiLoadFilterList
+            // 
+            this.tsmiLoadFilterList.Name = "tsmiLoadFilterList";
+            resources.ApplyResources(this.tsmiLoadFilterList, "tsmiLoadFilterList");
             // 
             // ssProcessInfo
             // 
@@ -1352,101 +1568,45 @@ namespace WPELibrary
             this.tsslWinsock.Name = "tsslWinsock";
             resources.ApplyResources(this.tsslWinsock, "tsslWinsock");
             // 
-            // toolStripStatusLabel2
+            // bgwSocketList
             // 
-            this.toolStripStatusLabel2.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            resources.ApplyResources(this.toolStripStatusLabel2, "toolStripStatusLabel2");
+            this.bgwSocketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketList_DoWork);
             // 
-            // tlSendTo
+            // tSocketInfo
             // 
-            resources.ApplyResources(this.tlSendTo, "tlSendTo");
-            this.tlSendTo.Name = "tlSendTo";
+            this.tSocketInfo.Interval = 10;
+            this.tSocketInfo.Tick += new System.EventHandler(this.tSocketInfo_Tick);
             // 
-            // tlSendTo_CNT
+            // bgwLogList
             // 
-            resources.ApplyResources(this.tlSendTo_CNT, "tlSendTo_CNT");
-            this.tlSendTo_CNT.Name = "tlSendTo_CNT";
+            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
             // 
-            // toolStripStatusLabel5
+            // bgwSendFrom
             // 
-            this.toolStripStatusLabel5.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            resources.ApplyResources(this.toolStripStatusLabel5, "toolStripStatusLabel5");
+            this.bgwSendFrom.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendFrom_DoWork);
+            this.bgwSendFrom.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendFrom_RunWorkerCompleted);
             // 
-            // tlRecvFrom
+            // bgwSearchPacketData
             // 
-            resources.ApplyResources(this.tlRecvFrom, "tlRecvFrom");
-            this.tlRecvFrom.Name = "tlRecvFrom";
+            this.bgwSearchPacketData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketData_DoWork);
+            this.bgwSearchPacketData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketData_RunWorkerCompleted);
             // 
-            // tlRecvFrom_CNT
+            // dataGridViewImageColumn1
             // 
-            resources.ApplyResources(this.tlRecvFrom_CNT, "tlRecvFrom_CNT");
-            this.tlRecvFrom_CNT.Name = "tlRecvFrom_CNT";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle15.NullValue")));
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle15;
+            resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
+            this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.ReadOnly = true;
+            this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
-            // toolStripStatusLabel8
+            // toolStripSeparator16
             // 
-            this.toolStripStatusLabel8.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
-            resources.ApplyResources(this.toolStripStatusLabel8, "toolStripStatusLabel8");
-            // 
-            // tlWSASend
-            // 
-            resources.ApplyResources(this.tlWSASend, "tlWSASend");
-            this.tlWSASend.Name = "tlWSASend";
-            // 
-            // tlWSASend_CNT
-            // 
-            resources.ApplyResources(this.tlWSASend_CNT, "tlWSASend_CNT");
-            this.tlWSASend_CNT.Name = "tlWSASend_CNT";
-            // 
-            // toolStripStatusLabel11
-            // 
-            this.toolStripStatusLabel11.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel11.Name = "toolStripStatusLabel11";
-            resources.ApplyResources(this.toolStripStatusLabel11, "toolStripStatusLabel11");
-            // 
-            // tlWSARecv
-            // 
-            resources.ApplyResources(this.tlWSARecv, "tlWSARecv");
-            this.tlWSARecv.Name = "tlWSARecv";
-            // 
-            // tlWSARecv_CNT
-            // 
-            resources.ApplyResources(this.tlWSARecv_CNT, "tlWSARecv_CNT");
-            this.tlWSARecv_CNT.Name = "tlWSARecv_CNT";
-            // 
-            // toolStripStatusLabel14
-            // 
-            this.toolStripStatusLabel14.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel14.Name = "toolStripStatusLabel14";
-            resources.ApplyResources(this.toolStripStatusLabel14, "toolStripStatusLabel14");
-            // 
-            // tlWSASendTo
-            // 
-            resources.ApplyResources(this.tlWSASendTo, "tlWSASendTo");
-            this.tlWSASendTo.Name = "tlWSASendTo";
-            // 
-            // tlWSASendTo_CNT
-            // 
-            resources.ApplyResources(this.tlWSASendTo_CNT, "tlWSASendTo_CNT");
-            this.tlWSASendTo_CNT.Name = "tlWSASendTo_CNT";
-            // 
-            // toolStripStatusLabel17
-            // 
-            this.toolStripStatusLabel17.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel17.Name = "toolStripStatusLabel17";
-            resources.ApplyResources(this.toolStripStatusLabel17, "toolStripStatusLabel17");
-            // 
-            // tlWSARecvFrom
-            // 
-            resources.ApplyResources(this.tlWSARecvFrom, "tlWSARecvFrom");
-            this.tlWSARecvFrom.Name = "tlWSARecvFrom";
-            // 
-            // tlWSARecvFrom_CNT
-            // 
-            resources.ApplyResources(this.tlWSARecvFrom_CNT, "tlWSARecvFrom_CNT");
-            this.tlWSARecvFrom_CNT.Name = "tlWSARecvFrom_CNT";
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            resources.ApplyResources(this.toolStripSeparator16, "toolStripSeparator16");
             // 
             // Socket_Form
             // 
@@ -1480,23 +1640,23 @@ namespace WPELibrary
             this.tlpHookButton.ResumeLayout(false);
             this.tlpHookButton_Start.ResumeLayout(false);
             this.tlpInformation.ResumeLayout(false);
-            this.gbFilterList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
-            this.cmsFilterList.ResumeLayout(false);
             this.tlpPacketInfo.ResumeLayout(false);
             this.tcPacketInfo.ResumeLayout(false);
             this.tpPacketData.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
-            this.tlpPacketData.PerformLayout();
-            this.ssPacketData.ResumeLayout(false);
-            this.ssPacketData.PerformLayout();
             this.tlpHexBox.ResumeLayout(false);
             this.tlpHexBox.PerformLayout();
+            this.tlpConversion.ResumeLayout(false);
+            this.tlpConversion.PerformLayout();
             this.tsPacketData.ResumeLayout(false);
             this.tsPacketData.PerformLayout();
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.cmsLogList.ResumeLayout(false);
+            this.tlpFilterList.ResumeLayout(false);
+            this.gbFilterList.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
+            this.cmsFilterList.ResumeLayout(false);
             this.ssProcessInfo.ResumeLayout(false);
             this.ssProcessInfo.PerformLayout();
             this.ResumeLayout(false);
@@ -1530,11 +1690,6 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
         private System.Windows.Forms.DataGridView dgvSocketList;
         private System.Windows.Forms.TableLayoutPanel tlpInformation;
-        private System.Windows.Forms.GroupBox gbFilterList;
-        private System.Windows.Forms.DataGridView dgvFilterList;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo;
         private System.Windows.Forms.TabControl tcPacketInfo;
         private System.Windows.Forms.TabPage tpSystemLog;
@@ -1574,23 +1729,10 @@ namespace WPELibrary
         private System.Windows.Forms.Timer tSocketInfo;
         private System.ComponentModel.BackgroundWorker bgwLogList;
         private System.ComponentModel.BackgroundWorker bgwSendFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
         private System.Windows.Forms.TabPage tpPacketData;
         private System.Windows.Forms.TableLayoutPanel tlpPacketData;
-        private System.Windows.Forms.StatusStrip ssPacketData;
-        private System.Windows.Forms.ToolStripStatusLabel tsslPositionInfo;
-        private System.Windows.Forms.ToolStripStatusLabel tsslPacketLen;
-        private System.Windows.Forms.ToolStripStatusLabel tsslBitInfo;
         private System.Windows.Forms.TableLayoutPanel tlpHexBox;
         private Be.Windows.Forms.HexBox hbPacketData;
-        private System.Windows.Forms.ToolStripStatusLabel split1;
-        private System.Windows.Forms.ToolStripStatusLabel split2;
         private System.Windows.Forms.ToolStrip tsPacketData;
         private System.Windows.Forms.ToolStripButton tsbSave;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
@@ -1662,5 +1804,44 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel17;
         private System.Windows.Forms.ToolStripStatusLabel tlWSARecvFrom;
         private System.Windows.Forms.ToolStripStatusLabel tlWSARecvFrom_CNT;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
+        private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterList;
+        private System.Windows.Forms.GroupBox gbFilterList;
+        private System.Windows.Forms.DataGridView dgvFilterList;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
+        private System.Windows.Forms.TableLayoutPanel tlpConversion;
+        private System.Windows.Forms.Label lDouble_Value;
+        private System.Windows.Forms.Label lDouble;
+        private System.Windows.Forms.Label lFloat_Value;
+        private System.Windows.Forms.Label lFloat;
+        private System.Windows.Forms.Label lUInt64_Value;
+        private System.Windows.Forms.Label lUInt64;
+        private System.Windows.Forms.Label lInt64_Value;
+        private System.Windows.Forms.Label lInt64;
+        private System.Windows.Forms.Label lUInt32_Value;
+        private System.Windows.Forms.Label lUInt32;
+        private System.Windows.Forms.Label lInt32_Value;
+        private System.Windows.Forms.Label lInt32;
+        private System.Windows.Forms.Label lUShort_Value;
+        private System.Windows.Forms.Label lUShort;
+        private System.Windows.Forms.Label lShort_Value;
+        private System.Windows.Forms.Label lShort;
+        private System.Windows.Forms.Label lByte_Value;
+        private System.Windows.Forms.Label lByte;
+        private System.Windows.Forms.ToolStripLabel tslPacketLen;
+        private System.Windows.Forms.Label lPacketDataPosition;
+        private System.Windows.Forms.Label lBits;
+        private System.Windows.Forms.Label lBits_Value;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator16;
     }
 }

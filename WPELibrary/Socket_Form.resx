@@ -122,7 +122,7 @@
     <value>1</value>
   </data>
   <metadata name="ssSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1034, 17</value>
+    <value>918, 17</value>
   </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ssSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -397,7 +397,7 @@
     <value>1, 0, 18, 0</value>
   </data>
   <data name="ssSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1033, 22</value>
+    <value>1178, 22</value>
   </data>
   <data name="ssSocketList.TabIndex" type="System.Int32, mscorlib">
     <value>70</value>
@@ -413,6 +413,32 @@
   </data>
   <data name="&gt;&gt;ssSocketList.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <metadata name="cTypeImg.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="dataGridViewCellStyle2.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEgoTGw8bGw8bGw8bGw8bGw8bGw8bG
+        w8bGw8bGw8bGw8bGw8bGw8YAAAAAAISChP///////////////////////////////////////////8bD
+        xgAAAAAAhIKE////////////////////////////////////////////xsPGAAAAAACEgoT/////////
+        ///////////////////////////////////Gw8YAAAAAAISChP//////////////////////////////
+        /////////////8bDxgAAAAAAhIKE////////////AAD/AAD/////////AAD/AAD/////////xsPGAAAA
+        AACEgoT///////////////8AAP8AAP8AAP8AAP/////////////Gw8YAAAAAAISChP//////////////
+        /////wAA/wAA/////////////////8bDxgAAAAAAhIKE////////////////AAD/AAD/AAD/AAD/////
+        ////////xsPGAAAAAACEgoT///////////8AAP8AAP////////8AAP8AAP/////////Gw8YAAAAAAISC
+        hP///////////////////////////////////////////8bDxgAAAAAAhIKE////////////////////
+        ////////////////////////xsPGAAAAAACEgoT/////////////////////////////////////////
+        ///Gw8YAAAAAAISChP///////////////////////////////////////////8bDxgAAAAAAhIKEhIKE
+        hIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEAAA=
+</value>
+  </data>
+  <data name="cTypeImg.HeaderText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="cTypeImg.Width" type="System.Int32, mscorlib">
+    <value>40</value>
   </data>
   <metadata name="cIndex.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -472,7 +498,7 @@
     <value>数据</value>
   </data>
   <metadata name="cmsSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>347, 17</value>
+    <value>231, 17</value>
   </metadata>
   <data name="tsmiSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 22</value>
@@ -541,7 +567,7 @@
     <value>3, 155</value>
   </data>
   <data name="dgvSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1033, 265</value>
+    <value>1178, 269</value>
   </data>
   <data name="dgvSocketList.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -682,7 +708,7 @@
     <value>126, 6</value>
   </data>
   <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 23</value>
+    <value>373, 23</value>
   </data>
   <data name="txtCheck_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -712,7 +738,7 @@
     <value>126, 39</value>
   </data>
   <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 23</value>
+    <value>373, 23</value>
   </data>
   <data name="txtCheck_IP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
@@ -742,7 +768,7 @@
     <value>126, 72</value>
   </data>
   <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 23</value>
+    <value>373, 23</value>
   </data>
   <data name="txtCheck_Packet.TabIndex" type="System.Int32, mscorlib">
     <value>48</value>
@@ -775,7 +801,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>365, 4</value>
+    <value>513, 4</value>
   </data>
   <data name="cbCheck_Size.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
@@ -811,7 +837,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
-    <value>367, 39</value>
+    <value>515, 39</value>
   </data>
   <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 23</value>
@@ -841,7 +867,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>367, 72</value>
+    <value>515, 72</value>
   </data>
   <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 23</value>
@@ -880,7 +906,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>467, 105</value>
+    <value>615, 105</value>
   </data>
   <data name="tlpFilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>42</value>
@@ -910,10 +936,10 @@
     <value>3, 3</value>
   </data>
   <data name="gbFilterSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
+    <value>3, 3, 0, 0</value>
   </data>
   <data name="gbFilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>473, 127</value>
+    <value>621, 127</value>
   </data>
   <data name="gbFilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -952,7 +978,7 @@
     <value>6, 78</value>
   </data>
   <data name="cbHook_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 21</value>
+    <value>104, 21</value>
   </data>
   <data name="cbHook_RecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -988,7 +1014,7 @@
     <value>6, 6</value>
   </data>
   <data name="cbHook_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 18</value>
+    <value>104, 18</value>
   </data>
   <data name="cbHook_Send.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1024,7 +1050,7 @@
     <value>6, 30</value>
   </data>
   <data name="cbHook_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 18</value>
+    <value>104, 18</value>
   </data>
   <data name="cbHook_SendTo.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1060,7 +1086,7 @@
     <value>6, 54</value>
   </data>
   <data name="cbHook_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 18</value>
+    <value>104, 18</value>
   </data>
   <data name="cbHook_Recv.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -1093,10 +1119,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSASend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>114, 6</value>
+    <value>116, 6</value>
   </data>
   <data name="cbHook_WSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 18</value>
+    <value>129, 18</value>
   </data>
   <data name="cbHook_WSASend.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -1129,10 +1155,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>114, 30</value>
+    <value>116, 30</value>
   </data>
   <data name="cbHook_WSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 18</value>
+    <value>129, 18</value>
   </data>
   <data name="cbHook_WSASendTo.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -1165,10 +1191,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>114, 54</value>
+    <value>116, 54</value>
   </data>
   <data name="cbHook_WSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 18</value>
+    <value>129, 18</value>
   </data>
   <data name="cbHook_WSARecv.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
@@ -1201,10 +1227,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>114, 78</value>
+    <value>116, 78</value>
   </data>
   <data name="cbHook_WSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 21</value>
+    <value>129, 21</value>
   </data>
   <data name="cbHook_WSARecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
@@ -1240,7 +1266,7 @@
     <value>4</value>
   </data>
   <data name="tlpHookType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 105</value>
+    <value>251, 105</value>
   </data>
   <data name="tlpHookType.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1264,13 +1290,13 @@
     <value>Fill</value>
   </data>
   <data name="gbHookType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>482, 3</value>
+    <value>627, 3</value>
   </data>
   <data name="gbHookType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
+    <value>3, 3, 0, 0</value>
   </data>
   <data name="gbHookType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 127</value>
+    <value>257, 127</value>
   </data>
   <data name="gbHookType.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -1306,7 +1332,7 @@
     <value>3, 32</value>
   </data>
   <data name="rbFromIndex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 21</value>
+    <value>99, 21</value>
   </data>
   <data name="rbFromIndex.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1339,7 +1365,7 @@
     <value>3, 3</value>
   </data>
   <data name="rbFromHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 21</value>
+    <value>99, 21</value>
   </data>
   <data name="rbFromHead.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1372,7 +1398,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pSearchSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 56</value>
+    <value>105, 56</value>
   </data>
   <data name="pSearchSocketList.TabIndex" type="System.Int32, mscorlib">
     <value>69</value>
@@ -1495,7 +1521,7 @@
     <value>3</value>
   </data>
   <data name="tlpSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 105</value>
+    <value>111, 105</value>
   </data>
   <data name="tlpSearch.TabIndex" type="System.Int32, mscorlib">
     <value>73</value>
@@ -1519,13 +1545,13 @@
     <value>Fill</value>
   </data>
   <data name="gbHookButton_Search.Location" type="System.Drawing.Point, System.Drawing">
-    <value>742, 3</value>
+    <value>887, 3</value>
   </data>
   <data name="gbHookButton_Search.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
+    <value>3, 3, 0, 0</value>
   </data>
   <data name="gbHookButton_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 127</value>
+    <value>117, 127</value>
   </data>
   <data name="gbHookButton_Search.TabIndex" type="System.Int32, mscorlib">
     <value>58</value>
@@ -1698,7 +1724,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpHookButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>862, 3</value>
+    <value>1007, 3</value>
   </data>
   <data name="tlpHookButton.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -1740,7 +1766,7 @@
     <value>1</value>
   </data>
   <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1039, 130</value>
+    <value>1184, 130</value>
   </data>
   <data name="tlpParameter.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1763,221 +1789,833 @@
   <data name="tlpInformation.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <metadata name="cIsCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cIsCheck.HeaderText" xml:space="preserve">
-    <value>开关</value>
-  </data>
-  <data name="cIsCheck.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <metadata name="cFNum.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cFNum.HeaderText" xml:space="preserve">
-    <value>序号</value>
-  </data>
-  <data name="cFNum.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cFNum.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <metadata name="cFName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cFName.HeaderText" xml:space="preserve">
-    <value>滤镜名称</value>
-  </data>
-  <metadata name="cmsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>238, 17</value>
-  </metadata>
-  <data name="tsmiShowFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiShowFilter.Text" xml:space="preserve">
-    <value>查看选中滤镜</value>
-  </data>
-  <data name="tssSep1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiAddFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiAddFilter.Text" xml:space="preserve">
-    <value>添加新滤镜</value>
-  </data>
-  <data name="tssSep3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiDeleteFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiDeleteFilter.Text" xml:space="preserve">
-    <value>删除选中滤镜</value>
-  </data>
-  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiSaveFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiSaveFilterList.Text" xml:space="preserve">
-    <value>保存此列表数据</value>
-  </data>
-  <data name="tssSep2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiClearAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiClearAll.Text" xml:space="preserve">
-    <value>清除所有滤镜</value>
-  </data>
-  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiLoadFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiLoadFilterList.Text" xml:space="preserve">
-    <value>加载滤镜列表</value>
-  </data>
-  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 166</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
-    <value>cmsFilterList</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 243</value>
-  </data>
-  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
-    <value>dgvFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 265</value>
-  </data>
-  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>61</value>
-  </data>
-  <data name="gbFilterList.Text" xml:space="preserve">
-    <value>[ 滤镜列表 ]</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
-    <value>tlpInformation</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="tlpPacketInfo.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="tlpPacketData.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <metadata name="ssPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <data name="ssPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpHexBox.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpConversion.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lBits_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lBits_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="ssPacketData.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Consolas, 9pt</value>
+  <data name="lBits_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="tsslPositionInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 17</value>
+  <data name="lBits_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="tsslPositionInfo.Text" xml:space="preserve">
-    <value>Ln 0  Col 0</value>
+  <data name="lBits_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 0</value>
   </data>
-  <data name="split1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>14, 17</value>
+  <data name="lBits_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
-  <data name="split1.Text" xml:space="preserve">
-    <value>|</value>
+  <data name="lBits_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
   </data>
-  <data name="tsslPacketLen.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
+  <data name="lBits_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>21</value>
   </data>
-  <data name="tsslPacketLen.Text" xml:space="preserve">
-    <value>0 Bytes</value>
+  <data name="lBits_Value.Text" xml:space="preserve">
+    <value>Bits_Value</value>
   </data>
-  <data name="split2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>14, 17</value>
+  <data name="&gt;&gt;lBits_Value.Name" xml:space="preserve">
+    <value>lBits_Value</value>
   </data>
-  <data name="split2.Text" xml:space="preserve">
-    <value>|</value>
+  <data name="&gt;&gt;lBits_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tsslBitInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 17</value>
+  <data name="&gt;&gt;lBits_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
   </data>
-  <data name="ssPacketData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 213</value>
-  </data>
-  <data name="ssPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 22</value>
-  </data>
-  <data name="ssPacketData.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;lBits_Value.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="ssPacketData.Text" xml:space="preserve">
-    <value>statusStrip1</value>
+  <data name="lBits.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;ssPacketData.Name" xml:space="preserve">
-    <value>ssPacketData</value>
+  <data name="lBits.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="&gt;&gt;ssPacketData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lBits.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="&gt;&gt;ssPacketData.Parent" xml:space="preserve">
-    <value>tlpPacketData</value>
+  <data name="lBits.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;ssPacketData.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="lBits.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
-  <data name="tlpHexBox.ColumnCount" type="System.Int32, mscorlib">
+  <data name="lBits.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lBits.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lBits.TabIndex" type="System.Int32, mscorlib">
+    <value>20</value>
+  </data>
+  <data name="lBits.Text" xml:space="preserve">
+    <value>Bits :</value>
+  </data>
+  <data name="&gt;&gt;lBits.Name" xml:space="preserve">
+    <value>lBits</value>
+  </data>
+  <data name="&gt;&gt;lBits.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lBits.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lBits.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="lDouble_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lDouble_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lDouble_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lDouble_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lDouble_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 180</value>
+  </data>
+  <data name="lDouble_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lDouble_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lDouble_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <data name="lDouble_Value.Text" xml:space="preserve">
+    <value>Double_Value</value>
+  </data>
+  <data name="&gt;&gt;lDouble_Value.Name" xml:space="preserve">
+    <value>lDouble_Value</value>
+  </data>
+  <data name="&gt;&gt;lDouble_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lDouble_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lDouble_Value.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lDouble.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lDouble.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lDouble.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lDouble.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lDouble.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 180</value>
+  </data>
+  <data name="lDouble.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lDouble.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lDouble.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="lDouble.Text" xml:space="preserve">
+    <value>Double :</value>
+  </data>
+  <data name="&gt;&gt;lDouble.Name" xml:space="preserve">
+    <value>lDouble</value>
+  </data>
+  <data name="&gt;&gt;lDouble.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lDouble.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lDouble.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lFloat_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lFloat_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lFloat_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lFloat_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lFloat_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 160</value>
+  </data>
+  <data name="lFloat_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lFloat_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lFloat_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="lFloat_Value.Text" xml:space="preserve">
+    <value>Float_Value</value>
+  </data>
+  <data name="&gt;&gt;lFloat_Value.Name" xml:space="preserve">
+    <value>lFloat_Value</value>
+  </data>
+  <data name="&gt;&gt;lFloat_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lFloat_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lFloat_Value.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lFloat.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lFloat.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lFloat.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lFloat.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lFloat.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 160</value>
+  </data>
+  <data name="lFloat.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lFloat.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lFloat.TabIndex" type="System.Int32, mscorlib">
+    <value>16</value>
+  </data>
+  <data name="lFloat.Text" xml:space="preserve">
+    <value>Float :</value>
+  </data>
+  <data name="&gt;&gt;lFloat.Name" xml:space="preserve">
+    <value>lFloat</value>
+  </data>
+  <data name="&gt;&gt;lFloat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lFloat.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lFloat.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lUInt64_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUInt64_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUInt64_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUInt64_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUInt64_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 140</value>
+  </data>
+  <data name="lUInt64_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUInt64_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lUInt64_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="lUInt64_Value.Text" xml:space="preserve">
+    <value>UInt64_Value</value>
+  </data>
+  <data name="&gt;&gt;lUInt64_Value.Name" xml:space="preserve">
+    <value>lUInt64_Value</value>
+  </data>
+  <data name="&gt;&gt;lUInt64_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUInt64_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUInt64_Value.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lUInt64.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUInt64.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUInt64.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUInt64.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUInt64.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 140</value>
+  </data>
+  <data name="lUInt64.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUInt64.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lUInt64.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="lUInt64.Text" xml:space="preserve">
+    <value>UInt64 :</value>
+  </data>
+  <data name="&gt;&gt;lUInt64.Name" xml:space="preserve">
+    <value>lUInt64</value>
+  </data>
+  <data name="&gt;&gt;lUInt64.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUInt64.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUInt64.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="lInt64_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lInt64_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lInt64_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lInt64_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lInt64_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 120</value>
+  </data>
+  <data name="lInt64_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lInt64_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lInt64_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="lInt64_Value.Text" xml:space="preserve">
+    <value>Int64_Value</value>
+  </data>
+  <data name="&gt;&gt;lInt64_Value.Name" xml:space="preserve">
+    <value>lInt64_Value</value>
+  </data>
+  <data name="&gt;&gt;lInt64_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lInt64_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lInt64_Value.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="lInt64.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lInt64.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lInt64.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lInt64.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lInt64.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 120</value>
+  </data>
+  <data name="lInt64.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lInt64.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lInt64.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="lInt64.Text" xml:space="preserve">
+    <value>Int64 :</value>
+  </data>
+  <data name="&gt;&gt;lInt64.Name" xml:space="preserve">
+    <value>lInt64</value>
+  </data>
+  <data name="&gt;&gt;lInt64.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lInt64.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lInt64.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="lUInt32_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUInt32_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUInt32_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUInt32_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUInt32_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 100</value>
+  </data>
+  <data name="lUInt32_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUInt32_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lUInt32_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lUInt32_Value.Text" xml:space="preserve">
+    <value>UInt32_Value</value>
+  </data>
+  <data name="&gt;&gt;lUInt32_Value.Name" xml:space="preserve">
+    <value>lUInt32_Value</value>
+  </data>
+  <data name="&gt;&gt;lUInt32_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUInt32_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUInt32_Value.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="lUInt32.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUInt32.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUInt32.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUInt32.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUInt32.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 100</value>
+  </data>
+  <data name="lUInt32.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUInt32.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lUInt32.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lUInt32.Text" xml:space="preserve">
+    <value>UInt32 :</value>
+  </data>
+  <data name="&gt;&gt;lUInt32.Name" xml:space="preserve">
+    <value>lUInt32</value>
+  </data>
+  <data name="&gt;&gt;lUInt32.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUInt32.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUInt32.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="lInt32_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lInt32_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lInt32_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lInt32_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lInt32_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 80</value>
+  </data>
+  <data name="lInt32_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lInt32_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lInt32_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lInt32_Value.Text" xml:space="preserve">
+    <value>Int32_Value</value>
+  </data>
+  <data name="&gt;&gt;lInt32_Value.Name" xml:space="preserve">
+    <value>lInt32_Value</value>
+  </data>
+  <data name="&gt;&gt;lInt32_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lInt32_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lInt32_Value.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="lInt32.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lInt32.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lInt32.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lInt32.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lInt32.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 80</value>
+  </data>
+  <data name="lInt32.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lInt32.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lInt32.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="lInt32.Text" xml:space="preserve">
+    <value>Int32 :</value>
+  </data>
+  <data name="&gt;&gt;lInt32.Name" xml:space="preserve">
+    <value>lInt32</value>
+  </data>
+  <data name="&gt;&gt;lInt32.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lInt32.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lInt32.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="lUShort_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUShort_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUShort_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUShort_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUShort_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 60</value>
+  </data>
+  <data name="lUShort_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUShort_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lUShort_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lUShort_Value.Text" xml:space="preserve">
+    <value>UShort_Value</value>
+  </data>
+  <data name="&gt;&gt;lUShort_Value.Name" xml:space="preserve">
+    <value>lUShort_Value</value>
+  </data>
+  <data name="&gt;&gt;lUShort_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUShort_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUShort_Value.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="lUShort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUShort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUShort.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lUShort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lUShort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 60</value>
+  </data>
+  <data name="lUShort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lUShort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lUShort.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="lUShort.Text" xml:space="preserve">
+    <value>UShort :</value>
+  </data>
+  <data name="&gt;&gt;lUShort.Name" xml:space="preserve">
+    <value>lUShort</value>
+  </data>
+  <data name="&gt;&gt;lUShort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUShort.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lUShort.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="lShort_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lShort_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lShort_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lShort_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lShort_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 40</value>
+  </data>
+  <data name="lShort_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lShort_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lShort_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lShort_Value.Text" xml:space="preserve">
+    <value>Short_Value</value>
+  </data>
+  <data name="&gt;&gt;lShort_Value.Name" xml:space="preserve">
+    <value>lShort_Value</value>
+  </data>
+  <data name="&gt;&gt;lShort_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lShort_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lShort_Value.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="lShort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lShort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lShort.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lShort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lShort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 40</value>
+  </data>
+  <data name="lShort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lShort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lShort.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lShort.Text" xml:space="preserve">
+    <value>Short :</value>
+  </data>
+  <data name="&gt;&gt;lShort.Name" xml:space="preserve">
+    <value>lShort</value>
+  </data>
+  <data name="&gt;&gt;lShort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lShort.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lShort.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="lByte_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lByte_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lByte_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lByte_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lByte_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lByte_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lByte_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 20</value>
+  </data>
+  <data name="lByte_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lByte_Value.Text" xml:space="preserve">
+    <value>Byte_Value</value>
+  </data>
+  <data name="&gt;&gt;lByte_Value.Name" xml:space="preserve">
+    <value>lByte_Value</value>
+  </data>
+  <data name="&gt;&gt;lByte_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lByte_Value.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lByte_Value.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="lByte.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lByte.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lByte.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="lByte.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lByte.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 20</value>
+  </data>
+  <data name="lByte.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lByte.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 20</value>
+  </data>
+  <data name="lByte.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lByte.Text" xml:space="preserve">
+    <value>Byte :</value>
+  </data>
+  <data name="&gt;&gt;lByte.Name" xml:space="preserve">
+    <value>lByte</value>
+  </data>
+  <data name="&gt;&gt;lByte.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lByte.Parent" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;lByte.ZOrder" xml:space="preserve">
+    <value>19</value>
+  </data>
+  <data name="tlpConversion.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpConversion.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="tlpConversion.Location" type="System.Drawing.Point, System.Drawing">
+    <value>753, 32</value>
+  </data>
+  <data name="tlpConversion.RowCount" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="tlpConversion.Size" type="System.Drawing.Size, System.Drawing">
+    <value>214, 207</value>
+  </data>
+  <data name="tlpConversion.TabIndex" type="System.Int32, mscorlib">
+    <value>71</value>
+  </data>
+  <data name="&gt;&gt;tlpConversion.Name" xml:space="preserve">
+    <value>tlpConversion</value>
+  </data>
+  <data name="&gt;&gt;tlpConversion.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpConversion.Parent" xml:space="preserve">
+    <value>tlpHexBox</value>
+  </data>
+  <data name="&gt;&gt;tlpConversion.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpConversion.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lBits_Value" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lBits" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lDouble_Value" Row="9" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lDouble" Row="9" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lFloat_Value" Row="8" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lFloat" Row="8" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64_Value" Row="7" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt64" Row="7" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt64_Value" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt64" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32_Value" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUInt32" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lInt32_Value" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lInt32" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lUShort_Value" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUShort" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lShort_Value" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lShort" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lByte_Value" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lByte" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,55,Percent,100" /&gt;&lt;Rows Styles="Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Absolute,20,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
   <metadata name="tsPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>920, 17</value>
+    <value>804, 17</value>
   </metadata>
   <data name="tsbSave.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -2094,19 +2732,31 @@
     <value>固定排列</value>
   </data>
   <data name="tscbPerLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 25</value>
+    <value>150, 25</value>
+  </data>
+  <data name="toolStripSeparator16.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="tslPacketLen.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tslPacketLen.Size" type="System.Drawing.Size, System.Drawing">
+    <value>93, 22</value>
+  </data>
+  <data name="tslPacketLen.Text" xml:space="preserve">
+    <value>Length 0 Bytes</value>
   </data>
   <data name="tsPacketData.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
   <data name="tsPacketData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+    <value>3, 3, 3, 1</value>
   </data>
   <data name="tsPacketData.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tsPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>819, 25</value>
+    <value>739, 25</value>
   </data>
   <data name="tsPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2124,7 +2774,7 @@
     <value>tlpHexBox</value>
   </data>
   <data name="&gt;&gt;tsPacketData.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="hbPacketData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
     <value>复制</value>
@@ -2145,10 +2795,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="hbPacketData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 34</value>
+    <value>3, 32</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>819, 176</value>
+    <value>739, 207</value>
   </data>
   <data name="hbPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2163,7 +2813,46 @@
     <value>tlpHexBox</value>
   </data>
   <data name="&gt;&gt;hbPacketData.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
+  </data>
+  <data name="lPacketDataPosition.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lPacketDataPosition.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lPacketDataPosition.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="lPacketDataPosition.Location" type="System.Drawing.Point, System.Drawing">
+    <value>753, 3</value>
+  </data>
+  <data name="lPacketDataPosition.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lPacketDataPosition.Size" type="System.Drawing.Size, System.Drawing">
+    <value>214, 23</value>
+  </data>
+  <data name="lPacketDataPosition.TabIndex" type="System.Int32, mscorlib">
+    <value>72</value>
+  </data>
+  <data name="lPacketDataPosition.Text" xml:space="preserve">
+    <value>Ln 0  Col 0  Pstn 0</value>
+  </data>
+  <data name="lPacketDataPosition.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lPacketDataPosition.Name" xml:space="preserve">
+    <value>lPacketDataPosition</value>
+  </data>
+  <data name="&gt;&gt;lPacketDataPosition.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lPacketDataPosition.Parent" xml:space="preserve">
+    <value>tlpHexBox</value>
+  </data>
+  <data name="&gt;&gt;lPacketDataPosition.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="tlpHexBox.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2178,7 +2867,7 @@
     <value>2</value>
   </data>
   <data name="tlpHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 213</value>
+    <value>970, 242</value>
   </data>
   <data name="tlpHexBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2193,10 +2882,10 @@
     <value>tlpPacketData</value>
   </data>
   <data name="&gt;&gt;tlpHexBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="tlpHexBox.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tsPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbPacketData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpConversion" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tsPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbPacketData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lPacketDataPosition" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,5,Absolute,220" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2208,10 +2897,10 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpPacketData.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 235</value>
+    <value>970, 242</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2229,13 +2918,13 @@
     <value>0</value>
   </data>
   <data name="tlpPacketData.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssPacketData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpHexBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpHexBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,260" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpPacketData.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
   </data>
   <data name="tpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 235</value>
+    <value>970, 242</value>
   </data>
   <data name="tpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -2280,7 +2969,7 @@
     <value>日志内容</value>
   </data>
   <metadata name="cmsLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>467, 17</value>
+    <value>351, 17</value>
   </metadata>
   <data name="tslClearList.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 22</value>
@@ -2313,7 +3002,7 @@
     <value>0, 0</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 246</value>
+    <value>970, 260</value>
   </data>
   <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2334,7 +3023,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>825, 246</value>
+    <value>970, 260</value>
   </data>
   <data name="tpSystemLog.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -2363,8 +3052,11 @@
   <data name="tcPacketInfo.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
+  <data name="tcPacketInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
   <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>833, 265</value>
+    <value>978, 272</value>
   </data>
   <data name="tcPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -2394,7 +3086,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>839, 271</value>
+    <value>984, 275</value>
   </data>
   <data name="tlpPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -2409,16 +3101,199 @@
     <value>tlpInformation</value>
   </data>
   <data name="&gt;&gt;tlpPacketInfo.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="tlpPacketInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tcPacketInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tcPacketInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpFilterList.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <metadata name="cIsCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIsCheck.HeaderText" xml:space="preserve">
+    <value>开关</value>
+  </data>
+  <data name="cIsCheck.Width" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <metadata name="cFNum.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cFNum.HeaderText" xml:space="preserve">
+    <value>序号</value>
+  </data>
+  <data name="cFNum.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cFNum.Width" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <metadata name="cFName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cFName.HeaderText" xml:space="preserve">
+    <value>滤镜名称</value>
+  </data>
+  <metadata name="cmsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>122, 17</value>
+  </metadata>
+  <data name="tsmiShowFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiShowFilter.Text" xml:space="preserve">
+    <value>查看选中滤镜</value>
+  </data>
+  <data name="tssSep1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="tsmiAddFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiAddFilter.Text" xml:space="preserve">
+    <value>添加新滤镜</value>
+  </data>
+  <data name="tssSep3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="tsmiDeleteFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiDeleteFilter.Text" xml:space="preserve">
+    <value>删除选中滤镜</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="tsmiSaveFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiSaveFilterList.Text" xml:space="preserve">
+    <value>保存此列表数据</value>
+  </data>
+  <data name="tssSep2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="tsmiClearAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiClearAll.Text" xml:space="preserve">
+    <value>清除所有滤镜</value>
+  </data>
+  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="tsmiLoadFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 22</value>
+  </data>
+  <data name="tsmiLoadFilterList.Text" xml:space="preserve">
+    <value>加载滤镜列表</value>
+  </data>
+  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 166</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
+    <value>cmsFilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>191, 250</value>
+  </data>
+  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
+    <value>dgvFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
+    <value>gbFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="gbFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 0, 0</value>
+  </data>
+  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 272</value>
+  </data>
+  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="gbFilterList.Text" xml:space="preserve">
+    <value>[ 滤镜列表 ]</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
+    <value>gbFilterList</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
+    <value>tlpFilterList</value>
+  </data>
+  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFilterList.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 275</value>
+  </data>
+  <data name="tlpFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Name" xml:space="preserve">
+    <value>tlpFilterList</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Parent" xml:space="preserve">
+    <value>tlpInformation</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpFilterList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,293" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpInformation.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="tlpInformation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 423</value>
+    <value>0, 427</value>
   </data>
   <data name="tlpInformation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2427,7 +3302,7 @@
     <value>1</value>
   </data>
   <data name="tlpInformation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1039, 271</value>
+    <value>1184, 275</value>
   </data>
   <data name="tlpInformation.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -2445,10 +3320,10 @@
     <value>3</value>
   </data>
   <data name="tlpInformation.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="ssProcessInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1311, 17</value>
+    <value>1195, 17</value>
   </metadata>
   <data name="tsslProcessName.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 17</value>
@@ -2469,13 +3344,13 @@
     <value>WinSock</value>
   </data>
   <data name="ssProcessInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 694</value>
+    <value>3, 702</value>
   </data>
   <data name="ssProcessInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
   </data>
   <data name="ssProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1033, 22</value>
+    <value>1178, 22</value>
   </data>
   <data name="ssProcessInfo.TabIndex" type="System.Int32, mscorlib">
     <value>71</value>
@@ -2505,7 +3380,7 @@
     <value>5</value>
   </data>
   <data name="tlpSocketForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1039, 716</value>
+    <value>1184, 724</value>
   </data>
   <data name="tlpSocketForm.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2526,20 +3401,43 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSocketList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,130,AutoSize,0,Percent,50,Percent,50,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="bgwSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>570, 17</value>
+    <value>454, 17</value>
   </metadata>
   <metadata name="tSocketInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>133, 17</value>
+    <value>17, 17</value>
   </metadata>
   <metadata name="bgwLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>692, 17</value>
+    <value>576, 17</value>
   </metadata>
   <metadata name="bgwSendFrom.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>797, 17</value>
+    <value>681, 17</value>
   </metadata>
   <metadata name="bgwSearchPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1143, 17</value>
+    <value>1027, 17</value>
   </metadata>
+  <data name="dataGridViewCellStyle15.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEgoTGw8bGw8bGw8bGw8bGw8bGw8bG
+        w8bGw8bGw8bGw8bGw8bGw8YAAAAAAISChP///////////////////////////////////////////8bD
+        xgAAAAAAhIKE////////////////////////////////////////////xsPGAAAAAACEgoT/////////
+        ///////////////////////////////////Gw8YAAAAAAISChP//////////////////////////////
+        /////////////8bDxgAAAAAAhIKE////////////AAD/AAD/////////AAD/AAD/////////xsPGAAAA
+        AACEgoT///////////////8AAP8AAP8AAP8AAP/////////////Gw8YAAAAAAISChP//////////////
+        /////wAA/wAA/////////////////8bDxgAAAAAAhIKE////////////////AAD/AAD/AAD/AAD/////
+        ////////xsPGAAAAAACEgoT///////////8AAP8AAP////////8AAP8AAP/////////Gw8YAAAAAAISC
+        hP///////////////////////////////////////////8bDxgAAAAAAhIKE////////////////////
+        ////////////////////////xsPGAAAAAACEgoT/////////////////////////////////////////
+        ///Gw8YAAAAAAISChP///////////////////////////////////////////8bDxgAAAAAAhIKEhIKE
+        hIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEAAA=
+</value>
+  </data>
+  <data name="dataGridViewImageColumn1.HeaderText" xml:space="preserve">
+    <value />
+  </data>
+  <data name="dataGridViewImageColumn1.Width" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -2553,7 +3451,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1039, 716</value>
+    <value>1184, 724</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -8775,6 +9673,24 @@
   <data name="&gt;&gt;tlSplit2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tlFilter.Name" xml:space="preserve">
+    <value>tlFilter</value>
+  </data>
+  <data name="&gt;&gt;tlFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlFilter_CNT.Name" xml:space="preserve">
+    <value>tlFilter_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlFilter_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlSplit4.Name" xml:space="preserve">
+    <value>tlSplit4</value>
+  </data>
+  <data name="&gt;&gt;tlSplit4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tlSend.Name" xml:space="preserve">
     <value>tlSend</value>
   </data>
@@ -8805,23 +9721,119 @@
   <data name="&gt;&gt;tlRecv_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlSplit4.Name" xml:space="preserve">
-    <value>tlSplit4</value>
+  <data name="&gt;&gt;toolStripStatusLabel2.Name" xml:space="preserve">
+    <value>toolStripStatusLabel2</value>
   </data>
-  <data name="&gt;&gt;tlSplit4.Type" xml:space="preserve">
+  <data name="&gt;&gt;toolStripStatusLabel2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlFilter.Name" xml:space="preserve">
-    <value>tlFilter</value>
+  <data name="&gt;&gt;tlSendTo.Name" xml:space="preserve">
+    <value>tlSendTo</value>
   </data>
-  <data name="&gt;&gt;tlFilter.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlSendTo.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlFilter_CNT.Name" xml:space="preserve">
-    <value>tlFilter_CNT</value>
+  <data name="&gt;&gt;tlSendTo_CNT.Name" xml:space="preserve">
+    <value>tlSendTo_CNT</value>
   </data>
-  <data name="&gt;&gt;tlFilter_CNT.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlSendTo_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel5.Name" xml:space="preserve">
+    <value>toolStripStatusLabel5</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlRecvFrom.Name" xml:space="preserve">
+    <value>tlRecvFrom</value>
+  </data>
+  <data name="&gt;&gt;tlRecvFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlRecvFrom_CNT.Name" xml:space="preserve">
+    <value>tlRecvFrom_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlRecvFrom_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel8.Name" xml:space="preserve">
+    <value>toolStripStatusLabel8</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSASend.Name" xml:space="preserve">
+    <value>tlWSASend</value>
+  </data>
+  <data name="&gt;&gt;tlWSASend.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSASend_CNT.Name" xml:space="preserve">
+    <value>tlWSASend_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlWSASend_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel11.Name" xml:space="preserve">
+    <value>toolStripStatusLabel11</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel11.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecv.Name" xml:space="preserve">
+    <value>tlWSARecv</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecv.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecv_CNT.Name" xml:space="preserve">
+    <value>tlWSARecv_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecv_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel14.Name" xml:space="preserve">
+    <value>toolStripStatusLabel14</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel14.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSASendTo.Name" xml:space="preserve">
+    <value>tlWSASendTo</value>
+  </data>
+  <data name="&gt;&gt;tlWSASendTo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSASendTo_CNT.Name" xml:space="preserve">
+    <value>tlWSASendTo_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlWSASendTo_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel17.Name" xml:space="preserve">
+    <value>toolStripStatusLabel17</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel17.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecvFrom.Name" xml:space="preserve">
+    <value>tlWSARecvFrom</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecvFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecvFrom_CNT.Name" xml:space="preserve">
+    <value>tlWSARecvFrom_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlWSARecvFrom_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cTypeImg.Name" xml:space="preserve">
+    <value>cTypeImg</value>
+  </data>
+  <data name="&gt;&gt;cTypeImg.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
     <value>cIndex</value>
@@ -8930,120 +9942,6 @@
   </data>
   <data name="&gt;&gt;tsmiSaveSocketInfo.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
-    <value>cIsCheck</value>
-  </data>
-  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Name" xml:space="preserve">
-    <value>cFNum</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
-    <value>cFName</value>
-  </data>
-  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiShowFilter.Name" xml:space="preserve">
-    <value>tsmiShowFilter</value>
-  </data>
-  <data name="&gt;&gt;tsmiShowFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tssSep1.Name" xml:space="preserve">
-    <value>tssSep1</value>
-  </data>
-  <data name="&gt;&gt;tssSep1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiAddFilter.Name" xml:space="preserve">
-    <value>tsmiAddFilter</value>
-  </data>
-  <data name="&gt;&gt;tsmiAddFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tssSep3.Name" xml:space="preserve">
-    <value>tssSep3</value>
-  </data>
-  <data name="&gt;&gt;tssSep3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiDeleteFilter.Name" xml:space="preserve">
-    <value>tsmiDeleteFilter</value>
-  </data>
-  <data name="&gt;&gt;tsmiDeleteFilter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
-    <value>toolStripSeparator6</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiSaveFilterList.Name" xml:space="preserve">
-    <value>tsmiSaveFilterList</value>
-  </data>
-  <data name="&gt;&gt;tsmiSaveFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tssSep2.Name" xml:space="preserve">
-    <value>tssSep2</value>
-  </data>
-  <data name="&gt;&gt;tssSep2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiClearAll.Name" xml:space="preserve">
-    <value>tsmiClearAll</value>
-  </data>
-  <data name="&gt;&gt;tsmiClearAll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator7.Name" xml:space="preserve">
-    <value>toolStripSeparator7</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator7.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadFilterList.Name" xml:space="preserve">
-    <value>tsmiLoadFilterList</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslPositionInfo.Name" xml:space="preserve">
-    <value>tsslPositionInfo</value>
-  </data>
-  <data name="&gt;&gt;tsslPositionInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;split1.Name" xml:space="preserve">
-    <value>split1</value>
-  </data>
-  <data name="&gt;&gt;split1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslPacketLen.Name" xml:space="preserve">
-    <value>tsslPacketLen</value>
-  </data>
-  <data name="&gt;&gt;tsslPacketLen.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;split2.Name" xml:space="preserve">
-    <value>split2</value>
-  </data>
-  <data name="&gt;&gt;split2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslBitInfo.Name" xml:space="preserve">
-    <value>tsslBitInfo</value>
-  </data>
-  <data name="&gt;&gt;tsslBitInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsbSave.Name" xml:space="preserve">
     <value>tsbSave</value>
@@ -9159,6 +10057,12 @@
   <data name="&gt;&gt;tscbPerLine.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tslPacketLen.Name" xml:space="preserve">
+    <value>tslPacketLen</value>
+  </data>
+  <data name="&gt;&gt;tslPacketLen.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cTime.Name" xml:space="preserve">
     <value>cTime</value>
   </data>
@@ -9195,6 +10099,108 @@
   <data name="&gt;&gt;tslToExcel.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
+    <value>cIsCheck</value>
+  </data>
+  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFNum.Name" xml:space="preserve">
+    <value>cFNum</value>
+  </data>
+  <data name="&gt;&gt;cFNum.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
+    <value>cFName</value>
+  </data>
+  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiShowFilter.Name" xml:space="preserve">
+    <value>tsmiShowFilter</value>
+  </data>
+  <data name="&gt;&gt;tsmiShowFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssSep1.Name" xml:space="preserve">
+    <value>tssSep1</value>
+  </data>
+  <data name="&gt;&gt;tssSep1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiAddFilter.Name" xml:space="preserve">
+    <value>tsmiAddFilter</value>
+  </data>
+  <data name="&gt;&gt;tsmiAddFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssSep3.Name" xml:space="preserve">
+    <value>tssSep3</value>
+  </data>
+  <data name="&gt;&gt;tssSep3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiDeleteFilter.Name" xml:space="preserve">
+    <value>tsmiDeleteFilter</value>
+  </data>
+  <data name="&gt;&gt;tsmiDeleteFilter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
+    <value>toolStripSeparator6</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiSaveFilterList.Name" xml:space="preserve">
+    <value>tsmiSaveFilterList</value>
+  </data>
+  <data name="&gt;&gt;tsmiSaveFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tssSep2.Name" xml:space="preserve">
+    <value>tssSep2</value>
+  </data>
+  <data name="&gt;&gt;tssSep2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiClearAll.Name" xml:space="preserve">
+    <value>tsmiClearAll</value>
+  </data>
+  <data name="&gt;&gt;tsmiClearAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator7.Name" xml:space="preserve">
+    <value>toolStripSeparator7</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiLoadFilterList.Name" xml:space="preserve">
+    <value>tsmiLoadFilterList</value>
+  </data>
+  <data name="&gt;&gt;tsmiLoadFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
+    <value>tsslProcessName</value>
+  </data>
+  <data name="&gt;&gt;tsslProcessName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
+    <value>toolStripStatusLabel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslWinsock.Name" xml:space="preserve">
+    <value>tsslWinsock</value>
+  </data>
+  <data name="&gt;&gt;tsslWinsock.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;bgwSocketList.Name" xml:space="preserve">
     <value>bgwSocketList</value>
   </data>
@@ -9225,131 +10231,17 @@
   <data name="&gt;&gt;bgwSearchPacketData.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
-    <value>tsslProcessName</value>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
+    <value>dataGridViewImageColumn1</value>
   </data>
-  <data name="&gt;&gt;tsslProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
-    <value>toolStripStatusLabel1</value>
+  <data name="&gt;&gt;toolStripSeparator16.Name" xml:space="preserve">
+    <value>toolStripSeparator16</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslWinsock.Name" xml:space="preserve">
-    <value>tsslWinsock</value>
-  </data>
-  <data name="&gt;&gt;tsslWinsock.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel2.Name" xml:space="preserve">
-    <value>toolStripStatusLabel2</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendTo.Name" xml:space="preserve">
-    <value>tlSendTo</value>
-  </data>
-  <data name="&gt;&gt;tlSendTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendTo_CNT.Name" xml:space="preserve">
-    <value>tlSendTo_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlSendTo_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel5.Name" xml:space="preserve">
-    <value>toolStripStatusLabel5</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlRecvFrom.Name" xml:space="preserve">
-    <value>tlRecvFrom</value>
-  </data>
-  <data name="&gt;&gt;tlRecvFrom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlRecvFrom_CNT.Name" xml:space="preserve">
-    <value>tlRecvFrom_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlRecvFrom_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel8.Name" xml:space="preserve">
-    <value>toolStripStatusLabel8</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSASend.Name" xml:space="preserve">
-    <value>tlWSASend</value>
-  </data>
-  <data name="&gt;&gt;tlWSASend.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSASend_CNT.Name" xml:space="preserve">
-    <value>tlWSASend_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlWSASend_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel11.Name" xml:space="preserve">
-    <value>toolStripStatusLabel11</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel11.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecv.Name" xml:space="preserve">
-    <value>tlWSARecv</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecv.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecv_CNT.Name" xml:space="preserve">
-    <value>tlWSARecv_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecv_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel14.Name" xml:space="preserve">
-    <value>toolStripStatusLabel14</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel14.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSASendTo.Name" xml:space="preserve">
-    <value>tlWSASendTo</value>
-  </data>
-  <data name="&gt;&gt;tlWSASendTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSASendTo_CNT.Name" xml:space="preserve">
-    <value>tlWSASendTo_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlWSASendTo_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel17.Name" xml:space="preserve">
-    <value>toolStripStatusLabel17</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel17.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecvFrom.Name" xml:space="preserve">
-    <value>tlWSARecvFrom</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecvFrom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecvFrom_CNT.Name" xml:space="preserve">
-    <value>tlWSARecvFrom_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlWSARecvFrom_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;toolStripSeparator16.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>
