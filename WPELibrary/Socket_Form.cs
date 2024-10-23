@@ -55,13 +55,62 @@ namespace WPELibrary
 
         #endregion
 
-        #region//窗体关闭
+        #region//窗体事件
 
         private void DLL_Form_FormClosed(object sender, FormClosedEventArgs e)
         {
+            this.ExitMainForm();
+        }
+
+        private void Socket_Form_Resize(object sender, EventArgs e)
+        {
             try
             {
-                ws.ExitHook();       
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    this.Hide();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void niWPE_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (((MouseEventArgs)e).Button == MouseButtons.Left)
+                {
+                    this.ShowMainForm();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void ShowMainForm()
+        {
+            try
+            {
+                this.Show();
+                this.WindowState = FormWindowState.Normal;
+                this.Activate();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void ExitMainForm()
+        {
+            try
+            {
+                ws.ExitHook();
             }
             catch (Exception ex)
             {
@@ -82,8 +131,21 @@ namespace WPELibrary
 
                 string sProcessName = string.Format("{0}{1} [{2}]", MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20), pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());                                
                 this.tsslProcessName.Text = sProcessName;
+                this.niWPE.Text = "Winsock Packet Editor" + "\r\n" + sProcessName;
 
-                string sProcessInfo = string.Format("{0} 句柄: {1}", pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                string sMainWindowTitle = pProcess.MainWindowTitle;
+                string sMainWindowHandle = pProcess.MainWindowHandle.ToString();
+                string sProcessInfo = string.Empty;
+
+                if (String.IsNullOrEmpty(sMainWindowTitle))
+                {
+                    sProcessInfo = pProcess.MainModule.ModuleName;
+                }
+                else
+                {
+                    sProcessInfo = string.Format("{0} 句柄: {1}", pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                }
+                
                 this.tsslProcessInfo.Text = sProcessInfo;
 
                 string sWinSock = "WinSock";
@@ -103,8 +165,10 @@ namespace WPELibrary
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
+                this.tsmiStartHook.Enabled = true;
+                this.tsmiStopHook.Enabled = false;
                 this.tSocketInfo.Enabled = true;
-                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
+                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);                
 
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(FilterMAXNum);
@@ -195,6 +259,11 @@ namespace WPELibrary
 
         private void bCleanUp_Click(object sender, EventArgs e)
         {
+            this.CleanUp_MainForm();
+        }
+
+        private void CleanUp_MainForm()
+        {
             this.CleanUp_SocketList();
             this.CleanUp_HexBox();
             this.CleanUp_Conversion();
@@ -272,14 +341,21 @@ namespace WPELibrary
 
         private void bStartHook_Click(object sender, EventArgs e)
         {
+            this.StartHook_MainForm();
+        }
+
+        private void StartHook_MainForm()
+        {
             try
             {
                 this.SetSocketParam();
 
-                this.tlpFilterSet.Enabled = false;                                
+                this.tlpFilterSet.Enabled = false;
                 this.gbHookType.Enabled = false;
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
+                this.tsmiStartHook.Enabled = false;
+                this.tsmiStopHook.Enabled = true;
 
                 ws.StartHook();
 
@@ -288,7 +364,7 @@ namespace WPELibrary
                     RemoteHooking.WakeUpProcess();
                     this.bWakeUp = false;
                 }
-                                
+
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
@@ -303,12 +379,19 @@ namespace WPELibrary
 
         private void bStopHook_Click(object sender, EventArgs e)
         {
+            this.StopHook_MainForm();                      
+        }
+
+        private void StopHook_MainForm()
+        {
             try
             {
                 this.tlpFilterSet.Enabled = true;
                 this.gbHookType.Enabled = true;
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
+                this.tsmiStartHook.Enabled = true;
+                this.tsmiStopHook.Enabled = false;
 
                 ws.StopHook();
 
@@ -317,7 +400,7 @@ namespace WPELibrary
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
+            }
         }
 
         #endregion
@@ -383,6 +466,62 @@ namespace WPELibrary
 
         #region//右键菜单
 
+        #region//图标菜单
+
+        private void cmsIcon_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsIcon.Close();
+
+            try
+            {
+                switch (sItemText)
+                {
+                    case "tsmiShow":
+
+                        this.ShowMainForm();
+
+                        break;
+
+                    case "tsmiStartHook":
+
+                        this.StartHook_MainForm();
+
+                        break;
+
+                    case "tsmiStopHook":
+
+                        this.StopHook_MainForm();
+
+                        break;
+
+                    case "tsmiCleanUp":
+
+                        this.CleanUp_MainForm();
+
+                        break;
+
+                    case "tsmiShowSendList":
+
+                        this.ShowSendListForm();
+
+                        break;
+
+                    case "tsmiExit":
+
+                        this.Close();
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//封包列表菜单
 
         private void cmsSocketList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -398,11 +537,7 @@ namespace WPELibrary
 
                         #region//查看发送列表
 
-                        if (Socket_Cache.SendList.bShow_SendListForm)
-                        {
-                            Socket_SendListForm sslForm = new Socket_SendListForm();
-                            sslForm.Show();
-                        };
+                        this.ShowSendListForm();
 
                         #endregion
 
@@ -420,7 +555,7 @@ namespace WPELibrary
                             {
                                 Socket_SendListForm sslForm = new Socket_SendListForm();
                                 sslForm.Show();
-                            };
+                            }
                         }
 
                         #endregion
@@ -919,11 +1054,31 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
-        #endregion                
+        #endregion
 
-        #region//打开发送窗体（异步）
+        #region//显示发送列表窗体
+
+        private void ShowSendListForm()
+        {
+            try
+            {
+                if (Socket_Cache.SendList.bShow_SendListForm)
+                {
+                    Socket_SendListForm sslForm = new Socket_SendListForm();
+                    sslForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
+
+        #region//显示发送窗体（异步）
 
         private void bgwSendFrom_DoWork(object sender, DoWorkEventArgs e)
         {

@@ -34,8 +34,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
         public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
-        public static string[] MutiLan_25 = { "查找", "Find" };
-        public static string[] MutiLan_26 = { "查找下一个", "Find Next" };
+        public static string[] MutiLan_25 = { "查找内容", "Search for content" };
+        public static string[] MutiLan_26 = { "查找", "Search" };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };

@@ -139,6 +139,15 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Edit24.png" />
+    <None Include="Resources\Counterclockwise-arrow16.png" />
+    <None Include="Resources\Trash-can16.png" />
+    <None Include="Resources\logout24.png" />
+    <None Include="Resources\Search16.png" />
+    <None Include="Resources\File-info16.png" />
+    <None Include="Resources\Stop16.png" />
+    <None Include="Resources\Play16.png" />
+    <None Include="Resources\Delete216.png" />
     <None Include="Resources\Info16.png" />
     <None Include="Resources\sent.png" />
     <None Include="Resources\received.png" />

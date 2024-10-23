@@ -142,6 +142,27 @@ namespace WPELibrary
             this.tpPacketData = new System.Windows.Forms.TabPage();
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.tlpHexBox = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpConversion = new System.Windows.Forms.TableLayoutPanel();
+            this.lBits_Value = new System.Windows.Forms.Label();
+            this.lBits = new System.Windows.Forms.Label();
+            this.lDouble_Value = new System.Windows.Forms.Label();
+            this.lDouble = new System.Windows.Forms.Label();
+            this.lFloat_Value = new System.Windows.Forms.Label();
+            this.lFloat = new System.Windows.Forms.Label();
+            this.lUInt64_Value = new System.Windows.Forms.Label();
+            this.lUInt64 = new System.Windows.Forms.Label();
+            this.lInt64_Value = new System.Windows.Forms.Label();
+            this.lInt64 = new System.Windows.Forms.Label();
+            this.lUInt32_Value = new System.Windows.Forms.Label();
+            this.lUInt32 = new System.Windows.Forms.Label();
+            this.lInt32_Value = new System.Windows.Forms.Label();
+            this.lInt32 = new System.Windows.Forms.Label();
+            this.lUShort_Value = new System.Windows.Forms.Label();
+            this.lUShort = new System.Windows.Forms.Label();
+            this.lShort_Value = new System.Windows.Forms.Label();
+            this.lShort = new System.Windows.Forms.Label();
+            this.lByte_Value = new System.Windows.Forms.Label();
+            this.lByte = new System.Windows.Forms.Label();
             this.tsPacketData = new System.Windows.Forms.ToolStrip();
             this.tsbSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -162,6 +183,7 @@ namespace WPELibrary
             this.tscbEncoding = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
             this.tscbPerLine = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
             this.tslPacketLen = new System.Windows.Forms.ToolStripLabel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.lPacketDataPosition = new System.Windows.Forms.Label();
@@ -195,39 +217,29 @@ namespace WPELibrary
             this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
             this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslProcessInfo = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.bgwSendFrom = new System.ComponentModel.BackgroundWorker();
             this.bgwSearchPacketData = new System.ComponentModel.BackgroundWorker();
+            this.niWPE = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiShow = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiStartHook = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiStopHook = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiCleanUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowSendList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslProcessInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lByte = new System.Windows.Forms.Label();
-            this.lByte_Value = new System.Windows.Forms.Label();
-            this.lShort = new System.Windows.Forms.Label();
-            this.lShort_Value = new System.Windows.Forms.Label();
-            this.lUShort = new System.Windows.Forms.Label();
-            this.lUShort_Value = new System.Windows.Forms.Label();
-            this.lInt32 = new System.Windows.Forms.Label();
-            this.lInt32_Value = new System.Windows.Forms.Label();
-            this.lUInt32 = new System.Windows.Forms.Label();
-            this.lUInt32_Value = new System.Windows.Forms.Label();
-            this.lInt64 = new System.Windows.Forms.Label();
-            this.lInt64_Value = new System.Windows.Forms.Label();
-            this.lUInt64 = new System.Windows.Forms.Label();
-            this.lUInt64_Value = new System.Windows.Forms.Label();
-            this.lFloat = new System.Windows.Forms.Label();
-            this.lFloat_Value = new System.Windows.Forms.Label();
-            this.lDouble = new System.Windows.Forms.Label();
-            this.lDouble_Value = new System.Windows.Forms.Label();
-            this.lBits = new System.Windows.Forms.Label();
-            this.lBits_Value = new System.Windows.Forms.Label();
-            this.tlpConversion = new System.Windows.Forms.TableLayoutPanel();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -251,6 +263,7 @@ namespace WPELibrary
             this.tpPacketData.SuspendLayout();
             this.tlpPacketData.SuspendLayout();
             this.tlpHexBox.SuspendLayout();
+            this.tlpConversion.SuspendLayout();
             this.tsPacketData.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
@@ -260,7 +273,7 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
             this.cmsFilterList.SuspendLayout();
             this.ssProcessInfo.SuspendLayout();
-            this.tlpConversion.SuspendLayout();
+            this.cmsIcon.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSocketForm
@@ -903,7 +916,8 @@ namespace WPELibrary
             // bSearchNext
             // 
             resources.ApplyResources(this.bSearchNext, "bSearchNext");
-            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.FindNextHS;
+            this.bSearchNext.FlatAppearance.BorderSize = 0;
+            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.Search16;
             this.bSearchNext.Name = "bSearchNext";
             this.bSearchNext.UseVisualStyleBackColor = true;
             this.bSearchNext.Click += new System.EventHandler(this.bSearchNext_Click);
@@ -911,7 +925,8 @@ namespace WPELibrary
             // bSearch
             // 
             resources.ApplyResources(this.bSearch, "bSearch");
-            this.bSearch.Image = global::WPELibrary.Properties.Resources.FindHS;
+            this.bSearch.FlatAppearance.BorderSize = 0;
+            this.bSearch.Image = global::WPELibrary.Properties.Resources.File_info16;
             this.bSearch.Name = "bSearch";
             this.bSearch.UseVisualStyleBackColor = true;
             this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
@@ -933,6 +948,7 @@ namespace WPELibrary
             // bStopHook
             // 
             resources.ApplyResources(this.bStopHook, "bStopHook");
+            this.bStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
             this.bStopHook.Name = "bStopHook";
             this.bStopHook.UseVisualStyleBackColor = true;
             this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
@@ -940,6 +956,7 @@ namespace WPELibrary
             // bStartHook
             // 
             resources.ApplyResources(this.bStartHook, "bStartHook");
+            this.bStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
             this.bStartHook.Name = "bStartHook";
             this.bStartHook.UseVisualStyleBackColor = true;
             this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
@@ -947,6 +964,7 @@ namespace WPELibrary
             // bCleanUp
             // 
             resources.ApplyResources(this.bCleanUp, "bCleanUp");
+            this.bCleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
             this.bCleanUp.Name = "bCleanUp";
             this.bCleanUp.UseVisualStyleBackColor = true;
             this.bCleanUp.Click += new System.EventHandler(this.bCleanUp_Click);
@@ -995,6 +1013,131 @@ namespace WPELibrary
             this.tlpHexBox.Controls.Add(this.hbPacketData, 0, 1);
             this.tlpHexBox.Controls.Add(this.lPacketDataPosition, 2, 0);
             this.tlpHexBox.Name = "tlpHexBox";
+            // 
+            // tlpConversion
+            // 
+            resources.ApplyResources(this.tlpConversion, "tlpConversion");
+            this.tlpConversion.Controls.Add(this.lBits_Value, 1, 0);
+            this.tlpConversion.Controls.Add(this.lBits, 0, 0);
+            this.tlpConversion.Controls.Add(this.lDouble_Value, 1, 9);
+            this.tlpConversion.Controls.Add(this.lDouble, 0, 9);
+            this.tlpConversion.Controls.Add(this.lFloat_Value, 1, 8);
+            this.tlpConversion.Controls.Add(this.lFloat, 0, 8);
+            this.tlpConversion.Controls.Add(this.lUInt64_Value, 1, 7);
+            this.tlpConversion.Controls.Add(this.lUInt64, 0, 7);
+            this.tlpConversion.Controls.Add(this.lInt64_Value, 1, 6);
+            this.tlpConversion.Controls.Add(this.lInt64, 0, 6);
+            this.tlpConversion.Controls.Add(this.lUInt32_Value, 1, 5);
+            this.tlpConversion.Controls.Add(this.lUInt32, 0, 5);
+            this.tlpConversion.Controls.Add(this.lInt32_Value, 1, 4);
+            this.tlpConversion.Controls.Add(this.lInt32, 0, 4);
+            this.tlpConversion.Controls.Add(this.lUShort_Value, 1, 3);
+            this.tlpConversion.Controls.Add(this.lUShort, 0, 3);
+            this.tlpConversion.Controls.Add(this.lShort_Value, 1, 2);
+            this.tlpConversion.Controls.Add(this.lShort, 0, 2);
+            this.tlpConversion.Controls.Add(this.lByte_Value, 1, 1);
+            this.tlpConversion.Controls.Add(this.lByte, 0, 1);
+            this.tlpConversion.Name = "tlpConversion";
+            // 
+            // lBits_Value
+            // 
+            resources.ApplyResources(this.lBits_Value, "lBits_Value");
+            this.lBits_Value.Name = "lBits_Value";
+            // 
+            // lBits
+            // 
+            resources.ApplyResources(this.lBits, "lBits");
+            this.lBits.Name = "lBits";
+            // 
+            // lDouble_Value
+            // 
+            resources.ApplyResources(this.lDouble_Value, "lDouble_Value");
+            this.lDouble_Value.Name = "lDouble_Value";
+            // 
+            // lDouble
+            // 
+            resources.ApplyResources(this.lDouble, "lDouble");
+            this.lDouble.Name = "lDouble";
+            // 
+            // lFloat_Value
+            // 
+            resources.ApplyResources(this.lFloat_Value, "lFloat_Value");
+            this.lFloat_Value.Name = "lFloat_Value";
+            // 
+            // lFloat
+            // 
+            resources.ApplyResources(this.lFloat, "lFloat");
+            this.lFloat.Name = "lFloat";
+            // 
+            // lUInt64_Value
+            // 
+            resources.ApplyResources(this.lUInt64_Value, "lUInt64_Value");
+            this.lUInt64_Value.Name = "lUInt64_Value";
+            // 
+            // lUInt64
+            // 
+            resources.ApplyResources(this.lUInt64, "lUInt64");
+            this.lUInt64.Name = "lUInt64";
+            // 
+            // lInt64_Value
+            // 
+            resources.ApplyResources(this.lInt64_Value, "lInt64_Value");
+            this.lInt64_Value.Name = "lInt64_Value";
+            // 
+            // lInt64
+            // 
+            resources.ApplyResources(this.lInt64, "lInt64");
+            this.lInt64.Name = "lInt64";
+            // 
+            // lUInt32_Value
+            // 
+            resources.ApplyResources(this.lUInt32_Value, "lUInt32_Value");
+            this.lUInt32_Value.Name = "lUInt32_Value";
+            // 
+            // lUInt32
+            // 
+            resources.ApplyResources(this.lUInt32, "lUInt32");
+            this.lUInt32.Name = "lUInt32";
+            // 
+            // lInt32_Value
+            // 
+            resources.ApplyResources(this.lInt32_Value, "lInt32_Value");
+            this.lInt32_Value.Name = "lInt32_Value";
+            // 
+            // lInt32
+            // 
+            resources.ApplyResources(this.lInt32, "lInt32");
+            this.lInt32.Name = "lInt32";
+            // 
+            // lUShort_Value
+            // 
+            resources.ApplyResources(this.lUShort_Value, "lUShort_Value");
+            this.lUShort_Value.Name = "lUShort_Value";
+            // 
+            // lUShort
+            // 
+            resources.ApplyResources(this.lUShort, "lUShort");
+            this.lUShort.Name = "lUShort";
+            // 
+            // lShort_Value
+            // 
+            resources.ApplyResources(this.lShort_Value, "lShort_Value");
+            this.lShort_Value.Name = "lShort_Value";
+            // 
+            // lShort
+            // 
+            resources.ApplyResources(this.lShort, "lShort");
+            this.lShort.Name = "lShort";
+            // 
+            // lByte_Value
+            // 
+            resources.ApplyResources(this.lByte_Value, "lByte_Value");
+            this.lByte_Value.Name = "lByte_Value";
+            // 
+            // lByte
+            // 
+            resources.ApplyResources(this.lByte, "lByte");
+            this.lByte.Name = "lByte";
             // 
             // tsPacketData
             // 
@@ -1154,6 +1297,11 @@ namespace WPELibrary
             resources.GetString("tscbPerLine.Items1")});
             this.tscbPerLine.Name = "tscbPerLine";
             this.tscbPerLine.SelectedIndexChanged += new System.EventHandler(this.tscbPerLine_SelectedIndexChanged);
+            // 
+            // toolStripSeparator16
+            // 
+            this.toolStripSeparator16.Name = "toolStripSeparator16";
+            resources.ApplyResources(this.toolStripSeparator16, "toolStripSeparator16");
             // 
             // tslPacketLen
             // 
@@ -1447,6 +1595,33 @@ namespace WPELibrary
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
             // 
+            // tsslProcessInfo
+            // 
+            this.tsslProcessInfo.Name = "tsslProcessInfo";
+            resources.ApplyResources(this.tsslProcessInfo, "tsslProcessInfo");
+            // 
+            // toolStripStatusLabel4
+            // 
+            this.toolStripStatusLabel4.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
+            resources.ApplyResources(this.toolStripStatusLabel4, "toolStripStatusLabel4");
+            // 
+            // tsslWinSock
+            // 
+            this.tsslWinSock.Name = "tsslWinSock";
+            resources.ApplyResources(this.tsslWinSock, "tsslWinSock");
+            // 
+            // toolStripStatusLabel3
+            // 
+            this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
+            // 
+            // tsslTotalBytes
+            // 
+            this.tsslTotalBytes.Name = "tsslTotalBytes";
+            resources.ApplyResources(this.tsslTotalBytes, "tsslTotalBytes");
+            // 
             // bgwSocketList
             // 
             this.bgwSocketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketList_DoWork);
@@ -1470,6 +1645,85 @@ namespace WPELibrary
             this.bgwSearchPacketData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketData_DoWork);
             this.bgwSearchPacketData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketData_RunWorkerCompleted);
             // 
+            // niWPE
+            // 
+            this.niWPE.ContextMenuStrip = this.cmsIcon;
+            resources.ApplyResources(this.niWPE, "niWPE");
+            this.niWPE.Click += new System.EventHandler(this.niWPE_Click);
+            // 
+            // cmsIcon
+            // 
+            this.cmsIcon.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShow,
+            this.toolStripSeparator17,
+            this.tsmiStartHook,
+            this.tsmiStopHook,
+            this.toolStripSeparator18,
+            this.tsmiCleanUp,
+            this.toolStripSeparator19,
+            this.tsmiShowSendList,
+            this.toolStripSeparator20,
+            this.tsmiExit});
+            this.cmsIcon.Name = "cmsIcon";
+            resources.ApplyResources(this.cmsIcon, "cmsIcon");
+            this.cmsIcon.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsIcon_ItemClicked);
+            // 
+            // tsmiShow
+            // 
+            this.tsmiShow.Image = global::WPELibrary.Properties.Resources.Counterclockwise_arrow16;
+            this.tsmiShow.Name = "tsmiShow";
+            resources.ApplyResources(this.tsmiShow, "tsmiShow");
+            // 
+            // toolStripSeparator17
+            // 
+            this.toolStripSeparator17.Name = "toolStripSeparator17";
+            resources.ApplyResources(this.toolStripSeparator17, "toolStripSeparator17");
+            // 
+            // tsmiStartHook
+            // 
+            this.tsmiStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
+            this.tsmiStartHook.Name = "tsmiStartHook";
+            resources.ApplyResources(this.tsmiStartHook, "tsmiStartHook");
+            // 
+            // tsmiStopHook
+            // 
+            this.tsmiStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
+            this.tsmiStopHook.Name = "tsmiStopHook";
+            resources.ApplyResources(this.tsmiStopHook, "tsmiStopHook");
+            // 
+            // toolStripSeparator18
+            // 
+            this.toolStripSeparator18.Name = "toolStripSeparator18";
+            resources.ApplyResources(this.toolStripSeparator18, "toolStripSeparator18");
+            // 
+            // tsmiCleanUp
+            // 
+            this.tsmiCleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            this.tsmiCleanUp.Name = "tsmiCleanUp";
+            resources.ApplyResources(this.tsmiCleanUp, "tsmiCleanUp");
+            // 
+            // toolStripSeparator19
+            // 
+            this.toolStripSeparator19.Name = "toolStripSeparator19";
+            resources.ApplyResources(this.toolStripSeparator19, "toolStripSeparator19");
+            // 
+            // tsmiShowSendList
+            // 
+            this.tsmiShowSendList.Image = global::WPELibrary.Properties.Resources.File_info16;
+            this.tsmiShowSendList.Name = "tsmiShowSendList";
+            resources.ApplyResources(this.tsmiShowSendList, "tsmiShowSendList");
+            // 
+            // toolStripSeparator20
+            // 
+            this.toolStripSeparator20.Name = "toolStripSeparator20";
+            resources.ApplyResources(this.toolStripSeparator20, "toolStripSeparator20");
+            // 
+            // tsmiExit
+            // 
+            this.tsmiExit.Image = global::WPELibrary.Properties.Resources.logout24;
+            this.tsmiExit.Name = "tsmiExit";
+            resources.ApplyResources(this.tsmiExit, "tsmiExit");
+            // 
             // dataGridViewImageColumn1
             // 
             dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -1482,163 +1736,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
-            // toolStripSeparator16
-            // 
-            this.toolStripSeparator16.Name = "toolStripSeparator16";
-            resources.ApplyResources(this.toolStripSeparator16, "toolStripSeparator16");
-            // 
-            // tsslTotalBytes
-            // 
-            this.tsslTotalBytes.Name = "tsslTotalBytes";
-            resources.ApplyResources(this.tsslTotalBytes, "tsslTotalBytes");
-            // 
-            // toolStripStatusLabel4
-            // 
-            this.toolStripStatusLabel4.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            resources.ApplyResources(this.toolStripStatusLabel4, "toolStripStatusLabel4");
-            // 
-            // tsslProcessInfo
-            // 
-            this.tsslProcessInfo.Name = "tsslProcessInfo";
-            resources.ApplyResources(this.tsslProcessInfo, "tsslProcessInfo");
-            // 
-            // toolStripStatusLabel3
-            // 
-            this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
-            // 
-            // tsslWinSock
-            // 
-            this.tsslWinSock.Name = "tsslWinSock";
-            resources.ApplyResources(this.tsslWinSock, "tsslWinSock");
-            // 
-            // lByte
-            // 
-            resources.ApplyResources(this.lByte, "lByte");
-            this.lByte.Name = "lByte";
-            // 
-            // lByte_Value
-            // 
-            resources.ApplyResources(this.lByte_Value, "lByte_Value");
-            this.lByte_Value.Name = "lByte_Value";
-            // 
-            // lShort
-            // 
-            resources.ApplyResources(this.lShort, "lShort");
-            this.lShort.Name = "lShort";
-            // 
-            // lShort_Value
-            // 
-            resources.ApplyResources(this.lShort_Value, "lShort_Value");
-            this.lShort_Value.Name = "lShort_Value";
-            // 
-            // lUShort
-            // 
-            resources.ApplyResources(this.lUShort, "lUShort");
-            this.lUShort.Name = "lUShort";
-            // 
-            // lUShort_Value
-            // 
-            resources.ApplyResources(this.lUShort_Value, "lUShort_Value");
-            this.lUShort_Value.Name = "lUShort_Value";
-            // 
-            // lInt32
-            // 
-            resources.ApplyResources(this.lInt32, "lInt32");
-            this.lInt32.Name = "lInt32";
-            // 
-            // lInt32_Value
-            // 
-            resources.ApplyResources(this.lInt32_Value, "lInt32_Value");
-            this.lInt32_Value.Name = "lInt32_Value";
-            // 
-            // lUInt32
-            // 
-            resources.ApplyResources(this.lUInt32, "lUInt32");
-            this.lUInt32.Name = "lUInt32";
-            // 
-            // lUInt32_Value
-            // 
-            resources.ApplyResources(this.lUInt32_Value, "lUInt32_Value");
-            this.lUInt32_Value.Name = "lUInt32_Value";
-            // 
-            // lInt64
-            // 
-            resources.ApplyResources(this.lInt64, "lInt64");
-            this.lInt64.Name = "lInt64";
-            // 
-            // lInt64_Value
-            // 
-            resources.ApplyResources(this.lInt64_Value, "lInt64_Value");
-            this.lInt64_Value.Name = "lInt64_Value";
-            // 
-            // lUInt64
-            // 
-            resources.ApplyResources(this.lUInt64, "lUInt64");
-            this.lUInt64.Name = "lUInt64";
-            // 
-            // lUInt64_Value
-            // 
-            resources.ApplyResources(this.lUInt64_Value, "lUInt64_Value");
-            this.lUInt64_Value.Name = "lUInt64_Value";
-            // 
-            // lFloat
-            // 
-            resources.ApplyResources(this.lFloat, "lFloat");
-            this.lFloat.Name = "lFloat";
-            // 
-            // lFloat_Value
-            // 
-            resources.ApplyResources(this.lFloat_Value, "lFloat_Value");
-            this.lFloat_Value.Name = "lFloat_Value";
-            // 
-            // lDouble
-            // 
-            resources.ApplyResources(this.lDouble, "lDouble");
-            this.lDouble.Name = "lDouble";
-            // 
-            // lDouble_Value
-            // 
-            resources.ApplyResources(this.lDouble_Value, "lDouble_Value");
-            this.lDouble_Value.Name = "lDouble_Value";
-            // 
-            // lBits
-            // 
-            resources.ApplyResources(this.lBits, "lBits");
-            this.lBits.Name = "lBits";
-            // 
-            // lBits_Value
-            // 
-            resources.ApplyResources(this.lBits_Value, "lBits_Value");
-            this.lBits_Value.Name = "lBits_Value";
-            // 
-            // tlpConversion
-            // 
-            resources.ApplyResources(this.tlpConversion, "tlpConversion");
-            this.tlpConversion.Controls.Add(this.lBits_Value, 1, 0);
-            this.tlpConversion.Controls.Add(this.lBits, 0, 0);
-            this.tlpConversion.Controls.Add(this.lDouble_Value, 1, 9);
-            this.tlpConversion.Controls.Add(this.lDouble, 0, 9);
-            this.tlpConversion.Controls.Add(this.lFloat_Value, 1, 8);
-            this.tlpConversion.Controls.Add(this.lFloat, 0, 8);
-            this.tlpConversion.Controls.Add(this.lUInt64_Value, 1, 7);
-            this.tlpConversion.Controls.Add(this.lUInt64, 0, 7);
-            this.tlpConversion.Controls.Add(this.lInt64_Value, 1, 6);
-            this.tlpConversion.Controls.Add(this.lInt64, 0, 6);
-            this.tlpConversion.Controls.Add(this.lUInt32_Value, 1, 5);
-            this.tlpConversion.Controls.Add(this.lUInt32, 0, 5);
-            this.tlpConversion.Controls.Add(this.lInt32_Value, 1, 4);
-            this.tlpConversion.Controls.Add(this.lInt32, 0, 4);
-            this.tlpConversion.Controls.Add(this.lUShort_Value, 1, 3);
-            this.tlpConversion.Controls.Add(this.lUShort, 0, 3);
-            this.tlpConversion.Controls.Add(this.lShort_Value, 1, 2);
-            this.tlpConversion.Controls.Add(this.lShort, 0, 2);
-            this.tlpConversion.Controls.Add(this.lByte_Value, 1, 1);
-            this.tlpConversion.Controls.Add(this.lByte, 0, 1);
-            this.tlpConversion.Name = "tlpConversion";
-            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1648,6 +1745,7 @@ namespace WPELibrary
             this.Name = "Socket_Form";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DLL_Form_FormClosed);
             this.Load += new System.EventHandler(this.DLL_Form_Load);
+            this.Resize += new System.EventHandler(this.Socket_Form_Resize);
             this.tlpSocketForm.ResumeLayout(false);
             this.tlpSocketForm.PerformLayout();
             this.ssSocketList.ResumeLayout(false);
@@ -1677,6 +1775,8 @@ namespace WPELibrary
             this.tlpPacketData.ResumeLayout(false);
             this.tlpHexBox.ResumeLayout(false);
             this.tlpHexBox.PerformLayout();
+            this.tlpConversion.ResumeLayout(false);
+            this.tlpConversion.PerformLayout();
             this.tsPacketData.ResumeLayout(false);
             this.tsPacketData.PerformLayout();
             this.tpSystemLog.ResumeLayout(false);
@@ -1688,8 +1788,7 @@ namespace WPELibrary
             this.cmsFilterList.ResumeLayout(false);
             this.ssProcessInfo.ResumeLayout(false);
             this.ssProcessInfo.PerformLayout();
-            this.tlpConversion.ResumeLayout(false);
-            this.tlpConversion.PerformLayout();
+            this.cmsIcon.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1878,5 +1977,17 @@ namespace WPELibrary
         private System.Windows.Forms.Label lShort;
         private System.Windows.Forms.Label lByte_Value;
         private System.Windows.Forms.Label lByte;
+        private System.Windows.Forms.NotifyIcon niWPE;
+        private System.Windows.Forms.ContextMenuStrip cmsIcon;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShow;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
+        private System.Windows.Forms.ToolStripMenuItem tsmiExit;
+        private System.Windows.Forms.ToolStripMenuItem tsmiStartHook;
+        private System.Windows.Forms.ToolStripMenuItem tsmiStopHook;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCleanUp;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowSendList;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator20;
     }
 }
