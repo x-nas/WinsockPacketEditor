@@ -117,80 +117,78 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;rtbLog.Parent" xml:space="preserve">
-    <value>tlpInjectorForm</value>
-  </data>
-  <data name="&gt;&gt;rtbLog.Name" xml:space="preserve">
-    <value>rtbLog</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpInjectorForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;pbLanguage.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="lProcessName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
-  <data name="lProcessName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="pbLanguage.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="lProcessName.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;rtbLog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSelectProcess.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tlpInjectorForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tbProcessID.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpInjectorForm.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bSelectProcess.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bInject.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tlpProcessInject.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 8</value>
-  </data>
-  <data name="&gt;&gt;pbAbout.Name" xml:space="preserve">
-    <value>pbAbout</value>
-  </data>
-  <data name="lProcessName.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="tlpInjectorForm.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="tlpProcessInject.ColumnCount" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="&gt;&gt;tbProcessID.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;lProcessName.Name" xml:space="preserve">
+    <value>lProcessName</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.Name" xml:space="preserve">
+    <value>tbProcessID</value>
   </data>
   <data name="&gt;&gt;tbProcessID.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Name" xml:space="preserve">
+    <value>bSelectProcess</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;bInject.Name" xml:space="preserve">
+    <value>bInject</value>
+  </data>
+  <data name="&gt;&gt;bInject.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bInject.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;bInject.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Name" xml:space="preserve">
+    <value>pbLanguage</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;pbAbout.Name" xml:space="preserve">
+    <value>pbAbout</value>
+  </data>
+  <data name="&gt;&gt;pbAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pbAbout.Parent" xml:space="preserve">
     <value>tlpProcessInject</value>
@@ -198,119 +196,410 @@
   <data name="&gt;&gt;pbAbout.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpProcessInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tlpProcessInject.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tlpProcessInject.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 8</value>
+  </data>
+  <data name="tlpProcessInject.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpProcessInject.Size" type="System.Drawing.Size, System.Drawing">
+    <value>485, 29</value>
+  </data>
+  <data name="tlpProcessInject.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpProcessInject.Name" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;tlpProcessInject.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProcessInject.Parent" xml:space="preserve">
+    <value>tlpInjectorForm</value>
+  </data>
+  <data name="&gt;&gt;tlpProcessInject.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProcessInject.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lProcessName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tbProcessID" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSelectProcess" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bInject" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="pbLanguage" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="pbAbout" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,80,Percent,100,Absolute,50,Absolute,90,Absolute,35,Absolute,35" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="rtbLog.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbLog.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rtbLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 43</value>
+  </data>
+  <data name="rtbLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>485, 143</value>
+  </data>
+  <data name="rtbLog.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="rtbLog.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbLog.Name" xml:space="preserve">
+    <value>rtbLog</value>
+  </data>
+  <data name="&gt;&gt;rtbLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbLog.Parent" xml:space="preserve">
+    <value>tlpInjectorForm</value>
+  </data>
+  <data name="&gt;&gt;rtbLog.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpInjectorForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpInjectorForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpInjectorForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpInjectorForm.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpInjectorForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>491, 189</value>
+  </data>
+  <data name="tlpInjectorForm.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpInjectorForm.Name" xml:space="preserve">
+    <value>tlpInjectorForm</value>
+  </data>
+  <data name="&gt;&gt;tlpInjectorForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpInjectorForm.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpInjectorForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpInjectorForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpProcessInject" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rtbLog" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,35,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="lProcessName.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lProcessName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lProcessName.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="lProcessName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lProcessName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lProcessName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 23</value>
+  </data>
+  <data name="lProcessName.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lProcessName.Text" xml:space="preserve">
+    <value>进程名称：</value>
+  </data>
+  <data name="lProcessName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.Name" xml:space="preserve">
+    <value>lProcessName</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;lProcessName.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbProcessID.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tbProcessID.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tbProcessID.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 3</value>
+  </data>
+  <data name="tbProcessID.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 23</value>
+  </data>
+  <data name="tbProcessID.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.Name" xml:space="preserve">
+    <value>tbProcessID</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;tbProcessID.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="bSelectProcess.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bSelectProcess.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bSelectProcess.Location" type="System.Drawing.Point, System.Drawing">
+    <value>277, 2</value>
+  </data>
+  <data name="bSelectProcess.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="bSelectProcess.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 25</value>
+  </data>
+  <data name="bSelectProcess.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bSelectProcess.Text" xml:space="preserve">
+    <value>. . .</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Name" xml:space="preserve">
+    <value>bSelectProcess</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;bSelectProcess.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="bInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bInject.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="bInject.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bInject.Location" type="System.Drawing.Point, System.Drawing">
+    <value>327, 2</value>
+  </data>
+  <data name="bInject.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="bInject.Size" type="System.Drawing.Size, System.Drawing">
+    <value>86, 25</value>
+  </data>
+  <data name="bInject.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="bInject.Text" xml:space="preserve">
+    <value>注 入 (&amp;P)</value>
+  </data>
+  <data name="&gt;&gt;bInject.Name" xml:space="preserve">
+    <value>bInject</value>
+  </data>
+  <data name="&gt;&gt;bInject.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bInject.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;bInject.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="pbLanguage.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pbLanguage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pbLanguage.Location" type="System.Drawing.Point, System.Drawing">
+    <value>418, 3</value>
+  </data>
+  <data name="pbLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 23</value>
+  </data>
+  <data name="pbLanguage.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="pbLanguage.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Name" xml:space="preserve">
+    <value>pbLanguage</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.Parent" xml:space="preserve">
+    <value>tlpProcessInject</value>
+  </data>
+  <data name="&gt;&gt;pbLanguage.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="pbAbout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pbAbout.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
+  </data>
+  <data name="pbAbout.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="pbAbout.Location" type="System.Drawing.Point, System.Drawing">
+    <value>453, 3</value>
+  </data>
+  <data name="pbAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 23</value>
+  </data>
   <data name="pbAbout.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
   </data>
   <data name="pbAbout.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
-  <data name="rtbLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 43</value>
-  </data>
-  <data name="bInject.Text" xml:space="preserve">
-    <value>注 入 (&amp;P)</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>进程注入器</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Name" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="pbLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>418, 3</value>
-  </data>
-  <data name="tlpProcessInject.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpProcessInject.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="bInject.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lProcessName.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="rtbLog.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;bInject.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="tlpInjectorForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpProcessInject" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rtbLog" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,35,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="lProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpInjectorForm.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="lProcessName.Text" xml:space="preserve">
-    <value>进程名称：</value>
-  </data>
-  <data name="rtbLog.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="rtbLog.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;pbAbout.Name" xml:space="preserve">
+    <value>pbAbout</value>
   </data>
   <data name="&gt;&gt;pbAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="pbAbout.Location" type="System.Drawing.Point, System.Drawing">
-    <value>453, 3</value>
-  </data>
-  <data name="tlpInjectorForm.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Parent" xml:space="preserve">
+  <data name="&gt;&gt;pbAbout.Parent" xml:space="preserve">
     <value>tlpProcessInject</value>
   </data>
-  <data name="&gt;&gt;rtbLog.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;pbAbout.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
-  <data name="bInject.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <metadata name="bgwCheckURL.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
   </data>
-  <data name="lProcessName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>491, 189</value>
   </data>
-  <data name="bSelectProcess.Text" xml:space="preserve">
-    <value>. . .</value>
-  </data>
-  <data name="tlpProcessInject.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lProcessName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tbProcessID" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSelectProcess" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bInject" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="pbLanguage" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="pbAbout" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,80,Percent,100,Absolute,50,Absolute,90,Absolute,35,Absolute,35" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tlpInjectorForm.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bInject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 25</value>
-  </data>
-  <data name="tlpProcessInject.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Injector_Form</value>
-  </data>
-  <data name="bSelectProcess.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 25</value>
-  </data>
-  <data name="bInject.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="rtbLog.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6484,233 +6773,25 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="bInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>491, 189</value>
-  </data>
-  <data name="lProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="pbAbout.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 4, 3, 4</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
   </data>
-  <data name="tbProcessID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 3</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>进程注入器</value>
   </data>
-  <data name="pbLanguage.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;bgwCheckURL.Name" xml:space="preserve">
+    <value>bgwCheckURL</value>
   </data>
-  <data name="&gt;&gt;bInject.Name" xml:space="preserve">
-    <value>bInject</value>
+  <data name="&gt;&gt;bgwCheckURL.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="bSelectProcess.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Injector_Form</value>
   </data>
-  <data name="pbAbout.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="bSelectProcess.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tbProcessID.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="tbProcessID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 23</value>
-  </data>
-  <data name="pbLanguage.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>Zoom</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpInjectorForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>491, 189</value>
-  </data>
-  <data name="pbLanguage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 23</value>
-  </data>
-  <data name="pbLanguage.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;bInject.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tbProcessID.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;pbLanguage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bInject.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="bSelectProcess.Location" type="System.Drawing.Point, System.Drawing">
-    <value>277, 2</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Name" xml:space="preserve">
-    <value>lProcessName</value>
-  </data>
-  <data name="&gt;&gt;pbLanguage.Name" xml:space="preserve">
-    <value>pbLanguage</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Name" xml:space="preserve">
-    <value>bSelectProcess</value>
-  </data>
-  <data name="bInject.Location" type="System.Drawing.Point, System.Drawing">
-    <value>327, 2</value>
-  </data>
-  <data name="rtbLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>485, 143</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="tlpInjectorForm.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpInjectorForm.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.Name" xml:space="preserve">
-    <value>tbProcessID</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Parent" xml:space="preserve">
-    <value>tlpInjectorForm</value>
-  </data>
-  <data name="pbAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 23</value>
-  </data>
-  <data name="tlpProcessInject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>485, 29</value>
-  </data>
-  <data name="tlpInjectorForm.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;pbLanguage.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tlpInjectorForm.Name" xml:space="preserve">
-    <value>tlpInjectorForm</value>
-  </data>
-  <data name="lProcessName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="pbAbout.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProcessInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
 </root>

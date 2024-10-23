@@ -593,7 +593,10 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            bgwSendFrom.RunWorkerAsync();
+                            if (!bgwSendFrom.IsBusy)
+                            {
+                                bgwSendFrom.RunWorkerAsync();
+                            }
                         }
 
                         #endregion

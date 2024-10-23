@@ -4,6 +4,8 @@ using System.IO;
 using WinsockPacketEditor.Lib;
 using WPELibrary.Lib;
 using EasyHook;
+using System.Reflection;
+using System.Net;
 
 namespace WinsockPacketEditor
 {
@@ -13,6 +15,8 @@ namespace WinsockPacketEditor
         private string ProcessPath = "";        
         private int ProcessID = -1;
         private string sDllName = "WPELibrary.dll";
+        private string sWPE64_URL = "https://www.wpe64.com";
+        private string sWPE64_IP = "http://101.132.222.195";
 
         private ToolTip tt = new ToolTip();
 
@@ -127,12 +131,15 @@ namespace WinsockPacketEditor
         {
             try
             {
-                System.Diagnostics.Process.Start("http://101.132.222.195");
+                if (!bgwCheckURL.IsBusy)
+                {
+                    bgwCheckURL.RunWorkerAsync();
+                }
             }
             catch (Exception ex)
             {
                 ShowLog(ex.Message);
-            }            
+            }
         }        
 
         private void pbLanguage_Click(object sender, EventArgs e)
@@ -146,6 +153,28 @@ namespace WinsockPacketEditor
             {
                 ShowLog(ex.Message);
             }            
+        }
+
+        private bool CheckWebSiteIsOK(string sURL)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
+                HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse();
+
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }        
+
+            return bReturn;
         }
 
         #endregion        
@@ -169,6 +198,43 @@ namespace WinsockPacketEditor
             {
                 ShowLog(ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//检测并打开网站（异步）
+
+        private void bgwCheckURL_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                e.Result = this.CheckWebSiteIsOK(sWPE64_URL);                
+            }
+            catch (Exception ex)
+            {
+                ShowLog(ex.Message);
+            }
+        }
+
+        private void bgwCheckURL_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                bool bWPE64_URL = (bool)e.Result;
+
+                if (bWPE64_URL)
+                {
+                    System.Diagnostics.Process.Start(sWPE64_URL);
+                }
+                else
+                {
+                    System.Diagnostics.Process.Start(sWPE64_IP);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowLog(ex.Message);
+            }            
         }
 
         #endregion

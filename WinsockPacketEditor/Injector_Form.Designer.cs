@@ -39,6 +39,7 @@ namespace WinsockPacketEditor
             this.pbLanguage = new System.Windows.Forms.PictureBox();
             this.pbAbout = new System.Windows.Forms.PictureBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
+            this.bgwCheckURL = new System.ComponentModel.BackgroundWorker();
             this.tlpInjectorForm.SuspendLayout();
             this.tlpProcessInject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).BeginInit();
@@ -70,8 +71,8 @@ namespace WinsockPacketEditor
             // 
             // tbProcessID
             // 
-            resources.ApplyResources(this.tbProcessID, "tbProcessID");
             this.tbProcessID.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.tbProcessID, "tbProcessID");
             this.tbProcessID.Name = "tbProcessID";
             // 
             // bSelectProcess
@@ -105,11 +106,16 @@ namespace WinsockPacketEditor
             // 
             // rtbLog
             // 
-            resources.ApplyResources(this.rtbLog, "rtbLog");
             this.rtbLog.BackColor = System.Drawing.Color.Black;
+            resources.ApplyResources(this.rtbLog, "rtbLog");
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
+            // 
+            // bgwCheckURL
+            // 
+            this.bgwCheckURL.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckURL_DoWork);
+            this.bgwCheckURL.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCheckURL_RunWorkerCompleted);
             // 
             // Injector_Form
             // 
@@ -140,6 +146,7 @@ namespace WinsockPacketEditor
         private System.Windows.Forms.Button bInject;
         private System.Windows.Forms.PictureBox pbLanguage;
         private System.Windows.Forms.PictureBox pbAbout;
+        private System.ComponentModel.BackgroundWorker bgwCheckURL;
     }
 }
 
