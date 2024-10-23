@@ -15,7 +15,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 
 安装下载以及使用说明   Installation, download, and instructions
 
-http://101.132.222.195
+https://www.wpe64.com
 
 
 ![111](https://github.com/user-attachments/assets/e5a2edf3-dd5a-4abf-9676-6aa11f42ffbb)
