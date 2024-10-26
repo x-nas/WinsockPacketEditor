@@ -67,12 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Lib\Socket_BitInfo.cs" />
     <Compile Include="Lib\User32.cs" />
     <Compile Include="Lib\WS2_32.cs" />
@@ -175,9 +169,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Socket_FilterForm.en-US.resx">
       <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </EmbeddedResource>
