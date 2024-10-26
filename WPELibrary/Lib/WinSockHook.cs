@@ -200,14 +200,6 @@ namespace WPELibrary.Lib
                 if (res > 0)
                 {
                     bReturn = true;
-                    
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
-                }
-                else
-                {
-                    bReturn = false;
-                    
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
                 }
             }
             catch (Exception ex)

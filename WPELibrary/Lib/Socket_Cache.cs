@@ -6,6 +6,7 @@ using System.Threading;
 using System.ComponentModel;
 using System.Reflection;
 using Be.Windows.Forms;
+using System.Diagnostics;
 
 namespace WPELibrary.Lib
 {
@@ -25,6 +26,8 @@ namespace WPELibrary.Lib
 
         public static class SocketPacket
         {
+            public static int PacketData_MaxLen = 60;
+
             #region//结构定义
 
             public struct in_addr
@@ -330,6 +333,7 @@ namespace WPELibrary.Lib
             public static int FilterNormal_SearchRowIndex = 0, FilterNormal_ModifyRowIndex = 1;
             public static int FilterAdvanced_SearchRowIndex = 0, FilterAdvanced_ModifyRowIndex = 0;
             public static int FilterSearchLen_New = 100, FilterModifyLen_New = 100;
+            public static int Filter_MaxNum = 3;
             public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
 
             #region//初始化滤镜列表
@@ -479,7 +483,47 @@ namespace WPELibrary.Lib
 
             #region//滤镜列表操作（新增，修改，删除）
 
-            //新增滤镜
+            #region//新增
+
+            public static void AddToFilterList_BySocketListIndex(int iSLIndex)
+            {
+                try
+                {
+                    if (SocketList.lstRecPacket.Count > 0 && iSLIndex > -1)
+                    {
+                        int iIndex = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketIndex;
+                        string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
+                        byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketBuffer;
+
+                        Socket_Cache.FilterList.AddToFilterList_New(sFName, bBuffer);
+                    }  
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void AddToFilterList_New(string sFName, byte[] bBuffer)
+            {
+                try
+                {  
+                    Socket_FilterInfo.FilterMode FMode = Socket_FilterInfo.FilterMode.Normal;
+                    Socket_FilterInfo.StartFrom FStartFrom = Socket_FilterInfo.StartFrom.Head;
+                    int iFModifyCNT = 1;
+
+                    string sFSearch = Socket_Operation.GetFilterString_ByBytes(bBuffer);
+                    int iFSearchLen = bBuffer.Length;
+
+                    Socket_Cache.FilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, "", iFSearchLen, false);
+                    Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+            
             public static void AddFilter_New()
             {
                 try
@@ -551,7 +595,10 @@ namespace WPELibrary.Lib
                 return iReturn;
             }
 
-            //删除滤镜
+            #endregion
+
+            #region//删除
+
             public static void DeleteFilter_ByFilterNum(int FNum)
             {
                 try
@@ -572,7 +619,10 @@ namespace WPELibrary.Lib
                 }
             }
 
-            //修改滤镜
+            #endregion
+
+            #region//修改
+
             public static void UpdateFilter_ByFilterNum(int FNum, string FName, Socket_FilterInfo.FilterMode FMode, Socket_FilterInfo.StartFrom FStartFrom, int FModifyCNT, string FSearch, int FSearchLen, string FModify, int FModifyLen)
             {
                 try
@@ -600,7 +650,12 @@ namespace WPELibrary.Lib
                 }
             }
 
-            //获取滤镜序号
+            #endregion
+
+            #endregion
+
+            #region//获取滤镜编号
+
             public static int GetFilterIndex_ByFilterNum(int FNum)
             {
                 int iReturn = -1;
@@ -628,7 +683,6 @@ namespace WPELibrary.Lib
                 return iReturn;
             }
 
-            //获取滤镜编号
             public static int GetFilterNum_ByFilterIndex(int FIndex)
             {
                 int iReturn = -1;
@@ -958,12 +1012,12 @@ namespace WPELibrary.Lib
 
         public static class SendList
         {
-            public static int Loop_CNT = 0;//循环次数
-            public static int Loop_Int = 0;//循环间隔
-            public static int Loop_Send_CNT = 0;//已循环次数
-            public static int SendList_Success_CNT = 0;//发送成功
-            public static int SendList_Fail_CNT = 0;//发送失败
-            public static int UseSocket = 0;//使用此套接字
+            public static int Loop_CNT = 0;
+            public static int Loop_Int = 0;
+            public static int Loop_Send_CNT = 0;
+            public static int SendList_Success_CNT = 0;
+            public static int SendList_Fail_CNT = 0;
+            public static int UseSocket = 0;
             public static bool bShow_SendListForm = true;
 
             public static DataTable dtSocketSendList = new DataTable();
@@ -972,51 +1026,74 @@ namespace WPELibrary.Lib
 
             public static void InitSendList()
             {
-                dtSocketSendList.Columns.Clear();
+                try
+                {
+                    dtSocketSendList.Columns.Clear();
 
-                dtSocketSendList.Columns.Add("ID", typeof(int));
-                dtSocketSendList.Columns.Add("Remark", typeof(string));
-                dtSocketSendList.Columns.Add("Socket", typeof(int));
-                dtSocketSendList.Columns.Add("ToAddress", typeof(string));
-                dtSocketSendList.Columns.Add("Len", typeof(int));
-                dtSocketSendList.Columns.Add("Data", typeof(string));
-                dtSocketSendList.Columns.Add("Bytes", typeof(byte[]));
+                    dtSocketSendList.Columns.Add("ID", typeof(int));
+                    dtSocketSendList.Columns.Add("Remark", typeof(string));
+                    dtSocketSendList.Columns.Add("Socket", typeof(int));
+                    dtSocketSendList.Columns.Add("ToAddress", typeof(string));
+                    dtSocketSendList.Columns.Add("Len", typeof(int));
+                    dtSocketSendList.Columns.Add("Data", typeof(string));
+                    dtSocketSendList.Columns.Add("Bytes", typeof(byte[]));
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion            
 
             #region//发送列表操作（新增，删除）
 
-            public static void AddSendList_BySocketListIndex(int iSLIndex)
+            public static void AddToSendList_BySocketListIndex(int iSLIndex)
             {
-                AddSendList_New(
-                    SocketList.lstRecPacket[iSLIndex].PacketIndex,
-                    "",
-                    SocketList.lstRecPacket[iSLIndex].PacketSocket,
-                    SocketList.lstRecPacket[iSLIndex].PacketTo,
-                    SocketList.lstRecPacket[iSLIndex].PacketLen,
-                    SocketList.lstRecPacket[iSLIndex].PacketData,
-                    SocketList.lstRecPacket[iSLIndex].PacketBuffer
-                    );
+                try
+                {
+                    if (SocketList.lstRecPacket.Count > 0 && iSLIndex > -1)
+                    {
+                        AddToSendList_New(SocketList.lstRecPacket[iSLIndex].PacketIndex, "", SocketList.lstRecPacket[iSLIndex].PacketSocket, SocketList.lstRecPacket[iSLIndex].PacketTo, SocketList.lstRecPacket[iSLIndex].PacketData, SocketList.lstRecPacket[iSLIndex].PacketBuffer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
-            public static void AddSendList_New(int iIndex, string sNote, int iSocket, string sIPTo, int iResLen, string sData, byte[] bBuffer)
+            public static void AddToSendList_New(int iIndex, string sNote, int iSocket, string sIPTo, string sData, byte[] bBuffer)
             {
-                DataRow dr = dtSocketSendList.NewRow();
+                try
+                {
+                    DataRow dr = dtSocketSendList.NewRow();
 
-                dr["ID"] = iIndex;
-                dr["Remark"] = sNote;
-                dr["Socket"] = iSocket;
-                dr["ToAddress"] = sIPTo;
-                dr["Len"] = iResLen;
-                dr["Data"] = sData;
-                dr["Bytes"] = bBuffer;
-                dtSocketSendList.Rows.Add(dr);
+                    dr["ID"] = iIndex;
+                    dr["Remark"] = sNote;
+                    dr["Socket"] = iSocket;
+                    dr["ToAddress"] = sIPTo;
+                    dr["Len"] = bBuffer.Length;
+                    dr["Data"] = sData;
+                    dr["Bytes"] = bBuffer;
+                    dtSocketSendList.Rows.Add(dr);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             public static void DeleteSendList_ByIndex(int SIndex)
             {
-                dtSocketSendList.Rows[SIndex].Delete();
+                try
+                {
+                    dtSocketSendList.Rows[SIndex].Delete();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion

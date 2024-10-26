@@ -45,7 +45,8 @@ namespace WPELibrary
 
         #endregion
 
-        #region//初始化窗体
+        #region//初始化
+
         private void InitSendListForm()
         {
             try
@@ -60,7 +61,7 @@ namespace WPELibrary
 
                 if (Socket_Cache.SendList.UseSocket > 0)
                 {
-                    this.txtUseSocket.Text = Socket_Cache.SendList.UseSocket.ToString();
+                    this.nudSocket.Value = Socket_Cache.SendList.UseSocket;
                 }
             }
             catch (Exception ex)
@@ -68,6 +69,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
+
         #endregion
 
         #region//初始化数据表
@@ -136,6 +138,7 @@ namespace WPELibrary
         #endregion
 
         #region//开始发送
+
         private void bSend_Click(object sender, EventArgs e)
         {
             try
@@ -159,7 +162,7 @@ namespace WPELibrary
 
                     if (this.cbUseSocket.Checked)
                     {
-                        int iCheckSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
+                        int iCheckSocket = (int)this.nudSocket.Value;
 
                         if (iCheckSocket > 0)
                         {
@@ -210,6 +213,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion
 
         #region//停止按钮
@@ -274,15 +278,14 @@ namespace WPELibrary
 
                                     if (this.cbUseSocket.Checked)
                                     {
-                                        iSocket = Socket_Operation.CheckSocket(this.txtUseSocket.Text.ToString().Trim());
+                                        iSocket = (int)this.nudSocket.Value;
                                     }
                                     else
                                     {
-                                        iSocket = Socket_Operation.CheckSocket(this.dgvSendList.Rows[j].Cells["cSocket"].Value.ToString().Trim());
+                                        iSocket = (int)this.dgvSendList.Rows[j].Cells["cSocket"].Value;
                                     }
 
                                     Socket_Cache.SendList.SendPacketList_ByIndex(iSocket, j);
-
                                     Socket_Cache.SendList.Loop_Send_CNT++;
                                 }
                             }

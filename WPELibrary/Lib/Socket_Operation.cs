@@ -9,7 +9,6 @@ using System.Data;
 using System.Linq;
 using System.Diagnostics;
 using System.Drawing;
-using static WPELibrary.Lib.Socket_Cache.SocketPacket;
 
 namespace WPELibrary.Lib
 {   
@@ -99,9 +98,9 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Byte数组转字符串
+        #region//Byte[]转字符串
 
-        public static string BytesToString(EncodingFormat efFormat, byte[] buffer)
+        public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, byte[] buffer)
         {
             string sReturn = string.Empty;
 
@@ -109,75 +108,79 @@ namespace WPELibrary.Lib
             {                
                 switch (efFormat)
                 {
-                    case EncodingFormat.Char:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Char:
                         char c = Convert.ToChar(buffer[0]);
                         if ((int)c > 31)
                         {
                             sReturn = c.ToString();
                         }
+                        else
+                        {
+                            sReturn = ".";
+                        }
                         break;
 
-                    case EncodingFormat.Byte:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Byte:
                         sReturn = buffer[0].ToString();
                         break;
 
-                    case EncodingFormat.Short:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Short:
                         if (buffer.Length >= 2)
                         {
                             sReturn = BitConverter.ToInt16(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.UShort:
+                    case Socket_Cache.SocketPacket.EncodingFormat.UShort:
                         if (buffer.Length >= 2)
                         {
                             sReturn = BitConverter.ToUInt16(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.Int32:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Int32:
                         if (buffer.Length >= 4)
                         {
                             sReturn = BitConverter.ToInt32(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.UInt32:
+                    case Socket_Cache.SocketPacket.EncodingFormat.UInt32:
                         if (buffer.Length >= 4)
                         {
                             sReturn = BitConverter.ToUInt32(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.Int64:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Int64:
                         if (buffer.Length >= 8)
                         {
                             sReturn = BitConverter.ToInt64(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.UInt64:
+                    case Socket_Cache.SocketPacket.EncodingFormat.UInt64:
                         if (buffer.Length >= 8)
                         {
                             sReturn = BitConverter.ToUInt64(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.Float:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Float:
                         if (buffer.Length >= 4)
                         {
                             sReturn = BitConverter.ToSingle(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.Double:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Double:
                         if (buffer.Length >= 8)
                         {
                             sReturn = BitConverter.ToDouble(buffer, 0).ToString();
                         }
                         break;
 
-                    case EncodingFormat.Bin:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Bin:
                         foreach (byte b in buffer)
                         {
                             string strTemp = Convert.ToString(b, 2);
@@ -187,7 +190,7 @@ namespace WPELibrary.Lib
                         sReturn = sReturn.Trim();
                         break;
 
-                    case EncodingFormat.Hex:
+                    case Socket_Cache.SocketPacket.EncodingFormat.Hex:
                         foreach (byte b in buffer)
                         {
                             sReturn += b.ToString("X2") + " ";
@@ -195,7 +198,7 @@ namespace WPELibrary.Lib
                         sReturn = sReturn.Trim();
                         break;
 
-                    case EncodingFormat.UTF7:
+                    case Socket_Cache.SocketPacket.EncodingFormat.UTF7:
                         sReturn = Encoding.UTF7.GetString(buffer);
                         break;                 
 
@@ -426,52 +429,8 @@ namespace WPELibrary.Lib
 
             return sReturn;
         }
-      
-        #endregion
 
-        #region//获取指定位置的16进制数据值
-        public static string GetValueByIndex_HEX(string sHex, int iIndex)
-        {
-            string sReturn = "";
-
-            try
-            {
-                string[] slHex = sHex.Split(' ');
-
-                if (slHex.Length > iIndex)
-                {
-                    sReturn = slHex[iIndex];
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-        #endregion
-
-        #region//获取指定步长的16进制数据值
-        public static string GetValueByLen_HEX(string sHex, int iLen)
-        {
-            string sReturn = "";
-
-            try
-            {
-                int iValue_Dec = Convert.ToInt32(sHex, 16);
-                iValue_Dec += iLen;
-
-                sReturn = iValue_Dec.ToString("X2");
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-        #endregion
+        #endregion        
 
         #region//获取封包数据字符串（十六进制）
 
@@ -492,11 +451,11 @@ namespace WPELibrary.Lib
                         bTemp[j] = bBuff[j];
                     }
 
-                    sReturn = Socket_Operation.BytesToString(EncodingFormat.Hex, bTemp) + " ...";
+                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bTemp) + " ...";
                 }
                 else
                 {
-                    sReturn = Socket_Operation.BytesToString(EncodingFormat.Hex, bBuff);
+                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
                 }
             }
             catch (Exception ex)
@@ -596,30 +555,51 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//替换封包指定位置的16进制数据值
-        public static string ReplaceValueByIndexAndLen_HEX(string sHex, int iIndex, int iLen)
+        #region//获取指定步长的Byte
+
+        public static byte GetStepByte(byte bStepByte, int iStepLen)
         {
-            string sReturn = "";
+            byte bReturn = byte.MinValue;
 
             try
             {
-                string sOldValue = GetValueByIndex_HEX(sHex, iIndex);
-                string sNewValue = GetValueByLen_HEX(sOldValue, iLen);
+                int iStepValue = Convert.ToInt32(bStepByte);
+                iStepValue += iStepLen;
 
-                int iStartIndex = iIndex * 3;
-
-                sHex = sHex.Remove(iStartIndex, 2);
-                sHex = sHex.Insert(iStartIndex, sNewValue);
-
-                sReturn = sHex;
+                bReturn = Convert.ToByte(iStepValue);
             }
             catch (Exception ex)
             {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return sReturn;
+            return bReturn;
         }
+
+        #endregion
+
+        #region//获取递进后的Byte[]
+
+        public static byte[] GetStepBytes(byte[] bStepBuffer, int iStepPosition, int iStepLen)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                byte bStepByte = bStepBuffer[iStepPosition];
+
+                bStepBuffer[iStepPosition] = GetStepByte(bStepByte, iStepLen);
+
+                bReturn = bStepBuffer;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }      
+
         #endregion
 
         #region//是否显示封包（过滤条件）        
@@ -746,7 +726,7 @@ namespace WPELibrary.Lib
             {
                 if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Packet))
                 {
-                    string sPacket = BytesToString(EncodingFormat.Hex, bBuffer);
+                    string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                     string[] sPacketArr = Socket_Cache.txtCheck_Packet.Split(';');
 
@@ -794,7 +774,7 @@ namespace WPELibrary.Lib
 
         #region//搜索封包数据        
 
-        public static int FindSocketList(EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
+        public static int FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
         {
             int iResult = -1;
 
@@ -836,33 +816,7 @@ namespace WPELibrary.Lib
             return iResult;
         }
 
-        #endregion
-
-        #region//检查套接字是否正确
-        public static int CheckSocket(string sSocket)
-        {
-            int iResult = 0;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(sSocket))
-                {
-                    iResult = int.Parse(sSocket);
-
-                    if (iResult < 0)
-                    {
-                        iResult = 0;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
-
-            return iResult;
-        }
-        #endregion
+        #endregion      
 
         #region//检查是否合法的十六进制
         public static bool CheckHEX(object oHex)
@@ -898,6 +852,46 @@ namespace WPELibrary.Lib
         }
         #endregion
 
+        #region//显示发送窗体
+
+        public static void ShowSendForm(int iSLIndex)
+        {
+            try
+            {
+                if (iSLIndex > -1)
+                {
+                    Socket_SendForm ssForm = new Socket_SendForm(iSLIndex);
+                    ssForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示发送列表窗体
+
+        public static void ShowSendListForm()
+        {
+            try
+            {
+                if (Socket_Cache.SendList.bShow_SendListForm)
+                {
+                    Socket_SendListForm sslForm = new Socket_SendListForm();
+                    sslForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//保存发送列表数据
 
         public static void SaveSendListToFile()
@@ -928,7 +922,7 @@ namespace WPELibrary.Lib
                                 string sIPTo = Socket_Cache.SendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
                                 string sLen = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
                                 byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSocketSendList.Rows[i]["Bytes"];
-                                string sData = BytesToString(EncodingFormat.Hex, bBuffer);
+                                string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                                 string sSave = sIndex + "|" + sNote + "|" + sSocket + "|" + sIPTo + "|" + sLen + "|" + sData;
 
@@ -961,6 +955,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//加载发送列表数据
+
         public static void LoadFileToSendList()
         {
             int iSuccess = 0;
@@ -996,7 +991,7 @@ namespace WPELibrary.Lib
 
                             byte[] bBuffer = Hex_To_Byte(sData);
 
-                            Socket_Cache.SendList.AddSendList_New(iIndex, sNote, iSocket, sIPTo, iResLen, sData, bBuffer);
+                            Socket_Cache.SendList.AddToSendList_New(iIndex, sNote, iSocket, sIPTo, sData, bBuffer);
 
                             iSuccess++;
                         }
@@ -1021,22 +1016,25 @@ namespace WPELibrary.Lib
 
         #region//保存滤镜列表数据
 
-        public static void SaveDialog_FilterList()
+        public static void SaveFilterList_Dialog()
         {
             int iSuccess = 0;
 
             try
             {
-                SaveFileDialog sfdSocketInfo = new SaveFileDialog();
-
-                sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
-                sfdSocketInfo.RestoreDirectory = true;
-
-                if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
+                if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    iSuccess = SaveFilterList(sfdSocketInfo.FileName);
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
-                }
+                    SaveFileDialog sfdSocketInfo = new SaveFileDialog();
+
+                    sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
+                    sfdSocketInfo.RestoreDirectory = true;
+
+                    if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
+                    {
+                        iSuccess = SaveFilterList(sfdSocketInfo.FileName);
+                        ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
+                    }
+                }  
             }
             catch (Exception ex)
             {
@@ -1051,46 +1049,49 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (string.IsNullOrEmpty(FilePath))
-                {
-                    FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                }
-
-                FileStream fs = new FileStream(FilePath, FileMode.Create);
-                StreamWriter sw = new StreamWriter(fs);
-
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
+                    if (string.IsNullOrEmpty(FilePath))
                     {
-                        try
+                        FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                    }
+
+                    FileStream fs = new FileStream(FilePath, FileMode.Create);
+                    StreamWriter sw = new StreamWriter(fs);
+
+                    if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                    {
+                        for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
                         {
-                            string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
-                            string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
-                            string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
-                            string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                            string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
-                            string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
-                            string sFSearchLen = Socket_Cache.FilterList.lstFilter[i].FSearchLen.ToString();
-                            string sModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
-                            string sModifyLen = Socket_Cache.FilterList.lstFilter[i].FModifyLen.ToString();
+                            try
+                            {
+                                string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
+                                string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
+                                string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
+                                string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
+                                string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
+                                string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
+                                string sFSearchLen = Socket_Cache.FilterList.lstFilter[i].FSearchLen.ToString();
+                                string sModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
+                                string sModifyLen = Socket_Cache.FilterList.lstFilter[i].FModifyLen.ToString();
 
-                            string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" + sModifyLen;
+                                string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" + sModifyLen;
 
-                            sw.WriteLine(sSave);
+                                sw.WriteLine(sSave);
 
-                            iReturn++;
-                        }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                iReturn++;
+                            }
+                            catch (Exception ex)
+                            {
+                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                            }
                         }
                     }
-                }
 
-                sw.Flush();
-                sw.Close();
-                fs.Close();                
+                    sw.Flush();
+                    sw.Close();
+                    fs.Close();
+                }              
             }
             catch (Exception ex)
             {
@@ -1104,7 +1105,7 @@ namespace WPELibrary.Lib
 
         #region//加载滤镜列表数据
 
-        public static void LoadDialog_FilterList()
+        public static void LoadFilterList_Dialog()
         {
             int iSuccess = 0;
 
@@ -1189,18 +1190,16 @@ namespace WPELibrary.Lib
 
         #region//获取滤镜字符串
 
-        public static string GetFilterString_ByHEX(string sHEX)
+        public static string GetFilterString_ByBytes(byte[] bBuffer)
         {
             string sReturn = "";
 
             try
             {
-                string[] slHex = sHEX.Split(' ');
-
-                for (int i = 0; i < slHex.Length; i++)
+                for (int i = 0; i < bBuffer.Length; i++)
                 {
-                    string sCell = slHex[i];
-                    sReturn += i.ToString() + "-" + sCell + ",";
+                    string sHex = bBuffer[i].ToString("X2");
+                    sReturn += i.ToString() + "-" + sHex + ",";
                 }
 
                 sReturn = sReturn.Trim(',');
@@ -1212,7 +1211,7 @@ namespace WPELibrary.Lib
             }
 
             return sReturn;
-        }
+        }    
 
         #endregion
 
@@ -1254,6 +1253,72 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//显示滤镜窗体（对话框）
+
+        public static void ShowFilterForm_Dialog(int iFNum)
+        {
+            try
+            {
+                if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                {
+                    if (iFNum > 0)
+                    {
+                        Socket_FilterForm fFilterForm = new Socket_FilterForm(iFNum);
+                        fFilterForm.ShowDialog();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//删除滤镜（对话框）
+
+        public static void CleanUpFilterList_Dialog()
+        {
+            try
+            {
+                DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
+
+                if (dr.Equals(DialogResult.OK))
+                {
+                    Socket_Cache.FilterList.FilterListClear();
+                    Socket_Operation.SaveFilterList("");
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void DeleteFilterByFilterNum_Dialog(int iFNum)
+        {
+            try
+            {
+                if (iFNum > 0)
+                {
+                    DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
+
+                    if (dr.Equals(DialogResult.OK))
+                    {
+                        Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);
+                        Socket_Operation.SaveFilterList("");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//保存封包列表为Excel
 
         public static void SaveSocketListToExcel()
@@ -1262,53 +1327,56 @@ namespace WPELibrary.Lib
 
             try
             {
-                SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                sfdSaveToExcel.FilterIndex = 0;
-                sfdSaveToExcel.RestoreDirectory = true;
-                sfdSaveToExcel.CreatePrompt = true;
-                                
-                sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
-
-                if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                if (Socket_Cache.SocketList.lstRecPacket.Count > 0)
                 {
-                    Stream myStream = sfdSaveToExcel.OpenFile();
-                    StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-                                        
-                    string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
-                    sw.WriteLine(sColTitle);
+                    SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                    sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
+                    sfdSaveToExcel.FilterIndex = 0;
+                    sfdSaveToExcel.RestoreDirectory = true;
+                    sfdSaveToExcel.CreatePrompt = true;
 
-                    foreach (Socket_PacketInfo spi in Socket_Cache.SocketList.lstRecPacket)
+                    sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
+
+                    if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
                     {
-                        try
+                        Stream myStream = sfdSaveToExcel.OpenFile();
+                        StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
+
+                        string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
+                        sw.WriteLine(sColTitle);
+
+                        foreach (Socket_PacketInfo spi in Socket_Cache.SocketList.lstRecPacket)
                         {
-                            string sColValue = "";
+                            try
+                            {
+                                string sColValue = "";
 
-                            string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fff");
-                            string sIndex = spi.PacketIndex.ToString();
-                            string sType = spi.PacketType.ToString();
-                            string sSocket = spi.PacketSocket.ToString();
-                            string sFrom = spi.PacketFrom;
-                            string sTo = spi.PacketTo;
-                            string sLen = spi.PacketLen.ToString();
-                            byte[] bBuff = spi.PacketBuffer;
-                            string sData = BytesToString(EncodingFormat.Hex, bBuff);
+                                string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fff");
+                                string sIndex = spi.PacketIndex.ToString();
+                                string sType = spi.PacketType.ToString();
+                                string sSocket = spi.PacketSocket.ToString();
+                                string sFrom = spi.PacketFrom;
+                                string sTo = spi.PacketTo;
+                                string sLen = spi.PacketLen.ToString();
+                                byte[] bBuff = spi.PacketBuffer;
+                                string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
 
-                            sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
-                            sw.WriteLine(sColValue);
+                                sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
+                                sw.WriteLine(sColValue);
 
-                            iSuccess++;
+                                iSuccess++;
+                            }
+                            catch (Exception ex)
+                            {
+                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
+
+                        sw.Close();
+                        myStream.Close();
+
+                        ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                     }
-
-                    sw.Close();
-                    myStream.Close();
-                                        
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                 }
             }
             catch(Exception ex)

@@ -165,6 +165,7 @@
             this.Name = "Socket_FindForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.TopMost = true;
             this.tlpFindForm.ResumeLayout(false);
             this.tlpFindForm.PerformLayout();
             this.tlpLine.ResumeLayout(false);

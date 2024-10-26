@@ -38,10 +38,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_26 = { "查找", "Search" };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
-        public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
+        //public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "已发送: {0} 字节  接收: {1} 字节", "Sent: {0} Bytes  Received: {1} Bytes" };
-        //public static string[] MutiLan_32 = { "总计接收 {0} 字节", "Total Recv {0} Bytes" };
+        public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
         //public static string[] MutiLan_33 = { "过滤-IP地址, ", "Filter-IP Address, " };
         //public static string[] MutiLan_34 = { "过滤-封包内容, ", "Filter-Socket Packet, " };
         public static string[] MutiLan_35 = { "开始拦截！", "Start Intercepting!" };
@@ -51,7 +51,7 @@ namespace WPELibrary.Lib
         //public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };
         //public static string[] MutiLan_40 = { "请输入搜索内容", "Please enter search content" };
         //public static string[] MutiLan_41 = { "搜索完成!", "Search completed!" };
-        public static string[] MutiLan_42 = { "发送封包 -【 序号", "Send -【 ID" };
+        //public static string[] MutiLan_42 = { "发送封包 -【 序号", "Send -【 ID" };
         //public static string[] MutiLan_43 = { "", "" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
@@ -89,8 +89,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
         public static string[] MutiLan_78 = { "记录时间\t模块\t日志内容\t", "Log Time\tModule Name\tLog content\t" };
         public static string[] MutiLan_79 = { "提示", "Prompt" };
-        public static string[] MutiLan_80 = { "发送封包成功", "Successfully sent packet" };
-        public static string[] MutiLan_81 = { "发送封包失败", "Sending packet failed" };
+        //public static string[] MutiLan_80 = { "发送封包成功", "Successfully sent packet" };
+        //public static string[] MutiLan_81 = { "发送封包失败", "Sending packet failed" };
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
         public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };

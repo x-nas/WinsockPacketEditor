@@ -6,7 +6,6 @@ using System.Reflection;
 using WPELibrary.Lib;
 using EasyHook;
 using Be.Windows.Forms;
-using static WPELibrary.Lib.Socket_Cache.SocketPacket;
 
 namespace WPELibrary
 {
@@ -16,10 +15,7 @@ namespace WPELibrary
 
         private int Select_Index = -1;
         private int Search_Index = -1;
-        private int Max_DataLen = 60;
-        private int FilterMAXNum = 3;
-        private bool bWakeUp = true;        
-        public bool Search_SocketList = false;
+        private bool bWakeUp = true;
         
         private ToolTip tt = new ToolTip();
 
@@ -31,26 +27,16 @@ namespace WPELibrary
             {
                 MultiLanguage.SetDefaultLanguage(sLanguage);
                 InitializeComponent();
+
+                this.InitSocketForm();
+                this.InitSocketDGV();                
+                Socket_Cache.SendList.InitSendList();
+                Socket_Cache.FilterList.InitFilterList(Socket_Cache.FilterList.Filter_MaxNum);                
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
-        }        
-
-        private void DLL_Form_Load(object sender, EventArgs e)
-        {
-            try
-            {                
-                this.InitSocketDGV();
-                this.InitSocketForm();
-                this.CleanUp_Conversion();
-                this.HexBox_ManageAbility();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
         }
 
         #endregion
@@ -120,7 +106,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//初始化窗体
+        #region//初始化
 
         private void InitSocketForm()
         {
@@ -165,20 +151,9 @@ namespace WPELibrary
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
-                this.tsmiStartHook.Enabled = true;
-                this.tsmiStopHook.Enabled = false;
+                this.cmsIcon_StartHook.Enabled = true;
+                this.cmsIcon_StopHook.Enabled = false;
                 this.tSocketInfo.Enabled = true;
-                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);                
-
-                Socket_Cache.SendList.InitSendList();
-                Socket_Cache.FilterList.InitFilterList(FilterMAXNum);
-
-                DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
-                EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
-                tscbEncoding.Items.Add(defConverter);
-                tscbEncoding.Items.Add(ebcdicConverter);          
-                tscbEncoding.SelectedIndex = 0;
-                tscbPerLine.SelectedIndex = 1;                
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
@@ -186,7 +161,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
@@ -265,31 +240,8 @@ namespace WPELibrary
         private void CleanUp_MainForm()
         {
             this.CleanUp_SocketList();
-            this.CleanUp_HexBox();
-            this.CleanUp_Conversion();
-        }
-
-        private void CleanUp_Conversion()
-        {
-            try
-            {
-                this.lPacketDataPosition.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), 0, 0, 0);
-                this.lBits_Value.Text = string.Empty;
-                this.lByte_Value.Text = string.Empty;
-                this.lShort_Value.Text = string.Empty;
-                this.lUShort_Value.Text = string.Empty;
-                this.lInt32_Value.Text = string.Empty;
-                this.lUInt32_Value.Text = string.Empty;
-                this.lInt64_Value.Text = string.Empty;
-                this.lUInt64_Value.Text = string.Empty;
-                this.lFloat_Value.Text = string.Empty;
-                this.lDouble_Value.Text = string.Empty;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+            this.CleanUp_HexBox();            
+        }        
 
         private void CleanUp_SocketList()
         {
@@ -329,10 +281,7 @@ namespace WPELibrary
                 }
 
                 hbPacketData.ByteProvider = null;
-            }
-            
-            this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
-            this.HexBox_ManageAbility();
+            }          
         }
 
         #endregion
@@ -354,8 +303,8 @@ namespace WPELibrary
                 this.gbHookType.Enabled = false;
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
-                this.tsmiStartHook.Enabled = false;
-                this.tsmiStopHook.Enabled = true;
+                this.cmsIcon_StartHook.Enabled = false;
+                this.cmsIcon_StopHook.Enabled = true;
 
                 ws.StartHook();
 
@@ -390,8 +339,8 @@ namespace WPELibrary
                 this.gbHookType.Enabled = true;
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
-                this.tsmiStartHook.Enabled = true;
-                this.tsmiStopHook.Enabled = false;
+                this.cmsIcon_StartHook.Enabled = true;
+                this.cmsIcon_StopHook.Enabled = false;
 
                 ws.StopHook();
 
@@ -464,7 +413,33 @@ namespace WPELibrary
 
         #endregion
 
-        #region//右键菜单
+        #region//封包编辑器菜单
+
+        private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            this.cmsHexBox.Close();
+
+            try
+            {
+                switch (sItemText)
+                {
+                    case "cmsHexBox_Send":
+                        if (Select_Index > -1)
+                        {
+                            Socket_Operation.ShowSendForm(Select_Index);
+                            this.dgvSocketList.Refresh();
+                        }
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//图标菜单
 
@@ -477,40 +452,28 @@ namespace WPELibrary
             {
                 switch (sItemText)
                 {
-                    case "tsmiShow":
-
+                    case "cmsIcon_Show":
                         this.ShowMainForm();
-
                         break;
 
-                    case "tsmiStartHook":
-
+                    case "cmsIcon_StartHook":
                         this.StartHook_MainForm();
-
                         break;
 
-                    case "tsmiStopHook":
-
+                    case "cmsIcon_StopHook":
                         this.StopHook_MainForm();
-
                         break;
 
-                    case "tsmiCleanUp":
-
+                    case "cmsIcon_CleanUp":
                         this.CleanUp_MainForm();
-
                         break;
 
-                    case "tsmiShowSendList":
-
-                        this.ShowSendListForm();
-
+                    case "cmsIcon_ShowSendList":
+                        Socket_Operation.ShowSendListForm();
                         break;
 
-                    case "tsmiExit":
-
+                    case "cmsIcon_Exit":
                         this.Close();
-
                         break;
                 }
             }
@@ -533,100 +496,45 @@ namespace WPELibrary
             {
                 switch (sItemText)
                 {
-                    case "tsmiShowBatchSend":
-
-                        #region//查看发送列表
-
-                        this.ShowSendListForm();
-
-                        #endregion
-
+                    case "cmsSocketList_ShowSendList":
+                        Socket_Operation.ShowSendListForm();
                         break;
 
-                    case "tsmiBatchSend":
-
-                        #region//添加到发送列表
-
+                    case "cmsSocketList_SendList":
                         if (Select_Index > -1)
                         {
-                            Socket_Cache.SendList.AddSendList_BySocketListIndex(Select_Index);
-
-                            if (Socket_Cache.SendList.bShow_SendListForm)
-                            {
-                                Socket_SendListForm sslForm = new Socket_SendListForm();
-                                sslForm.Show();
-                            }
+                            Socket_Cache.SendList.AddToSendList_BySocketListIndex(Select_Index);
+                            Socket_Operation.ShowSendListForm();
                         }
-
-                        #endregion
-
                         break;
 
-                    case "tsmiAddToFilter":
-
-                        #region//添加到滤镜列表
-
+                    case "cmsSocketList_FilterList":
                         if (Select_Index > -1)
                         {
-                            int iIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex;
-                            string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
-                            Socket_FilterInfo.FilterMode FMode = Socket_FilterInfo.FilterMode.Normal;                            
-                            Socket_FilterInfo.StartFrom FStartFrom = Socket_FilterInfo.StartFrom.Head;
-                            int iFModifyCNT = 1;
-                            byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
-                            string sData = Socket_Operation.BytesToString(EncodingFormat.Hex, bBuffer);
-                            string sFSearch = Socket_Operation.GetFilterString_ByHEX(sData);
-                            int iFSearchLen = bBuffer.Length;
-
-                            Socket_Cache.FilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, "", iFSearchLen, false);
-
-                            Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
-                        }  
-
-                        #endregion
-
-                        break;
-
-                    case "tsmiSend":
-
-                        #region//发送
-
-                        if (Select_Index > -1)
-                        {
-                            if (!bgwSendFrom.IsBusy)
-                            {
-                                bgwSendFrom.RunWorkerAsync();
-                            }
+                            Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index);
                         }
-
-                        #endregion
-
                         break;
 
-                    case "tsmiUseSocket":
+                    case "cmsSocketList_Send":
+                        if (Select_Index > -1)
+                        {
+                            Socket_Operation.ShowSendForm(Select_Index);
+                            this.dgvSocketList.Refresh();
+                        }                        
+                        break;
 
-                        #region//使用此套接字
-
+                    case "cmsSocketList_UseSocket":
                         if (Select_Index > -1)
                         {
                             Socket_Cache.SendList.UseSocket = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
                         }
-
-                        #endregion
-
                         break;
 
-                    case "tsmiSaveSocketInfo":
-
-                        #region//导出到Excel                        
-
+                    case "cmsSocketList_ToExcel":
                         if (dgvSocketList.Rows.Count > 0)
                         {
                             Socket_Operation.SaveSocketListToExcel();
-                        }                        
-
-                        #endregion
-
+                        }
                         break;
                 }
             }
@@ -649,31 +557,19 @@ namespace WPELibrary
             {
                 switch (sItemText)
                 {
-                    case "tslToExcel":
-
-                        #region//导出到Excel
-
+                    case "cmsLogList_ToExcel":
                         if (dgvLogList.Rows.Count > 0)
                         {
                             Socket_Operation.SaveLogListToExcel();
-                        }                        
-
-                        #endregion
-
+                        }
                         break;
 
-                    case "tslClearList":
-
-                        #region//清空此列表
-
+                    case "cmsLogList_CleanUp":
                         if (dgvLogList.Rows.Count > 0)
                         {
                             Socket_Cache.LogQueue.ResetLogQueue();
                             this.dgvLogList.Rows.Clear();
-                        }                        
-
-                        #endregion
-
+                        }
                         break;                   
                 }
             }
@@ -698,114 +594,51 @@ namespace WPELibrary
             {
                 switch (sItemText)
                 {
-                    case "tsmiShowFilter":
-
-                        #region//查看选中滤镜
-
-                        try
-                        {
-                            if (dgvFilterList.Rows.Count > 0)
-                            {                                
-                                int iFNum = int.Parse(this.dgvFilterList.CurrentRow.Cells["cFNum"].Value.ToString().Trim());                                
-
-                                if (iFNum > 0)
-                                {
-                                    Socket_FilterForm fFilterForm = new Socket_FilterForm(iFNum);
-                                    fFilterForm.Show();
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
-
-                        #endregion
-
-                        break;
-
-                    case "tsmiSaveFilterList":
-
-                        #region//保存此列表数据                        
-
+                    case "cmsFilterList_Show":
                         if (dgvFilterList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveDialog_FilterList();
-                        }
+                            int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
 
-                        #endregion
-
-                        break;
-
-                    case "tsmiLoadFilterList":
-
-                        #region//加载滤镜列表
-
-                        Socket_Operation.LoadDialog_FilterList();
-
-                        #endregion
-
-                        break;
-
-                    case "tsmiAddFilter":
-
-                        #region//添加新滤镜
-
-                        Socket_Cache.FilterList.AddFilter_New();
-                        Socket_Operation.SaveFilterList("");
-
-                        #endregion
-
-                        break;
-
-                    case "tsmiDeleteFilter":
-
-                        #region//删除选中滤镜
-
-                        try
-                        {
-                            if (dgvFilterList.Rows.Count > 0)
+                            if (iFNum > 0)
                             {
-                                DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                                if (dr.Equals(DialogResult.OK))
-                                {
-                                    int iFNum = int.Parse(this.dgvFilterList.CurrentRow.Cells["cFNum"].Value.ToString().Trim());
-
-                                    if (iFNum > 0)
-                                    {
-                                        Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);
-                                        Socket_Operation.SaveFilterList("");
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
-                        
-                        #endregion
-
-                        break;
-
-                    case "tsmiClearAll":
-
-                        #region//清除所有滤镜
-
-                        if (dgvFilterList.Rows.Count > 0)
-                        {                            
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                            if (dr.Equals(DialogResult.OK))
-                            {
-                                Socket_Cache.FilterList.FilterListClear();
-                                Socket_Operation.SaveFilterList("");
+                                Socket_Operation.ShowFilterForm_Dialog(iFNum);
                             }
                         }                        
+                        break;
 
-                        #endregion
+                    case "cmsFilterList_Save":
+                        if (dgvFilterList.Rows.Count > 0)
+                        {
+                            Socket_Operation.SaveFilterList_Dialog();
+                        }
+                        break;
 
+                    case "cmsFilterList_Load":
+                        Socket_Operation.LoadFilterList_Dialog();
+                        break;
+
+                    case "cmsFilterList_Add":
+                        Socket_Cache.FilterList.AddFilter_New();
+                        Socket_Operation.SaveFilterList("");
+                        break;
+
+                    case "cmsFilterList_Delete":
+                        if (dgvFilterList.Rows.Count > 0)
+                        {
+                            int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
+
+                            if (iFNum > 0)
+                            {
+                                Socket_Operation.DeleteFilterByFilterNum_Dialog(iFNum);
+                            }
+                        }
+                        break;
+
+                    case "cmsFilterList_CleanUp":
+                        if (dgvFilterList.Rows.Count > 0)
+                        {
+                            Socket_Operation.CleanUpFilterList_Dialog();
+                        }
                         break;
                 }
             }
@@ -817,9 +650,118 @@ namespace WPELibrary
 
         #endregion
 
+        #region//显示封包列表（异步）
+
+        private void bgwSocketList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }      
+
+        private void Event_RecSocketPacket(Socket_PacketInfo spi)
+        {
+            try
+            {
+                dgvSocketList.Invoke(new MethodInvoker(delegate
+                {
+                    Socket_Cache.SocketList.lstRecPacket.Add(spi);
+                }));
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
+                {
+                    Socket_Cache.SocketPacket.SocketType stType = (Socket_Cache.SocketPacket.SocketType)dgvSocketList.Rows[e.RowIndex].Cells["cType"].Value;
+                    e.Value = Socket_Operation.GetPacketTypeImg(stType);
+                    e.FormattingApplied = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示日志列表（异步）
+
+        private void bgwLogList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                Socket_Cache.LogList.LogToList();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void Event_RecSocketLog(Socket_LogInfo sli)
+        {
+            try
+            {
+                if (!IsDisposed)
+                {
+                    dgvLogList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.LogList.lstRecLog.Add(sli);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示封包数据        
+
+        private void dgvSocketInfo_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvSocketList.SelectedRows.Count == 1)
+                {
+                    Select_Index = dgvSocketList.SelectedRows[0].Index;
+
+                    Search_Index = Select_Index;
+
+                    if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    {
+                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
+
+                        DynamicByteProvider dbp = new DynamicByteProvider(bSelected);                        
+                        hbPacketData.ByteProvider = dbp;                     
+                    }                  
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion        
 
-        #region//查找封包（异步）
+        #region//搜索封包内容（异步）
 
         private void bSearch_Click(object sender, EventArgs e)
         {
@@ -837,6 +779,24 @@ namespace WPELibrary
             this.SearchSocketListNext();
         }
 
+        private void HexBox_FindNext()
+        {
+            try
+            {
+                if (Socket_Cache.FindOptions.IsValid)
+                {
+                    if (!bgwSearchPacketData.IsBusy)
+                    {
+                        bgwSearchPacketData.RunWorkerAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void SearchSocketListNext()
         {
             try
@@ -850,19 +810,19 @@ namespace WPELibrary
 
                         FindType fType = Socket_Cache.FindOptions.Type;
 
-                        EncodingFormat efFormat = new EncodingFormat();
+                        Socket_Cache.SocketPacket.EncodingFormat efFormat = new Socket_Cache.SocketPacket.EncodingFormat();
 
                         switch (fType)
                         {
                             case FindType.Text:
-                                efFormat = EncodingFormat.UTF7;
+                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.UTF7;
                                 sSearch_Text = Socket_Cache.FindOptions.Text;
                                 break;
 
                             case FindType.Hex:
-                                efFormat = EncodingFormat.Hex;
+                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
                                 byte[] bSearch_Hex = Socket_Cache.FindOptions.Hex;
-                                sSearch_Text = Socket_Operation.BytesToString(EncodingFormat.Hex, bSearch_Hex);
+                                sSearch_Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
                                 break;
                         }
 
@@ -870,6 +830,7 @@ namespace WPELibrary
                         {
                             Search_Index = 0;
                             this.rbFromIndex.Checked = true;
+                            this.hbPacketData.SelectionStart = 0;
                         }
 
                         int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
@@ -879,7 +840,7 @@ namespace WPELibrary
                             this.dgvSocketList.Rows[iIndex].Selected = true;
                             this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iIndex].Cells[0];
 
-                            this.HexBox_FindNext(true);
+                            this.HexBox_FindNext();
                         }
                         else
                         {
@@ -927,181 +888,9 @@ namespace WPELibrary
 
                 if (res == -1)
                 {
-                    if (Search_SocketList)
-                    {
-                        Search_Index += 1;
-                        this.SearchSocketListNext();
-                    }
-                    else
-                    {
-                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
-                    }
+                    Search_Index += 1;
+                    this.SearchSocketListNext();
                 }
-
-                this.HexBox_ManageAbilityForCopyAndPaste();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示封包列表（异步）
-
-        private void bgwSocketList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Socket_Cache.SocketList.SocketToList(Max_DataLen);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwLogList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Socket_Cache.LogList.LogToList();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        private void Event_RecSocketPacket(Socket_PacketInfo spi)
-        {
-            try
-            {
-                dgvSocketList.Invoke(new MethodInvoker(delegate
-                {
-                    Socket_Cache.SocketList.lstRecPacket.Add(spi);
-                }));
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void Event_RecSocketLog(Socket_LogInfo sli)
-        {
-            try
-            {
-                if (!IsDisposed)
-                {
-                    dgvLogList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.LogList.lstRecLog.Add(sli);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
-                {
-                    Socket_Cache.SocketPacket.SocketType stType = (Socket_Cache.SocketPacket.SocketType)dgvSocketList.Rows[e.RowIndex].Cells["cType"].Value;
-                    e.Value = Socket_Operation.GetPacketTypeImg(stType);
-                    e.FormattingApplied = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示封包数据        
-
-        private void dgvSocketInfo_SelectionChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvSocketList.SelectedRows.Count == 1)
-                {
-                    Select_Index = dgvSocketList.SelectedRows[0].Index;
-
-                    Search_Index = Select_Index;
-
-                    if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
-                    {
-                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
-
-                        DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
-                        dbp.Changed += new EventHandler(ByteProvider_Changed);
-                        dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
-                        hbPacketData.ByteProvider = dbp;                        
-
-                        this.HexBox_LinePositionChanged();                        
-                        this.UpdatePacketLenStatus();
-                        this.HexBox_ManageAbility();
-                    }                  
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示发送列表窗体
-
-        private void ShowSendListForm()
-        {
-            try
-            {
-                if (Socket_Cache.SendList.bShow_SendListForm)
-                {
-                    Socket_SendListForm sslForm = new Socket_SendListForm();
-                    sslForm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion
-
-        #region//显示发送窗体（异步）
-
-        private void bgwSendFrom_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Socket_SendForm ssForm = new Socket_SendForm(Select_Index);
-                e.Result = ssForm;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwSendFrom_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                Socket_SendForm ssForm = e.Result as Socket_SendForm;
-                ssForm.Show();
             }
             catch (Exception ex)
             {
@@ -1137,338 +926,6 @@ namespace WPELibrary
 
 
 
-
-        #endregion
-
-        #region//封包编辑器
-
-        private void hbPacketData_CurrentLineChanged(object sender, EventArgs e)
-        {
-            this.HexBox_LinePositionChanged();
-        }
-
-        private void hbPacketData_CurrentPositionInLineChanged(object sender, EventArgs e)
-        {
-            this.HexBox_LinePositionChanged();
-        }
-
-        private void hbPacketData_Copied(object sender, EventArgs e)
-        {
-            this.HexBox_ManageAbilityForCopyAndPaste();
-        }
-
-        private void hbPacketData_CopiedHex(object sender, EventArgs e)
-        {
-            this.HexBox_ManageAbilityForCopyAndPaste();
-        }
-
-        private void hbPacketData_SelectionLengthChanged(object sender, EventArgs e)
-        {
-            this.HexBox_ManageAbilityForCopyAndPaste();
-        }
-
-        private void hbPacketData_SelectionStartChanged(object sender, EventArgs e)
-        {
-            this.HexBox_ManageAbilityForCopyAndPaste();
-        }
-
-        private void ByteProvider_Changed(object sender, EventArgs e)
-        {
-            this.HexBox_ManageAbility();
-        }
-
-        private void ByteProvider_LengthChanged(object sender, EventArgs e)
-        {
-            UpdatePacketLenStatus();
-        }
-
-        private void UpdatePacketLenStatus()
-        {
-            if (this.hbPacketData.ByteProvider == null)
-            {
-                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), 0);
-            }
-            else
-            {
-                this.tslPacketLen.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), this.hbPacketData.ByteProvider.Length);
-            }
-        }
-
-        private void HexBox_LinePositionChanged()
-        {
-            try
-            {
-                string bitPresentation = string.Empty;
-                string sConversion = string.Empty;                
-
-                if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > hbPacketData.SelectionStart)
-                {
-                    byte bSelected = hbPacketData.ByteProvider.ReadByte(hbPacketData.SelectionStart);
-
-                    Socket_BitInfo bitInfo = new Socket_BitInfo(bSelected, hbPacketData.SelectionStart);
-
-                    if (bitInfo != null)
-                    {
-                        long start = hbPacketData.SelectionStart;
-                        long selected = hbPacketData.SelectionLength;
-
-                        if (selected == 0 || selected > 8)
-                        {
-                            selected = 8;
-                        }
-
-                        long last = hbPacketData.ByteProvider.Length;
-                        long end = Math.Min(start + selected, last);
-
-                        byte[] buffer64 = new byte[8];
-                        int iBuffIndex = 0;
-
-                        for (long i = start; i < end; i++)
-                        {
-                            buffer64[iBuffIndex] = hbPacketData.ByteProvider.ReadByte(i);
-                            iBuffIndex++;
-                        }
-
-                        this.lPacketDataPosition.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine, hbPacketData.SelectionStart);
-
-                        this.lBits_Value.Text = bitInfo.ToString();                        
-                        this.lByte_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Byte, buffer64);
-                        this.lShort_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Short, buffer64);
-                        this.lUShort_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UShort, buffer64);
-                        this.lInt32_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Int32, buffer64);
-                        this.lUInt32_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UInt32, buffer64);
-                        this.lInt64_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Int64, buffer64);
-                        this.lUInt64_Value.Text = Socket_Operation.BytesToString(EncodingFormat.UInt64, buffer64);
-                        this.lFloat_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Float, buffer64);
-                        this.lDouble_Value.Text = Socket_Operation.BytesToString(EncodingFormat.Double, buffer64);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//封包编辑器功能按钮
-
-        #region//保存
-
-        private void tsbSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (hbPacketData.ByteProvider != null)
-                {
-                    DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
-
-                    byte[] bNewBuff = dbp.Bytes.ToArray();
-                    int iNewLen = bNewBuff.Length;
-                    string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bNewBuff, Max_DataLen);
-
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen = iNewLen;
-
-                    dbp.ApplyChanges();
-
-                    this.dgvSocketList.Refresh();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-            finally
-            {
-                HexBox_ManageAbility();
-            }
-        }
-
-        #endregion
-
-        #region//剪切
-
-        private void tsbCut_Click(object sender, EventArgs e)
-        {
-            this.hbPacketData.Cut();
-        }
-
-        #endregion
-
-        #region//复制
-
-        private void tsbCopy_ButtonClick(object sender, EventArgs e)
-        {
-            this.hbPacketData.Copy();
-        }
-
-        private void tsmiCopy_Click(object sender, EventArgs e)
-        {
-            this.hbPacketData.Copy();
-        }
-
-        private void tsmiCopyHex_Click(object sender, EventArgs e)
-        {
-            this.hbPacketData.CopyHex();
-        }
-
-        #endregion
-
-        #region//粘贴
-
-        private void tsbPaste_ButtonClick(object sender, EventArgs e)
-        {
-            this.hbPacketData.Paste();
-        }
-
-        private void tsmiPaste_Click(object sender, EventArgs e)
-        {
-            this.hbPacketData.Paste();
-        }
-
-        private void tsmiPasteHex_Click(object sender, EventArgs e)
-        {
-            this.hbPacketData.PasteHex();            
-        }
-
-        #endregion
-
-        #region//查找
-
-        private void tsbFind_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                this.ShowFindForm();
-
-                if (Socket_Cache.DoSearch)
-                {
-                    this.HexBox_FindNext(false);
-                }  
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }      
-
-        #endregion
-
-        #region//查找下一个
-
-        private void tsbFindNext_Click(object sender, EventArgs e)
-        {
-            this.HexBox_FindNext(false);
-        }
-
-        private void HexBox_FindNext(bool bSearchFrom_SocketList)
-        {
-            try
-            {
-                if (Socket_Cache.FindOptions.IsValid)
-                {
-                    Search_SocketList = bSearchFrom_SocketList;
-
-                    if (!bgwSearchPacketData.IsBusy)
-                    {
-                        bgwSearchPacketData.RunWorkerAsync();
-                    }
-                }  
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion
-
-        #region//编码
-
-        private void tscbEncoding_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            hbPacketData.ByteCharConverter = tscbEncoding.SelectedItem as IByteCharConverter;
-
-            this.hbPacketData.Focus();
-        }
-
-        #endregion
-
-        #region//排列
-
-        private void tscbPerLine_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int iIndex = tscbPerLine.SelectedIndex;
-
-            if (iIndex == 0)
-            {
-                this.hbPacketData.UseFixedBytesPerLine = false;
-            }
-            else if (iIndex == 1)
-            {
-                this.hbPacketData.UseFixedBytesPerLine = true;
-            }
-
-            this.hbPacketData.Focus();
-        }
-
-        #endregion
-
-        #region//可用性
-
-        private void HexBox_ManageAbility()
-        {
-            try
-            {
-                if (hbPacketData.ByteProvider == null)
-                {
-                    tsbSave.Enabled = false;
-
-                    tsbFind.Enabled = false;
-                    tsbFindNext.Enabled = false;
-                    tscbEncoding.Enabled = false;
-                    tscbPerLine.Enabled = false;
-                }
-                else
-                {
-                    tsbSave.Enabled = hbPacketData.ByteProvider.HasChanges();
-
-                    tsbFind.Enabled = true;
-                    tsbFindNext.Enabled = true;
-                    tscbEncoding.Enabled = true;
-                    tscbPerLine.Enabled = true;
-                }
-
-                HexBox_ManageAbilityForCopyAndPaste();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        private void HexBox_ManageAbilityForCopyAndPaste()
-        {
-            try
-            {
-                if (!this.bgwSearchPacketData.IsBusy)
-                {
-                    tsbCopy.Enabled = hbPacketData.CanCopy();
-                    tsbCut.Enabled = hbPacketData.CanCut();
-                    tsbPaste.Enabled = hbPacketData.CanPaste();
-                    tsmiPasteHex.Enabled = hbPacketData.CanPasteHex();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion
 
         #endregion
     }
