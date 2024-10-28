@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.Threading;
 using WPELibrary.Lib;
 using System.Diagnostics;
@@ -11,14 +10,14 @@ namespace WPELibrary
 {
     public partial class Socket_SendForm : Form
     {
-        private int Send_Socket = 0;
-        private int Send_Times = 0;
-        private int Send_Interval = 0;
+        private int Select_Index = 0;
+
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
-        private int Select_Index = 0;
-        private byte[] Send_Bytes = null;
+
+        private int Send_SocketID = 0;     
+        private Socket_Cache.SocketPacket.PacketType Send_PacketType;        
 
         #region//窗体加载
 
@@ -49,6 +48,29 @@ namespace WPELibrary
 
         #region//初始化
 
+        private void InitSendInfo()
+        {
+            try
+            {
+                this.Send_SocketID = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
+                this.Send_PacketType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;            
+
+                this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fffffff");              
+                this.txtPacketType.Text = Send_PacketType.ToString();
+
+                this.txtIPFrom.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketFrom;
+                this.txtIPTo.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
+                this.pbSocketType.Image = Socket_Operation.GetImg_BySocketType(Send_PacketType);
+                
+                this.nudSendSocket_Len.Value = hbPacketData.ByteProvider.Length;
+                this.nudSendSocket_Socket.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void InitHexBox()
         {
             try
@@ -67,7 +89,7 @@ namespace WPELibrary
                     tscbEncoding.Items.Add(defConverter);
                     tscbEncoding.Items.Add(ebcdicConverter);
                     tscbEncoding.SelectedIndex = 0;
-                    tscbPerLine.SelectedIndex = 1;                    
+                    tscbPerLine.SelectedIndex = 1;
 
                     this.HexBox_LinePositionChanged();
                     this.HexBox_UpdatePacketLen();
@@ -80,30 +102,10 @@ namespace WPELibrary
             }
         }
 
-        private void InitSendInfo()
-        {
-            try
-            {
-                this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fff");
-                this.txtIPFrom.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketFrom;
-                this.txtIPTo.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
-                this.txtSocketType.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType.ToString();
-                this.nudSendLen.Value = this.hbPacketData.ByteProvider.Length;
-                this.nudSendSocket.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;                
-                this.txtSendSocket_IP.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[0];
-                this.txtSendSocket_Port.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo.Split(':')[1];
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
         private void InitSendParameters()
         {
             try
-            {
-                this.SendSocketChanged();
+            {  
                 this.SendTypeChanged();
                 this.SendStepChanged();
             }
@@ -115,7 +117,154 @@ namespace WPELibrary
 
         #endregion
 
-        #region//发送按钮
+        #region//显示递进数据
+
+        private void cbSendStep_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SendStepChanged();
+        }
+
+        private void SendStepChanged()
+        {
+            try
+            {
+                if (this.cbSendStep.Checked)
+                {
+                    this.nudSendStep_Position.Enabled = true;
+                    this.nudSendStep_Len.Enabled = true;
+                }
+                else
+                {
+                    this.nudSendStep_Position.Enabled = false;
+                    this.nudSendStep_Len.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void nudStepIndex_ValueChanged(object sender, EventArgs e)
+        {
+            this.ShowStepValue();
+        }
+
+        private void nudStepLen_ValueChanged(object sender, EventArgs e)
+        {
+            this.ShowStepValue();
+        }
+
+        private void ShowStepValue()
+        {
+            try
+            {
+                string sStepHex = string.Empty;
+                string sStepHex_New = string.Empty;
+
+                int iSelectIndex = (int)this.nudSendStep_Position.Value;
+                int iPacketLen = (int)hbPacketData.ByteProvider.Length;
+
+                if (iPacketLen >= iSelectIndex + 1)
+                {
+                    int iStepPosition = (int)this.nudSendStep_Position.Value;
+                    int iStepLen = (int)this.nudSendStep_Len.Value;
+
+                    if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > iStepPosition)
+                    {
+                        byte bStepBuffer = hbPacketData.ByteProvider.ReadByte(iStepPosition);
+                        byte bStepBuffer_New = Socket_Operation.GetStepByte(bStepBuffer, iStepLen);
+
+                        sStepHex = bStepBuffer.ToString("X2");
+                        sStepHex_New = bStepBuffer_New.ToString("X2");
+                    }
+                }
+
+                this.lSendStep_Position_Value.Text = sStepHex;
+                this.lSendStep_Len_Value.Text = sStepHex_New;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
+
+        #region//发送类型参数
+
+        private void rbSendType_Continuously_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SendTypeChanged();
+        }
+
+        private void rbSendType_Times_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SendTypeChanged();
+        }
+
+        private void SendTypeChanged()
+        {
+            try
+            {
+                if (this.rbSendType_Continuously.Checked)
+                {
+                    this.nudSendType_Times.Enabled = false;
+                }
+                else
+                {
+                    this.nudSendType_Times.Enabled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
+
+        #region//检查发送数据
+
+        private bool CheckSendPacket()
+        {
+            try
+            {
+                int iSocket = (int)this.nudSendSocket_Socket.Value;
+
+                if (iSocket == 0)
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_45));
+                    return false;
+                }
+
+                if (hbPacketData.ByteProvider.Length == 0)
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_46));
+                    return false;
+                }
+
+                if (this.cbSendStep.Checked)
+                {
+                    if (this.lSendStep_Position_Value.Text.Equals("") || this.lSendStep_Len_Value.Text.Equals(""))
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_47));
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region//发送封包（异步）
 
         private void bSend_Click(object sender, EventArgs e)
         {
@@ -126,20 +275,13 @@ namespace WPELibrary
                     this.bSend.Enabled = false;
                     this.bSendStop.Enabled = true;
 
-                    this.gbSendSocket.Enabled = false;                    
+                    this.gbSendSocket.Enabled = false;
                     this.gbSendStep.Enabled = false;
                     this.gbSendType.Enabled = false;
 
                     this.Send_CNT = 0;
                     this.Send_Success = 0;
                     this.Send_Fail = 0;
-
-                    this.Send_Socket = (int)this.nudSendSocket.Value;
-                    this.Send_Interval = (int)this.nudSendType_Interval.Value;
-                    this.Send_Times = (int)this.nudSendType_Times.Value;
-
-                    DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
-                    this.Send_Bytes = dbp.Bytes.ToArray();
 
                     if (!bgwSendPacket.IsBusy)
                     {
@@ -153,38 +295,32 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//发送封包（异步）
-
         private void bgwSendPacket_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {
+                int iSocket = (int)this.nudSendSocket_Socket.Value;
+
+                int iSend_Interval = (int)this.nudSendType_Interval.Value;
+                int iSend_Times = (int)this.nudSendType_Times.Value;
+                string sSend_IP = this.txtIPTo.Text.Trim();
+
+                DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                byte[] bBuff = dbp.Bytes.ToArray();
+
                 if (this.rbSendType_Continuously.Checked)
                 {
                     while (!bgwSendPacket.CancellationPending)
                     {
-                        bool bSendOK = this.SendPacket(this.Send_Socket, this.Send_Bytes);
+                        this.DoSendPacket(iSocket, sSend_IP, bBuff);
 
-                        if (bSendOK)
-                        {
-                            this.Send_Success++;
-                        }
-                        else
-                        {
-                            this.Send_Fail++;
-                        }
-
-                        this.Send_CNT++;
-
-                        bgwSendPacket.ReportProgress(this.Send_CNT);
-                        Thread.Sleep(Send_Interval);
+                        bgwSendPacket.ReportProgress(Send_CNT);
+                        Thread.Sleep(iSend_Interval);
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < Send_Times; i++)
+                    for (int i = 0; i < iSend_Times; i++)
                     {
                         if (bgwSendPacket.CancellationPending)
                         {
@@ -192,21 +328,10 @@ namespace WPELibrary
                         }
                         else
                         {
-                            bool bSendOK = this.SendPacket(this.Send_Socket, this.Send_Bytes);
+                            this.DoSendPacket(iSocket, sSend_IP, bBuff);
 
-                            if (bSendOK)
-                            {
-                                this.Send_Success++;                                
-                            }
-                            else
-                            {
-                                this.Send_Fail++;                                
-                            }
-
-                            this.Send_CNT++;
-
-                            bgwSendPacket.ReportProgress(this.Send_CNT);
-                            Thread.Sleep(Send_Interval);
+                            bgwSendPacket.ReportProgress(Send_CNT);
+                            Thread.Sleep(iSend_Interval);
                         }
                     }
                 }
@@ -247,34 +372,35 @@ namespace WPELibrary
             }
         }
 
-        private bool SendPacket(int iSocket, byte[] bSendBuffer)
+        private void DoSendPacket(int iSocket, string sSendIP, byte[] bSendBuff)
         {
-            bool bReturn = false;
-
             try
             {
-                if (iSocket >0 && bSendBuffer.Length > 0)
+                bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sSendIP, bSendBuff);
+
+                if (bSendOK)
                 {
-                    if (this.cbSendStep.Checked)
-                    {
-                        int iStepIndex = (int)this.nudSendStep_Position.Value;
-                        int iStepLen = ((int)this.nudSendStep_Len.Value) * this.Send_CNT;
+                    this.Send_Success++;
+                }
+                else
+                {
+                    this.Send_Fail++;
+                }
 
-                        bSendBuffer = Socket_Operation.GetStepBytes(bSendBuffer, iStepIndex, iStepLen);
-                    }
+                this.Send_CNT++;
 
-                    IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
-                    Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
+                if (this.cbSendStep.Checked)
+                {
+                    int iStepIndex = (int)this.nudSendStep_Position.Value;
+                    int iStepLen = (int)this.nudSendStep_Len.Value;
 
-                    bReturn = WinSockHook.SendPacket(iSocket, ipSend, bSendBuffer.Length);
+                    bSendBuff = Socket_Operation.GetStepBytes(bSendBuff, iStepIndex, iStepLen);
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-
-            return bReturn;
         }
 
         #endregion
@@ -335,54 +461,6 @@ namespace WPELibrary
 
         #endregion
 
-        #region//显示递进数据
-        
-        private void nudStepIndex_ValueChanged(object sender, EventArgs e)
-        {            
-            this.ShowStepValue();
-        }
-     
-        private void nudStepLen_ValueChanged(object sender, EventArgs e)
-        {
-            this.ShowStepValue();
-        }
-
-        private void ShowStepValue()
-        {            
-            try
-            {
-                string sStepHex = string.Empty;
-                string sStepHex_New = string.Empty;
-
-                int iSelectIndex = (int)this.nudSendStep_Position.Value;
-                int iPacketLen = (int)hbPacketData.ByteProvider.Length;
-
-                if (iPacketLen >= iSelectIndex + 1)
-                {
-                    int iStepPosition = (int)this.nudSendStep_Position.Value;
-                    int iStepLen = (int)this.nudSendStep_Len.Value;
-
-                    if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > iStepPosition)
-                    {
-                        byte bStepBuffer = hbPacketData.ByteProvider.ReadByte(iStepPosition);
-                        byte bStepBuffer_New = Socket_Operation.GetStepByte(bStepBuffer, iStepLen);
-
-                        sStepHex = bStepBuffer.ToString("X2");
-                        sStepHex_New = bStepBuffer_New.ToString("X2");
-                    }
-                }
-
-                this.lSendStep_Position_Value.Text = sStepHex;
-                this.lSendStep_Len_Value.Text = sStepHex_New;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion        
-
         #region//右键菜单
 
         private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -402,7 +480,7 @@ namespace WPELibrary
                 {                    
                     case "cmsHexBox_SendList":
                         
-                        int iSocket = (int)this.nudSendSocket.Value;
+                        int iSocket = (int)this.nudSendSocket_Socket.Value;
                         string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
 
                         Socket_Cache.SendList.AddToSendList_New(iPacketIndex, "", iSocket, sIPTo, sHex, bBuffer);
@@ -422,46 +500,6 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-        }
-
-        #endregion
-
-        #region//检查发送数据
-
-        private bool CheckSendPacket()
-        { 
-            try
-            {
-                int iSocket = (int)this.nudSendSocket.Value;
-
-                if (iSocket == 0)
-                {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_45));
-                    return false;
-                }                
-
-                if (hbPacketData.ByteProvider.Length == 0)
-                {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_46));
-                    return false;
-                }
-
-                if (this.cbSendStep.Checked)
-                {
-                    if (this.lSendStep_Position_Value.Text.Equals("") || this.lSendStep_Len_Value.Text.Equals(""))
-                    {
-                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_47));
-                        return false;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return false;
-            }
-
-            return true;
         }
 
         #endregion
@@ -514,8 +552,8 @@ namespace WPELibrary
         {
             try
             {
-                this.nudSendLen.Value = this.hbPacketData.ByteProvider.Length;
-                this.nudSendStep_Position.Maximum = this.hbPacketData.ByteProvider.Length;
+                this.nudSendSocket_Len.Value = this.hbPacketData.ByteProvider.Length;
+                this.nudSendStep_Position.Maximum = this.hbPacketData.ByteProvider.Length - 1;
             }
             catch (Exception ex)
             {
@@ -808,106 +846,6 @@ namespace WPELibrary
 
 
         #endregion
-
-        #endregion
-
-        #region//套接字
-
-        private void rbSendSocket_UseSocket_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SendSocketChanged();
-        }
-
-        private void rbSendSocket_NewSocket_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SendSocketChanged();
-        }
-
-        private void SendSocketChanged()
-        {
-            try
-            {
-                if (this.rbSendSocket_UseSocket.Checked)
-                {
-                    this.nudSendSocket.Enabled = true;
-                    this.txtSendSocket_IP.Enabled = false;
-                    this.txtSendSocket_Port.Enabled = false;
-                }
-                else
-                {
-                    this.nudSendSocket.Enabled = false;
-                    this.txtSendSocket_IP.Enabled = true;
-                    this.txtSendSocket_Port.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//发送类型
-
-        private void rbSendType_Continuously_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SendTypeChanged();
-        }
-
-        private void rbSendType_Times_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SendTypeChanged();
-        }
-
-        private void SendTypeChanged()
-        {
-            try
-            {
-                if (this.rbSendType_Continuously.Checked)
-                {
-                    this.nudSendType_Times.Enabled = false;
-                }
-                else
-                {
-                    this.nudSendType_Times.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//递进
-
-        private void cbSendStep_CheckedChanged(object sender, EventArgs e)
-        {
-            this.SendStepChanged();
-        }
-
-        private void SendStepChanged()
-        {
-            try
-            {
-                if (this.cbSendStep.Checked)
-                {
-                    this.nudSendStep_Position.Enabled = true;
-                    this.nudSendStep_Len.Enabled = true;
-                }
-                else
-                {
-                    this.nudSendStep_Position.Enabled = false;
-                    this.nudSendStep_Len.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
 
         #endregion
     }

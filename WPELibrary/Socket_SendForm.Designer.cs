@@ -34,13 +34,13 @@ namespace WPELibrary
             this.tlpSendForm = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPacketInfo = new System.Windows.Forms.TableLayoutPanel();
             this.txtIPTo = new System.Windows.Forms.TextBox();
-            this.txtSocketType = new System.Windows.Forms.TextBox();
+            this.txtPacketType = new System.Windows.Forms.TextBox();
             this.txtIPFrom = new System.Windows.Forms.TextBox();
-            this.lIPTo = new System.Windows.Forms.Label();
-            this.lSocketType = new System.Windows.Forms.Label();
-            this.lIPFrom = new System.Windows.Forms.Label();
+            this.lPacketType = new System.Windows.Forms.Label();
+            this.lIPAddr = new System.Windows.Forms.Label();
             this.lPacketTime = new System.Windows.Forms.Label();
             this.txtPacketTime = new System.Windows.Forms.TextBox();
+            this.pbSocketType = new System.Windows.Forms.PictureBox();
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.tsPacketData = new System.Windows.Forms.ToolStrip();
             this.tsPacketData_Cut = new System.Windows.Forms.ToolStripButton();
@@ -99,15 +99,23 @@ namespace WPELibrary
             this.tlSend_Fail = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSend_Fail_Value = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
-            this.gbSendType = new System.Windows.Forms.GroupBox();
-            this.gbSendStep = new System.Windows.Forms.GroupBox();
             this.gbSendSocket = new System.Windows.Forms.GroupBox();
-            this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
-            this.bSave = new System.Windows.Forms.Button();
-            this.bClose = new System.Windows.Forms.Button();
-            this.bSendStop = new System.Windows.Forms.Button();
-            this.bSend = new System.Windows.Forms.Button();
-            this.bgwSendPacket = new System.ComponentModel.BackgroundWorker();
+            this.tlpSendSocket = new System.Windows.Forms.TableLayoutPanel();
+            this.nudSendSocket_Len = new System.Windows.Forms.NumericUpDown();
+            this.lSendSocket_Len = new System.Windows.Forms.Label();
+            this.lSendSocket_Socket = new System.Windows.Forms.Label();
+            this.nudSendSocket_Socket = new System.Windows.Forms.NumericUpDown();
+            this.gbSendType = new System.Windows.Forms.GroupBox();
+            this.tlpSendType = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSendType_Times = new System.Windows.Forms.TableLayoutPanel();
+            this.lSendType_Times = new System.Windows.Forms.Label();
+            this.lSendType_Int = new System.Windows.Forms.Label();
+            this.nudSendType_Interval = new System.Windows.Forms.NumericUpDown();
+            this.nudSendType_Times = new System.Windows.Forms.NumericUpDown();
+            this.pSendType = new System.Windows.Forms.Panel();
+            this.rbSendType_Continuously = new System.Windows.Forms.RadioButton();
+            this.rbSendType_Times = new System.Windows.Forms.RadioButton();
+            this.gbSendStep = new System.Windows.Forms.GroupBox();
             this.tlpSendStep = new System.Windows.Forms.TableLayoutPanel();
             this.tlpSendStepSet = new System.Windows.Forms.TableLayoutPanel();
             this.lSendStep_Position = new System.Windows.Forms.Label();
@@ -116,58 +124,38 @@ namespace WPELibrary
             this.lSendStep_Len = new System.Windows.Forms.Label();
             this.lSendStep_Position_Value = new System.Windows.Forms.Label();
             this.nudSendStep_Position = new System.Windows.Forms.NumericUpDown();
-            this.tlpSendSocket = new System.Windows.Forms.TableLayoutPanel();
-            this.pSendSocket = new System.Windows.Forms.Panel();
-            this.rbSendSocket_NewSocket = new System.Windows.Forms.RadioButton();
-            this.rbSendSocket_UseSocket = new System.Windows.Forms.RadioButton();
-            this.tlpSendSocket_IP = new System.Windows.Forms.TableLayoutPanel();
-            this.lSendSocket_ID = new System.Windows.Forms.Label();
-            this.nudSendSocket = new System.Windows.Forms.NumericUpDown();
-            this.txtSendSocket_Port = new System.Windows.Forms.TextBox();
-            this.lSendSocket_Port = new System.Windows.Forms.Label();
-            this.txtSendSocket_IP = new System.Windows.Forms.TextBox();
-            this.lSendSocket_IP = new System.Windows.Forms.Label();
-            this.tlpSendType = new System.Windows.Forms.TableLayoutPanel();
-            this.pSendType = new System.Windows.Forms.Panel();
-            this.rbSendType_Times = new System.Windows.Forms.RadioButton();
-            this.tlpSendType_Times = new System.Windows.Forms.TableLayoutPanel();
-            this.nudSendType_Times = new System.Windows.Forms.NumericUpDown();
-            this.nudSendType_Interval = new System.Windows.Forms.NumericUpDown();
-            this.lSendType_Int = new System.Windows.Forms.Label();
-            this.rbSendType_Continuously = new System.Windows.Forms.RadioButton();
-            this.lSendType_Times = new System.Windows.Forms.Label();
             this.cbSendStep = new System.Windows.Forms.CheckBox();
-            this.gbSendLen = new System.Windows.Forms.GroupBox();
-            this.tlpSendLen = new System.Windows.Forms.TableLayoutPanel();
-            this.nudSendLen = new System.Windows.Forms.NumericUpDown();
+            this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
+            this.bSave = new System.Windows.Forms.Button();
+            this.bClose = new System.Windows.Forms.Button();
+            this.bSendStop = new System.Windows.Forms.Button();
+            this.bSend = new System.Windows.Forms.Button();
+            this.bgwSendPacket = new System.ComponentModel.BackgroundWorker();
             this.tlpSendForm.SuspendLayout();
             this.tlpPacketInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSocketType)).BeginInit();
             this.tlpPacketData.SuspendLayout();
             this.tsPacketData.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.cmsHexBox.SuspendLayout();
             this.ssSocketSend.SuspendLayout();
             this.tlpParameter.SuspendLayout();
-            this.gbSendType.SuspendLayout();
-            this.gbSendStep.SuspendLayout();
             this.gbSendSocket.SuspendLayout();
-            this.tlpButtons.SuspendLayout();
+            this.tlpSendSocket.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Len)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Socket)).BeginInit();
+            this.gbSendType.SuspendLayout();
+            this.tlpSendType.SuspendLayout();
+            this.tlpSendType_Times.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).BeginInit();
+            this.pSendType.SuspendLayout();
+            this.gbSendStep.SuspendLayout();
             this.tlpSendStep.SuspendLayout();
             this.tlpSendStepSet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Position)).BeginInit();
-            this.tlpSendSocket.SuspendLayout();
-            this.pSendSocket.SuspendLayout();
-            this.tlpSendSocket_IP.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket)).BeginInit();
-            this.tlpSendType.SuspendLayout();
-            this.pSendType.SuspendLayout();
-            this.tlpSendType_Times.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).BeginInit();
-            this.gbSendLen.SuspendLayout();
-            this.tlpSendLen.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendLen)).BeginInit();
+            this.tlpButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSendForm
@@ -184,13 +172,13 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.tlpPacketInfo, "tlpPacketInfo");
             this.tlpPacketInfo.Controls.Add(this.txtIPTo, 7, 0);
-            this.tlpPacketInfo.Controls.Add(this.txtSocketType, 3, 0);
+            this.tlpPacketInfo.Controls.Add(this.txtPacketType, 3, 0);
             this.tlpPacketInfo.Controls.Add(this.txtIPFrom, 5, 0);
-            this.tlpPacketInfo.Controls.Add(this.lIPTo, 6, 0);
-            this.tlpPacketInfo.Controls.Add(this.lSocketType, 2, 0);
-            this.tlpPacketInfo.Controls.Add(this.lIPFrom, 4, 0);
+            this.tlpPacketInfo.Controls.Add(this.lPacketType, 2, 0);
+            this.tlpPacketInfo.Controls.Add(this.lIPAddr, 4, 0);
             this.tlpPacketInfo.Controls.Add(this.lPacketTime, 0, 0);
             this.tlpPacketInfo.Controls.Add(this.txtPacketTime, 1, 0);
+            this.tlpPacketInfo.Controls.Add(this.pbSocketType, 6, 0);
             this.tlpPacketInfo.Name = "tlpPacketInfo";
             // 
             // txtIPTo
@@ -199,11 +187,11 @@ namespace WPELibrary
             this.txtIPTo.Name = "txtIPTo";
             this.txtIPTo.ReadOnly = true;
             // 
-            // txtSocketType
+            // txtPacketType
             // 
-            resources.ApplyResources(this.txtSocketType, "txtSocketType");
-            this.txtSocketType.Name = "txtSocketType";
-            this.txtSocketType.ReadOnly = true;
+            resources.ApplyResources(this.txtPacketType, "txtPacketType");
+            this.txtPacketType.Name = "txtPacketType";
+            this.txtPacketType.ReadOnly = true;
             // 
             // txtIPFrom
             // 
@@ -211,20 +199,15 @@ namespace WPELibrary
             this.txtIPFrom.Name = "txtIPFrom";
             this.txtIPFrom.ReadOnly = true;
             // 
-            // lIPTo
+            // lPacketType
             // 
-            resources.ApplyResources(this.lIPTo, "lIPTo");
-            this.lIPTo.Name = "lIPTo";
+            resources.ApplyResources(this.lPacketType, "lPacketType");
+            this.lPacketType.Name = "lPacketType";
             // 
-            // lSocketType
+            // lIPAddr
             // 
-            resources.ApplyResources(this.lSocketType, "lSocketType");
-            this.lSocketType.Name = "lSocketType";
-            // 
-            // lIPFrom
-            // 
-            resources.ApplyResources(this.lIPFrom, "lIPFrom");
-            this.lIPFrom.Name = "lIPFrom";
+            resources.ApplyResources(this.lIPAddr, "lIPAddr");
+            this.lIPAddr.Name = "lIPAddr";
             // 
             // lPacketTime
             // 
@@ -236,6 +219,13 @@ namespace WPELibrary
             resources.ApplyResources(this.txtPacketTime, "txtPacketTime");
             this.txtPacketTime.Name = "txtPacketTime";
             this.txtPacketTime.ReadOnly = true;
+            // 
+            // pbSocketType
+            // 
+            resources.ApplyResources(this.pbSocketType, "pbSocketType");
+            this.pbSocketType.Image = global::WPELibrary.Properties.Resources.sent;
+            this.pbSocketType.Name = "pbSocketType";
+            this.pbSocketType.TabStop = false;
             // 
             // tlpPacketData
             // 
@@ -645,25 +635,10 @@ namespace WPELibrary
             // tlpParameter
             // 
             resources.ApplyResources(this.tlpParameter, "tlpParameter");
-            this.tlpParameter.Controls.Add(this.gbSendType, 1, 0);
-            this.tlpParameter.Controls.Add(this.gbSendStep, 4, 0);
-            this.tlpParameter.Controls.Add(this.gbSendSocket, 3, 0);
-            this.tlpParameter.Controls.Add(this.gbSendLen, 2, 0);
+            this.tlpParameter.Controls.Add(this.gbSendSocket, 1, 0);
+            this.tlpParameter.Controls.Add(this.gbSendType, 2, 0);
+            this.tlpParameter.Controls.Add(this.gbSendStep, 3, 0);
             this.tlpParameter.Name = "tlpParameter";
-            // 
-            // gbSendType
-            // 
-            this.gbSendType.Controls.Add(this.tlpSendType);
-            resources.ApplyResources(this.gbSendType, "gbSendType");
-            this.gbSendType.Name = "gbSendType";
-            this.gbSendType.TabStop = false;
-            // 
-            // gbSendStep
-            // 
-            this.gbSendStep.Controls.Add(this.tlpSendStep);
-            resources.ApplyResources(this.gbSendStep, "gbSendStep");
-            this.gbSendStep.Name = "gbSendStep";
-            this.gbSendStep.TabStop = false;
             // 
             // gbSendSocket
             // 
@@ -672,50 +647,162 @@ namespace WPELibrary
             this.gbSendSocket.Name = "gbSendSocket";
             this.gbSendSocket.TabStop = false;
             // 
-            // tlpButtons
+            // tlpSendSocket
             // 
-            resources.ApplyResources(this.tlpButtons, "tlpButtons");
-            this.tlpButtons.Controls.Add(this.bSave, 5, 0);
-            this.tlpButtons.Controls.Add(this.bClose, 7, 0);
-            this.tlpButtons.Controls.Add(this.bSendStop, 3, 0);
-            this.tlpButtons.Controls.Add(this.bSend, 1, 0);
-            this.tlpButtons.Name = "tlpButtons";
+            resources.ApplyResources(this.tlpSendSocket, "tlpSendSocket");
+            this.tlpSendSocket.Controls.Add(this.nudSendSocket_Len, 1, 1);
+            this.tlpSendSocket.Controls.Add(this.lSendSocket_Len, 0, 1);
+            this.tlpSendSocket.Controls.Add(this.lSendSocket_Socket, 0, 0);
+            this.tlpSendSocket.Controls.Add(this.nudSendSocket_Socket, 1, 0);
+            this.tlpSendSocket.Name = "tlpSendSocket";
             // 
-            // bSave
+            // nudSendSocket_Len
             // 
-            resources.ApplyResources(this.bSave, "bSave");
-            this.bSave.Name = "bSave";
-            this.bSave.UseVisualStyleBackColor = true;
-            this.bSave.Click += new System.EventHandler(this.bSave_Click);
+            resources.ApplyResources(this.nudSendSocket_Len, "nudSendSocket_Len");
+            this.nudSendSocket_Len.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudSendSocket_Len.Name = "nudSendSocket_Len";
+            this.nudSendSocket_Len.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // bClose
+            // lSendSocket_Len
             // 
-            resources.ApplyResources(this.bClose, "bClose");
-            this.bClose.Name = "bClose";
-            this.bClose.UseVisualStyleBackColor = true;
-            this.bClose.Click += new System.EventHandler(this.bClose_Click);
+            resources.ApplyResources(this.lSendSocket_Len, "lSendSocket_Len");
+            this.lSendSocket_Len.Name = "lSendSocket_Len";
             // 
-            // bSendStop
+            // lSendSocket_Socket
             // 
-            resources.ApplyResources(this.bSendStop, "bSendStop");
-            this.bSendStop.Name = "bSendStop";
-            this.bSendStop.UseVisualStyleBackColor = true;
-            this.bSendStop.Click += new System.EventHandler(this.bSendStop_Click);
+            resources.ApplyResources(this.lSendSocket_Socket, "lSendSocket_Socket");
+            this.lSendSocket_Socket.Name = "lSendSocket_Socket";
             // 
-            // bSend
+            // nudSendSocket_Socket
             // 
-            resources.ApplyResources(this.bSend, "bSend");
-            this.bSend.Name = "bSend";
-            this.bSend.UseVisualStyleBackColor = true;
-            this.bSend.Click += new System.EventHandler(this.bSend_Click);
+            resources.ApplyResources(this.nudSendSocket_Socket, "nudSendSocket_Socket");
+            this.nudSendSocket_Socket.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudSendSocket_Socket.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSendSocket_Socket.Name = "nudSendSocket_Socket";
+            this.nudSendSocket_Socket.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // bgwSendPacket
+            // gbSendType
             // 
-            this.bgwSendPacket.WorkerReportsProgress = true;
-            this.bgwSendPacket.WorkerSupportsCancellation = true;
-            this.bgwSendPacket.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendPacket_DoWork);
-            this.bgwSendPacket.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwSendPacket_ProgressChanged);
-            this.bgwSendPacket.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendPacket_RunWorkerCompleted);
+            this.gbSendType.Controls.Add(this.tlpSendType);
+            resources.ApplyResources(this.gbSendType, "gbSendType");
+            this.gbSendType.Name = "gbSendType";
+            this.gbSendType.TabStop = false;
+            // 
+            // tlpSendType
+            // 
+            resources.ApplyResources(this.tlpSendType, "tlpSendType");
+            this.tlpSendType.Controls.Add(this.tlpSendType_Times, 1, 0);
+            this.tlpSendType.Controls.Add(this.pSendType, 0, 0);
+            this.tlpSendType.Name = "tlpSendType";
+            // 
+            // tlpSendType_Times
+            // 
+            resources.ApplyResources(this.tlpSendType_Times, "tlpSendType_Times");
+            this.tlpSendType_Times.Controls.Add(this.lSendType_Times, 1, 0);
+            this.tlpSendType_Times.Controls.Add(this.lSendType_Int, 1, 1);
+            this.tlpSendType_Times.Controls.Add(this.nudSendType_Interval, 0, 1);
+            this.tlpSendType_Times.Controls.Add(this.nudSendType_Times, 0, 0);
+            this.tlpSendType_Times.Name = "tlpSendType_Times";
+            // 
+            // lSendType_Times
+            // 
+            resources.ApplyResources(this.lSendType_Times, "lSendType_Times");
+            this.lSendType_Times.Name = "lSendType_Times";
+            // 
+            // lSendType_Int
+            // 
+            resources.ApplyResources(this.lSendType_Int, "lSendType_Int");
+            this.lSendType_Int.Name = "lSendType_Int";
+            // 
+            // nudSendType_Interval
+            // 
+            resources.ApplyResources(this.nudSendType_Interval, "nudSendType_Interval");
+            this.nudSendType_Interval.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.nudSendType_Interval.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudSendType_Interval.Name = "nudSendType_Interval";
+            this.nudSendType_Interval.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            // 
+            // nudSendType_Times
+            // 
+            resources.ApplyResources(this.nudSendType_Times, "nudSendType_Times");
+            this.nudSendType_Times.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.nudSendType_Times.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSendType_Times.Name = "nudSendType_Times";
+            this.nudSendType_Times.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // pSendType
+            // 
+            this.pSendType.Controls.Add(this.rbSendType_Continuously);
+            this.pSendType.Controls.Add(this.rbSendType_Times);
+            resources.ApplyResources(this.pSendType, "pSendType");
+            this.pSendType.Name = "pSendType";
+            // 
+            // rbSendType_Continuously
+            // 
+            resources.ApplyResources(this.rbSendType_Continuously, "rbSendType_Continuously");
+            this.rbSendType_Continuously.Name = "rbSendType_Continuously";
+            this.rbSendType_Continuously.UseVisualStyleBackColor = true;
+            this.rbSendType_Continuously.CheckedChanged += new System.EventHandler(this.rbSendType_Continuously_CheckedChanged);
+            // 
+            // rbSendType_Times
+            // 
+            resources.ApplyResources(this.rbSendType_Times, "rbSendType_Times");
+            this.rbSendType_Times.Checked = true;
+            this.rbSendType_Times.Name = "rbSendType_Times";
+            this.rbSendType_Times.TabStop = true;
+            this.rbSendType_Times.UseVisualStyleBackColor = true;
+            this.rbSendType_Times.CheckedChanged += new System.EventHandler(this.rbSendType_Times_CheckedChanged);
+            // 
+            // gbSendStep
+            // 
+            this.gbSendStep.Controls.Add(this.tlpSendStep);
+            resources.ApplyResources(this.gbSendStep, "gbSendStep");
+            this.gbSendStep.Name = "gbSendStep";
+            this.gbSendStep.TabStop = false;
             // 
             // tlpSendStep
             // 
@@ -787,181 +874,6 @@ namespace WPELibrary
             0});
             this.nudSendStep_Position.ValueChanged += new System.EventHandler(this.nudStepIndex_ValueChanged);
             // 
-            // tlpSendSocket
-            // 
-            resources.ApplyResources(this.tlpSendSocket, "tlpSendSocket");
-            this.tlpSendSocket.Controls.Add(this.tlpSendSocket_IP, 1, 0);
-            this.tlpSendSocket.Controls.Add(this.pSendSocket, 0, 0);
-            this.tlpSendSocket.Name = "tlpSendSocket";
-            // 
-            // pSendSocket
-            // 
-            this.pSendSocket.Controls.Add(this.rbSendSocket_NewSocket);
-            this.pSendSocket.Controls.Add(this.rbSendSocket_UseSocket);
-            resources.ApplyResources(this.pSendSocket, "pSendSocket");
-            this.pSendSocket.Name = "pSendSocket";
-            // 
-            // rbSendSocket_NewSocket
-            // 
-            resources.ApplyResources(this.rbSendSocket_NewSocket, "rbSendSocket_NewSocket");
-            this.rbSendSocket_NewSocket.Name = "rbSendSocket_NewSocket";
-            this.rbSendSocket_NewSocket.UseVisualStyleBackColor = true;
-            this.rbSendSocket_NewSocket.CheckedChanged += new System.EventHandler(this.rbSendSocket_NewSocket_CheckedChanged);
-            // 
-            // rbSendSocket_UseSocket
-            // 
-            resources.ApplyResources(this.rbSendSocket_UseSocket, "rbSendSocket_UseSocket");
-            this.rbSendSocket_UseSocket.Checked = true;
-            this.rbSendSocket_UseSocket.Name = "rbSendSocket_UseSocket";
-            this.rbSendSocket_UseSocket.TabStop = true;
-            this.rbSendSocket_UseSocket.UseVisualStyleBackColor = true;
-            this.rbSendSocket_UseSocket.CheckedChanged += new System.EventHandler(this.rbSendSocket_UseSocket_CheckedChanged);
-            // 
-            // tlpSendSocket_IP
-            // 
-            resources.ApplyResources(this.tlpSendSocket_IP, "tlpSendSocket_IP");
-            this.tlpSendSocket_IP.Controls.Add(this.lSendSocket_ID, 0, 0);
-            this.tlpSendSocket_IP.Controls.Add(this.nudSendSocket, 1, 0);
-            this.tlpSendSocket_IP.Controls.Add(this.txtSendSocket_Port, 1, 2);
-            this.tlpSendSocket_IP.Controls.Add(this.lSendSocket_Port, 0, 2);
-            this.tlpSendSocket_IP.Controls.Add(this.txtSendSocket_IP, 1, 1);
-            this.tlpSendSocket_IP.Controls.Add(this.lSendSocket_IP, 0, 1);
-            this.tlpSendSocket_IP.Name = "tlpSendSocket_IP";
-            // 
-            // lSendSocket_ID
-            // 
-            resources.ApplyResources(this.lSendSocket_ID, "lSendSocket_ID");
-            this.lSendSocket_ID.Name = "lSendSocket_ID";
-            // 
-            // nudSendSocket
-            // 
-            resources.ApplyResources(this.nudSendSocket, "nudSendSocket");
-            this.nudSendSocket.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudSendSocket.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSendSocket.Name = "nudSendSocket";
-            this.nudSendSocket.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // txtSendSocket_Port
-            // 
-            resources.ApplyResources(this.txtSendSocket_Port, "txtSendSocket_Port");
-            this.txtSendSocket_Port.Name = "txtSendSocket_Port";
-            // 
-            // lSendSocket_Port
-            // 
-            resources.ApplyResources(this.lSendSocket_Port, "lSendSocket_Port");
-            this.lSendSocket_Port.Name = "lSendSocket_Port";
-            // 
-            // txtSendSocket_IP
-            // 
-            resources.ApplyResources(this.txtSendSocket_IP, "txtSendSocket_IP");
-            this.txtSendSocket_IP.Name = "txtSendSocket_IP";
-            // 
-            // lSendSocket_IP
-            // 
-            resources.ApplyResources(this.lSendSocket_IP, "lSendSocket_IP");
-            this.lSendSocket_IP.Name = "lSendSocket_IP";
-            // 
-            // tlpSendType
-            // 
-            resources.ApplyResources(this.tlpSendType, "tlpSendType");
-            this.tlpSendType.Controls.Add(this.tlpSendType_Times, 1, 0);
-            this.tlpSendType.Controls.Add(this.pSendType, 0, 0);
-            this.tlpSendType.Name = "tlpSendType";
-            // 
-            // pSendType
-            // 
-            this.pSendType.Controls.Add(this.rbSendType_Continuously);
-            this.pSendType.Controls.Add(this.rbSendType_Times);
-            resources.ApplyResources(this.pSendType, "pSendType");
-            this.pSendType.Name = "pSendType";
-            // 
-            // rbSendType_Times
-            // 
-            resources.ApplyResources(this.rbSendType_Times, "rbSendType_Times");
-            this.rbSendType_Times.Checked = true;
-            this.rbSendType_Times.Name = "rbSendType_Times";
-            this.rbSendType_Times.TabStop = true;
-            this.rbSendType_Times.UseVisualStyleBackColor = true;
-            this.rbSendType_Times.CheckedChanged += new System.EventHandler(this.rbSendType_Times_CheckedChanged);
-            // 
-            // tlpSendType_Times
-            // 
-            resources.ApplyResources(this.tlpSendType_Times, "tlpSendType_Times");
-            this.tlpSendType_Times.Controls.Add(this.lSendType_Times, 1, 0);
-            this.tlpSendType_Times.Controls.Add(this.lSendType_Int, 1, 1);
-            this.tlpSendType_Times.Controls.Add(this.nudSendType_Interval, 0, 1);
-            this.tlpSendType_Times.Controls.Add(this.nudSendType_Times, 0, 0);
-            this.tlpSendType_Times.Name = "tlpSendType_Times";
-            // 
-            // nudSendType_Times
-            // 
-            resources.ApplyResources(this.nudSendType_Times, "nudSendType_Times");
-            this.nudSendType_Times.Maximum = new decimal(new int[] {
-            999999,
-            0,
-            0,
-            0});
-            this.nudSendType_Times.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSendType_Times.Name = "nudSendType_Times";
-            this.nudSendType_Times.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudSendType_Interval
-            // 
-            resources.ApplyResources(this.nudSendType_Interval, "nudSendType_Interval");
-            this.nudSendType_Interval.Increment = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nudSendType_Interval.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudSendType_Interval.Name = "nudSendType_Interval";
-            this.nudSendType_Interval.Value = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            // 
-            // lSendType_Int
-            // 
-            resources.ApplyResources(this.lSendType_Int, "lSendType_Int");
-            this.lSendType_Int.Name = "lSendType_Int";
-            // 
-            // rbSendType_Continuously
-            // 
-            resources.ApplyResources(this.rbSendType_Continuously, "rbSendType_Continuously");
-            this.rbSendType_Continuously.Name = "rbSendType_Continuously";
-            this.rbSendType_Continuously.UseVisualStyleBackColor = true;
-            this.rbSendType_Continuously.CheckedChanged += new System.EventHandler(this.rbSendType_Continuously_CheckedChanged);
-            // 
-            // lSendType_Times
-            // 
-            resources.ApplyResources(this.lSendType_Times, "lSendType_Times");
-            this.lSendType_Times.Name = "lSendType_Times";
-            // 
             // cbSendStep
             // 
             resources.ApplyResources(this.cbSendStep, "cbSendStep");
@@ -969,33 +881,50 @@ namespace WPELibrary
             this.cbSendStep.UseVisualStyleBackColor = true;
             this.cbSendStep.CheckedChanged += new System.EventHandler(this.cbSendStep_CheckedChanged);
             // 
-            // gbSendLen
+            // tlpButtons
             // 
-            this.gbSendLen.Controls.Add(this.tlpSendLen);
-            resources.ApplyResources(this.gbSendLen, "gbSendLen");
-            this.gbSendLen.Name = "gbSendLen";
-            this.gbSendLen.TabStop = false;
+            resources.ApplyResources(this.tlpButtons, "tlpButtons");
+            this.tlpButtons.Controls.Add(this.bSave, 5, 0);
+            this.tlpButtons.Controls.Add(this.bClose, 7, 0);
+            this.tlpButtons.Controls.Add(this.bSendStop, 3, 0);
+            this.tlpButtons.Controls.Add(this.bSend, 1, 0);
+            this.tlpButtons.Name = "tlpButtons";
             // 
-            // tlpSendLen
+            // bSave
             // 
-            resources.ApplyResources(this.tlpSendLen, "tlpSendLen");
-            this.tlpSendLen.Controls.Add(this.nudSendLen, 0, 0);
-            this.tlpSendLen.Name = "tlpSendLen";
+            resources.ApplyResources(this.bSave, "bSave");
+            this.bSave.Name = "bSave";
+            this.bSave.UseVisualStyleBackColor = true;
+            this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
-            // nudSendLen
+            // bClose
             // 
-            resources.ApplyResources(this.nudSendLen, "nudSendLen");
-            this.nudSendLen.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudSendLen.Name = "nudSendLen";
-            this.nudSendLen.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
+            resources.ApplyResources(this.bClose, "bClose");
+            this.bClose.Name = "bClose";
+            this.bClose.UseVisualStyleBackColor = true;
+            this.bClose.Click += new System.EventHandler(this.bClose_Click);
+            // 
+            // bSendStop
+            // 
+            resources.ApplyResources(this.bSendStop, "bSendStop");
+            this.bSendStop.Name = "bSendStop";
+            this.bSendStop.UseVisualStyleBackColor = true;
+            this.bSendStop.Click += new System.EventHandler(this.bSendStop_Click);
+            // 
+            // bSend
+            // 
+            resources.ApplyResources(this.bSend, "bSend");
+            this.bSend.Name = "bSend";
+            this.bSend.UseVisualStyleBackColor = true;
+            this.bSend.Click += new System.EventHandler(this.bSend_Click);
+            // 
+            // bgwSendPacket
+            // 
+            this.bgwSendPacket.WorkerReportsProgress = true;
+            this.bgwSendPacket.WorkerSupportsCancellation = true;
+            this.bgwSendPacket.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendPacket_DoWork);
+            this.bgwSendPacket.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwSendPacket_ProgressChanged);
+            this.bgwSendPacket.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendPacket_RunWorkerCompleted);
             // 
             // Socket_SendForm
             // 
@@ -1008,6 +937,7 @@ namespace WPELibrary
             this.tlpSendForm.PerformLayout();
             this.tlpPacketInfo.ResumeLayout(false);
             this.tlpPacketInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSocketType)).EndInit();
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();
             this.tsPacketData.ResumeLayout(false);
@@ -1018,32 +948,27 @@ namespace WPELibrary
             this.ssSocketSend.ResumeLayout(false);
             this.ssSocketSend.PerformLayout();
             this.tlpParameter.ResumeLayout(false);
-            this.gbSendType.ResumeLayout(false);
-            this.gbSendStep.ResumeLayout(false);
             this.gbSendSocket.ResumeLayout(false);
-            this.tlpButtons.ResumeLayout(false);
+            this.tlpSendSocket.ResumeLayout(false);
+            this.tlpSendSocket.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Len)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Socket)).EndInit();
+            this.gbSendType.ResumeLayout(false);
+            this.tlpSendType.ResumeLayout(false);
+            this.tlpSendType_Times.ResumeLayout(false);
+            this.tlpSendType_Times.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).EndInit();
+            this.pSendType.ResumeLayout(false);
+            this.pSendType.PerformLayout();
+            this.gbSendStep.ResumeLayout(false);
             this.tlpSendStep.ResumeLayout(false);
             this.tlpSendStep.PerformLayout();
             this.tlpSendStepSet.ResumeLayout(false);
             this.tlpSendStepSet.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Position)).EndInit();
-            this.tlpSendSocket.ResumeLayout(false);
-            this.pSendSocket.ResumeLayout(false);
-            this.pSendSocket.PerformLayout();
-            this.tlpSendSocket_IP.ResumeLayout(false);
-            this.tlpSendSocket_IP.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket)).EndInit();
-            this.tlpSendType.ResumeLayout(false);
-            this.pSendType.ResumeLayout(false);
-            this.pSendType.PerformLayout();
-            this.tlpSendType_Times.ResumeLayout(false);
-            this.tlpSendType_Times.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).EndInit();
-            this.gbSendLen.ResumeLayout(false);
-            this.tlpSendLen.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendLen)).EndInit();
+            this.tlpButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1061,7 +986,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlSend_Fail;
         private System.Windows.Forms.ToolStripStatusLabel tlSend_Fail_Value;
         private System.Windows.Forms.TableLayoutPanel tlpParameter;
-        private System.Windows.Forms.GroupBox gbSendSocket;
         private System.Windows.Forms.GroupBox gbSendType;
         private System.Windows.Forms.GroupBox gbSendStep;
         private System.Windows.Forms.ContextMenuStrip cmsHexBox;
@@ -1120,11 +1044,10 @@ namespace WPELibrary
         private System.Windows.Forms.Button bSendStop;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo;
         private System.Windows.Forms.TextBox txtIPTo;
-        private System.Windows.Forms.TextBox txtSocketType;
+        private System.Windows.Forms.TextBox txtPacketType;
         private System.Windows.Forms.TextBox txtIPFrom;
-        private System.Windows.Forms.Label lIPTo;
-        private System.Windows.Forms.Label lSocketType;
-        private System.Windows.Forms.Label lIPFrom;
+        private System.Windows.Forms.Label lPacketType;
+        private System.Windows.Forms.Label lIPAddr;
         private System.Windows.Forms.Label lPacketTime;
         private System.Windows.Forms.TextBox txtPacketTime;
         private System.Windows.Forms.TableLayoutPanel tlpSendStep;
@@ -1135,17 +1058,6 @@ namespace WPELibrary
         private System.Windows.Forms.Label lSendStep_Len;
         private System.Windows.Forms.Label lSendStep_Position_Value;
         private System.Windows.Forms.NumericUpDown nudSendStep_Position;
-        private System.Windows.Forms.TableLayoutPanel tlpSendSocket;
-        private System.Windows.Forms.TableLayoutPanel tlpSendSocket_IP;
-        private System.Windows.Forms.Label lSendSocket_ID;
-        private System.Windows.Forms.NumericUpDown nudSendSocket;
-        private System.Windows.Forms.TextBox txtSendSocket_Port;
-        private System.Windows.Forms.Label lSendSocket_Port;
-        private System.Windows.Forms.TextBox txtSendSocket_IP;
-        private System.Windows.Forms.Label lSendSocket_IP;
-        private System.Windows.Forms.Panel pSendSocket;
-        private System.Windows.Forms.RadioButton rbSendSocket_NewSocket;
-        private System.Windows.Forms.RadioButton rbSendSocket_UseSocket;
         private System.Windows.Forms.TableLayoutPanel tlpSendType;
         private System.Windows.Forms.Panel pSendType;
         private System.Windows.Forms.RadioButton rbSendType_Times;
@@ -1156,8 +1068,12 @@ namespace WPELibrary
         private System.Windows.Forms.RadioButton rbSendType_Continuously;
         private System.Windows.Forms.Label lSendType_Times;
         private System.Windows.Forms.CheckBox cbSendStep;
-        private System.Windows.Forms.GroupBox gbSendLen;
-        private System.Windows.Forms.TableLayoutPanel tlpSendLen;
-        private System.Windows.Forms.NumericUpDown nudSendLen;
+        private System.Windows.Forms.PictureBox pbSocketType;
+        private System.Windows.Forms.GroupBox gbSendSocket;
+        private System.Windows.Forms.TableLayoutPanel tlpSendSocket;
+        private System.Windows.Forms.NumericUpDown nudSendSocket_Len;
+        private System.Windows.Forms.Label lSendSocket_Len;
+        private System.Windows.Forms.Label lSendSocket_Socket;
+        private System.Windows.Forms.NumericUpDown nudSendSocket_Socket;
     }
 }

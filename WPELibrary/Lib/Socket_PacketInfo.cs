@@ -33,13 +33,16 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//类别
-        protected Socket_Cache.SocketPacket.SocketType packettype;
-        public Socket_Cache.SocketPacket.SocketType PacketType
+        #region//封包类别
+
+        protected Socket_Cache.SocketPacket.PacketType packettype;
+
+        public Socket_Cache.SocketPacket.PacketType PacketType
         {
             get { return packettype; }
             set { packettype = value; }
         }
+
         #endregion
 
         #region//源地址
@@ -89,10 +92,10 @@ namespace WPELibrary.Lib
 
         #region//Socket_PacketInfo        
 
-        public Socket_PacketInfo(DateTime pTime, int pSocket, Socket_Cache.SocketPacket.SocketType pType, string pFrom, string pTo, byte[] pBuffer, int pLen)
+        public Socket_PacketInfo(DateTime pTime, int pSocket, Socket_Cache.SocketPacket.PacketType pType, string pFrom, string pTo, byte[] pBuffer, int pLen)
         {  
             this.packettime = pTime;            
-            this.packetsocket = pSocket;
+            this.packetsocket = pSocket;          
             this.packettype = pType;
             this.packetfrom = pFrom;
             this.packetto = pTo;

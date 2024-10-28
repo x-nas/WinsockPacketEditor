@@ -425,11 +425,32 @@ namespace WPELibrary
                 switch (sItemText)
                 {
                     case "cmsHexBox_Send":
+
                         if (Select_Index > -1)
                         {
                             Socket_Operation.ShowSendForm(Select_Index);
                             this.dgvSocketList.Refresh();
                         }
+
+                        break;
+
+                    case "cmsHexBox_SendList":
+
+                        if (Select_Index > -1)
+                        {
+                            Socket_Cache.SendList.AddToSendList_BySocketListIndex(Select_Index);
+                            Socket_Operation.ShowSendListForm();
+                        }
+
+                        break;
+
+                    case "cmsHexBox_FilterList":
+
+                        if (Select_Index > -1)
+                        {
+                            Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index);
+                        }
+
                         break;
                 }
             }
@@ -497,44 +518,27 @@ namespace WPELibrary
                 switch (sItemText)
                 {
                     case "cmsSocketList_ShowSendList":
+
                         Socket_Operation.ShowSendListForm();
-                        break;
 
-                    case "cmsSocketList_SendList":
-                        if (Select_Index > -1)
-                        {
-                            Socket_Cache.SendList.AddToSendList_BySocketListIndex(Select_Index);
-                            Socket_Operation.ShowSendListForm();
-                        }
-                        break;
-
-                    case "cmsSocketList_FilterList":
-                        if (Select_Index > -1)
-                        {
-                            Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index);
-                        }
-                        break;
-
-                    case "cmsSocketList_Send":
-                        if (Select_Index > -1)
-                        {
-                            Socket_Operation.ShowSendForm(Select_Index);
-                            this.dgvSocketList.Refresh();
-                        }                        
                         break;
 
                     case "cmsSocketList_UseSocket":
+
                         if (Select_Index > -1)
                         {
                             Socket_Cache.SendList.UseSocket = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
                         }
+
                         break;
 
                     case "cmsSocketList_ToExcel":
+
                         if (dgvSocketList.Rows.Count > 0)
                         {
                             Socket_Operation.SaveSocketListToExcel();
                         }
+
                         break;
                 }
             }
@@ -685,8 +689,8 @@ namespace WPELibrary
             {
                 if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
                 {
-                    Socket_Cache.SocketPacket.SocketType stType = (Socket_Cache.SocketPacket.SocketType)dgvSocketList.Rows[e.RowIndex].Cells["cType"].Value;
-                    e.Value = Socket_Operation.GetPacketTypeImg(stType);
+                    Socket_Cache.SocketPacket.PacketType stType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
+                    e.Value = Socket_Operation.GetImg_BySocketType(stType);
                     e.FormattingApplied = true;
                 }
             }

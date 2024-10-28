@@ -30,11 +30,44 @@ namespace WPELibrary.Lib
 
             #region//结构定义
 
+            [StructLayout(LayoutKind.Explicit)]
+
             public struct in_addr
             {
-                [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-                public byte[] sin_addr;
-            }
+                [FieldOffset(0)]
+                public S_un _S_un;
+
+                [StructLayout(LayoutKind.Explicit)]
+                public struct S_un
+                {
+                    [FieldOffset(0)]
+                    public S_un_b S_un_b;
+
+                    [FieldOffset(0)]
+                    public S_un_w S_un_w;
+
+                    [FieldOffset(0)]
+                    public uint S_addr;
+                }
+
+                [StructLayout(LayoutKind.Sequential)]
+
+                public struct S_un_b
+                {
+                    public byte s_b1;
+                    public byte s_b2;
+                    public byte s_b3;
+                    public byte s_b4;
+                }
+
+                [StructLayout(LayoutKind.Sequential)]
+
+                public struct S_un_w
+                {
+                    public ushort s_w1;
+                    public ushort s_w2;
+                }
+            }            
 
             public struct sockaddr
             {
@@ -62,7 +95,7 @@ namespace WPELibrary.Lib
                 public IntPtr EventHandle;
             }
 
-            public enum SocketType
+            public enum PacketType
             {
                 Send,
                 SendTo,
@@ -122,54 +155,54 @@ namespace WPELibrary.Lib
 
             #region//封包入队列            
 
-            public static void SocketPacket_ToQueue(int iSocket, byte[] bBuffByte, Socket_Cache.SocketPacket.SocketType stType, Socket_Cache.SocketPacket.sockaddr sAddr, int iResLen)
+            public static void SocketPacket_ToQueue(int iSocket, byte[] bBuffByte, Socket_Cache.SocketPacket.PacketType ptPacketType, Socket_Cache.SocketPacket.sockaddr sAddr, int iResLen)
             {
                 try
                 {
-                    string sPacketIP = Socket_Operation.GetSocketPacketIP(iSocket, sAddr, stType);
+                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
                     if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
                     {
                         string[] slPacketIP = sPacketIP.Split('|');
                         string pFrom = slPacketIP[0];
                         string pTo = slPacketIP[1];                        
-                        DateTime pTime = DateTime.Now;                        
+                        DateTime pTime = DateTime.Now;
 
-                        Socket_PacketInfo spi = new Socket_PacketInfo(pTime, iSocket, stType, pFrom, pTo, bBuffByte, iResLen);
+                        Socket_PacketInfo spi = new Socket_PacketInfo(pTime, iSocket, ptPacketType, pFrom, pTo, bBuffByte, iResLen);
 
                         if (Socket_Operation.ISShowSocketPacket_ByFilter(spi))
                         {
-                            switch (stType)
+                            switch (ptPacketType)
                             {
-                                case Socket_Cache.SocketPacket.SocketType.Send:
+                                case Socket_Cache.SocketPacket.PacketType.Send:
                                     Total_SendBytes += iResLen;
                                     SocketQueue.Send_CNT++;                                    
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.SendTo:
+                                case Socket_Cache.SocketPacket.PacketType.SendTo:
                                     Total_SendBytes += iResLen;
                                     SocketQueue.SendTo_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.Recv:
+                                case Socket_Cache.SocketPacket.PacketType.Recv:
                                     Total_RecvBytes += iResLen;
                                     SocketQueue.Recv_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.RecvFrom:
+                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:
                                     Total_RecvBytes += iResLen;
                                     SocketQueue.RecvFrom_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.WSASend:
+                                case Socket_Cache.SocketPacket.PacketType.WSASend:
                                     Total_SendBytes += iResLen;
                                     SocketQueue.WSASend_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.WSASendTo:
+                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:
                                     Total_SendBytes += iResLen;
                                     SocketQueue.WSASendTo_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.WSARecv:
+                                case Socket_Cache.SocketPacket.PacketType.WSARecv:
                                     Total_RecvBytes += iResLen;
                                     SocketQueue.WSARecv_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
+                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
                                     Total_RecvBytes += iResLen;
                                     SocketQueue.WSARecvFrom_CNT++;
                                     break;
@@ -231,7 +264,7 @@ namespace WPELibrary.Lib
                     if (SocketQueue.qSocket_PacketInfo.Count > 0)
                     {
                         Socket_PacketInfo spi = SocketQueue.qSocket_PacketInfo.Dequeue();
-                        Socket_Cache.SocketPacket.SocketType sType = spi.PacketType;
+                        Socket_Cache.SocketPacket.PacketType sType = spi.PacketType;
                         int iResLen = spi.PacketLen;
                         byte[] bBuffer = spi.PacketBuffer;
 

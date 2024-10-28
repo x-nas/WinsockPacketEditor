@@ -9,6 +9,8 @@ using System.Data;
 using System.Linq;
 using System.Diagnostics;
 using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
 
 namespace WPELibrary.Lib
 {   
@@ -320,9 +322,9 @@ namespace WPELibrary.Lib
         }
         #endregion
 
-        #region//获取封包的IP地址和端口
+        #region//获取sockaddr对应的IP地址和端口
 
-        public static string GetSocketPacketIP(int pSocket, Socket_Cache.SocketPacket.sockaddr pAddr, Socket_Cache.SocketPacket.SocketType pType)
+        public static string GetIPString_BySocketAddr(int pSocket, Socket_Cache.SocketPacket.sockaddr pAddr, Socket_Cache.SocketPacket.PacketType pType)
         {
             string sReturn = "";
 
@@ -332,37 +334,44 @@ namespace WPELibrary.Lib
 
                 switch (pType)
                 {
-                    case Socket_Cache.SocketPacket.SocketType.Send:                        
+                    case Socket_Cache.SocketPacket.PacketType.Send:                        
                         sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
                         sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
                         break;
-                    case Socket_Cache.SocketPacket.SocketType.SendTo:                        
+
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
+                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:                        
                         sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
                         sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
+                        break;      
+                        
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:                        
+                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
+                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
                         break;
-                    case Socket_Cache.SocketPacket.SocketType.Recv:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.RecvFrom:                        
-                        sIP_From = Socket_Operation.GetIP_ByAddr(pAddr);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        break;                    
-                    case Socket_Cache.SocketPacket.SocketType.WSASend:                        
+                        
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:                        
                         sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
                         sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
                         break;
-                    case Socket_Cache.SocketPacket.SocketType.WSASendTo:                        
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
+                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:                        
                         sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
                         sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
                         break;
-                    case Socket_Cache.SocketPacket.SocketType.WSARecv:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:                        
-                        sIP_From = Socket_Operation.GetIP_ByAddr(pAddr);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:                        
+                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
+                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
                         break;
                 }
 
@@ -430,7 +439,41 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//获取IP地址和端口对应的sockaddr
+
+        public static Socket_Cache.SocketPacket.sockaddr GetSocketAddr_ByIPString(string IPString)
+        {
+            Socket_Cache.SocketPacket.sockaddr saReturn = new Socket_Cache.SocketPacket.sockaddr();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(IPString) && IPString.IndexOf(":") > 0)
+                {                    
+                    string sIP = IPString.Split(':')[0];
+                    string sPort = IPString.Split(':')[1];
+
+                    saReturn.sin_family = ((short)AddressFamily.InterNetwork);
+                    saReturn.sin_port = WS2_32.htons(ushort.Parse(sPort));
+
+                    Socket_Cache.SocketPacket.in_addr ia = new Socket_Cache.SocketPacket.in_addr();
+                    IPAddress ipAddress = IPAddress.Parse(sIP);
+                    ia._S_un.S_addr = ((uint)ipAddress.GetHashCode());
+
+                    saReturn.sin_addr = ia;
+                    saReturn.sin_zero = new byte[8];
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return saReturn;
+        }
+
+        #endregion
 
         #region//获取封包数据字符串（十六进制）
 
@@ -504,56 +547,7 @@ namespace WPELibrary.Lib
             return bByteBuff;
         }
 
-        #endregion
-
-        #region//获取封包类型对应的标识图片
-
-        public static Image GetPacketTypeImg(Socket_Cache.SocketPacket.SocketType stType)
-        {
-            Image imgReturn = null;
-
-            try
-            {
-                switch (stType)
-                {
-                    case Socket_Cache.SocketPacket.SocketType.Send:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.Recv:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.SendTo:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.RecvFrom:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.WSASend:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.WSARecv:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.WSASendTo:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.SocketType.WSARecvFrom:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    default:
-                        imgReturn = Properties.Resources.Info16;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return imgReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #region//获取指定步长的Byte
 
@@ -598,7 +592,53 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
-        }      
+        }
+
+        #endregion
+
+        #region//获取封包类型的图标
+
+        public static Image GetImg_BySocketType(Socket_Cache.SocketPacket.PacketType socketType)
+        {
+            Image imgReturn = null;
+
+            try
+            {
+                switch (socketType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.Send:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        imgReturn = Properties.Resources.sent;
+                        break;
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        imgReturn = Properties.Resources.received;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return imgReturn;
+        }
 
         #endregion
 
@@ -1493,6 +1533,49 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }           
         }
+        #endregion
+
+        #region//发送封包
+
+        public static bool SendPacket(int iSocket, Socket_Cache.SocketPacket.PacketType stType, string sIPString, byte[] bSendBuffer)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (iSocket > 0 && bSendBuffer.Length > 0)
+                {
+                    IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
+                    Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
+
+                    int res = 0;
+                    string sIP = string.Empty;
+                    Socket_Cache.SocketPacket.sockaddr saAddr = new Socket_Cache.SocketPacket.sockaddr();
+
+                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                    {
+                        res = WS2_32.send(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                    }
+                    else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                    {
+                        saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, 16);
+                    }
+
+                    if (res > 0)
+                    {
+                        bReturn = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
         #endregion
     }
 }
