@@ -26,10 +26,11 @@ namespace WPELibrary.Lib
 
             if (res > 0)
             {
+                byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
                 Task.Run(() =>
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Send;
-                    byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Send;                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, new Socket_Cache.SocketPacket.sockaddr(), res);
                 });
             }
@@ -56,10 +57,11 @@ namespace WPELibrary.Lib
             {
                 Socket_Cache.FilterList.DoFilter(buffer, res);
 
+                byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
                 Task.Run(() =>
                 {
-                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.Recv;
-                    byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.Recv;                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), res);
                 });
             }
@@ -86,11 +88,12 @@ namespace WPELibrary.Lib
 
             if (res > 0)
             {
+                byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
                 Task.Run(() =>
                 {
                     Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
-                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.SendTo;
-                    byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.SendTo;                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, ptType, saTo, res);
                 });
             }          
@@ -117,11 +120,12 @@ namespace WPELibrary.Lib
             {
                 Socket_Cache.FilterList.DoFilter(buffer, res);
 
+                byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
                 Task.Run(() =>
                 {
                     Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.RecvFrom;
-                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
-                    byte[] bBuff = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuff, stSocketType, saFrom, res);
                 });
             }
@@ -155,10 +159,11 @@ namespace WPELibrary.Lib
 
             if (res == SocketError.Success && BytesSent > 0)
             {
+                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+
                 Task.Run(() =>
                 {
-                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSASend;
-                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSASend;                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
                 });
             }
@@ -192,10 +197,11 @@ namespace WPELibrary.Lib
                     Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
                 }
 
+                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+
                 Task.Run(() =>
                 {
-                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSARecv;
-                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+                    Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSARecv;                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
                 });
             }            
@@ -229,11 +235,12 @@ namespace WPELibrary.Lib
 
             if (res == SocketError.Success && BytesSent > 0)
             {
+                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+
                 Task.Run(() =>
                 {
                     Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSASendTo;
-                    Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
-                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
+                    Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, saTo, bBuff.Length);
                 });
             }
@@ -267,11 +274,12 @@ namespace WPELibrary.Lib
                     Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
                 }
 
+                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+
                 Task.Run(() =>
                 {
                     Socket_Cache.SocketPacket.PacketType stSocketType = Socket_Cache.SocketPacket.PacketType.WSARecvFrom;
-                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
-                    byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);                    
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, stSocketType, saFrom, bBuff.Length);
                 });
             }
