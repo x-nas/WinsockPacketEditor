@@ -118,41 +118,218 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tsmiBatchSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+  <data name="txtIPTo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>627, 3</value>
   </data>
-  <data name="tsmiBatchSend.Text" xml:space="preserve">
-    <value>Add to send list</value>
+  <data name="txtPacketType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>278, 3</value>
+  </data>
+  <data name="txtIPFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>433, 3</value>
+  </data>
+  <data name="lPacketType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>236, 3</value>
+  </data>
+  <data name="lPacketType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 24</value>
+  </data>
+  <data name="lPacketType.Text" xml:space="preserve">
+    <value>Type:</value>
+  </data>
+  <data name="lIPAddr.Location" type="System.Drawing.Point, System.Drawing">
+    <value>378, 3</value>
+  </data>
+  <data name="lIPAddr.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 24</value>
+  </data>
+  <data name="lIPAddr.Text" xml:space="preserve">
+    <value>IP Addr:</value>
+  </data>
+  <data name="lPacketTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 24</value>
+  </data>
+  <data name="lPacketTime.Text" xml:space="preserve">
+    <value>Time Stamp:</value>
+  </data>
+  <data name="txtPacketTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>86, 3</value>
+  </data>
+  <data name="pbSocketType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>580, 0</value>
+  </data>
+  <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 54</value>
+  </data>
+  <data name="cmsHexBox_SendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="cmsHexBox_SendList.Text" xml:space="preserve">
+    <value>Add To Send List</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>172, 6</value>
   </data>
-  <data name="tsmiAddToFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+  <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
   </data>
-  <data name="tsmiAddToFilter.Text" xml:space="preserve">
-    <value>Add to filter list</value>
+  <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
+    <value>Add To Filter List</value>
   </data>
-  <data name="cmsSocketSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 54</value>
+  <data name="tlSendTimes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 17</value>
   </data>
-  <data name="tlSendPacket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>49, 23</value>
-  </data>
-  <data name="tlSendPacket.Text" xml:space="preserve">
-    <value>Total：</value>
+  <data name="tlSendTimes.Text" xml:space="preserve">
+    <value>Sent:</value>
   </data>
   <data name="tlSend_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 23</value>
+    <value>56, 17</value>
   </data>
   <data name="tlSend_Success.Text" xml:space="preserve">
-    <value>Success：</value>
+    <value>Success:</value>
   </data>
   <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 23</value>
+    <value>30, 17</value>
   </data>
   <data name="tlSend_Fail.Text" xml:space="preserve">
-    <value>Fail：</value>
+    <value>Fail:</value>
+  </data>
+  <data name="gbSendSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>80, 3</value>
+  </data>
+  <data name="gbSendSocket.Text" xml:space="preserve">
+    <value>[ Socket ]</value>
+  </data>
+  <data name="tlpSendSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpSendSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 84</value>
+  </data>
+  <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
+    <value>81, 30</value>
+  </data>
+  <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 21</value>
+  </data>
+  <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 21</value>
+  </data>
+  <data name="lSendSocket_Len.Text" xml:space="preserve">
+    <value>Length:</value>
+  </data>
+  <data name="lSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 21</value>
+  </data>
+  <data name="lSendSocket_Socket.Text" xml:space="preserve">
+    <value>Use Socket:</value>
+  </data>
+  <data name="nudSendSocket_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>81, 3</value>
+  </data>
+  <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 21</value>
+  </data>
+  <data name="gbSendType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>280, 3</value>
+  </data>
+  <data name="gbSendType.Text" xml:space="preserve">
+    <value>[ Send ]</value>
+  </data>
+  <data name="tlpSendType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpSendType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>288, 84</value>
+  </data>
+  <data name="tlpSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 84</value>
+  </data>
+  <data name="lSendType_Times.Text" xml:space="preserve">
+    <value>Times</value>
+  </data>
+  <data name="lSendType_Int.Text" xml:space="preserve">
+    <value>Delay (ms)</value>
+  </data>
+  <data name="pSendType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 84</value>
+  </data>
+  <data name="rbSendType_Continuously.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 27</value>
+  </data>
+  <data name="rbSendType_Continuously.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 26</value>
+  </data>
+  <data name="rbSendType_Continuously.Text" xml:space="preserve">
+    <value>continuous:</value>
+  </data>
+  <data name="rbSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 24</value>
+  </data>
+  <data name="rbSendType_Times.Text" xml:space="preserve">
+    <value>Send:</value>
+  </data>
+  <data name="gbSendStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>580, 3</value>
+  </data>
+  <data name="gbSendStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>274, 104</value>
+  </data>
+  <data name="gbSendStep.Text" xml:space="preserve">
+    <value>[ Progressively ]</value>
+  </data>
+  <data name="tlpSendStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpSendStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>268, 84</value>
+  </data>
+  <data name="tlpSendStepSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>80, 0</value>
+  </data>
+  <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 84</value>
+  </data>
+  <data name="lSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 21</value>
+  </data>
+  <data name="lSendStep_Position.Text" xml:space="preserve">
+    <value>Position:</value>
+  </data>
+  <data name="lSendStep_Len_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>151, 30</value>
+  </data>
+  <data name="nudSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
+    <value>63, 30</value>
+  </data>
+  <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 21</value>
+  </data>
+  <data name="lSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 21</value>
+  </data>
+  <data name="lSendStep_Len.Text" xml:space="preserve">
+    <value>Step:</value>
+  </data>
+  <data name="lSendStep_Position_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>151, 3</value>
+  </data>
+  <data name="nudSendStep_Position.Location" type="System.Drawing.Point, System.Drawing">
+    <value>63, 3</value>
+  </data>
+  <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 21</value>
+  </data>
+  <data name="cbSendStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 25</value>
+  </data>
+  <data name="cbSendStep.Text" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="bSave.Text" xml:space="preserve">
+    <value>Save (&amp;S)</value>
+  </data>
+  <data name="bClose.Text" xml:space="preserve">
+    <value>Close (&amp;C)</value>
   </data>
   <data name="bSendStop.Text" xml:space="preserve">
     <value>Stop (&amp;T)</value>
@@ -160,29 +337,8 @@
   <data name="bSend.Text" xml:space="preserve">
     <value>Send (&amp;F)</value>
   </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>Int(ms)：</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>Loop：</value>
-  </data>
-  <data name="lStepLen.Text" xml:space="preserve">
-    <value>Prog Step：</value>
-  </data>
-  <data name="cbStep.Text" xml:space="preserve">
-    <value>Progressive</value>
-  </data>
-  <data name="lSend_Port.Text" xml:space="preserve">
-    <value>To Port：</value>
-  </data>
-  <data name="lSend_IP.Text" xml:space="preserve">
-    <value>To IP：</value>
-  </data>
-  <data name="lSend_Len.Text" xml:space="preserve">
-    <value>Length：</value>
-  </data>
-  <data name="lSend_Socket.Text" xml:space="preserve">
-    <value>Socket：</value>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

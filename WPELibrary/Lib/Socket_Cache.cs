@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Reflection;
 using Be.Windows.Forms;
 using System.Diagnostics;
+using System.Collections.Concurrent;
 
 namespace WPELibrary.Lib
 {
@@ -151,7 +152,7 @@ namespace WPELibrary.Lib
             public static int Total_SendBytes = 0;
             public static int Total_RecvBytes = 0;
 
-            public static Queue<Socket_PacketInfo> qSocket_PacketInfo = new Queue<Socket_PacketInfo>();
+            public static ConcurrentQueue<Socket_PacketInfo> qSocket_PacketInfo = new ConcurrentQueue<Socket_PacketInfo>();
 
             #region//封包入队列            
 
@@ -162,61 +163,14 @@ namespace WPELibrary.Lib
                     string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
                     if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
-                    {
-                        string[] slPacketIP = sPacketIP.Split('|');
-                        string pFrom = slPacketIP[0];
-                        string pTo = slPacketIP[1];                        
-                        DateTime pTime = DateTime.Now;
+                    {  
+                        string sIPFrom = sPacketIP.Split('|')[0];
+                        string sIPTo = sPacketIP.Split('|')[1];                        
+                        DateTime dtTime = DateTime.Now;
 
-                        Socket_PacketInfo spi = new Socket_PacketInfo(pTime, iSocket, ptPacketType, pFrom, pTo, bBuffByte, iResLen);
+                        Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bBuffByte, iResLen);
 
-                        if (Socket_Operation.ISShowSocketPacket_ByFilter(spi))
-                        {
-                            switch (ptPacketType)
-                            {
-                                case Socket_Cache.SocketPacket.PacketType.Send:
-                                    Total_SendBytes += iResLen;
-                                    SocketQueue.Send_CNT++;                                    
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.SendTo:
-                                    Total_SendBytes += iResLen;
-                                    SocketQueue.SendTo_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.Recv:
-                                    Total_RecvBytes += iResLen;
-                                    SocketQueue.Recv_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                                    Total_RecvBytes += iResLen;
-                                    SocketQueue.RecvFrom_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.WSASend:
-                                    Total_SendBytes += iResLen;
-                                    SocketQueue.WSASend_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                                    Total_SendBytes += iResLen;
-                                    SocketQueue.WSASendTo_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                                    Total_RecvBytes += iResLen;
-                                    SocketQueue.WSARecv_CNT++;
-                                    break;
-                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                                    Total_RecvBytes += iResLen;
-                                    SocketQueue.WSARecvFrom_CNT++;
-                                    break;
-                            }
-
-                            lock (qSocket_PacketInfo)
-                            {
-                                qSocket_PacketInfo.Enqueue(spi);
-                            }
-                        }
-                        else
-                        {
-                            SocketQueue.Filter_CNT++;
-                        }
+                        qSocket_PacketInfo.Enqueue(spi);
                     }
                 }
                 catch (Exception ex)
@@ -233,7 +187,10 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    qSocket_PacketInfo.Clear();
+                    while (!qSocket_PacketInfo.IsEmpty)
+                    {
+                        qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi);
+                    }                      
                 }
                 catch (Exception ex)
                 {
@@ -261,17 +218,60 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (SocketQueue.qSocket_PacketInfo.Count > 0)
+                    if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi))
                     {
-                        Socket_PacketInfo spi = SocketQueue.qSocket_PacketInfo.Dequeue();
-                        Socket_Cache.SocketPacket.PacketType sType = spi.PacketType;
-                        int iResLen = spi.PacketLen;
-                        byte[] bBuffer = spi.PacketBuffer;
+                        if (Socket_Operation.ISShowSocketPacket_ByFilter(spi))
+                        {                            
+                            int iPacketLen = spi.PacketLen;
+                            byte[] bBuffer = spi.PacketBuffer;
 
-                        spi.PacketIndex = lstRecPacket.Count + 1;
-                        spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
+                            spi.PacketIndex = lstRecPacket.Count + 1;
+                            spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
 
-                        RecSocketPacket?.Invoke(spi);                        
+                            Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
+
+                            switch (ptType)
+                            {
+                                case Socket_Cache.SocketPacket.PacketType.Send:
+                                    SocketQueue.Total_SendBytes += iPacketLen;
+                                    SocketQueue.Send_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.SendTo:
+                                    SocketQueue.Total_SendBytes += iPacketLen;
+                                    SocketQueue.SendTo_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.Recv:
+                                    SocketQueue.Total_RecvBytes += iPacketLen;
+                                    SocketQueue.Recv_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                                    SocketQueue.Total_RecvBytes += iPacketLen;
+                                    SocketQueue.RecvFrom_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.WSASend:
+                                    SocketQueue.Total_SendBytes += iPacketLen;
+                                    SocketQueue.WSASend_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                                    SocketQueue.Total_SendBytes += iPacketLen;
+                                    SocketQueue.WSASendTo_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                                    SocketQueue.Total_RecvBytes += iPacketLen;
+                                    SocketQueue.WSARecv_CNT++;
+                                    break;
+                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                                    SocketQueue.Total_RecvBytes += iPacketLen;
+                                    SocketQueue.WSARecvFrom_CNT++;
+                                    break;
+                            }
+
+                            RecSocketPacket?.Invoke(spi);
+                        }
+                        else
+                        {
+                            SocketQueue.Filter_CNT++;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -288,7 +288,7 @@ namespace WPELibrary.Lib
         #region//日志队列
         public static class LogQueue
         {
-            public static Queue<Socket_LogInfo> qSocket_Log = new Queue<Socket_LogInfo>();
+            public static ConcurrentQueue<Socket_LogInfo> qSocket_Log = new ConcurrentQueue<Socket_LogInfo>();
 
             #region//日志入队列
 
@@ -298,10 +298,7 @@ namespace WPELibrary.Lib
                 {
                     Socket_LogInfo sli = new Socket_LogInfo(sFuncName, sLogContent);
 
-                    lock (qSocket_Log)
-                    {
-                        qSocket_Log.Enqueue(sli);
-                    }                 
+                    qSocket_Log.Enqueue(sli);
                 }
                 catch (Exception ex) 
                 {
@@ -316,7 +313,10 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    qSocket_Log.Clear();
+                    while (!qSocket_Log.IsEmpty)
+                    {
+                        qSocket_Log.TryDequeue(out Socket_LogInfo sl);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -342,11 +342,10 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (LogQueue.qSocket_Log.Count > 0)
+                    if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sli))
                     {
-                        Socket_LogInfo sli = LogQueue.qSocket_Log.Dequeue();
                         RecSocketLog?.Invoke(sli);
-                    }
+                    }              
                 }
                 catch (Exception ex)
                 {
@@ -742,68 +741,47 @@ namespace WPELibrary.Lib
             #endregion
 
             #region//执行滤镜
+
             public static void DoFilter(IntPtr ipBuff, int iLen)
             {
-                string sFName = "";
+                string sFName = string.Empty;
 
                 try
                 {
-                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(ipBuff, iLen);
-
-                    if (bBuff.Length > 0)
+                    foreach (Socket_FilterInfo sfi in lstFilter)
                     {
-                        foreach (Socket_FilterInfo sfi in lstFilter)
+                        if (Socket_Operation.CheckFilter_IsEffective(sfi))
                         {
-                            bool bChecked = sfi.IsCheck;
+                            sFName = sfi.FName;
+                            Socket_FilterInfo.FilterMode Fmode = sfi.FMode;
 
-                            if (bChecked)
+                            switch (Fmode)
                             {
-                                sFName = sfi.FName;
-                                Socket_FilterInfo.FilterMode Fmode = sfi.FMode;
+                                case Socket_FilterInfo.FilterMode.Normal:
 
-                                switch (Fmode)
-                                {
-                                    case Socket_FilterInfo.FilterMode.Normal:
-
-                                        bool bMatch = CheckFilterIsMatch_Normal(sfi, bBuff);                                        
-
-                                        if (bMatch)
+                                    if (Socket_Operation.CheckFilter_IsMatch_Normal(sfi, ipBuff, iLen))
+                                    {
+                                        if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
                                         {
-                                            bool bOK = DoFilter_Normal(sfi, ipBuff, iLen);
-
-                                            if (bOK)
-                                            {
-                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
-
-                                                break;
-                                            }
+                                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);                                            
                                         }
+                                    }
 
-                                        break;
+                                    break;
 
-                                    case Socket_FilterInfo.FilterMode.Advanced:
+                                case Socket_FilterInfo.FilterMode.Advanced:
 
-                                        DataTable dtReturn = CheckFilterIsMatch_Adcanced(sfi, bBuff);
+                                    List<int> MatchIndex = Socket_Operation.CheckFilter_IsMatch_Adcanced(sfi, ipBuff, iLen);
 
-                                        if (dtReturn.Rows.Count > 0)
+                                    foreach (int iIndex in MatchIndex)
+                                    {
+                                        if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
                                         {
-                                            for (int i = 0; i < dtReturn.Rows.Count; i++) 
-                                            {
-                                                int iMatch = int.Parse(dtReturn.Rows[i][0].ToString());
+                                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);                                            
+                                        }
+                                    }
 
-                                                bool bOK = DoFilter_Advanced(sfi, iMatch, ipBuff, iLen);
-
-                                                if (bOK)
-                                                {
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
-                                                }
-                                            }
-
-                                            break;
-                                        }                                     
-
-                                        break;
-                                }
+                                    break;                                    
                             }
                         }
                     }
@@ -814,229 +792,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static bool DoFilter_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
-            { 
-                bool bReturn = false;
-
-                try
-                {                    
-                    string sModify = sfi.FModify;
-                    string[] ssModify = sModify.Split(',');
-
-                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(ipBuff, iLen);
-
-                    foreach (string sTemp in ssModify)
-                    {
-                        string[] sModifyValue = sTemp.Split('-');
-                        int iIndex = int.Parse(sModifyValue[0].ToString().Trim());
-                        string sValue = sModifyValue[1].ToString().Trim();
-
-                        if (iIndex >= 0 && iIndex < bBuff.Length)
-                        {
-                            bBuff[iIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
-                        }
-                    }
-
-                    bReturn = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);                  
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    bReturn = false;
-                }
-
-                return bReturn;
-            }
-
-            private static bool DoFilter_Advanced(Socket_FilterInfo sfi, int iMatch, IntPtr ipBuff, int iLen)
-            {
-                bool bReturn = false;
-
-                try
-                {
-                    byte[] bBuff = Socket_Operation.GetByte_FromIntPtr(ipBuff, iLen);
-
-                    int iModifyLen = sfi.FModifyLen;
-                    string sModify = sfi.FModify;
-                    string[] ssModify = sModify.Split(',');
-
-                    Socket_FilterInfo.StartFrom FStartFrom = sfi.FStartFrom;
-
-                    foreach (string sTemp in ssModify)
-                    {
-                        int iModifyIndex = -1;
-                        string[] sModifyValue = sTemp.Split('-');
-                        int iIndex = int.Parse(sModifyValue[0].ToString().Trim());
-                        string sValue = sModifyValue[1].ToString().Trim();
-
-                        switch (FStartFrom)
-                        {
-                            case Socket_FilterInfo.StartFrom.Head:
-
-                                iModifyIndex = iIndex;
-
-                                break;
-
-                            case Socket_FilterInfo.StartFrom.Position:
-
-                                iModifyIndex = iMatch + (iIndex - iModifyLen);
-
-                                break;
-                        }
-
-                        if (iModifyIndex >= 0 && iModifyIndex < bBuff.Length)
-                        {
-                            bBuff[iModifyIndex] = Socket_Operation.Hex_To_Byte(sValue)[0];
-                        }                        
-                    }                    
-
-                    bReturn = Socket_Operation.SetByteToIntPtr(bBuff, ipBuff, iLen);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return bReturn;
-            }
-
-            #endregion
-
-            #region//检查是否匹配滤镜
-
-            private static bool CheckFilterIsMatch_Normal(Socket_FilterInfo sfi, byte[] bBuff)
-            {
-                bool bResult = true;
-
-                try
-                {                    
-                    string sFSearch = sfi.FSearch;
-                    string sModify = sfi.FModify;
-
-                    if (!string.IsNullOrEmpty(sFSearch) && !string.IsNullOrEmpty(sModify))
-                    {
-                        string[] ssSearch = sFSearch.Split(',');
-
-                        foreach (string sSearch in ssSearch)
-                        {
-                            string[] sSearchValue = sSearch.Split('-');
-                            int iIndex = int.Parse(sSearchValue[0].ToString().Trim());
-                            string sValue = sSearchValue[1].ToString().Trim();
-
-                            string sBufferValue = bBuff[iIndex].ToString("X2");
-
-                            if (!sValue.Equals(sBufferValue))
-                            {
-                                bResult = false;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        bResult = false;
-                    }
-                }
-                catch (Exception ex)
-                {                    
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-                    bResult = false;
-                }
-
-                return bResult;
-            }
-
-            private static DataTable CheckFilterIsMatch_Adcanced(Socket_FilterInfo sfi, byte[] bBuff)
-            {
-                DataTable dtReturn = new DataTable();
-                dtReturn.Columns.Add("MatchIndex", typeof(int));
-
-                try
-                {
-                    int iStartPosition = -1;
-                    int iInterval = 0;
-                    int iFModifyCNT = sfi.FModifyCNT;
-                    string sFSearch = sfi.FSearch;
-                    string sModify = sfi.FModify;
-
-                    if (!string.IsNullOrEmpty(sFSearch) && !string.IsNullOrEmpty(sModify))
-                    {
-                        string[] ssSearch = sFSearch.Split(',');
-
-                        for (int i = 0; i < bBuff.Length; i++)
-                        {
-                            int iEndPosition = -1;
-                            for (int j = 0; j < ssSearch.Length; j++)
-                            {
-                                string[] ssSearchString = ssSearch[j].Split('-');
-                                int iSearchString_Index = int.Parse(ssSearchString[0].ToString().Trim());
-                                string sSearchString_Value = ssSearchString[1].ToString().Trim();
-
-                                if (j > 0)
-                                {
-                                    string[] ssSearchString_Head = ssSearch[0].Split('-');
-                                    int iSearchString_Prev_Index = int.Parse(ssSearchString_Head[0].ToString().Trim());
-                                    string sSearchString_Prev_Value = ssSearchString_Head[1].ToString().Trim();
-
-                                    iInterval = iSearchString_Index - iSearchString_Prev_Index;
-                                }
-                                else
-                                {
-                                    iInterval = 0;
-                                }
-
-                                iEndPosition = i + iInterval;
-
-                                if (iEndPosition >= 0 && iEndPosition < bBuff.Length)
-                                {
-                                    string sBufferValue = bBuff[iEndPosition].ToString("X2");
-
-                                    if (sBufferValue.Equals(sSearchString_Value))
-                                    {
-                                        iStartPosition = i;
-                                    }
-                                    else
-                                    {
-                                        iStartPosition = -1;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    iStartPosition = -1;
-                                    break;
-                                }
-                            }                            
-
-                            if (iStartPosition > -1)
-                            {
-                                if (iFModifyCNT > 0)
-                                {
-                                    DataRow dr = dtReturn.NewRow();
-                                    dr[0] = iStartPosition;
-                                    dtReturn.Rows.Add(dr);
-
-                                    iFModifyCNT = iFModifyCNT - 1;
-
-                                    i = iEndPosition;
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-                }
-
-                return dtReturn;
-            }
-
-            #endregion
+            #endregion            
         }
 
         #endregion

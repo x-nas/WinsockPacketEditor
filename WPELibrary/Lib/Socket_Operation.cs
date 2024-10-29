@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace WPELibrary.Lib
 {   
@@ -219,7 +221,8 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//十六进制字符串转字节
+        #region//十六进制字符串转byte[]
+
         public static byte[] Hex_To_Byte(string hexString)
         {
             try
@@ -247,6 +250,7 @@ namespace WPELibrary.Lib
                 return null;
             }
         }
+
         #endregion
 
         #endregion
@@ -285,8 +289,9 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取指针地址指定长度的字节数据
-        public static byte[] GetByte_FromIntPtr(IntPtr ipBuff, int iLen)
+        #region//从内存复制指定长度的字节数组
+
+        public static byte[] GetBytes_FromIntPtr(IntPtr ipBuff, int iLen)
         {
             byte[] bBuffer = new byte[iLen];
 
@@ -301,9 +306,11 @@ namespace WPELibrary.Lib
 
             return bBuffer;
         }
+
         #endregion
 
         #region//设置指针地址位置的字节数据
+
         public static bool SetByteToIntPtr(byte[] bBuffer, IntPtr ipBuff, int iLen)
         {
             bool bResult = false;
@@ -320,6 +327,7 @@ namespace WPELibrary.Lib
 
             return bResult;
         }
+
         #endregion
 
         #region//获取sockaddr对应的IP地址和端口
@@ -329,50 +337,19 @@ namespace WPELibrary.Lib
             string sReturn = "";
 
             try
-            {
-                string sIP_From = "", sIP_To = "";
+            {  
+                string sIP_From = string.Empty;
+                string sIP_To = string.Empty;
 
-                switch (pType)
-                {
-                    case Socket_Cache.SocketPacket.PacketType.Send:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        break;
+                sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
 
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
-                        break;      
-                        
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
-                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
-                        break;
-                        
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
-                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
-                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:                        
-                        sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From); 
-                        sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
-                        break;
+                if (pType == Socket_Cache.SocketPacket.PacketType.Send || pType == Socket_Cache.SocketPacket.PacketType.Recv || pType == Socket_Cache.SocketPacket.PacketType.WSASend || pType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                {                    
+                    sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
+                }
+                else if (pType == Socket_Cache.SocketPacket.PacketType.SendTo || pType == Socket_Cache.SocketPacket.PacketType.RecvFrom || pType == Socket_Cache.SocketPacket.PacketType.WSASendTo || pType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                {                    
+                    sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
                 }
 
                 if (!string.IsNullOrEmpty(sIP_From) && !string.IsNullOrEmpty(sIP_To))
@@ -419,17 +396,19 @@ namespace WPELibrary.Lib
                 switch (IPType)
                 {
                     case Socket_Cache.SocketPacket.IPType.From:
+
                         WS2_32.getsockname(iSocket, ref saAddr, ref iAddrLen);
+
                         break;
+
                     case Socket_Cache.SocketPacket.IPType.To:
+
                         WS2_32.getpeername(iSocket, ref saAddr, ref iAddrLen);
+
                         break;                    
                 }
 
-                string sIP = Marshal.PtrToStringAnsi(WS2_32.inet_ntoa(saAddr.sin_addr));
-                string sPort = WS2_32.ntohs(saAddr.sin_port).ToString();
-
-                sReturn = sIP + ":" + sPort;
+                sReturn = GetIP_ByAddr(saAddr);
             }
             catch (Exception ex)
             {
@@ -511,7 +490,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取WSABUF数组的字节        
+        #region//获取WSABUF数组的字节数组        
 
         public static unsafe byte[] GetByteFromWSABUF(IntPtr lpBuffers, Int32 dwBufferCount, int BytesCNT)
         {
@@ -521,9 +500,9 @@ namespace WPELibrary.Lib
 
             for (int i = 0; i < dwBufferCount; i++)
             {
-                Socket_Cache.SocketPacket.WSABUF wsBuffer = (Socket_Cache.SocketPacket.WSABUF)Marshal.PtrToStructure(IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i), typeof(Socket_Cache.SocketPacket.WSABUF));
-                Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
-
+                IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
+                Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);                
+                
                 if (wsBuffer.len >= BytesLeft)
                 {
                     byte[] bBuffer = new byte[BytesLeft];
@@ -1359,6 +1338,217 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//检查滤镜是否启用
+
+        public static bool CheckFilter_IsEffective(Socket_FilterInfo sfi)
+        {
+            bool bResult = false;
+
+            try
+            {
+                if (sfi.IsCheck)
+                {
+                    string sFSearch = sfi.FSearch;
+                    string sModify = sfi.FModify;
+
+                    if (!string.IsNullOrEmpty(sFSearch) && !string.IsNullOrEmpty(sModify))
+                    {
+                        bResult = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bResult;
+        }
+
+        #endregion
+
+        #region//检查滤镜是否匹配成功（普通滤镜）
+
+        public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+        {
+            bool bResult = true;
+
+            try
+            {
+                string[] slSearch = sfi.FSearch.Split(',');
+
+                foreach (string s in slSearch)
+                {
+                    int iIndex = int.Parse(s.Split('-')[0]);
+                    string sValue = s.Split('-')[1];
+
+                    if (iIndex >= 0 && iIndex < iLen)
+                    {
+                        string sBuffValue = Marshal.ReadByte(ipBuff, iIndex).ToString("X2");
+
+                        if (!sValue.Equals(sBuffValue))
+                        {
+                            bResult = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                bResult = false;
+            }
+
+            return bResult;
+        }
+
+        #endregion
+
+        #region//检查滤镜是否匹配成功（高级滤镜）
+
+        public static List<int> CheckFilter_IsMatch_Adcanced(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+        {
+            List<int> lReturn = new List<int>();
+
+            try
+            {
+                int iFModifyCNT = sfi.FModifyCNT;
+
+                string[] slSearch = sfi.FSearch.Split(',');
+
+                int iMatchIndex = -1;
+                int iBuffIndex = -1;
+
+                for (int i = 0; i < iLen; i++)
+                {
+                    for (int j = 0; j < slSearch.Length; j++)
+                    {
+                        int iIndex = int.Parse(slSearch[j].Split('-')[0]);
+                        string sValue = slSearch[j].Split('-')[1];
+
+                        iBuffIndex = i + iIndex;
+
+                        if (iBuffIndex >= 0 && iBuffIndex < iLen)
+                        {
+                            string sBuff_Hex = Marshal.ReadByte(ipBuff, iBuffIndex).ToString("X2");
+
+                            if (sValue.Equals(sBuff_Hex))
+                            {
+                                iMatchIndex = i;
+                            }
+                            else
+                            {
+                                iMatchIndex = -1;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (iMatchIndex > -1)
+                    {
+                        if (iFModifyCNT > 0)
+                        {
+                            lReturn.Add(iMatchIndex);
+                            iFModifyCNT--;
+
+                            i = iBuffIndex;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return lReturn;
+        }
+
+        #endregion
+
+        #region//执行滤镜（普通滤镜）
+
+        public static bool DoFilter_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+        {
+            bool bReturn = true;
+
+            try
+            {
+                string[] slModify = sfi.FModify.Split(',');
+
+                foreach (string s in slModify)
+                {
+                    int iIndex = int.Parse(s.Split('-')[0]);
+                    string sValue = s.Split('-')[1];
+
+                    if (iIndex >= 0 && iIndex < iLen)
+                    {
+                        byte bValue = Convert.ToByte(sValue, 16);
+                        Marshal.WriteByte(ipBuff, iIndex, bValue);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                bReturn = false;
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//执行滤镜（高级滤镜）
+
+        public static bool DoFilter_Advanced(Socket_FilterInfo sfi, int iMatch, IntPtr ipBuff, int iLen)
+        {
+            bool bReturn = true;
+
+            try
+            {
+                int iModifyLen = sfi.FModifyLen;
+                string[] slModify = sfi.FModify.Split(',');
+
+                Socket_FilterInfo.StartFrom FStartFrom = sfi.FStartFrom;
+
+                int iBufferIndex = -1;
+
+                foreach (string s in slModify)
+                {
+                    int iIndex = int.Parse(s.Split('-')[0]);
+                    string sValue = s.Split('-')[1];
+
+                    switch (FStartFrom)
+                    {
+                        case Socket_FilterInfo.StartFrom.Head:
+                            iBufferIndex = iIndex;
+                            break;
+
+                        case Socket_FilterInfo.StartFrom.Position:
+                            iBufferIndex = iMatch + (iIndex - iModifyLen);
+                            break;
+                    }
+
+                    if (iBufferIndex >= 0 && iBufferIndex < iLen)
+                    {
+                        byte bValue = Convert.ToByte(sValue, 16);
+                        Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                bReturn = false;
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
         #region//保存封包列表为Excel
 
         public static void SaveSocketListToExcel()
@@ -1521,17 +1711,13 @@ namespace WPELibrary.Lib
 
         public static void DoLog(string sFuncName, string sLogContent)
         {
-            try
+            Task.Run(() =>
             {
                 if (bDoLog)
-                {  
+                {
                     Socket_Cache.LogQueue.LogToQueue(sFuncName, sLogContent);
                 }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }           
+            });           
         }
         #endregion
 
@@ -1548,9 +1734,7 @@ namespace WPELibrary.Lib
                     IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
                     Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
 
-                    int res = 0;
-                    string sIP = string.Empty;
-                    Socket_Cache.SocketPacket.sockaddr saAddr = new Socket_Cache.SocketPacket.sockaddr();
+                    int res = -1;                                
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {
@@ -1558,8 +1742,14 @@ namespace WPELibrary.Lib
                     }
                     else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {
-                        saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, 16);
+                        Socket_Cache.SocketPacket.sockaddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+
+                        int iSizeAddr = Marshal.SizeOf(saAddr);
+                        IntPtr ipAddr = Marshal.AllocHGlobal(iSizeAddr);
+
+                        Marshal.StructureToPtr<Socket_Cache.SocketPacket.sockaddr>(saAddr, ipAddr, true);
+
+                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None, ipAddr, iSizeAddr);
                     }
 
                     if (res > 0)

@@ -1897,7 +1897,7 @@
     <value>Fill</value>
   </data>
   <data name="gbSendSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>95, 3</value>
+    <value>80, 3</value>
   </data>
   <data name="gbSendSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>194, 104</value>
@@ -2242,7 +2242,7 @@
     <value>Fill</value>
   </data>
   <data name="gbSendType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>295, 3</value>
+    <value>280, 3</value>
   </data>
   <data name="gbSendType.Size" type="System.Drawing.Size, System.Drawing">
     <value>294, 104</value>
@@ -2323,7 +2323,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendStep_Len_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>141, 30</value>
+    <value>151, 30</value>
   </data>
   <data name="lSendStep_Len_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2362,7 +2362,7 @@
     <value>44, 30</value>
   </data>
   <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 21</value>
+    <value>101, 21</value>
   </data>
   <data name="nudSendStep_Len.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -2434,7 +2434,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendStep_Position_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>141, 3</value>
+    <value>151, 3</value>
   </data>
   <data name="lSendStep_Position_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2473,7 +2473,7 @@
     <value>44, 3</value>
   </data>
   <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 21</value>
+    <value>101, 21</value>
   </data>
   <data name="nudSendStep_Position.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -2497,7 +2497,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpSendStepSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>60, 0</value>
+    <value>80, 0</value>
   </data>
   <data name="tlpSendStepSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2506,7 +2506,7 @@
     <value>3</value>
   </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 82</value>
+    <value>188, 82</value>
   </data>
   <data name="tlpSendStepSet.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2545,7 +2545,7 @@
     <value>3, 3, 0, 3</value>
   </data>
   <data name="cbSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 27</value>
+    <value>77, 27</value>
   </data>
   <data name="cbSendStep.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -2578,7 +2578,7 @@
     <value>1</value>
   </data>
   <data name="tlpSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>238, 82</value>
+    <value>268, 82</value>
   </data>
   <data name="tlpSendStep.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2596,16 +2596,16 @@
     <value>0</value>
   </data>
   <data name="tlpSendStep.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpSendStepSet" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSendStep" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,60,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpSendStepSet" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSendStep" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,80,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbSendStep.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="gbSendStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>595, 3</value>
+    <value>580, 3</value>
   </data>
   <data name="gbSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>244, 104</value>
+    <value>274, 104</value>
   </data>
   <data name="gbSendStep.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2656,7 +2656,7 @@
     <value>3</value>
   </data>
   <data name="tlpParameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendSocket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSendType" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSendStep" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,200,Absolute,300,Absolute,250,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendSocket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSendType" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSendStep" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,200,Absolute,300,Absolute,280,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpButtons.ColumnCount" type="System.Int32, mscorlib">
     <value>9</value>

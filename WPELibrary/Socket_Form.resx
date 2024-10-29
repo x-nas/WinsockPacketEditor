@@ -451,7 +451,7 @@
     <value>True</value>
   </metadata>
   <data name="cFrom.HeaderText" xml:space="preserve">
-    <value>源地址</value>
+    <value>本机地址</value>
   </data>
   <data name="cFrom.Width" type="System.Int32, mscorlib">
     <value>160</value>
@@ -460,7 +460,7 @@
     <value>True</value>
   </metadata>
   <data name="cTo.HeaderText" xml:space="preserve">
-    <value>目的地址</value>
+    <value>远端地址</value>
   </data>
   <data name="cTo.Width" type="System.Int32, mscorlib">
     <value>160</value>
@@ -483,6 +483,18 @@
   <metadata name="cmsSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>231, 17</value>
   </metadata>
+  <data name="cmsSocketList_Send.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="cmsSocketList_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="cmsSocketList_Send.Text" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="cmsSocketList_tss1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 6</value>
+  </data>
   <data name="cmsSocketList_UseSocket.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
@@ -517,7 +529,7 @@
     <value>导出到 Excel</value>
   </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 82</value>
+    <value>153, 110</value>
   </data>
   <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
     <value>cmsSocketList</value>
@@ -565,13 +577,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 70</value>
-  </data>
-  <data name="cbCheck_Packet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
+    <value>6, 65</value>
   </data>
   <data name="cbCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 31</value>
+    <value>111, 23</value>
   </data>
   <data name="cbCheck_Packet.TabIndex" type="System.Int32, mscorlib">
     <value>47</value>
@@ -601,13 +610,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="cbCheck_Socket.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
+    <value>6, 6</value>
   </data>
   <data name="cbCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 31</value>
+    <value>111, 24</value>
   </data>
   <data name="cbCheck_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -637,13 +643,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 37</value>
-  </data>
-  <data name="cbCheck_IP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
+    <value>6, 36</value>
   </data>
   <data name="cbCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 31</value>
+    <value>111, 23</value>
   </data>
   <data name="cbCheck_IP.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
@@ -670,10 +673,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>126, 6</value>
+    <value>123, 6</value>
   </data>
   <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 23</value>
+    <value>176, 23</value>
   </data>
   <data name="txtCheck_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -700,10 +703,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>126, 39</value>
+    <value>123, 36</value>
   </data>
   <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 23</value>
+    <value>176, 23</value>
   </data>
   <data name="txtCheck_IP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
@@ -730,10 +733,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>126, 72</value>
+    <value>123, 65</value>
   </data>
   <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 23</value>
+    <value>176, 23</value>
   </data>
   <data name="txtCheck_Packet.TabIndex" type="System.Int32, mscorlib">
     <value>48</value>
@@ -775,7 +778,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="cbCheck_Size.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 31</value>
+    <value>98, 28</value>
   </data>
   <data name="cbCheck_Size.TabIndex" type="System.Int32, mscorlib">
     <value>49</value>
@@ -802,7 +805,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 39</value>
+    <value>315, 36</value>
   </data>
   <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 23</value>
@@ -832,7 +835,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 72</value>
+    <value>315, 65</value>
   </data>
   <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 23</value>
@@ -868,7 +871,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tlpFilterSet.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>415, 105</value>
@@ -889,7 +892,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbCheck_Packet" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Socket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_IP" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Socket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_IP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Packet" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Size" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_From" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_To" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,120,Percent,100,Absolute,10,Absolute,100" /&gt;&lt;Rows Styles="Percent,33.33333,Percent,33.33333,Percent,33.33333" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbCheck_Packet" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Socket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_IP" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Socket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_IP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Packet" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Size" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_From" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_To" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,10,Absolute,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -940,10 +943,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 78</value>
+    <value>6, 81</value>
   </data>
   <data name="cbHook_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 21</value>
+    <value>104, 19</value>
   </data>
   <data name="cbHook_RecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -979,7 +982,7 @@
     <value>6, 6</value>
   </data>
   <data name="cbHook_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 18</value>
+    <value>104, 19</value>
   </data>
   <data name="cbHook_Send.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1012,10 +1015,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_SendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 30</value>
+    <value>6, 31</value>
   </data>
   <data name="cbHook_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 18</value>
+    <value>104, 19</value>
   </data>
   <data name="cbHook_SendTo.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1048,10 +1051,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 54</value>
+    <value>6, 56</value>
   </data>
   <data name="cbHook_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 18</value>
+    <value>104, 19</value>
   </data>
   <data name="cbHook_Recv.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -1087,7 +1090,7 @@
     <value>116, 6</value>
   </data>
   <data name="cbHook_WSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 18</value>
+    <value>129, 19</value>
   </data>
   <data name="cbHook_WSASend.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -1120,10 +1123,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 30</value>
+    <value>116, 31</value>
   </data>
   <data name="cbHook_WSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 18</value>
+    <value>129, 19</value>
   </data>
   <data name="cbHook_WSASendTo.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -1156,10 +1159,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 54</value>
+    <value>116, 56</value>
   </data>
   <data name="cbHook_WSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 18</value>
+    <value>129, 19</value>
   </data>
   <data name="cbHook_WSARecv.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
@@ -1192,10 +1195,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHook_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 78</value>
+    <value>116, 81</value>
   </data>
   <data name="cbHook_WSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 21</value>
+    <value>129, 19</value>
   </data>
   <data name="cbHook_WSARecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
@@ -1228,7 +1231,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tlpHookType.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="tlpHookType.Size" type="System.Drawing.Size, System.Drawing">
     <value>251, 105</value>
@@ -1249,7 +1252,7 @@
     <value>0</value>
   </data>
   <data name="tlpHookType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbHook_RecvFrom" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Send" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_SendTo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Recv" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASend" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASendTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecv" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecvFrom" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,45,Percent,55" /&gt;&lt;Rows Styles="Percent,25,Percent,25,Percent,25,Percent,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbHook_RecvFrom" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Send" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_SendTo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Recv" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASend" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASendTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecv" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecvFrom" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,45,Percent,55" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbHookType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -14920,9 +14923,6 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
@@ -15124,6 +15124,12 @@
   <data name="&gt;&gt;tlWSARecvFrom_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cTypeImg.Name" xml:space="preserve">
+    <value>cTypeImg</value>
+  </data>
+  <data name="&gt;&gt;cTypeImg.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
     <value>cIndex</value>
   </data>
@@ -15166,11 +15172,35 @@
   <data name="&gt;&gt;cData.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsSocketList_Send.Name" xml:space="preserve">
+    <value>cmsSocketList_Send</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_tss1.Name" xml:space="preserve">
+    <value>cmsSocketList_tss1</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_tss1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_UseSocket.Name" xml:space="preserve">
+    <value>cmsSocketList_UseSocket</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_UseSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tss4.Name" xml:space="preserve">
     <value>tss4</value>
   </data>
   <data name="&gt;&gt;tss4.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ShowSendList.Name" xml:space="preserve">
+    <value>cmsSocketList_ShowSendList</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ShowSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tss5.Name" xml:space="preserve">
     <value>tss5</value>
@@ -15178,17 +15208,41 @@
   <data name="&gt;&gt;tss5.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsSocketList_ToExcel.Name" xml:space="preserve">
+    <value>cmsSocketList_ToExcel</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ToExcel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Send.Name" xml:space="preserve">
+    <value>cmsHexBox_Send</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cmsHexBox_tss1.Name" xml:space="preserve">
     <value>cmsHexBox_tss1</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_tss1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsHexBox_SendList.Name" xml:space="preserve">
+    <value>cmsHexBox_SendList</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cmsHexBox_tss2.Name" xml:space="preserve">
     <value>cmsHexBox_tss2</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_tss2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
+    <value>cmsHexBox_FilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cTime.Name" xml:space="preserve">
     <value>cTime</value>
@@ -15208,11 +15262,23 @@
   <data name="&gt;&gt;cContent.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsLogList_CleanUp.Name" xml:space="preserve">
+    <value>cmsLogList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
     <value>toolStripSeparator5</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_ToExcel.Name" xml:space="preserve">
+    <value>cmsLogList_ToExcel</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_ToExcel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
     <value>cIsCheck</value>
@@ -15232,11 +15298,23 @@
   <data name="&gt;&gt;cFName.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsFilterList_Show.Name" xml:space="preserve">
+    <value>cmsFilterList_Show</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Show.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;tssSep1.Name" xml:space="preserve">
     <value>tssSep1</value>
   </data>
   <data name="&gt;&gt;tssSep1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Add.Name" xml:space="preserve">
+    <value>cmsFilterList_Add</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Add.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tssSep3.Name" xml:space="preserve">
     <value>tssSep3</value>
@@ -15244,11 +15322,23 @@
   <data name="&gt;&gt;tssSep3.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsFilterList_Delete.Name" xml:space="preserve">
+    <value>cmsFilterList_Delete</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
     <value>toolStripSeparator6</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Save.Name" xml:space="preserve">
+    <value>cmsFilterList_Save</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tssSep2.Name" xml:space="preserve">
     <value>tssSep2</value>
@@ -15256,11 +15346,23 @@
   <data name="&gt;&gt;tssSep2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsFilterList_CleanUp.Name" xml:space="preserve">
+    <value>cmsFilterList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator7.Name" xml:space="preserve">
     <value>toolStripSeparator7</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator7.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Load.Name" xml:space="preserve">
+    <value>cmsFilterList_Load</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Load.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
     <value>tsslProcessName</value>
@@ -15334,131 +15436,17 @@
   <data name="&gt;&gt;niWPE.Type" xml:space="preserve">
     <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tss17.Name" xml:space="preserve">
-    <value>tss17</value>
-  </data>
-  <data name="&gt;&gt;tss17.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tss18.Name" xml:space="preserve">
-    <value>tss18</value>
-  </data>
-  <data name="&gt;&gt;tss18.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tss19.Name" xml:space="preserve">
-    <value>tss19</value>
-  </data>
-  <data name="&gt;&gt;tss19.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tss20.Name" xml:space="preserve">
-    <value>tss20</value>
-  </data>
-  <data name="&gt;&gt;tss20.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
-    <value>dataGridViewImageColumn1</value>
-  </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cTypeImg.Name" xml:space="preserve">
-    <value>cTypeImg</value>
-  </data>
-  <data name="&gt;&gt;cTypeImg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_UseSocket.Name" xml:space="preserve">
-    <value>cmsSocketList_UseSocket</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_UseSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ShowSendList.Name" xml:space="preserve">
-    <value>cmsSocketList_ShowSendList</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ShowSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Name" xml:space="preserve">
-    <value>cmsSocketList_ToExcel</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_Send.Name" xml:space="preserve">
-    <value>cmsHexBox_Send</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_Send.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_SendList.Name" xml:space="preserve">
-    <value>cmsHexBox_SendList</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
-    <value>cmsHexBox_FilterList</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_CleanUp.Name" xml:space="preserve">
-    <value>cmsLogList_CleanUp</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_CleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_ToExcel.Name" xml:space="preserve">
-    <value>cmsLogList_ToExcel</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_ToExcel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Show.Name" xml:space="preserve">
-    <value>cmsFilterList_Show</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Show.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Add.Name" xml:space="preserve">
-    <value>cmsFilterList_Add</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Add.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Delete.Name" xml:space="preserve">
-    <value>cmsFilterList_Delete</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Delete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Save.Name" xml:space="preserve">
-    <value>cmsFilterList_Save</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Save.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_CleanUp.Name" xml:space="preserve">
-    <value>cmsFilterList_CleanUp</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_CleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Load.Name" xml:space="preserve">
-    <value>cmsFilterList_Load</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Load.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsIcon_Show.Name" xml:space="preserve">
     <value>cmsIcon_Show</value>
   </data>
   <data name="&gt;&gt;cmsIcon_Show.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tss17.Name" xml:space="preserve">
+    <value>tss17</value>
+  </data>
+  <data name="&gt;&gt;tss17.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsIcon_StartHook.Name" xml:space="preserve">
     <value>cmsIcon_StartHook</value>
@@ -15472,11 +15460,23 @@
   <data name="&gt;&gt;cmsIcon_StopHook.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tss18.Name" xml:space="preserve">
+    <value>tss18</value>
+  </data>
+  <data name="&gt;&gt;tss18.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cmsIcon_CleanUp.Name" xml:space="preserve">
     <value>cmsIcon_CleanUp</value>
   </data>
   <data name="&gt;&gt;cmsIcon_CleanUp.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tss19.Name" xml:space="preserve">
+    <value>tss19</value>
+  </data>
+  <data name="&gt;&gt;tss19.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsIcon_ShowSendList.Name" xml:space="preserve">
     <value>cmsIcon_ShowSendList</value>
@@ -15484,11 +15484,23 @@
   <data name="&gt;&gt;cmsIcon_ShowSendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;tss20.Name" xml:space="preserve">
+    <value>tss20</value>
+  </data>
+  <data name="&gt;&gt;tss20.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;cmsIcon_Exit.Name" xml:space="preserve">
     <value>cmsIcon_Exit</value>
   </data>
   <data name="&gt;&gt;cmsIcon_Exit.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
+    <value>dataGridViewImageColumn1</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

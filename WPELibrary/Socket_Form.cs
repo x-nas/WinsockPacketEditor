@@ -428,8 +428,7 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            Socket_Operation.ShowSendForm(Select_Index);
-                            this.dgvSocketList.Refresh();
+                            Socket_Operation.ShowSendForm(Select_Index);                            
                         }
 
                         break;
@@ -517,6 +516,15 @@ namespace WPELibrary
             {
                 switch (sItemText)
                 {
+                    case "cmsSocketList_Send":
+
+                        if (Select_Index > -1)
+                        {
+                            Socket_Operation.ShowSendForm(Select_Index);                            
+                        }
+
+                        break;
+
                     case "cmsSocketList_ShowSendList":
 
                         Socket_Operation.ShowSendListForm();
