@@ -344,11 +344,11 @@ namespace WPELibrary.Lib
                 sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
 
                 if (pType == Socket_Cache.SocketPacket.PacketType.Send || pType == Socket_Cache.SocketPacket.PacketType.Recv || pType == Socket_Cache.SocketPacket.PacketType.WSASend || pType == Socket_Cache.SocketPacket.PacketType.WSARecv)
-                {                    
+                {
                     sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
                 }
                 else if (pType == Socket_Cache.SocketPacket.PacketType.SendTo || pType == Socket_Cache.SocketPacket.PacketType.RecvFrom || pType == Socket_Cache.SocketPacket.PacketType.WSASendTo || pType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                {                    
+                {
                     sIP_To = Socket_Operation.GetIP_ByAddr(pAddr);
                 }
 
@@ -492,38 +492,47 @@ namespace WPELibrary.Lib
 
         #region//获取WSABUF数组的字节数组        
 
-        public static unsafe byte[] GetByteFromWSABUF(IntPtr lpBuffers, Int32 dwBufferCount, int BytesCNT)
+        public static byte[] GetByteFromWSABUF(IntPtr lpBuffers, Int32 dwBufferCount, int BytesCNT)
         {
-            byte[] bByteBuff = new byte[0];
+            byte[] bReturn = new byte[0];
 
-            int BytesLeft = BytesCNT;
-
-            for (int i = 0; i < dwBufferCount; i++)
+            try
             {
-                IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
-                Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);                
-                
-                if (wsBuffer.len >= BytesLeft)
+                int BytesLeft = BytesCNT;
+
+                for (int i = 0; i < dwBufferCount; i++)
                 {
-                    byte[] bBuffer = new byte[BytesLeft];
-                    Marshal.Copy(wsBuffer.buf, bBuffer, 0, bBuffer.Length);
+                    if (BytesLeft > 0)
+                    {
+                        IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, Marshal.SizeOf(typeof(Socket_Cache.SocketPacket.WSABUF)) * i);
+                        Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
 
-                    bByteBuff = bByteBuff.Concat(bBuffer).ToArray();
+                        int iBuffLen = 0;
 
-                    break;
-                }
-                else
-                {
-                    byte[] bBuffer = new byte[wsBuffer.len];
-                    Marshal.Copy(wsBuffer.buf, bBuffer, 0, bBuffer.Length);
+                        if (wsBuffer.len >= BytesLeft)
+                        {
+                            iBuffLen = BytesLeft;
+                        }
+                        else
+                        {
+                            iBuffLen = wsBuffer.len;
+                        }
 
-                    bByteBuff = bByteBuff.Concat(bBuffer).ToArray();
+                        BytesLeft -= iBuffLen;
 
-                    BytesLeft -= wsBuffer.len;
+                        byte[] bBuff = new byte[iBuffLen];
+                        Marshal.Copy(wsBuffer.buf, bBuff, 0, iBuffLen);
+
+                        bReturn = bReturn.Concat(bBuff).ToArray();                        
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
 
-            return bByteBuff;
+            return bReturn;
         }
 
         #endregion        
@@ -1459,7 +1468,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
             }
 
             return lReturn;

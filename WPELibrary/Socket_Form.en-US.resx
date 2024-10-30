@@ -259,8 +259,11 @@
   <data name="cbCheck_Packet.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="cbCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 61</value>
+  </data>
   <data name="cbCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>118, 33</value>
+    <value>99, 21</value>
   </data>
   <data name="cbCheck_Packet.Text" xml:space="preserve">
     <value>Filter Data</value>
@@ -268,11 +271,20 @@
   <data name="cbCheck_Socket.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="cbCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>99, 22</value>
+  </data>
   <data name="cbCheck_Socket.Text" xml:space="preserve">
     <value>Filter Sockets</value>
   </data>
   <data name="cbCheck_IP.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="cbCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 34</value>
+  </data>
+  <data name="cbCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>99, 21</value>
   </data>
   <data name="cbCheck_IP.Text" xml:space="preserve">
     <value>Filter IP</value>
@@ -280,23 +292,35 @@
   <data name="txtCheck_Socket.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="txtCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>111, 6</value>
+  </data>
   <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 21</value>
+    <value>188, 21</value>
   </data>
   <data name="txtCheck_IP.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="txtCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>111, 34</value>
+  </data>
   <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 21</value>
+    <value>188, 21</value>
   </data>
   <data name="txtCheck_Packet.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="txtCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>111, 61</value>
+  </data>
   <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 21</value>
+    <value>188, 21</value>
   </data>
   <data name="cbCheck_Size.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="cbCheck_Size.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 26</value>
   </data>
   <data name="cbCheck_Size.Text" xml:space="preserve">
     <value>Filter Length</value>
@@ -304,11 +328,17 @@
   <data name="nudCheck_Size_From.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
+  <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>315, 34</value>
+  </data>
   <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 21</value>
   </data>
   <data name="nudCheck_Size_To.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>315, 61</value>
   </data>
   <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 21</value>
@@ -321,48 +351,6 @@
   </data>
   <data name="tlpHookType.Size" type="System.Drawing.Size, System.Drawing">
     <value>251, 107</value>
-  </data>
-  <data name="cbHook_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 81</value>
-  </data>
-  <data name="cbHook_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 20</value>
-  </data>
-  <data name="cbHook_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 19</value>
-  </data>
-  <data name="cbHook_SendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 31</value>
-  </data>
-  <data name="cbHook_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 19</value>
-  </data>
-  <data name="cbHook_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 56</value>
-  </data>
-  <data name="cbHook_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 19</value>
-  </data>
-  <data name="cbHook_WSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 19</value>
-  </data>
-  <data name="cbHook_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 31</value>
-  </data>
-  <data name="cbHook_WSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 19</value>
-  </data>
-  <data name="cbHook_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 56</value>
-  </data>
-  <data name="cbHook_WSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 19</value>
-  </data>
-  <data name="cbHook_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>116, 81</value>
-  </data>
-  <data name="cbHook_WSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 20</value>
   </data>
   <data name="gbHookButton_Search.Text" xml:space="preserve">
     <value>[ Search ]</value>
@@ -476,6 +464,12 @@
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>Add To Filter List</value>
   </data>
+  <data name="tpSystemLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 24</value>
+  </data>
+  <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>770, 211</value>
+  </data>
   <data name="tpSystemLog.Text" xml:space="preserve">
     <value>System Log</value>
   </data>
@@ -493,6 +487,9 @@
   </data>
   <data name="cmsLogList.Size" type="System.Drawing.Size, System.Drawing">
     <value>152, 54</value>
+  </data>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>770, 211</value>
   </data>
   <data name="cmsLogList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
     <value>151, 22</value>
@@ -12999,9 +12996,5 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
 </root>

@@ -39,6 +39,7 @@ namespace WPELibrary.Lib
                 public S_un _S_un;
 
                 [StructLayout(LayoutKind.Explicit)]
+
                 public struct S_un
                 {
                     [FieldOffset(0)]
@@ -80,13 +81,15 @@ namespace WPELibrary.Lib
             }
 
             [StructLayout(LayoutKind.Sequential)]
-            public unsafe struct WSABUF
+
+            public struct WSABUF
             {
                 public int len;
                 public IntPtr buf;
             }
 
             [StructLayout(LayoutKind.Sequential)]
+
             public struct OVERLAPPED
             {
                 public IntPtr InternalLow;
@@ -131,7 +134,7 @@ namespace WPELibrary.Lib
                 UTF7,
             }
 
-            #endregion
+            #endregion            
         }
 
         #endregion
@@ -741,6 +744,43 @@ namespace WPELibrary.Lib
             #endregion
 
             #region//执行滤镜
+
+            public static void DoFilter_WSABUF(IntPtr lpBuffers, int dwBufferCount, int BytesCNT)
+            {
+                try
+                {
+                    int BytesLeft = BytesCNT;
+
+                    for (int i = 0; i < dwBufferCount; i++)
+                    {
+                        if (BytesLeft > 0)
+                        {
+                            IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, Marshal.SizeOf(typeof(Socket_Cache.SocketPacket.WSABUF)) * i);
+                            Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
+
+                            int iBuffLen = 0;
+
+                            if (wsBuffer.len >= BytesLeft)
+                            {
+                                iBuffLen = BytesLeft;
+                            }
+                            else
+                            {
+                                iBuffLen = wsBuffer.len;
+                            }
+
+                            BytesLeft -= iBuffLen;
+
+                            Socket_Cache.FilterList.DoFilter(wsBuffer.buf, iBuffLen);
+                        }
+                            
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
 
             public static void DoFilter(IntPtr ipBuff, int iLen)
             {

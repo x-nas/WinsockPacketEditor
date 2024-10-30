@@ -110,6 +110,310 @@ namespace WPELibrary
             }
         }
 
+        #endregion        
+
+        #region//初始化数据表并显示滤镜内容（异步）
+
+        private void InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType FDGVType)
+        {
+            try
+            {
+                this.pbLoading.Visible = true;
+                this.tcFilterInfo.Visible = false;
+                this.tlpFilterInfo_Function.Enabled = false;
+
+                if (!bgwFilterInfo.IsBusy)
+                {
+                    this.FilterDGVType_Init = FDGVType;
+
+                    bgwFilterInfo.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwFilterInfo_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                switch (this.FilterDGVType_Init)
+                {
+                    case Socket_FilterInfo.FilterDGVType.Search:
+
+                        this.InitDGV_Search(FilterSearchLen);
+
+                        break;
+
+                    case Socket_FilterInfo.FilterDGVType.Modify:
+
+                        this.InitDGV_Modify(FilterModifyLen);
+
+                        break;
+
+                    case Socket_FilterInfo.FilterDGVType.All:
+
+                        this.InitDGV_Search(FilterSearchLen);
+                        this.InitDGV_Modify(FilterModifyLen);
+
+                        break;
+                }
+
+                this.ShowFilterInfo();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwFilterInfo_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.pbLoading.Visible = false;
+                this.tcFilterInfo.Visible = true;
+                this.tlpFilterInfo_Function.Enabled = true;
+
+                this.bFinishInit = true;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitDGV_Search(int FilterLength)
+        {
+            try
+            {
+                this.dgvFilter_Normal.Columns.Clear();
+
+                for (int i = 0; i < FilterLength; i++)
+                {
+                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
+                    {
+                        Name = "col" + (i + 1).ToString("000"),
+                        HeaderText = (i + 1).ToString("000"),
+                        Width = 50,
+                        MaxInputLength = 2
+                    };
+
+                    DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
+                    dgvColumn.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                    dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
+                    dgvFilter_Normal.Columns.Add(dgvColumn);
+                }
+
+                if (dgvFilter_Normal.Rows.Count == 0)
+                {
+                    dgvFilter_Normal.Rows.Add();
+                    dgvFilter_Normal.Rows.Add();
+                }
+
+                this.dgvFilter_Advanced_Search.Columns.Clear();
+
+                for (int i = 0; i < FilterLength; i++)
+                {
+                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
+                    {
+                        Name = "col" + (i + 1).ToString("000"),
+                        HeaderText = (i + 1).ToString("000"),
+                        Width = 50,
+                        MaxInputLength = 2
+                    };
+
+                    DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
+                    dgvColumn.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+                    dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
+                    dgvFilter_Advanced_Search.Columns.Add(dgvColumn);
+                }
+
+                if (dgvFilter_Advanced_Search.Rows.Count == 0)
+                {
+                    dgvFilter_Advanced_Search.Rows.Add();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitDGV_Modify(int FilterLength)
+        {
+            try
+            {
+                this.dgvFilter_Advanced_Modify.Columns.Clear();
+
+                if (rbFromHead.Checked)
+                {
+                    for (int i = 0; i < FilterLength; i++)
+                    {
+                        DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
+                        {
+                            Name = "col" + (i + 1).ToString("000"),
+                            HeaderText = (i + 1).ToString("000"),
+                            Width = 50,
+                            MaxInputLength = 2
+                        };
+
+                        DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
+                        dgvColumn.DefaultCellStyle.BackColor = Color.Yellow;
+                        dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
+
+                        dgvFilter_Advanced_Modify.Columns.Add(dgvColumn);
+                    }
+                }
+                else
+                {
+                    for (int i = -FilterLength; i < FilterLength; i++)
+                    {
+                        DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
+                        {
+                            Name = "col" + i.ToString("000"),
+                            HeaderText = i.ToString("000"),
+                            Width = 50,
+                            MaxInputLength = 2
+                        };
+
+                        DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
+                        dgvColumn.DefaultCellStyle.BackColor = Color.Yellow;
+                        dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
+
+                        dgvFilter_Advanced_Modify.Columns.Add(dgvColumn);
+                    }
+                }
+
+                if (dgvFilter_Advanced_Modify.Rows.Count == 0)
+                {
+                    dgvFilter_Advanced_Modify.Rows.Add();
+                }
+
+                foreach (DataGridViewColumn column in dgvFilter_Advanced_Modify.Columns)
+                {
+                    if (column.Name == "col000")
+                    {
+                        dgvFilter_Advanced_Modify.CurrentCell = dgvFilter_Advanced_Modify.Rows[0].Cells[column.Index];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvFilter_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            try
+            {
+                e.Column.FillWeight = 1;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示滤镜内容
+
+        private void ShowFilterInfo()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(FilterSearch))
+                {
+                    string[] sSearchAll = FilterSearch.Split(',');
+
+                    foreach (string sText in sSearchAll)
+                    {
+                        string[] sSplitText = sText.Split('-');
+                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
+                        string sValue = sSplitText[1].ToString().Trim();
+
+                        if (this.dgvFilter_Normal.Rows.Count == 2)
+                        {
+                            if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells.Count)
+                            {
+                                this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells[iIndex].Value = sValue;
+                            }
+                        }
+
+                        if (this.dgvFilter_Advanced_Search.Rows.Count == 1)
+                        {
+                            if (iIndex < this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells.Count)
+                            {
+                                this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells[iIndex].Value = sValue;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message + " - Search");
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(FilterModify))
+                {
+                    string[] sModifyAll = FilterModify.Split(',');
+
+                    foreach (string sText in sModifyAll)
+                    {
+                        string[] sSplitText = sText.Split('-');
+                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
+                        string sValue = sSplitText[1].ToString().Trim();
+
+                        switch (FilterMode)
+                        {
+                            case Socket_FilterInfo.FilterMode.Normal:
+
+                                if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells.Count)
+                                {
+                                    this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells[iIndex].Value = sValue;
+                                }
+
+                                break;
+
+                            case Socket_FilterInfo.FilterMode.Advanced:
+
+                                Socket_FilterInfo.StartFrom sf;
+
+                                if (rbFromHead.Checked)
+                                {
+                                    sf = Socket_FilterInfo.StartFrom.Head;
+                                }
+                                else
+                                {
+                                    sf = Socket_FilterInfo.StartFrom.Position;
+                                }
+
+                                if (sf == this.FilterStartFrom)
+                                {
+                                    if (iIndex < this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells.Count)
+                                    {
+                                        this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells[iIndex].Value = sValue;
+                                    }
+                                }
+
+                                break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message + " - Modify");
+            }
+        }
+
         #endregion
 
         #region//重置按钮
@@ -521,300 +825,6 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-        #endregion
-
-        #region//初始化数据表
-
-        private void InitDGV_Search(int FilterLength)
-        {
-            try
-            {
-                this.dgvFilter_Normal.Columns.Clear();
-
-                for (int i = 0; i < FilterLength; i++)
-                {
-                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
-                    {
-                        Name = "col" + (i + 1).ToString("000"),
-                        HeaderText = (i + 1).ToString("000"),
-                        Width = 50,
-                        MaxInputLength = 2
-                    };
-
-                    DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
-                    dgvColumn.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
-                    dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
-                    dgvFilter_Normal.Columns.Add(dgvColumn);
-                }
-
-                if (dgvFilter_Normal.Rows.Count == 0)
-                {
-                    dgvFilter_Normal.Rows.Add();
-                    dgvFilter_Normal.Rows.Add();
-                }
-
-                this.dgvFilter_Advanced_Search.Columns.Clear();
-
-                for (int i = 0; i < FilterLength; i++)
-                {
-                    DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
-                    {
-                        Name = "col" + (i + 1).ToString("000"),
-                        HeaderText = (i + 1).ToString("000"),
-                        Width = 50,
-                        MaxInputLength = 2
-                    };
-
-                    DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
-                    dgvColumn.DefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
-                    dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
-                    dgvFilter_Advanced_Search.Columns.Add(dgvColumn);
-                }
-
-                if (dgvFilter_Advanced_Search.Rows.Count == 0)
-                {
-                    dgvFilter_Advanced_Search.Rows.Add();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void InitDGV_Modify(int FilterLength)
-        {
-            try
-            {
-                this.dgvFilter_Advanced_Modify.Columns.Clear();
-
-                if (rbFromHead.Checked)
-                {
-                    for (int i = 0; i < FilterLength; i++)
-                    {
-                        DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
-                        {
-                            Name = "col" + (i + 1).ToString("000"),
-                            HeaderText = (i + 1).ToString("000"),
-                            Width = 50,
-                            MaxInputLength = 2
-                        };
-
-                        DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
-                        dgvColumn.DefaultCellStyle.BackColor = Color.Yellow;
-                        dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
-
-                        dgvFilter_Advanced_Modify.Columns.Add(dgvColumn);
-                    }
-                }
-                else
-                {
-                    for (int i = -FilterLength; i < FilterLength; i++)
-                    {
-                        DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn()
-                        {
-                            Name = "col" + i.ToString("000"),
-                            HeaderText = i.ToString("000"),
-                            Width = 50,
-                            MaxInputLength = 2
-                        };
-
-                        DataGridViewTextBoxColumn dgvColumn = dataGridViewTextBoxColumn;
-                        dgvColumn.DefaultCellStyle.BackColor = Color.Yellow;
-                        dgvColumn.DefaultCellStyle.ForeColor = Color.RoyalBlue;
-
-                        dgvFilter_Advanced_Modify.Columns.Add(dgvColumn);
-                    }
-                }
-
-                if (dgvFilter_Advanced_Modify.Rows.Count == 0)
-                {
-                    dgvFilter_Advanced_Modify.Rows.Add();
-                }
-
-                foreach (DataGridViewColumn column in dgvFilter_Advanced_Modify.Columns)
-                {
-                    if (column.Name == "col000")
-                    {
-                        dgvFilter_Advanced_Modify.CurrentCell = dgvFilter_Advanced_Modify.Rows[0].Cells[column.Index];                        
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvFilter_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
-        {
-            try
-            {
-                e.Column.FillWeight = 1;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示滤镜内容
-
-        private void ShowFilterInfo()
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(FilterSearch))
-                {
-                    string[] sSearchAll = FilterSearch.Split(',');
-
-                    foreach (string sText in sSearchAll)
-                    {
-                        string[] sSplitText = sText.Split('-');
-                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
-                        string sValue = sSplitText[1].ToString().Trim();
-
-                        if (this.dgvFilter_Normal.Rows.Count == 2)
-                        {
-                            if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells.Count)
-                            {
-                                this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_SearchRowIndex].Cells[iIndex].Value = sValue;
-                            }
-                        }
-
-                        if (this.dgvFilter_Advanced_Search.Rows.Count == 1)
-                        {
-                            if (iIndex < this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells.Count)
-                            {
-                                this.dgvFilter_Advanced_Search.Rows[Socket_Cache.FilterList.FilterAdvanced_SearchRowIndex].Cells[iIndex].Value = sValue;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message + " - Search");
-            }
-
-            try
-            {
-                if (!string.IsNullOrEmpty(FilterModify))
-                {
-                    string[] sModifyAll = FilterModify.Split(',');
-
-                    foreach (string sText in sModifyAll)
-                    {
-                        string[] sSplitText = sText.Split('-');
-                        int iIndex = int.Parse(sSplitText[0].ToString().Trim());
-                        string sValue = sSplitText[1].ToString().Trim();
-
-                        switch (FilterMode)
-                        {
-                            case Socket_FilterInfo.FilterMode.Normal:
-
-                                if (iIndex < this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells.Count)
-                                {
-                                    this.dgvFilter_Normal.Rows[Socket_Cache.FilterList.FilterNormal_ModifyRowIndex].Cells[iIndex].Value = sValue;
-                                }
-
-                                break;
-
-                            case Socket_FilterInfo.FilterMode.Advanced:
-
-                                if (iIndex < this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells.Count)
-                                {
-                                    this.dgvFilter_Advanced_Modify.Rows[Socket_Cache.FilterList.FilterAdvanced_ModifyRowIndex].Cells[iIndex].Value = sValue;
-                                }
-
-                                break;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message + " - Modify");
-            }
-        }
-
-        #endregion
-
-        #region//初始化数据表并显示滤镜内容（异步）
-
-        private void InitDGVAndShowFilterInfo(Socket_FilterInfo.FilterDGVType FDGVType)
-        {
-            try
-            {
-                this.pbLoading.Visible = true;
-                this.tcFilterInfo.Visible = false;
-                this.tlpFilterInfo_Function.Enabled = false;
-
-                if (!bgwFilterInfo.IsBusy)
-                {
-                    this.FilterDGVType_Init = FDGVType;
-
-                    bgwFilterInfo.RunWorkerAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        private void bgwFilterInfo_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                switch (this.FilterDGVType_Init)
-                {
-                    case Socket_FilterInfo.FilterDGVType.Search:
-
-                        this.InitDGV_Search(FilterSearchLen);
-
-                        break;
-
-                    case Socket_FilterInfo.FilterDGVType.Modify:
-
-                        this.InitDGV_Modify(FilterModifyLen);
-
-                        break;
-
-                    case Socket_FilterInfo.FilterDGVType.All:
-
-                        this.InitDGV_Search(FilterSearchLen);
-                        this.InitDGV_Modify(FilterModifyLen);
-
-                        break;
-                }
-                
-                this.ShowFilterInfo();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        private void bgwFilterInfo_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                this.pbLoading.Visible = false;
-                this.tcFilterInfo.Visible = true;
-                this.tlpFilterInfo_Function.Enabled = true;
-
-                this.bFinishInit = true;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
 
         #endregion
     }

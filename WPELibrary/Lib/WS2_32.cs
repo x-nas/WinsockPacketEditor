@@ -146,19 +146,15 @@ namespace WPELibrary.Lib
 
         public static unsafe SocketError WSASend_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, IntPtr lpOverlapped, IntPtr lpCompletionRoutine)
         {
-            for (int i = 0; i < dwBufferCount; i++)
-            {
-                IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
-
-                Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);                
-                Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
-            }
-
-            SocketError res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, lpOverlapped, lpCompletionRoutine);
             int BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-            if (res == SocketError.Success && BytesSent > 0)
+            Socket_Cache.FilterList.DoFilter_WSABUF(lpBuffers, dwBufferCount, BytesSent);
+
+            SocketError res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, lpOverlapped, lpCompletionRoutine);            
+
+            if (res == SocketError.Success)
             {
+                BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
                 byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
 
                 Task.Run(() =>
@@ -184,18 +180,13 @@ namespace WPELibrary.Lib
 
         public static unsafe SocketError WSARecv_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, IntPtr overlapped, IntPtr completionRoutine)
         {
-            SocketError res = WSARecv(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, overlapped, completionRoutine);
-            int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
+            SocketError res = WSARecv(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, overlapped, completionRoutine);            
 
-            if (res == SocketError.Success && BytesRecvd > 0)
+            if (res == SocketError.Success)
             {
-                for (int i = 0; i < dwBufferCount; i++)
-                {
-                    IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
+                int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
 
-                    Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
-                    Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
-                }
+                Socket_Cache.FilterList.DoFilter_WSABUF(lpBuffers, dwBufferCount, BytesRecvd);
 
                 byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
 
@@ -222,19 +213,15 @@ namespace WPELibrary.Lib
 
         public static unsafe SocketError WSASendTo_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesSent, ref SocketFlags dwFlags, IntPtr To, Int32 toLenth, IntPtr lpOverlapped, IntPtr lpCompletionRoutine)
         {
-            for (int i = 0; i < dwBufferCount; i++)
-            {
-                IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
-
-                Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
-                Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
-            }
-
-            SocketError res = WSASendTo(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, To, toLenth, lpOverlapped, lpCompletionRoutine);
             int BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-            if (res == SocketError.Success && BytesSent > 0)
+            Socket_Cache.FilterList.DoFilter_WSABUF(lpBuffers, dwBufferCount, BytesSent);
+
+            SocketError res = WSASendTo(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, To, toLenth, lpOverlapped, lpCompletionRoutine);            
+
+            if (res == SocketError.Success)
             {
+                BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
                 byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
 
                 Task.Run(() =>
@@ -261,18 +248,13 @@ namespace WPELibrary.Lib
 
         public static unsafe SocketError WSARecvFrom_Hook(Int32 Socket, IntPtr lpBuffers, Int32 dwBufferCount, IntPtr lpNumberOfBytesRecvd, ref SocketFlags flags, IntPtr from, Int32 fromLen, IntPtr overlapped, IntPtr completionRoutine)
         {
-            SocketError res = WSARecvFrom(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, from, fromLen, overlapped, completionRoutine);
-            int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
+            SocketError res = WSARecvFrom(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesRecvd, ref flags, from, fromLen, overlapped, completionRoutine);            
 
-            if (res == SocketError.Success && BytesRecvd > 0)
+            if (res == SocketError.Success)
             {
-                for (int i = 0; i < dwBufferCount; i++)
-                {
-                    IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, sizeof(Socket_Cache.SocketPacket.WSABUF) * i);
+                int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
 
-                    Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
-                    Socket_Cache.FilterList.DoFilter(wsBuffer.buf, wsBuffer.len);
-                }
+                Socket_Cache.FilterList.DoFilter_WSABUF(lpBuffers, dwBufferCount, BytesRecvd);
 
                 byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
 
