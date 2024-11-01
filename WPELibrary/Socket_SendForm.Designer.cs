@@ -238,6 +238,7 @@ namespace WPELibrary
             // 
             // tsPacketData
             // 
+            this.tsPacketData.BackColor = System.Drawing.SystemColors.Control;
             this.tsPacketData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsPacketData_Cut,
             this.toolStripSeparator10,

@@ -1074,52 +1074,50 @@ namespace WPELibrary.Lib
         public static int SaveFilterList(string FilePath)
         {
             int iReturn = 0;
+            string sSave = string.Empty;
 
             try
             {
+                if (string.IsNullOrEmpty(FilePath))
+                {
+                    FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                }
+
+                FileStream fs = new FileStream(FilePath, FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs);
+
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    if (string.IsNullOrEmpty(FilePath))
+                    for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
                     {
-                        FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                    }
-
-                    FileStream fs = new FileStream(FilePath, FileMode.Create);
-                    StreamWriter sw = new StreamWriter(fs);
-
-                    if (Socket_Cache.FilterList.lstFilter.Count > 0)
-                    {
-                        for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
+                        try
                         {
-                            try
-                            {
-                                string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
-                                string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
-                                string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
-                                string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                                string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
-                                string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
-                                string sFSearchLen = Socket_Cache.FilterList.lstFilter[i].FSearchLen.ToString();
-                                string sModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
-                                string sModifyLen = Socket_Cache.FilterList.lstFilter[i].FModifyLen.ToString();
+                            string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
+                            string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
+                            string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
+                            string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
+                            string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
+                            string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
+                            string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
+                            string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
+                            string sModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
 
-                                string sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sFSearchLen + "|" + sModify + "|" + sModifyLen;
+                            sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFAction + "|" + sFFunction + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sModify;
 
-                                sw.WriteLine(sSave);
+                            sw.WriteLine(sSave);
 
-                                iReturn++;
-                            }
-                            catch (Exception ex)
-                            {
-                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }
+                            iReturn++;
+                        }
+                        catch (Exception ex)
+                        {
+                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                         }
                     }
+                }                
 
-                    sw.Flush();
-                    sw.Close();
-                    fs.Close();
-                }              
+                sw.Flush();
+                sw.Close();
+                fs.Close();
             }
             catch (Exception ex)
             {
@@ -1127,6 +1125,33 @@ namespace WPELibrary.Lib
             }
 
             return iReturn;
+        }
+
+        #endregion
+
+        #region//获取滤镜作用类别字符串
+
+        public static string GetFilterFunctionString(Socket_Cache.Filter.FilterFunction FilterFunction)
+        { 
+            string sReturn = string.Empty;
+
+            try
+            {
+                sReturn += Convert.ToInt32(FilterFunction.Send) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.SendTo) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.Recv) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.RecvFrom) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSASend) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSASendTo) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSARecv) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion
@@ -1168,42 +1193,43 @@ namespace WPELibrary.Lib
             {
                 if (string.IsNullOrEmpty(FilePath))
                 {
-                    FilePath = System.AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                    FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
                 }
 
-                bool bFilterList = System.IO.File.Exists(FilePath);
-
-                if (bFilterList)
+                if (File.Exists(FilePath))
                 {
                     string[] slFilter = File.ReadAllLines(FilePath, Encoding.UTF8);
-
-                    Socket_Cache.FilterList.FilterListClear();
-
-                    foreach (string sFilterTemp in slFilter)
+                    
+                    if (slFilter.Length > 0)
                     {
-                        try
+                        Socket_Cache.FilterList.FilterListClear();
+
+                        foreach (string sFilterTemp in slFilter)
                         {
-                            string[] ss = sFilterTemp.Split('|');
+                            try
+                            {
+                                string[] ss = sFilterTemp.Split('|');
 
-                            int iFNum = int.Parse(ss[0]);
-                            string sFName = ss[1];
-                            Socket_FilterInfo.FilterMode FMode = GetFilterMode_ByString(ss[2]);
-                            Socket_FilterInfo.StartFrom FStartFrom = GetFilterStartFrom_ByString(ss[3]);
-                            int iFModifyCNT = int.Parse(ss[4]);
-                            string sFSearch = ss[5];
-                            int iFSearchLen = int.Parse(ss[6]);
-                            string sFModify = ss[7];
-                            int iFModifyLen = int.Parse(ss[8]);
+                                int iFNum = int.Parse(ss[0]);
+                                string sFName = ss[1];
+                                Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(ss[2]);
+                                Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(ss[3]);
+                                Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(ss[4]);
+                                Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(ss[5]);
+                                int iFModifyCNT = int.Parse(ss[6]);
+                                string sFSearch = ss[7];
+                                string sFModify = ss[8];
 
-                            Socket_Cache.FilterList.AddFilter_New(sFName, FMode, FStartFrom, iFModifyCNT, sFSearch, iFSearchLen, sFModify, iFModifyLen, false);
+                                Socket_Cache.FilterList.AddFilter_New(sFName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
 
-                            iReturn++;
+                                iReturn++;
+                            }
+                            catch (Exception ex)
+                            {
+                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
-                    }
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -1245,34 +1271,76 @@ namespace WPELibrary.Lib
 
         #region//获取滤镜选项
 
-        public static Socket_FilterInfo.FilterMode GetFilterMode_ByString(string sFMode)
+        public static Socket_Cache.Filter.FilterMode GetFilterMode_ByString(string FilterMode)
         {
-            Socket_FilterInfo.FilterMode FMode;
+            Socket_Cache.Filter.FilterMode FMode;
 
             try
             {
-                FMode = (Socket_FilterInfo.FilterMode)Enum.Parse(typeof(Socket_FilterInfo.FilterMode), sFMode);
+                FMode = (Socket_Cache.Filter.FilterMode)Enum.Parse(typeof(Socket_Cache.Filter.FilterMode), FilterMode);
             }
             catch (Exception ex)
             {
-                FMode = Socket_FilterInfo.FilterMode.Normal;
+                FMode = Socket_Cache.Filter.FilterMode.Normal;
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }                       
 
             return FMode;
-        }        
+        }
 
-        public static Socket_FilterInfo.StartFrom GetFilterStartFrom_ByString(string sFStartFrom)
+        public static Socket_Cache.Filter.FilterAction GetFilterAction_ByString(string FilterAction)
         {
-            Socket_FilterInfo.StartFrom FStartFrom;
+            Socket_Cache.Filter.FilterAction FAction;
 
             try
             {
-                FStartFrom = (Socket_FilterInfo.StartFrom)Enum.Parse(typeof(Socket_FilterInfo.StartFrom), sFStartFrom);
+                FAction = (Socket_Cache.Filter.FilterAction)Enum.Parse(typeof(Socket_Cache.Filter.FilterAction), FilterAction);
             }
             catch (Exception ex)
             {
-                FStartFrom = Socket_FilterInfo.StartFrom.Head;
+                FAction = Socket_Cache.Filter.FilterAction.Replace;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return FAction;
+        }
+
+        public static Socket_Cache.Filter.FilterFunction GetFilterFunction_ByString(string FilterFunction)
+        {
+            Socket_Cache.Filter.FilterFunction FFunction = new Socket_Cache.Filter.FilterFunction();
+
+            try
+            {
+                string[] slFilterFunction = FilterFunction.Split(':');                
+
+                FFunction.Send = Convert.ToBoolean(int.Parse(slFilterFunction[0]));
+                FFunction.SendTo = Convert.ToBoolean(int.Parse(slFilterFunction[1]));
+                FFunction.Recv = Convert.ToBoolean(int.Parse(slFilterFunction[2]));
+                FFunction.RecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[3]));
+                FFunction.WSASend = Convert.ToBoolean(int.Parse(slFilterFunction[4]));
+                FFunction.WSASendTo = Convert.ToBoolean(int.Parse(slFilterFunction[5]));
+                FFunction.WSARecv = Convert.ToBoolean(int.Parse(slFilterFunction[6]));
+                FFunction.WSARecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[7]));
+            }
+            catch (Exception ex)
+            {  
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return FFunction;
+        }
+
+        public static Socket_Cache.Filter.FilterStartFrom GetFilterStartFrom_ByString(string sFStartFrom)
+        {
+            Socket_Cache.Filter.FilterStartFrom FStartFrom;
+
+            try
+            {
+                FStartFrom = (Socket_Cache.Filter.FilterStartFrom)Enum.Parse(typeof(Socket_Cache.Filter.FilterStartFrom), sFStartFrom);
+            }
+            catch (Exception ex)
+            {
+                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
@@ -1347,22 +1415,22 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//检查滤镜是否启用
+        #region//检查滤镜是否生效
 
-        public static bool CheckFilter_IsEffective(Socket_FilterInfo sfi)
+        public static bool CheckFilter_IsEffective(Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
         {
             bool bResult = false;
 
             try
             {
-                if (sfi.IsCheck)
+                if (sfi.IsEnable)
                 {
-                    string sFSearch = sfi.FSearch;
-                    string sModify = sfi.FModify;
-
-                    if (!string.IsNullOrEmpty(sFSearch) && !string.IsNullOrEmpty(sModify))
+                    if (CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
                     {
-                        bResult = true;
+                        if (!string.IsNullOrEmpty(sfi.FSearch))
+                        {
+                            bResult = true;
+                        }
                     }
                 }
             }
@@ -1372,6 +1440,112 @@ namespace WPELibrary.Lib
             }
 
             return bResult;
+        }
+
+        #endregion
+
+        #region//获取封包类别对应的滤镜作用类别
+
+        public static Socket_Cache.Filter.FilterFunction GetFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType)
+        {
+            Socket_Cache.Filter.FilterFunction ffReturn = new Socket_Cache.Filter.FilterFunction();
+
+            try
+            {
+                switch (ptType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.Send:
+                        ffReturn.Send = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        ffReturn.SendTo = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        ffReturn.Recv = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        ffReturn.RecvFrom = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        ffReturn.WSASend = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        ffReturn.WSASendTo = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        ffReturn.WSARecv = true;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        ffReturn.WSARecvFrom = true;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return ffReturn;
+        }
+
+        #endregion
+
+        #region//检查滤镜作用类别
+
+        public static bool CheckFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.Filter.FilterFunction ffFunction)
+        { 
+            bool bReturn = false;
+
+            try
+            {
+                switch (ptType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.Send:
+                        bReturn = ffFunction.Send;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        bReturn = ffFunction.SendTo;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        bReturn = ffFunction.Recv;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        bReturn = ffFunction.RecvFrom;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        bReturn = ffFunction.WSASend;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        bReturn = ffFunction.WSASendTo;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        bReturn = ffFunction.WSARecv;
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        bReturn = ffFunction.WSARecvFrom;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
         }
 
         #endregion
@@ -1484,17 +1658,24 @@ namespace WPELibrary.Lib
 
             try
             {
-                string[] slModify = sfi.FModify.Split(',');
-
-                foreach (string s in slModify)
+                if (string.IsNullOrEmpty(sfi.FModify))
                 {
-                    int iIndex = int.Parse(s.Split('-')[0]);
-                    string sValue = s.Split('-')[1];
+                    bReturn = false;
+                }
+                else
+                {
+                    string[] slModify = sfi.FModify.Split(',');
 
-                    if (iIndex >= 0 && iIndex < iLen)
+                    foreach (string s in slModify)
                     {
-                        byte bValue = Convert.ToByte(sValue, 16);
-                        Marshal.WriteByte(ipBuff, iIndex, bValue);
+                        int iIndex = int.Parse(s.Split('-')[0]);
+                        string sValue = s.Split('-')[1];
+
+                        if (iIndex >= 0 && iIndex < iLen)
+                        {
+                            byte bValue = Convert.ToByte(sValue, 16);
+                            Marshal.WriteByte(ipBuff, iIndex, bValue);
+                        }
                     }
                 }
             }
@@ -1517,35 +1698,41 @@ namespace WPELibrary.Lib
 
             try
             {
-                int iModifyLen = sfi.FModifyLen;
-                string[] slModify = sfi.FModify.Split(',');
-
-                Socket_FilterInfo.StartFrom FStartFrom = sfi.FStartFrom;
-
-                int iBufferIndex = -1;
-
-                foreach (string s in slModify)
+                if (string.IsNullOrEmpty(sfi.FModify))
                 {
-                    int iIndex = int.Parse(s.Split('-')[0]);
-                    string sValue = s.Split('-')[1];
-
-                    switch (FStartFrom)
-                    {
-                        case Socket_FilterInfo.StartFrom.Head:
-                            iBufferIndex = iIndex;
-                            break;
-
-                        case Socket_FilterInfo.StartFrom.Position:
-                            iBufferIndex = iMatch + (iIndex - iModifyLen);
-                            break;
-                    }
-
-                    if (iBufferIndex >= 0 && iBufferIndex < iLen)
-                    {
-                        byte bValue = Convert.ToByte(sValue, 16);
-                        Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
-                    }
+                    bReturn = false;
                 }
+                else
+                {
+                    string[] slModify = sfi.FModify.Split(',');
+
+                    Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
+
+                    int iBufferIndex = -1;
+
+                    foreach (string s in slModify)
+                    {
+                        int iIndex = int.Parse(s.Split('-')[0]);
+                        string sValue = s.Split('-')[1];
+
+                        switch (FStartFrom)
+                        {
+                            case Socket_Cache.Filter.FilterStartFrom.Head:
+                                iBufferIndex = iIndex;
+                                break;
+
+                            case Socket_Cache.Filter.FilterStartFrom.Position:
+                                iBufferIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                break;
+                        }
+
+                        if (iBufferIndex >= 0 && iBufferIndex < iLen)
+                        {
+                            byte bValue = Convert.ToByte(sValue, 16);
+                            Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
+                        }
+                    }
+                }                
             }
             catch (Exception ex)
             {

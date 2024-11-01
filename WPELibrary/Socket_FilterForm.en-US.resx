@@ -117,65 +117,61 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="rbFromPosition.Text" xml:space="preserve">
-    <value>From the position of chain</value>
-  </data>
-  <data name="rbFromHead.Text" xml:space="preserve">
-    <value>From the beginning of the packet</value>
-  </data>
-  <data name="gbStartModify.Text" xml:space="preserve">
-    <value>[ Starting Modify ]</value>
-  </data>
-  <data name="bSave.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="bReset.Text" xml:space="preserve">
-    <value>Reset</value>
-  </data>
-  <data name="gbFilterName.Text" xml:space="preserve">
-    <value>[ Filter Name ]</value>
-  </data>
-  <data name="rbAdvanced.Text" xml:space="preserve">
-    <value>Advanced（ match to 'data' ）</value>
-  </data>
-  <data name="rbNormal.Text" xml:space="preserve">
-    <value>Normal（ match to 'offset' ）</value>
-  </data>
-  <data name="gbFilterMode.Text" xml:space="preserve">
-    <value>[ Filter Mode ]</value>
-  </data>
-  <data name="bPacketLength.Text" xml:space="preserve">
-    <value>Apply</value>
-  </data>
-  <data name="rbPacketLength_Custom.Text" xml:space="preserve">
-    <value>Custom</value>
-  </data>
-  <data name="rbPacketLength_NoModify.Text" xml:space="preserve">
-    <value>Dont modify</value>
-  </data>
-  <data name="gbPacketLength.Text" xml:space="preserve">
-    <value>[ Packet Length ]</value>
-  </data>
-  <data name="bModifyLength.Text" xml:space="preserve">
-    <value>Apply</value>
-  </data>
-  <data name="gbModifyLength.Text" xml:space="preserve">
-    <value>[ Modify Length]</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="gbModifyCNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbModifyCNT.Text" xml:space="preserve">
-    <value>[ Modify Cnt ]</value>
-  </data>
   <data name="tpNormal.Text" xml:space="preserve">
     <value>[First row 'search', second row 'modify']</value>
   </data>
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
   </data>
+  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
+    <value>[ Starting Modify ]</value>
+  </data>
+  <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
+    <value>From the position of the chain</value>
+  </data>
+  <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
+    <value>From the beginning of the packet</value>
+  </data>
+  <data name="gbFilterSet.Text" xml:space="preserve">
+    <value>[ Set ]</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="nudFilterSet_ModifyTimes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>99, 6</value>
+  </data>
+  <data name="nudFilterSet_ModifyTimes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 23</value>
+  </data>
+  <data name="lFilterSet_ModifyTimes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 23</value>
+  </data>
+  <data name="lFilterSet_ModifyTimes.Text" xml:space="preserve">
+    <value>Modify Times</value>
+  </data>
+  <data name="gbFilterName.Text" xml:space="preserve">
+    <value>[ Filter Name ]</value>
+  </data>
+  <data name="bFilterButton_Save.Text" xml:space="preserve">
+    <value>Save (&amp;S)</value>
+  </data>
+  <data name="bFilterButton_Close.Text" xml:space="preserve">
+    <value>Close (&amp;C)</value>
+  </data>
+  <data name="rbFilterAction_Intercept.Text" xml:space="preserve">
+    <value>Intercept</value>
+  </data>
+  <data name="rbFilterAction_Replace.Text" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="gbFilterMode.Text" xml:space="preserve">
+    <value>[ Filter Mode ]</value>
+  </data>
+  <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="rbFilterMode_Normal.Text" xml:space="preserve">
+    <value>Normal</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAoIAQAZgAAAICAAAABACAAKAgBAI4gBABAQAAAAQAgAChCAAC2KAUAMDAAAAEA

@@ -97,6 +97,8 @@ namespace WPELibrary
             try
             {
                 ws.ExitHook();
+
+                Socket_Operation.SaveFilterList(string.Empty);
             }
             catch (Exception ex)
             {
@@ -362,6 +364,7 @@ namespace WPELibrary
             {
                 int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
                 int iFilter_CNT = Socket_Cache.SocketQueue.Filter_CNT;
+                int iIntercept_CNT = Socket_Cache.SocketQueue.Intercept_CNT;
                 int iSend_CNT = Socket_Cache.SocketQueue.Send_CNT;
                 int iRecv_CNT = Socket_Cache.SocketQueue.Recv_CNT;
                 int iSendTo_CNT = Socket_Cache.SocketQueue.SendTo_CNT;
@@ -369,10 +372,11 @@ namespace WPELibrary
                 int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
                 int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
                 int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
-                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
-                int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
+                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;                
                 int iTotal_SendBytes = Socket_Cache.SocketQueue.Total_SendBytes;
                 int iTotal_RecvBytes = Socket_Cache.SocketQueue.Total_RecvBytes;
+
+                int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
 
                 this.tlALL_CNT.Text = iAll_CNT.ToString();
                 this.tlQueue_CNT.Text = iQueue_CNT.ToString();
@@ -385,6 +389,7 @@ namespace WPELibrary
                 this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
                 this.tlFilter_CNT.Text = iFilter_CNT.ToString();
+                this.tlIntercept_CNT.Text = iIntercept_CNT.ToString();
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());                
 
                 this.dgvFilterList.Refresh();
@@ -447,7 +452,20 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index);
+                            int iSelectLen = ((int)hbPacketData.SelectionLength);
+                            int iStart = ((int)hbPacketData.SelectionStart);
+                            int iEnd = iStart + iSelectLen;
+
+                            byte[] bBuffer = new byte[hbPacketData.SelectionLength];
+
+                            int iIndex = 0;
+                            for (int i = iStart; i < iEnd; i++)
+                            {                                
+                                bBuffer[iIndex] = hbPacketData.ByteProvider.ReadByte(i);
+                                iIndex++;
+                            }                          
+
+                            Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBuffer);
                         }
 
                         break;
@@ -520,7 +538,7 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            Socket_Operation.ShowSendForm(Select_Index);                            
+                            Socket_Operation.ShowSendForm(Select_Index);
                         }
 
                         break;
@@ -553,7 +571,7 @@ namespace WPELibrary
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            } 
+            }
         }
 
         #endregion
@@ -583,75 +601,6 @@ namespace WPELibrary
                             this.dgvLogList.Rows.Clear();
                         }
                         break;                   
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//滤镜菜单
-
-        private void cmsFilterList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            this.dgvFilterList.EndEdit();
-            string sItemText = e.ClickedItem.Name;            
-
-            cmsFilterList.Close();
-
-            try
-            {
-                switch (sItemText)
-                {
-                    case "cmsFilterList_Show":
-                        if (dgvFilterList.Rows.Count > 0)
-                        {
-                            int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
-
-                            if (iFNum > 0)
-                            {
-                                Socket_Operation.ShowFilterForm_Dialog(iFNum);
-                            }
-                        }                        
-                        break;
-
-                    case "cmsFilterList_Save":
-                        if (dgvFilterList.Rows.Count > 0)
-                        {
-                            Socket_Operation.SaveFilterList_Dialog();
-                        }
-                        break;
-
-                    case "cmsFilterList_Load":
-                        Socket_Operation.LoadFilterList_Dialog();
-                        break;
-
-                    case "cmsFilterList_Add":
-                        Socket_Cache.FilterList.AddFilter_New();
-                        Socket_Operation.SaveFilterList("");
-                        break;
-
-                    case "cmsFilterList_Delete":
-                        if (dgvFilterList.Rows.Count > 0)
-                        {
-                            int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
-
-                            if (iFNum > 0)
-                            {
-                                Socket_Operation.DeleteFilterByFilterNum_Dialog(iFNum);
-                            }
-                        }
-                        break;
-
-                    case "cmsFilterList_CleanUp":
-                        if (dgvFilterList.Rows.Count > 0)
-                        {
-                            Socket_Operation.CleanUpFilterList_Dialog();
-                        }
-                        break;
                 }
             }
             catch (Exception ex)
@@ -936,9 +885,97 @@ namespace WPELibrary
             }
         }
 
+        private void dgvFilterList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvFilterList.Rows.Count > 0)
+                {
+                    int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
 
-
+                    if (iFNum > 0)
+                    {
+                        Socket_Operation.ShowFilterForm_Dialog(iFNum);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion
+
+        #region//滤镜功能按钮
+
+        private void tsFilterList_Load_Click(object sender, EventArgs e)
+        {
+            Socket_Operation.LoadFilterList_Dialog();
+        }
+
+        private void tsFilterList_Save_Click(object sender, EventArgs e)
+        {
+            if (dgvFilterList.Rows.Count > 0)
+            {
+                Socket_Operation.SaveFilterList_Dialog();
+            }
+        }
+
+        private void tsFilterList_Add_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.FilterList.AddFilter_New();
+            Socket_Operation.SaveFilterList("");
+        }
+
+        private void tsFilterList_Edit_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvFilterList.Rows.Count > 0)
+                {
+                    int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
+
+                    if (iFNum > 0)
+                    {
+                        Socket_Operation.ShowFilterForm_Dialog(iFNum);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void tsFilterList_Delete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvFilterList.Rows.Count > 0)
+                {
+                    int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
+
+                    if (iFNum > 0)
+                    {
+                        Socket_Operation.DeleteFilterByFilterNum_Dialog(iFNum);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void tsFilterList_CleanUp_Click(object sender, EventArgs e)
+        {
+            if (dgvFilterList.Rows.Count > 0)
+            {
+                Socket_Operation.CleanUpFilterList_Dialog();
+            }
+        }
+
+        #endregion        
     }
 }

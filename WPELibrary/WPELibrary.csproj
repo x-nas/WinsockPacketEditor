@@ -139,6 +139,7 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\openHS.png" />
     <None Include="Resources\Edit24.png" />
     <None Include="Resources\Counterclockwise-arrow16.png" />
     <None Include="Resources\Trash-can16.png" />

@@ -401,6 +401,39 @@
     <value>CleanUp
 (&amp;C)</value>
   </data>
+  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 9pt</value>
+  </data>
+  <data name="gbFilterList.Text" xml:space="preserve">
+    <value>[ Filter List ]</value>
+  </data>
+  <data name="tlpFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>191, 219</value>
+  </data>
+  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>185, 188</value>
+  </data>
+  <data name="tsFilterList_Load.Text" xml:space="preserve">
+    <value>Load FilterList</value>
+  </data>
+  <data name="tsFilterList_Save.Text" xml:space="preserve">
+    <value>Save FilterList</value>
+  </data>
+  <data name="tsFilterList_Add.Text" xml:space="preserve">
+    <value>Add New</value>
+  </data>
+  <data name="tsFilterList_Edit.Text" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="tsFilterList_Delete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="tsFilterList_CleanUp.Text" xml:space="preserve">
+    <value>Clean Up</value>
+  </data>
   <data name="tcPacketInfo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
@@ -505,75 +538,6 @@
   </data>
   <data name="cmsLogList_ToExcel.Text" xml:space="preserve">
     <value>Save To Excel</value>
-  </data>
-  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="gbFilterList.Text" xml:space="preserve">
-    <value>[ Filter List ]</value>
-  </data>
-  <data name="cmsFilterList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 166</value>
-  </data>
-  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 17</value>
-  </data>
-  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 219</value>
-  </data>
-  <data name="cmsFilterList_Show.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_Show.Text" xml:space="preserve">
-    <value>Show</value>
-  </data>
-  <data name="tssSep1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="cmsFilterList_Add.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_Add.Text" xml:space="preserve">
-    <value>Add New Filter</value>
-  </data>
-  <data name="tssSep3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="cmsFilterList_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_Delete.Text" xml:space="preserve">
-    <value>Delete Filter</value>
-  </data>
-  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="cmsFilterList_Save.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_Save.Text" xml:space="preserve">
-    <value>Save Filter List</value>
-  </data>
-  <data name="tssSep2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="cmsFilterList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_CleanUp.Text" xml:space="preserve">
-    <value>Clean Up</value>
-  </data>
-  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>151, 6</value>
-  </data>
-  <data name="cmsFilterList_Load.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 22</value>
-  </data>
-  <data name="cmsFilterList_Load.Text" xml:space="preserve">
-    <value>Load Filter List</value>
   </data>
   <data name="tsslProcessName.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 17</value>

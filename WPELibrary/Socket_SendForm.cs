@@ -471,9 +471,11 @@ namespace WPELibrary
                 this.cmsHexBox.Close();
 
                 int iPacketIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex;
+                Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;
 
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;                
-                byte[] bBuffer = dbp.Bytes.ToArray();
+                byte[] bBuffer = dbp.Bytes.ToArray();                
+
                 string sHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                 switch (sItemText)
@@ -491,7 +493,28 @@ namespace WPELibrary
                     case "cmsHexBox_FilterList":
 
                         string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iPacketIndex.ToString() + "]";
-                        Socket_Cache.FilterList.AddToFilterList_New(sFName, bBuffer);
+
+                        int iSelectLen = ((int)hbPacketData.SelectionLength);
+                        int iStart = ((int)hbPacketData.SelectionStart);
+                        int iEnd = iStart + iSelectLen;
+
+                        byte[] bSelectBuffer = new byte[hbPacketData.SelectionLength];
+
+                        int iIndex = 0;
+                        for (int i = iStart; i < iEnd; i++)
+                        {
+                            bSelectBuffer[iIndex] = hbPacketData.ByteProvider.ReadByte(i);
+                            iIndex++;
+                        }
+
+                        if (bSelectBuffer.Length > 0)
+                        {
+                            Socket_Cache.FilterList.AddToFilterList_New(sFName, ptType, bSelectBuffer);
+                        }
+                        else
+                        {
+                            Socket_Cache.FilterList.AddToFilterList_New(sFName, ptType, bBuffer);
+                        }
 
                         break;
                 }
@@ -567,7 +590,7 @@ namespace WPELibrary
             {
                 int iSelectIndex = (int)hbPacketData.SelectionStart;
 
-                if (iSelectIndex >= 0)
+                if (iSelectIndex >= 0 && iSelectIndex <= this.nudSendStep_Position.Maximum)
                 {
                     this.nudSendStep_Position.Value = iSelectIndex;
                 }                
