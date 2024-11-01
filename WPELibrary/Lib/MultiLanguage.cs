@@ -38,7 +38,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_26 = { "查找", "Search" };
         public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
-        //public static string[] MutiLan_29 = { " 长度 {0} 字节", " Length {0} Bytes" };
+        public static string[] MutiLan_29 = { "两个文本相同", "The two texts are the same" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "已发送: {0} 字节  接收: {1} 字节", "Sent: {0} Bytes  Received: {1} Bytes" };
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };

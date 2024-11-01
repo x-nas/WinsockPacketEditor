@@ -6,6 +6,8 @@ using System.Reflection;
 using WPELibrary.Lib;
 using EasyHook;
 using Be.Windows.Forms;
+using System.Drawing;
+using System.Linq;
 
 namespace WPELibrary
 {
@@ -16,7 +18,10 @@ namespace WPELibrary
         private int Select_Index = -1;
         private int Search_Index = -1;
         private bool bWakeUp = true;
-        
+
+        private Color col_Del = Color.Red;
+        private Color col_Add = Color.Green;
+
         private ToolTip tt = new ToolTip();
 
         #region//加载窗体
@@ -242,7 +247,8 @@ namespace WPELibrary
         private void CleanUp_MainForm()
         {
             this.CleanUp_SocketList();
-            this.CleanUp_HexBox();            
+            this.CleanUp_HexBox();
+            this.CleanUp_Comparison();
         }        
 
         private void CleanUp_SocketList()
@@ -284,6 +290,20 @@ namespace WPELibrary
 
                 hbPacketData.ByteProvider = null;
             }          
+        }
+
+        private void CleanUp_Comparison()
+        {
+            try
+            {
+                this.rtbComparison_A.Clear();
+                this.rtbComparison_B.Clear();
+                this.rtbComparison_Result.Clear();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -563,6 +583,26 @@ namespace WPELibrary
                         if (dgvSocketList.Rows.Count > 0)
                         {
                             Socket_Operation.SaveSocketListToExcel();
+                        }
+
+                        break;
+
+                    case "cmsSocketList_Comparison_A":
+
+                        if (Select_Index > -1)
+                        {
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            this.rtbComparison_A.Text = sPacketHex;
+                        }
+
+                        break;
+
+                    case "cmsSocketList_Comparison_B":
+
+                        if (Select_Index > -1)
+                        {
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            this.rtbComparison_B.Text = sPacketHex;
                         }
 
                         break;
@@ -976,6 +1016,175 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//文本比较
+
+        private void bComparison_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.rtbComparison_Result.Clear();
+
+                string sText_A = this.rtbComparison_A.Text;
+                string sText_B = this.rtbComparison_B.Text;
+
+                if (sText_A == sText_B)
+                {
+                    AppendColoredText(rtbComparison_Result, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
+                    return;
+                }
+
+                string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
+
+                int la = 0;
+                int lb = 0;
+
+                while (la < linesA.Length)
+                {
+                    if (lb >= linesB.Length)
+                    { 
+                        AppendColoredText(rtbComparison_Result, linesA[la], col_Del);
+                    }
+                    else if (linesA[la] == linesB[lb])
+                    {                        
+                        AppendColoredText(rtbComparison_Result, linesA[la], rtbComparison_Result.ForeColor);
+                    }
+                    else
+                    {  
+                        if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
+                        {  
+                            AppendColoredText(rtbComparison_Result, linesB[lb], col_Add);
+                            AppendColoredText(rtbComparison_Result, "\n" + linesA[la], rtbComparison_Result.ForeColor);
+
+                            lb++;
+                        }                        
+                        else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                        {  
+                            AppendColoredText(rtbComparison_Result, linesA[la], col_Del);
+                            AppendColoredText(rtbComparison_Result, "\n" + linesB[lb], rtbComparison_Result.ForeColor);
+
+                            la++;
+                        }                        
+                        else
+                        {
+                            string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                            string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
+
+                            int wa = 0;
+                            int wb = 0;
+                            while (wa < wordsA.Length)
+                            {
+                                if (wb >= wordsB.Length)
+                                {  
+                                    AppendColoredText(rtbComparison_Result, wordsA[wa], col_Del);
+                                }
+                                else if (wordsA[wa] == wordsB[wb])
+                                {
+                                    AppendColoredText(rtbComparison_Result, wordsA[wa], rtbComparison_Result.ForeColor);
+                                }
+                                else
+                                {
+                                    if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                    {
+                                        AppendColoredText(rtbComparison_Result, wordsB[wb], col_Add);
+                                        AppendColoredText(rtbComparison_Result, " " + wordsA[wa], rtbComparison_Result.ForeColor);
+
+                                        wb++;
+                                    }                                    
+                                    else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                    {                                        
+                                        AppendColoredText(rtbComparison_Result, wordsA[wa], col_Del);
+                                        AppendColoredText(rtbComparison_Result, " " + wordsB[wb], rtbComparison_Result.ForeColor);
+
+                                        wa++;
+                                    }                                    
+                                    else
+                                    {  
+                                        AppendColoredText(rtbComparison_Result, wordsA[wa], col_Del);
+                                        AppendColoredText(rtbComparison_Result, wordsB[wb], col_Add);
+                                    }
+                                }
+                                if (wa + 1 < wordsA.Length) AppendColoredText(rtbComparison_Result, " ", rtbComparison_Result.ForeColor);
+
+                                if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
+                                {  
+                                    while (wb + 1 < wordsB.Length)
+                                    {
+                                        wb++;
+                                        
+                                        AppendColoredText(rtbComparison_Result, " ", rtbComparison_Result.ForeColor);
+                                        AppendColoredText(rtbComparison_Result, wordsB[wb], col_Add);
+                                    }
+                                }
+
+                                wa++;
+                                wb++;
+                            }
+                        }
+                    }
+
+                    if (la + 1 < linesA.Length)
+                    {
+                        AppendColoredText(rtbComparison_Result, "\n", rtbComparison_Result.ForeColor);
+                    } 
+
+                    if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                    {  
+                        while (lb + 1 < linesB.Length)
+                        {
+                            lb++;
+                            
+                            AppendColoredText(rtbComparison_Result, "\n", rtbComparison_Result.ForeColor);
+                            AppendColoredText(rtbComparison_Result, linesB[lb], col_Add);
+                        }
+                    }
+
+                    la++;
+                    lb++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void AppendColoredText(RichTextBox box, string text, Color color)
+        {
+            try
+            {
+                box.SelectionStart = box.TextLength;
+                box.SelectionLength = text.Length;
+
+                if (color == col_Add)
+                {
+                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Underline);
+                }
+
+                if (color == col_Del)
+                {
+                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Strikeout);
+                }
+
+                box.SelectionColor = color;
+                box.AppendText(text);
+
+                box.SelectionFont = box.Font;
+                box.SelectionColor = box.ForeColor;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        private void bComparison_Clear_Click(object sender, EventArgs e)
+        {
+            this.CleanUp_Comparison();
+        }
+
+        #endregion
     }
 }

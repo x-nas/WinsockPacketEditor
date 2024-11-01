@@ -549,8 +549,29 @@
   <data name="cmsSocketList_ToExcel.Text" xml:space="preserve">
     <value>导出到 Excel</value>
   </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 6</value>
+  </data>
+  <data name="cmsSocketList_Comparison_A.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="cmsSocketList_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="cmsSocketList_Comparison_A.Text" xml:space="preserve">
+    <value>添加到 文本A</value>
+  </data>
+  <data name="cmsSocketList_Comparison_B.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="cmsSocketList_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
+  <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
+    <value>添加到 文本B</value>
+  </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 110</value>
+    <value>153, 160</value>
   </data>
   <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
     <value>cmsSocketList</value>
@@ -2186,6 +2207,339 @@
   <data name="&gt;&gt;tpPacketData.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="tlpComparison.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="rtbComparison_Result.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbComparison_Result.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="rtbComparison_Result.Location" type="System.Drawing.Point, System.Drawing">
+    <value>577, 31</value>
+  </data>
+  <data name="rtbComparison_Result.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="rtbComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 177</value>
+  </data>
+  <data name="rtbComparison_Result.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="rtbComparison_Result.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbComparison_Result.Name" xml:space="preserve">
+    <value>rtbComparison_Result</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_Result.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_Result.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_Result.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rtbComparison_B.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbComparison_B.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="rtbComparison_B.Location" type="System.Drawing.Point, System.Drawing">
+    <value>290, 31</value>
+  </data>
+  <data name="rtbComparison_B.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="rtbComparison_B.Size" type="System.Drawing.Size, System.Drawing">
+    <value>281, 177</value>
+  </data>
+  <data name="rtbComparison_B.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="rtbComparison_B.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbComparison_B.Name" xml:space="preserve">
+    <value>rtbComparison_B</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_B.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_B.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_B.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="rtbComparison_A.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rtbComparison_A.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="rtbComparison_A.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 31</value>
+  </data>
+  <data name="rtbComparison_A.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 1, 3, 1</value>
+  </data>
+  <data name="rtbComparison_A.Size" type="System.Drawing.Size, System.Drawing">
+    <value>281, 177</value>
+  </data>
+  <data name="rtbComparison_A.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="rtbComparison_A.Text" xml:space="preserve">
+    <value />
+  </data>
+  <data name="&gt;&gt;rtbComparison_A.Name" xml:space="preserve">
+    <value>rtbComparison_A</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_A.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_A.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;rtbComparison_A.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpComparison_Button.ColumnCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="bComparison_Clear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bComparison_Clear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bComparison_Clear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>61, 3</value>
+  </data>
+  <data name="bComparison_Clear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="bComparison_Clear.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bComparison_Clear.Text" xml:space="preserve">
+    <value>清 空</value>
+  </data>
+  <data name="&gt;&gt;bComparison_Clear.Name" xml:space="preserve">
+    <value>bComparison_Clear</value>
+  </data>
+  <data name="&gt;&gt;bComparison_Clear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bComparison_Clear.Parent" xml:space="preserve">
+    <value>tlpComparison_Button</value>
+  </data>
+  <data name="&gt;&gt;bComparison_Clear.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bComparison.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bComparison.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bComparison.Location" type="System.Drawing.Point, System.Drawing">
+    <value>161, 3</value>
+  </data>
+  <data name="bComparison.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="bComparison.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="bComparison.Text" xml:space="preserve">
+    <value>对 比</value>
+  </data>
+  <data name="&gt;&gt;bComparison.Name" xml:space="preserve">
+    <value>bComparison</value>
+  </data>
+  <data name="&gt;&gt;bComparison.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bComparison.Parent" xml:space="preserve">
+    <value>tlpComparison_Button</value>
+  </data>
+  <data name="&gt;&gt;bComparison.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpComparison_Button.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpComparison_Button.Location" type="System.Drawing.Point, System.Drawing">
+    <value>574, 0</value>
+  </data>
+  <data name="tlpComparison_Button.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpComparison_Button.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpComparison_Button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>296, 30</value>
+  </data>
+  <data name="tlpComparison_Button.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison_Button.Name" xml:space="preserve">
+    <value>tlpComparison_Button</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison_Button.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison_Button.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison_Button.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpComparison_Button.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bComparison_Clear" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bComparison" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,80,Absolute,20,Absolute,80,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="lComparison_B.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lComparison_B.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lComparison_B.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lComparison_B.Location" type="System.Drawing.Point, System.Drawing">
+    <value>290, 3</value>
+  </data>
+  <data name="lComparison_B.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lComparison_B.Size" type="System.Drawing.Size, System.Drawing">
+    <value>281, 24</value>
+  </data>
+  <data name="lComparison_B.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lComparison_B.Text" xml:space="preserve">
+    <value>文 本 B</value>
+  </data>
+  <data name="lComparison_B.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lComparison_B.Name" xml:space="preserve">
+    <value>lComparison_B</value>
+  </data>
+  <data name="&gt;&gt;lComparison_B.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lComparison_B.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;lComparison_B.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lComparison_A.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lComparison_A.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lComparison_A.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lComparison_A.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lComparison_A.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lComparison_A.Size" type="System.Drawing.Size, System.Drawing">
+    <value>281, 24</value>
+  </data>
+  <data name="lComparison_A.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lComparison_A.Text" xml:space="preserve">
+    <value>文 本 A</value>
+  </data>
+  <data name="lComparison_A.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lComparison_A.Name" xml:space="preserve">
+    <value>lComparison_A</value>
+  </data>
+  <data name="&gt;&gt;lComparison_A.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lComparison_A.Parent" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;lComparison_A.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpComparison.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpComparison.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpComparison.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpComparison.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpComparison.Size" type="System.Drawing.Size, System.Drawing">
+    <value>870, 209</value>
+  </data>
+  <data name="tlpComparison.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison.Name" xml:space="preserve">
+    <value>tlpComparison</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison.Parent" xml:space="preserve">
+    <value>tpComparison</value>
+  </data>
+  <data name="&gt;&gt;tlpComparison.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpComparison.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rtbComparison_Result" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rtbComparison_B" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rtbComparison_A" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpComparison_Button" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lComparison_B" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lComparison_A" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33,Percent,33,Percent,34" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpComparison.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpComparison.Size" type="System.Drawing.Size, System.Drawing">
+    <value>870, 209</value>
+  </data>
+  <data name="tpComparison.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="tpComparison.Text" xml:space="preserve">
+    <value>[ 文本对比 ]</value>
+  </data>
+  <data name="&gt;&gt;tpComparison.Name" xml:space="preserve">
+    <value>tpComparison</value>
+  </data>
+  <data name="&gt;&gt;tpComparison.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpComparison.Parent" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpComparison.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <metadata name="cTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -2289,7 +2643,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpSystemLog.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -14953,6 +15307,9 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
@@ -15172,12 +15529,6 @@
   <data name="&gt;&gt;tlWSARecvFrom_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cTypeImg.Name" xml:space="preserve">
-    <value>cTypeImg</value>
-  </data>
-  <data name="&gt;&gt;cTypeImg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cIndex.Name" xml:space="preserve">
     <value>cIndex</value>
   </data>
@@ -15220,23 +15571,11 @@
   <data name="&gt;&gt;cData.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Send.Name" xml:space="preserve">
-    <value>cmsSocketList_Send</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_Send.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsSocketList_tss1.Name" xml:space="preserve">
     <value>cmsSocketList_tss1</value>
   </data>
   <data name="&gt;&gt;cmsSocketList_tss1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_UseSocket.Name" xml:space="preserve">
-    <value>cmsSocketList_UseSocket</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_UseSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tss4.Name" xml:space="preserve">
     <value>tss4</value>
@@ -15244,23 +15583,11 @@
   <data name="&gt;&gt;tss4.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_ShowSendList.Name" xml:space="preserve">
-    <value>cmsSocketList_ShowSendList</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ShowSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;tss5.Name" xml:space="preserve">
     <value>tss5</value>
   </data>
   <data name="&gt;&gt;tss5.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Name" xml:space="preserve">
-    <value>cmsSocketList_ToExcel</value>
-  </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
     <value>cIsCheck</value>
@@ -15280,35 +15607,11 @@
   <data name="&gt;&gt;cFName.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsFilterList_Load.Name" xml:space="preserve">
-    <value>tsFilterList_Load</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Load.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Save.Name" xml:space="preserve">
-    <value>tsFilterList_Save</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Save.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
     <value>toolStripSeparator1</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Add.Name" xml:space="preserve">
-    <value>tsFilterList_Add</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Add.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Edit.Name" xml:space="preserve">
-    <value>tsFilterList_Edit</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Edit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
     <value>toolStripSeparator2</value>
@@ -15316,47 +15619,17 @@
   <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsFilterList_Delete.Name" xml:space="preserve">
-    <value>tsFilterList_Delete</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Delete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_CleanUp.Name" xml:space="preserve">
-    <value>tsFilterList_CleanUp</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_CleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_Send.Name" xml:space="preserve">
-    <value>cmsHexBox_Send</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_Send.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsHexBox_tss1.Name" xml:space="preserve">
     <value>cmsHexBox_tss1</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_tss1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsHexBox_SendList.Name" xml:space="preserve">
-    <value>cmsHexBox_SendList</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsHexBox_tss2.Name" xml:space="preserve">
     <value>cmsHexBox_tss2</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_tss2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
-    <value>cmsHexBox_FilterList</value>
-  </data>
-  <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cTime.Name" xml:space="preserve">
     <value>cTime</value>
@@ -15376,23 +15649,11 @@
   <data name="&gt;&gt;cContent.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsLogList_CleanUp.Name" xml:space="preserve">
-    <value>cmsLogList_CleanUp</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_CleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
     <value>toolStripSeparator5</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator5.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_ToExcel.Name" xml:space="preserve">
-    <value>cmsLogList_ToExcel</value>
-  </data>
-  <data name="&gt;&gt;cmsLogList_ToExcel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
     <value>tsslProcessName</value>
@@ -15466,17 +15727,137 @@
   <data name="&gt;&gt;niWPE.Type" xml:space="preserve">
     <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsIcon_Show.Name" xml:space="preserve">
-    <value>cmsIcon_Show</value>
-  </data>
-  <data name="&gt;&gt;cmsIcon_Show.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;tss17.Name" xml:space="preserve">
     <value>tss17</value>
   </data>
   <data name="&gt;&gt;tss17.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tss18.Name" xml:space="preserve">
+    <value>tss18</value>
+  </data>
+  <data name="&gt;&gt;tss18.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tss19.Name" xml:space="preserve">
+    <value>tss19</value>
+  </data>
+  <data name="&gt;&gt;tss19.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tss20.Name" xml:space="preserve">
+    <value>tss20</value>
+  </data>
+  <data name="&gt;&gt;tss20.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
+    <value>dataGridViewImageColumn1</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cTypeImg.Name" xml:space="preserve">
+    <value>cTypeImg</value>
+  </data>
+  <data name="&gt;&gt;cTypeImg.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_Send.Name" xml:space="preserve">
+    <value>cmsSocketList_Send</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_UseSocket.Name" xml:space="preserve">
+    <value>cmsSocketList_UseSocket</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_UseSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ShowSendList.Name" xml:space="preserve">
+    <value>cmsSocketList_ShowSendList</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ShowSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ToExcel.Name" xml:space="preserve">
+    <value>cmsSocketList_ToExcel</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_ToExcel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Load.Name" xml:space="preserve">
+    <value>tsFilterList_Load</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Load.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Save.Name" xml:space="preserve">
+    <value>tsFilterList_Save</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Add.Name" xml:space="preserve">
+    <value>tsFilterList_Add</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Add.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Edit.Name" xml:space="preserve">
+    <value>tsFilterList_Edit</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Edit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Delete.Name" xml:space="preserve">
+    <value>tsFilterList_Delete</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_CleanUp.Name" xml:space="preserve">
+    <value>tsFilterList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Send.Name" xml:space="preserve">
+    <value>cmsHexBox_Send</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Send.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_SendList.Name" xml:space="preserve">
+    <value>cmsHexBox_SendList</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
+    <value>cmsHexBox_FilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_CleanUp.Name" xml:space="preserve">
+    <value>cmsLogList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_ToExcel.Name" xml:space="preserve">
+    <value>cmsLogList_ToExcel</value>
+  </data>
+  <data name="&gt;&gt;cmsLogList_ToExcel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsIcon_Show.Name" xml:space="preserve">
+    <value>cmsIcon_Show</value>
+  </data>
+  <data name="&gt;&gt;cmsIcon_Show.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsIcon_StartHook.Name" xml:space="preserve">
     <value>cmsIcon_StartHook</value>
@@ -15490,23 +15871,11 @@
   <data name="&gt;&gt;cmsIcon_StopHook.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tss18.Name" xml:space="preserve">
-    <value>tss18</value>
-  </data>
-  <data name="&gt;&gt;tss18.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsIcon_CleanUp.Name" xml:space="preserve">
     <value>cmsIcon_CleanUp</value>
   </data>
   <data name="&gt;&gt;cmsIcon_CleanUp.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tss19.Name" xml:space="preserve">
-    <value>tss19</value>
-  </data>
-  <data name="&gt;&gt;tss19.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsIcon_ShowSendList.Name" xml:space="preserve">
     <value>cmsIcon_ShowSendList</value>
@@ -15514,23 +15883,29 @@
   <data name="&gt;&gt;cmsIcon_ShowSendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tss20.Name" xml:space="preserve">
-    <value>tss20</value>
-  </data>
-  <data name="&gt;&gt;tss20.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsIcon_Exit.Name" xml:space="preserve">
     <value>cmsIcon_Exit</value>
   </data>
   <data name="&gt;&gt;cmsIcon_Exit.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
-    <value>dataGridViewImageColumn1</value>
+  <data name="&gt;&gt;cmsSocketList_Comparison_A.Name" xml:space="preserve">
+    <value>cmsSocketList_Comparison_A</value>
   </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cmsSocketList_Comparison_A.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
+    <value>toolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_Comparison_B.Name" xml:space="preserve">
+    <value>cmsSocketList_Comparison_B</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_Comparison_B.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>
