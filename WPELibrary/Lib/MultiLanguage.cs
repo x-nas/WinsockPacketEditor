@@ -30,8 +30,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_18 = { "确定保存当前数据吗?", "Are you sure to save the current data?" };
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
         public static string[] MutiLan_20 = { "目标进程: ", "Process: " };
-        public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
-        public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
+        //public static string[] MutiLan_21 = { "初始化数据表完成", "Initializing data table completed" };
+        //public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
         public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
         public static string[] MutiLan_25 = { "查找内容", "Search for content" };
@@ -42,10 +42,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "已发送: {0} 字节  接收: {1} 字节", "Sent: {0} Bytes  Received: {1} Bytes" };
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
-        //public static string[] MutiLan_33 = { "过滤-IP地址, ", "Filter-IP Address, " };
-        //public static string[] MutiLan_34 = { "过滤-封包内容, ", "Filter-Socket Packet, " };
-        public static string[] MutiLan_35 = { "开始拦截！", "Start Intercepting!" };
-        public static string[] MutiLan_36 = { "结束拦截！", "Stop Interception!" };
+        public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
+        public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
+        //public static string[] MutiLan_35 = { "开始拦截！", "Start Intercepting!" };
+        //public static string[] MutiLan_36 = { "结束拦截！", "Stop Interception!" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         //public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };

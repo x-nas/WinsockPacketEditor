@@ -33,6 +33,7 @@ namespace WPELibrary
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -45,7 +46,6 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlALL = new System.Windows.Forms.ToolStripStatusLabel();
@@ -84,6 +84,7 @@ namespace WPELibrary
             this.tlWSARecvFrom = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlWSARecvFrom_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvSocketList = new System.Windows.Forms.DataGridView();
+            this.cTypeImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.cIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cPacketType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -92,21 +93,37 @@ namespace WPELibrary
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSocketList_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsSocketList_UseSocket = new System.Windows.Forms.ToolStripMenuItem();
             this.tss4 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsSocketList_ShowSendList = new System.Windows.Forms.ToolStripMenuItem();
             this.tss5 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsSocketList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsSocketList_Comparison_A = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsSocketList_Comparison_B = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSocketList_Set = new System.Windows.Forms.GroupBox();
+            this.tlpSocketList_Set = new System.Windows.Forms.TableLayoutPanel();
+            this.cbSocketList_Set_Roll = new System.Windows.Forms.CheckBox();
             this.gbFilterSet = new System.Windows.Forms.GroupBox();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterSet_Parameter = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpFilterSet_Parameter_PacketLen = new System.Windows.Forms.TableLayoutPanel();
+            this.nudCheck_Size_To = new System.Windows.Forms.NumericUpDown();
+            this.nudCheck_Size_From = new System.Windows.Forms.NumericUpDown();
+            this.lCheck_Size = new System.Windows.Forms.Label();
+            this.txtCheck_Packet = new System.Windows.Forms.TextBox();
             this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
             this.cbCheck_Socket = new System.Windows.Forms.CheckBox();
             this.cbCheck_IP = new System.Windows.Forms.CheckBox();
             this.txtCheck_Socket = new System.Windows.Forms.TextBox();
             this.txtCheck_IP = new System.Windows.Forms.TextBox();
-            this.txtCheck_Packet = new System.Windows.Forms.TextBox();
             this.cbCheck_Size = new System.Windows.Forms.CheckBox();
-            this.nudCheck_Size_From = new System.Windows.Forms.NumericUpDown();
-            this.nudCheck_Size_To = new System.Windows.Forms.NumericUpDown();
+            this.tlpFilterSet_Function = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterSet_Function_Show = new System.Windows.Forms.RadioButton();
+            this.rbFilterSet_Function_NotShow = new System.Windows.Forms.RadioButton();
             this.gbHookType = new System.Windows.Forms.GroupBox();
             this.tlpHookType = new System.Windows.Forms.TableLayoutPanel();
             this.cbHook_RecvFrom = new System.Windows.Forms.CheckBox();
@@ -119,12 +136,15 @@ namespace WPELibrary
             this.cbHook_WSARecvFrom = new System.Windows.Forms.CheckBox();
             this.gbHookButton_Search = new System.Windows.Forms.GroupBox();
             this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
-            this.pSearchSocketList = new System.Windows.Forms.Panel();
             this.rbFromIndex = new System.Windows.Forms.RadioButton();
             this.rbFromHead = new System.Windows.Forms.RadioButton();
             this.tlpSearchButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSearchNext = new System.Windows.Forms.Button();
+            this.bSearch = new System.Windows.Forms.Button();
             this.tlpHookButton = new System.Windows.Forms.TableLayoutPanel();
             this.tlpHookButton_Start = new System.Windows.Forms.TableLayoutPanel();
+            this.bStopHook = new System.Windows.Forms.Button();
+            this.bStartHook = new System.Windows.Forms.Button();
             this.bCleanUp = new System.Windows.Forms.Button();
             this.tlpInformation = new System.Windows.Forms.TableLayoutPanel();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
@@ -134,8 +154,14 @@ namespace WPELibrary
             this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tsFilterList = new System.Windows.Forms.ToolStrip();
+            this.tsFilterList_Load = new System.Windows.Forms.ToolStripButton();
+            this.tsFilterList_Save = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsFilterList_Add = new System.Windows.Forms.ToolStripButton();
+            this.tsFilterList_Edit = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsFilterList_Delete = new System.Windows.Forms.ToolStripButton();
+            this.tsFilterList_CleanUp = new System.Windows.Forms.ToolStripButton();
             this.tlpPacketInfo = new System.Windows.Forms.TableLayoutPanel();
             this.tcPacketInfo = new System.Windows.Forms.TabControl();
             this.tpPacketData = new System.Windows.Forms.TabPage();
@@ -143,15 +169,66 @@ namespace WPELibrary
             this.tlpHexBox = new System.Windows.Forms.TableLayoutPanel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsHexBox_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_FilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tpComparison = new System.Windows.Forms.TabPage();
+            this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
+            this.rtbComparison_Result = new System.Windows.Forms.RichTextBox();
+            this.rtbComparison_B = new System.Windows.Forms.RichTextBox();
+            this.rtbComparison_A = new System.Windows.Forms.RichTextBox();
+            this.tlpComparison_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.bComparison_Exchange = new System.Windows.Forms.Button();
+            this.bComparison_Clear = new System.Windows.Forms.Button();
+            this.bComparison = new System.Windows.Forms.Button();
+            this.lComparison_B = new System.Windows.Forms.Label();
+            this.lComparison_A = new System.Windows.Forms.Label();
+            this.tpEncoding = new System.Windows.Forms.TabPage();
+            this.tlpPacketInfo_Encoding = new System.Windows.Forms.TableLayoutPanel();
+            this.rtbPacketInfo_Encoding = new System.Windows.Forms.RichTextBox();
+            this.tlpPacketInfo_Encoding_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.bPacketInfo_Decoding = new System.Windows.Forms.Button();
+            this.bPacketInfo_Encoding = new System.Windows.Forms.Button();
+            this.tlpPacketInfo_Encoding_Result = new System.Windows.Forms.TableLayoutPanel();
+            this.txtPacketInfo_Encoding_ANSIUnicode = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_ANSIUnicode = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_ANSIUTF32 = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_ANSIUTF32 = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_ANSIUTF16 = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_ANSIASCII = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_Unicode = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_Unicode = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_UTF32 = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_UTF32 = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_UTF16 = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_ASCII = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_ANSIbase64 = new System.Windows.Forms.TextBox();
+            this.txtPacketInfo_Encoding_ANSIUTF8 = new System.Windows.Forms.TextBox();
+            this.txtPacketInfo_Encoding_ANSIUTF7 = new System.Windows.Forms.TextBox();
+            this.txtPacketInfo_Encoding_ANSIGBK = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_ANSIbase64 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_ANSIUTF8 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_ANSIUTF7 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_UTF7 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_ANSIGBK = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_base64 = new System.Windows.Forms.TextBox();
+            this.txtPacketInfo_Encoding_UTF8 = new System.Windows.Forms.TextBox();
+            this.txtPacketInfo_Encoding_UTF7 = new System.Windows.Forms.TextBox();
+            this.lPacketInfo_Encoding_base64 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_UTF8 = new System.Windows.Forms.Label();
+            this.lPacketInfo_Encoding_Bytes = new System.Windows.Forms.Label();
+            this.txtPacketInfo_Encoding_Bytes = new System.Windows.Forms.TextBox();
             this.tpSystemLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsLogList_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsLogList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
             this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -166,64 +243,35 @@ namespace WPELibrary
             this.bgwSearchPacketData = new System.ComponentModel.BackgroundWorker();
             this.niWPE = new System.Windows.Forms.NotifyIcon(this.components);
             this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.tss17 = new System.Windows.Forms.ToolStripSeparator();
-            this.tss18 = new System.Windows.Forms.ToolStripSeparator();
-            this.tss19 = new System.Windows.Forms.ToolStripSeparator();
-            this.tss20 = new System.Windows.Forms.ToolStripSeparator();
-            this.tpComparison = new System.Windows.Forms.TabPage();
-            this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
-            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.cTypeImg = new System.Windows.Forms.DataGridViewImageColumn();
-            this.cmsSocketList_Send = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSocketList_UseSocket = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSocketList_ShowSendList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSocketList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
-            this.bSearchNext = new System.Windows.Forms.Button();
-            this.bSearch = new System.Windows.Forms.Button();
-            this.bStopHook = new System.Windows.Forms.Button();
-            this.bStartHook = new System.Windows.Forms.Button();
-            this.tsFilterList_Load = new System.Windows.Forms.ToolStripButton();
-            this.tsFilterList_Save = new System.Windows.Forms.ToolStripButton();
-            this.tsFilterList_Add = new System.Windows.Forms.ToolStripButton();
-            this.tsFilterList_Edit = new System.Windows.Forms.ToolStripButton();
-            this.tsFilterList_Delete = new System.Windows.Forms.ToolStripButton();
-            this.tsFilterList_CleanUp = new System.Windows.Forms.ToolStripButton();
-            this.cmsHexBox_Send = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsHexBox_FilterList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsLogList_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsLogList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsIcon_Show = new System.Windows.Forms.ToolStripMenuItem();
+            this.tss17 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_StartHook = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsIcon_StopHook = new System.Windows.Forms.ToolStripMenuItem();
+            this.tss18 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tss19 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_ShowSendList = new System.Windows.Forms.ToolStripMenuItem();
+            this.tss20 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.lComparison_A = new System.Windows.Forms.Label();
-            this.lComparison_B = new System.Windows.Forms.Label();
-            this.tlpComparison_Button = new System.Windows.Forms.TableLayoutPanel();
-            this.bComparison = new System.Windows.Forms.Button();
-            this.rtbComparison_A = new System.Windows.Forms.RichTextBox();
-            this.rtbComparison_B = new System.Windows.Forms.RichTextBox();
-            this.rtbComparison_Result = new System.Windows.Forms.RichTextBox();
-            this.bComparison_Clear = new System.Windows.Forms.Button();
-            this.cmsSocketList_Comparison_A = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.cmsSocketList_Comparison_B = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.cmsSocketList.SuspendLayout();
             this.tlpParameter.SuspendLayout();
+            this.gbSocketList_Set.SuspendLayout();
+            this.tlpSocketList_Set.SuspendLayout();
             this.gbFilterSet.SuspendLayout();
             this.tlpFilterSet.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).BeginInit();
+            this.tlpFilterSet_Parameter.SuspendLayout();
+            this.tlpFilterSet_Parameter_PacketLen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).BeginInit();
+            this.tlpFilterSet_Function.SuspendLayout();
             this.gbHookType.SuspendLayout();
             this.tlpHookType.SuspendLayout();
             this.gbHookButton_Search.SuspendLayout();
             this.tlpSearch.SuspendLayout();
-            this.pSearchSocketList.SuspendLayout();
             this.tlpSearchButton.SuspendLayout();
             this.tlpHookButton.SuspendLayout();
             this.tlpHookButton_Start.SuspendLayout();
@@ -238,14 +286,18 @@ namespace WPELibrary
             this.tlpPacketData.SuspendLayout();
             this.tlpHexBox.SuspendLayout();
             this.cmsHexBox.SuspendLayout();
+            this.tpComparison.SuspendLayout();
+            this.tlpComparison.SuspendLayout();
+            this.tlpComparison_Button.SuspendLayout();
+            this.tpEncoding.SuspendLayout();
+            this.tlpPacketInfo_Encoding.SuspendLayout();
+            this.tlpPacketInfo_Encoding_Button.SuspendLayout();
+            this.tlpPacketInfo_Encoding_Result.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.cmsLogList.SuspendLayout();
             this.ssProcessInfo.SuspendLayout();
             this.cmsIcon.SuspendLayout();
-            this.tpComparison.SuspendLayout();
-            this.tlpComparison.SuspendLayout();
-            this.tlpComparison_Button.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSocketForm
@@ -526,6 +578,18 @@ namespace WPELibrary
             this.dgvSocketList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSocketList_CellFormatting);
             this.dgvSocketList.SelectionChanged += new System.EventHandler(this.dgvSocketInfo_SelectionChanged);
             // 
+            // cTypeImg
+            // 
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = null;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cTypeImg, "cTypeImg");
+            this.cTypeImg.Image = global::WPELibrary.Properties.Resources.Info16;
+            this.cTypeImg.Name = "cTypeImg";
+            this.cTypeImg.ReadOnly = true;
+            this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
             // cIndex
             // 
             this.cIndex.DataPropertyName = "PacketIndex";
@@ -613,29 +677,90 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsSocketList, "cmsSocketList");
             this.cmsSocketList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSocketList_ItemClicked);
             // 
+            // cmsSocketList_Send
+            // 
+            this.cmsSocketList_Send.Image = global::WPELibrary.Properties.Resources.sent;
+            resources.ApplyResources(this.cmsSocketList_Send, "cmsSocketList_Send");
+            this.cmsSocketList_Send.Name = "cmsSocketList_Send";
+            // 
             // cmsSocketList_tss1
             // 
             this.cmsSocketList_tss1.Name = "cmsSocketList_tss1";
             resources.ApplyResources(this.cmsSocketList_tss1, "cmsSocketList_tss1");
+            // 
+            // cmsSocketList_UseSocket
+            // 
+            this.cmsSocketList_UseSocket.Image = global::WPELibrary.Properties.Resources.Info16;
+            resources.ApplyResources(this.cmsSocketList_UseSocket, "cmsSocketList_UseSocket");
+            this.cmsSocketList_UseSocket.Name = "cmsSocketList_UseSocket";
             // 
             // tss4
             // 
             this.tss4.Name = "tss4";
             resources.ApplyResources(this.tss4, "tss4");
             // 
+            // cmsSocketList_ShowSendList
+            // 
+            this.cmsSocketList_ShowSendList.Image = global::WPELibrary.Properties.Resources.File_info16;
+            resources.ApplyResources(this.cmsSocketList_ShowSendList, "cmsSocketList_ShowSendList");
+            this.cmsSocketList_ShowSendList.Name = "cmsSocketList_ShowSendList";
+            // 
             // tss5
             // 
             this.tss5.Name = "tss5";
             resources.ApplyResources(this.tss5, "tss5");
             // 
+            // cmsSocketList_ToExcel
+            // 
+            this.cmsSocketList_ToExcel.Image = global::WPELibrary.Properties.Resources.saveHS;
+            resources.ApplyResources(this.cmsSocketList_ToExcel, "cmsSocketList_ToExcel");
+            this.cmsSocketList_ToExcel.Name = "cmsSocketList_ToExcel";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            // 
+            // cmsSocketList_Comparison_A
+            // 
+            this.cmsSocketList_Comparison_A.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            resources.ApplyResources(this.cmsSocketList_Comparison_A, "cmsSocketList_Comparison_A");
+            this.cmsSocketList_Comparison_A.Name = "cmsSocketList_Comparison_A";
+            // 
+            // cmsSocketList_Comparison_B
+            // 
+            this.cmsSocketList_Comparison_B.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            resources.ApplyResources(this.cmsSocketList_Comparison_B, "cmsSocketList_Comparison_B");
+            this.cmsSocketList_Comparison_B.Name = "cmsSocketList_Comparison_B";
+            // 
             // tlpParameter
             // 
             resources.ApplyResources(this.tlpParameter, "tlpParameter");
+            this.tlpParameter.Controls.Add(this.gbSocketList_Set, 2, 0);
             this.tlpParameter.Controls.Add(this.gbFilterSet, 0, 0);
             this.tlpParameter.Controls.Add(this.gbHookType, 1, 0);
-            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 2, 0);
-            this.tlpParameter.Controls.Add(this.tlpHookButton, 3, 0);
+            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 3, 0);
+            this.tlpParameter.Controls.Add(this.tlpHookButton, 4, 0);
             this.tlpParameter.Name = "tlpParameter";
+            // 
+            // gbSocketList_Set
+            // 
+            this.gbSocketList_Set.Controls.Add(this.tlpSocketList_Set);
+            resources.ApplyResources(this.gbSocketList_Set, "gbSocketList_Set");
+            this.gbSocketList_Set.Name = "gbSocketList_Set";
+            this.gbSocketList_Set.TabStop = false;
+            // 
+            // tlpSocketList_Set
+            // 
+            resources.ApplyResources(this.tlpSocketList_Set, "tlpSocketList_Set");
+            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_Set_Roll, 0, 0);
+            this.tlpSocketList_Set.Name = "tlpSocketList_Set";
+            // 
+            // cbSocketList_Set_Roll
+            // 
+            resources.ApplyResources(this.cbSocketList_Set_Roll, "cbSocketList_Set_Roll");
+            this.cbSocketList_Set_Roll.Name = "cbSocketList_Set_Roll";
+            this.cbSocketList_Set_Roll.UseVisualStyleBackColor = true;
             // 
             // gbFilterSet
             // 
@@ -647,16 +772,66 @@ namespace WPELibrary
             // tlpFilterSet
             // 
             resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Packet, 0, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Socket, 0, 0);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_IP, 0, 1);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_Socket, 1, 0);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_IP, 1, 1);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_Packet, 1, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Size, 3, 0);
-            this.tlpFilterSet.Controls.Add(this.nudCheck_Size_From, 3, 1);
-            this.tlpFilterSet.Controls.Add(this.nudCheck_Size_To, 3, 2);
+            this.tlpFilterSet.Controls.Add(this.tlpFilterSet_Parameter, 0, 1);
+            this.tlpFilterSet.Controls.Add(this.tlpFilterSet_Function, 0, 0);
             this.tlpFilterSet.Name = "tlpFilterSet";
+            // 
+            // tlpFilterSet_Parameter
+            // 
+            resources.ApplyResources(this.tlpFilterSet_Parameter, "tlpFilterSet_Parameter");
+            this.tlpFilterSet_Parameter.Controls.Add(this.tlpFilterSet_Parameter_PacketLen, 3, 1);
+            this.tlpFilterSet_Parameter.Controls.Add(this.txtCheck_Packet, 3, 0);
+            this.tlpFilterSet_Parameter.Controls.Add(this.cbCheck_Packet, 2, 0);
+            this.tlpFilterSet_Parameter.Controls.Add(this.cbCheck_Socket, 0, 0);
+            this.tlpFilterSet_Parameter.Controls.Add(this.cbCheck_IP, 0, 1);
+            this.tlpFilterSet_Parameter.Controls.Add(this.txtCheck_Socket, 1, 0);
+            this.tlpFilterSet_Parameter.Controls.Add(this.txtCheck_IP, 1, 1);
+            this.tlpFilterSet_Parameter.Controls.Add(this.cbCheck_Size, 2, 1);
+            this.tlpFilterSet_Parameter.Name = "tlpFilterSet_Parameter";
+            // 
+            // tlpFilterSet_Parameter_PacketLen
+            // 
+            resources.ApplyResources(this.tlpFilterSet_Parameter_PacketLen, "tlpFilterSet_Parameter_PacketLen");
+            this.tlpFilterSet_Parameter_PacketLen.Controls.Add(this.nudCheck_Size_To, 2, 0);
+            this.tlpFilterSet_Parameter_PacketLen.Controls.Add(this.nudCheck_Size_From, 0, 0);
+            this.tlpFilterSet_Parameter_PacketLen.Controls.Add(this.lCheck_Size, 1, 0);
+            this.tlpFilterSet_Parameter_PacketLen.Name = "tlpFilterSet_Parameter_PacketLen";
+            // 
+            // nudCheck_Size_To
+            // 
+            resources.ApplyResources(this.nudCheck_Size_To, "nudCheck_Size_To");
+            this.nudCheck_Size_To.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudCheck_Size_To.Name = "nudCheck_Size_To";
+            this.nudCheck_Size_To.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // nudCheck_Size_From
+            // 
+            resources.ApplyResources(this.nudCheck_Size_From, "nudCheck_Size_From");
+            this.nudCheck_Size_From.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudCheck_Size_From.Name = "nudCheck_Size_From";
+            // 
+            // lCheck_Size
+            // 
+            resources.ApplyResources(this.lCheck_Size, "lCheck_Size");
+            this.lCheck_Size.Name = "lCheck_Size";
+            // 
+            // txtCheck_Packet
+            // 
+            this.txtCheck_Packet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
+            this.txtCheck_Packet.Name = "txtCheck_Packet";
             // 
             // cbCheck_Packet
             // 
@@ -688,42 +863,32 @@ namespace WPELibrary
             resources.ApplyResources(this.txtCheck_IP, "txtCheck_IP");
             this.txtCheck_IP.Name = "txtCheck_IP";
             // 
-            // txtCheck_Packet
-            // 
-            this.txtCheck_Packet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
-            this.txtCheck_Packet.Name = "txtCheck_Packet";
-            // 
             // cbCheck_Size
             // 
             resources.ApplyResources(this.cbCheck_Size, "cbCheck_Size");
             this.cbCheck_Size.Name = "cbCheck_Size";
             this.cbCheck_Size.UseVisualStyleBackColor = true;
             // 
-            // nudCheck_Size_From
+            // tlpFilterSet_Function
             // 
-            resources.ApplyResources(this.nudCheck_Size_From, "nudCheck_Size_From");
-            this.nudCheck_Size_From.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudCheck_Size_From.Name = "nudCheck_Size_From";
+            resources.ApplyResources(this.tlpFilterSet_Function, "tlpFilterSet_Function");
+            this.tlpFilterSet_Function.Controls.Add(this.rbFilterSet_Function_Show, 1, 0);
+            this.tlpFilterSet_Function.Controls.Add(this.rbFilterSet_Function_NotShow, 0, 0);
+            this.tlpFilterSet_Function.Name = "tlpFilterSet_Function";
             // 
-            // nudCheck_Size_To
+            // rbFilterSet_Function_Show
             // 
-            resources.ApplyResources(this.nudCheck_Size_To, "nudCheck_Size_To");
-            this.nudCheck_Size_To.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudCheck_Size_To.Name = "nudCheck_Size_To";
-            this.nudCheck_Size_To.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
+            resources.ApplyResources(this.rbFilterSet_Function_Show, "rbFilterSet_Function_Show");
+            this.rbFilterSet_Function_Show.Name = "rbFilterSet_Function_Show";
+            this.rbFilterSet_Function_Show.UseVisualStyleBackColor = true;
+            // 
+            // rbFilterSet_Function_NotShow
+            // 
+            resources.ApplyResources(this.rbFilterSet_Function_NotShow, "rbFilterSet_Function_NotShow");
+            this.rbFilterSet_Function_NotShow.Checked = true;
+            this.rbFilterSet_Function_NotShow.Name = "rbFilterSet_Function_NotShow";
+            this.rbFilterSet_Function_NotShow.TabStop = true;
+            this.rbFilterSet_Function_NotShow.UseVisualStyleBackColor = true;
             // 
             // gbHookType
             // 
@@ -819,16 +984,10 @@ namespace WPELibrary
             // tlpSearch
             // 
             resources.ApplyResources(this.tlpSearch, "tlpSearch");
-            this.tlpSearch.Controls.Add(this.pSearchSocketList, 0, 0);
+            this.tlpSearch.Controls.Add(this.rbFromIndex, 0, 1);
+            this.tlpSearch.Controls.Add(this.rbFromHead, 0, 0);
             this.tlpSearch.Controls.Add(this.tlpSearchButton, 0, 2);
             this.tlpSearch.Name = "tlpSearch";
-            // 
-            // pSearchSocketList
-            // 
-            this.pSearchSocketList.Controls.Add(this.rbFromIndex);
-            this.pSearchSocketList.Controls.Add(this.rbFromHead);
-            resources.ApplyResources(this.pSearchSocketList, "pSearchSocketList");
-            this.pSearchSocketList.Name = "pSearchSocketList";
             // 
             // rbFromIndex
             // 
@@ -851,6 +1010,24 @@ namespace WPELibrary
             this.tlpSearchButton.Controls.Add(this.bSearch, 0, 0);
             this.tlpSearchButton.Name = "tlpSearchButton";
             // 
+            // bSearchNext
+            // 
+            resources.ApplyResources(this.bSearchNext, "bSearchNext");
+            this.bSearchNext.FlatAppearance.BorderSize = 0;
+            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.Search16;
+            this.bSearchNext.Name = "bSearchNext";
+            this.bSearchNext.UseVisualStyleBackColor = true;
+            this.bSearchNext.Click += new System.EventHandler(this.bSearchNext_Click);
+            // 
+            // bSearch
+            // 
+            resources.ApplyResources(this.bSearch, "bSearch");
+            this.bSearch.FlatAppearance.BorderSize = 0;
+            this.bSearch.Image = global::WPELibrary.Properties.Resources.File_info16;
+            this.bSearch.Name = "bSearch";
+            this.bSearch.UseVisualStyleBackColor = true;
+            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
+            // 
             // tlpHookButton
             // 
             resources.ApplyResources(this.tlpHookButton, "tlpHookButton");
@@ -864,6 +1041,22 @@ namespace WPELibrary
             this.tlpHookButton_Start.Controls.Add(this.bStopHook, 0, 2);
             this.tlpHookButton_Start.Controls.Add(this.bStartHook, 0, 0);
             this.tlpHookButton_Start.Name = "tlpHookButton_Start";
+            // 
+            // bStopHook
+            // 
+            resources.ApplyResources(this.bStopHook, "bStopHook");
+            this.bStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
+            this.bStopHook.Name = "bStopHook";
+            this.bStopHook.UseVisualStyleBackColor = true;
+            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
+            // 
+            // bStartHook
+            // 
+            resources.ApplyResources(this.bStartHook, "bStartHook");
+            this.bStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
+            this.bStartHook.Name = "bStartHook";
+            this.bStartHook.UseVisualStyleBackColor = true;
+            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
             // 
             // bCleanUp
             // 
@@ -961,15 +1154,69 @@ namespace WPELibrary
             this.tsFilterList_CleanUp});
             this.tsFilterList.Name = "tsFilterList";
             // 
+            // tsFilterList_Load
+            // 
+            this.tsFilterList_Load.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
+            resources.ApplyResources(this.tsFilterList_Load, "tsFilterList_Load");
+            this.tsFilterList_Load.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_Load.Name = "tsFilterList_Load";
+            this.tsFilterList_Load.Click += new System.EventHandler(this.tsFilterList_Load_Click);
+            // 
+            // tsFilterList_Save
+            // 
+            this.tsFilterList_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_Save.Image = global::WPELibrary.Properties.Resources.saveHS;
+            resources.ApplyResources(this.tsFilterList_Save, "tsFilterList_Save");
+            this.tsFilterList_Save.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_Save.Name = "tsFilterList_Save";
+            this.tsFilterList_Save.Click += new System.EventHandler(this.tsFilterList_Save_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
+            // tsFilterList_Add
+            // 
+            this.tsFilterList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_Add.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            resources.ApplyResources(this.tsFilterList_Add, "tsFilterList_Add");
+            this.tsFilterList_Add.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_Add.Name = "tsFilterList_Add";
+            this.tsFilterList_Add.Click += new System.EventHandler(this.tsFilterList_Add_Click);
+            // 
+            // tsFilterList_Edit
+            // 
+            this.tsFilterList_Edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_Edit.Image = global::WPELibrary.Properties.Resources.Edit24;
+            resources.ApplyResources(this.tsFilterList_Edit, "tsFilterList_Edit");
+            this.tsFilterList_Edit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_Edit.Name = "tsFilterList_Edit";
+            this.tsFilterList_Edit.Click += new System.EventHandler(this.tsFilterList_Edit_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
+            // tsFilterList_Delete
+            // 
+            this.tsFilterList_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_Delete.Image = global::WPELibrary.Properties.Resources.Delete216;
+            resources.ApplyResources(this.tsFilterList_Delete, "tsFilterList_Delete");
+            this.tsFilterList_Delete.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_Delete.Name = "tsFilterList_Delete";
+            this.tsFilterList_Delete.Click += new System.EventHandler(this.tsFilterList_Delete_Click);
+            // 
+            // tsFilterList_CleanUp
+            // 
+            this.tsFilterList_CleanUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsFilterList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            resources.ApplyResources(this.tsFilterList_CleanUp, "tsFilterList_CleanUp");
+            this.tsFilterList_CleanUp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.tsFilterList_CleanUp.Name = "tsFilterList_CleanUp";
+            this.tsFilterList_CleanUp.Click += new System.EventHandler(this.tsFilterList_CleanUp_Click);
             // 
             // tlpPacketInfo
             // 
@@ -981,6 +1228,7 @@ namespace WPELibrary
             // 
             this.tcPacketInfo.Controls.Add(this.tpPacketData);
             this.tcPacketInfo.Controls.Add(this.tpComparison);
+            this.tcPacketInfo.Controls.Add(this.tpEncoding);
             this.tcPacketInfo.Controls.Add(this.tpSystemLog);
             resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
             this.tcPacketInfo.Multiline = true;
@@ -1041,15 +1289,358 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsHexBox, "cmsHexBox");
             this.cmsHexBox.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsHexBox_ItemClicked);
             // 
+            // cmsHexBox_Send
+            // 
+            this.cmsHexBox_Send.Image = global::WPELibrary.Properties.Resources.sent;
+            resources.ApplyResources(this.cmsHexBox_Send, "cmsHexBox_Send");
+            this.cmsHexBox_Send.Name = "cmsHexBox_Send";
+            // 
             // cmsHexBox_tss1
             // 
             this.cmsHexBox_tss1.Name = "cmsHexBox_tss1";
             resources.ApplyResources(this.cmsHexBox_tss1, "cmsHexBox_tss1");
             // 
+            // cmsHexBox_SendList
+            // 
+            this.cmsHexBox_SendList.Image = global::WPELibrary.Properties.Resources.File_info16;
+            resources.ApplyResources(this.cmsHexBox_SendList, "cmsHexBox_SendList");
+            this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
+            // 
             // cmsHexBox_tss2
             // 
             this.cmsHexBox_tss2.Name = "cmsHexBox_tss2";
             resources.ApplyResources(this.cmsHexBox_tss2, "cmsHexBox_tss2");
+            // 
+            // cmsHexBox_FilterList
+            // 
+            this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.File_info16;
+            resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
+            this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Controls.Add(this.tlpComparison);
+            resources.ApplyResources(this.tpComparison, "tpComparison");
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.UseVisualStyleBackColor = true;
+            // 
+            // tlpComparison
+            // 
+            this.tlpComparison.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.tlpComparison, "tlpComparison");
+            this.tlpComparison.Controls.Add(this.rtbComparison_Result, 2, 1);
+            this.tlpComparison.Controls.Add(this.rtbComparison_B, 1, 1);
+            this.tlpComparison.Controls.Add(this.rtbComparison_A, 0, 1);
+            this.tlpComparison.Controls.Add(this.tlpComparison_Button, 2, 0);
+            this.tlpComparison.Controls.Add(this.lComparison_B, 1, 0);
+            this.tlpComparison.Controls.Add(this.lComparison_A, 0, 0);
+            this.tlpComparison.Name = "tlpComparison";
+            // 
+            // rtbComparison_Result
+            // 
+            this.rtbComparison_Result.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbComparison_Result, "rtbComparison_Result");
+            this.rtbComparison_Result.Name = "rtbComparison_Result";
+            // 
+            // rtbComparison_B
+            // 
+            this.rtbComparison_B.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbComparison_B, "rtbComparison_B");
+            this.rtbComparison_B.Name = "rtbComparison_B";
+            this.rtbComparison_B.TextChanged += new System.EventHandler(this.rtbComparison_B_TextChanged);
+            // 
+            // rtbComparison_A
+            // 
+            this.rtbComparison_A.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbComparison_A, "rtbComparison_A");
+            this.rtbComparison_A.Name = "rtbComparison_A";
+            this.rtbComparison_A.TextChanged += new System.EventHandler(this.rtbComparison_A_TextChanged);
+            // 
+            // tlpComparison_Button
+            // 
+            this.tlpComparison_Button.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.tlpComparison_Button, "tlpComparison_Button");
+            this.tlpComparison_Button.Controls.Add(this.bComparison_Exchange, 5, 0);
+            this.tlpComparison_Button.Controls.Add(this.bComparison_Clear, 1, 0);
+            this.tlpComparison_Button.Controls.Add(this.bComparison, 3, 0);
+            this.tlpComparison_Button.Name = "tlpComparison_Button";
+            // 
+            // bComparison_Exchange
+            // 
+            resources.ApplyResources(this.bComparison_Exchange, "bComparison_Exchange");
+            this.bComparison_Exchange.Name = "bComparison_Exchange";
+            this.bComparison_Exchange.UseVisualStyleBackColor = true;
+            this.bComparison_Exchange.Click += new System.EventHandler(this.bComparison_Exchange_Click);
+            // 
+            // bComparison_Clear
+            // 
+            resources.ApplyResources(this.bComparison_Clear, "bComparison_Clear");
+            this.bComparison_Clear.Name = "bComparison_Clear";
+            this.bComparison_Clear.UseVisualStyleBackColor = true;
+            this.bComparison_Clear.Click += new System.EventHandler(this.bComparison_Clear_Click);
+            // 
+            // bComparison
+            // 
+            resources.ApplyResources(this.bComparison, "bComparison");
+            this.bComparison.Name = "bComparison";
+            this.bComparison.UseVisualStyleBackColor = true;
+            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
+            // 
+            // lComparison_B
+            // 
+            resources.ApplyResources(this.lComparison_B, "lComparison_B");
+            this.lComparison_B.BackColor = System.Drawing.SystemColors.Control;
+            this.lComparison_B.Name = "lComparison_B";
+            // 
+            // lComparison_A
+            // 
+            resources.ApplyResources(this.lComparison_A, "lComparison_A");
+            this.lComparison_A.BackColor = System.Drawing.SystemColors.Control;
+            this.lComparison_A.Name = "lComparison_A";
+            // 
+            // tpEncoding
+            // 
+            this.tpEncoding.Controls.Add(this.tlpPacketInfo_Encoding);
+            resources.ApplyResources(this.tpEncoding, "tpEncoding");
+            this.tpEncoding.Name = "tpEncoding";
+            this.tpEncoding.UseVisualStyleBackColor = true;
+            // 
+            // tlpPacketInfo_Encoding
+            // 
+            this.tlpPacketInfo_Encoding.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.tlpPacketInfo_Encoding, "tlpPacketInfo_Encoding");
+            this.tlpPacketInfo_Encoding.Controls.Add(this.rtbPacketInfo_Encoding, 0, 0);
+            this.tlpPacketInfo_Encoding.Controls.Add(this.tlpPacketInfo_Encoding_Button, 1, 0);
+            this.tlpPacketInfo_Encoding.Controls.Add(this.tlpPacketInfo_Encoding_Result, 2, 0);
+            this.tlpPacketInfo_Encoding.Name = "tlpPacketInfo_Encoding";
+            // 
+            // rtbPacketInfo_Encoding
+            // 
+            this.rtbPacketInfo_Encoding.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbPacketInfo_Encoding, "rtbPacketInfo_Encoding");
+            this.rtbPacketInfo_Encoding.Name = "rtbPacketInfo_Encoding";
+            // 
+            // tlpPacketInfo_Encoding_Button
+            // 
+            resources.ApplyResources(this.tlpPacketInfo_Encoding_Button, "tlpPacketInfo_Encoding_Button");
+            this.tlpPacketInfo_Encoding_Button.Controls.Add(this.bPacketInfo_Decoding, 0, 3);
+            this.tlpPacketInfo_Encoding_Button.Controls.Add(this.bPacketInfo_Encoding, 0, 1);
+            this.tlpPacketInfo_Encoding_Button.Name = "tlpPacketInfo_Encoding_Button";
+            // 
+            // bPacketInfo_Decoding
+            // 
+            resources.ApplyResources(this.bPacketInfo_Decoding, "bPacketInfo_Decoding");
+            this.bPacketInfo_Decoding.Name = "bPacketInfo_Decoding";
+            this.bPacketInfo_Decoding.UseVisualStyleBackColor = true;
+            this.bPacketInfo_Decoding.Click += new System.EventHandler(this.bPacketInfo_Decoding_Click);
+            // 
+            // bPacketInfo_Encoding
+            // 
+            resources.ApplyResources(this.bPacketInfo_Encoding, "bPacketInfo_Encoding");
+            this.bPacketInfo_Encoding.Name = "bPacketInfo_Encoding";
+            this.bPacketInfo_Encoding.UseVisualStyleBackColor = true;
+            this.bPacketInfo_Encoding.Click += new System.EventHandler(this.bPacketInfo_Encoding_Click);
+            // 
+            // tlpPacketInfo_Encoding_Result
+            // 
+            resources.ApplyResources(this.tlpPacketInfo_Encoding_Result, "tlpPacketInfo_Encoding_Result");
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIUnicode, 3, 5);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIUnicode, 2, 5);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIUTF32, 3, 4);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIUTF32, 2, 4);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIUTF16, 3, 3);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIASCII, 2, 3);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_Unicode, 1, 5);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_Unicode, 0, 5);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_UTF32, 1, 4);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_UTF32, 0, 4);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_UTF16, 1, 3);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ASCII, 0, 3);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIbase64, 3, 6);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIUTF8, 3, 2);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIUTF7, 3, 1);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_ANSIGBK, 3, 0);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIbase64, 2, 6);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIUTF8, 2, 2);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIUTF7, 2, 1);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_UTF7, 0, 1);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_ANSIGBK, 2, 0);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_base64, 1, 6);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_UTF8, 1, 2);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_UTF7, 1, 1);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_base64, 0, 6);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_UTF8, 0, 2);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.lPacketInfo_Encoding_Bytes, 0, 0);
+            this.tlpPacketInfo_Encoding_Result.Controls.Add(this.txtPacketInfo_Encoding_Bytes, 1, 0);
+            this.tlpPacketInfo_Encoding_Result.Name = "tlpPacketInfo_Encoding_Result";
+            // 
+            // txtPacketInfo_Encoding_ANSIUnicode
+            // 
+            this.txtPacketInfo_Encoding_ANSIUnicode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUnicode, "txtPacketInfo_Encoding_ANSIUnicode");
+            this.txtPacketInfo_Encoding_ANSIUnicode.Name = "txtPacketInfo_Encoding_ANSIUnicode";
+            this.txtPacketInfo_Encoding_ANSIUnicode.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_ANSIUnicode
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIUnicode, "lPacketInfo_Encoding_ANSIUnicode");
+            this.lPacketInfo_Encoding_ANSIUnicode.Name = "lPacketInfo_Encoding_ANSIUnicode";
+            // 
+            // txtPacketInfo_Encoding_ANSIUTF32
+            // 
+            this.txtPacketInfo_Encoding_ANSIUTF32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF32, "txtPacketInfo_Encoding_ANSIUTF32");
+            this.txtPacketInfo_Encoding_ANSIUTF32.Name = "txtPacketInfo_Encoding_ANSIUTF32";
+            this.txtPacketInfo_Encoding_ANSIUTF32.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_ANSIUTF32
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIUTF32, "lPacketInfo_Encoding_ANSIUTF32");
+            this.lPacketInfo_Encoding_ANSIUTF32.Name = "lPacketInfo_Encoding_ANSIUTF32";
+            // 
+            // txtPacketInfo_Encoding_ANSIUTF16
+            // 
+            this.txtPacketInfo_Encoding_ANSIUTF16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF16, "txtPacketInfo_Encoding_ANSIUTF16");
+            this.txtPacketInfo_Encoding_ANSIUTF16.Name = "txtPacketInfo_Encoding_ANSIUTF16";
+            this.txtPacketInfo_Encoding_ANSIUTF16.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_ANSIASCII
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIASCII, "lPacketInfo_Encoding_ANSIASCII");
+            this.lPacketInfo_Encoding_ANSIASCII.Name = "lPacketInfo_Encoding_ANSIASCII";
+            // 
+            // txtPacketInfo_Encoding_Unicode
+            // 
+            this.txtPacketInfo_Encoding_Unicode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_Unicode, "txtPacketInfo_Encoding_Unicode");
+            this.txtPacketInfo_Encoding_Unicode.Name = "txtPacketInfo_Encoding_Unicode";
+            this.txtPacketInfo_Encoding_Unicode.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_Unicode
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_Unicode, "lPacketInfo_Encoding_Unicode");
+            this.lPacketInfo_Encoding_Unicode.Name = "lPacketInfo_Encoding_Unicode";
+            // 
+            // txtPacketInfo_Encoding_UTF32
+            // 
+            this.txtPacketInfo_Encoding_UTF32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_UTF32, "txtPacketInfo_Encoding_UTF32");
+            this.txtPacketInfo_Encoding_UTF32.Name = "txtPacketInfo_Encoding_UTF32";
+            this.txtPacketInfo_Encoding_UTF32.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_UTF32
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_UTF32, "lPacketInfo_Encoding_UTF32");
+            this.lPacketInfo_Encoding_UTF32.Name = "lPacketInfo_Encoding_UTF32";
+            // 
+            // txtPacketInfo_Encoding_UTF16
+            // 
+            this.txtPacketInfo_Encoding_UTF16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_UTF16, "txtPacketInfo_Encoding_UTF16");
+            this.txtPacketInfo_Encoding_UTF16.Name = "txtPacketInfo_Encoding_UTF16";
+            this.txtPacketInfo_Encoding_UTF16.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_ASCII
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ASCII, "lPacketInfo_Encoding_ASCII");
+            this.lPacketInfo_Encoding_ASCII.Name = "lPacketInfo_Encoding_ASCII";
+            // 
+            // txtPacketInfo_Encoding_ANSIbase64
+            // 
+            this.txtPacketInfo_Encoding_ANSIbase64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIbase64, "txtPacketInfo_Encoding_ANSIbase64");
+            this.txtPacketInfo_Encoding_ANSIbase64.Name = "txtPacketInfo_Encoding_ANSIbase64";
+            this.txtPacketInfo_Encoding_ANSIbase64.ReadOnly = true;
+            // 
+            // txtPacketInfo_Encoding_ANSIUTF8
+            // 
+            this.txtPacketInfo_Encoding_ANSIUTF8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF8, "txtPacketInfo_Encoding_ANSIUTF8");
+            this.txtPacketInfo_Encoding_ANSIUTF8.Name = "txtPacketInfo_Encoding_ANSIUTF8";
+            this.txtPacketInfo_Encoding_ANSIUTF8.ReadOnly = true;
+            // 
+            // txtPacketInfo_Encoding_ANSIUTF7
+            // 
+            this.txtPacketInfo_Encoding_ANSIUTF7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF7, "txtPacketInfo_Encoding_ANSIUTF7");
+            this.txtPacketInfo_Encoding_ANSIUTF7.Name = "txtPacketInfo_Encoding_ANSIUTF7";
+            this.txtPacketInfo_Encoding_ANSIUTF7.ReadOnly = true;
+            // 
+            // txtPacketInfo_Encoding_ANSIGBK
+            // 
+            this.txtPacketInfo_Encoding_ANSIGBK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIGBK, "txtPacketInfo_Encoding_ANSIGBK");
+            this.txtPacketInfo_Encoding_ANSIGBK.Name = "txtPacketInfo_Encoding_ANSIGBK";
+            this.txtPacketInfo_Encoding_ANSIGBK.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_ANSIbase64
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIbase64, "lPacketInfo_Encoding_ANSIbase64");
+            this.lPacketInfo_Encoding_ANSIbase64.Name = "lPacketInfo_Encoding_ANSIbase64";
+            // 
+            // lPacketInfo_Encoding_ANSIUTF8
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIUTF8, "lPacketInfo_Encoding_ANSIUTF8");
+            this.lPacketInfo_Encoding_ANSIUTF8.Name = "lPacketInfo_Encoding_ANSIUTF8";
+            // 
+            // lPacketInfo_Encoding_ANSIUTF7
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIUTF7, "lPacketInfo_Encoding_ANSIUTF7");
+            this.lPacketInfo_Encoding_ANSIUTF7.Name = "lPacketInfo_Encoding_ANSIUTF7";
+            // 
+            // lPacketInfo_Encoding_UTF7
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_UTF7, "lPacketInfo_Encoding_UTF7");
+            this.lPacketInfo_Encoding_UTF7.Name = "lPacketInfo_Encoding_UTF7";
+            // 
+            // lPacketInfo_Encoding_ANSIGBK
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_ANSIGBK, "lPacketInfo_Encoding_ANSIGBK");
+            this.lPacketInfo_Encoding_ANSIGBK.Name = "lPacketInfo_Encoding_ANSIGBK";
+            // 
+            // txtPacketInfo_Encoding_base64
+            // 
+            this.txtPacketInfo_Encoding_base64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_base64, "txtPacketInfo_Encoding_base64");
+            this.txtPacketInfo_Encoding_base64.Name = "txtPacketInfo_Encoding_base64";
+            this.txtPacketInfo_Encoding_base64.ReadOnly = true;
+            // 
+            // txtPacketInfo_Encoding_UTF8
+            // 
+            this.txtPacketInfo_Encoding_UTF8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_UTF8, "txtPacketInfo_Encoding_UTF8");
+            this.txtPacketInfo_Encoding_UTF8.Name = "txtPacketInfo_Encoding_UTF8";
+            this.txtPacketInfo_Encoding_UTF8.ReadOnly = true;
+            // 
+            // txtPacketInfo_Encoding_UTF7
+            // 
+            this.txtPacketInfo_Encoding_UTF7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_UTF7, "txtPacketInfo_Encoding_UTF7");
+            this.txtPacketInfo_Encoding_UTF7.Name = "txtPacketInfo_Encoding_UTF7";
+            this.txtPacketInfo_Encoding_UTF7.ReadOnly = true;
+            // 
+            // lPacketInfo_Encoding_base64
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_base64, "lPacketInfo_Encoding_base64");
+            this.lPacketInfo_Encoding_base64.Name = "lPacketInfo_Encoding_base64";
+            // 
+            // lPacketInfo_Encoding_UTF8
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_UTF8, "lPacketInfo_Encoding_UTF8");
+            this.lPacketInfo_Encoding_UTF8.Name = "lPacketInfo_Encoding_UTF8";
+            // 
+            // lPacketInfo_Encoding_Bytes
+            // 
+            resources.ApplyResources(this.lPacketInfo_Encoding_Bytes, "lPacketInfo_Encoding_Bytes");
+            this.lPacketInfo_Encoding_Bytes.Name = "lPacketInfo_Encoding_Bytes";
+            // 
+            // txtPacketInfo_Encoding_Bytes
+            // 
+            this.txtPacketInfo_Encoding_Bytes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtPacketInfo_Encoding_Bytes, "txtPacketInfo_Encoding_Bytes");
+            this.txtPacketInfo_Encoding_Bytes.Name = "txtPacketInfo_Encoding_Bytes";
+            this.txtPacketInfo_Encoding_Bytes.ReadOnly = true;
             // 
             // tpSystemLog
             // 
@@ -1126,10 +1717,22 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsLogList, "cmsLogList");
             this.cmsLogList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsLogList_ItemClicked);
             // 
+            // cmsLogList_CleanUp
+            // 
+            this.cmsLogList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            resources.ApplyResources(this.cmsLogList_CleanUp, "cmsLogList_CleanUp");
+            this.cmsLogList_CleanUp.Name = "cmsLogList_CleanUp";
+            // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
+            // 
+            // cmsLogList_ToExcel
+            // 
+            this.cmsLogList_ToExcel.Image = global::WPELibrary.Properties.Resources.saveHS;
+            resources.ApplyResources(this.cmsLogList_ToExcel, "cmsLogList_ToExcel");
+            this.cmsLogList_ToExcel.Name = "cmsLogList_ToExcel";
             // 
             // ssProcessInfo
             // 
@@ -1185,6 +1788,7 @@ namespace WPELibrary
             // bgwSocketList
             // 
             this.bgwSocketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketList_DoWork);
+            this.bgwSocketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSocketList_RunWorkerCompleted);
             // 
             // tSocketInfo
             // 
@@ -1223,216 +1827,16 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsIcon, "cmsIcon");
             this.cmsIcon.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsIcon_ItemClicked);
             // 
-            // tss17
-            // 
-            this.tss17.Name = "tss17";
-            resources.ApplyResources(this.tss17, "tss17");
-            // 
-            // tss18
-            // 
-            this.tss18.Name = "tss18";
-            resources.ApplyResources(this.tss18, "tss18");
-            // 
-            // tss19
-            // 
-            this.tss19.Name = "tss19";
-            resources.ApplyResources(this.tss19, "tss19");
-            // 
-            // tss20
-            // 
-            this.tss20.Name = "tss20";
-            resources.ApplyResources(this.tss20, "tss20");
-            // 
-            // tpComparison
-            // 
-            this.tpComparison.Controls.Add(this.tlpComparison);
-            resources.ApplyResources(this.tpComparison, "tpComparison");
-            this.tpComparison.Name = "tpComparison";
-            this.tpComparison.UseVisualStyleBackColor = true;
-            // 
-            // tlpComparison
-            // 
-            this.tlpComparison.BackColor = System.Drawing.SystemColors.Control;
-            resources.ApplyResources(this.tlpComparison, "tlpComparison");
-            this.tlpComparison.Controls.Add(this.rtbComparison_Result, 2, 1);
-            this.tlpComparison.Controls.Add(this.rtbComparison_B, 1, 1);
-            this.tlpComparison.Controls.Add(this.rtbComparison_A, 0, 1);
-            this.tlpComparison.Controls.Add(this.tlpComparison_Button, 2, 0);
-            this.tlpComparison.Controls.Add(this.lComparison_B, 1, 0);
-            this.tlpComparison.Controls.Add(this.lComparison_A, 0, 0);
-            this.tlpComparison.Name = "tlpComparison";
-            // 
-            // dataGridViewImageColumn1
-            // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.NullValue = null;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle15;
-            resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
-            this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
-            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
-            this.dataGridViewImageColumn1.ReadOnly = true;
-            this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // cTypeImg
-            // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = null;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cTypeImg, "cTypeImg");
-            this.cTypeImg.Image = global::WPELibrary.Properties.Resources.Info16;
-            this.cTypeImg.Name = "cTypeImg";
-            this.cTypeImg.ReadOnly = true;
-            this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // cmsSocketList_Send
-            // 
-            this.cmsSocketList_Send.Image = global::WPELibrary.Properties.Resources.sent;
-            resources.ApplyResources(this.cmsSocketList_Send, "cmsSocketList_Send");
-            this.cmsSocketList_Send.Name = "cmsSocketList_Send";
-            // 
-            // cmsSocketList_UseSocket
-            // 
-            this.cmsSocketList_UseSocket.Image = global::WPELibrary.Properties.Resources.Info16;
-            resources.ApplyResources(this.cmsSocketList_UseSocket, "cmsSocketList_UseSocket");
-            this.cmsSocketList_UseSocket.Name = "cmsSocketList_UseSocket";
-            // 
-            // cmsSocketList_ShowSendList
-            // 
-            this.cmsSocketList_ShowSendList.Image = global::WPELibrary.Properties.Resources.File_info16;
-            resources.ApplyResources(this.cmsSocketList_ShowSendList, "cmsSocketList_ShowSendList");
-            this.cmsSocketList_ShowSendList.Name = "cmsSocketList_ShowSendList";
-            // 
-            // cmsSocketList_ToExcel
-            // 
-            this.cmsSocketList_ToExcel.Image = global::WPELibrary.Properties.Resources.saveHS;
-            resources.ApplyResources(this.cmsSocketList_ToExcel, "cmsSocketList_ToExcel");
-            this.cmsSocketList_ToExcel.Name = "cmsSocketList_ToExcel";
-            // 
-            // bSearchNext
-            // 
-            resources.ApplyResources(this.bSearchNext, "bSearchNext");
-            this.bSearchNext.FlatAppearance.BorderSize = 0;
-            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.Search16;
-            this.bSearchNext.Name = "bSearchNext";
-            this.bSearchNext.UseVisualStyleBackColor = true;
-            this.bSearchNext.Click += new System.EventHandler(this.bSearchNext_Click);
-            // 
-            // bSearch
-            // 
-            resources.ApplyResources(this.bSearch, "bSearch");
-            this.bSearch.FlatAppearance.BorderSize = 0;
-            this.bSearch.Image = global::WPELibrary.Properties.Resources.File_info16;
-            this.bSearch.Name = "bSearch";
-            this.bSearch.UseVisualStyleBackColor = true;
-            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
-            // 
-            // bStopHook
-            // 
-            resources.ApplyResources(this.bStopHook, "bStopHook");
-            this.bStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
-            this.bStopHook.Name = "bStopHook";
-            this.bStopHook.UseVisualStyleBackColor = true;
-            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
-            // 
-            // bStartHook
-            // 
-            resources.ApplyResources(this.bStartHook, "bStartHook");
-            this.bStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
-            this.bStartHook.Name = "bStartHook";
-            this.bStartHook.UseVisualStyleBackColor = true;
-            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
-            // 
-            // tsFilterList_Load
-            // 
-            this.tsFilterList_Load.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
-            resources.ApplyResources(this.tsFilterList_Load, "tsFilterList_Load");
-            this.tsFilterList_Load.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_Load.Name = "tsFilterList_Load";
-            this.tsFilterList_Load.Click += new System.EventHandler(this.tsFilterList_Load_Click);
-            // 
-            // tsFilterList_Save
-            // 
-            this.tsFilterList_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Save.Image = global::WPELibrary.Properties.Resources.saveHS;
-            resources.ApplyResources(this.tsFilterList_Save, "tsFilterList_Save");
-            this.tsFilterList_Save.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_Save.Name = "tsFilterList_Save";
-            this.tsFilterList_Save.Click += new System.EventHandler(this.tsFilterList_Save_Click);
-            // 
-            // tsFilterList_Add
-            // 
-            this.tsFilterList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Add.Image = global::WPELibrary.Properties.Resources.PasteHS;
-            resources.ApplyResources(this.tsFilterList_Add, "tsFilterList_Add");
-            this.tsFilterList_Add.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_Add.Name = "tsFilterList_Add";
-            this.tsFilterList_Add.Click += new System.EventHandler(this.tsFilterList_Add_Click);
-            // 
-            // tsFilterList_Edit
-            // 
-            this.tsFilterList_Edit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Edit.Image = global::WPELibrary.Properties.Resources.Edit24;
-            resources.ApplyResources(this.tsFilterList_Edit, "tsFilterList_Edit");
-            this.tsFilterList_Edit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_Edit.Name = "tsFilterList_Edit";
-            this.tsFilterList_Edit.Click += new System.EventHandler(this.tsFilterList_Edit_Click);
-            // 
-            // tsFilterList_Delete
-            // 
-            this.tsFilterList_Delete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Delete.Image = global::WPELibrary.Properties.Resources.Delete216;
-            resources.ApplyResources(this.tsFilterList_Delete, "tsFilterList_Delete");
-            this.tsFilterList_Delete.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_Delete.Name = "tsFilterList_Delete";
-            this.tsFilterList_Delete.Click += new System.EventHandler(this.tsFilterList_Delete_Click);
-            // 
-            // tsFilterList_CleanUp
-            // 
-            this.tsFilterList_CleanUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
-            resources.ApplyResources(this.tsFilterList_CleanUp, "tsFilterList_CleanUp");
-            this.tsFilterList_CleanUp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.tsFilterList_CleanUp.Name = "tsFilterList_CleanUp";
-            this.tsFilterList_CleanUp.Click += new System.EventHandler(this.tsFilterList_CleanUp_Click);
-            // 
-            // cmsHexBox_Send
-            // 
-            this.cmsHexBox_Send.Image = global::WPELibrary.Properties.Resources.sent;
-            resources.ApplyResources(this.cmsHexBox_Send, "cmsHexBox_Send");
-            this.cmsHexBox_Send.Name = "cmsHexBox_Send";
-            // 
-            // cmsHexBox_SendList
-            // 
-            this.cmsHexBox_SendList.Image = global::WPELibrary.Properties.Resources.File_info16;
-            resources.ApplyResources(this.cmsHexBox_SendList, "cmsHexBox_SendList");
-            this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
-            // 
-            // cmsHexBox_FilterList
-            // 
-            this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.File_info16;
-            resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
-            this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
-            // 
-            // cmsLogList_CleanUp
-            // 
-            this.cmsLogList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
-            resources.ApplyResources(this.cmsLogList_CleanUp, "cmsLogList_CleanUp");
-            this.cmsLogList_CleanUp.Name = "cmsLogList_CleanUp";
-            // 
-            // cmsLogList_ToExcel
-            // 
-            this.cmsLogList_ToExcel.Image = global::WPELibrary.Properties.Resources.saveHS;
-            resources.ApplyResources(this.cmsLogList_ToExcel, "cmsLogList_ToExcel");
-            this.cmsLogList_ToExcel.Name = "cmsLogList_ToExcel";
-            // 
             // cmsIcon_Show
             // 
             this.cmsIcon_Show.Image = global::WPELibrary.Properties.Resources.Info16;
             resources.ApplyResources(this.cmsIcon_Show, "cmsIcon_Show");
             this.cmsIcon_Show.Name = "cmsIcon_Show";
+            // 
+            // tss17
+            // 
+            this.tss17.Name = "tss17";
+            resources.ApplyResources(this.tss17, "tss17");
             // 
             // cmsIcon_StartHook
             // 
@@ -1446,11 +1850,21 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsIcon_StopHook, "cmsIcon_StopHook");
             this.cmsIcon_StopHook.Name = "cmsIcon_StopHook";
             // 
+            // tss18
+            // 
+            this.tss18.Name = "tss18";
+            resources.ApplyResources(this.tss18, "tss18");
+            // 
             // cmsIcon_CleanUp
             // 
             this.cmsIcon_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
             resources.ApplyResources(this.cmsIcon_CleanUp, "cmsIcon_CleanUp");
             this.cmsIcon_CleanUp.Name = "cmsIcon_CleanUp";
+            // 
+            // tss19
+            // 
+            this.tss19.Name = "tss19";
+            resources.ApplyResources(this.tss19, "tss19");
             // 
             // cmsIcon_ShowSendList
             // 
@@ -1458,80 +1872,28 @@ namespace WPELibrary
             resources.ApplyResources(this.cmsIcon_ShowSendList, "cmsIcon_ShowSendList");
             this.cmsIcon_ShowSendList.Name = "cmsIcon_ShowSendList";
             // 
+            // tss20
+            // 
+            this.tss20.Name = "tss20";
+            resources.ApplyResources(this.tss20, "tss20");
+            // 
             // cmsIcon_Exit
             // 
             this.cmsIcon_Exit.Image = global::WPELibrary.Properties.Resources.logout24;
             this.cmsIcon_Exit.Name = "cmsIcon_Exit";
             resources.ApplyResources(this.cmsIcon_Exit, "cmsIcon_Exit");
             // 
-            // lComparison_A
+            // dataGridViewImageColumn1
             // 
-            resources.ApplyResources(this.lComparison_A, "lComparison_A");
-            this.lComparison_A.BackColor = System.Drawing.SystemColors.Control;
-            this.lComparison_A.Name = "lComparison_A";
-            // 
-            // lComparison_B
-            // 
-            resources.ApplyResources(this.lComparison_B, "lComparison_B");
-            this.lComparison_B.BackColor = System.Drawing.SystemColors.Control;
-            this.lComparison_B.Name = "lComparison_B";
-            // 
-            // tlpComparison_Button
-            // 
-            this.tlpComparison_Button.BackColor = System.Drawing.SystemColors.Control;
-            resources.ApplyResources(this.tlpComparison_Button, "tlpComparison_Button");
-            this.tlpComparison_Button.Controls.Add(this.bComparison_Clear, 1, 0);
-            this.tlpComparison_Button.Controls.Add(this.bComparison, 3, 0);
-            this.tlpComparison_Button.Name = "tlpComparison_Button";
-            // 
-            // bComparison
-            // 
-            resources.ApplyResources(this.bComparison, "bComparison");
-            this.bComparison.Name = "bComparison";
-            this.bComparison.UseVisualStyleBackColor = true;
-            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
-            // 
-            // rtbComparison_A
-            // 
-            this.rtbComparison_A.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbComparison_A, "rtbComparison_A");
-            this.rtbComparison_A.Name = "rtbComparison_A";
-            // 
-            // rtbComparison_B
-            // 
-            this.rtbComparison_B.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbComparison_B, "rtbComparison_B");
-            this.rtbComparison_B.Name = "rtbComparison_B";
-            // 
-            // rtbComparison_Result
-            // 
-            this.rtbComparison_Result.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbComparison_Result, "rtbComparison_Result");
-            this.rtbComparison_Result.Name = "rtbComparison_Result";
-            // 
-            // bComparison_Clear
-            // 
-            resources.ApplyResources(this.bComparison_Clear, "bComparison_Clear");
-            this.bComparison_Clear.Name = "bComparison_Clear";
-            this.bComparison_Clear.UseVisualStyleBackColor = true;
-            this.bComparison_Clear.Click += new System.EventHandler(this.bComparison_Clear_Click);
-            // 
-            // cmsSocketList_Comparison_A
-            // 
-            this.cmsSocketList_Comparison_A.Image = global::WPELibrary.Properties.Resources.CopyHS;
-            resources.ApplyResources(this.cmsSocketList_Comparison_A, "cmsSocketList_Comparison_A");
-            this.cmsSocketList_Comparison_A.Name = "cmsSocketList_Comparison_A";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
-            // 
-            // cmsSocketList_Comparison_B
-            // 
-            this.cmsSocketList_Comparison_B.Image = global::WPELibrary.Properties.Resources.CopyHS;
-            resources.ApplyResources(this.cmsSocketList_Comparison_B, "cmsSocketList_Comparison_B");
-            this.cmsSocketList_Comparison_B.Name = "cmsSocketList_Comparison_B";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.NullValue = null;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle15;
+            resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
+            this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
+            this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
+            this.dataGridViewImageColumn1.ReadOnly = true;
+            this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // Socket_Form
             // 
@@ -1549,18 +1911,25 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.cmsSocketList.ResumeLayout(false);
             this.tlpParameter.ResumeLayout(false);
+            this.gbSocketList_Set.ResumeLayout(false);
+            this.tlpSocketList_Set.ResumeLayout(false);
+            this.tlpSocketList_Set.PerformLayout();
             this.gbFilterSet.ResumeLayout(false);
             this.tlpFilterSet.ResumeLayout(false);
-            this.tlpFilterSet.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).EndInit();
+            this.tlpFilterSet_Parameter.ResumeLayout(false);
+            this.tlpFilterSet_Parameter.PerformLayout();
+            this.tlpFilterSet_Parameter_PacketLen.ResumeLayout(false);
+            this.tlpFilterSet_Parameter_PacketLen.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).EndInit();
+            this.tlpFilterSet_Function.ResumeLayout(false);
+            this.tlpFilterSet_Function.PerformLayout();
             this.gbHookType.ResumeLayout(false);
             this.tlpHookType.ResumeLayout(false);
             this.tlpHookType.PerformLayout();
             this.gbHookButton_Search.ResumeLayout(false);
             this.tlpSearch.ResumeLayout(false);
-            this.pSearchSocketList.ResumeLayout(false);
-            this.pSearchSocketList.PerformLayout();
+            this.tlpSearch.PerformLayout();
             this.tlpSearchButton.ResumeLayout(false);
             this.tlpHookButton.ResumeLayout(false);
             this.tlpHookButton_Start.ResumeLayout(false);
@@ -1577,16 +1946,21 @@ namespace WPELibrary
             this.tlpPacketData.ResumeLayout(false);
             this.tlpHexBox.ResumeLayout(false);
             this.cmsHexBox.ResumeLayout(false);
+            this.tpComparison.ResumeLayout(false);
+            this.tlpComparison.ResumeLayout(false);
+            this.tlpComparison.PerformLayout();
+            this.tlpComparison_Button.ResumeLayout(false);
+            this.tpEncoding.ResumeLayout(false);
+            this.tlpPacketInfo_Encoding.ResumeLayout(false);
+            this.tlpPacketInfo_Encoding_Button.ResumeLayout(false);
+            this.tlpPacketInfo_Encoding_Result.ResumeLayout(false);
+            this.tlpPacketInfo_Encoding_Result.PerformLayout();
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.cmsLogList.ResumeLayout(false);
             this.ssProcessInfo.ResumeLayout(false);
             this.ssProcessInfo.PerformLayout();
             this.cmsIcon.ResumeLayout(false);
-            this.tpComparison.ResumeLayout(false);
-            this.tlpComparison.ResumeLayout(false);
-            this.tlpComparison.PerformLayout();
-            this.tlpComparison_Button.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1606,25 +1980,11 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbHook_WSARecv;
         private System.Windows.Forms.CheckBox cbHook_WSARecvFrom;
         private System.Windows.Forms.GroupBox gbFilterSet;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
-        private System.Windows.Forms.CheckBox cbCheck_Packet;
-        private System.Windows.Forms.CheckBox cbCheck_Socket;
-        private System.Windows.Forms.CheckBox cbCheck_IP;
-        private System.Windows.Forms.TextBox txtCheck_Socket;
-        private System.Windows.Forms.TextBox txtCheck_IP;
-        private System.Windows.Forms.TextBox txtCheck_Packet;
-        private System.Windows.Forms.CheckBox cbCheck_Size;
-        private System.Windows.Forms.NumericUpDown nudCheck_Size_From;
-        private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
         private System.Windows.Forms.DataGridView dgvSocketList;
         private System.Windows.Forms.TableLayoutPanel tlpInformation;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo;
         private System.Windows.Forms.TabControl tcPacketInfo;
         private System.Windows.Forms.TabPage tpSystemLog;
-        private System.Windows.Forms.DataGridView dgvLogList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
         private System.Windows.Forms.ContextMenuStrip cmsSocketList;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_UseSocket;
         private System.Windows.Forms.ToolStripSeparator tss4;
@@ -1664,9 +2024,6 @@ namespace WPELibrary
         private System.Windows.Forms.Button bStopHook;
         private System.Windows.Forms.Button bStartHook;
         private System.Windows.Forms.TableLayoutPanel tlpSearch;
-        private System.Windows.Forms.Panel pSearchSocketList;
-        private System.Windows.Forms.RadioButton rbFromHead;
-        private System.Windows.Forms.RadioButton rbFromIndex;
         private System.Windows.Forms.TableLayoutPanel tlpSearchButton;
         private System.Windows.Forms.Button bSearchNext;
         private System.Windows.Forms.Button bSearch;
@@ -1757,5 +2114,66 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_Comparison_A;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_Comparison_B;
+        private System.Windows.Forms.Button bComparison_Exchange;
+        private System.Windows.Forms.DataGridView dgvLogList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
+        private System.Windows.Forms.TabPage tpEncoding;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding;
+        private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding_Button;
+        private System.Windows.Forms.Button bPacketInfo_Encoding;
+        private System.Windows.Forms.Button bPacketInfo_Decoding;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding_Result;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_UTF8;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_Bytes;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_base64;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_UTF8;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_UTF7;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_Bytes;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIbase64;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUTF8;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUTF7;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIGBK;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIbase64;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIUTF8;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIUTF7;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_UTF7;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIGBK;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_base64;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_UTF16;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ASCII;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_UTF32;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_UTF32;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_Unicode;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_Unicode;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUTF16;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIASCII;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIUTF32;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUTF32;
+        private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIUnicode;
+        private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUnicode;
+        private System.Windows.Forms.GroupBox gbSocketList_Set;
+        private System.Windows.Forms.TableLayoutPanel tlpSocketList_Set;
+        private System.Windows.Forms.CheckBox cbSocketList_Set_Roll;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_Parameter;
+        private System.Windows.Forms.CheckBox cbCheck_Socket;
+        private System.Windows.Forms.CheckBox cbCheck_IP;
+        private System.Windows.Forms.TextBox txtCheck_Socket;
+        private System.Windows.Forms.TextBox txtCheck_IP;
+        private System.Windows.Forms.CheckBox cbCheck_Size;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_Function;
+        private System.Windows.Forms.RadioButton rbFilterSet_Function_Show;
+        private System.Windows.Forms.RadioButton rbFilterSet_Function_NotShow;
+        private System.Windows.Forms.RadioButton rbFromHead;
+        private System.Windows.Forms.RadioButton rbFromIndex;
+        private System.Windows.Forms.TextBox txtCheck_Packet;
+        private System.Windows.Forms.CheckBox cbCheck_Packet;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_Parameter_PacketLen;
+        private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
+        private System.Windows.Forms.NumericUpDown nudCheck_Size_From;
+        private System.Windows.Forms.Label lCheck_Size;
     }
 }

@@ -102,113 +102,243 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Byte[]转字符串
+        #region//base64 编码，解码
+
+        public static string Base64_Encoding(string sString)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                byte[] bBuffer = StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sString);
+                sReturn = Convert.ToBase64String(bBuffer);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        public static string Base64_Decoding(string sString)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                byte[] bBuffer = Convert.FromBase64String(sString);
+                sReturn = Encoding.Default.GetString(bBuffer);
+            }
+            catch
+            {
+                //
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//字符串转byte[]
+
+        public static byte[] StringToBytes(Socket_Cache.SocketPacket.EncodingFormat efFormat, string sString)
+        {
+            byte[] bReturn = new byte[sString.Length];
+
+            try
+            {
+                switch (efFormat)
+                {
+                    case Socket_Cache.SocketPacket.EncodingFormat.Default:
+                        bReturn = Encoding.Default.GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.Hex:
+                        bReturn = Hex_To_Bytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.GBK:
+                        bReturn = Encoding.GetEncoding("GBK").GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.Unicode:
+                        bReturn = Encoding.Unicode.GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.UTF7:
+                        bReturn = Encoding.UTF7.GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.UTF8:
+                        bReturn = Encoding.UTF8.GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.UTF16:
+                        bReturn = Encoding.BigEndianUnicode.GetBytes(sString);
+                        break;
+
+                    case Socket_Cache.SocketPacket.EncodingFormat.UTF32:
+                        bReturn = Encoding.UTF32.GetBytes(sString);
+                        break;                
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//byte[]转字符串
 
         public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, byte[] buffer)
         {
             string sReturn = string.Empty;
 
             try
-            {                
-                switch (efFormat)
+            {
+                if (buffer.Length > 0)
                 {
-                    case Socket_Cache.SocketPacket.EncodingFormat.Char:
-                        char c = Convert.ToChar(buffer[0]);
-                        if ((int)c > 31)
-                        {
-                            sReturn = c.ToString();
-                        }
-                        else
-                        {
-                            sReturn = ".";
-                        }
-                        break;
+                    switch (efFormat)
+                    {
+                        case Socket_Cache.SocketPacket.EncodingFormat.Default:
+                            sReturn = Encoding.Default.GetString(buffer);
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Byte:
-                        sReturn = buffer[0].ToString();
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Char:
+                            char c = Convert.ToChar(buffer[0]);
+                            if ((int)c > 31)
+                            {
+                                sReturn = c.ToString();
+                            }
+                            else
+                            {
+                                sReturn = ".";
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Short:
-                        if (buffer.Length >= 2)
-                        {
-                            sReturn = BitConverter.ToInt16(buffer, 0).ToString();
-                        }
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Byte:
+                            sReturn = buffer[0].ToString();
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.UShort:
-                        if (buffer.Length >= 2)
-                        {
-                            sReturn = BitConverter.ToUInt16(buffer, 0).ToString();
-                        }
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Bytes:
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Int32:
-                        if (buffer.Length >= 4)
-                        {
-                            sReturn = BitConverter.ToInt32(buffer, 0).ToString();
-                        }
-                        break;
+                            foreach (byte b in buffer)
+                            {
+                                sReturn += Convert.ToInt32(b) + ",";
+                            }
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.UInt32:
-                        if (buffer.Length >= 4)
-                        {
-                            sReturn = BitConverter.ToUInt32(buffer, 0).ToString();
-                        }
-                        break;
+                            sReturn = sReturn.TrimEnd(',');
+                            sReturn = string.Format("{{{0}}}", sReturn);
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Int64:
-                        if (buffer.Length >= 8)
-                        {
-                            sReturn = BitConverter.ToInt64(buffer, 0).ToString();
-                        }
-                        break;
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.UInt64:
-                        if (buffer.Length >= 8)
-                        {
-                            sReturn = BitConverter.ToUInt64(buffer, 0).ToString();
-                        }
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Short:
+                            if (buffer.Length >= 2)
+                            {
+                                sReturn = BitConverter.ToInt16(buffer, 0).ToString();
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Float:
-                        if (buffer.Length >= 4)
-                        {
-                            sReturn = BitConverter.ToSingle(buffer, 0).ToString();
-                        }
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.UShort:
+                            if (buffer.Length >= 2)
+                            {
+                                sReturn = BitConverter.ToUInt16(buffer, 0).ToString();
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Double:
-                        if (buffer.Length >= 8)
-                        {
-                            sReturn = BitConverter.ToDouble(buffer, 0).ToString();
-                        }
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Int32:
+                            if (buffer.Length >= 4)
+                            {
+                                sReturn = BitConverter.ToInt32(buffer, 0).ToString();
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Bin:
-                        foreach (byte b in buffer)
-                        {
-                            string strTemp = Convert.ToString(b, 2);
-                            strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
-                            sReturn += strTemp + " ";
-                        }
-                        sReturn = sReturn.Trim();
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.UInt32:
+                            if (buffer.Length >= 4)
+                            {
+                                sReturn = BitConverter.ToUInt32(buffer, 0).ToString();
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.Hex:
-                        foreach (byte b in buffer)
-                        {
-                            sReturn += b.ToString("X2") + " ";
-                        }
-                        sReturn = sReturn.Trim();
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Int64:
+                            if (buffer.Length >= 8)
+                            {
+                                sReturn = BitConverter.ToInt64(buffer, 0).ToString();
+                            }
+                            break;
 
-                    case Socket_Cache.SocketPacket.EncodingFormat.UTF7:
-                        sReturn = Encoding.UTF7.GetString(buffer);
-                        break;                 
+                        case Socket_Cache.SocketPacket.EncodingFormat.UInt64:
+                            if (buffer.Length >= 8)
+                            {
+                                sReturn = BitConverter.ToUInt64(buffer, 0).ToString();
+                            }
+                            break;
 
-                    default:
-                        sReturn = Encoding.Default.GetString(buffer);
-                        break;
+                        case Socket_Cache.SocketPacket.EncodingFormat.Float:
+                            if (buffer.Length >= 4)
+                            {
+                                sReturn = BitConverter.ToSingle(buffer, 0).ToString();
+                            }
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.Double:
+                            if (buffer.Length >= 8)
+                            {
+                                sReturn = BitConverter.ToDouble(buffer, 0).ToString();
+                            }
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.Bin:
+                            foreach (byte b in buffer)
+                            {
+                                string strTemp = Convert.ToString(b, 2);
+                                strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
+                                sReturn += strTemp + " ";
+                            }
+                            sReturn = sReturn.Trim();
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.Hex:
+                            foreach (byte b in buffer)
+                            {
+                                sReturn += b.ToString("X2") + " ";
+                            }
+                            sReturn = sReturn.Trim();
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.GBK:
+                            sReturn = Encoding.GetEncoding("GBK").GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.Unicode:
+                            sReturn = Encoding.Unicode.GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.ASCII:
+                            sReturn = Encoding.ASCII.GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.UTF7:
+                            sReturn = Encoding.UTF7.GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.UTF8:
+                            sReturn = Encoding.UTF8.GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.UTF16:
+                            sReturn = Encoding.BigEndianUnicode.GetString(buffer);
+                            break;
+
+                        case Socket_Cache.SocketPacket.EncodingFormat.UTF32:
+                            sReturn = Encoding.UTF32.GetString(buffer);
+                            break;                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -223,7 +353,7 @@ namespace WPELibrary.Lib
 
         #region//十六进制字符串转byte[]
 
-        public static byte[] Hex_To_Byte(string hexString)
+        public static byte[] Hex_To_Bytes(string hexString)
         {
             try
             {
@@ -244,10 +374,8 @@ namespace WPELibrary.Lib
                 return returnBytes;
             }
             catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-
-                return null;
+            {  
+                return new byte[0];
             }
         }
 
@@ -639,36 +767,92 @@ namespace WPELibrary.Lib
                 //套接字
                 if (Socket_Cache.Check_Socket)
                 {
-                    if (ISFilter_BySocket(spi.PacketSocket))
-                    {                        
-                        return false;
+                    if (Socket_Cache.Check_NotShow)
+                    {
+                        if (ISFilter_BySocket(spi.PacketSocket))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (ISFilter_BySocket(spi.PacketSocket))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
 
                 //IP地址
                 if (Socket_Cache.Check_IP)
-                {                    
-                    if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
-                    {                        
-                        return false;
+                {
+                    if (Socket_Cache.Check_NotShow)
+                    {
+                        if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
+                        {
+                            return false;
+                        }
                     }
+                    else
+                    {
+                        if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }               
                 }
 
                 //封包内容
                 if (Socket_Cache.Check_Packet)
-                {  
-                    if (ISFilter_ByPacket(spi.PacketBuffer))
-                    {                        
-                        return false;
+                {
+                    if (Socket_Cache.Check_NotShow)
+                    {
+                        if (ISFilter_ByPacket(spi.PacketBuffer))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (ISFilter_ByPacket(spi.PacketBuffer))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
 
                 //封包大小
                 if (Socket_Cache.Check_Size)
                 {
-                    if (ISFilter_BySize(spi.PacketLen))
+                    if (Socket_Cache.Check_NotShow)
                     {
-                        return false;
+                        if (ISFilter_BySize(spi.PacketLen))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (ISFilter_BySize(spi.PacketLen))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                 }
             }
@@ -700,7 +884,7 @@ namespace WPELibrary.Lib
                         {
                             return true;
                         }                        
-                    }
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -729,7 +913,14 @@ namespace WPELibrary.Lib
                     {
                         if (sCheckIP.IndexOf(sIP) >= 0)
                         {
-                            return true;
+                            if (Socket_Cache.Check_NotShow)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }                    
@@ -778,6 +969,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//检测封包大小
+
         private static bool ISFilter_BySize(int iLength)
         {
             bool bReturn = false;
@@ -796,6 +988,7 @@ namespace WPELibrary.Lib
 
             return bReturn;
         }
+
         #endregion
 
         #endregion
@@ -1017,7 +1210,7 @@ namespace WPELibrary.Lib
                             int iResLen = int.Parse(ss[4]);
                             string sData = ss[5];
 
-                            byte[] bBuffer = Hex_To_Byte(sData);
+                            byte[] bBuffer = StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sData);
 
                             Socket_Cache.SendList.AddToSendList_New(iIndex, sNote, iSocket, sIPTo, sData, bBuffer);
 

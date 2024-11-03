@@ -16,7 +16,7 @@ namespace WPELibrary.Lib
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
         public static bool Hook_Send, Hook_SendTo, Hook_Recv, Hook_RecvFrom, Hook_WSASend, Hook_WSASendTo, Hook_WSARecv, Hook_WSARecvFrom;
-        public static bool Check_Size, Check_Socket, Check_IP, Check_Packet;
+        public static bool Check_NotShow, Check_Size, Check_Socket, Check_IP, Check_Packet;
         public static string txtCheck_Socket, txtCheck_IP, txtCheck_Packet;
         public static decimal txtCheck_Size_From, txtCheck_Size_To;
 
@@ -119,8 +119,10 @@ namespace WPELibrary.Lib
 
             public enum EncodingFormat
             {
+                Default,
                 Char,
                 Byte,
+                Bytes,
                 Short,
                 UShort,
                 Int32,
@@ -130,8 +132,15 @@ namespace WPELibrary.Lib
                 Float,
                 Double,
                 Bin,
+                GBK,
+                Unicode,
+                ASCII,
                 Hex,
                 UTF7,
+                UTF8,
+                UTF16,
+                UTF32,
+                Base64,
             }
 
             #endregion            

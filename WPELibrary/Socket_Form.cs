@@ -17,7 +17,7 @@ namespace WPELibrary
 
         private int Select_Index = -1;
         private int Search_Index = -1;
-        private bool bWakeUp = true;
+        private bool bWakeUp = true;        
 
         private Color col_Del = Color.Red;
         private Color col_Add = Color.Green;
@@ -191,19 +191,17 @@ namespace WPELibrary
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
-                                
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_21));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                Socket_Operation.ShowMessageBox(ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }            
         }
 
         #endregion
 
         #region//设置拦截参数
+
         private void SetSocketParam()
         {
             try
@@ -217,6 +215,7 @@ namespace WPELibrary
                 Socket_Cache.Hook_WSARecv = cbHook_WSARecv.Checked;
                 Socket_Cache.Hook_WSARecvFrom = cbHook_WSARecvFrom.Checked;
                 
+                Socket_Cache.Check_NotShow = rbFilterSet_Function_NotShow.Checked;
                 Socket_Cache.Check_Socket = cbCheck_Socket.Checked;
                 Socket_Cache.Check_IP = cbCheck_IP.Checked;
                 Socket_Cache.Check_Packet = cbCheck_Packet.Checked;
@@ -226,16 +225,15 @@ namespace WPELibrary
                 Socket_Cache.txtCheck_IP = this.txtCheck_IP.Text.Trim();
                 Socket_Cache.txtCheck_Packet = this.txtCheck_Packet.Text.Trim();
                 Socket_Cache.txtCheck_Size_From = this.nudCheck_Size_From.Value;
-                Socket_Cache.txtCheck_Size_To = this.nudCheck_Size_To.Value;                
-
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
+                Socket_Cache.txtCheck_Size_To = this.nudCheck_Size_To.Value;
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
-        #endregion
+
+        #endregion        
 
         #region//清空数据
 
@@ -335,8 +333,6 @@ namespace WPELibrary
                     RemoteHooking.WakeUpProcess();
                     this.bWakeUp = false;
                 }
-
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
@@ -365,8 +361,6 @@ namespace WPELibrary
                 this.cmsIcon_StopHook.Enabled = false;
 
                 ws.StopHook();
-
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36));
             }
             catch (Exception ex)
             {
@@ -410,9 +404,7 @@ namespace WPELibrary
                 this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
                 this.tlFilter_CNT.Text = iFilter_CNT.ToString();
                 this.tlIntercept_CNT.Text = iIntercept_CNT.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());                
-
-                this.dgvFilterList.Refresh();
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());
 
                 if (!bgwSocketList.IsBusy)
                 {
@@ -428,7 +420,7 @@ namespace WPELibrary
                     {
                         bgwLogList.RunWorkerAsync();
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -663,7 +655,25 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }      
+        }
+
+        private void bgwSocketList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if (this.cbSocketList_Set_Roll.Checked)
+                {
+                    if (dgvSocketList.Rows.Count > 0)
+                    {
+                        dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void Event_RecSocketPacket(Socket_PacketInfo spi)
         {
@@ -1018,7 +1028,33 @@ namespace WPELibrary
 
         #endregion
 
-        #region//文本比较
+        #region//文本对比
+
+        private void rtbComparison_A_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int iTextLen = rtbComparison_A.Text.Length;
+                this.lComparison_A.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_33), iTextLen);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void rtbComparison_B_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                int iTextLen = rtbComparison_B.Text.Length;
+                this.lComparison_B.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_34), iTextLen);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void bComparison_Click(object sender, EventArgs e)
         {
@@ -1180,9 +1216,125 @@ namespace WPELibrary
             }            
         }
 
+        private void bComparison_Exchange_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string sText_A = this.rtbComparison_A.Text;
+                string sText_B = this.rtbComparison_B.Text;
+
+                this.rtbComparison_A.Text = sText_B;
+                this.rtbComparison_B.Text = sText_A;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void bComparison_Clear_Click(object sender, EventArgs e)
         {
             this.CleanUp_Comparison();
+        }
+
+        #endregion
+
+        #region//编码转换
+
+        private void bPacketInfo_Encoding_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string sEncodingText = this.rtbPacketInfo_Encoding.Text;
+
+                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sEncodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.GBK, sEncodingText));
+
+                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
+
+                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
+
+                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
+
+                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
+
+                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
+
+                string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
+                string sANSI_Base64 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sBase64));
+
+                this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
+                this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
+                this.txtPacketInfo_Encoding_UTF7.Text = sUTF7;
+                this.txtPacketInfo_Encoding_ANSIUTF7.Text = sANSI_UTF7;
+                this.txtPacketInfo_Encoding_UTF8.Text = sUTF8;
+                this.txtPacketInfo_Encoding_ANSIUTF8.Text = sANSI_UTF8;
+                this.txtPacketInfo_Encoding_UTF16.Text = sUTF16;
+                this.txtPacketInfo_Encoding_ANSIUTF16.Text = sANSI_UTF16;
+                this.txtPacketInfo_Encoding_UTF32.Text = sUTF32;
+                this.txtPacketInfo_Encoding_ANSIUTF32.Text = sANSI_UTF32;
+                this.txtPacketInfo_Encoding_Unicode.Text = sUnicode;
+                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;                
+                this.txtPacketInfo_Encoding_base64.Text = sBase64;
+                this.txtPacketInfo_Encoding_ANSIbase64.Text = sANSI_Base64;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bPacketInfo_Decoding_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string sDecodingText = this.rtbPacketInfo_Encoding.Text;
+
+                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.GBK, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+
+                string sBase64 = Socket_Operation.Base64_Decoding(sDecodingText);
+                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText)));
+
+                this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
+                this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
+                this.txtPacketInfo_Encoding_UTF7.Text = sUTF7;
+                this.txtPacketInfo_Encoding_ANSIUTF7.Text = sANSI_UTF7;
+                this.txtPacketInfo_Encoding_UTF8.Text = sUTF8;
+                this.txtPacketInfo_Encoding_ANSIUTF8.Text = sANSI_UTF8;
+                this.txtPacketInfo_Encoding_UTF16.Text = sUTF16;
+                this.txtPacketInfo_Encoding_ANSIUTF16.Text = sANSI_UTF16;
+                this.txtPacketInfo_Encoding_UTF32.Text = sUTF32;
+                this.txtPacketInfo_Encoding_ANSIUTF32.Text = sANSI_UTF32;
+                this.txtPacketInfo_Encoding_Unicode.Text = sUnicode;
+                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;               
+                this.txtPacketInfo_Encoding_base64.Text = sBase64;
+                this.txtPacketInfo_Encoding_ANSIbase64.Text = sANSI_Base64;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
