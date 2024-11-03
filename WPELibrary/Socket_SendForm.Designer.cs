@@ -686,7 +686,7 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.nudSendSocket_Socket, "nudSendSocket_Socket");
             this.nudSendSocket_Socket.Maximum = new decimal(new int[] {
-            9999,
+            65535,
             0,
             0,
             0});
@@ -744,7 +744,7 @@ namespace WPELibrary
             0,
             0});
             this.nudSendType_Interval.Maximum = new decimal(new int[] {
-            100000,
+            99999,
             0,
             0,
             0});
@@ -759,7 +759,7 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.nudSendType_Times, "nudSendType_Times");
             this.nudSendType_Times.Maximum = new decimal(new int[] {
-            999999,
+            99999,
             0,
             0,
             0});
