@@ -936,14 +936,7 @@ namespace WPELibrary.Lib
                     {
                         if (sCheckIP.IndexOf(sIP) >= 0)
                         {
-                            if (Socket_Cache.Check_NotShow)
-                            {
-                                return true;
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            return true;
                         }
                     }
                 }                    

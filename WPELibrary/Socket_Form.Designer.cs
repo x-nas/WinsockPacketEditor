@@ -192,6 +192,7 @@ namespace WPELibrary
             this.tlpPacketInfo_XOR = new System.Windows.Forms.TableLayoutPanel();
             this.hbXOR_To = new Be.Windows.Forms.HexBox();
             this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.lXOR2 = new System.Windows.Forms.Label();
             this.bXOR_Clear = new System.Windows.Forms.Button();
             this.bXOR = new System.Windows.Forms.Button();
             this.lXOR = new System.Windows.Forms.Label();
@@ -266,7 +267,6 @@ namespace WPELibrary
             this.tss20 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.lXOR2 = new System.Windows.Forms.Label();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -1482,6 +1482,11 @@ namespace WPELibrary
             this.tlpPacketInfo_XOR_Button.Controls.Add(this.txtXOR, 2, 0);
             this.tlpPacketInfo_XOR_Button.Name = "tlpPacketInfo_XOR_Button";
             // 
+            // lXOR2
+            // 
+            resources.ApplyResources(this.lXOR2, "lXOR2");
+            this.lXOR2.Name = "lXOR2";
+            // 
             // bXOR_Clear
             // 
             resources.ApplyResources(this.bXOR_Clear, "bXOR_Clear");
@@ -2039,11 +2044,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // lXOR2
-            // 
-            resources.ApplyResources(this.lXOR2, "lXOR2");
-            this.lXOR2.Name = "lXOR2";
             // 
             // Socket_Form
             // 
