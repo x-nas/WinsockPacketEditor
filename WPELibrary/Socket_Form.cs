@@ -34,7 +34,9 @@ namespace WPELibrary
                 InitializeComponent();
 
                 this.InitSocketForm();
-                this.InitSocketDGV();                
+                this.InitSocketDGV();
+                this.InitHexBox();
+
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(Socket_Cache.FilterList.Filter_MaxNum);                
             }
@@ -168,7 +170,20 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
+        private void InitHexBox()
+        {
+            try
+            {  
+                this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
+                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
 
         #endregion
 
@@ -245,8 +260,7 @@ namespace WPELibrary
         private void CleanUp_MainForm()
         {
             this.CleanUp_SocketList();
-            this.CleanUp_HexBox();
-            this.CleanUp_Comparison();
+            this.CleanUp_HexBox();         
         }        
 
         private void CleanUp_SocketList()
@@ -302,7 +316,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
@@ -479,6 +493,18 @@ namespace WPELibrary
 
                             Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBuffer);
                         }
+
+                        break;
+
+                    case "cmsHexBox_CopyHex":
+
+                        this.hbPacketData.CopyHex();                     
+
+                        break;
+
+                    case "cmsHexBox_CopyText":
+
+                        this.hbPacketData.Copy();                     
 
                         break;
                 }
@@ -1335,6 +1361,87 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//异或计算
+
+        private void bXOR_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+
+                DynamicByteProvider dbpXOR_From = this.hbXOR_From.ByteProvider as DynamicByteProvider;
+                byte[] blXOR_From = dbpXOR_From.Bytes.ToArray();
+
+                string sXOR_Value = this.txtXOR.Text.Trim();
+                string[] slXOR_Value = sXOR_Value.Split(' ');
+
+                if (blXOR_From != null && blXOR_From.Length > 0 && !string.IsNullOrEmpty(sXOR_Value) && slXOR_Value.Length > 0)
+                {
+                    int j = 0;
+
+                    byte[] blXOR_To = new byte[blXOR_From.Length];
+
+                    for (int i = 0; i < blXOR_From.Length; i++)
+                    {
+                        if (j == slXOR_Value.Length)
+                        {
+                            j = 0;
+                        }
+
+                        byte bXOR_From = blXOR_From[i];
+
+                        byte bXOR_Value = new byte();
+
+                        bool bOK = Byte.TryParse(slXOR_Value[j], System.Globalization.NumberStyles.HexNumber, null, out bXOR_Value);
+
+                        if (bOK)
+                        {
+                            blXOR_To[i] = (byte)(bXOR_From ^ bXOR_Value);
+
+                            j++;
+                        }
+                        else
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_21));
+                            return;
+                        }
+                    }
+
+                    DynamicByteProvider dbpXOR_To = new DynamicByteProvider(blXOR_To);
+                    hbXOR_To.ByteProvider = dbpXOR_To;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtXOR_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                char keyChar = e.KeyChar;
+
+                if (!char.IsControl(keyChar) && !Socket_Operation.IsHexChar(keyChar) && keyChar != ' ')
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bXOR_Clear_Click(object sender, EventArgs e)
+        {
+            this.InitHexBox();
+            this.txtXOR.Clear();
         }
 
         #endregion

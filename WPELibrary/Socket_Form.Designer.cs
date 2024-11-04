@@ -174,6 +174,9 @@ namespace WPELibrary
             this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_FilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsHexBox_tss3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_CopyHex = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsHexBox_CopyText = new System.Windows.Forms.ToolStripMenuItem();
             this.tpComparison = new System.Windows.Forms.TabPage();
             this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
             this.rtbComparison_Result = new System.Windows.Forms.RichTextBox();
@@ -185,6 +188,15 @@ namespace WPELibrary
             this.bComparison = new System.Windows.Forms.Button();
             this.lComparison_B = new System.Windows.Forms.Label();
             this.lComparison_A = new System.Windows.Forms.Label();
+            this.tpXOR = new System.Windows.Forms.TabPage();
+            this.tlpPacketInfo_XOR = new System.Windows.Forms.TableLayoutPanel();
+            this.hbXOR_To = new Be.Windows.Forms.HexBox();
+            this.tlpPacketInfo_XOR_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.bXOR_Clear = new System.Windows.Forms.Button();
+            this.bXOR = new System.Windows.Forms.Button();
+            this.lXOR = new System.Windows.Forms.Label();
+            this.txtXOR = new System.Windows.Forms.TextBox();
+            this.hbXOR_From = new Be.Windows.Forms.HexBox();
             this.tpEncoding = new System.Windows.Forms.TabPage();
             this.tlpPacketInfo_Encoding = new System.Windows.Forms.TableLayoutPanel();
             this.rtbPacketInfo_Encoding = new System.Windows.Forms.RichTextBox();
@@ -254,6 +266,7 @@ namespace WPELibrary
             this.tss20 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.lXOR2 = new System.Windows.Forms.Label();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -289,6 +302,9 @@ namespace WPELibrary
             this.tpComparison.SuspendLayout();
             this.tlpComparison.SuspendLayout();
             this.tlpComparison_Button.SuspendLayout();
+            this.tpXOR.SuspendLayout();
+            this.tlpPacketInfo_XOR.SuspendLayout();
+            this.tlpPacketInfo_XOR_Button.SuspendLayout();
             this.tpEncoding.SuspendLayout();
             this.tlpPacketInfo_Encoding.SuspendLayout();
             this.tlpPacketInfo_Encoding_Button.SuspendLayout();
@@ -1228,6 +1244,7 @@ namespace WPELibrary
             // 
             this.tcPacketInfo.Controls.Add(this.tpPacketData);
             this.tcPacketInfo.Controls.Add(this.tpComparison);
+            this.tcPacketInfo.Controls.Add(this.tpXOR);
             this.tcPacketInfo.Controls.Add(this.tpEncoding);
             this.tcPacketInfo.Controls.Add(this.tpSystemLog);
             resources.ApplyResources(this.tcPacketInfo, "tcPacketInfo");
@@ -1284,7 +1301,10 @@ namespace WPELibrary
             this.cmsHexBox_tss1,
             this.cmsHexBox_SendList,
             this.cmsHexBox_tss2,
-            this.cmsHexBox_FilterList});
+            this.cmsHexBox_FilterList,
+            this.cmsHexBox_tss3,
+            this.cmsHexBox_CopyHex,
+            this.cmsHexBox_CopyText});
             this.cmsHexBox.Name = "cmsHexBox";
             resources.ApplyResources(this.cmsHexBox, "cmsHexBox");
             this.cmsHexBox.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsHexBox_ItemClicked);
@@ -1316,6 +1336,23 @@ namespace WPELibrary
             this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.File_info16;
             resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
             this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
+            // 
+            // cmsHexBox_tss3
+            // 
+            this.cmsHexBox_tss3.Name = "cmsHexBox_tss3";
+            resources.ApplyResources(this.cmsHexBox_tss3, "cmsHexBox_tss3");
+            // 
+            // cmsHexBox_CopyHex
+            // 
+            this.cmsHexBox_CopyHex.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.cmsHexBox_CopyHex.Name = "cmsHexBox_CopyHex";
+            resources.ApplyResources(this.cmsHexBox_CopyHex, "cmsHexBox_CopyHex");
+            // 
+            // cmsHexBox_CopyText
+            // 
+            this.cmsHexBox_CopyText.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.cmsHexBox_CopyText.Name = "cmsHexBox_CopyText";
+            resources.ApplyResources(this.cmsHexBox_CopyText, "cmsHexBox_CopyText");
             // 
             // tpComparison
             // 
@@ -1398,6 +1435,100 @@ namespace WPELibrary
             this.lComparison_A.BackColor = System.Drawing.SystemColors.Control;
             this.lComparison_A.Name = "lComparison_A";
             // 
+            // tpXOR
+            // 
+            this.tpXOR.Controls.Add(this.tlpPacketInfo_XOR);
+            resources.ApplyResources(this.tpXOR, "tpXOR");
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.UseVisualStyleBackColor = true;
+            // 
+            // tlpPacketInfo_XOR
+            // 
+            this.tlpPacketInfo_XOR.BackColor = System.Drawing.SystemColors.Control;
+            resources.ApplyResources(this.tlpPacketInfo_XOR, "tlpPacketInfo_XOR");
+            this.tlpPacketInfo_XOR.Controls.Add(this.hbXOR_To, 0, 2);
+            this.tlpPacketInfo_XOR.Controls.Add(this.tlpPacketInfo_XOR_Button, 0, 1);
+            this.tlpPacketInfo_XOR.Controls.Add(this.hbXOR_From, 0, 0);
+            this.tlpPacketInfo_XOR.Name = "tlpPacketInfo_XOR";
+            // 
+            // hbXOR_To
+            // 
+            this.hbXOR_To.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            // 
+            // 
+            // 
+            this.hbXOR_To.BuiltInContextMenu.CopyMenuItemImage = global::WPELibrary.Properties.Resources.CopyHS;
+            this.hbXOR_To.BuiltInContextMenu.CopyMenuItemText = resources.GetString("hbXOR_To.BuiltInContextMenu.CopyMenuItemText");
+            this.hbXOR_To.BuiltInContextMenu.CutMenuItemImage = global::WPELibrary.Properties.Resources.CutHS;
+            this.hbXOR_To.BuiltInContextMenu.CutMenuItemText = resources.GetString("hbXOR_To.BuiltInContextMenu.CutMenuItemText");
+            this.hbXOR_To.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.PasteHS;
+            this.hbXOR_To.BuiltInContextMenu.PasteMenuItemText = resources.GetString("hbXOR_To.BuiltInContextMenu.PasteMenuItemText");
+            this.hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText");
+            this.hbXOR_To.ColumnInfoVisible = true;
+            resources.ApplyResources(this.hbXOR_To, "hbXOR_To");
+            this.hbXOR_To.LineInfoVisible = true;
+            this.hbXOR_To.Name = "hbXOR_To";
+            this.hbXOR_To.ReadOnly = true;
+            this.hbXOR_To.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_To.VScrollBarVisible = true;
+            // 
+            // tlpPacketInfo_XOR_Button
+            // 
+            resources.ApplyResources(this.tlpPacketInfo_XOR_Button, "tlpPacketInfo_XOR_Button");
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.lXOR2, 3, 0);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR_Clear, 6, 0);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.bXOR, 4, 0);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.lXOR, 1, 0);
+            this.tlpPacketInfo_XOR_Button.Controls.Add(this.txtXOR, 2, 0);
+            this.tlpPacketInfo_XOR_Button.Name = "tlpPacketInfo_XOR_Button";
+            // 
+            // bXOR_Clear
+            // 
+            resources.ApplyResources(this.bXOR_Clear, "bXOR_Clear");
+            this.bXOR_Clear.Name = "bXOR_Clear";
+            this.bXOR_Clear.UseVisualStyleBackColor = true;
+            this.bXOR_Clear.Click += new System.EventHandler(this.bXOR_Clear_Click);
+            // 
+            // bXOR
+            // 
+            resources.ApplyResources(this.bXOR, "bXOR");
+            this.bXOR.Name = "bXOR";
+            this.bXOR.UseVisualStyleBackColor = true;
+            this.bXOR.Click += new System.EventHandler(this.bXOR_Click);
+            // 
+            // lXOR
+            // 
+            resources.ApplyResources(this.lXOR, "lXOR");
+            this.lXOR.Name = "lXOR";
+            // 
+            // txtXOR
+            // 
+            this.txtXOR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtXOR.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            resources.ApplyResources(this.txtXOR, "txtXOR");
+            this.txtXOR.Name = "txtXOR";
+            this.txtXOR.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtXOR_KeyPress);
+            // 
+            // hbXOR_From
+            // 
+            this.hbXOR_From.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            // 
+            // 
+            // 
+            this.hbXOR_From.BuiltInContextMenu.CopyMenuItemImage = global::WPELibrary.Properties.Resources.CopyHS;
+            this.hbXOR_From.BuiltInContextMenu.CopyMenuItemText = resources.GetString("hbXOR_From.BuiltInContextMenu.CopyMenuItemText");
+            this.hbXOR_From.BuiltInContextMenu.CutMenuItemImage = global::WPELibrary.Properties.Resources.CutHS;
+            this.hbXOR_From.BuiltInContextMenu.CutMenuItemText = resources.GetString("hbXOR_From.BuiltInContextMenu.CutMenuItemText");
+            this.hbXOR_From.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.PasteHS;
+            this.hbXOR_From.BuiltInContextMenu.PasteMenuItemText = resources.GetString("hbXOR_From.BuiltInContextMenu.PasteMenuItemText");
+            this.hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText");
+            this.hbXOR_From.ColumnInfoVisible = true;
+            resources.ApplyResources(this.hbXOR_From, "hbXOR_From");
+            this.hbXOR_From.LineInfoVisible = true;
+            this.hbXOR_From.Name = "hbXOR_From";
+            this.hbXOR_From.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbXOR_From.VScrollBarVisible = true;
+            // 
             // tpEncoding
             // 
             this.tpEncoding.Controls.Add(this.tlpPacketInfo_Encoding);
@@ -1476,6 +1607,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIUnicode
             // 
+            this.txtPacketInfo_Encoding_ANSIUnicode.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIUnicode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUnicode, "txtPacketInfo_Encoding_ANSIUnicode");
             this.txtPacketInfo_Encoding_ANSIUnicode.Name = "txtPacketInfo_Encoding_ANSIUnicode";
@@ -1488,6 +1620,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIUTF32
             // 
+            this.txtPacketInfo_Encoding_ANSIUTF32.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIUTF32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF32, "txtPacketInfo_Encoding_ANSIUTF32");
             this.txtPacketInfo_Encoding_ANSIUTF32.Name = "txtPacketInfo_Encoding_ANSIUTF32";
@@ -1500,6 +1633,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIUTF16
             // 
+            this.txtPacketInfo_Encoding_ANSIUTF16.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIUTF16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF16, "txtPacketInfo_Encoding_ANSIUTF16");
             this.txtPacketInfo_Encoding_ANSIUTF16.Name = "txtPacketInfo_Encoding_ANSIUTF16";
@@ -1512,6 +1646,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_Unicode
             // 
+            this.txtPacketInfo_Encoding_Unicode.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_Unicode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_Unicode, "txtPacketInfo_Encoding_Unicode");
             this.txtPacketInfo_Encoding_Unicode.Name = "txtPacketInfo_Encoding_Unicode";
@@ -1524,6 +1659,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_UTF32
             // 
+            this.txtPacketInfo_Encoding_UTF32.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_UTF32.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_UTF32, "txtPacketInfo_Encoding_UTF32");
             this.txtPacketInfo_Encoding_UTF32.Name = "txtPacketInfo_Encoding_UTF32";
@@ -1536,6 +1672,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_UTF16
             // 
+            this.txtPacketInfo_Encoding_UTF16.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_UTF16.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_UTF16, "txtPacketInfo_Encoding_UTF16");
             this.txtPacketInfo_Encoding_UTF16.Name = "txtPacketInfo_Encoding_UTF16";
@@ -1548,6 +1685,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIbase64
             // 
+            this.txtPacketInfo_Encoding_ANSIbase64.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIbase64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIbase64, "txtPacketInfo_Encoding_ANSIbase64");
             this.txtPacketInfo_Encoding_ANSIbase64.Name = "txtPacketInfo_Encoding_ANSIbase64";
@@ -1555,6 +1693,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIUTF8
             // 
+            this.txtPacketInfo_Encoding_ANSIUTF8.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIUTF8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF8, "txtPacketInfo_Encoding_ANSIUTF8");
             this.txtPacketInfo_Encoding_ANSIUTF8.Name = "txtPacketInfo_Encoding_ANSIUTF8";
@@ -1562,6 +1701,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIUTF7
             // 
+            this.txtPacketInfo_Encoding_ANSIUTF7.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIUTF7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIUTF7, "txtPacketInfo_Encoding_ANSIUTF7");
             this.txtPacketInfo_Encoding_ANSIUTF7.Name = "txtPacketInfo_Encoding_ANSIUTF7";
@@ -1569,6 +1709,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_ANSIGBK
             // 
+            this.txtPacketInfo_Encoding_ANSIGBK.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_ANSIGBK.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_ANSIGBK, "txtPacketInfo_Encoding_ANSIGBK");
             this.txtPacketInfo_Encoding_ANSIGBK.Name = "txtPacketInfo_Encoding_ANSIGBK";
@@ -1601,6 +1742,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_base64
             // 
+            this.txtPacketInfo_Encoding_base64.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_base64.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_base64, "txtPacketInfo_Encoding_base64");
             this.txtPacketInfo_Encoding_base64.Name = "txtPacketInfo_Encoding_base64";
@@ -1608,6 +1750,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_UTF8
             // 
+            this.txtPacketInfo_Encoding_UTF8.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_UTF8.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_UTF8, "txtPacketInfo_Encoding_UTF8");
             this.txtPacketInfo_Encoding_UTF8.Name = "txtPacketInfo_Encoding_UTF8";
@@ -1615,6 +1758,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_UTF7
             // 
+            this.txtPacketInfo_Encoding_UTF7.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_UTF7.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_UTF7, "txtPacketInfo_Encoding_UTF7");
             this.txtPacketInfo_Encoding_UTF7.Name = "txtPacketInfo_Encoding_UTF7";
@@ -1637,6 +1781,7 @@ namespace WPELibrary
             // 
             // txtPacketInfo_Encoding_Bytes
             // 
+            this.txtPacketInfo_Encoding_Bytes.BackColor = System.Drawing.SystemColors.Window;
             this.txtPacketInfo_Encoding_Bytes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtPacketInfo_Encoding_Bytes, "txtPacketInfo_Encoding_Bytes");
             this.txtPacketInfo_Encoding_Bytes.Name = "txtPacketInfo_Encoding_Bytes";
@@ -1895,6 +2040,11 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
+            // lXOR2
+            // 
+            resources.ApplyResources(this.lXOR2, "lXOR2");
+            this.lXOR2.Name = "lXOR2";
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1950,6 +2100,10 @@ namespace WPELibrary
             this.tlpComparison.ResumeLayout(false);
             this.tlpComparison.PerformLayout();
             this.tlpComparison_Button.ResumeLayout(false);
+            this.tpXOR.ResumeLayout(false);
+            this.tlpPacketInfo_XOR.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.ResumeLayout(false);
+            this.tlpPacketInfo_XOR_Button.PerformLayout();
             this.tpEncoding.ResumeLayout(false);
             this.tlpPacketInfo_Encoding.ResumeLayout(false);
             this.tlpPacketInfo_Encoding_Button.ResumeLayout(false);
@@ -2175,5 +2329,18 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
         private System.Windows.Forms.NumericUpDown nudCheck_Size_From;
         private System.Windows.Forms.Label lCheck_Size;
+        private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss3;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_CopyHex;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_CopyText;
+        private System.Windows.Forms.TabPage tpXOR;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_XOR;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_XOR_Button;
+        private Be.Windows.Forms.HexBox hbXOR_From;
+        private System.Windows.Forms.Button bXOR;
+        private System.Windows.Forms.Button bXOR_Clear;
+        private System.Windows.Forms.Label lXOR;
+        private System.Windows.Forms.TextBox txtXOR;
+        private Be.Windows.Forms.HexBox hbXOR_To;
+        private System.Windows.Forms.Label lXOR2;
     }
 }

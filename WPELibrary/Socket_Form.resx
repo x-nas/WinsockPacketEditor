@@ -2384,8 +2384,23 @@
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>添加到 滤镜列表</value>
   </data>
+  <data name="cmsHexBox_tss3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 6</value>
+  </data>
+  <data name="cmsHexBox_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="cmsHexBox_CopyHex.Text" xml:space="preserve">
+    <value>复制 十六进制</value>
+  </data>
+  <data name="cmsHexBox_CopyText.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="cmsHexBox_CopyText.Text" xml:space="preserve">
+    <value>复制 文本</value>
+  </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 82</value>
+    <value>165, 132</value>
   </data>
   <data name="&gt;&gt;cmsHexBox.Name" xml:space="preserve">
     <value>cmsHexBox</value>
@@ -2403,7 +2418,7 @@
     <value>3, 3</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>864, 205</value>
+    <value>964, 205</value>
   </data>
   <data name="hbPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2433,7 +2448,7 @@
     <value>1</value>
   </data>
   <data name="tlpHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tlpHexBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2466,7 +2481,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2490,7 +2505,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -2873,6 +2888,336 @@
   <data name="&gt;&gt;tpComparison.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="tlpPacketInfo_XOR.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="hbXOR_To.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="hbXOR_To.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="hbXOR_To.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="hbXOR_To.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="hbXOR_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbXOR_To.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="hbXOR_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 123</value>
+  </data>
+  <data name="hbXOR_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>964, 85</value>
+  </data>
+  <data name="hbXOR_To.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_To.Name" xml:space="preserve">
+    <value>hbXOR_To</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_To.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_To.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_To.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.ColumnCount" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="lXOR2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lXOR2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lXOR2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lXOR2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>572, 3</value>
+  </data>
+  <data name="lXOR2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lXOR2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 24</value>
+  </data>
+  <data name="lXOR2.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lXOR2.Text" xml:space="preserve">
+    <value>支持循环异或</value>
+  </data>
+  <data name="lXOR2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lXOR2.Name" xml:space="preserve">
+    <value>lXOR2</value>
+  </data>
+  <data name="&gt;&gt;lXOR2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lXOR2.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;lXOR2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bXOR_Clear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bXOR_Clear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bXOR_Clear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>748, 3</value>
+  </data>
+  <data name="bXOR_Clear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="bXOR_Clear.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bXOR_Clear.Text" xml:space="preserve">
+    <value>清 空</value>
+  </data>
+  <data name="&gt;&gt;bXOR_Clear.Name" xml:space="preserve">
+    <value>bXOR_Clear</value>
+  </data>
+  <data name="&gt;&gt;bXOR_Clear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bXOR_Clear.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;bXOR_Clear.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="bXOR.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bXOR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>658, 3</value>
+  </data>
+  <data name="bXOR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="bXOR.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="bXOR.Text" xml:space="preserve">
+    <value>计 算</value>
+  </data>
+  <data name="&gt;&gt;bXOR.Name" xml:space="preserve">
+    <value>bXOR</value>
+  </data>
+  <data name="&gt;&gt;bXOR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bXOR.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;bXOR.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lXOR.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lXOR.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lXOR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>147, 3</value>
+  </data>
+  <data name="lXOR.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lXOR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>119, 24</value>
+  </data>
+  <data name="lXOR.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lXOR.Text" xml:space="preserve">
+    <value>异或值（十六进制）:</value>
+  </data>
+  <data name="lXOR.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lXOR.Name" xml:space="preserve">
+    <value>lXOR</value>
+  </data>
+  <data name="&gt;&gt;lXOR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lXOR.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;lXOR.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="txtXOR.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtXOR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>272, 3</value>
+  </data>
+  <data name="txtXOR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>294, 23</value>
+  </data>
+  <data name="txtXOR.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;txtXOR.Name" xml:space="preserve">
+    <value>txtXOR</value>
+  </data>
+  <data name="&gt;&gt;txtXOR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtXOR.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;txtXOR.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 90</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>970, 30</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR_Button.Name" xml:space="preserve">
+    <value>tlpPacketInfo_XOR_Button</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR_Button.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR_Button.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR_Button.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpPacketInfo_XOR_Button.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lXOR2" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bXOR_Clear" Row="0" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="bXOR" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="lXOR" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtXOR" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,300,AutoSize,0,Absolute,80,Absolute,10,Absolute,80,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="hbXOR_From.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="hbXOR_From.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="hbXOR_From.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="hbXOR_From.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="hbXOR_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbXOR_From.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="hbXOR_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="hbXOR_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>964, 84</value>
+  </data>
+  <data name="hbXOR_From.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_From.Name" xml:space="preserve">
+    <value>hbXOR_From</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_From.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_From.Parent" xml:space="preserve">
+    <value>tlpPacketInfo_XOR</value>
+  </data>
+  <data name="&gt;&gt;hbXOR_From.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>970, 211</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR.Name" xml:space="preserve">
+    <value>tlpPacketInfo_XOR</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR.Parent" xml:space="preserve">
+    <value>tpXOR</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketInfo_XOR.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpPacketInfo_XOR.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hbXOR_To" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketInfo_XOR_Button" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbXOR_From" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,50,Absolute,30,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpXOR.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpXOR.Size" type="System.Drawing.Size, System.Drawing">
+    <value>970, 211</value>
+  </data>
+  <data name="tpXOR.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="tpXOR.Text" xml:space="preserve">
+    <value>异或计算</value>
+  </data>
+  <data name="&gt;&gt;tpXOR.Name" xml:space="preserve">
+    <value>tpXOR</value>
+  </data>
+  <data name="&gt;&gt;tpXOR.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpXOR.Parent" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpXOR.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="tlpPacketInfo_Encoding.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
@@ -2883,7 +3228,7 @@
     <value>3, 3</value>
   </data>
   <data name="rtbPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 205</value>
+    <value>255, 205</value>
   </data>
   <data name="rtbPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2976,7 +3321,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Button.Location" type="System.Drawing.Point, System.Drawing">
-    <value>234, 3</value>
+    <value>264, 3</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Button.RowCount" type="System.Int32, mscorlib">
     <value>5</value>
@@ -3009,10 +3354,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUnicode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 148</value>
+    <value>385, 148</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUnicode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUnicode.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -3042,7 +3387,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUnicode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 148</value>
+    <value>292, 148</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUnicode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3075,10 +3420,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF32.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 119</value>
+    <value>385, 119</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF32.TabIndex" type="System.Int32, mscorlib">
     <value>58</value>
@@ -3108,7 +3453,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF32.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 119</value>
+    <value>292, 119</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF32.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3141,10 +3486,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF16.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 90</value>
+    <value>385, 90</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF16.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF16.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -3174,7 +3519,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIASCII.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 90</value>
+    <value>292, 90</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIASCII.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3210,7 +3555,7 @@
     <value>65, 148</value>
   </data>
   <data name="txtPacketInfo_Encoding_Unicode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_Unicode.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -3276,7 +3621,7 @@
     <value>65, 119</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF32.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF32.TabIndex" type="System.Int32, mscorlib">
     <value>52</value>
@@ -3342,7 +3687,7 @@
     <value>65, 90</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF16.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF16.TabIndex" type="System.Int32, mscorlib">
     <value>50</value>
@@ -3405,10 +3750,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIbase64.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 177</value>
+    <value>385, 177</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIbase64.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIbase64.TabIndex" type="System.Int32, mscorlib">
     <value>48</value>
@@ -3429,10 +3774,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 61</value>
+    <value>385, 61</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF8.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -3453,10 +3798,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 32</value>
+    <value>385, 32</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF7.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -3477,10 +3822,10 @@
     <value>Fill</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIGBK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>350, 3</value>
+    <value>385, 3</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIGBK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIGBK.TabIndex" type="System.Int32, mscorlib">
     <value>42</value>
@@ -3510,7 +3855,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIbase64.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 177</value>
+    <value>292, 177</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIbase64.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3552,7 +3897,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 61</value>
+    <value>292, 61</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF8.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3594,7 +3939,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 32</value>
+    <value>292, 32</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIUTF7.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3678,7 +4023,7 @@
     <value>NoControl</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIGBK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>257, 3</value>
+    <value>292, 3</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIGBK.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -3714,7 +4059,7 @@
     <value>65, 177</value>
   </data>
   <data name="txtPacketInfo_Encoding_base64.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_base64.TabIndex" type="System.Int32, mscorlib">
     <value>27</value>
@@ -3738,7 +4083,7 @@
     <value>65, 61</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF8.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -3762,7 +4107,7 @@
     <value>65, 32</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF7.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -3912,7 +4257,7 @@
     <value>65, 3</value>
   </data>
   <data name="txtPacketInfo_Encoding_Bytes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 23</value>
+    <value>221, 23</value>
   </data>
   <data name="txtPacketInfo_Encoding_Bytes.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -3933,7 +4278,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Location" type="System.Drawing.Point, System.Drawing">
-    <value>331, 0</value>
+    <value>361, 0</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -3942,7 +4287,7 @@
     <value>8</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>539, 211</value>
+    <value>609, 211</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -3975,7 +4320,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tlpPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3999,7 +4344,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpEncoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tpEncoding.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -4017,7 +4362,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpEncoding.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <metadata name="cTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -4083,7 +4428,7 @@
     <value>0, 0</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -4104,7 +4449,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 211</value>
+    <value>970, 211</value>
   </data>
   <data name="tpSystemLog.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -4122,7 +4467,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpSystemLog.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -17207,6 +17552,24 @@
     <value>cmsHexBox_FilterList</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_tss3.Name" xml:space="preserve">
+    <value>cmsHexBox_tss3</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_tss3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_CopyHex.Name" xml:space="preserve">
+    <value>cmsHexBox_CopyHex</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_CopyHex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_CopyText.Name" xml:space="preserve">
+    <value>cmsHexBox_CopyText</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_CopyText.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cTime.Name" xml:space="preserve">

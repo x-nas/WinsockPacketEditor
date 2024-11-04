@@ -62,6 +62,7 @@
             // 
             // hexFind
             // 
+            this.hexFind.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
             // 
             // 

@@ -383,6 +383,29 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//判断是否为合法的Hex字符
+
+        public static bool IsHexChar(char c)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
         #region//初始化进程支持的Winsock版本
 
         public static void InitProcessWinSockSupport()
