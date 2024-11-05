@@ -233,11 +233,13 @@ namespace WPELibrary
                 Socket_Cache.Check_NotShow = rbFilterSet_Function_NotShow.Checked;
                 Socket_Cache.Check_Socket = cbCheck_Socket.Checked;
                 Socket_Cache.Check_IP = cbCheck_IP.Checked;
+                Socket_Cache.Check_Port = cbCheck_Port.Checked;
                 Socket_Cache.Check_Packet = cbCheck_Packet.Checked;
                 Socket_Cache.Check_Size = cbCheck_Size.Checked;
 
                 Socket_Cache.txtCheck_Socket = this.txtCheck_Socket.Text.Trim();
                 Socket_Cache.txtCheck_IP = this.txtCheck_IP.Text.Trim();
+                Socket_Cache.txtCheck_Port = this.txtCheck_Port.Text.Trim();
                 Socket_Cache.txtCheck_Packet = this.txtCheck_Packet.Text.Trim();
                 Socket_Cache.txtCheck_Size_From = this.nudCheck_Size_From.Value;
                 Socket_Cache.txtCheck_Size_To = this.nudCheck_Size_To.Value;
@@ -249,6 +251,70 @@ namespace WPELibrary
         }
 
         #endregion        
+
+        #region//检测过滤参数输入
+
+        private void txtCheck_Socket_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtCheck_Packet_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsHex(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtCheck_IP_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtCheck_Port_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//清空数据
 
@@ -498,13 +564,19 @@ namespace WPELibrary
 
                     case "cmsHexBox_CopyHex":
 
-                        this.hbPacketData.CopyHex();                     
+                        this.hbPacketData.CopyHex();
 
                         break;
 
                     case "cmsHexBox_CopyText":
 
-                        this.hbPacketData.Copy();                     
+                        this.hbPacketData.Copy();
+
+                        break;
+
+                    case "cmsHexBox_SelectAll":
+
+                        this.hbPacketData.SelectAll();
 
                         break;
                 }
@@ -1425,9 +1497,7 @@ namespace WPELibrary
         {
             try
             {
-                char keyChar = e.KeyChar;
-
-                if (!char.IsControl(keyChar) && !Socket_Operation.IsHexChar(keyChar) && keyChar != ' ')
+                if (!Socket_Operation.CheckTextInput_IsHex(e.KeyChar))
                 {
                     e.Handled = true;
                 }

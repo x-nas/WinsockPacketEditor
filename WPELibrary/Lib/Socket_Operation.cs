@@ -4,7 +4,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Data;
 using System.Linq;
 using System.Diagnostics;
@@ -381,11 +380,49 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #endregion
+        #endregion        
 
-        #region//判断是否为合法的Hex字符
+        #region//判断文本框输入的字符类型
 
-        public static bool IsHexChar(char c)
+        public static bool CheckTextInput_IsDigit(char keyChar)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (char.IsControl(keyChar) || char.IsDigit(keyChar) || keyChar.Equals(';') || keyChar.Equals('.'))
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        public static bool CheckTextInput_IsHex(char keyChar)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (char.IsControl(keyChar) || Socket_Operation.IsHexChar(keyChar) || keyChar.Equals(' ') || keyChar.Equals(';'))
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        private static bool IsHexChar(char c)
         {
             bool bReturn = false;
 
@@ -833,6 +870,29 @@ namespace WPELibrary.Lib
                     }               
                 }
 
+                //端口号
+                if (Socket_Cache.Check_Port)
+                {
+                    if (Socket_Cache.Check_NotShow)
+                    {
+                        if (ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 //封包内容
                 if (Socket_Cache.Check_Packet)
                 {
@@ -928,18 +988,61 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_IP))
+                if (!string.IsNullOrEmpty(sCheckIP))
                 {
-                    string[] sIPArr = Socket_Cache.txtCheck_IP.Split(';');
-
-                    foreach (string sIP in sIPArr)
+                    string sIP = sCheckIP.Split(':')[0];
+                    string sPort = sCheckIP.Split(':')[1];
+                    
+                    if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_IP))
                     {
-                        if (sCheckIP.IndexOf(sIP) >= 0)
+                        string[] sIPArr = Socket_Cache.txtCheck_IP.Split(';');
+
+                        foreach (string s in sIPArr)
                         {
-                            return true;
+                            if (sIP.Equals(s))
+                            {
+                                return true;
+                            }
                         }
                     }
-                }                    
+                }                  
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//检测端口号
+
+        private static bool ISFilter_ByPort(string sCheckPort)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(sCheckPort))
+                {
+                    string sIP = sCheckPort.Split(':')[0];
+                    string sPort = sCheckPort.Split(':')[1];
+
+                    if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Port))
+                    {
+                        string[] sPortArr = Socket_Cache.txtCheck_Port.Split(';');
+
+                        foreach (string s in sPortArr)
+                        {
+                            if (sPort.Equals(s))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }  
             }
             catch (Exception ex)
             {
@@ -1054,40 +1157,6 @@ namespace WPELibrary.Lib
         }
 
         #endregion      
-
-        #region//检查是否合法的十六进制
-        public static bool CheckHEX(object oHex)
-        {
-            try
-            {
-                if (oHex == null)
-                { 
-                    return false;
-                }
-                
-                if (string.IsNullOrEmpty(oHex.ToString()))
-                {
-                    return false;
-                }
-
-                string sHex = oHex.ToString();
-
-                if (sHex.Length != 2)
-                {
-                    return false;
-                }
-
-                string pattern = "^[A-Fa-f0-9]+$";
-                return Regex.IsMatch(sHex, pattern);
-            }
-            catch (Exception ex) 
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-
-                return false;
-            }
-        }
-        #endregion
 
         #region//显示发送窗体
 
