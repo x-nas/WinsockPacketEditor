@@ -15,10 +15,10 @@ namespace WPELibrary.Lib
     {  
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
-        public static bool Hook_Send, Hook_SendTo, Hook_Recv, Hook_RecvFrom, Hook_WSASend, Hook_WSASendTo, Hook_WSARecv, Hook_WSARecvFrom;
-        public static bool Check_NotShow, Check_Size, Check_Socket, Check_IP, Check_Port, Check_Packet;
-        public static string txtCheck_Socket, txtCheck_IP, txtCheck_Port, txtCheck_Packet;
-        public static decimal txtCheck_Size_From, txtCheck_Size_To;
+        public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
+        public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckData;
+        public static string CheckSocket_Value, CheckIP_Value, CheckPort_Value, CheckData_Value;
+        public static decimal CheckSizeFrom_Value, CheckSizeTo_Value;        
 
         public static FindOptions FindOptions = new FindOptions();
         public static bool DoSearch;
@@ -220,6 +220,8 @@ namespace WPELibrary.Lib
 
         public static class SocketList
         {
+            public static bool AutoRoll;
+
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
 
             public delegate void SocketPacketReceived(Socket_PacketInfo si);
@@ -439,9 +441,9 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    int iFilterList = Socket_Operation.LoadFilterList(string.Empty);
+                    bool bOK = Socket_Operation.LoadFilterList(string.Empty);
 
-                    if (iFilterList == 0)
+                    if (!bOK)
                     {
                         FilterListClear();
 
@@ -449,7 +451,7 @@ namespace WPELibrary.Lib
                         {
                             AddFilter_New();
                         }
-                    }                    
+                    }                      
                 }
                 catch (Exception ex)
                 {

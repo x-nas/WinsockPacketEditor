@@ -89,6 +89,7 @@ namespace WPELibrary
         #endregion
 
         #region//右键菜单
+
         private void cmsSendList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
@@ -118,14 +119,28 @@ namespace WPELibrary
 
                         if (dgvSendList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveSendListToFile();
+                            if (Socket_Operation.SaveSendList())
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71));
+                            }
+                            else
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72));
+                            }
                         }
 
                         break;
 
                     case "tsmiLoadSendList":
 
-                        Socket_Operation.LoadFileToSendList();
+                        if (Socket_Operation.LoadSendList())
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
+                        }
+                        else
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74));
+                        }
 
                         break;
                 }
@@ -135,6 +150,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }       
         }
+
         #endregion
 
         #region//开始发送

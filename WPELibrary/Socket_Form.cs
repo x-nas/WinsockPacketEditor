@@ -36,6 +36,7 @@ namespace WPELibrary
                 this.InitSocketForm();
                 this.InitSocketDGV();
                 this.InitHexBox();
+                this.LoadSystemParameter();
 
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(Socket_Cache.FilterList.Filter_MaxNum);                
@@ -91,7 +92,7 @@ namespace WPELibrary
             {
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                this.Activate();             
             }
             catch (Exception ex)
             {
@@ -105,6 +106,8 @@ namespace WPELibrary
             {
                 ws.ExitHook();
 
+                SetSystemParameter();
+                Socket_Operation.SaveSystemConfig();
                 Socket_Operation.SaveFilterList(string.Empty);
             }
             catch (Exception ex)
@@ -215,34 +218,88 @@ namespace WPELibrary
 
         #endregion
 
-        #region//设置拦截参数
+        #region//设置系统参数
 
-        private void SetSocketParam()
+        private void LoadSystemParameter()
+        {
+            try
+            {
+                if (Socket_Operation.LoadSystemConfig())
+                {
+                    cbHookSend.Checked = Socket_Cache.HookSend;
+                    cbHookSendTo.Checked = Socket_Cache.HookSendTo;
+                    cbHookRecv.Checked = Socket_Cache.HookRecv;
+                    cbHookRecvFrom.Checked = Socket_Cache.HookRecvFrom;
+                    cbHookWSASend.Checked = Socket_Cache.HookWSASend;
+                    cbHookWSASendTo.Checked = Socket_Cache.HookWSASendTo;
+                    cbHookWSARecv.Checked = Socket_Cache.HookWSARecv;
+                    cbHookWSARecvFrom.Checked = Socket_Cache.HookWSARecvFrom;
+
+                    if (Socket_Cache.CheckNotShow)
+                    {
+                        rbFilter_NotShow.Checked = true;
+                    }
+                    else
+                    {
+                        rbFilter_Show.Checked = true;
+                    }
+
+                    cbCheckSocket.Checked = Socket_Cache.CheckSocket;
+                    cbCheckIP.Checked = Socket_Cache.CheckIP;
+                    cbCheckPort.Checked = Socket_Cache.CheckPort;
+                    cbCheckData.Checked = Socket_Cache.CheckData;
+                    cbCheckSize.Checked = Socket_Cache.CheckSize;
+
+                    this.txtCheckSocket.Text = Socket_Cache.CheckSocket_Value;
+                    this.txtCheckIP.Text = Socket_Cache.CheckIP_Value;
+                    this.txtCheckPort.Text = Socket_Cache.CheckPort_Value;
+                    this.txtCheckData.Text = Socket_Cache.CheckData_Value;
+                    this.nudCheckSizeFrom.Value = Socket_Cache.CheckSizeFrom_Value;
+                    this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
+
+                    this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
+                }
+                else
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void SetSystemParameter()
         {
             try
             {  
-                Socket_Cache.Hook_Send = cbHook_Send.Checked;
-                Socket_Cache.Hook_SendTo = cbHook_SendTo.Checked;
-                Socket_Cache.Hook_Recv = cbHook_Recv.Checked;
-                Socket_Cache.Hook_RecvFrom = cbHook_RecvFrom.Checked;
-                Socket_Cache.Hook_WSASend = cbHook_WSASend.Checked;
-                Socket_Cache.Hook_WSASendTo = cbHook_WSASendTo.Checked;
-                Socket_Cache.Hook_WSARecv = cbHook_WSARecv.Checked;
-                Socket_Cache.Hook_WSARecvFrom = cbHook_WSARecvFrom.Checked;
+                Socket_Cache.HookSend = cbHookSend.Checked;
+                Socket_Cache.HookSendTo = cbHookSendTo.Checked;
+                Socket_Cache.HookRecv = cbHookRecv.Checked;
+                Socket_Cache.HookRecvFrom = cbHookRecvFrom.Checked;
+                Socket_Cache.HookWSASend = cbHookWSASend.Checked;
+                Socket_Cache.HookWSASendTo = cbHookWSASendTo.Checked;
+                Socket_Cache.HookWSARecv = cbHookWSARecv.Checked;
+                Socket_Cache.HookWSARecvFrom = cbHookWSARecvFrom.Checked;
                 
-                Socket_Cache.Check_NotShow = rbFilterSet_Function_NotShow.Checked;
-                Socket_Cache.Check_Socket = cbCheck_Socket.Checked;
-                Socket_Cache.Check_IP = cbCheck_IP.Checked;
-                Socket_Cache.Check_Port = cbCheck_Port.Checked;
-                Socket_Cache.Check_Packet = cbCheck_Packet.Checked;
-                Socket_Cache.Check_Size = cbCheck_Size.Checked;
+                Socket_Cache.CheckNotShow = rbFilter_NotShow.Checked;
+                Socket_Cache.CheckSocket = cbCheckSocket.Checked;
+                Socket_Cache.CheckIP = cbCheckIP.Checked;
+                Socket_Cache.CheckPort = cbCheckPort.Checked;
+                Socket_Cache.CheckData = cbCheckData.Checked;
+                Socket_Cache.CheckSize = cbCheckSize.Checked;
 
-                Socket_Cache.txtCheck_Socket = this.txtCheck_Socket.Text.Trim();
-                Socket_Cache.txtCheck_IP = this.txtCheck_IP.Text.Trim();
-                Socket_Cache.txtCheck_Port = this.txtCheck_Port.Text.Trim();
-                Socket_Cache.txtCheck_Packet = this.txtCheck_Packet.Text.Trim();
-                Socket_Cache.txtCheck_Size_From = this.nudCheck_Size_From.Value;
-                Socket_Cache.txtCheck_Size_To = this.nudCheck_Size_To.Value;
+                Socket_Cache.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
+                Socket_Cache.CheckIP_Value = this.txtCheckIP.Text.Trim();
+                Socket_Cache.CheckPort_Value = this.txtCheckPort.Text.Trim();
+                Socket_Cache.CheckData_Value = this.txtCheckData.Text.Trim();
+                Socket_Cache.CheckSizeFrom_Value = this.nudCheckSizeFrom.Value;
+                Socket_Cache.CheckSizeTo_Value = this.nudCheckSizeTo.Value;
+
+                Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
             }
             catch (Exception ex)
             {
@@ -397,7 +454,7 @@ namespace WPELibrary
         {
             try
             {
-                this.SetSocketParam();
+                this.SetSystemParameter();
 
                 this.tlpFilterSet.Enabled = false;
                 this.gbHookType.Enabled = false;
@@ -759,7 +816,7 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbSocketList_Set_Roll.Checked)
+                if (this.cbSocketList_AutoRoll.Checked)
                 {
                     if (dgvSocketList.Rows.Count > 0)
                     {

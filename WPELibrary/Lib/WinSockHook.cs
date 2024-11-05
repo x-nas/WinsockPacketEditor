@@ -53,49 +53,49 @@ namespace WPELibrary.Lib
                 {
                     #region//Winsock 2.0 Hook
 
-                    if (Socket_Cache.Hook_Send)
+                    if (Socket_Cache.HookSend)
                     {
                         lhSend = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "send"), new WS2_32.DSend(WS2_32.Send_Hook), this);
                         lhSend.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_SendTo)
+                    if (Socket_Cache.HookSendTo)
                     {
                         lhSendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "sendto"), new WS2_32.DSendTo(WS2_32.SendTo_Hook), this);
                         lhSendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_Recv)
+                    if (Socket_Cache.HookRecv)
                     {
                         lhRecv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recv"), new WS2_32.Drecv(WS2_32.Recv_Hook), this);
                         lhRecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_RecvFrom)
+                    if (Socket_Cache.HookRecvFrom)
                     {
                         lhRecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recvfrom"), new WS2_32.DRecvFrom(WS2_32.RecvFrom_Hook), this);
                         lhRecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_WSASend)
+                    if (Socket_Cache.HookWSASend)
                     {
                         lhWSASend = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASend"), new WS2_32.DWSASend(WS2_32.WSASend_Hook), this);
                         lhWSASend.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_WSASendTo)
+                    if (Socket_Cache.HookWSASendTo)
                     {
                         lhWSASendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASendTo"), new WS2_32.DWSASendTo(WS2_32.WSASendTo_Hook), this);
                         lhWSASendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_WSARecv)
+                    if (Socket_Cache.HookWSARecv)
                     {
                         lhWSARecv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecv"), new WS2_32.DWSARecv(WS2_32.WSARecv_Hook), this);
                         lhWSARecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
                     }
 
-                    if (Socket_Cache.Hook_WSARecvFrom)
+                    if (Socket_Cache.HookWSARecvFrom)
                     {
                         lhWSARecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecvFrom"), new WS2_32.DWSARecvFrom(WS2_32.WSARecvFrom_Hook), this);
                         lhWSARecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });

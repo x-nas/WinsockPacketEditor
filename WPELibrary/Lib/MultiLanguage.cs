@@ -44,8 +44,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
-        //public static string[] MutiLan_35 = { "开始拦截！", "Start Intercepting!" };
-        //public static string[] MutiLan_36 = { "结束拦截！", "Stop Interception!" };
+        public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
+        public static string[] MutiLan_36 = { "加载默认系统配置！", "Load System Default Config!" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         //public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };
@@ -80,10 +80,10 @@ namespace WPELibrary.Lib
         //public static string[] MutiLan_68 = { "[过滤IP地址] ", "[Filter IP addresses] " };
         //public static string[] MutiLan_69 = { "[过滤封包内容] ", "[Filter packet content] " };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
-        public static string[] MutiLan_71 = { "保存完毕: 成功 {0}", "Save completed: successful {0}" };
-        public static string[] MutiLan_72 = { "保存失败！错误：", "Save failed! Error: " };
-        public static string[] MutiLan_73 = { "加载完毕: 成功 {0}", "Load completed: successful {0}" };
-        public static string[] MutiLan_74 = { "加载失败！错误：", "Load failed! Error: " };
+        public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };
+        public static string[] MutiLan_72 = { "保存失败!", "Save failed!" };
+        public static string[] MutiLan_73 = { "加载成功!", "Load successful!" };
+        public static string[] MutiLan_74 = { "加载失败!", "Load failed!" };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };

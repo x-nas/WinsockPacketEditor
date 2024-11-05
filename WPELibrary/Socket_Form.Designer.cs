@@ -106,34 +106,34 @@ namespace WPELibrary
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbSocketList_Set = new System.Windows.Forms.GroupBox();
             this.tlpSocketList_Set = new System.Windows.Forms.TableLayoutPanel();
-            this.cbSocketList_Set_Roll = new System.Windows.Forms.CheckBox();
+            this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.gbFilterSet = new System.Windows.Forms.GroupBox();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilterSet_PacketLength = new System.Windows.Forms.TableLayoutPanel();
-            this.nudCheck_Size_To = new System.Windows.Forms.NumericUpDown();
+            this.nudCheckSizeTo = new System.Windows.Forms.NumericUpDown();
             this.lCheck_Size = new System.Windows.Forms.Label();
-            this.nudCheck_Size_From = new System.Windows.Forms.NumericUpDown();
-            this.cbCheck_Size = new System.Windows.Forms.CheckBox();
-            this.rbFilterSet_Function_Show = new System.Windows.Forms.RadioButton();
-            this.rbFilterSet_Function_NotShow = new System.Windows.Forms.RadioButton();
-            this.txtCheck_Port = new System.Windows.Forms.TextBox();
-            this.cbCheck_Port = new System.Windows.Forms.CheckBox();
-            this.txtCheck_Packet = new System.Windows.Forms.TextBox();
-            this.cbCheck_Packet = new System.Windows.Forms.CheckBox();
-            this.cbCheck_Socket = new System.Windows.Forms.CheckBox();
-            this.cbCheck_IP = new System.Windows.Forms.CheckBox();
-            this.txtCheck_Socket = new System.Windows.Forms.TextBox();
-            this.txtCheck_IP = new System.Windows.Forms.TextBox();
+            this.nudCheckSizeFrom = new System.Windows.Forms.NumericUpDown();
+            this.cbCheckSize = new System.Windows.Forms.CheckBox();
+            this.rbFilter_Show = new System.Windows.Forms.RadioButton();
+            this.rbFilter_NotShow = new System.Windows.Forms.RadioButton();
+            this.txtCheckPort = new System.Windows.Forms.TextBox();
+            this.cbCheckPort = new System.Windows.Forms.CheckBox();
+            this.txtCheckData = new System.Windows.Forms.TextBox();
+            this.cbCheckData = new System.Windows.Forms.CheckBox();
+            this.cbCheckSocket = new System.Windows.Forms.CheckBox();
+            this.cbCheckIP = new System.Windows.Forms.CheckBox();
+            this.txtCheckSocket = new System.Windows.Forms.TextBox();
+            this.txtCheckIP = new System.Windows.Forms.TextBox();
             this.gbHookType = new System.Windows.Forms.GroupBox();
             this.tlpHookType = new System.Windows.Forms.TableLayoutPanel();
-            this.cbHook_RecvFrom = new System.Windows.Forms.CheckBox();
-            this.cbHook_Send = new System.Windows.Forms.CheckBox();
-            this.cbHook_SendTo = new System.Windows.Forms.CheckBox();
-            this.cbHook_Recv = new System.Windows.Forms.CheckBox();
-            this.cbHook_WSASend = new System.Windows.Forms.CheckBox();
-            this.cbHook_WSASendTo = new System.Windows.Forms.CheckBox();
-            this.cbHook_WSARecv = new System.Windows.Forms.CheckBox();
-            this.cbHook_WSARecvFrom = new System.Windows.Forms.CheckBox();
+            this.cbHookRecvFrom = new System.Windows.Forms.CheckBox();
+            this.cbHookSend = new System.Windows.Forms.CheckBox();
+            this.cbHookSendTo = new System.Windows.Forms.CheckBox();
+            this.cbHookRecv = new System.Windows.Forms.CheckBox();
+            this.cbHookWSASend = new System.Windows.Forms.CheckBox();
+            this.cbHookWSASendTo = new System.Windows.Forms.CheckBox();
+            this.cbHookWSARecv = new System.Windows.Forms.CheckBox();
+            this.cbHookWSARecvFrom = new System.Windows.Forms.CheckBox();
             this.gbHookButton_Search = new System.Windows.Forms.GroupBox();
             this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
             this.rbFromIndex = new System.Windows.Forms.RadioButton();
@@ -283,8 +283,8 @@ namespace WPELibrary
             this.gbFilterSet.SuspendLayout();
             this.tlpFilterSet.SuspendLayout();
             this.tlpFilterSet_PacketLength.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).BeginInit();
             this.gbHookType.SuspendLayout();
             this.tlpHookType.SuspendLayout();
             this.gbHookButton_Search.SuspendLayout();
@@ -777,14 +777,14 @@ namespace WPELibrary
             // tlpSocketList_Set
             // 
             resources.ApplyResources(this.tlpSocketList_Set, "tlpSocketList_Set");
-            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_Set_Roll, 0, 0);
+            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_AutoRoll, 0, 0);
             this.tlpSocketList_Set.Name = "tlpSocketList_Set";
             // 
-            // cbSocketList_Set_Roll
+            // cbSocketList_AutoRoll
             // 
-            resources.ApplyResources(this.cbSocketList_Set_Roll, "cbSocketList_Set_Roll");
-            this.cbSocketList_Set_Roll.Name = "cbSocketList_Set_Roll";
-            this.cbSocketList_Set_Roll.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbSocketList_AutoRoll, "cbSocketList_AutoRoll");
+            this.cbSocketList_AutoRoll.Name = "cbSocketList_AutoRoll";
+            this.cbSocketList_AutoRoll.UseVisualStyleBackColor = true;
             // 
             // gbFilterSet
             // 
@@ -797,37 +797,37 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
             this.tlpFilterSet.Controls.Add(this.tlpFilterSet_PacketLength, 3, 0);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Size, 2, 0);
-            this.tlpFilterSet.Controls.Add(this.rbFilterSet_Function_Show, 1, 0);
-            this.tlpFilterSet.Controls.Add(this.rbFilterSet_Function_NotShow, 0, 0);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_Port, 3, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Port, 2, 2);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_Packet, 3, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Packet, 2, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_Socket, 0, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheck_IP, 0, 2);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_Socket, 1, 1);
-            this.tlpFilterSet.Controls.Add(this.txtCheck_IP, 1, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckSize, 2, 0);
+            this.tlpFilterSet.Controls.Add(this.rbFilter_Show, 1, 0);
+            this.tlpFilterSet.Controls.Add(this.rbFilter_NotShow, 0, 0);
+            this.tlpFilterSet.Controls.Add(this.txtCheckPort, 3, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckPort, 2, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckData, 3, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckData, 2, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckSocket, 0, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckIP, 0, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckSocket, 1, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheckIP, 1, 2);
             this.tlpFilterSet.Name = "tlpFilterSet";
             // 
             // tlpFilterSet_PacketLength
             // 
             resources.ApplyResources(this.tlpFilterSet_PacketLength, "tlpFilterSet_PacketLength");
-            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheck_Size_To, 2, 0);
+            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheckSizeTo, 2, 0);
             this.tlpFilterSet_PacketLength.Controls.Add(this.lCheck_Size, 1, 0);
-            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheck_Size_From, 0, 0);
+            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheckSizeFrom, 0, 0);
             this.tlpFilterSet_PacketLength.Name = "tlpFilterSet_PacketLength";
             // 
-            // nudCheck_Size_To
+            // nudCheckSizeTo
             // 
-            resources.ApplyResources(this.nudCheck_Size_To, "nudCheck_Size_To");
-            this.nudCheck_Size_To.Maximum = new decimal(new int[] {
+            resources.ApplyResources(this.nudCheckSizeTo, "nudCheckSizeTo");
+            this.nudCheckSizeTo.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
-            this.nudCheck_Size_To.Name = "nudCheck_Size_To";
-            this.nudCheck_Size_To.Value = new decimal(new int[] {
+            this.nudCheckSizeTo.Name = "nudCheckSizeTo";
+            this.nudCheckSizeTo.Value = new decimal(new int[] {
             100,
             0,
             0,
@@ -838,88 +838,88 @@ namespace WPELibrary
             resources.ApplyResources(this.lCheck_Size, "lCheck_Size");
             this.lCheck_Size.Name = "lCheck_Size";
             // 
-            // nudCheck_Size_From
+            // nudCheckSizeFrom
             // 
-            resources.ApplyResources(this.nudCheck_Size_From, "nudCheck_Size_From");
-            this.nudCheck_Size_From.Maximum = new decimal(new int[] {
+            resources.ApplyResources(this.nudCheckSizeFrom, "nudCheckSizeFrom");
+            this.nudCheckSizeFrom.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
-            this.nudCheck_Size_From.Name = "nudCheck_Size_From";
+            this.nudCheckSizeFrom.Name = "nudCheckSizeFrom";
             // 
-            // cbCheck_Size
+            // cbCheckSize
             // 
-            resources.ApplyResources(this.cbCheck_Size, "cbCheck_Size");
-            this.cbCheck_Size.Name = "cbCheck_Size";
-            this.cbCheck_Size.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbCheckSize, "cbCheckSize");
+            this.cbCheckSize.Name = "cbCheckSize";
+            this.cbCheckSize.UseVisualStyleBackColor = true;
             // 
-            // rbFilterSet_Function_Show
+            // rbFilter_Show
             // 
-            resources.ApplyResources(this.rbFilterSet_Function_Show, "rbFilterSet_Function_Show");
-            this.rbFilterSet_Function_Show.Name = "rbFilterSet_Function_Show";
-            this.rbFilterSet_Function_Show.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.rbFilter_Show, "rbFilter_Show");
+            this.rbFilter_Show.Name = "rbFilter_Show";
+            this.rbFilter_Show.UseVisualStyleBackColor = true;
             // 
-            // rbFilterSet_Function_NotShow
+            // rbFilter_NotShow
             // 
-            resources.ApplyResources(this.rbFilterSet_Function_NotShow, "rbFilterSet_Function_NotShow");
-            this.rbFilterSet_Function_NotShow.Checked = true;
-            this.rbFilterSet_Function_NotShow.Name = "rbFilterSet_Function_NotShow";
-            this.rbFilterSet_Function_NotShow.TabStop = true;
-            this.rbFilterSet_Function_NotShow.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.rbFilter_NotShow, "rbFilter_NotShow");
+            this.rbFilter_NotShow.Checked = true;
+            this.rbFilter_NotShow.Name = "rbFilter_NotShow";
+            this.rbFilter_NotShow.TabStop = true;
+            this.rbFilter_NotShow.UseVisualStyleBackColor = true;
             // 
-            // txtCheck_Port
+            // txtCheckPort
             // 
-            this.txtCheck_Port.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtCheck_Port, "txtCheck_Port");
-            this.txtCheck_Port.Name = "txtCheck_Port";
-            this.txtCheck_Port.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Port_KeyPress);
+            this.txtCheckPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtCheckPort, "txtCheckPort");
+            this.txtCheckPort.Name = "txtCheckPort";
+            this.txtCheckPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Port_KeyPress);
             // 
-            // cbCheck_Port
+            // cbCheckPort
             // 
-            resources.ApplyResources(this.cbCheck_Port, "cbCheck_Port");
-            this.cbCheck_Port.Name = "cbCheck_Port";
-            this.cbCheck_Port.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbCheckPort, "cbCheckPort");
+            this.cbCheckPort.Name = "cbCheckPort";
+            this.cbCheckPort.UseVisualStyleBackColor = true;
             // 
-            // txtCheck_Packet
+            // txtCheckData
             // 
-            this.txtCheck_Packet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCheck_Packet.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            resources.ApplyResources(this.txtCheck_Packet, "txtCheck_Packet");
-            this.txtCheck_Packet.Name = "txtCheck_Packet";
-            this.txtCheck_Packet.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Packet_KeyPress);
+            this.txtCheckData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCheckData.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            resources.ApplyResources(this.txtCheckData, "txtCheckData");
+            this.txtCheckData.Name = "txtCheckData";
+            this.txtCheckData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Packet_KeyPress);
             // 
-            // cbCheck_Packet
+            // cbCheckData
             // 
-            resources.ApplyResources(this.cbCheck_Packet, "cbCheck_Packet");
-            this.cbCheck_Packet.Name = "cbCheck_Packet";
-            this.cbCheck_Packet.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbCheckData, "cbCheckData");
+            this.cbCheckData.Name = "cbCheckData";
+            this.cbCheckData.UseVisualStyleBackColor = true;
             // 
-            // cbCheck_Socket
+            // cbCheckSocket
             // 
-            resources.ApplyResources(this.cbCheck_Socket, "cbCheck_Socket");
-            this.cbCheck_Socket.Name = "cbCheck_Socket";
-            this.cbCheck_Socket.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbCheckSocket, "cbCheckSocket");
+            this.cbCheckSocket.Name = "cbCheckSocket";
+            this.cbCheckSocket.UseVisualStyleBackColor = true;
             // 
-            // cbCheck_IP
+            // cbCheckIP
             // 
-            resources.ApplyResources(this.cbCheck_IP, "cbCheck_IP");
-            this.cbCheck_IP.Name = "cbCheck_IP";
-            this.cbCheck_IP.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbCheckIP, "cbCheckIP");
+            this.cbCheckIP.Name = "cbCheckIP";
+            this.cbCheckIP.UseVisualStyleBackColor = true;
             // 
-            // txtCheck_Socket
+            // txtCheckSocket
             // 
-            this.txtCheck_Socket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtCheck_Socket, "txtCheck_Socket");
-            this.txtCheck_Socket.Name = "txtCheck_Socket";
-            this.txtCheck_Socket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Socket_KeyPress);
+            this.txtCheckSocket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtCheckSocket, "txtCheckSocket");
+            this.txtCheckSocket.Name = "txtCheckSocket";
+            this.txtCheckSocket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Socket_KeyPress);
             // 
-            // txtCheck_IP
+            // txtCheckIP
             // 
-            this.txtCheck_IP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtCheck_IP, "txtCheck_IP");
-            this.txtCheck_IP.Name = "txtCheck_IP";
-            this.txtCheck_IP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_IP_KeyPress);
+            this.txtCheckIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtCheckIP, "txtCheckIP");
+            this.txtCheckIP.Name = "txtCheckIP";
+            this.txtCheckIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_IP_KeyPress);
             // 
             // gbHookType
             // 
@@ -931,79 +931,79 @@ namespace WPELibrary
             // tlpHookType
             // 
             resources.ApplyResources(this.tlpHookType, "tlpHookType");
-            this.tlpHookType.Controls.Add(this.cbHook_RecvFrom, 0, 3);
-            this.tlpHookType.Controls.Add(this.cbHook_Send, 0, 0);
-            this.tlpHookType.Controls.Add(this.cbHook_SendTo, 0, 1);
-            this.tlpHookType.Controls.Add(this.cbHook_Recv, 0, 2);
-            this.tlpHookType.Controls.Add(this.cbHook_WSASend, 1, 0);
-            this.tlpHookType.Controls.Add(this.cbHook_WSASendTo, 1, 1);
-            this.tlpHookType.Controls.Add(this.cbHook_WSARecv, 1, 2);
-            this.tlpHookType.Controls.Add(this.cbHook_WSARecvFrom, 1, 3);
+            this.tlpHookType.Controls.Add(this.cbHookRecvFrom, 0, 3);
+            this.tlpHookType.Controls.Add(this.cbHookSend, 0, 0);
+            this.tlpHookType.Controls.Add(this.cbHookSendTo, 0, 1);
+            this.tlpHookType.Controls.Add(this.cbHookRecv, 0, 2);
+            this.tlpHookType.Controls.Add(this.cbHookWSASend, 1, 0);
+            this.tlpHookType.Controls.Add(this.cbHookWSASendTo, 1, 1);
+            this.tlpHookType.Controls.Add(this.cbHookWSARecv, 1, 2);
+            this.tlpHookType.Controls.Add(this.cbHookWSARecvFrom, 1, 3);
             this.tlpHookType.Name = "tlpHookType";
             // 
-            // cbHook_RecvFrom
+            // cbHookRecvFrom
             // 
-            resources.ApplyResources(this.cbHook_RecvFrom, "cbHook_RecvFrom");
-            this.cbHook_RecvFrom.Checked = true;
-            this.cbHook_RecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_RecvFrom.Name = "cbHook_RecvFrom";
-            this.cbHook_RecvFrom.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookRecvFrom, "cbHookRecvFrom");
+            this.cbHookRecvFrom.Checked = true;
+            this.cbHookRecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookRecvFrom.Name = "cbHookRecvFrom";
+            this.cbHookRecvFrom.UseVisualStyleBackColor = true;
             // 
-            // cbHook_Send
+            // cbHookSend
             // 
-            resources.ApplyResources(this.cbHook_Send, "cbHook_Send");
-            this.cbHook_Send.Checked = true;
-            this.cbHook_Send.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_Send.Name = "cbHook_Send";
-            this.cbHook_Send.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookSend, "cbHookSend");
+            this.cbHookSend.Checked = true;
+            this.cbHookSend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookSend.Name = "cbHookSend";
+            this.cbHookSend.UseVisualStyleBackColor = true;
             // 
-            // cbHook_SendTo
+            // cbHookSendTo
             // 
-            resources.ApplyResources(this.cbHook_SendTo, "cbHook_SendTo");
-            this.cbHook_SendTo.Checked = true;
-            this.cbHook_SendTo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_SendTo.Name = "cbHook_SendTo";
-            this.cbHook_SendTo.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookSendTo, "cbHookSendTo");
+            this.cbHookSendTo.Checked = true;
+            this.cbHookSendTo.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookSendTo.Name = "cbHookSendTo";
+            this.cbHookSendTo.UseVisualStyleBackColor = true;
             // 
-            // cbHook_Recv
+            // cbHookRecv
             // 
-            resources.ApplyResources(this.cbHook_Recv, "cbHook_Recv");
-            this.cbHook_Recv.Checked = true;
-            this.cbHook_Recv.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_Recv.Name = "cbHook_Recv";
-            this.cbHook_Recv.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookRecv, "cbHookRecv");
+            this.cbHookRecv.Checked = true;
+            this.cbHookRecv.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookRecv.Name = "cbHookRecv";
+            this.cbHookRecv.UseVisualStyleBackColor = true;
             // 
-            // cbHook_WSASend
+            // cbHookWSASend
             // 
-            resources.ApplyResources(this.cbHook_WSASend, "cbHook_WSASend");
-            this.cbHook_WSASend.Checked = true;
-            this.cbHook_WSASend.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_WSASend.Name = "cbHook_WSASend";
-            this.cbHook_WSASend.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookWSASend, "cbHookWSASend");
+            this.cbHookWSASend.Checked = true;
+            this.cbHookWSASend.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookWSASend.Name = "cbHookWSASend";
+            this.cbHookWSASend.UseVisualStyleBackColor = true;
             // 
-            // cbHook_WSASendTo
+            // cbHookWSASendTo
             // 
-            resources.ApplyResources(this.cbHook_WSASendTo, "cbHook_WSASendTo");
-            this.cbHook_WSASendTo.Checked = true;
-            this.cbHook_WSASendTo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_WSASendTo.Name = "cbHook_WSASendTo";
-            this.cbHook_WSASendTo.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookWSASendTo, "cbHookWSASendTo");
+            this.cbHookWSASendTo.Checked = true;
+            this.cbHookWSASendTo.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookWSASendTo.Name = "cbHookWSASendTo";
+            this.cbHookWSASendTo.UseVisualStyleBackColor = true;
             // 
-            // cbHook_WSARecv
+            // cbHookWSARecv
             // 
-            resources.ApplyResources(this.cbHook_WSARecv, "cbHook_WSARecv");
-            this.cbHook_WSARecv.Checked = true;
-            this.cbHook_WSARecv.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_WSARecv.Name = "cbHook_WSARecv";
-            this.cbHook_WSARecv.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookWSARecv, "cbHookWSARecv");
+            this.cbHookWSARecv.Checked = true;
+            this.cbHookWSARecv.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookWSARecv.Name = "cbHookWSARecv";
+            this.cbHookWSARecv.UseVisualStyleBackColor = true;
             // 
-            // cbHook_WSARecvFrom
+            // cbHookWSARecvFrom
             // 
-            resources.ApplyResources(this.cbHook_WSARecvFrom, "cbHook_WSARecvFrom");
-            this.cbHook_WSARecvFrom.Checked = true;
-            this.cbHook_WSARecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbHook_WSARecvFrom.Name = "cbHook_WSARecvFrom";
-            this.cbHook_WSARecvFrom.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbHookWSARecvFrom, "cbHookWSARecvFrom");
+            this.cbHookWSARecvFrom.Checked = true;
+            this.cbHookWSARecvFrom.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbHookWSARecvFrom.Name = "cbHookWSARecvFrom";
+            this.cbHookWSARecvFrom.UseVisualStyleBackColor = true;
             // 
             // gbHookButton_Search
             // 
@@ -2124,8 +2124,8 @@ namespace WPELibrary
             this.tlpFilterSet.PerformLayout();
             this.tlpFilterSet_PacketLength.ResumeLayout(false);
             this.tlpFilterSet_PacketLength.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_To)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheck_Size_From)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).EndInit();
             this.gbHookType.ResumeLayout(false);
             this.tlpHookType.ResumeLayout(false);
             this.tlpHookType.PerformLayout();
@@ -2181,14 +2181,14 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpParameter;
         private System.Windows.Forms.GroupBox gbHookType;
         private System.Windows.Forms.TableLayoutPanel tlpHookType;
-        private System.Windows.Forms.CheckBox cbHook_RecvFrom;
-        private System.Windows.Forms.CheckBox cbHook_Send;
-        private System.Windows.Forms.CheckBox cbHook_SendTo;
-        private System.Windows.Forms.CheckBox cbHook_Recv;
-        private System.Windows.Forms.CheckBox cbHook_WSASend;
-        private System.Windows.Forms.CheckBox cbHook_WSASendTo;
-        private System.Windows.Forms.CheckBox cbHook_WSARecv;
-        private System.Windows.Forms.CheckBox cbHook_WSARecvFrom;
+        private System.Windows.Forms.CheckBox cbHookRecvFrom;
+        private System.Windows.Forms.CheckBox cbHookSend;
+        private System.Windows.Forms.CheckBox cbHookSendTo;
+        private System.Windows.Forms.CheckBox cbHookRecv;
+        private System.Windows.Forms.CheckBox cbHookWSASend;
+        private System.Windows.Forms.CheckBox cbHookWSASendTo;
+        private System.Windows.Forms.CheckBox cbHookWSARecv;
+        private System.Windows.Forms.CheckBox cbHookWSARecvFrom;
         private System.Windows.Forms.GroupBox gbFilterSet;
         private System.Windows.Forms.DataGridView dgvSocketList;
         private System.Windows.Forms.TableLayoutPanel tlpInformation;
@@ -2362,7 +2362,7 @@ namespace WPELibrary
         private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUnicode;
         private System.Windows.Forms.GroupBox gbSocketList_Set;
         private System.Windows.Forms.TableLayoutPanel tlpSocketList_Set;
-        private System.Windows.Forms.CheckBox cbSocketList_Set_Roll;
+        private System.Windows.Forms.CheckBox cbSocketList_AutoRoll;
         private System.Windows.Forms.RadioButton rbFromHead;
         private System.Windows.Forms.RadioButton rbFromIndex;
         private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss3;
@@ -2382,20 +2382,20 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
         private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
         private System.Windows.Forms.TableLayoutPanel tlpFilterSet_PacketLength;
-        private System.Windows.Forms.NumericUpDown nudCheck_Size_To;
+        private System.Windows.Forms.NumericUpDown nudCheckSizeTo;
         private System.Windows.Forms.Label lCheck_Size;
-        private System.Windows.Forms.NumericUpDown nudCheck_Size_From;
-        private System.Windows.Forms.CheckBox cbCheck_Size;
-        private System.Windows.Forms.RadioButton rbFilterSet_Function_Show;
-        private System.Windows.Forms.RadioButton rbFilterSet_Function_NotShow;
-        private System.Windows.Forms.TextBox txtCheck_Port;
-        private System.Windows.Forms.CheckBox cbCheck_Port;
-        private System.Windows.Forms.TextBox txtCheck_Packet;
-        private System.Windows.Forms.CheckBox cbCheck_Packet;
-        private System.Windows.Forms.CheckBox cbCheck_Socket;
-        private System.Windows.Forms.CheckBox cbCheck_IP;
-        private System.Windows.Forms.TextBox txtCheck_Socket;
-        private System.Windows.Forms.TextBox txtCheck_IP;
+        private System.Windows.Forms.NumericUpDown nudCheckSizeFrom;
+        private System.Windows.Forms.CheckBox cbCheckSize;
+        private System.Windows.Forms.RadioButton rbFilter_Show;
+        private System.Windows.Forms.RadioButton rbFilter_NotShow;
+        private System.Windows.Forms.TextBox txtCheckPort;
+        private System.Windows.Forms.CheckBox cbCheckPort;
+        private System.Windows.Forms.TextBox txtCheckData;
+        private System.Windows.Forms.CheckBox cbCheckData;
+        private System.Windows.Forms.CheckBox cbCheckSocket;
+        private System.Windows.Forms.CheckBox cbCheckIP;
+        private System.Windows.Forms.TextBox txtCheckSocket;
+        private System.Windows.Forms.TextBox txtCheckIP;
         private System.Windows.Forms.Panel pComparison_A;
         private System.Windows.Forms.RichTextBox rtbComparison_A;
         private System.Windows.Forms.Panel pComparison_B;

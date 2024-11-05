@@ -609,37 +609,37 @@
   <data name="tlpSocketList_Set.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="cbSocketList_Set_Roll.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbSocketList_AutoRoll.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbSocketList_Set_Roll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbSocketList_AutoRoll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbSocketList_Set_Roll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbSocketList_AutoRoll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbSocketList_Set_Roll.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbSocketList_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 6</value>
   </data>
-  <data name="cbSocketList_Set_Roll.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbSocketList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
     <value>79, 21</value>
   </data>
-  <data name="cbSocketList_Set_Roll.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbSocketList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="cbSocketList_Set_Roll.Text" xml:space="preserve">
+  <data name="cbSocketList_AutoRoll.Text" xml:space="preserve">
     <value>自动滚动</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_Set_Roll.Name" xml:space="preserve">
-    <value>cbSocketList_Set_Roll</value>
+  <data name="&gt;&gt;cbSocketList_AutoRoll.Name" xml:space="preserve">
+    <value>cbSocketList_AutoRoll</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_Set_Roll.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbSocketList_AutoRoll.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_Set_Roll.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbSocketList_AutoRoll.Parent" xml:space="preserve">
     <value>tlpSocketList_Set</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_Set_Roll.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbSocketList_AutoRoll.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="tlpSocketList_Set.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -676,7 +676,7 @@
     <value>0</value>
   </data>
   <data name="tlpSocketList_Set.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbSocketList_Set_Roll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbSocketList_Set.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -714,34 +714,34 @@
   <data name="tlpFilterSet_PacketLength.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="nudCheck_Size_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="nudCheckSizeTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="nudCheck_Size_To.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="nudCheckSizeTo.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="nudCheck_Size_To.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="nudCheckSizeTo.Location" type="System.Drawing.Point, System.Drawing">
     <value>101, 3</value>
   </data>
-  <data name="nudCheck_Size_To.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="nudCheckSizeTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>73, 23</value>
   </data>
-  <data name="nudCheck_Size_To.TabIndex" type="System.Int32, mscorlib">
+  <data name="nudCheckSizeTo.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
   </data>
-  <data name="nudCheck_Size_To.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+  <data name="nudCheckSizeTo.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_To.Name" xml:space="preserve">
-    <value>nudCheck_Size_To</value>
+  <data name="&gt;&gt;nudCheckSizeTo.Name" xml:space="preserve">
+    <value>nudCheckSizeTo</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_To.Type" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeTo.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_To.Parent" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeTo.Parent" xml:space="preserve">
     <value>tlpFilterSet_PacketLength</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_To.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeTo.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="lCheck_Size.AutoSize" type="System.Boolean, mscorlib">
@@ -783,34 +783,34 @@
   <data name="&gt;&gt;lCheck_Size.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="nudCheck_Size_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="nudCheckSizeFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="nudCheck_Size_From.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="nudCheckSizeFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="nudCheck_Size_From.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="nudCheckSizeFrom.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="nudCheck_Size_From.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="nudCheckSizeFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 23</value>
   </data>
-  <data name="nudCheck_Size_From.TabIndex" type="System.Int32, mscorlib">
+  <data name="nudCheckSizeFrom.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
   </data>
-  <data name="nudCheck_Size_From.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+  <data name="nudCheckSizeFrom.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_From.Name" xml:space="preserve">
-    <value>nudCheck_Size_From</value>
+  <data name="&gt;&gt;nudCheckSizeFrom.Name" xml:space="preserve">
+    <value>nudCheckSizeFrom</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_From.Type" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeFrom.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_From.Parent" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeFrom.Parent" xml:space="preserve">
     <value>tlpFilterSet_PacketLength</value>
   </data>
-  <data name="&gt;&gt;nudCheck_Size_From.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;nudCheckSizeFrom.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -844,363 +844,363 @@
     <value>0</value>
   </data>
   <data name="tlpFilterSet_PacketLength.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudCheck_Size_To" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lCheck_Size" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudCheck_Size_From" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,20,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudCheckSizeTo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lCheck_Size" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudCheckSizeFrom" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,20,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="cbCheck_Size.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbCheckSize.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbCheck_Size.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbCheckSize.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbCheck_Size.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbCheckSize.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbCheckSize.Location" type="System.Drawing.Point, System.Drawing">
     <value>254, 6</value>
   </data>
-  <data name="cbCheck_Size.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbCheckSize.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
   </data>
-  <data name="cbCheck_Size.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbCheckSize.TabIndex" type="System.Int32, mscorlib">
     <value>58</value>
   </data>
-  <data name="cbCheck_Size.Text" xml:space="preserve">
+  <data name="cbCheckSize.Text" xml:space="preserve">
     <value>封包长度:</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Size.Name" xml:space="preserve">
-    <value>cbCheck_Size</value>
+  <data name="&gt;&gt;cbCheckSize.Name" xml:space="preserve">
+    <value>cbCheckSize</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Size.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSize.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Size.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSize.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Size.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSize.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="rbFilterSet_Function_Show.AutoSize" type="System.Boolean, mscorlib">
+  <data name="rbFilter_Show.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="rbFilterSet_Function_Show.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="rbFilter_Show.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rbFilterSet_Function_Show.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="rbFilter_Show.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="rbFilterSet_Function_Show.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rbFilter_Show.Location" type="System.Drawing.Point, System.Drawing">
     <value>78, 6</value>
   </data>
-  <data name="rbFilterSet_Function_Show.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rbFilter_Show.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 24</value>
   </data>
-  <data name="rbFilterSet_Function_Show.TabIndex" type="System.Int32, mscorlib">
+  <data name="rbFilter_Show.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
   </data>
-  <data name="rbFilterSet_Function_Show.Text" xml:space="preserve">
+  <data name="rbFilter_Show.Text" xml:space="preserve">
     <value>只显示</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_Show.Name" xml:space="preserve">
-    <value>rbFilterSet_Function_Show</value>
+  <data name="&gt;&gt;rbFilter_Show.Name" xml:space="preserve">
+    <value>rbFilter_Show</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_Show.Type" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_Show.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_Show.Parent" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_Show.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_Show.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_Show.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.AutoSize" type="System.Boolean, mscorlib">
+  <data name="rbFilter_NotShow.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="rbFilter_NotShow.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="rbFilter_NotShow.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rbFilter_NotShow.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 6</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rbFilter_NotShow.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 24</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.TabIndex" type="System.Int32, mscorlib">
+  <data name="rbFilter_NotShow.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
   </data>
-  <data name="rbFilterSet_Function_NotShow.Text" xml:space="preserve">
+  <data name="rbFilter_NotShow.Text" xml:space="preserve">
     <value>不显示</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_NotShow.Name" xml:space="preserve">
-    <value>rbFilterSet_Function_NotShow</value>
+  <data name="&gt;&gt;rbFilter_NotShow.Name" xml:space="preserve">
+    <value>rbFilter_NotShow</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_NotShow.Type" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_NotShow.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_NotShow.Parent" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_NotShow.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;rbFilterSet_Function_NotShow.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rbFilter_NotShow.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="txtCheck_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtCheckPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtCheck_Port.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="txtCheckPort.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="txtCheck_Port.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="txtCheckPort.Location" type="System.Drawing.Point, System.Drawing">
     <value>338, 66</value>
   </data>
-  <data name="txtCheck_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="txtCheckPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 0, 3</value>
   </data>
-  <data name="txtCheck_Port.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="txtCheckPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 23</value>
   </data>
-  <data name="txtCheck_Port.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtCheckPort.TabIndex" type="System.Int32, mscorlib">
     <value>55</value>
   </data>
-  <data name="txtCheck_Port.WordWrap" type="System.Boolean, mscorlib">
+  <data name="txtCheckPort.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Port.Name" xml:space="preserve">
-    <value>txtCheck_Port</value>
+  <data name="&gt;&gt;txtCheckPort.Name" xml:space="preserve">
+    <value>txtCheckPort</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Port.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckPort.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Port.Parent" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckPort.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Port.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckPort.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="cbCheck_Port.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbCheckPort.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbCheck_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbCheckPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbCheck_Port.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbCheckPort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbCheck_Port.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbCheckPort.Location" type="System.Drawing.Point, System.Drawing">
     <value>254, 66</value>
   </data>
-  <data name="cbCheck_Port.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbCheckPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
   </data>
-  <data name="cbCheck_Port.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbCheckPort.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
   </data>
-  <data name="cbCheck_Port.Text" xml:space="preserve">
+  <data name="cbCheckPort.Text" xml:space="preserve">
     <value>端口号:</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Port.Name" xml:space="preserve">
-    <value>cbCheck_Port</value>
+  <data name="&gt;&gt;cbCheckPort.Name" xml:space="preserve">
+    <value>cbCheckPort</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Port.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckPort.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Port.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckPort.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Port.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckPort.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="txtCheck_Packet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtCheckData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtCheck_Packet.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="txtCheckData.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="txtCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="txtCheckData.Location" type="System.Drawing.Point, System.Drawing">
     <value>338, 36</value>
   </data>
-  <data name="txtCheck_Packet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="txtCheckData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 0, 3</value>
   </data>
-  <data name="txtCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="txtCheckData.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 23</value>
   </data>
-  <data name="txtCheck_Packet.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtCheckData.TabIndex" type="System.Int32, mscorlib">
     <value>53</value>
   </data>
-  <data name="txtCheck_Packet.WordWrap" type="System.Boolean, mscorlib">
+  <data name="txtCheckData.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Packet.Name" xml:space="preserve">
-    <value>txtCheck_Packet</value>
+  <data name="&gt;&gt;txtCheckData.Name" xml:space="preserve">
+    <value>txtCheckData</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Packet.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckData.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Packet.Parent" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckData.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Packet.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckData.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="cbCheck_Packet.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbCheckData.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbCheck_Packet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbCheckData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbCheck_Packet.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbCheckData.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbCheck_Packet.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbCheckData.Location" type="System.Drawing.Point, System.Drawing">
     <value>254, 36</value>
   </data>
-  <data name="cbCheck_Packet.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbCheckData.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
   </data>
-  <data name="cbCheck_Packet.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbCheckData.TabIndex" type="System.Int32, mscorlib">
     <value>52</value>
   </data>
-  <data name="cbCheck_Packet.Text" xml:space="preserve">
+  <data name="cbCheckData.Text" xml:space="preserve">
     <value>封包数据:</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Packet.Name" xml:space="preserve">
-    <value>cbCheck_Packet</value>
+  <data name="&gt;&gt;cbCheckData.Name" xml:space="preserve">
+    <value>cbCheckData</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Packet.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckData.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Packet.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckData.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Packet.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckData.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="cbCheck_Socket.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbCheckSocket.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbCheck_Socket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbCheckSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbCheck_Socket.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbCheckSocket.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbCheckSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 36</value>
   </data>
-  <data name="cbCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 24</value>
   </data>
-  <data name="cbCheck_Socket.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbCheckSocket.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
   </data>
-  <data name="cbCheck_Socket.Text" xml:space="preserve">
+  <data name="cbCheckSocket.Text" xml:space="preserve">
     <value>套接字:</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Socket.Name" xml:space="preserve">
-    <value>cbCheck_Socket</value>
+  <data name="&gt;&gt;cbCheckSocket.Name" xml:space="preserve">
+    <value>cbCheckSocket</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Socket.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSocket.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Socket.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSocket.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;cbCheck_Socket.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckSocket.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <data name="cbCheck_IP.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbCheckIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbCheck_IP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbCheckIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbCheck_IP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbCheckIP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbCheckIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 66</value>
   </data>
-  <data name="cbCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbCheckIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 24</value>
   </data>
-  <data name="cbCheck_IP.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbCheckIP.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
   </data>
-  <data name="cbCheck_IP.Text" xml:space="preserve">
+  <data name="cbCheckIP.Text" xml:space="preserve">
     <value>IP地址:</value>
   </data>
-  <data name="&gt;&gt;cbCheck_IP.Name" xml:space="preserve">
-    <value>cbCheck_IP</value>
+  <data name="&gt;&gt;cbCheckIP.Name" xml:space="preserve">
+    <value>cbCheckIP</value>
   </data>
-  <data name="&gt;&gt;cbCheck_IP.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckIP.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbCheck_IP.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckIP.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;cbCheck_IP.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbCheckIP.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="txtCheck_Socket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtCheckSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtCheck_Socket.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="txtCheckSocket.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="txtCheck_Socket.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="txtCheckSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>78, 36</value>
   </data>
-  <data name="txtCheck_Socket.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="txtCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 23</value>
   </data>
-  <data name="txtCheck_Socket.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtCheckSocket.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
   </data>
-  <data name="txtCheck_Socket.WordWrap" type="System.Boolean, mscorlib">
+  <data name="txtCheckSocket.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Socket.Name" xml:space="preserve">
-    <value>txtCheck_Socket</value>
+  <data name="&gt;&gt;txtCheckSocket.Name" xml:space="preserve">
+    <value>txtCheckSocket</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Socket.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckSocket.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Socket.Parent" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckSocket.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;txtCheck_Socket.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckSocket.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <data name="txtCheck_IP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtCheckIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtCheck_IP.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="txtCheckIP.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="txtCheck_IP.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="txtCheckIP.Location" type="System.Drawing.Point, System.Drawing">
     <value>78, 66</value>
   </data>
-  <data name="txtCheck_IP.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="txtCheckIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 23</value>
   </data>
-  <data name="txtCheck_IP.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtCheckIP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
   </data>
-  <data name="txtCheck_IP.WordWrap" type="System.Boolean, mscorlib">
+  <data name="txtCheckIP.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;txtCheck_IP.Name" xml:space="preserve">
-    <value>txtCheck_IP</value>
+  <data name="&gt;&gt;txtCheckIP.Name" xml:space="preserve">
+    <value>txtCheckIP</value>
   </data>
-  <data name="&gt;&gt;txtCheck_IP.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckIP.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtCheck_IP.Parent" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckIP.Parent" xml:space="preserve">
     <value>tlpFilterSet</value>
   </data>
-  <data name="&gt;&gt;txtCheck_IP.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtCheckIP.ZOrder" xml:space="preserve">
     <value>11</value>
   </data>
   <data name="tlpFilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -1237,7 +1237,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Size" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterSet_Function_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterSet_Function_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Port" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Port" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Packet" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Packet" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_Socket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheck_IP" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_Socket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheck_IP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,50,AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSize" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckPort" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckData" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckData" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSocket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckIP" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckSocket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,50,AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1275,316 +1275,316 @@
   <data name="tlpHookType.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="cbHook_RecvFrom.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookRecvFrom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_RecvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookRecvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_RecvFrom.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookRecvFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_RecvFrom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookRecvFrom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookRecvFrom.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 74</value>
   </data>
-  <data name="cbHook_RecvFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookRecvFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 19</value>
   </data>
-  <data name="cbHook_RecvFrom.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookRecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
   </data>
-  <data name="cbHook_RecvFrom.Text" xml:space="preserve">
+  <data name="cbHookRecvFrom.Text" xml:space="preserve">
     <value>RecvFrom</value>
   </data>
-  <data name="&gt;&gt;cbHook_RecvFrom.Name" xml:space="preserve">
-    <value>cbHook_RecvFrom</value>
+  <data name="&gt;&gt;cbHookRecvFrom.Name" xml:space="preserve">
+    <value>cbHookRecvFrom</value>
   </data>
-  <data name="&gt;&gt;cbHook_RecvFrom.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecvFrom.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_RecvFrom.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecvFrom.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_RecvFrom.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecvFrom.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cbHook_Send.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookSend.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_Send.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookSend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_Send.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookSend.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_Send.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookSend.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_Send.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookSend.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 5</value>
   </data>
-  <data name="cbHook_Send.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookSend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_Send.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 19</value>
   </data>
-  <data name="cbHook_Send.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookSend.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
   </data>
-  <data name="cbHook_Send.Text" xml:space="preserve">
+  <data name="cbHookSend.Text" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="&gt;&gt;cbHook_Send.Name" xml:space="preserve">
-    <value>cbHook_Send</value>
+  <data name="&gt;&gt;cbHookSend.Name" xml:space="preserve">
+    <value>cbHookSend</value>
   </data>
-  <data name="&gt;&gt;cbHook_Send.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSend.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_Send.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSend.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_Send.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSend.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="cbHook_SendTo.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookSendTo.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_SendTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookSendTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_SendTo.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookSendTo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_SendTo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookSendTo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_SendTo.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookSendTo.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 28</value>
   </data>
-  <data name="cbHook_SendTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookSendTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_SendTo.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookSendTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 19</value>
   </data>
-  <data name="cbHook_SendTo.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookSendTo.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
   </data>
-  <data name="cbHook_SendTo.Text" xml:space="preserve">
+  <data name="cbHookSendTo.Text" xml:space="preserve">
     <value>SendTo</value>
   </data>
-  <data name="&gt;&gt;cbHook_SendTo.Name" xml:space="preserve">
-    <value>cbHook_SendTo</value>
+  <data name="&gt;&gt;cbHookSendTo.Name" xml:space="preserve">
+    <value>cbHookSendTo</value>
   </data>
-  <data name="&gt;&gt;cbHook_SendTo.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSendTo.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_SendTo.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSendTo.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_SendTo.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookSendTo.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="cbHook_Recv.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookRecv.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_Recv.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookRecv.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_Recv.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookRecv.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_Recv.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookRecv.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_Recv.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookRecv.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 51</value>
   </data>
-  <data name="cbHook_Recv.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookRecv.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_Recv.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookRecv.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 19</value>
   </data>
-  <data name="cbHook_Recv.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookRecv.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
   </data>
-  <data name="cbHook_Recv.Text" xml:space="preserve">
+  <data name="cbHookRecv.Text" xml:space="preserve">
     <value>Recv</value>
   </data>
-  <data name="&gt;&gt;cbHook_Recv.Name" xml:space="preserve">
-    <value>cbHook_Recv</value>
+  <data name="&gt;&gt;cbHookRecv.Name" xml:space="preserve">
+    <value>cbHookRecv</value>
   </data>
-  <data name="&gt;&gt;cbHook_Recv.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecv.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_Recv.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecv.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_Recv.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookRecv.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="cbHook_WSASend.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookWSASend.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_WSASend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookWSASend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_WSASend.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookWSASend.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_WSASend.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookWSASend.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_WSASend.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWSASend.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 5</value>
   </data>
-  <data name="cbHook_WSASend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookWSASend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_WSASend.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookWSASend.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 19</value>
   </data>
-  <data name="cbHook_WSASend.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookWSASend.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
   </data>
-  <data name="cbHook_WSASend.Text" xml:space="preserve">
+  <data name="cbHookWSASend.Text" xml:space="preserve">
     <value>WSASend</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASend.Name" xml:space="preserve">
-    <value>cbHook_WSASend</value>
+  <data name="&gt;&gt;cbHookWSASend.Name" xml:space="preserve">
+    <value>cbHookWSASend</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASend.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASend.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASend.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASend.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASend.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASend.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="cbHook_WSASendTo.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookWSASendTo.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_WSASendTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookWSASendTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_WSASendTo.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookWSASendTo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_WSASendTo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookWSASendTo.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWSASendTo.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 28</value>
   </data>
-  <data name="cbHook_WSASendTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookWSASendTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_WSASendTo.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 19</value>
   </data>
-  <data name="cbHook_WSASendTo.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookWSASendTo.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
   </data>
-  <data name="cbHook_WSASendTo.Text" xml:space="preserve">
+  <data name="cbHookWSASendTo.Text" xml:space="preserve">
     <value>WSASendTo</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASendTo.Name" xml:space="preserve">
-    <value>cbHook_WSASendTo</value>
+  <data name="&gt;&gt;cbHookWSASendTo.Name" xml:space="preserve">
+    <value>cbHookWSASendTo</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASendTo.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASendTo.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASendTo.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASendTo.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSASendTo.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSASendTo.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="cbHook_WSARecv.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookWSARecv.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_WSARecv.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookWSARecv.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_WSARecv.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookWSARecv.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_WSARecv.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookWSARecv.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWSARecv.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 51</value>
   </data>
-  <data name="cbHook_WSARecv.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookWSARecv.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_WSARecv.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookWSARecv.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 19</value>
   </data>
-  <data name="cbHook_WSARecv.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookWSARecv.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
   </data>
-  <data name="cbHook_WSARecv.Text" xml:space="preserve">
+  <data name="cbHookWSARecv.Text" xml:space="preserve">
     <value>WSARecv</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecv.Name" xml:space="preserve">
-    <value>cbHook_WSARecv</value>
+  <data name="&gt;&gt;cbHookWSARecv.Name" xml:space="preserve">
+    <value>cbHookWSARecv</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecv.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecv.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecv.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecv.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecv.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecv.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="cbHook_WSARecvFrom.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbHookWSARecvFrom.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbHookWSARecvFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cbHookWSARecvFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cbHook_WSARecvFrom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbHookWSARecvFrom.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
     <value>116, 74</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbHookWSARecvFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbHookWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>129, 19</value>
   </data>
-  <data name="cbHook_WSARecvFrom.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbHookWSARecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
   </data>
-  <data name="cbHook_WSARecvFrom.Text" xml:space="preserve">
+  <data name="cbHookWSARecvFrom.Text" xml:space="preserve">
     <value>WSARecvFrom</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecvFrom.Name" xml:space="preserve">
-    <value>cbHook_WSARecvFrom</value>
+  <data name="&gt;&gt;cbHookWSARecvFrom.Name" xml:space="preserve">
+    <value>cbHookWSARecvFrom</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecvFrom.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecvFrom.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecvFrom.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecvFrom.Parent" xml:space="preserve">
     <value>tlpHookType</value>
   </data>
-  <data name="&gt;&gt;cbHook_WSARecvFrom.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbHookWSARecvFrom.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
   <data name="tlpHookType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -1621,7 +1621,7 @@
     <value>0</value>
   </data>
   <data name="tlpHookType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbHook_RecvFrom" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Send" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_SendTo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_Recv" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASend" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSASendTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecv" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHook_WSARecvFrom" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,45,Percent,55" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbHookRecvFrom" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHookSend" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHookSendTo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHookRecv" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbHookWSASend" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHookWSASendTo" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHookWSARecv" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbHookWSARecvFrom" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,45,Percent,55" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbHookType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

@@ -12,6 +12,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace WPELibrary.Lib
 {   
@@ -825,9 +826,9 @@ namespace WPELibrary.Lib
             try
             {
                 //套接字
-                if (Socket_Cache.Check_Socket)
+                if (Socket_Cache.CheckSocket)
                 {
-                    if (Socket_Cache.Check_NotShow)
+                    if (Socket_Cache.CheckNotShow)
                     {
                         if (ISFilter_BySocket(spi.PacketSocket))
                         {
@@ -848,9 +849,9 @@ namespace WPELibrary.Lib
                 }
 
                 //IP地址
-                if (Socket_Cache.Check_IP)
+                if (Socket_Cache.CheckIP)
                 {
-                    if (Socket_Cache.Check_NotShow)
+                    if (Socket_Cache.CheckNotShow)
                     {
                         if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
                         {
@@ -871,9 +872,9 @@ namespace WPELibrary.Lib
                 }
 
                 //端口号
-                if (Socket_Cache.Check_Port)
+                if (Socket_Cache.CheckPort)
                 {
-                    if (Socket_Cache.Check_NotShow)
+                    if (Socket_Cache.CheckNotShow)
                     {
                         if (ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo))
                         {
@@ -894,9 +895,9 @@ namespace WPELibrary.Lib
                 }
 
                 //封包内容
-                if (Socket_Cache.Check_Packet)
+                if (Socket_Cache.CheckData)
                 {
-                    if (Socket_Cache.Check_NotShow)
+                    if (Socket_Cache.CheckNotShow)
                     {
                         if (ISFilter_ByPacket(spi.PacketBuffer))
                         {
@@ -917,9 +918,9 @@ namespace WPELibrary.Lib
                 }
 
                 //封包大小
-                if (Socket_Cache.Check_Size)
+                if (Socket_Cache.CheckSize)
                 {
-                    if (Socket_Cache.Check_NotShow)
+                    if (Socket_Cache.CheckNotShow)
                     {
                         if (ISFilter_BySize(spi.PacketLen))
                         {
@@ -955,9 +956,9 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Socket))
+                if (!string.IsNullOrEmpty(Socket_Cache.CheckSocket_Value))
                 {
-                    string[] sSocketArr = Socket_Cache.txtCheck_Socket.Split(';');
+                    string[] sSocketArr = Socket_Cache.CheckSocket_Value.Split(';');
 
                     foreach (string sSocket in sSocketArr)
                     {
@@ -993,9 +994,9 @@ namespace WPELibrary.Lib
                     string sIP = sCheckIP.Split(':')[0];
                     string sPort = sCheckIP.Split(':')[1];
                     
-                    if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_IP))
+                    if (!string.IsNullOrEmpty(Socket_Cache.CheckIP_Value))
                     {
-                        string[] sIPArr = Socket_Cache.txtCheck_IP.Split(';');
+                        string[] sIPArr = Socket_Cache.CheckIP_Value.Split(';');
 
                         foreach (string s in sIPArr)
                         {
@@ -1030,9 +1031,9 @@ namespace WPELibrary.Lib
                     string sIP = sCheckPort.Split(':')[0];
                     string sPort = sCheckPort.Split(':')[1];
 
-                    if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Port))
+                    if (!string.IsNullOrEmpty(Socket_Cache.CheckPort_Value))
                     {
-                        string[] sPortArr = Socket_Cache.txtCheck_Port.Split(';');
+                        string[] sPortArr = Socket_Cache.CheckPort_Value.Split(';');
 
                         foreach (string s in sPortArr)
                         {
@@ -1062,11 +1063,11 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.txtCheck_Packet))
+                if (!string.IsNullOrEmpty(Socket_Cache.CheckData_Value))
                 {
                     string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
-                    string[] sPacketArr = Socket_Cache.txtCheck_Packet.Split(';');
+                    string[] sPacketArr = Socket_Cache.CheckData_Value.Split(';');
 
                     foreach (string sPacketCheck in sPacketArr)
                     {
@@ -1095,7 +1096,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (iLength >= Socket_Cache.txtCheck_Size_From && iLength <= Socket_Cache.txtCheck_Size_To)
+                if (iLength >= Socket_Cache.CheckSizeFrom_Value && iLength <= Socket_Cache.CheckSizeTo_Value)
                 {
                     bReturn = true;
                 }
@@ -1200,9 +1201,9 @@ namespace WPELibrary.Lib
 
         #region//保存发送列表数据
 
-        public static void SaveSendListToFile()
+        public static bool SaveSendList()
         {
-            int iSuccess = 0;
+            bool bReturn = true;
 
             try
             {
@@ -1213,58 +1214,74 @@ namespace WPELibrary.Lib
 
                 if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
                 {
-                    FileStream fs = new FileStream(sfdSocketInfo.FileName, FileMode.Create);
-                    StreamWriter sw = new StreamWriter(fs);
+                    XmlDocument doc = new XmlDocument();
+
+                    XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+                    doc.AppendChild(xmlDeclaration);
+
+                    XmlElement xeSendList = doc.CreateElement("SendList");
+                    doc.AppendChild(xeSendList);
 
                     if (Socket_Cache.SendList.dtSocketSendList.Rows.Count > 0)
                     {
                         for (int i = 0; i < Socket_Cache.SendList.dtSocketSendList.Rows.Count; i++)
                         {
-                            try
-                            {
-                                string sIndex = (i + 1).ToString();
-                                string sNote = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Remark"].ToString().Trim();
-                                string sSocket = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Socket"].ToString().Trim();
-                                string sIPTo = Socket_Cache.SendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
-                                string sLen = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
-                                byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSocketSendList.Rows[i]["Bytes"];
-                                string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                            string sIndex = (i + 1).ToString();
+                            string sNote = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Remark"].ToString().Trim();
+                            string sSocket = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Socket"].ToString().Trim();
+                            string sIPTo = Socket_Cache.SendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
+                            string sLen = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
+                            byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSocketSendList.Rows[i]["Bytes"];
+                            string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
-                                string sSave = sIndex + "|" + sNote + "|" + sSocket + "|" + sIPTo + "|" + sLen + "|" + sData;
+                            XmlElement xeSend = doc.CreateElement("Send");
+                            xeSendList.AppendChild(xeSend);
 
-                                sw.WriteLine(sSave);
+                            XmlElement xeIndex = doc.CreateElement("Index");
+                            xeIndex.InnerText = sIndex;
+                            xeSend.AppendChild(xeIndex);
 
-                                iSuccess++;
-                            }
-                            catch(Exception ex)
-                            {                                
-                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }
+                            XmlElement xeNote = doc.CreateElement("Note");
+                            xeNote.InnerText = sNote;
+                            xeSend.AppendChild(xeNote);
+
+                            XmlElement xeSocket = doc.CreateElement("Socket");
+                            xeSocket.InnerText = sSocket;
+                            xeSend.AppendChild(xeSocket);
+
+                            XmlElement xeIPTo = doc.CreateElement("IPTo");
+                            xeIPTo.InnerText = sIPTo;
+                            xeSend.AppendChild(xeIPTo);
+
+                            XmlElement xeLen = doc.CreateElement("Len");
+                            xeLen.InnerText = sLen;
+                            xeSend.AppendChild(xeLen);
+
+                            XmlElement xeData = doc.CreateElement("Data");
+                            xeData.InnerText = sData;
+                            xeSend.AppendChild(xeData);
                         }
                     }
 
-                    sw.Flush();
-                    sw.Close();
-                    fs.Close();
-
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));                 
+                    doc.Save(sfdSocketInfo.FileName);
                 }
             }
             catch (Exception ex)
-            {                
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
-
+            {
+                bReturn = false;
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }                            
+            }
+            
+            return bReturn;
         }
 
         #endregion
 
         #region//加载发送列表数据
 
-        public static void LoadFileToSendList()
+        public static bool LoadSendList()
         {
-            int iSuccess = 0;
+            bool bReturn = true;
 
             try
             {
@@ -1274,48 +1291,42 @@ namespace WPELibrary.Lib
                 ofdLoadSocket.RestoreDirectory = true;
 
                 ofdLoadSocket.ShowDialog();
-                string filePath = ofdLoadSocket.FileName;
+                string FilePath = ofdLoadSocket.FileName;
 
-                if (!string.IsNullOrEmpty(filePath))
-                {
-                    string[] slSocket = File.ReadAllLines(filePath, Encoding.UTF8);
+                if (!string.IsNullOrEmpty(FilePath))
+                {  
+                    Socket_Cache.SendList.SendListClear();
 
-                    Socket_Cache.SendList.dtSocketSendList.Rows.Clear();
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(FilePath);
+                    XmlNode xnSendList = doc.DocumentElement;
 
-                    foreach (string sSocketTemp in slSocket)
+                    foreach (XmlNode xnSend in xnSendList.ChildNodes)
                     {
-                        try
-                        {
-                            string[] ss = sSocketTemp.Split('|');
+                        string sIndex = xnSend.SelectSingleNode("Index").InnerText;
+                        string sNote = xnSend.SelectSingleNode("Note").InnerText;
+                        string sSocket = xnSend.SelectSingleNode("Socket").InnerText;
+                        string sIPTo = xnSend.SelectSingleNode("IPTo").InnerText;
+                        string sLen = xnSend.SelectSingleNode("Len").InnerText;
+                        string sData = xnSend.SelectSingleNode("Data").InnerText;
 
-                            int iIndex = int.Parse(ss[0]);
-                            string sNote = ss[1];
-                            int iSocket = int.Parse(ss[2]);
-                            string sIPTo = ss[3];
-                            int iResLen = int.Parse(ss[4]);
-                            string sData = ss[5];
+                        int iIndex = int.Parse(sIndex);                        
+                        int iSocket = int.Parse(sSocket);                        
+                        int iLen = int.Parse(sLen);
 
-                            byte[] bBuffer = StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sData);
+                        byte[] bBuffer = StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sData);
 
-                            Socket_Cache.SendList.AddToSendList_New(iIndex, sNote, iSocket, sIPTo, sData, bBuffer);
-
-                            iSuccess++;
-                        }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }                       
+                        Socket_Cache.SendList.AddToSendList_New(iIndex, sNote, iSocket, sIPTo, sData, bBuffer);
                     }
-
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess));
                 }            
             }
             catch (Exception ex)
             {
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
-
+                bReturn = false;
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            return bReturn;
         }
 
         #endregion
@@ -1324,8 +1335,6 @@ namespace WPELibrary.Lib
 
         public static void SaveFilterList_Dialog()
         {
-            int iSuccess = 0;
-
             try
             {
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
@@ -1337,22 +1346,28 @@ namespace WPELibrary.Lib
 
                     if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
                     {
-                        iSuccess = SaveFilterList(sfdSocketInfo.FileName);
-                        ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
+                        bool bOK = SaveFilterList(sfdSocketInfo.FileName);
+
+                        if (bOK)
+                        {
+                            ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71));
+                        }
+                        else
+                        {
+                            ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72));
+                        }
                     }
                 }  
             }
             catch (Exception ex)
-            {
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
+            {                
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
-        public static int SaveFilterList(string FilePath)
+        public static bool SaveFilterList(string FilePath)
         {
-            int iReturn = 0;
-            string sSave = string.Empty;
+            bool bReturn = true;
 
             try
             {
@@ -1361,49 +1376,79 @@ namespace WPELibrary.Lib
                     FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
                 }
 
-                FileStream fs = new FileStream(FilePath, FileMode.Create);
-                StreamWriter sw = new StreamWriter(fs);
+                XmlDocument doc = new XmlDocument();
+
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+                doc.AppendChild(xmlDeclaration);
+
+                XmlElement xeFilterList = doc.CreateElement("FilterList");
+                doc.AppendChild(xeFilterList);
 
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
                     for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
                     {
-                        try
-                        {
-                            string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
-                            string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
-                            string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
-                            string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
-                            string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
-                            string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                            string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
-                            string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
-                            string sModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
+                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
+                        string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
+                        string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
+                        string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
+                        string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
+                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
+                        string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
+                        string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
+                        string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
 
-                            sSave = sFNum + "|" + sFName + "|" + sFMode + "|" + sFAction + "|" + sFFunction + "|" + sFStartFrom + "|" + sFModifyCNT + "|" + sFSearch + "|" + sModify;
+                        XmlElement xeFilter = doc.CreateElement("Filter");
+                        xeFilterList.AppendChild(xeFilter);
 
-                            sw.WriteLine(sSave);
+                        XmlElement xeFNum = doc.CreateElement("Num");
+                        xeFNum.InnerText = sFNum;
+                        xeFilter.AppendChild(xeFNum);
 
-                            iReturn++;
-                        }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
+                        XmlElement xeFName = doc.CreateElement("Name");
+                        xeFName.InnerText = sFName;
+                        xeFilter.AppendChild(xeFName);
+
+                        XmlElement xeFMode = doc.CreateElement("Mode");
+                        xeFMode.InnerText = sFMode;
+                        xeFilter.AppendChild(xeFMode);
+
+                        XmlElement xeFAction = doc.CreateElement("Action");
+                        xeFAction.InnerText = sFAction;
+                        xeFilter.AppendChild(xeFAction);
+
+                        XmlElement xeFFunction = doc.CreateElement("Function");
+                        xeFFunction.InnerText = sFFunction;
+                        xeFilter.AppendChild(xeFFunction);
+
+                        XmlElement xeFStartFrom = doc.CreateElement("StartFrom");
+                        xeFStartFrom.InnerText = sFStartFrom;
+                        xeFilter.AppendChild(xeFStartFrom);
+
+                        XmlElement xeFModifyCNT = doc.CreateElement("ModifyCNT");
+                        xeFModifyCNT.InnerText = sFModifyCNT;
+                        xeFilter.AppendChild(xeFModifyCNT);
+
+                        XmlElement xeSearch = doc.CreateElement("Search");
+                        xeSearch.InnerText = sFSearch;
+                        xeFilter.AppendChild(xeSearch);
+
+                        XmlElement xeModify = doc.CreateElement("Modify");
+                        xeModify.InnerText = sFModify;
+                        xeFilter.AppendChild(xeModify);
                     }
-                }                
+                }
 
-                sw.Flush();
-                sw.Close();
-                fs.Close();
+                doc.Save(FilePath);
             }
             catch (Exception ex)
             {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                bReturn = false;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return iReturn;
-        }
+            return bReturn;
+        }        
 
         #endregion
 
@@ -1438,8 +1483,6 @@ namespace WPELibrary.Lib
 
         public static void LoadFilterList_Dialog()
         {
-            int iSuccess = 0;
-
             try
             {
                 OpenFileDialog ofdLoadSocket = new OpenFileDialog();
@@ -1448,24 +1491,31 @@ namespace WPELibrary.Lib
                 ofdLoadSocket.RestoreDirectory = true;
 
                 ofdLoadSocket.ShowDialog();
-                string filePath = ofdLoadSocket.FileName;
+                string FilePath = ofdLoadSocket.FileName;
 
-                if (!string.IsNullOrEmpty(filePath))
+                if (!string.IsNullOrEmpty(FilePath))
                 {
-                    iSuccess = LoadFilterList(filePath);
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), iSuccess));
+                    bool bOK = LoadFilterList(FilePath);
+
+                    if (bOK)
+                    {
+                        ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
+                    }
+                    else
+                    {
+                        ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74));
+                    }                    
                 }
             }
             catch (Exception ex)
-            {
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74) + ex.Message);
+            {                
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
-        public static int LoadFilterList(string FilePath)
+        public static bool LoadFilterList(string FilePath)
         {
-            int iReturn = 0;            
+            bool bReturn = true;
 
             try
             {
@@ -1476,46 +1526,42 @@ namespace WPELibrary.Lib
 
                 if (File.Exists(FilePath))
                 {
-                    string[] slFilter = File.ReadAllLines(FilePath, Encoding.UTF8);
-                    
-                    if (slFilter.Length > 0)
+                    Socket_Cache.FilterList.FilterListClear();
+
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(FilePath);
+                    XmlNode xnFilterList = doc.DocumentElement;
+
+                    foreach (XmlNode xnFilter in xnFilterList.ChildNodes)
                     {
-                        Socket_Cache.FilterList.FilterListClear();
+                        string sFNum = xnFilter.SelectSingleNode("Num").InnerText;
+                        string sFName = xnFilter.SelectSingleNode("Name").InnerText;
+                        string sFMode = xnFilter.SelectSingleNode("Mode").InnerText;
+                        string sFAction = xnFilter.SelectSingleNode("Action").InnerText;
+                        string sFFunction = xnFilter.SelectSingleNode("Function").InnerText;
+                        string sFStartFrom = xnFilter.SelectSingleNode("StartFrom").InnerText;
+                        string sFModifyCNT = xnFilter.SelectSingleNode("ModifyCNT").InnerText;
+                        string sFSearch = xnFilter.SelectSingleNode("Search").InnerText;
+                        string sFModify = xnFilter.SelectSingleNode("Modify").InnerText;
 
-                        foreach (string sFilterTemp in slFilter)
-                        {
-                            try
-                            {
-                                string[] ss = sFilterTemp.Split('|');
+                        int iFNum = int.Parse(sFNum);                        
+                        Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
+                        Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
+                        Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
+                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
+                        int iFModifyCNT = int.Parse(sFModifyCNT);                   
 
-                                int iFNum = int.Parse(ss[0]);
-                                string sFName = ss[1];
-                                Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(ss[2]);
-                                Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(ss[3]);
-                                Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(ss[4]);
-                                Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(ss[5]);
-                                int iFModifyCNT = int.Parse(ss[6]);
-                                string sFSearch = ss[7];
-                                string sFModify = ss[8];
-
-                                Socket_Cache.FilterList.AddFilter_New(sFName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
-
-                                iReturn++;
-                            }
-                            catch (Exception ex)
-                            {
-                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }
-                        }
-                    }                    
+                        Socket_Cache.FilterList.AddFilter_New(sFName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
+                    }
                 }
             }
             catch (Exception ex)
             {
+                bReturn = false;
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return iReturn;
+            return bReturn;
         }
 
         #endregion
@@ -2150,6 +2196,267 @@ namespace WPELibrary.Lib
             }
         }
         #endregion        
+
+        #region//保存系统设置
+
+        public static bool SaveSystemConfig()
+        {
+            bool bReturn = true;
+
+            try
+            {
+                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\system.config";
+
+                XmlDocument doc = new XmlDocument();
+
+                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+                doc.AppendChild(xmlDeclaration);
+
+                XmlElement xeSystemConfig = doc.CreateElement("SystemConfig");
+                doc.AppendChild(xeSystemConfig);
+
+                #region//滤镜设置
+
+                XmlElement xeFilterConfig = doc.CreateElement("FilterConfig");
+                xeSystemConfig.AppendChild(xeFilterConfig);
+
+                string sCheckNotShow = Socket_Cache.CheckNotShow.ToString();
+                string sCheckSocket = Socket_Cache.CheckSocket.ToString();
+                string sCheckIP = Socket_Cache.CheckIP.ToString();
+                string sCheckPort = Socket_Cache.CheckPort.ToString();
+                string sCheckData = Socket_Cache.CheckData.ToString();
+                string sCheckSize = Socket_Cache.CheckSize.ToString();
+
+                string sCheckSocket_Value = Socket_Cache.CheckSocket_Value;
+                string sCheckIP_Value = Socket_Cache.CheckIP_Value;
+                string sCheckPort_Value = Socket_Cache.CheckPort_Value;
+                string sCheckData_Value = Socket_Cache.CheckData_Value;
+                string sCheckSizeFrom_Value = Socket_Cache.CheckSizeFrom_Value.ToString();
+                string sCheckSizeTo_Value = Socket_Cache.CheckSizeTo_Value.ToString();
+
+                XmlElement xeCheckNotShow = doc.CreateElement("CheckNotShow");
+                xeCheckNotShow.InnerText = sCheckNotShow;
+                xeFilterConfig.AppendChild(xeCheckNotShow);
+
+                XmlElement xeCheckSocket = doc.CreateElement("CheckSocket");
+                xeCheckSocket.InnerText = sCheckSocket;
+                xeFilterConfig.AppendChild(xeCheckSocket);
+
+                XmlElement xeCheckIP = doc.CreateElement("CheckIP");
+                xeCheckIP.InnerText = sCheckIP;
+                xeFilterConfig.AppendChild(xeCheckIP);
+
+                XmlElement xeCheckPort = doc.CreateElement("CheckPort");
+                xeCheckPort.InnerText = sCheckPort;
+                xeFilterConfig.AppendChild(xeCheckPort);
+
+                XmlElement xeCheckData = doc.CreateElement("CheckData");
+                xeCheckData.InnerText = sCheckData;
+                xeFilterConfig.AppendChild(xeCheckData);
+
+                XmlElement xeCheckSize = doc.CreateElement("CheckSize");
+                xeCheckSize.InnerText = sCheckSize;
+                xeFilterConfig.AppendChild(xeCheckSize);
+
+                XmlElement xeCheckSocket_Value = doc.CreateElement("CheckSocket_Value");
+                xeCheckSocket_Value.InnerText = sCheckSocket_Value;
+                xeFilterConfig.AppendChild(xeCheckSocket_Value);
+
+                XmlElement xeCheckIP_Value = doc.CreateElement("CheckIP_Value");
+                xeCheckIP_Value.InnerText = sCheckIP_Value;
+                xeFilterConfig.AppendChild(xeCheckIP_Value);
+
+                XmlElement xeCheckPort_Value = doc.CreateElement("CheckPort_Value");
+                xeCheckPort_Value.InnerText = sCheckPort_Value;
+                xeFilterConfig.AppendChild(xeCheckPort_Value);
+
+                XmlElement xeCheckData_Value = doc.CreateElement("CheckData_Value");
+                xeCheckData_Value.InnerText = sCheckData_Value;
+                xeFilterConfig.AppendChild(xeCheckData_Value);
+
+                XmlElement xeCheckSizeFrom_Value = doc.CreateElement("CheckSizeFrom_Value");
+                xeCheckSizeFrom_Value.InnerText = sCheckSizeFrom_Value;
+                xeFilterConfig.AppendChild(xeCheckSizeFrom_Value);
+
+                XmlElement xeCheckSizeTo_Value = doc.CreateElement("CheckSizeTo_Value");
+                xeCheckSizeTo_Value.InnerText = sCheckSizeTo_Value;
+                xeFilterConfig.AppendChild(xeCheckSizeTo_Value);
+
+                #endregion
+
+                #region//拦截设置
+
+                XmlElement xeHookConfig = doc.CreateElement("HookConfig");
+                xeSystemConfig.AppendChild(xeHookConfig);
+
+                string sHookSend = Socket_Cache.HookSend.ToString();
+                string sHookSendTo = Socket_Cache.HookSendTo.ToString();
+                string sHookRecv = Socket_Cache.HookRecv.ToString();
+                string sHookRecvFrom = Socket_Cache.HookRecvFrom.ToString();
+                string sHookWSASend = Socket_Cache.HookWSASend.ToString();
+                string sHookWSASendTo = Socket_Cache.HookWSASendTo.ToString();
+                string sHookWSARecv = Socket_Cache.HookWSARecv.ToString();
+                string sHookWSARecvFrom = Socket_Cache.HookWSARecvFrom.ToString();
+
+                XmlElement xeHookSend = doc.CreateElement("HookSend");
+                xeHookSend.InnerText = sHookSend;
+                xeHookConfig.AppendChild(xeHookSend);
+
+                XmlElement xeHookSendTo = doc.CreateElement("HookSendTo");
+                xeHookSendTo.InnerText = sHookSendTo;
+                xeHookConfig.AppendChild(xeHookSendTo);
+
+                XmlElement xeHookRecv = doc.CreateElement("HookRecv");
+                xeHookRecv.InnerText = sHookRecv;
+                xeHookConfig.AppendChild(xeHookRecv);
+
+                XmlElement xeHookRecvFrom = doc.CreateElement("HookRecvFrom");
+                xeHookRecvFrom.InnerText = sHookRecvFrom;
+                xeHookConfig.AppendChild(xeHookRecvFrom);
+
+                XmlElement xeHookWSASend = doc.CreateElement("HookWSASend");
+                xeHookWSASend.InnerText = sHookWSASend;
+                xeHookConfig.AppendChild(xeHookWSASend);
+
+                XmlElement xeHookWSASendTo = doc.CreateElement("HookWSASendTo");
+                xeHookWSASendTo.InnerText = sHookWSASendTo;
+                xeHookConfig.AppendChild(xeHookWSASendTo);
+
+                XmlElement xeHookWSARecv = doc.CreateElement("HookWSARecv");
+                xeHookWSARecv.InnerText = sHookWSARecv;
+                xeHookConfig.AppendChild(xeHookWSARecv);
+
+                XmlElement xeHookWSARecvFrom = doc.CreateElement("HookWSARecvFrom");
+                xeHookWSARecvFrom.InnerText = sHookWSARecvFrom;
+                xeHookConfig.AppendChild(xeHookWSARecvFrom);
+
+                #endregion
+
+                #region//列表设置
+
+                XmlElement xeSocketListConfig = doc.CreateElement("SocketListConfig");
+                xeSystemConfig.AppendChild(xeSocketListConfig);
+
+                string sAutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();              
+
+                XmlElement xeAutoRoll = doc.CreateElement("AutoRoll");
+                xeAutoRoll.InnerText = sAutoRoll;
+                xeSocketListConfig.AppendChild(xeAutoRoll);              
+
+                #endregion
+
+                doc.Save(FilePath);
+            }
+            catch (Exception ex)
+            {
+                bReturn = false;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//加载系统设置
+
+        public static bool LoadSystemConfig()
+        {
+            bool bReturn = true;
+
+            try
+            {
+                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\system.config";
+
+                if (File.Exists(FilePath))
+                {
+                    XmlDocument doc = new XmlDocument();
+                    doc.Load(FilePath);
+                    XmlNode xnSystemConfig = doc.DocumentElement;
+
+                    #region//滤镜设置
+
+                    XmlNode xnFilterConfig = xnSystemConfig.SelectSingleNode("FilterConfig");
+
+                    string sCheckNotShow = xnFilterConfig.SelectSingleNode("CheckNotShow").InnerText;
+                    string sCheckSocket = xnFilterConfig.SelectSingleNode("CheckSocket").InnerText;
+                    string sCheckIP = xnFilterConfig.SelectSingleNode("CheckIP").InnerText;
+                    string sCheckPort = xnFilterConfig.SelectSingleNode("CheckPort").InnerText;
+                    string sCheckData = xnFilterConfig.SelectSingleNode("CheckData").InnerText;
+                    string sCheckSize = xnFilterConfig.SelectSingleNode("CheckSize").InnerText;
+
+                    string sCheckSocket_Value = xnFilterConfig.SelectSingleNode("CheckSocket_Value").InnerText;
+                    string sCheckIP_Value = xnFilterConfig.SelectSingleNode("CheckIP_Value").InnerText;
+                    string sCheckPort_Value = xnFilterConfig.SelectSingleNode("CheckPort_Value").InnerText;
+                    string sCheckData_Value = xnFilterConfig.SelectSingleNode("CheckData_Value").InnerText;
+                    string sCheckSizeFrom_Value = xnFilterConfig.SelectSingleNode("CheckSizeFrom_Value").InnerText;
+                    string sCheckSizeTo_Value = xnFilterConfig.SelectSingleNode("CheckSizeTo_Value").InnerText;
+
+                    Socket_Cache.CheckNotShow = bool.Parse(sCheckNotShow);
+                    Socket_Cache.CheckSocket = bool.Parse(sCheckSocket);
+                    Socket_Cache.CheckIP = bool.Parse(sCheckIP);
+                    Socket_Cache.CheckPort = bool.Parse(sCheckPort);
+                    Socket_Cache.CheckData = bool.Parse(sCheckData);
+                    Socket_Cache.CheckSize = bool.Parse(sCheckSize);
+
+                    Socket_Cache.CheckSocket_Value = sCheckSocket_Value;
+                    Socket_Cache.CheckIP_Value = sCheckIP_Value;
+                    Socket_Cache.CheckPort_Value = sCheckPort_Value;
+                    Socket_Cache.CheckData_Value = sCheckData_Value;
+                    Socket_Cache.CheckSizeFrom_Value = decimal.Parse(sCheckSizeFrom_Value);
+                    Socket_Cache.CheckSizeTo_Value = decimal.Parse(sCheckSizeTo_Value);
+
+                    #endregion
+
+                    #region//拦截设置
+
+                    XmlNode xnHookConfig = xnSystemConfig.SelectSingleNode("HookConfig");
+
+                    string sHookSend = xnHookConfig.SelectSingleNode("HookSend").InnerText;
+                    string sHookSendTo = xnHookConfig.SelectSingleNode("HookSendTo").InnerText;
+                    string sHookRecv = xnHookConfig.SelectSingleNode("HookRecv").InnerText;
+                    string sHookRecvFrom = xnHookConfig.SelectSingleNode("HookRecvFrom").InnerText;
+                    string sHookWSASend = xnHookConfig.SelectSingleNode("HookWSASend").InnerText;
+                    string sHookWSASendTo = xnHookConfig.SelectSingleNode("HookWSASendTo").InnerText;
+                    string sHookWSARecv = xnHookConfig.SelectSingleNode("HookWSARecv").InnerText;
+                    string sHookWSARecvFrom = xnHookConfig.SelectSingleNode("HookWSARecvFrom").InnerText;
+
+                    Socket_Cache.HookSend = bool.Parse(sHookSend);
+                    Socket_Cache.HookSendTo = bool.Parse(sHookSendTo);
+                    Socket_Cache.HookRecv = bool.Parse(sHookRecv);
+                    Socket_Cache.HookRecvFrom = bool.Parse(sHookRecvFrom);
+                    Socket_Cache.HookWSASend = bool.Parse(sHookWSASend);
+                    Socket_Cache.HookWSASendTo = bool.Parse(sHookWSASendTo);
+                    Socket_Cache.HookWSARecv = bool.Parse(sHookWSARecv);
+                    Socket_Cache.HookWSARecvFrom = bool.Parse(sHookWSARecvFrom);
+
+                    #endregion
+
+                    #region//列表设置
+
+                    XmlNode xnSocketListConfig = xnSystemConfig.SelectSingleNode("SocketListConfig");
+
+                    string sAutoRoll = xnSocketListConfig.SelectSingleNode("AutoRoll").InnerText;
+
+                    Socket_Cache.SocketList.AutoRoll = bool.Parse(sAutoRoll);
+
+                    #endregion
+                }
+                else
+                {
+                    bReturn = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                bReturn = false;
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
 
         #region//弹出对话框
         public static void ShowMessageBox(string sMessage)
