@@ -151,9 +151,6 @@
   <data name="gbFilterFunction.Text" xml:space="preserve">
     <value>[ Function ]</value>
   </data>
-  <data name="gbFilterName.Text" xml:space="preserve">
-    <value>[ Filter Name ]</value>
-  </data>
   <data name="bFilterButton_Save.Text" xml:space="preserve">
     <value>Save (&amp;S)</value>
   </data>
@@ -177,6 +174,24 @@
   </data>
   <data name="rbFilterMode_Normal.Text" xml:space="preserve">
     <value>Normal</value>
+  </data>
+  <data name="gbFilterAppoint.Text" xml:space="preserve">
+    <value>[ Appoint ]</value>
+  </data>
+  <data name="txtFilter_HeaderContent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>82, 6</value>
+  </data>
+  <data name="txtFilter_HeaderContent.Size" type="System.Drawing.Size, System.Drawing">
+    <value>233, 23</value>
+  </data>
+  <data name="cbFilter_AppointHeader.Size" type="System.Drawing.Size, System.Drawing">
+    <value>70, 23</value>
+  </data>
+  <data name="cbFilter_AppointHeader.Text" xml:space="preserve">
+    <value>Header</value>
+  </data>
+  <data name="gbFilterName.Text" xml:space="preserve">
+    <value>[ Filter Name ]</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

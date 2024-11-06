@@ -221,6 +221,8 @@ namespace WPELibrary.Lib
         public static class SocketList
         {
             public static bool AutoRoll;
+            public static bool AutoClear;
+            public static decimal AutoClear_Value;
 
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
 
@@ -562,7 +564,7 @@ namespace WPELibrary.Lib
 
                     string sFSearch = Socket_Operation.GetFilterString_ByBytes(bBuffer);                    
 
-                    Socket_Cache.FilterList.AddFilter_New(sFName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, sFSearch, string.Empty, false);
+                    Socket_Cache.FilterList.AddFilter_New(sFName, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, sFSearch, string.Empty, false);
                     Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
                 }
                 catch (Exception ex)
@@ -580,7 +582,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, false, true, false, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    AddFilter_New(string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, string.Empty, false);
+                    AddFilter_New(string.Empty, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, string.Empty, false);
                 }
                 catch (Exception ex)
                 {
@@ -588,7 +590,7 @@ namespace WPELibrary.Lib
                 }
             }
             
-            public static void AddFilter_New(string FName, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify, bool bEnable)
+            public static void AddFilter_New(string FName, bool bAppointHeader, string FilterHeaderContent, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify, bool bEnable)
             {
                 try
                 {
@@ -599,7 +601,7 @@ namespace WPELibrary.Lib
                         FName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + FNum.ToString();
                     }                
 
-                    Socket_FilterInfo sc = new Socket_FilterInfo(FNum, bEnable, FName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, FModifyCNT, FSearch, FModify);
+                    Socket_FilterInfo sc = new Socket_FilterInfo(FNum, bEnable, FName, bAppointHeader, FilterHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, FModifyCNT, FSearch, FModify);
 
                     lstFilter.Add(sc);
                 }
@@ -665,7 +667,7 @@ namespace WPELibrary.Lib
 
             #region//修改
 
-            public static void UpdateFilter_ByFilterNum(int FNum, string FName, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify)
+            public static void UpdateFilter_ByFilterNum(int FNum, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify)
             {
                 try
                 {
@@ -676,6 +678,8 @@ namespace WPELibrary.Lib
                         if (iFIndex > -1)
                         {
                             lstFilter[iFIndex].FName = FName;
+                            lstFilter[iFIndex].AppointHeader = AppointHeader;
+                            lstFilter[iFIndex].HeaderContent = HeaderContent;
                             lstFilter[iFIndex].FMode = FilterMode;
                             lstFilter[iFIndex].FAction = FilterAction;
                             lstFilter[iFIndex].FFunction = FilterFunction;
@@ -763,7 +767,7 @@ namespace WPELibrary.Lib
                     {
                         sFName = sfi.FName;
 
-                        if (Socket_Operation.CheckFilter_IsEffective(ptType, sfi))
+                        if (Socket_Operation.CheckFilter_IsEffective(ipBuff, iLen, ptType, sfi))
                         {
                             switch (sfi.FMode)
                             {

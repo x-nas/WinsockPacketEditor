@@ -14,8 +14,10 @@ namespace WPELibrary
         private int FilterIndex = -1;
         private int FilterModifyCNT = 0;
         private string FilterName = string.Empty;
+        private string FilterHeaderContent = string.Empty;
         private string FilterSearch = string.Empty;
-        private string FilterModify = string.Empty;        
+        private string FilterModify = string.Empty;
+        private bool FilterAppointHeader = false;
         private Socket_Cache.Filter.FilterMode FilterMode;
         private Socket_Cache.Filter.FilterAction FilterAction;
         private Socket_Cache.Filter.FilterFunction FilterFunction;        
@@ -59,13 +61,15 @@ namespace WPELibrary
                 if (FilterIndex >= 0)
                 {
                     this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
+                    this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
+                    this.FilterHeaderContent = Socket_Cache.FilterList.lstFilter[FilterIndex].HeaderContent;
                     this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
                     this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
                     this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
                     this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
                     this.FilterModifyCNT = Socket_Cache.FilterList.lstFilter[FilterIndex].FModifyCNT;
                     this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
-                    this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;
+                    this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;                    
 
                     switch (FilterMode)
                     {
@@ -102,9 +106,14 @@ namespace WPELibrary
                     }
                     this.FilterModifyFromChange();
 
-                    this.txtFilterName.Text = FilterName;
-                    this.nudFilterSet_ModifyTimes.Value = FilterModifyCNT;
+                    this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
+                    this.FilterAppointHeaderChange();
 
+                    this.txtFilterName.Text = FilterName;                    
+                    this.txtFilter_HeaderContent.Text = FilterHeaderContent;
+                    
+                    this.nudFilterSet_ModifyTimes.Value = FilterModifyCNT;
+                    
                     this.cbFilterFunction_Send.Checked = FilterFunction.Send;
                     this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
                     this.cbFilterFunction_Recv.Checked = FilterFunction.Recv;
@@ -376,6 +385,49 @@ namespace WPELibrary
 
         #endregion
 
+        #region//高级指定
+
+        private void txtFilter_HeaderContent_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsHex(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void cbFilter_AppointHeader_CheckedChanged(object sender, EventArgs e)
+        {
+            this.FilterAppointHeaderChange();
+        }
+
+        private void FilterAppointHeaderChange()
+        {
+            try
+            {
+                if (this.cbFilter_AppointHeader.Checked)
+                {
+                    this.txtFilter_HeaderContent.Enabled = true;
+                }
+                else
+                {
+                    this.txtFilter_HeaderContent.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示滤镜内容
 
         private void ShowFilterInfo()
@@ -490,8 +542,11 @@ namespace WPELibrary
             try
             {
                 string sFName_New = string.Empty;
+                string sHeaderContent_New = string.Empty;
                 string sSearch_New = string.Empty;
                 string sModify_New = string.Empty;
+
+                bool bAppointHeader;
 
                 Socket_Cache.Filter.FilterMode FilterMode_New;
                 Socket_Cache.Filter.FilterAction FilterAction_New;
@@ -505,6 +560,10 @@ namespace WPELibrary
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
                     return;
                 }
+
+                bAppointHeader = this.cbFilter_AppointHeader.Checked;
+
+                sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
 
                 if (rbFilterMode_Normal.Checked)
                 {
@@ -640,7 +699,7 @@ namespace WPELibrary
 
                 int iFModifyCNT_New = int.Parse(this.nudFilterSet_ModifyTimes.Value.ToString());                
 
-                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, FilterMode_New, FilterAction_New, FilterFunction_New, FilterStartFrom_New, iFModifyCNT_New, sSearch_New, sModify_New);                
+                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, bAppointHeader, sHeaderContent_New, FilterMode_New, FilterAction_New, FilterFunction_New, FilterStartFrom_New, iFModifyCNT_New, sSearch_New, sModify_New);                
 
                 this.Close();
             }
@@ -764,6 +823,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

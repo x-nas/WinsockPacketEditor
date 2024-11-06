@@ -40,6 +40,30 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否指定包头
+
+        protected bool appointheader;
+
+        public bool AppointHeader
+        {
+            get { return appointheader; }
+            set { appointheader = value; }
+        }
+
+        #endregion
+
+        #region//包头内容
+
+        protected string headercontent;
+
+        public string HeaderContent
+        {
+            get { return headercontent; }
+            set { headercontent = value; }
+        }
+
+        #endregion        
+
         #region//模式
 
         protected Socket_Cache.Filter.FilterMode fmode;
@@ -126,11 +150,13 @@ namespace WPELibrary.Lib
 
         #region//Socket_FilterInfo
 
-        public Socket_FilterInfo(int FNum,bool IsEnable, string FName, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, int FModifyCNT, string FSearch, string FModify) 
+        public Socket_FilterInfo(int FNum,bool IsEnable, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, int FModifyCNT, string FSearch, string FModify) 
         {
             this.fnum = FNum;
             this.isenable = IsEnable;
             this.fname = FName;
+            this.appointheader = AppointHeader;
+            this.headercontent = HeaderContent;
             this.fmode = FMode;
             this.faction = FAction;
             this.ffunction = FFunction;

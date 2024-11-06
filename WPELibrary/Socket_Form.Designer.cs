@@ -106,6 +106,8 @@ namespace WPELibrary
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbSocketList_Set = new System.Windows.Forms.GroupBox();
             this.tlpSocketList_Set = new System.Windows.Forms.TableLayoutPanel();
+            this.nudSocketList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
+            this.cbSocketList_AutoClear = new System.Windows.Forms.CheckBox();
             this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.gbFilterSet = new System.Windows.Forms.GroupBox();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
@@ -280,6 +282,7 @@ namespace WPELibrary
             this.tlpParameter.SuspendLayout();
             this.gbSocketList_Set.SuspendLayout();
             this.tlpSocketList_Set.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
             this.gbFilterSet.SuspendLayout();
             this.tlpFilterSet.SuspendLayout();
             this.tlpFilterSet_PacketLength.SuspendLayout();
@@ -777,8 +780,32 @@ namespace WPELibrary
             // tlpSocketList_Set
             // 
             resources.ApplyResources(this.tlpSocketList_Set, "tlpSocketList_Set");
+            this.tlpSocketList_Set.Controls.Add(this.nudSocketList_AutoClearValue, 0, 2);
+            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_AutoClear, 0, 1);
             this.tlpSocketList_Set.Controls.Add(this.cbSocketList_AutoRoll, 0, 0);
             this.tlpSocketList_Set.Name = "tlpSocketList_Set";
+            // 
+            // nudSocketList_AutoClearValue
+            // 
+            resources.ApplyResources(this.nudSocketList_AutoClearValue, "nudSocketList_AutoClearValue");
+            this.nudSocketList_AutoClearValue.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudSocketList_AutoClearValue.Name = "nudSocketList_AutoClearValue";
+            this.nudSocketList_AutoClearValue.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            // 
+            // cbSocketList_AutoClear
+            // 
+            resources.ApplyResources(this.cbSocketList_AutoClear, "cbSocketList_AutoClear");
+            this.cbSocketList_AutoClear.Name = "cbSocketList_AutoClear";
+            this.cbSocketList_AutoClear.UseVisualStyleBackColor = true;
+            this.cbSocketList_AutoClear.CheckedChanged += new System.EventHandler(this.cbSocketList_AutoClear_CheckedChanged);
             // 
             // cbSocketList_AutoRoll
             // 
@@ -2119,6 +2146,7 @@ namespace WPELibrary
             this.gbSocketList_Set.ResumeLayout(false);
             this.tlpSocketList_Set.ResumeLayout(false);
             this.tlpSocketList_Set.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).EndInit();
             this.gbFilterSet.ResumeLayout(false);
             this.tlpFilterSet.ResumeLayout(false);
             this.tlpFilterSet.PerformLayout();
@@ -2404,5 +2432,7 @@ namespace WPELibrary
         private System.Windows.Forms.RichTextBox rtbComparison_Result;
         private System.Windows.Forms.Panel pPacketInfo_Encoding;
         private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
+        private System.Windows.Forms.NumericUpDown nudSocketList_AutoClearValue;
+        private System.Windows.Forms.CheckBox cbSocketList_AutoClear;
     }
 }

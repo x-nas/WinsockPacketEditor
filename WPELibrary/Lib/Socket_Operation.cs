@@ -1388,15 +1388,17 @@ namespace WPELibrary.Lib
                 {
                     for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
                     {
-                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
-                        string sFName = Socket_Cache.FilterList.lstFilter[i].FName.ToString();
+                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();                        
+                        string sFName = Socket_Cache.FilterList.lstFilter[i].FName;
+                        string sFAppointHeader = Socket_Cache.FilterList.lstFilter[i].AppointHeader.ToString();
+                        string sFHeaderContent = Socket_Cache.FilterList.lstFilter[i].HeaderContent;
                         string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
                         string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
                         string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
                         string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
                         string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
-                        string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch.ToString();
-                        string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify.ToString();
+                        string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
+                        string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
                         XmlElement xeFilter = doc.CreateElement("Filter");
                         xeFilterList.AppendChild(xeFilter);
@@ -1408,6 +1410,14 @@ namespace WPELibrary.Lib
                         XmlElement xeFName = doc.CreateElement("Name");
                         xeFName.InnerText = sFName;
                         xeFilter.AppendChild(xeFName);
+
+                        XmlElement xeAppointHeader = doc.CreateElement("AppointHeader");
+                        xeAppointHeader.InnerText = sFAppointHeader;
+                        xeFilter.AppendChild(xeAppointHeader);
+
+                        XmlElement xeHeaderContent = doc.CreateElement("HeaderContent");
+                        xeHeaderContent.InnerText = sFHeaderContent;
+                        xeFilter.AppendChild(xeHeaderContent);
 
                         XmlElement xeFMode = doc.CreateElement("Mode");
                         xeFMode.InnerText = sFMode;
@@ -1536,6 +1546,8 @@ namespace WPELibrary.Lib
                     {
                         string sFNum = xnFilter.SelectSingleNode("Num").InnerText;
                         string sFName = xnFilter.SelectSingleNode("Name").InnerText;
+                        string sFAppointHeader = xnFilter.SelectSingleNode("AppointHeader").InnerText;
+                        string sFHeaderContent = xnFilter.SelectSingleNode("HeaderContent").InnerText;
                         string sFMode = xnFilter.SelectSingleNode("Mode").InnerText;
                         string sFAction = xnFilter.SelectSingleNode("Action").InnerText;
                         string sFFunction = xnFilter.SelectSingleNode("Function").InnerText;
@@ -1544,14 +1556,17 @@ namespace WPELibrary.Lib
                         string sFSearch = xnFilter.SelectSingleNode("Search").InnerText;
                         string sFModify = xnFilter.SelectSingleNode("Modify").InnerText;
 
-                        int iFNum = int.Parse(sFNum);                        
+                        int iFNum = int.Parse(sFNum);
+                        int iFModifyCNT = int.Parse(sFModifyCNT);
+
+                        bool bAppointHeader = bool.Parse(sFAppointHeader);
+
                         Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
                         Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
                         Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
-                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
-                        int iFModifyCNT = int.Parse(sFModifyCNT);                   
+                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);                                           
 
-                        Socket_Cache.FilterList.AddFilter_New(sFName, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
+                        Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
                     }
                 }
             }
@@ -1741,7 +1756,7 @@ namespace WPELibrary.Lib
 
         #region//检查滤镜是否生效
 
-        public static bool CheckFilter_IsEffective(Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
+        public static bool CheckFilter_IsEffective(IntPtr ipBuff, int iLen, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
         {
             bool bResult = false;
 
@@ -1749,11 +1764,21 @@ namespace WPELibrary.Lib
             {
                 if (sfi.IsEnable)
                 {
-                    if (CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
+                    if (!string.IsNullOrEmpty(sfi.FSearch))
                     {
-                        if (!string.IsNullOrEmpty(sfi.FSearch))
+                        if (CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
                         {
-                            bResult = true;
+                            if (sfi.AppointHeader)
+                            {
+                                if (CheckPacket_IsMatch_AppointHeader(ipBuff, iLen, sfi.HeaderContent))
+                                {
+                                    bResult = true;
+                                }
+                            }
+                            else
+                            {
+                                bResult = true;
+                            }
                         }
                     }
                 }
@@ -1870,6 +1895,41 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//检查封包是否匹配滤镜的指定包头
+
+        public static bool CheckPacket_IsMatch_AppointHeader(IntPtr ipBuff, int iLen, string sHeaderContent)
+        {
+            bool bResult = false;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(sHeaderContent))
+                {
+                    byte[] bHeaderContent = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sHeaderContent);
+                    int iHeaderContent_Len = bHeaderContent.Length;
+
+                    if (iHeaderContent_Len > 0 && iHeaderContent_Len <= iLen)
+                    {
+                        byte[] bPacketHeader = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iHeaderContent_Len);
+                        string sPacketHeader = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bPacketHeader);
+
+                        if (sHeaderContent.Equals(sPacketHeader))
+                        {
+                            bResult = true;
+                        }
+                    }                    
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+            }
+
+            return bResult;
         }
 
         #endregion
@@ -2337,11 +2397,21 @@ namespace WPELibrary.Lib
                 XmlElement xeSocketListConfig = doc.CreateElement("SocketListConfig");
                 xeSystemConfig.AppendChild(xeSocketListConfig);
 
-                string sAutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();              
+                string sAutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();
+                string sAutoClear = Socket_Cache.SocketList.AutoClear.ToString();
+                string sAutoClear_Value = Socket_Cache.SocketList.AutoClear_Value.ToString();                
 
                 XmlElement xeAutoRoll = doc.CreateElement("AutoRoll");
                 xeAutoRoll.InnerText = sAutoRoll;
-                xeSocketListConfig.AppendChild(xeAutoRoll);              
+                xeSocketListConfig.AppendChild(xeAutoRoll);
+
+                XmlElement xeAutoClear = doc.CreateElement("AutoClear");
+                xeAutoClear.InnerText = sAutoClear;
+                xeSocketListConfig.AppendChild(xeAutoClear);
+
+                XmlElement xesAutoClear_Value = doc.CreateElement("AutoClear_Value");
+                xesAutoClear_Value.InnerText = sAutoClear_Value;
+                xeSocketListConfig.AppendChild(xesAutoClear_Value);
 
                 #endregion
 
@@ -2437,8 +2507,12 @@ namespace WPELibrary.Lib
                     XmlNode xnSocketListConfig = xnSystemConfig.SelectSingleNode("SocketListConfig");
 
                     string sAutoRoll = xnSocketListConfig.SelectSingleNode("AutoRoll").InnerText;
+                    string sAutoClear = xnSocketListConfig.SelectSingleNode("AutoClear").InnerText;
+                    string sAutoClear_Value = xnSocketListConfig.SelectSingleNode("AutoClear_Value").InnerText;
 
                     Socket_Cache.SocketList.AutoRoll = bool.Parse(sAutoRoll);
+                    Socket_Cache.SocketList.AutoClear = bool.Parse(sAutoClear);
+                    Socket_Cache.SocketList.AutoClear_Value = decimal.Parse(sAutoClear_Value);
 
                     #endregion
                 }

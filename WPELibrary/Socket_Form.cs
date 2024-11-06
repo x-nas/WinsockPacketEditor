@@ -258,6 +258,9 @@ namespace WPELibrary
                     this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
 
                     this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
+                    this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
+                    this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
+                    this.SocketList_AutoClearChange();
 
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
                 }
@@ -300,6 +303,8 @@ namespace WPELibrary
                 Socket_Cache.CheckSizeTo_Value = this.nudCheckSizeTo.Value;
 
                 Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
+                Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
+                Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
             }
             catch (Exception ex)
             {
@@ -363,6 +368,34 @@ namespace WPELibrary
                 if (!Socket_Operation.CheckTextInput_IsDigit(e.KeyChar))
                 {
                     e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//列表设置
+
+        private void cbSocketList_AutoClear_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SocketList_AutoClearChange();
+        }
+
+        private void SocketList_AutoClearChange()
+        {
+            try
+            {
+                if (this.cbSocketList_AutoClear.Checked)
+                {
+                    this.nudSocketList_AutoClearValue.Enabled = true;
+                }
+                else
+                {
+                    this.nudSocketList_AutoClearValue.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -439,7 +472,30 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
+        private void AutoCleanUp_SocketList()
+        {
+            try
+            {
+                if (this.cbSocketList_AutoClear.Checked)
+                {
+                    decimal dClearCount = this.nudSocketList_AutoClearValue.Value;
+
+                    if (dClearCount > 0)
+                    {
+                        if (this.dgvSocketList.Rows.Count > dClearCount)
+                        {
+                            this.CleanUp_MainForm();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion
 
@@ -513,6 +569,8 @@ namespace WPELibrary
         {
             try
             {
+                this.AutoCleanUp_SocketList();
+
                 int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
                 int iFilter_CNT = Socket_Cache.SocketQueue.Filter_CNT;
                 int iIntercept_CNT = Socket_Cache.SocketQueue.Intercept_CNT;
@@ -541,7 +599,7 @@ namespace WPELibrary
                 this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
                 this.tlFilter_CNT.Text = iFilter_CNT.ToString();
                 this.tlIntercept_CNT.Text = iIntercept_CNT.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());                
 
                 if (!bgwSocketList.IsBusy)
                 {
@@ -1571,6 +1629,6 @@ namespace WPELibrary
             this.txtXOR.Clear();
         }
 
-        #endregion
+        #endregion        
     }
 }
