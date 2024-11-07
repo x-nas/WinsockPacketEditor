@@ -77,7 +77,7 @@ namespace WPELibrary.Lib
                 if (res > 0)
                 {
                     Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Recv;
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.GetFilterAction_ByDoFilter(ptType, buffer, length);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.GetFilterAction_ByDoFilter(ptType, buffer, res);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -115,7 +115,6 @@ namespace WPELibrary.Lib
 
         public static unsafe Int32 SendTo_Hook(Int32 socket, IntPtr buffer, Int32 length, SocketFlags flags, IntPtr To, Int32 toLenth)
         {
-
             Int32 res = 0;
 
             try
@@ -171,9 +170,9 @@ namespace WPELibrary.Lib
                 res = recvfrom(socket, buffer, length, flags, from, fromLen);
 
                 if (res > 0)
-                {
+                {                   
                     Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.RecvFrom;
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.GetFilterAction_ByDoFilter(ptType, buffer, length);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.GetFilterAction_ByDoFilter(ptType, buffer, res);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {

@@ -582,8 +582,8 @@ namespace WPELibrary
                 int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
                 int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
                 int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;                
-                int iTotal_SendBytes = Socket_Cache.SocketQueue.Total_SendBytes;
-                int iTotal_RecvBytes = Socket_Cache.SocketQueue.Total_RecvBytes;
+                long lTotal_SendBytes = Socket_Cache.SocketQueue.Total_SendBytes;
+                long lTotal_RecvBytes = Socket_Cache.SocketQueue.Total_RecvBytes;
 
                 int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
 
@@ -599,7 +599,10 @@ namespace WPELibrary
                 this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
                 this.tlFilter_CNT.Text = iFilter_CNT.ToString();
                 this.tlIntercept_CNT.Text = iIntercept_CNT.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), iTotal_SendBytes.ToString(), iTotal_RecvBytes.ToString());                
+
+                string sTotal_SendBytes = Socket_Operation.GetDisplayBytes(lTotal_SendBytes);
+                string sTotal_RecvBytes = Socket_Operation.GetDisplayBytes(lTotal_RecvBytes);
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), sTotal_SendBytes, sTotal_RecvBytes);                
 
                 if (!bgwSocketList.IsBusy)
                 {

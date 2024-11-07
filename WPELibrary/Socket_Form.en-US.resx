@@ -370,12 +370,6 @@
   <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
     <value>Add To Text B</value>
   </data>
-  <data name="gbSocketList_Set.Location" type="System.Drawing.Point, System.Drawing">
-    <value>777, 3</value>
-  </data>
-  <data name="gbSocketList_Set.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 122</value>
-  </data>
   <data name="gbSocketList_Set.Text" xml:space="preserve">
     <value>[ List Set ]</value>
   </data>
@@ -387,9 +381,6 @@
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 56</value>
-  </data>
-  <data name="nudSocketList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 23</value>
   </data>
   <data name="cbSocketList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 31</value>
@@ -408,9 +399,6 @@
   </data>
   <data name="gbFilterSet.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
-  </data>
-  <data name="gbFilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>511, 122</value>
   </data>
   <data name="gbFilterSet.Text" xml:space="preserve">
     <value>[ Filter Settings ]</value>
@@ -516,9 +504,6 @@
   </data>
   <data name="txtCheckIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 23</value>
-  </data>
-  <data name="gbHookType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>517, 3</value>
   </data>
   <data name="gbHookType.Text" xml:space="preserve">
     <value>[ Hook Settings ]</value>

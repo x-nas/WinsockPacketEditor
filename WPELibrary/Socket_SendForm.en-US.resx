@@ -193,9 +193,6 @@
   <data name="tlSend_Fail.Text" xml:space="preserve">
     <value>Fail:</value>
   </data>
-  <data name="gbSendSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 3</value>
-  </data>
   <data name="gbSendSocket.Text" xml:space="preserve">
     <value>[ Socket ]</value>
   </data>
@@ -228,9 +225,6 @@
   </data>
   <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
     <value>104, 21</value>
-  </data>
-  <data name="gbSendType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>280, 3</value>
   </data>
   <data name="gbSendType.Text" xml:space="preserve">
     <value>[ Send ]</value>
@@ -268,12 +262,6 @@
   <data name="rbSendType_Times.Text" xml:space="preserve">
     <value>Send:</value>
   </data>
-  <data name="gbSendStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 3</value>
-  </data>
-  <data name="gbSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 104</value>
-  </data>
   <data name="gbSendStep.Text" xml:space="preserve">
     <value>[ Progressively ]</value>
   </data>
@@ -283,9 +271,6 @@
   <data name="tlpSendStep.Size" type="System.Drawing.Size, System.Drawing">
     <value>268, 84</value>
   </data>
-  <data name="tlpSendStepSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 0</value>
-  </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>188, 84</value>
   </data>
@@ -294,9 +279,6 @@
   </data>
   <data name="lSendStep_Position.Text" xml:space="preserve">
     <value>Position:</value>
-  </data>
-  <data name="lSendStep_Len_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>151, 30</value>
   </data>
   <data name="nudSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
     <value>63, 30</value>
@@ -309,9 +291,6 @@
   </data>
   <data name="lSendStep_Len.Text" xml:space="preserve">
     <value>Step:</value>
-  </data>
-  <data name="lSendStep_Position_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>151, 3</value>
   </data>
   <data name="nudSendStep_Position.Location" type="System.Drawing.Point, System.Drawing">
     <value>63, 3</value>

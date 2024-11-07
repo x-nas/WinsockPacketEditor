@@ -13,12 +13,14 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Xml;
+using System.Globalization;
 
 namespace WPELibrary.Lib
 {   
     public static class Socket_Operation
     {        
         public static bool bDoLog = true;
+        public static bool bDoLog_HookTime = false;
         public static DataTable dtSearchFrom = new DataTable();
         public static DataTable dtPacketFormat = new DataTable();
 
@@ -815,6 +817,90 @@ namespace WPELibrary.Lib
             }
 
             return imgReturn;
+        }
+
+        #endregion
+
+        #region//获取字节长度对应的字符串
+
+        public static string GetDisplayBytes(long size)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                const long multi = 1024;
+                long kb = multi;
+                long mb = kb * multi;
+                long gb = mb * multi;
+                long tb = gb * multi;
+
+                const string BYTES = "Bytes";
+                const string KB = "KB";
+                const string MB = "MB";
+                const string GB = "GB";
+                const string TB = "TB";
+                
+                if (size < kb)
+                {
+                    sReturn = string.Format("{0} {1}", size, BYTES);
+                }
+                else if (size < mb)
+                {
+                    sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, kb), KB, ConvertBytesDisplay(size));
+                }
+                else if (size < gb)
+                {
+                    sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, mb), MB, ConvertBytesDisplay(size));
+                }
+                else if (size < tb)
+                {
+                    sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, gb), GB, ConvertBytesDisplay(size));
+                }
+                else
+                {
+                    sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, tb), TB, ConvertBytesDisplay(size));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }              
+
+            return sReturn;
+        }
+
+        private static string ConvertBytesDisplay(long size)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                sReturn = size.ToString("###,###,###,###,###", CultureInfo.CurrentCulture);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        private static string ConvertToOneDigit(long size, long quan)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                double quotient = (double)size / (double)quan;
+                sReturn = quotient.ToString("0.#", CultureInfo.CurrentCulture);                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion
@@ -1959,6 +2045,11 @@ namespace WPELibrary.Lib
                             break;
                         }
                     }
+                    else
+                    {
+                        bResult = false;
+                        break;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1981,28 +2072,48 @@ namespace WPELibrary.Lib
             try
             {
                 int iFModifyCNT = sfi.FModifyCNT;
+                byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
+
+                Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
+                Dictionary<int, byte> dSearchValue = new Dictionary<int, byte>();
 
                 string[] slSearch = sfi.FSearch.Split(',');
+
+                for (int i = 0; i < slSearch.Length; i++)
+                {
+                    int iIndex = int.Parse(slSearch[i].Split('-')[0]);
+                    string sValue = slSearch[i].Split('-')[1];
+                    byte bValue = Convert.ToByte(sValue, 16);
+
+                    dSearchIndex.Add(i, iIndex);
+                    dSearchValue.Add(i, bValue);
+                }
 
                 int iMatchIndex = -1;
                 int iBuffIndex = -1;
 
+                byte bFirst_SearchValue = dSearchValue[0];
+
                 for (int i = 0; i < iLen; i++)
                 {
-                    for (int j = 0; j < slSearch.Length; j++)
+                    if (bBUffer[i] == bFirst_SearchValue)
                     {
-                        int iIndex = int.Parse(slSearch[j].Split('-')[0]);
-                        string sValue = slSearch[j].Split('-')[1];
+                        iMatchIndex = i;
 
-                        iBuffIndex = i + iIndex;
-
-                        if (iBuffIndex >= 0 && iBuffIndex < iLen)
+                        for (int j = 1; j < slSearch.Length; j++)
                         {
-                            string sBuff_Hex = Marshal.ReadByte(ipBuff, iBuffIndex).ToString("X2");
+                            int iIndex = dSearchIndex[j];
+                            byte bValue = dSearchValue[j];
 
-                            if (sValue.Equals(sBuff_Hex))
+                            iBuffIndex = i + iIndex;
+
+                            if (iBuffIndex >= 0 && iBuffIndex < iLen)
                             {
-                                iMatchIndex = i;
+                                if (bBUffer[iBuffIndex] != bValue)
+                                {
+                                    iMatchIndex = -1;
+                                    break;
+                                }                                
                             }
                             else
                             {
@@ -2010,16 +2121,16 @@ namespace WPELibrary.Lib
                                 break;
                             }
                         }
-                    }
 
-                    if (iMatchIndex > -1)
-                    {
-                        if (iFModifyCNT > 0)
+                        if (iMatchIndex > -1)
                         {
-                            lReturn.Add(iMatchIndex);
-                            iFModifyCNT--;
+                            if (iFModifyCNT > 0)
+                            {
+                                lReturn.Add(iMatchIndex);
+                                iFModifyCNT--;
 
-                            i = iBuffIndex;
+                                i = iBuffIndex;
+                            }
                         }
                     }
                 }

@@ -162,8 +162,8 @@ namespace WPELibrary.Lib
             public static int WSARecvFrom_CNT = 0;
             public static int Filter_CNT = 0;
             public static int Intercept_CNT = 0;
-            public static int Total_SendBytes = 0;
-            public static int Total_RecvBytes = 0;
+            public static long Total_SendBytes = 0;
+            public static long Total_RecvBytes = 0;
 
             public static ConcurrentQueue<Socket_PacketInfo> qSocket_PacketInfo = new ConcurrentQueue<Socket_PacketInfo>();
 
@@ -303,6 +303,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//日志队列
+
         public static class LogQueue
         {
             public static ConcurrentQueue<Socket_LogInfo> qSocket_Log = new ConcurrentQueue<Socket_LogInfo>();
@@ -326,6 +327,7 @@ namespace WPELibrary.Lib
             #endregion
 
             #region//清除队列数据
+
             public static void ResetLogQueue()
             {
                 try
@@ -340,8 +342,10 @@ namespace WPELibrary.Lib
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
+
             #endregion
         }
+
         #endregion
 
         #region//日志列表
@@ -779,7 +783,7 @@ namespace WPELibrary.Lib
                                         {
                                             if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
                                             {                                                
-                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
+                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName + " | " + iLen);
                                             }
 
                                             faReturn = Filter.FilterAction.Replace;
@@ -788,9 +792,9 @@ namespace WPELibrary.Lib
                                         {
                                             Socket_Cache.SocketQueue.Intercept_CNT++;
                                             faReturn = Filter.FilterAction.Intercept;
-
-                                            break;
                                         }
+
+                                        break;
                                     }
 
                                     break;
@@ -807,7 +811,7 @@ namespace WPELibrary.Lib
                                             {
                                                 if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
                                                 {
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName);
+                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName + " | " + iLen);
                                                 }
                                             }
                                             
@@ -817,9 +821,9 @@ namespace WPELibrary.Lib
                                         {
                                             Socket_Cache.SocketQueue.Intercept_CNT++;
                                             faReturn = Filter.FilterAction.Intercept;
-
-                                            break;
                                         }
+
+                                        break;
                                     }
 
                                     break;
@@ -829,7 +833,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52) + sFName + " | " + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52) + sFName + " | " + iLen + " | " + ex.Message);
                 }
 
                 return faReturn;

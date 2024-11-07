@@ -133,21 +133,22 @@ namespace WPELibrary
             // 
             // tcFilterInfo
             // 
+            resources.ApplyResources(this.tcFilterInfo, "tcFilterInfo");
             this.tcFilterInfo.Controls.Add(this.tpNormal);
             this.tcFilterInfo.Controls.Add(this.tpAdvanced);
-            resources.ApplyResources(this.tcFilterInfo, "tcFilterInfo");
             this.tcFilterInfo.Name = "tcFilterInfo";
             this.tcFilterInfo.SelectedIndex = 0;
             // 
             // tpNormal
             // 
-            this.tpNormal.Controls.Add(this.dgvFilterNormal);
             resources.ApplyResources(this.tpNormal, "tpNormal");
+            this.tpNormal.Controls.Add(this.dgvFilterNormal);
             this.tpNormal.Name = "tpNormal";
             this.tpNormal.UseVisualStyleBackColor = true;
             // 
             // dgvFilterNormal
             // 
+            resources.ApplyResources(this.dgvFilterNormal, "dgvFilterNormal");
             this.dgvFilterNormal.AllowUserToAddRows = false;
             this.dgvFilterNormal.AllowUserToDeleteRows = false;
             this.dgvFilterNormal.AllowUserToResizeColumns = false;
@@ -169,7 +170,6 @@ namespace WPELibrary
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilterNormal.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.dgvFilterNormal, "dgvFilterNormal");
             this.dgvFilterNormal.MultiSelect = false;
             this.dgvFilterNormal.Name = "dgvFilterNormal";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -189,8 +189,8 @@ namespace WPELibrary
             // 
             // tpAdvanced
             // 
-            this.tpAdvanced.Controls.Add(this.tlpFilterAdvanced);
             resources.ApplyResources(this.tpAdvanced, "tpAdvanced");
+            this.tpAdvanced.Controls.Add(this.tlpFilterAdvanced);
             this.tpAdvanced.Name = "tpAdvanced";
             this.tpAdvanced.UseVisualStyleBackColor = true;
             // 
@@ -204,6 +204,7 @@ namespace WPELibrary
             // 
             // dgvFilterAdvanced_Modify_FromPosition
             // 
+            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromPosition, "dgvFilterAdvanced_Modify_FromPosition");
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToAddRows = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToResizeColumns = false;
@@ -225,7 +226,6 @@ namespace WPELibrary
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilterAdvanced_Modify_FromPosition.DefaultCellStyle = dataGridViewCellStyle6;
-            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromPosition, "dgvFilterAdvanced_Modify_FromPosition");
             this.dgvFilterAdvanced_Modify_FromPosition.MultiSelect = false;
             this.dgvFilterAdvanced_Modify_FromPosition.Name = "dgvFilterAdvanced_Modify_FromPosition";
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -245,6 +245,7 @@ namespace WPELibrary
             // 
             // dgvFilterAdvanced_Search
             // 
+            resources.ApplyResources(this.dgvFilterAdvanced_Search, "dgvFilterAdvanced_Search");
             this.dgvFilterAdvanced_Search.AllowUserToAddRows = false;
             this.dgvFilterAdvanced_Search.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Search.AllowUserToResizeColumns = false;
@@ -266,7 +267,6 @@ namespace WPELibrary
             dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilterAdvanced_Search.DefaultCellStyle = dataGridViewCellStyle10;
-            resources.ApplyResources(this.dgvFilterAdvanced_Search, "dgvFilterAdvanced_Search");
             this.dgvFilterAdvanced_Search.MultiSelect = false;
             this.dgvFilterAdvanced_Search.Name = "dgvFilterAdvanced_Search";
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -286,6 +286,7 @@ namespace WPELibrary
             // 
             // dgvFilterAdvanced_Modify_FromHead
             // 
+            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromHead, "dgvFilterAdvanced_Modify_FromHead");
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToAddRows = false;
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeColumns = false;
@@ -307,7 +308,6 @@ namespace WPELibrary
             dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilterAdvanced_Modify_FromHead.DefaultCellStyle = dataGridViewCellStyle14;
-            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromHead, "dgvFilterAdvanced_Modify_FromHead");
             this.dgvFilterAdvanced_Modify_FromHead.MultiSelect = false;
             this.dgvFilterAdvanced_Modify_FromHead.Name = "dgvFilterAdvanced_Modify_FromHead";
             dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -338,8 +338,8 @@ namespace WPELibrary
             // 
             // gbFilterModifyFrom
             // 
-            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
             resources.ApplyResources(this.gbFilterModifyFrom, "gbFilterModifyFrom");
+            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
             this.gbFilterModifyFrom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterModifyFrom.Name = "gbFilterModifyFrom";
             this.gbFilterModifyFrom.TabStop = false;
@@ -369,8 +369,8 @@ namespace WPELibrary
             // 
             // gbFilterSet
             // 
-            this.gbFilterSet.Controls.Add(this.tlpFilterSet);
             resources.ApplyResources(this.gbFilterSet, "gbFilterSet");
+            this.gbFilterSet.Controls.Add(this.tlpFilterSet);
             this.gbFilterSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterSet.Name = "gbFilterSet";
             this.gbFilterSet.TabStop = false;
@@ -384,8 +384,8 @@ namespace WPELibrary
             // 
             // nudFilterSet_ModifyTimes
             // 
-            this.nudFilterSet_ModifyTimes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.nudFilterSet_ModifyTimes, "nudFilterSet_ModifyTimes");
+            this.nudFilterSet_ModifyTimes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.nudFilterSet_ModifyTimes.Maximum = new decimal(new int[] {
             9999,
             0,
@@ -410,8 +410,8 @@ namespace WPELibrary
             // 
             // gbFilterFunction
             // 
-            this.gbFilterFunction.Controls.Add(this.tlpFilterFunction);
             resources.ApplyResources(this.gbFilterFunction, "gbFilterFunction");
+            this.gbFilterFunction.Controls.Add(this.tlpFilterFunction);
             this.gbFilterFunction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterFunction.Name = "gbFilterFunction";
             this.gbFilterFunction.TabStop = false;
@@ -523,8 +523,8 @@ namespace WPELibrary
             // 
             // gbFilterAction
             // 
-            this.gbFilterAction.Controls.Add(this.tlpFilterAction);
             resources.ApplyResources(this.gbFilterAction, "gbFilterAction");
+            this.gbFilterAction.Controls.Add(this.tlpFilterAction);
             this.gbFilterAction.Name = "gbFilterAction";
             this.gbFilterAction.TabStop = false;
             // 
@@ -551,8 +551,8 @@ namespace WPELibrary
             // 
             // gbFilterMode
             // 
-            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
             resources.ApplyResources(this.gbFilterMode, "gbFilterMode");
+            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
             this.gbFilterMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterMode.Name = "gbFilterMode";
             this.gbFilterMode.TabStop = false;
@@ -589,8 +589,8 @@ namespace WPELibrary
             // 
             // gbFilterAppoint
             // 
-            this.gbFilterAppoint.Controls.Add(this.tlpFilterAppoint);
             resources.ApplyResources(this.gbFilterAppoint, "gbFilterAppoint");
+            this.gbFilterAppoint.Controls.Add(this.tlpFilterAppoint);
             this.gbFilterAppoint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterAppoint.Name = "gbFilterAppoint";
             this.gbFilterAppoint.TabStop = false;
@@ -604,9 +604,9 @@ namespace WPELibrary
             // 
             // txtFilter_HeaderContent
             // 
+            resources.ApplyResources(this.txtFilter_HeaderContent, "txtFilter_HeaderContent");
             this.txtFilter_HeaderContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtFilter_HeaderContent.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            resources.ApplyResources(this.txtFilter_HeaderContent, "txtFilter_HeaderContent");
             this.txtFilter_HeaderContent.Name = "txtFilter_HeaderContent";
             this.txtFilter_HeaderContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFilter_HeaderContent_KeyPress);
             // 
@@ -619,8 +619,8 @@ namespace WPELibrary
             // 
             // gbFilterName
             // 
-            this.gbFilterName.Controls.Add(this.tlpFilterName);
             resources.ApplyResources(this.gbFilterName, "gbFilterName");
+            this.gbFilterName.Controls.Add(this.tlpFilterName);
             this.gbFilterName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterName.Name = "gbFilterName";
             this.gbFilterName.TabStop = false;
@@ -633,8 +633,8 @@ namespace WPELibrary
             // 
             // txtFilterName
             // 
-            this.txtFilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtFilterName, "txtFilterName");
+            this.txtFilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtFilterName.Name = "txtFilterName";
             // 
             // Socket_FilterForm
