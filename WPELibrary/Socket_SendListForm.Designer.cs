@@ -72,6 +72,7 @@ namespace WPELibrary
             this.lLoop_CNT = new System.Windows.Forms.Label();
             this.gbSendListForm2 = new System.Windows.Forms.GroupBox();
             this.tlpSendListForm2 = new System.Windows.Forms.TableLayoutPanel();
+            this.nudSocket = new System.Windows.Forms.NumericUpDown();
             this.cbUseSocket = new System.Windows.Forms.CheckBox();
             this.gbSendListForm1 = new System.Windows.Forms.GroupBox();
             this.cbSelectAll = new System.Windows.Forms.CheckBox();
@@ -79,7 +80,6 @@ namespace WPELibrary
             this.bSendListStop = new System.Windows.Forms.Button();
             this.bSendList = new System.Windows.Forms.Button();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
-            this.nudSocket = new System.Windows.Forms.NumericUpDown();
             this.tlpSendList.SuspendLayout();
             this.ssSocketSendList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).BeginInit();
@@ -93,9 +93,9 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop_CNT)).BeginInit();
             this.gbSendListForm2.SuspendLayout();
             this.tlpSendListForm2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocket)).BeginInit();
             this.gbSendListForm1.SuspendLayout();
             this.tlpSendListForm5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSocket)).BeginInit();
             this.SuspendLayout();
             // 
             // tlpSendList
@@ -124,8 +124,8 @@ namespace WPELibrary
             // 
             // tlLoop_Send
             // 
-            this.tlLoop_Send.Name = "tlLoop_Send";
             resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
+            this.tlLoop_Send.Name = "tlLoop_Send";
             // 
             // tlLoop_Send_CNT
             // 
@@ -134,14 +134,14 @@ namespace WPELibrary
             // 
             // tlSplit
             // 
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
-            resources.ApplyResources(this.tlSplit, "tlSplit");
             // 
             // tlSendList_Success
             // 
-            this.tlSendList_Success.Name = "tlSendList_Success";
             resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
+            this.tlSendList_Success.Name = "tlSendList_Success";
             // 
             // tlSendList_Success_CNT
             // 
@@ -151,14 +151,14 @@ namespace WPELibrary
             // 
             // toolStripStatusLabel3
             // 
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // tlSendList_Fail
             // 
-            this.tlSendList_Fail.Name = "tlSendList_Fail";
             resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
+            this.tlSendList_Fail.Name = "tlSendList_Fail";
             // 
             // tlSendList_Fail_CNT
             // 
@@ -168,6 +168,7 @@ namespace WPELibrary
             // 
             // dgvSendList
             // 
+            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.AllowUserToAddRows = false;
             this.dgvSendList.AllowUserToDeleteRows = false;
             this.dgvSendList.AllowUserToResizeRows = false;
@@ -182,7 +183,6 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSendList.ContextMenuStrip = this.cmsSendList;
-            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.MultiSelect = false;
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
@@ -257,6 +257,7 @@ namespace WPELibrary
             // 
             // cmsSendList
             // 
+            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiDeleteSendList,
@@ -267,43 +268,46 @@ namespace WPELibrary
             this.toolStripSeparator3,
             this.tsmiLoadSendList});
             this.cmsSendList.Name = "cmsBatchSend";
-            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSendList_ItemClicked);
             // 
             // tsmiDeleteSendList
             // 
-            this.tsmiDeleteSendList.Name = "tsmiDeleteSendList";
             resources.ApplyResources(this.tsmiDeleteSendList, "tsmiDeleteSendList");
+            this.tsmiDeleteSendList.Image = global::WPELibrary.Properties.Resources.Delete216;
+            this.tsmiDeleteSendList.Name = "tsmiDeleteSendList";
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
             // 
             // tsmiClear
             // 
-            this.tsmiClear.Name = "tsmiClear";
             resources.ApplyResources(this.tsmiClear, "tsmiClear");
+            this.tsmiClear.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            this.tsmiClear.Name = "tsmiClear";
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
             // 
             // tsmiSaveSendList
             // 
-            this.tsmiSaveSendList.Name = "tsmiSaveSendList";
             resources.ApplyResources(this.tsmiSaveSendList, "tsmiSaveSendList");
+            this.tsmiSaveSendList.Image = global::WPELibrary.Properties.Resources.saveHS;
+            this.tsmiSaveSendList.Name = "tsmiSaveSendList";
             // 
             // toolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
             // 
             // tsmiLoadSendList
             // 
-            this.tsmiLoadSendList.Name = "tsmiLoadSendList";
             resources.ApplyResources(this.tsmiLoadSendList, "tsmiLoadSendList");
+            this.tsmiLoadSendList.Image = global::WPELibrary.Properties.Resources.openHS;
+            this.tsmiLoadSendList.Name = "tsmiLoadSendList";
             // 
             // tlpParameter
             // 
@@ -317,8 +321,8 @@ namespace WPELibrary
             // 
             // gbSendListForm4
             // 
-            this.gbSendListForm4.Controls.Add(this.tlpSendListForm4);
             resources.ApplyResources(this.gbSendListForm4, "gbSendListForm4");
+            this.gbSendListForm4.Controls.Add(this.tlpSendListForm4);
             this.gbSendListForm4.Name = "gbSendListForm4";
             this.gbSendListForm4.TabStop = false;
             // 
@@ -356,8 +360,8 @@ namespace WPELibrary
             // 
             // gbSendListForm3
             // 
-            this.gbSendListForm3.Controls.Add(this.tlpSendListForm3);
             resources.ApplyResources(this.gbSendListForm3, "gbSendListForm3");
+            this.gbSendListForm3.Controls.Add(this.tlpSendListForm3);
             this.gbSendListForm3.Name = "gbSendListForm3";
             this.gbSendListForm3.TabStop = false;
             // 
@@ -395,8 +399,8 @@ namespace WPELibrary
             // 
             // gbSendListForm2
             // 
-            this.gbSendListForm2.Controls.Add(this.tlpSendListForm2);
             resources.ApplyResources(this.gbSendListForm2, "gbSendListForm2");
+            this.gbSendListForm2.Controls.Add(this.tlpSendListForm2);
             this.gbSendListForm2.Name = "gbSendListForm2";
             this.gbSendListForm2.TabStop = false;
             // 
@@ -407,6 +411,26 @@ namespace WPELibrary
             this.tlpSendListForm2.Controls.Add(this.cbUseSocket, 0, 0);
             this.tlpSendListForm2.Name = "tlpSendListForm2";
             // 
+            // nudSocket
+            // 
+            resources.ApplyResources(this.nudSocket, "nudSocket");
+            this.nudSocket.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.nudSocket.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSocket.Name = "nudSocket";
+            this.nudSocket.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // cbUseSocket
             // 
             resources.ApplyResources(this.cbUseSocket, "cbUseSocket");
@@ -415,8 +439,8 @@ namespace WPELibrary
             // 
             // gbSendListForm1
             // 
-            this.gbSendListForm1.Controls.Add(this.cbSelectAll);
             resources.ApplyResources(this.gbSendListForm1, "gbSendListForm1");
+            this.gbSendListForm1.Controls.Add(this.cbSelectAll);
             this.gbSendListForm1.Name = "gbSendListForm1";
             this.gbSendListForm1.TabStop = false;
             // 
@@ -454,26 +478,6 @@ namespace WPELibrary
             this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
             this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
             // 
-            // nudSocket
-            // 
-            resources.ApplyResources(this.nudSocket, "nudSocket");
-            this.nudSocket.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudSocket.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSocket.Name = "nudSocket";
-            this.nudSocket.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // Socket_SendListForm
             // 
             resources.ApplyResources(this, "$this");
@@ -501,10 +505,10 @@ namespace WPELibrary
             this.gbSendListForm2.ResumeLayout(false);
             this.tlpSendListForm2.ResumeLayout(false);
             this.tlpSendListForm2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocket)).EndInit();
             this.gbSendListForm1.ResumeLayout(false);
             this.gbSendListForm1.PerformLayout();
             this.tlpSendListForm5.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSocket)).EndInit();
             this.ResumeLayout(false);
 
         }

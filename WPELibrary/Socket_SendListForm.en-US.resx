@@ -238,10 +238,10 @@
   <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
     <value>184, 50</value>
   </data>
-  <data name="txtUseSocket.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="nudSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>132, 4</value>
   </data>
-  <data name="txtUseSocket.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="nudSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 23</value>
   </data>
   <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">

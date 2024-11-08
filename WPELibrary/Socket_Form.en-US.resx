@@ -572,8 +572,57 @@
   <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>191, 221</value>
   </data>
+  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 104</value>
+  </data>
   <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 190</value>
+  </data>
+  <data name="cmsFilterList_MoveTop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsFilterList_MoveTop.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="cmsFilterList_tss1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsFilterList_MoveUp.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wAAADsABataJCQAAAjdJREFUOE/FkUtoE1EUhqNgRVrX6SJuaquSmoTmOZPJJFFrszBELaIudGfavJPm
+        UTWY+sKKVCxoBUFdibrQhYhFcKEgSNpqY1rzcBI1LaZqMQU3Iuji9yQTFEGtXfnBhZl7zv/NuXcki9BA
+        a4X4uETWbr+5xhIde9zSNeim16VLzLHJ2/xACVuPZeabmlXt9e1/o33/fZs1UYQhXoJtaA663rvXaLtJ
+        rC5Gq38lF0kL2tgrsIkZWAfL2Hm+/FXKeu1UXSY2/QV1z8O4sb8ITU0wC+vpOdhHPsJ2PDVBZanY9Qfa
+        uq+38NHMZ21YgCb6c4Ku4XnsuboA+e7LcWqr/pnfo3E+uWOKCdBHBHSExTvgT77FlqH32DZSwY7hUqVR
+        xirq7b+yYdctO+PPgA3nwUYFqIICtAdfwzgwAwtN0Xn2A7ovVWDwjd6g9tViqo6M7VvF9CSLBhIwoRw4
+        Eij9L2mKAvSHSHJ0FuZTZWw+8w6Oc+VvUsbtoNhyMU107LuXMAUy0HtfgAlkwfbloQnmofDlaxIdSZgj
+        JXAk2kQiS38yRbHmWlhmu9hq8T39onNNQeeZphFpimAODEnkriw2kkQVKkAdLdaOpD/8Bp0nSmhzXEhQ
+        vEHCHXgwavRQuDeNqkT/Q5KFxp/FemcGcneuJlIG6G5C1QsugI+lFxplBqWEdz76ZHYnwbvHYPKMg/NM
+        wOh5BsY7CYP3OZTOFBS0VK401N40SeljgSlwkWmsc1zZWzvGf0Qi+Q67bios5+wb/QAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="cmsFilterList_MoveUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsFilterList_MoveUp.Text" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="cmsFilterList_MoveDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsFilterList_MoveDown.Text" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="cmsFilterList_tss2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsFilterList_MoveBottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsFilterList_MoveBottom.Text" xml:space="preserve">
+    <value>Bottom</value>
   </data>
   <data name="tsFilterList_Load.Text" xml:space="preserve">
     <value>Load FilterList</value>

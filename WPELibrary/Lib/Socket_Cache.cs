@@ -405,6 +405,14 @@ namespace WPELibrary.Lib
                 Position,
             }
 
+            public enum FilterMove
+            {
+                Top,
+                Up,
+                Down,
+                Bottom,
+            }
+
             public struct FilterFunction
             {
                 public bool Send;

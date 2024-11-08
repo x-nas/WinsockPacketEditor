@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Xml;
 using System.Globalization;
+using static WPELibrary.Lib.Socket_Cache;
 
 namespace WPELibrary.Lib
 {   
@@ -1836,6 +1837,79 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//移动滤镜在列表中的位置
+
+        public static int MoveFilter_ByFilterIndex(int iFIndex, Socket_Cache.Filter.FilterMove filterMove)
+        {
+            int iReturn = -1;
+
+            try
+            {
+                int iFilterListCount = Socket_Cache.FilterList.lstFilter.Count;
+
+                Socket_FilterInfo sfi = Socket_Cache.FilterList.lstFilter[iFIndex];
+
+                switch (filterMove)
+                {
+                    case Filter.FilterMove.Top:
+
+                        if (iFIndex > 0)
+                        {
+                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                            Socket_Cache.FilterList.lstFilter.Insert(0, sfi);
+
+                            iReturn = 0;
+                        }
+
+                        break;
+
+                    case Filter.FilterMove.Up:
+
+                        if (iFIndex > 0)
+                        {
+                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                            Socket_Cache.FilterList.lstFilter.Insert(iFIndex - 1, sfi);
+
+                            iReturn = iFIndex - 1;
+                        }
+
+                        break;
+
+                    case Filter.FilterMove.Down:
+
+                        if (iFIndex < iFilterListCount - 1)
+                        {
+                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                            Socket_Cache.FilterList.lstFilter.Insert(iFIndex + 1, sfi);
+
+                            iReturn = iFIndex + 1;
+                        }
+
+                        break;
+
+                    case Filter.FilterMove.Bottom:
+
+                        if (iFIndex < iFilterListCount - 1)
+                        {
+                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                            Socket_Cache.FilterList.lstFilter.Add(sfi);
+
+                            iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return iReturn;
         }
 
         #endregion

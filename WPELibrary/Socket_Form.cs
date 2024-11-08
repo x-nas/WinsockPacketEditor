@@ -824,6 +824,70 @@ namespace WPELibrary
 
         #endregion
 
+        #region//滤镜菜单
+
+        private void cmsFilterList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsFilterList.Close();
+
+            try
+            {
+                if (dgvFilterList.Rows.Count > 0)
+                {
+                    int iFIndex = this.dgvFilterList.CurrentRow.Index;
+
+                    if (iFIndex > -1)
+                    {
+                        Socket_Cache.Filter.FilterMove filterMove = Socket_Cache.Filter.FilterMove.Up;
+
+                        switch (sItemText)
+                        {
+                            case "cmsFilterList_MoveTop":
+
+                                filterMove = Socket_Cache.Filter.FilterMove.Top;
+
+                                break;
+
+                            case "cmsFilterList_MoveUp":
+
+                                filterMove = Socket_Cache.Filter.FilterMove.Up;
+
+                                break;
+
+                            case "cmsFilterList_MoveDown":
+
+                                filterMove = Socket_Cache.Filter.FilterMove.Down;
+
+                                break;
+
+                            case "cmsFilterList_MoveBottom":
+
+                                filterMove = Socket_Cache.Filter.FilterMove.Bottom;
+
+                                break;
+                        }
+
+                        int iIndex = Socket_Operation.MoveFilter_ByFilterIndex(iFIndex, filterMove);
+
+                        if (iIndex > -1)
+                        {
+                            this.dgvFilterList.ClearSelection();
+
+                            this.dgvFilterList.Rows[iIndex].Selected = true;
+                            this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[iIndex].Cells[0];
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//日志菜单
 
         private void cmsLogList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -1632,6 +1696,6 @@ namespace WPELibrary
             this.txtXOR.Clear();
         }
 
-        #endregion        
+        #endregion
     }
 }

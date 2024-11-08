@@ -155,6 +155,13 @@ namespace WPELibrary
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cFNum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsFilterList_MoveTop = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFilterList_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsFilterList_MoveUp = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFilterList_MoveDown = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFilterList_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsFilterList_MoveBottom = new System.Windows.Forms.ToolStripMenuItem();
             this.tsFilterList = new System.Windows.Forms.ToolStrip();
             this.tsFilterList_Load = new System.Windows.Forms.ToolStripButton();
             this.tsFilterList_Save = new System.Windows.Forms.ToolStripButton();
@@ -299,6 +306,7 @@ namespace WPELibrary
             this.gbFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).BeginInit();
+            this.cmsFilterList.SuspendLayout();
             this.tsFilterList.SuspendLayout();
             this.tlpPacketInfo.SuspendLayout();
             this.tcPacketInfo.SuspendLayout();
@@ -1160,6 +1168,7 @@ namespace WPELibrary
             this.cIsCheck,
             this.cFNum,
             this.cFName});
+            this.dgvFilterList.ContextMenuStrip = this.cmsFilterList;
             resources.ApplyResources(this.dgvFilterList, "dgvFilterList");
             this.dgvFilterList.MultiSelect = false;
             this.dgvFilterList.Name = "dgvFilterList";
@@ -1196,6 +1205,50 @@ namespace WPELibrary
             resources.ApplyResources(this.cFName, "cFName");
             this.cFName.Name = "cFName";
             this.cFName.ReadOnly = true;
+            // 
+            // cmsFilterList
+            // 
+            this.cmsFilterList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsFilterList_MoveTop,
+            this.cmsFilterList_tss1,
+            this.cmsFilterList_MoveUp,
+            this.cmsFilterList_MoveDown,
+            this.cmsFilterList_tss2,
+            this.cmsFilterList_MoveBottom});
+            this.cmsFilterList.Name = "cmsFilterList";
+            resources.ApplyResources(this.cmsFilterList, "cmsFilterList");
+            this.cmsFilterList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsFilterList_ItemClicked);
+            // 
+            // cmsFilterList_MoveTop
+            // 
+            this.cmsFilterList_MoveTop.Name = "cmsFilterList_MoveTop";
+            resources.ApplyResources(this.cmsFilterList_MoveTop, "cmsFilterList_MoveTop");
+            // 
+            // cmsFilterList_tss1
+            // 
+            this.cmsFilterList_tss1.Name = "cmsFilterList_tss1";
+            resources.ApplyResources(this.cmsFilterList_tss1, "cmsFilterList_tss1");
+            // 
+            // cmsFilterList_MoveUp
+            // 
+            resources.ApplyResources(this.cmsFilterList_MoveUp, "cmsFilterList_MoveUp");
+            this.cmsFilterList_MoveUp.Name = "cmsFilterList_MoveUp";
+            // 
+            // cmsFilterList_MoveDown
+            // 
+            this.cmsFilterList_MoveDown.Image = global::WPELibrary.Properties.Resources.Down;
+            this.cmsFilterList_MoveDown.Name = "cmsFilterList_MoveDown";
+            resources.ApplyResources(this.cmsFilterList_MoveDown, "cmsFilterList_MoveDown");
+            // 
+            // cmsFilterList_tss2
+            // 
+            this.cmsFilterList_tss2.Name = "cmsFilterList_tss2";
+            resources.ApplyResources(this.cmsFilterList_tss2, "cmsFilterList_tss2");
+            // 
+            // cmsFilterList_MoveBottom
+            // 
+            this.cmsFilterList_MoveBottom.Name = "cmsFilterList_MoveBottom";
+            resources.ApplyResources(this.cmsFilterList_MoveBottom, "cmsFilterList_MoveBottom");
             // 
             // tsFilterList
             // 
@@ -1238,7 +1291,7 @@ namespace WPELibrary
             // tsFilterList_Add
             // 
             this.tsFilterList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsFilterList_Add.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            this.tsFilterList_Add.Image = global::WPELibrary.Properties.Resources.add_icon;
             resources.ApplyResources(this.tsFilterList_Add, "tsFilterList_Add");
             this.tsFilterList_Add.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.tsFilterList_Add.Name = "tsFilterList_Add";
@@ -2168,6 +2221,7 @@ namespace WPELibrary
             this.tlpFilterList.ResumeLayout(false);
             this.tlpFilterList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterList)).EndInit();
+            this.cmsFilterList.ResumeLayout(false);
             this.tsFilterList.ResumeLayout(false);
             this.tsFilterList.PerformLayout();
             this.tlpPacketInfo.ResumeLayout(false);
@@ -2434,5 +2488,12 @@ namespace WPELibrary
         private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
         private System.Windows.Forms.NumericUpDown nudSocketList_AutoClearValue;
         private System.Windows.Forms.CheckBox cbSocketList_AutoClear;
+        private System.Windows.Forms.ContextMenuStrip cmsFilterList;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveUp;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveDown;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveTop;
+        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss1;
+        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss2;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveBottom;
     }
 }
