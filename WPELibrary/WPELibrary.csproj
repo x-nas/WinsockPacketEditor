@@ -139,6 +139,8 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\go-bottom.png" />
+    <None Include="Resources\go-top.png" />
     <None Include="Resources\Down.png" />
     <None Include="Resources\add-icon.png" />
     <None Include="Resources\Up.png" />

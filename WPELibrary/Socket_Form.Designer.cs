@@ -104,6 +104,9 @@ namespace WPELibrary
             this.cmsSocketList_Comparison_A = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_Comparison_B = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSystemSet = new System.Windows.Forms.GroupBox();
+            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.cbSystemSet_SpeedMode = new System.Windows.Forms.CheckBox();
             this.gbSocketList_Set = new System.Windows.Forms.GroupBox();
             this.tlpSocketList_Set = new System.Windows.Forms.TableLayoutPanel();
             this.nudSocketList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
@@ -126,7 +129,7 @@ namespace WPELibrary
             this.cbCheckIP = new System.Windows.Forms.CheckBox();
             this.txtCheckSocket = new System.Windows.Forms.TextBox();
             this.txtCheckIP = new System.Windows.Forms.TextBox();
-            this.gbHookType = new System.Windows.Forms.GroupBox();
+            this.gbHookSet = new System.Windows.Forms.GroupBox();
             this.tlpHookType = new System.Windows.Forms.TableLayoutPanel();
             this.cbHookRecvFrom = new System.Windows.Forms.CheckBox();
             this.cbHookSend = new System.Windows.Forms.CheckBox();
@@ -287,6 +290,8 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.cmsSocketList.SuspendLayout();
             this.tlpParameter.SuspendLayout();
+            this.gbSystemSet.SuspendLayout();
+            this.tlpSystemSet.SuspendLayout();
             this.gbSocketList_Set.SuspendLayout();
             this.tlpSocketList_Set.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
@@ -295,7 +300,7 @@ namespace WPELibrary
             this.tlpFilterSet_PacketLength.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).BeginInit();
-            this.gbHookType.SuspendLayout();
+            this.gbHookSet.SuspendLayout();
             this.tlpHookType.SuspendLayout();
             this.gbHookButton_Search.SuspendLayout();
             this.tlpSearch.SuspendLayout();
@@ -771,12 +776,32 @@ namespace WPELibrary
             // tlpParameter
             // 
             resources.ApplyResources(this.tlpParameter, "tlpParameter");
-            this.tlpParameter.Controls.Add(this.gbSocketList_Set, 2, 0);
+            this.tlpParameter.Controls.Add(this.gbSystemSet, 2, 0);
+            this.tlpParameter.Controls.Add(this.gbSocketList_Set, 3, 0);
             this.tlpParameter.Controls.Add(this.gbFilterSet, 0, 0);
-            this.tlpParameter.Controls.Add(this.gbHookType, 1, 0);
-            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 3, 0);
-            this.tlpParameter.Controls.Add(this.tlpHookButton, 4, 0);
+            this.tlpParameter.Controls.Add(this.gbHookSet, 1, 0);
+            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 4, 0);
+            this.tlpParameter.Controls.Add(this.tlpHookButton, 5, 0);
             this.tlpParameter.Name = "tlpParameter";
+            // 
+            // gbSystemSet
+            // 
+            this.gbSystemSet.Controls.Add(this.tlpSystemSet);
+            resources.ApplyResources(this.gbSystemSet, "gbSystemSet");
+            this.gbSystemSet.Name = "gbSystemSet";
+            this.gbSystemSet.TabStop = false;
+            // 
+            // tlpSystemSet
+            // 
+            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
+            this.tlpSystemSet.Controls.Add(this.cbSystemSet_SpeedMode, 0, 0);
+            this.tlpSystemSet.Name = "tlpSystemSet";
+            // 
+            // cbSystemSet_SpeedMode
+            // 
+            resources.ApplyResources(this.cbSystemSet_SpeedMode, "cbSystemSet_SpeedMode");
+            this.cbSystemSet_SpeedMode.Name = "cbSystemSet_SpeedMode";
+            this.cbSystemSet_SpeedMode.UseVisualStyleBackColor = true;
             // 
             // gbSocketList_Set
             // 
@@ -956,12 +981,12 @@ namespace WPELibrary
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_IP_KeyPress);
             // 
-            // gbHookType
+            // gbHookSet
             // 
-            this.gbHookType.Controls.Add(this.tlpHookType);
-            resources.ApplyResources(this.gbHookType, "gbHookType");
-            this.gbHookType.Name = "gbHookType";
-            this.gbHookType.TabStop = false;
+            this.gbHookSet.Controls.Add(this.tlpHookType);
+            resources.ApplyResources(this.gbHookSet, "gbHookSet");
+            this.gbHookSet.Name = "gbHookSet";
+            this.gbHookSet.TabStop = false;
             // 
             // tlpHookType
             // 
@@ -1221,6 +1246,7 @@ namespace WPELibrary
             // 
             // cmsFilterList_MoveTop
             // 
+            this.cmsFilterList_MoveTop.Image = global::WPELibrary.Properties.Resources.go_top;
             this.cmsFilterList_MoveTop.Name = "cmsFilterList_MoveTop";
             resources.ApplyResources(this.cmsFilterList_MoveTop, "cmsFilterList_MoveTop");
             // 
@@ -1247,6 +1273,7 @@ namespace WPELibrary
             // 
             // cmsFilterList_MoveBottom
             // 
+            this.cmsFilterList_MoveBottom.Image = global::WPELibrary.Properties.Resources.go_bottom;
             this.cmsFilterList_MoveBottom.Name = "cmsFilterList_MoveBottom";
             resources.ApplyResources(this.cmsFilterList_MoveBottom, "cmsFilterList_MoveBottom");
             // 
@@ -2196,6 +2223,9 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.cmsSocketList.ResumeLayout(false);
             this.tlpParameter.ResumeLayout(false);
+            this.gbSystemSet.ResumeLayout(false);
+            this.tlpSystemSet.ResumeLayout(false);
+            this.tlpSystemSet.PerformLayout();
             this.gbSocketList_Set.ResumeLayout(false);
             this.tlpSocketList_Set.ResumeLayout(false);
             this.tlpSocketList_Set.PerformLayout();
@@ -2207,7 +2237,7 @@ namespace WPELibrary
             this.tlpFilterSet_PacketLength.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).EndInit();
-            this.gbHookType.ResumeLayout(false);
+            this.gbHookSet.ResumeLayout(false);
             this.tlpHookType.ResumeLayout(false);
             this.tlpHookType.PerformLayout();
             this.gbHookButton_Search.ResumeLayout(false);
@@ -2261,7 +2291,7 @@ namespace WPELibrary
 
         private System.Windows.Forms.TableLayoutPanel tlpSocketForm;
         private System.Windows.Forms.TableLayoutPanel tlpParameter;
-        private System.Windows.Forms.GroupBox gbHookType;
+        private System.Windows.Forms.GroupBox gbHookSet;
         private System.Windows.Forms.TableLayoutPanel tlpHookType;
         private System.Windows.Forms.CheckBox cbHookRecvFrom;
         private System.Windows.Forms.CheckBox cbHookSend;
@@ -2495,5 +2525,8 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss1;
         private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss2;
         private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveBottom;
+        private System.Windows.Forms.GroupBox gbSystemSet;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet;
+        private System.Windows.Forms.CheckBox cbSystemSet_SpeedMode;
     }
 }

@@ -823,6 +823,72 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//右键菜单
+
+        private void cmsDGV_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sDGVName = ((ContextMenuStrip)sender).SourceControl.Name;
+            string sItemText = e.ClickedItem.Name;
+
+            cmsDGV.Close();
+
+            try
+            {
+                switch (sDGVName)
+                {
+                    case "dgvFilterNormal":
+
+                        switch (sItemText)
+                        {
+                            case "cmsDGV_Delete":
+                                this.dgvFilterNormal.CurrentCell.Value = null;
+                                break;
+                        }
+
+                        break;
+
+                    case "dgvFilterAdvanced_Search":
+
+                        switch (sItemText)
+                        {
+                            case "cmsDGV_Delete":
+                                this.dgvFilterAdvanced_Search.CurrentCell.Value = null;
+                                break;
+                        }
+
+                        break;
+
+                    case "dgvFilterAdvanced_Modify_FromHead":
+
+                        switch (sItemText)
+                        {
+                            case "cmsDGV_Delete":
+                                this.dgvFilterAdvanced_Modify_FromHead.CurrentCell.Value = null;
+                                break;
+                        }
+
+                        break;
+
+                    case "dgvFilterAdvanced_Modify_FromPosition":
+
+                        switch (sItemText)
+                        {
+                            case "cmsDGV_Delete":
+                                this.dgvFilterAdvanced_Modify_FromPosition.CurrentCell.Value = null;
+                                break;
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

@@ -31,7 +31,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
         public static string[] MutiLan_20 = { "目标进程: ", "Process: " };
         public static string[] MutiLan_21 = { "不是有效的异或值!", "Not a valid XOR value!" };
-        //public static string[] MutiLan_22 = { "设置拦截参数完成", "Setting interception parameters completed" };
+        public static string[] MutiLan_22 = { "只执行滤镜，不显示封包", "Only execute filters, do not display packets" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
         public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
         public static string[] MutiLan_25 = { "查找内容", "Search for content" };
@@ -48,9 +48,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_36 = { "加载默认系统配置！", "Load System Default Config!" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
-        //public static string[] MutiLan_39 = { "没有搜索到数据", "No data found in search" };
-        //public static string[] MutiLan_40 = { "请输入搜索内容", "Please enter search content" };
-        //public static string[] MutiLan_41 = { "搜索完成!", "Search completed!" };
+        public static string[] MutiLan_39 = { "开始拦截!", "Start Intercepting!" };
+        public static string[] MutiLan_40 = { "结束拦截!", "Stop Intercepting!" };
+        public static string[] MutiLan_41 = { "已开启极速模式!", "Speed mode has been activated!" };
         //public static string[] MutiLan_42 = { "发送封包 -【 序号", "Send -【 ID" };
         //public static string[] MutiLan_43 = { "", "" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
@@ -60,8 +60,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_48 = { "发送列表 - ", "Send List - " };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜", "Filter" };
-        public static string[] MutiLan_51 = { "执行滤镜成功: ", "Filter execution successful: " };
-        public static string[] MutiLan_52 = { "执行滤镜出错: ", "Error executing filter: " };
+        public static string[] MutiLan_51 = { "执行滤镜成功: {0} | 封包长度: {1}", "Filter execution successful: {0} | Packet Length: {1}" };
+        public static string[] MutiLan_52 = { "执行滤镜出错: {0} | 封包长度: {1} | {2}", "Error executing filter: {0} | Packet Length: {1} | {2}" };
         public static string[] MutiLan_53 = { "匹配滤镜出错: ", "Matching filter error: " };
         //public static string[] MutiLan_54 = { "发送", "Send" };
         //public static string[] MutiLan_55 = { "WSA发送", "WSend" };

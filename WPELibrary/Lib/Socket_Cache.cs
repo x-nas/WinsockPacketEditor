@@ -12,7 +12,11 @@ using System.Collections.Concurrent;
 namespace WPELibrary.Lib
 {
     public static class Socket_Cache
-    {  
+    {
+        public static long TotalPackets = 0;
+        public static long Total_SendBytes = 0;
+        public static long Total_RecvBytes = 0;
+        public static bool SpeedMode;
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
         public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
@@ -151,7 +155,7 @@ namespace WPELibrary.Lib
         #region//封包队列
 
         public static class SocketQueue
-        {
+        {            
             public static int Send_CNT = 0;
             public static int SendTo_CNT = 0;
             public static int Recv_CNT = 0;
@@ -161,9 +165,7 @@ namespace WPELibrary.Lib
             public static int WSARecv_CNT = 0;
             public static int WSARecvFrom_CNT = 0;
             public static int Filter_CNT = 0;
-            public static int Intercept_CNT = 0;
-            public static long Total_SendBytes = 0;
-            public static long Total_RecvBytes = 0;
+            public static int Intercept_CNT = 0;            
 
             public static ConcurrentQueue<Socket_PacketInfo> qSocket_PacketInfo = new ConcurrentQueue<Socket_PacketInfo>();
 
@@ -249,36 +251,35 @@ namespace WPELibrary.Lib
 
                             switch (ptType)
                             {
-                                case Socket_Cache.SocketPacket.PacketType.Send:
-                                    SocketQueue.Total_SendBytes += iPacketLen;
+                                case Socket_Cache.SocketPacket.PacketType.Send:                                    
                                     SocketQueue.Send_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.SendTo:
-                                    SocketQueue.Total_SendBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.SendTo:                                    
                                     SocketQueue.SendTo_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.Recv:
-                                    SocketQueue.Total_RecvBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.Recv:                                    
                                     SocketQueue.Recv_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                                    SocketQueue.Total_RecvBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:                                    
                                     SocketQueue.RecvFrom_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.WSASend:
-                                    SocketQueue.Total_SendBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.WSASend:                                    
                                     SocketQueue.WSASend_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                                    SocketQueue.Total_SendBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:                                    
                                     SocketQueue.WSASendTo_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                                    SocketQueue.Total_RecvBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.WSARecv:                                    
                                     SocketQueue.WSARecv_CNT++;
                                     break;
-                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                                    SocketQueue.Total_RecvBytes += iPacketLen;
+
+                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:                                    
                                     SocketQueue.WSARecvFrom_CNT++;
                                     break;
                             }
@@ -791,7 +792,7 @@ namespace WPELibrary.Lib
                                         {
                                             if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
                                             {                                                
-                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName + " | " + iLen);
+                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
                                             }
 
                                             faReturn = Filter.FilterAction.Replace;
@@ -819,7 +820,7 @@ namespace WPELibrary.Lib
                                             {
                                                 if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
                                                 {
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51) + sFName + " | " + iLen);
+                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
                                                 }
                                             }
                                             
@@ -841,7 +842,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52) + sFName + " | " + iLen + " | " + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52), sFName, iLen, ex.Message));
                 }
 
                 return faReturn;

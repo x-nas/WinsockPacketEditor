@@ -17,7 +17,7 @@ namespace WPELibrary
 
         private int Select_Index = -1;
         private int Search_Index = -1;
-        private bool bWakeUp = true;        
+        private bool bWakeUp = true;
 
         private Color col_Del = Color.Red;
         private Color col_Add = Color.Green;
@@ -156,10 +156,11 @@ namespace WPELibrary
                 {
                     sWinSock += " 2.0";
                 }
-                this.tsslWinSock.Text = sWinSock;                
+                this.tsslWinSock.Text = sWinSock;
 
+                tt.SetToolTip(cbSystemSet_SpeedMode, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
-                tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
+                tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));                
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
@@ -196,11 +197,6 @@ namespace WPELibrary
         {
             try
             {
-                dgvLogList.AutoGenerateColumns = false;
-                dgvLogList.DataSource = Socket_Cache.LogList.lstRecLog;
-                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
-                Socket_Cache.LogList.RecSocketLog += new Socket_Cache.LogList.SocketLogReceived(Event_RecSocketLog);
-
                 dgvSocketList.AutoGenerateColumns = false;
                 dgvSocketList.DataSource = Socket_Cache.SocketList.lstRecPacket;
                 dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
@@ -209,6 +205,11 @@ namespace WPELibrary
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
+
+                dgvLogList.AutoGenerateColumns = false;
+                dgvLogList.DataSource = Socket_Cache.LogList.lstRecLog;
+                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
+                Socket_Cache.LogList.RecSocketLog += new Socket_Cache.LogList.SocketLogReceived(Event_RecSocketLog);
             }
             catch (Exception ex)
             {
@@ -262,6 +263,8 @@ namespace WPELibrary
                     this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
                     this.SocketList_AutoClearChange();
 
+                    this.cbSystemSet_SpeedMode.Checked = Socket_Cache.SpeedMode;
+
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
                 }
                 else
@@ -305,6 +308,8 @@ namespace WPELibrary
                 Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
                 Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
+
+                Socket_Cache.SpeedMode = this.cbSystemSet_SpeedMode.Checked;
             }
             catch (Exception ex)
             {
@@ -415,17 +420,36 @@ namespace WPELibrary
 
         private void CleanUp_MainForm()
         {
+            this.CleanUp_SocketPacket();
             this.CleanUp_SocketList();
-            this.CleanUp_HexBox();         
-        }        
+            this.CleanUp_HexBox();
+            this.CleanUp_LogList();
+        }
+
+        private void CleanUp_SocketPacket()
+        {
+            try
+            {
+                Socket_Cache.TotalPackets = 0;
+                Socket_Cache.Total_SendBytes = 0;
+                Socket_Cache.Total_RecvBytes = 0;
+
+                Socket_Cache.SocketQueue.ResetSocketQueue();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void CleanUp_SocketList()
         {
             try
             {
+                Socket_Cache.SocketList.lstRecPacket.Clear();
+
                 this.Select_Index = -1;
                 this.dgvSocketList.Rows.Clear();
-                Socket_Cache.SocketQueue.ResetSocketQueue();
 
                 Socket_Cache.SocketQueue.Filter_CNT = 0;
                 Socket_Cache.SocketQueue.Send_CNT = 0;
@@ -436,10 +460,21 @@ namespace WPELibrary
                 Socket_Cache.SocketQueue.WSARecv_CNT = 0;
                 Socket_Cache.SocketQueue.WSASendTo_CNT = 0;
                 Socket_Cache.SocketQueue.WSARecvFrom_CNT = 0;
-                Socket_Cache.SocketQueue.Total_SendBytes = 0;
-                Socket_Cache.SocketQueue.Total_RecvBytes = 0;
             }
             catch(Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_LogList()
+        {
+            try
+            {
+                Socket_Cache.LogList.lstRecLog.Clear();                
+                this.dgvLogList.Rows.Clear();             
+            }
+            catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
@@ -486,7 +521,8 @@ namespace WPELibrary
                     {
                         if (this.dgvSocketList.Rows.Count > dClearCount)
                         {
-                            this.CleanUp_MainForm();
+                            this.CleanUp_SocketList();
+                            this.CleanUp_HexBox();
                         }
                     }
                 }
@@ -512,20 +548,31 @@ namespace WPELibrary
             {
                 this.SetSystemParameter();
 
-                this.tlpFilterSet.Enabled = false;
-                this.gbHookType.Enabled = false;
+                this.gbFilterSet.Enabled = false;
+                this.gbHookSet.Enabled = false;
+                this.gbSystemSet.Enabled = false;
+
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
+
                 this.cmsIcon_StartHook.Enabled = false;
                 this.cmsIcon_StopHook.Enabled = true;
 
                 ws.StartHook();
+
+                if (this.cbSystemSet_SpeedMode.Checked)
+                {
+                    this.CleanUp_MainForm();
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
+                }
 
                 if (bWakeUp)
                 {
                     RemoteHooking.WakeUpProcess();
                     this.bWakeUp = false;
                 }
+
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_39));
             }
             catch (Exception ex)
             {
@@ -546,14 +593,19 @@ namespace WPELibrary
         {
             try
             {
-                this.tlpFilterSet.Enabled = true;
-                this.gbHookType.Enabled = true;
+                this.gbFilterSet.Enabled = true;
+                this.gbHookSet.Enabled = true;
+                this.gbSystemSet.Enabled = true;
+
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
+
                 this.cmsIcon_StartHook.Enabled = true;
                 this.cmsIcon_StopHook.Enabled = false;
 
                 ws.StopHook();
+
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_40));
             }
             catch (Exception ex)
             {
@@ -581,13 +633,13 @@ namespace WPELibrary
                 int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
                 int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
                 int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
-                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;                
-                long lTotal_SendBytes = Socket_Cache.SocketQueue.Total_SendBytes;
-                long lTotal_RecvBytes = Socket_Cache.SocketQueue.Total_RecvBytes;
+                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
 
-                int iAll_CNT = iSend_CNT + iRecv_CNT + iSendTo_CNT + iRecvFrom_CNT + iWSASend_CNT + iWSARecv_CNT + iWSASendTo_CNT + iWSARecvFrom_CNT;
+                long lTotal_CNT = Socket_Cache.TotalPackets;
+                long lTotal_SendBytes = Socket_Cache.Total_SendBytes;
+                long lTotal_RecvBytes = Socket_Cache.Total_RecvBytes;                
 
-                this.tlALL_CNT.Text = iAll_CNT.ToString();
+                this.tlALL_CNT.Text = lTotal_CNT.ToString();
                 this.tlQueue_CNT.Text = iQueue_CNT.ToString();
                 this.tlSend_CNT.Text = iSend_CNT.ToString();
                 this.tlRecv_CNT.Text = iRecv_CNT.ToString();
@@ -900,18 +952,18 @@ namespace WPELibrary
                 switch (sItemText)
                 {
                     case "cmsLogList_ToExcel":
+
                         if (dgvLogList.Rows.Count > 0)
                         {
                             Socket_Operation.SaveLogListToExcel();
                         }
+
                         break;
 
                     case "cmsLogList_CleanUp":
-                        if (dgvLogList.Rows.Count > 0)
-                        {
-                            Socket_Cache.LogQueue.ResetLogQueue();
-                            this.dgvLogList.Rows.Clear();
-                        }
+
+                        this.CleanUp_LogList();
+
                         break;                   
                 }
             }

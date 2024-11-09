@@ -384,7 +384,58 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #endregion        
+        #endregion
+
+        #region//统计封包数量
+
+        public static void CountSocketPackets(Socket_Cache.SocketPacket.PacketType ptPacketType, int iPacketLen)
+        {
+            try
+            {
+                Socket_Cache.TotalPackets++;
+
+                switch (ptPacketType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.Send:
+                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//判断文本框输入的字符类型
 
@@ -2600,6 +2651,19 @@ namespace WPELibrary.Lib
 
                 #endregion
 
+                #region//系统设置
+
+                XmlElement xeSystemSetConfig = doc.CreateElement("SystemSetConfig");
+                xeSystemConfig.AppendChild(xeSystemSetConfig);
+
+                string sSpeedMode = Socket_Cache.SpeedMode.ToString();             
+
+                XmlElement xesSpeedMode = doc.CreateElement("SpeedMode");
+                xesSpeedMode.InnerText = sSpeedMode;
+                xeSystemSetConfig.AppendChild(xesSpeedMode);
+
+                #endregion
+
                 doc.Save(FilePath);
             }
             catch (Exception ex)
@@ -2698,6 +2762,16 @@ namespace WPELibrary.Lib
                     Socket_Cache.SocketList.AutoRoll = bool.Parse(sAutoRoll);
                     Socket_Cache.SocketList.AutoClear = bool.Parse(sAutoClear);
                     Socket_Cache.SocketList.AutoClear_Value = decimal.Parse(sAutoClear_Value);
+
+                    #endregion
+
+                    #region//系统设置
+
+                    XmlNode xnSystemSetConfig = xnSystemConfig.SelectSingleNode("SystemSetConfig");
+
+                    string sSpeedMode = xnSystemSetConfig.SelectSingleNode("SpeedMode").InnerText;                
+
+                    Socket_Cache.SpeedMode = bool.Parse(sSpeedMode);                
 
                     #endregion
                 }
