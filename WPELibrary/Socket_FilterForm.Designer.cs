@@ -52,6 +52,9 @@ namespace WPELibrary
             this.tpNormal = new System.Windows.Forms.TabPage();
             this.dgvFilterNormal = new System.Windows.Forms.DataGridView();
             this.cmsDGV = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsDGV_Copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsDGV_Cut = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsDGV_Paste = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsDGV_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.tpAdvanced = new System.Windows.Forms.TabPage();
             this.tlpFilterAdvanced = new System.Windows.Forms.TableLayoutPanel();
@@ -190,15 +193,36 @@ namespace WPELibrary
             dataGridViewCellStyle20.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFilterNormal.RowsDefaultCellStyle = dataGridViewCellStyle20;
             this.dgvFilterNormal.RowTemplate.Height = 30;
-            this.dgvFilterNormal.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
+            this.dgvFilterNormal.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // cmsDGV
             // 
             resources.ApplyResources(this.cmsDGV, "cmsDGV");
             this.cmsDGV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsDGV_Copy,
+            this.cmsDGV_Cut,
+            this.cmsDGV_Paste,
             this.cmsDGV_Delete});
             this.cmsDGV.Name = "cmsDGV";
             this.cmsDGV.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsDGV_ItemClicked);
+            // 
+            // cmsDGV_Copy
+            // 
+            resources.ApplyResources(this.cmsDGV_Copy, "cmsDGV_Copy");
+            this.cmsDGV_Copy.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.cmsDGV_Copy.Name = "cmsDGV_Copy";
+            // 
+            // cmsDGV_Cut
+            // 
+            resources.ApplyResources(this.cmsDGV_Cut, "cmsDGV_Cut");
+            this.cmsDGV_Cut.Image = global::WPELibrary.Properties.Resources.CutHS;
+            this.cmsDGV_Cut.Name = "cmsDGV_Cut";
+            // 
+            // cmsDGV_Paste
+            // 
+            resources.ApplyResources(this.cmsDGV_Paste, "cmsDGV_Paste");
+            this.cmsDGV_Paste.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            this.cmsDGV_Paste.Name = "cmsDGV_Paste";
             // 
             // cmsDGV_Delete
             // 
@@ -261,7 +285,7 @@ namespace WPELibrary
             dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFilterAdvanced_Modify_FromPosition.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.Height = 30;
-            this.dgvFilterAdvanced_Modify_FromPosition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
+            this.dgvFilterAdvanced_Modify_FromPosition.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // dgvFilterAdvanced_Search
             // 
@@ -303,7 +327,7 @@ namespace WPELibrary
             dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFilterAdvanced_Search.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dgvFilterAdvanced_Search.RowTemplate.Height = 30;
-            this.dgvFilterAdvanced_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
+            this.dgvFilterAdvanced_Search.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // dgvFilterAdvanced_Modify_FromHead
             // 
@@ -345,7 +369,7 @@ namespace WPELibrary
             dataGridViewCellStyle12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.dgvFilterAdvanced_Modify_FromHead.RowsDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvFilterAdvanced_Modify_FromHead.RowTemplate.Height = 30;
-            this.dgvFilterAdvanced_Modify_FromHead.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterList_KeyDown);
+            this.dgvFilterAdvanced_Modify_FromHead.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // tlpFilterParameter
             // 
@@ -759,5 +783,8 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbFilter_AppointHeader;
         private System.Windows.Forms.ContextMenuStrip cmsDGV;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Delete;
+        private System.Windows.Forms.ToolStripMenuItem cmsDGV_Copy;
+        private System.Windows.Forms.ToolStripMenuItem cmsDGV_Paste;
+        private System.Windows.Forms.ToolStripMenuItem cmsDGV_Cut;
     }
 }

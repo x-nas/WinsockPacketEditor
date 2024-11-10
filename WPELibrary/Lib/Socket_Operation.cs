@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Xml;
 using System.Globalization;
-using static WPELibrary.Lib.Socket_Cache;
+using System.Text.RegularExpressions;
 
 namespace WPELibrary.Lib
 {   
@@ -26,84 +26,6 @@ namespace WPELibrary.Lib
         public static DataTable dtPacketFormat = new DataTable();
 
         #region//数据格式转换
-
-        #region//初始化封包数据格式表        
-
-        public static void InitPacketFormat()
-        {
-            try
-            {
-                if (dtPacketFormat.Columns.Count == 0)
-                {
-                    dtPacketFormat.Columns.Add("Key", typeof(string));
-                    dtPacketFormat.Columns.Add("Value", typeof(string));
-                }
-
-                if (dtPacketFormat.Rows.Count == 0)
-                {
-                    DataRow drUTF7 = dtPacketFormat.NewRow();
-                    drUTF7[0] = "UTF-7";
-                    drUTF7[1] = "UTF-7";
-                    dtPacketFormat.Rows.Add(drUTF7);
-
-                    DataRow drASCII = dtPacketFormat.NewRow();
-                    drASCII[0] = "ASCII";
-                    drASCII[1] = "ASCII";
-                    dtPacketFormat.Rows.Add(drASCII);                  
-
-                    DataRow drUnicode = dtPacketFormat.NewRow();
-                    drUnicode[0] = "UNICODE";
-                    drUnicode[1] = "UNICODE";
-                    dtPacketFormat.Rows.Add(drUnicode);                    
-
-                    DataRow drUTF8 = dtPacketFormat.NewRow();
-                    drUTF8[0] = "UTF-8";
-                    drUTF8[1] = "UTF-8";
-                    dtPacketFormat.Rows.Add(drUTF8);
-
-                    DataRow drUTF16LE = dtPacketFormat.NewRow();
-                    drUTF16LE[0] = "UTF-16-LE";
-                    drUTF16LE[1] = "UTF-16（LE）";
-                    dtPacketFormat.Rows.Add(drUTF16LE);
-
-                    DataRow drUTF16BE = dtPacketFormat.NewRow();
-                    drUTF16BE[0] = "UTF-16-BE";
-                    drUTF16BE[1] = "UTF-16（BE）";
-                    dtPacketFormat.Rows.Add(drUTF16BE);
-
-                    DataRow drUTF32LE = dtPacketFormat.NewRow();
-                    drUTF32LE[0] = "UTF-32-LE";
-                    drUTF32LE[1] = "UTF-32（LE）";
-                    dtPacketFormat.Rows.Add(drUTF32LE);
-
-                    DataRow drUTF32BE = dtPacketFormat.NewRow();
-                    drUTF32BE[0] = "UTF-32-BE";
-                    drUTF32BE[1] = "UTF-32（BE）";
-                    dtPacketFormat.Rows.Add(drUTF32BE);
-
-                    DataRow drBIN = dtPacketFormat.NewRow();
-                    drBIN[0] = "BIN";
-                    drBIN[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_86);
-                    dtPacketFormat.Rows.Add(drBIN);
-
-                    DataRow drDEC = dtPacketFormat.NewRow();
-                    drDEC[0] = "DEC";
-                    drDEC[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_87);
-                    dtPacketFormat.Rows.Add(drDEC);
-
-                    DataRow drHEX = dtPacketFormat.NewRow();
-                    drHEX[0] = "HEX";
-                    drHEX[1] = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_85);
-                    dtPacketFormat.Rows.Add(drHEX);
-                }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
-        }
-
-        #endregion
 
         #region//base64 编码，解码
 
@@ -380,6 +302,28 @@ namespace WPELibrary.Lib
             {  
                 return new byte[0];
             }
+        }
+
+        #endregion
+
+        #region//判断是否十六进制字符串（带空格）
+
+        public static bool IsHexString(string value)
+        {
+            bool bReturn = false;
+
+            try
+            {  
+                string pattern = @"^([A-Fa-f0-9]{2}\s?)+$";
+
+                bReturn = Regex.IsMatch(value, pattern);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;            
         }
 
         #endregion
@@ -1906,7 +1850,7 @@ namespace WPELibrary.Lib
 
                 switch (filterMove)
                 {
-                    case Filter.FilterMove.Top:
+                    case Socket_Cache.Filter.FilterMove.Top:
 
                         if (iFIndex > 0)
                         {
@@ -1918,7 +1862,7 @@ namespace WPELibrary.Lib
 
                         break;
 
-                    case Filter.FilterMove.Up:
+                    case Socket_Cache.Filter.FilterMove.Up:
 
                         if (iFIndex > 0)
                         {
@@ -1930,7 +1874,7 @@ namespace WPELibrary.Lib
 
                         break;
 
-                    case Filter.FilterMove.Down:
+                    case Socket_Cache.Filter.FilterMove.Down:
 
                         if (iFIndex < iFilterListCount - 1)
                         {
@@ -1942,7 +1886,7 @@ namespace WPELibrary.Lib
 
                         break;
 
-                    case Filter.FilterMove.Bottom:
+                    case Socket_Cache.Filter.FilterMove.Bottom:
 
                         if (iFIndex < iFilterListCount - 1)
                         {

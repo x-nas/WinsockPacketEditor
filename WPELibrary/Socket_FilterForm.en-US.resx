@@ -122,13 +122,35 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cmsDGV.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 26</value>
+    <value>114, 92</value>
+  </data>
+  <data name="cmsDGV_Copy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="cmsDGV_Copy.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="cmsDGV_Cut.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="cmsDGV_Cut.Text" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="cmsDGV_Paste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>113, 22</value>
+  </data>
+  <data name="cmsDGV_Paste.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cmsDGV_Delete.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>SizeToFit</value>
   </data>
   <data name="cmsDGV_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 22</value>
+    <value>113, 22</value>
   </data>
   <data name="cmsDGV_Delete.Text" xml:space="preserve">
-    <value>Delete Data</value>
+    <value>Delete</value>
   </data>
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>

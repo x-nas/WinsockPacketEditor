@@ -522,7 +522,23 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
+        private void DGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.Value != null)
+                {
+                    e.Value = e.Value.ToString().ToUpper();
+                    e.FormattingApplied = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion
 
@@ -709,121 +725,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//黏贴封包数据
-
-        private void dgvFilterList_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                if (e.Control && e.KeyCode == Keys.V)
-                {
-                    string sDGVName = ((DataGridView)sender).Name.Trim();
-                    string sClipboardText = Clipboard.GetText().Trim();
-
-                    ShowSocketSendData(sDGVName, sClipboardText);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        private void ShowSocketSendData(string sDGVName, string sData)
-        {
-            try
-            {
-                int iRow = 0, iCol = 0;
-                string[] DataCells = sData.Split(' ');                
-
-                switch (sDGVName)
-                {
-                    case "dgvFilterNormal":
-
-                        iRow = dgvFilterNormal.CurrentCell.RowIndex;
-                        iCol = dgvFilterNormal.CurrentCell.ColumnIndex;
-
-                        for (int i = 0; i < DataCells.Length; i++)
-                        {
-                            if (iCol + i < this.dgvFilterNormal.ColumnCount)
-                            {
-                                dgvFilterNormal[iCol + i, iRow].Value = Convert.ChangeType(DataCells[i], dgvFilterNormal[iCol + i, iRow].ValueType);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                        break;
-
-                    case "dgvFilterAdvanced_Search":
-
-                        iRow = dgvFilterAdvanced_Search.CurrentCell.RowIndex;
-                        iCol = dgvFilterAdvanced_Search.CurrentCell.ColumnIndex;
-
-                        for (int i = 0; i < DataCells.Length; i++)
-                        {
-                            if (iCol + i < this.dgvFilterAdvanced_Search.ColumnCount)
-                            {
-                                dgvFilterAdvanced_Search[iCol + i, iRow].Value = Convert.ChangeType(DataCells[i], dgvFilterAdvanced_Search[iCol + i, iRow].ValueType);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                        break;
-
-                    case "dgvFilterAdvanced_Modify_FromHead":
-
-                        iRow = dgvFilterAdvanced_Modify_FromHead.CurrentCell.RowIndex;
-                        iCol = dgvFilterAdvanced_Modify_FromHead.CurrentCell.ColumnIndex;
-
-                        for (int i = 0; i < DataCells.Length; i++)
-                        {
-                            if (iCol + i < this.dgvFilterAdvanced_Modify_FromHead.ColumnCount)
-                            {
-                                dgvFilterAdvanced_Modify_FromHead[iCol + i, iRow].Value = Convert.ChangeType(DataCells[i], dgvFilterAdvanced_Modify_FromHead[iCol + i, iRow].ValueType);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                        break;
-
-                    case "dgvFilterAdvanced_Modify_FromPosition":
-
-                        iRow = dgvFilterAdvanced_Modify_FromPosition.CurrentCell.RowIndex;
-                        iCol = dgvFilterAdvanced_Modify_FromPosition.CurrentCell.ColumnIndex;
-
-                        for (int i = 0; i < DataCells.Length; i++)
-                        {
-                            if (iCol + i < this.dgvFilterAdvanced_Modify_FromPosition.ColumnCount)
-                            {
-                                dgvFilterAdvanced_Modify_FromPosition[iCol + i, iRow].Value = Convert.ChangeType(DataCells[i], dgvFilterAdvanced_Modify_FromPosition[iCol + i, iRow].ValueType);
-                            }
-                            else
-                            {
-                                break;
-                            }
-                        }
-
-                        break;                 
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//右键菜单
 
@@ -836,51 +738,98 @@ namespace WPELibrary
 
             try
             {
+                string sCellText = string.Empty;
+
+                DataGridView dgv = new DataGridView();
+
                 switch (sDGVName)
                 {
                     case "dgvFilterNormal":
-
-                        switch (sItemText)
-                        {
-                            case "cmsDGV_Delete":
-                                this.dgvFilterNormal.CurrentCell.Value = null;
-                                break;
-                        }
-
+                        dgv = this.dgvFilterNormal;
                         break;
 
                     case "dgvFilterAdvanced_Search":
-
-                        switch (sItemText)
-                        {
-                            case "cmsDGV_Delete":
-                                this.dgvFilterAdvanced_Search.CurrentCell.Value = null;
-                                break;
-                        }
-
+                        dgv = this.dgvFilterAdvanced_Search;
                         break;
 
                     case "dgvFilterAdvanced_Modify_FromHead":
-
-                        switch (sItemText)
-                        {
-                            case "cmsDGV_Delete":
-                                this.dgvFilterAdvanced_Modify_FromHead.CurrentCell.Value = null;
-                                break;
-                        }
-
+                        dgv = this.dgvFilterAdvanced_Modify_FromHead;
                         break;
 
                     case "dgvFilterAdvanced_Modify_FromPosition":
+                        dgv = this.dgvFilterAdvanced_Modify_FromPosition;
+                        break;
+                }
 
-                        switch (sItemText)
+                switch (sItemText)
+                {
+                    case "cmsDGV_Copy":
+
+                        if (dgv.CurrentCell.Value != null)
                         {
-                            case "cmsDGV_Delete":
-                                this.dgvFilterAdvanced_Modify_FromPosition.CurrentCell.Value = null;
-                                break;
+                            sCellText = dgv.CurrentCell.Value.ToString();
+                            Clipboard.SetText(sCellText);
                         }
+                        
+                        break;
+
+                    case "cmsDGV_Cut":
+
+                        if (dgv.CurrentCell.Value != null)
+                        {
+                            sCellText = dgv.CurrentCell.Value.ToString();
+                            Clipboard.SetText(sCellText);
+                            dgv.CurrentCell.Value = null;
+                        }
+                        
+                        break;
+
+                    case "cmsDGV_Paste":
+
+                        string sClipboardText = Clipboard.GetText().Trim();
+                        PastePacketData(dgv, sClipboardText);
 
                         break;
+
+                    case "cmsDGV_Delete":
+
+                        dgv.CurrentCell.Value = null;
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void PastePacketData(DataGridView dgv, string sData)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(sData) && Socket_Operation.IsHexString(sData))
+                {
+                    string[] DataCells = sData.Split(' ');
+
+                    int iRow = dgv.CurrentCell.RowIndex;
+                    int iCol = dgv.CurrentCell.ColumnIndex;
+
+                    for (int i = 0; i < DataCells.Length; i++)
+                    {
+                        if (iCol + i < dgv.ColumnCount)
+                        {
+                            dgv[iCol + i, iRow].Value = Convert.ChangeType(DataCells[i].ToUpper(), dgv[iCol + i, iRow].ValueType);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {  
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_42));
                 }
             }
             catch (Exception ex)
