@@ -172,13 +172,13 @@
     <value>False</value>
   </data>
   <data name="txtPacketType.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 9pt</value>
+    <value>Microsoft YaHei UI, 9pt</value>
   </data>
   <data name="txtPacketType.Location" type="System.Drawing.Point, System.Drawing">
     <value>247, 3</value>
   </data>
   <data name="txtPacketType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 21</value>
+    <value>94, 23</value>
   </data>
   <data name="txtPacketType.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -475,13 +475,13 @@
     <value>6, 25</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
     <value>复制 Hex</value>
@@ -499,13 +499,13 @@
     <value>6, 25</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
     <value>粘贴</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
     <value>粘贴 Hex</value>

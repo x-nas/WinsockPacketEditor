@@ -298,7 +298,7 @@ namespace WPELibrary.Lib
 
                 return returnBytes;
             }
-            catch (Exception ex)
+            catch
             {  
                 return new byte[0];
             }
@@ -771,9 +771,62 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取封包类型的图标
+        #region//获取封包类型对应的名称
 
-        public static Image GetImg_BySocketType(Socket_Cache.SocketPacket.PacketType socketType)
+        public static string GetName_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                switch (socketType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.Send:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//获取封包类型对应的图标
+
+        public static Image GetImg_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
         {
             Image imgReturn = null;
 
@@ -1638,7 +1691,6 @@ namespace WPELibrary.Lib
                         string sFSearch = xnFilter.SelectSingleNode("Search").InnerText;
                         string sFModify = xnFilter.SelectSingleNode("Modify").InnerText;
 
-                        int iFNum = int.Parse(sFNum);
                         int iFModifyCNT = int.Parse(sFModifyCNT);
 
                         bool bAppointHeader = bool.Parse(sFAppointHeader);
@@ -1648,7 +1700,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
                         Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);                                           
 
-                        Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify, false);
+                        Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify);
                     }
                 }
             }
@@ -1813,7 +1865,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static void DeleteFilterByFilterNum_Dialog(int iFNum)
+        public static void DeleteFilter_ByFilterNum_Dialog(int iFNum)
         {
             try
             {
@@ -1832,6 +1884,39 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//复制滤镜
+
+        public static int CopyFilter_ByFilterIndex(int iFIndex)
+        {
+            int iReturn = -1;
+
+            try
+            {  
+                string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.FilterList.lstFilter[iFIndex].FName);
+                bool bAppointHeader = Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader;
+                string HeaderContent = Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent;
+                Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
+                Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
+                Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
+                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
+                int FModifyCNT = Socket_Cache.FilterList.lstFilter[iFIndex].FModifyCNT;
+                string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
+                string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
+
+                Socket_Cache.FilterList.AddFilter_New(FName, bAppointHeader, HeaderContent, FMode, FAction, FFunction, FStartFrom, FModifyCNT, FSearch, FModify);
+
+                iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return iReturn;
         }
 
         #endregion
@@ -2781,7 +2866,7 @@ namespace WPELibrary.Lib
 
         #region//发送封包
 
-        public static bool SendPacket(int iSocket, Socket_Cache.SocketPacket.PacketType stType, string sIPString, byte[] bSendBuffer)
+        public static bool SendPacket(int iSocket, Socket_Cache.SocketPacket.PacketType stType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
         {
             bool bReturn = false;
 
@@ -2792,7 +2877,17 @@ namespace WPELibrary.Lib
                     IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
                     Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
 
-                    int res = -1;                                
+                    int res = -1;
+                    string sIPString = string.Empty;
+
+                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
+                    {
+                        sIPString = sIPTo;
+                    }
+                    else if (stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSARecv || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                    {
+                        sIPString = sIPFrom;
+                    }
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {

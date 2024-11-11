@@ -68,6 +68,8 @@ namespace WinsockPacketEditor
                 {
                     tbProcessID.Text = Program.PNAME;
                 }
+
+                this.bInject.Focus();
             }
             catch (Exception ex)
             {

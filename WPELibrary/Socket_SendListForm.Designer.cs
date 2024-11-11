@@ -273,7 +273,7 @@ namespace WPELibrary
             // tsmiDeleteSendList
             // 
             resources.ApplyResources(this.tsmiDeleteSendList, "tsmiDeleteSendList");
-            this.tsmiDeleteSendList.Image = global::WPELibrary.Properties.Resources.Delete216;
+            this.tsmiDeleteSendList.Image = global::WPELibrary.Properties.Resources.ListDel;
             this.tsmiDeleteSendList.Name = "tsmiDeleteSendList";
             // 
             // toolStripSeparator1
@@ -295,7 +295,7 @@ namespace WPELibrary
             // tsmiSaveSendList
             // 
             resources.ApplyResources(this.tsmiSaveSendList, "tsmiSaveSendList");
-            this.tsmiSaveSendList.Image = global::WPELibrary.Properties.Resources.saveHS;
+            this.tsmiSaveSendList.Image = global::WPELibrary.Properties.Resources.saveas;
             this.tsmiSaveSendList.Name = "tsmiSaveSendList";
             // 
             // toolStripSeparator3

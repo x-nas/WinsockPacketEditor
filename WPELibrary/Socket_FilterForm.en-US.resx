@@ -117,13 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="tpNormal.Text" xml:space="preserve">
-    <value>[First row 'search', second row 'modify']</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cmsDGV.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 92</value>
-  </data>
   <data name="cmsDGV_Copy.Size" type="System.Drawing.Size, System.Drawing">
     <value>113, 22</value>
   </data>
@@ -152,11 +146,14 @@
   <data name="cmsDGV_Delete.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="cmsDGV.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 92</value>
+  </data>
+  <data name="tpNormal.Text" xml:space="preserve">
+    <value>[First row 'search', second row 'modify']</value>
+  </data>
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
-  </data>
-  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
-    <value>[ Starting Modify ]</value>
   </data>
   <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
     <value>From the position of the chain</value>
@@ -164,8 +161,8 @@
   <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
     <value>From the beginning of the packet</value>
   </data>
-  <data name="gbFilterSet.Text" xml:space="preserve">
-    <value>[ Set ]</value>
+  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
+    <value>[ Starting Modify ]</value>
   </data>
   <data name="nudFilterSet_ModifyTimes.Location" type="System.Drawing.Point, System.Drawing">
     <value>99, 6</value>
@@ -179,6 +176,33 @@
   <data name="lFilterSet_ModifyTimes.Text" xml:space="preserve">
     <value>Modify Times</value>
   </data>
+  <data name="gbFilterSet.Text" xml:space="preserve">
+    <value>[ Setting ]</value>
+  </data>
+  <data name="cbFilterFunction_RecvFrom.Text" xml:space="preserve">
+    <value>RecvFrom</value>
+  </data>
+  <data name="cbFilterFunction_Send.Text" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="cbFilterFunction_SendTo.Text" xml:space="preserve">
+    <value>SendTo</value>
+  </data>
+  <data name="cbFilterFunction_Recv.Text" xml:space="preserve">
+    <value>Recv</value>
+  </data>
+  <data name="cbFilterFunction_WSASend.Text" xml:space="preserve">
+    <value>WSASend</value>
+  </data>
+  <data name="cbFilterFunction_WSASendTo.Text" xml:space="preserve">
+    <value>WSASendTo</value>
+  </data>
+  <data name="cbFilterFunction_WSARecv.Text" xml:space="preserve">
+    <value>WSARecv</value>
+  </data>
+  <data name="cbFilterFunction_WSARecvFrom.Text" xml:space="preserve">
+    <value>WSARecvFrom</value>
+  </data>
   <data name="gbFilterFunction.Text" xml:space="preserve">
     <value>[ Function ]</value>
   </data>
@@ -188,17 +212,14 @@
   <data name="bFilterButton_Close.Text" xml:space="preserve">
     <value>Close (&amp;C)</value>
   </data>
-  <data name="gbFilterAction.Text" xml:space="preserve">
-    <value>[ Action ]</value>
-  </data>
   <data name="rbFilterAction_Intercept.Text" xml:space="preserve">
     <value>Intercept</value>
   </data>
   <data name="rbFilterAction_Replace.Text" xml:space="preserve">
     <value>Replace</value>
   </data>
-  <data name="gbFilterMode.Text" xml:space="preserve">
-    <value>[ Filter Mode ]</value>
+  <data name="gbFilterAction.Text" xml:space="preserve">
+    <value>[ Action ]</value>
   </data>
   <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
     <value>Advanced</value>
@@ -206,8 +227,8 @@
   <data name="rbFilterMode_Normal.Text" xml:space="preserve">
     <value>Normal</value>
   </data>
-  <data name="gbFilterAppoint.Text" xml:space="preserve">
-    <value>[ Appoint ]</value>
+  <data name="gbFilterMode.Text" xml:space="preserve">
+    <value>[ Mode ]</value>
   </data>
   <data name="txtFilter_HeaderContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>82, 6</value>
@@ -220,6 +241,9 @@
   </data>
   <data name="cbFilter_AppointHeader.Text" xml:space="preserve">
     <value>Header</value>
+  </data>
+  <data name="gbFilterAppoint.Text" xml:space="preserve">
+    <value>[ Appoint Type ]</value>
   </data>
   <data name="gbFilterName.Text" xml:space="preserve">
     <value>[ Filter Name ]</value>
@@ -6395,5 +6419,8 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Inherit</value>
   </data>
 </root>

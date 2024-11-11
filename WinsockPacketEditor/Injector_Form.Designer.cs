@@ -34,12 +34,12 @@ namespace WinsockPacketEditor
             this.tlpProcessInject = new System.Windows.Forms.TableLayoutPanel();
             this.lProcessName = new System.Windows.Forms.Label();
             this.tbProcessID = new System.Windows.Forms.TextBox();
-            this.bSelectProcess = new System.Windows.Forms.Button();
             this.bInject = new System.Windows.Forms.Button();
-            this.pbLanguage = new System.Windows.Forms.PictureBox();
-            this.pbAbout = new System.Windows.Forms.PictureBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
             this.bgwCheckURL = new System.ComponentModel.BackgroundWorker();
+            this.bSelectProcess = new System.Windows.Forms.Button();
+            this.pbLanguage = new System.Windows.Forms.PictureBox();
+            this.pbAbout = new System.Windows.Forms.PictureBox();
             this.tlpInjectorForm.SuspendLayout();
             this.tlpProcessInject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).BeginInit();
@@ -75,34 +75,12 @@ namespace WinsockPacketEditor
             resources.ApplyResources(this.tbProcessID, "tbProcessID");
             this.tbProcessID.Name = "tbProcessID";
             // 
-            // bSelectProcess
-            // 
-            resources.ApplyResources(this.bSelectProcess, "bSelectProcess");
-            this.bSelectProcess.Name = "bSelectProcess";
-            this.bSelectProcess.UseVisualStyleBackColor = true;
-            this.bSelectProcess.Click += new System.EventHandler(this.bSelectProcess_Click);
-            // 
             // bInject
             // 
             resources.ApplyResources(this.bInject, "bInject");
             this.bInject.Name = "bInject";
             this.bInject.UseVisualStyleBackColor = true;
             this.bInject.Click += new System.EventHandler(this.bInject_Click);
-            // 
-            // pbLanguage
-            // 
-            resources.ApplyResources(this.pbLanguage, "pbLanguage");
-            this.pbLanguage.Image = global::WinsockPacketEditor.Properties.Resources.Language;
-            this.pbLanguage.Name = "pbLanguage";
-            this.pbLanguage.TabStop = false;
-            this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
-            // 
-            // pbAbout
-            // 
-            resources.ApplyResources(this.pbAbout, "pbAbout");
-            this.pbAbout.Name = "pbAbout";
-            this.pbAbout.TabStop = false;
-            this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
             // 
             // rtbLog
             // 
@@ -116,6 +94,30 @@ namespace WinsockPacketEditor
             // 
             this.bgwCheckURL.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckURL_DoWork);
             this.bgwCheckURL.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCheckURL_RunWorkerCompleted);
+            // 
+            // bSelectProcess
+            // 
+            resources.ApplyResources(this.bSelectProcess, "bSelectProcess");
+            this.bSelectProcess.Image = global::WinsockPacketEditor.Properties.Resources.searchbox_button;
+            this.bSelectProcess.Name = "bSelectProcess";
+            this.bSelectProcess.UseVisualStyleBackColor = true;
+            this.bSelectProcess.Click += new System.EventHandler(this.bSelectProcess_Click);
+            // 
+            // pbLanguage
+            // 
+            resources.ApplyResources(this.pbLanguage, "pbLanguage");
+            this.pbLanguage.Image = global::WinsockPacketEditor.Properties.Resources.Language;
+            this.pbLanguage.Name = "pbLanguage";
+            this.pbLanguage.TabStop = false;
+            this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
+            // 
+            // pbAbout
+            // 
+            resources.ApplyResources(this.pbAbout, "pbAbout");
+            this.pbAbout.Image = global::WinsockPacketEditor.Properties.Resources.help;
+            this.pbAbout.Name = "pbAbout";
+            this.pbAbout.TabStop = false;
+            this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
             // 
             // Injector_Form
             // 

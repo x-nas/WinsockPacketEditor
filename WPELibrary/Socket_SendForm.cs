@@ -56,11 +56,11 @@ namespace WPELibrary
                 this.Send_PacketType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;            
 
                 this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fffffff");              
-                this.txtPacketType.Text = Send_PacketType.ToString();
+                this.txtPacketType.Text = Socket_Operation.GetName_ByPacketType(Send_PacketType);
 
                 this.txtIPFrom.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketFrom;
                 this.txtIPTo.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
-                this.pbSocketType.Image = Socket_Operation.GetImg_BySocketType(Send_PacketType);
+                this.pbSocketType.Image = Socket_Operation.GetImg_ByPacketType(Send_PacketType);
                 
                 this.nudSendSocket_Len.Value = hbPacketData.ByteProvider.Length;
                 this.nudSendSocket_Socket.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
@@ -303,7 +303,9 @@ namespace WPELibrary
 
                 int iSend_Interval = (int)this.nudSendType_Interval.Value;
                 int iSend_Times = (int)this.nudSendType_Times.Value;
-                string sSend_IP = this.txtIPTo.Text.Trim();
+
+                string sIPFrom = this.txtIPFrom.Text.Trim();
+                string sIPTo = this.txtIPTo.Text.Trim();
 
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
                 byte[] bBuff = dbp.Bytes.ToArray();
@@ -312,7 +314,7 @@ namespace WPELibrary
                 {
                     while (!bgwSendPacket.CancellationPending)
                     {
-                        this.DoSendPacket(iSocket, sSend_IP, bBuff);
+                        this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
 
                         bgwSendPacket.ReportProgress(Send_CNT);
                         Thread.Sleep(iSend_Interval);
@@ -328,7 +330,7 @@ namespace WPELibrary
                         }
                         else
                         {
-                            this.DoSendPacket(iSocket, sSend_IP, bBuff);
+                            this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
 
                             bgwSendPacket.ReportProgress(Send_CNT);
                             Thread.Sleep(iSend_Interval);
@@ -372,11 +374,11 @@ namespace WPELibrary
             }
         }
 
-        private void DoSendPacket(int iSocket, string sSendIP, byte[] bSendBuff)
+        private void DoSendPacket(int iSocket, string sIPFrom, string sIPTo, byte[] bSendBuff)
         {
             try
             {
-                bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sSendIP, bSendBuff);
+                bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sIPFrom, sIPTo, bSendBuff);
 
                 if (bSendOK)
                 {
@@ -481,7 +483,7 @@ namespace WPELibrary
                 switch (sItemText)
                 {                    
                     case "cmsHexBox_SendList":
-                        
+
                         int iSocket = (int)this.nudSendSocket_Socket.Value;
                         string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
 
@@ -492,28 +494,19 @@ namespace WPELibrary
                     
                     case "cmsHexBox_FilterList":
 
-                        string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iPacketIndex.ToString() + "]";
-
-                        int iSelectLen = ((int)hbPacketData.SelectionLength);
-                        int iStart = ((int)hbPacketData.SelectionStart);
-                        int iEnd = iStart + iSelectLen;
-
-                        byte[] bSelectBuffer = new byte[hbPacketData.SelectionLength];
-
-                        int iIndex = 0;
-                        for (int i = iStart; i < iEnd; i++)
+                        if (Select_Index > -1)
                         {
-                            bSelectBuffer[iIndex] = hbPacketData.ByteProvider.ReadByte(i);
-                            iIndex++;
-                        }
+                            if (this.hbPacketData.CanCopy())
+                            {
+                                this.hbPacketData.CopyHex();
 
-                        if (bSelectBuffer.Length > 0)
-                        {
-                            Socket_Cache.FilterList.AddToFilterList_New(sFName, ptType, bSelectBuffer);
-                        }
-                        else
-                        {
-                            Socket_Cache.FilterList.AddToFilterList_New(sFName, ptType, bBuffer);
+                                byte[] bBufferCopy = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
+                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBufferCopy);
+                            }
+                            else
+                            {
+                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBuffer);
+                            }
                         }
 
                         break;

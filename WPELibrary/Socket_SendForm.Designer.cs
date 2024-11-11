@@ -259,7 +259,7 @@ namespace WPELibrary
             // tsPacketData_Cut
             // 
             this.tsPacketData_Cut.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsPacketData_Cut.Image = global::WPELibrary.Properties.Resources.CutHS;
+            this.tsPacketData_Cut.Image = global::WPELibrary.Properties.Resources.cut;
             resources.ApplyResources(this.tsPacketData_Cut, "tsPacketData_Cut");
             this.tsPacketData_Cut.Name = "tsPacketData_Cut";
             this.tsPacketData_Cut.Click += new System.EventHandler(this.tsPacketData_Cut_Click);
@@ -275,21 +275,21 @@ namespace WPELibrary
             this.tsPacketData_Copy.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsPacketData_Copy_Copy,
             this.tsPacketData_Copy_CopyHex});
-            this.tsPacketData_Copy.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.tsPacketData_Copy.Image = global::WPELibrary.Properties.Resources.copy;
             resources.ApplyResources(this.tsPacketData_Copy, "tsPacketData_Copy");
             this.tsPacketData_Copy.Name = "tsPacketData_Copy";
             this.tsPacketData_Copy.ButtonClick += new System.EventHandler(this.tsPacketData_Copy_ButtonClick);
             // 
             // tsPacketData_Copy_Copy
             // 
-            this.tsPacketData_Copy_Copy.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.tsPacketData_Copy_Copy.Image = global::WPELibrary.Properties.Resources.copy;
             this.tsPacketData_Copy_Copy.Name = "tsPacketData_Copy_Copy";
             resources.ApplyResources(this.tsPacketData_Copy_Copy, "tsPacketData_Copy_Copy");
             this.tsPacketData_Copy_Copy.Click += new System.EventHandler(this.tsPacketData_Copy_Copy_Click);
             // 
             // tsPacketData_Copy_CopyHex
             // 
-            this.tsPacketData_Copy_CopyHex.Image = global::WPELibrary.Properties.Resources.CopyHS;
+            this.tsPacketData_Copy_CopyHex.Image = global::WPELibrary.Properties.Resources.copy;
             this.tsPacketData_Copy_CopyHex.Name = "tsPacketData_Copy_CopyHex";
             resources.ApplyResources(this.tsPacketData_Copy_CopyHex, "tsPacketData_Copy_CopyHex");
             this.tsPacketData_Copy_CopyHex.Click += new System.EventHandler(this.tsPacketData_Copy_CopyHex_Click);
@@ -305,21 +305,21 @@ namespace WPELibrary
             this.tsPacketData_Paste.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsPacketData_Paste_Paste,
             this.tsPacketData_Paste_PasteHex});
-            this.tsPacketData_Paste.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            this.tsPacketData_Paste.Image = global::WPELibrary.Properties.Resources.paste;
             resources.ApplyResources(this.tsPacketData_Paste, "tsPacketData_Paste");
             this.tsPacketData_Paste.Name = "tsPacketData_Paste";
             this.tsPacketData_Paste.ButtonClick += new System.EventHandler(this.tsPacketData_Paste_ButtonClick);
             // 
             // tsPacketData_Paste_Paste
             // 
-            this.tsPacketData_Paste_Paste.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            this.tsPacketData_Paste_Paste.Image = global::WPELibrary.Properties.Resources.paste;
             this.tsPacketData_Paste_Paste.Name = "tsPacketData_Paste_Paste";
             resources.ApplyResources(this.tsPacketData_Paste_Paste, "tsPacketData_Paste_Paste");
             this.tsPacketData_Paste_Paste.Click += new System.EventHandler(this.tsPacketData_Paste_Paste_Click);
             // 
             // tsPacketData_Paste_PasteHex
             // 
-            this.tsPacketData_Paste_PasteHex.Image = global::WPELibrary.Properties.Resources.PasteHS;
+            this.tsPacketData_Paste_PasteHex.Image = global::WPELibrary.Properties.Resources.paste;
             this.tsPacketData_Paste_PasteHex.Name = "tsPacketData_Paste_PasteHex";
             resources.ApplyResources(this.tsPacketData_Paste_PasteHex, "tsPacketData_Paste_PasteHex");
             this.tsPacketData_Paste_PasteHex.Click += new System.EventHandler(this.tsPacketData_Paste_PasteHex_Click);
@@ -557,6 +557,7 @@ namespace WPELibrary
             // 
             // cmsHexBox_SendList
             // 
+            this.cmsHexBox_SendList.Image = global::WPELibrary.Properties.Resources.addto;
             this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
             resources.ApplyResources(this.cmsHexBox_SendList, "cmsHexBox_SendList");
             // 
@@ -567,6 +568,7 @@ namespace WPELibrary
             // 
             // cmsHexBox_FilterList
             // 
+            this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
             this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
             resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
             // 

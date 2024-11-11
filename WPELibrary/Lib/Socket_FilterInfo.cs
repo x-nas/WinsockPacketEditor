@@ -150,10 +150,10 @@ namespace WPELibrary.Lib
 
         #region//Socket_FilterInfo
 
-        public Socket_FilterInfo(int FNum,bool IsEnable, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, int FModifyCNT, string FSearch, string FModify) 
+        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, int FModifyCNT, string FSearch, string FModify) 
         {
-            this.fnum = FNum;
             this.isenable = IsEnable;
+            this.fnum = FNum;            
             this.fname = FName;
             this.appointheader = AppointHeader;
             this.headercontent = HeaderContent;

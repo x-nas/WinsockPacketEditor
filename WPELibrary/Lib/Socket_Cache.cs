@@ -164,8 +164,7 @@ namespace WPELibrary.Lib
             public static int WSASendTo_CNT = 0;
             public static int WSARecv_CNT = 0;
             public static int WSARecvFrom_CNT = 0;
-            public static int Filter_CNT = 0;
-            public static int Intercept_CNT = 0;            
+            public static int FilterSocketList_CNT = 0;                       
 
             public static ConcurrentQueue<Socket_PacketInfo> qSocket_PacketInfo = new ConcurrentQueue<Socket_PacketInfo>();
 
@@ -288,7 +287,7 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            SocketQueue.Filter_CNT++;
+                            SocketQueue.FilterSocketList_CNT++;
                         }
                     }
                 }
@@ -384,6 +383,8 @@ namespace WPELibrary.Lib
 
         public static class Filter
         {
+            public static long FilterReplace_CNT = 0;
+            public static long FilterIntercept_CNT = 0;
             public static int FilterSize_MaxLen = 500;
 
             #region//定义结构        
@@ -577,7 +578,7 @@ namespace WPELibrary.Lib
 
                     string sFSearch = Socket_Operation.GetFilterString_ByBytes(bBuffer);                    
 
-                    Socket_Cache.FilterList.AddFilter_New(sFName, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, sFSearch, string.Empty, false);
+                    Socket_Cache.FilterList.AddFilter_New(sFName, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, sFSearch, string.Empty);
                     Socket_Operation.ShowMessageBox(String.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), sFName));
                 }
                 catch (Exception ex)
@@ -595,7 +596,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, false, true, false, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    AddFilter_New(string.Empty, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, string.Empty, false);
+                    AddFilter_New(string.Empty, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -603,7 +604,7 @@ namespace WPELibrary.Lib
                 }
             }
             
-            public static void AddFilter_New(string FName, bool bAppointHeader, string FilterHeaderContent, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify, bool bEnable)
+            public static void AddFilter_New(string FName, bool bAppointHeader, string FilterHeaderContent, Socket_Cache.Filter.FilterMode FilterMode, Socket_Cache.Filter.FilterAction FilterAction, Socket_Cache.Filter.FilterFunction FilterFunction, Socket_Cache.Filter.FilterStartFrom FilterStartFrom, int FModifyCNT, string FSearch, string FModify)
             {
                 try
                 {
@@ -614,7 +615,7 @@ namespace WPELibrary.Lib
                         FName = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50) + " " + FNum.ToString();
                     }                
 
-                    Socket_FilterInfo sc = new Socket_FilterInfo(FNum, bEnable, FName, bAppointHeader, FilterHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, FModifyCNT, FSearch, FModify);
+                    Socket_FilterInfo sc = new Socket_FilterInfo(false, FNum, FName, bAppointHeader, FilterHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, FModifyCNT, FSearch, FModify);
 
                     lstFilter.Add(sc);
                 }
@@ -791,7 +792,8 @@ namespace WPELibrary.Lib
                                         if (sfi.FAction == Filter.FilterAction.Replace)
                                         {
                                             if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
-                                            {                                                
+                                            {
+                                                Socket_Cache.Filter.FilterReplace_CNT++;
                                                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
                                             }
 
@@ -799,7 +801,7 @@ namespace WPELibrary.Lib
                                         }
                                         else if (sfi.FAction == Filter.FilterAction.Intercept)
                                         {
-                                            Socket_Cache.SocketQueue.Intercept_CNT++;
+                                            Socket_Cache.Filter.FilterIntercept_CNT++;
                                             faReturn = Filter.FilterAction.Intercept;
                                         }
 
@@ -820,6 +822,7 @@ namespace WPELibrary.Lib
                                             {
                                                 if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
                                                 {
+                                                    Socket_Cache.Filter.FilterReplace_CNT++;
                                                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
                                                 }
                                             }
@@ -828,7 +831,7 @@ namespace WPELibrary.Lib
                                         }
                                         else if (sfi.FAction == Filter.FilterAction.Intercept)
                                         {
-                                            Socket_Cache.SocketQueue.Intercept_CNT++;
+                                            Socket_Cache.Filter.FilterIntercept_CNT++;
                                             faReturn = Filter.FilterAction.Intercept;
                                         }
 
