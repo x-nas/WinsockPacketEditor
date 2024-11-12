@@ -15,13 +15,14 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace WPELibrary.Lib
 {   
     public static class Socket_Operation
     {        
         public static bool bDoLog = true;
-        public static bool bDoLog_HookTime = false;
+        public static bool bDoLog_HookTime = true;
         public static DataTable dtSearchFrom = new DataTable();
         public static DataTable dtPacketFormat = new DataTable();
 
@@ -332,44 +333,44 @@ namespace WPELibrary.Lib
 
         #region//统计封包数量
 
-        public static void CountSocketPackets(Socket_Cache.SocketPacket.PacketType ptPacketType, int iPacketLen)
+        public static void CountSocketInfo(Socket_Cache.SocketPacket.PacketType ptPacketType, int iPacketLen)
         {
             try
             {
-                Socket_Cache.TotalPackets++;
+                Interlocked.Increment(ref Socket_Cache.TotalPackets);
 
                 switch (ptPacketType)
                 {
                     case Socket_Cache.SocketPacket.PacketType.Send:
-                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.Recv:
-                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        Socket_Cache.Total_SendBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        Socket_Cache.Total_RecvBytes += iPacketLen;                        
+                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
                         break;
                 }
             }
@@ -2854,14 +2855,15 @@ namespace WPELibrary.Lib
 
         public static void DoLog(string sFuncName, string sLogContent)
         {
-            Task.Run(() =>
+            if (bDoLog)
             {
-                if (bDoLog)
+                Task.Run(() =>
                 {
                     Socket_Cache.LogQueue.LogToQueue(sFuncName, sLogContent);
-                }
-            });           
+                });
+            }                     
         }
+
         #endregion
 
         #region//发送封包

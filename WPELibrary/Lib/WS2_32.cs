@@ -40,7 +40,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, res);
+                            Socket_Operation.CountSocketInfo(ptType, res);
                         });                        
 
                         if (!Socket_Cache.SpeedMode)
@@ -95,7 +95,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, res);
+                            Socket_Operation.CountSocketInfo(ptType, res);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -150,7 +150,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, res);
+                            Socket_Operation.CountSocketInfo(ptType, res);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -206,7 +206,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, res);
+                            Socket_Operation.CountSocketInfo(ptType, res);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -266,7 +266,7 @@ namespace WPELibrary.Lib
 
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, BytesSent);
+                            Socket_Operation.CountSocketInfo(ptType, BytesSent);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -324,7 +324,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, BytesRecvd);
+                            Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -383,7 +383,7 @@ namespace WPELibrary.Lib
 
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, BytesSent);
+                            Socket_Operation.CountSocketInfo(ptType, BytesSent);
                         });
 
                         if (!Socket_Cache.SpeedMode)
@@ -442,7 +442,7 @@ namespace WPELibrary.Lib
                     {
                         Task.Run(() =>
                         {
-                            Socket_Operation.CountSocketPackets(ptType, BytesRecvd);
+                            Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
                         });
 
                         if (!Socket_Cache.SpeedMode)

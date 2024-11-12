@@ -315,7 +315,6 @@ namespace WPELibrary.Lib
                 try
                 {
                     Socket_LogInfo sli = new Socket_LogInfo(sFuncName, sLogContent);
-
                     qSocket_Log.Enqueue(sli);
                 }
                 catch (Exception ex) 
@@ -794,7 +793,11 @@ namespace WPELibrary.Lib
                                             if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
                                             {
                                                 Socket_Cache.Filter.FilterReplace_CNT++;
-                                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+
+                                                if (!Socket_Cache.SpeedMode)
+                                                {
+                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                                }
                                             }
 
                                             faReturn = Filter.FilterAction.Replace;
@@ -823,7 +826,11 @@ namespace WPELibrary.Lib
                                                 if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
                                                 {
                                                     Socket_Cache.Filter.FilterReplace_CNT++;
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+
+                                                    if (!Socket_Cache.SpeedMode)
+                                                    {
+                                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                                    }
                                                 }
                                             }
                                             

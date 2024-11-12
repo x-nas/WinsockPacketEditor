@@ -422,13 +422,13 @@ namespace WPELibrary
 
         private void CleanUp_MainForm()
         {
-            this.CleanUp_SocketPacket();
+            this.CleanUp_SocketInfo();
             this.CleanUp_SocketList();
             this.CleanUp_HexBox();
             this.CleanUp_LogList();
         }
 
-        private void CleanUp_SocketPacket()
+        private void CleanUp_SocketInfo()
         {
             try
             {
@@ -437,8 +437,6 @@ namespace WPELibrary
                 Socket_Cache.Total_RecvBytes = 0;
                 Socket_Cache.Filter.FilterReplace_CNT = 0;
                 Socket_Cache.Filter.FilterIntercept_CNT = 0;
-
-                Socket_Cache.SocketQueue.ResetSocketQueue();
             }
             catch (Exception ex)
             {
@@ -450,6 +448,7 @@ namespace WPELibrary
         {
             try
             {
+                Socket_Cache.SocketQueue.ResetSocketQueue();
                 Socket_Cache.SocketList.lstRecPacket.Clear();
 
                 this.Select_Index = -1;
@@ -475,6 +474,7 @@ namespace WPELibrary
         {
             try
             {
+                Socket_Cache.LogQueue.ResetLogQueue();
                 Socket_Cache.LogList.lstRecLog.Clear();                
                 this.dgvLogList.Rows.Clear();             
             }
@@ -527,6 +527,29 @@ namespace WPELibrary
                         {
                             this.CleanUp_SocketList();
                             this.CleanUp_HexBox();
+                        }                      
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void AutoCleanUp_LogList()
+        {
+            try
+            {
+                if (this.cbSocketList_AutoClear.Checked)
+                {
+                    decimal dClearCount = this.nudSocketList_AutoClearValue.Value;
+
+                    if (dClearCount > 0)
+                    {
+                        if (this.dgvLogList.Rows.Count > dClearCount)
+                        {
+                            this.CleanUp_LogList();
                         }
                     }
                 }
@@ -625,41 +648,15 @@ namespace WPELibrary
         {
             try
             {
-                this.AutoCleanUp_SocketList();
-
-                long lTotal_CNT = Socket_Cache.TotalPackets;
-                string sTotal_SendBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_SendBytes);
-                string sTotal_RecvBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_RecvBytes);
-                long lFilterReplace_CNT = Socket_Cache.Filter.FilterReplace_CNT;
-                long iFilterIntercept_CNT = Socket_Cache.Filter.FilterIntercept_CNT;
-                int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
-                int iFilterSocketList_CNT = Socket_Cache.SocketQueue.FilterSocketList_CNT;                
-                int iSend_CNT = Socket_Cache.SocketQueue.Send_CNT;
-                int iRecv_CNT = Socket_Cache.SocketQueue.Recv_CNT;
-                int iSendTo_CNT = Socket_Cache.SocketQueue.SendTo_CNT;
-                int iRecvFrom_CNT = Socket_Cache.SocketQueue.RecvFrom_CNT;
-                int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
-                int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
-                int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
-                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;                
-
-                this.tlTotal_CNT.Text = lTotal_CNT.ToString();
-                this.tlFilterReplace_CNT.Text = lFilterReplace_CNT.ToString();
-                this.tlFilterIntercept_CNT.Text = iFilterIntercept_CNT.ToString();
-                this.tlQueue_CNT.Text = iQueue_CNT.ToString();
-                this.tlFilterSocketList_CNT.Text = iFilterSocketList_CNT.ToString();
-                this.tlSend_CNT.Text = iSend_CNT.ToString();
-                this.tlRecv_CNT.Text = iRecv_CNT.ToString();
-                this.tlSendTo_CNT.Text = iSendTo_CNT.ToString();
-                this.tlRecvFrom_CNT.Text = iRecvFrom_CNT.ToString();
-                this.tlWSASend_CNT.Text = iWSASend_CNT.ToString();
-                this.tlWSARecv_CNT.Text = iWSARecv_CNT.ToString();
-                this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
-                this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), sTotal_SendBytes, sTotal_RecvBytes);                
+                if (!bgwSocketInfo.IsBusy)
+                {
+                    bgwSocketInfo.RunWorkerAsync();
+                }
 
                 if (!bgwSocketList.IsBusy)
                 {
+                    this.UpdateSocketListInfo();
+
                     if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                     {
                         bgwSocketList.RunWorkerAsync();
@@ -672,7 +669,7 @@ namespace WPELibrary
                     {
                         bgwLogList.RunWorkerAsync();
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -681,6 +678,349 @@ namespace WPELibrary
         }
 
         #endregion
+
+        #region//更新封包信息数据（异步）
+
+        private void bgwSocketInfo_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.UpdateSocketInfo();
+        }
+
+        private void UpdateSocketInfo()
+        {
+            try
+            {
+                long lTotal_CNT = Socket_Cache.TotalPackets;
+                long lFilterReplace_CNT = Socket_Cache.Filter.FilterReplace_CNT;
+                long iFilterIntercept_CNT = Socket_Cache.Filter.FilterIntercept_CNT;
+                string sTotal_SendBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_SendBytes);
+                string sTotal_RecvBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_RecvBytes);                                
+
+                this.tlTotal_CNT.Text = lTotal_CNT.ToString();
+                this.tlFilterReplace_CNT.Text = lFilterReplace_CNT.ToString();
+                this.tlFilterIntercept_CNT.Text = iFilterIntercept_CNT.ToString();
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), sTotal_SendBytes, sTotal_RecvBytes);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void UpdateSocketListInfo()
+        {
+            try
+            {
+                int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
+                int iFilterSocketList_CNT = Socket_Cache.SocketQueue.FilterSocketList_CNT;
+                int iSend_CNT = Socket_Cache.SocketQueue.Send_CNT;
+                int iRecv_CNT = Socket_Cache.SocketQueue.Recv_CNT;
+                int iSendTo_CNT = Socket_Cache.SocketQueue.SendTo_CNT;
+                int iRecvFrom_CNT = Socket_Cache.SocketQueue.RecvFrom_CNT;
+                int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
+                int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
+                int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
+                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
+
+                this.tlQueue_CNT.Text = iQueue_CNT.ToString();
+                this.tlFilterSocketList_CNT.Text = iFilterSocketList_CNT.ToString();
+                this.tlSend_CNT.Text = iSend_CNT.ToString();
+                this.tlRecv_CNT.Text = iRecv_CNT.ToString();
+                this.tlSendTo_CNT.Text = iSendTo_CNT.ToString();
+                this.tlRecvFrom_CNT.Text = iRecvFrom_CNT.ToString();
+                this.tlWSASend_CNT.Text = iWSASend_CNT.ToString();
+                this.tlWSARecv_CNT.Text = iWSARecv_CNT.ToString();
+                this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
+                this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示封包列表（异步）
+
+        private void bgwSocketList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSocketList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if (this.cbSocketList_AutoRoll.Checked)
+                {
+                    if (dgvSocketList.Rows.Count > 0)
+                    {
+                        dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
+                    }
+                }
+
+                this.AutoCleanUp_SocketList();                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void Event_RecSocketPacket(Socket_PacketInfo spi)
+        {
+            try
+            {
+                dgvSocketList.Invoke(new MethodInvoker(delegate
+                {
+                    Socket_Cache.SocketList.lstRecPacket.Add(spi);
+                }));
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
+                {
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
+                    e.Value = Socket_Operation.GetImg_ByPacketType(ptType);
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvSocketList.Columns["cPacketType"].Index)
+                {
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
+                    e.Value = Socket_Operation.GetName_ByPacketType(ptType);
+                    e.FormattingApplied = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示日志列表（异步）
+
+        private void bgwLogList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                Socket_Cache.LogList.LogToList();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwLogList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.AutoCleanUp_LogList();
+        }
+
+        private void Event_RecSocketLog(Socket_LogInfo sli)
+        {
+            try
+            {
+                if (!IsDisposed)
+                {
+                    dgvLogList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.LogList.lstRecLog.Add(sli);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//搜索封包内容（异步）
+
+        private void bSearch_Click(object sender, EventArgs e)
+        {
+            this.ShowFindForm();
+
+            if (Socket_Cache.DoSearch)
+            {
+                this.bSearchNext.Focus();
+                this.SearchSocketListNext();
+            }
+        }
+
+        private void bSearchNext_Click(object sender, EventArgs e)
+        {
+            this.SearchSocketListNext();
+        }
+
+        private void HexBox_FindNext()
+        {
+            try
+            {
+                if (Socket_Cache.FindOptions.IsValid)
+                {
+                    if (!bgwSearchPacketData.IsBusy)
+                    {
+                        bgwSearchPacketData.RunWorkerAsync();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void SearchSocketListNext()
+        {
+            try
+            {
+                if (dgvSocketList.Rows.Count > 0)
+                {
+                    if (Socket_Cache.FindOptions.IsValid)
+                    {
+                        string sSearch_Text = string.Empty;
+                        string sSearch_Type = string.Empty;
+
+                        FindType fType = Socket_Cache.FindOptions.Type;
+
+                        Socket_Cache.SocketPacket.EncodingFormat efFormat = new Socket_Cache.SocketPacket.EncodingFormat();
+
+                        switch (fType)
+                        {
+                            case FindType.Text:
+                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.UTF7;
+                                sSearch_Text = Socket_Cache.FindOptions.Text;
+                                break;
+
+                            case FindType.Hex:
+                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
+                                byte[] bSearch_Hex = Socket_Cache.FindOptions.Hex;
+                                sSearch_Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
+                                break;
+                        }
+
+                        if (rbFromHead.Checked)
+                        {
+                            Search_Index = 0;
+                            this.rbFromIndex.Checked = true;
+                            this.hbPacketData.SelectionStart = 0;
+                        }
+
+                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
+
+                        if (iIndex >= 0)
+                        {
+                            this.dgvSocketList.Rows[iIndex].Selected = true;
+                            this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iIndex].Cells[0];
+
+                            this.HexBox_FindNext();
+                        }
+                        else
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void ShowFindForm()
+        {
+            try
+            {
+                Socket_FindForm sffFindForm = new Socket_FindForm();
+                sffFindForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSearchPacketData_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                e.Result = hbPacketData.Find(Socket_Cache.FindOptions);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSearchPacketData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                long res = (long)e.Result;
+
+                if (res == -1)
+                {
+                    Search_Index += 1;
+                    this.SearchSocketListNext();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示封包数据        
+
+        private void dgvSocketInfo_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvSocketList.SelectedRows.Count == 1)
+                {
+                    Select_Index = dgvSocketList.SelectedRows[0].Index;
+
+                    Search_Index = Select_Index;
+
+                    if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    {
+                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
+
+                        DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
+                        hbPacketData.ByteProvider = dbp;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
 
         #region//封包编辑器菜单
 
@@ -1000,280 +1340,6 @@ namespace WPELibrary
                         this.CleanUp_LogList();
 
                         break;                   
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示封包列表（异步）
-
-        private void bgwSocketList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwSocketList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                if (this.cbSocketList_AutoRoll.Checked)
-                {
-                    if (dgvSocketList.Rows.Count > 0)
-                    {
-                        dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void Event_RecSocketPacket(Socket_PacketInfo spi)
-        {
-            try
-            {
-                dgvSocketList.Invoke(new MethodInvoker(delegate
-                {
-                    Socket_Cache.SocketList.lstRecPacket.Add(spi);
-                }));
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
-                {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
-                    e.Value = Socket_Operation.GetImg_ByPacketType(ptType);
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvSocketList.Columns["cPacketType"].Index)
-                {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
-                    e.Value = Socket_Operation.GetName_ByPacketType(ptType);
-                    e.FormattingApplied = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示日志列表（异步）
-
-        private void bgwLogList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Socket_Cache.LogList.LogToList();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void Event_RecSocketLog(Socket_LogInfo sli)
-        {
-            try
-            {
-                if (!IsDisposed)
-                {
-                    dgvLogList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.LogList.lstRecLog.Add(sli);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示封包数据        
-
-        private void dgvSocketInfo_SelectionChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvSocketList.SelectedRows.Count == 1)
-                {
-                    Select_Index = dgvSocketList.SelectedRows[0].Index;
-
-                    Search_Index = Select_Index;
-
-                    if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
-                    {
-                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
-
-                        DynamicByteProvider dbp = new DynamicByteProvider(bSelected);                        
-                        hbPacketData.ByteProvider = dbp;                     
-                    }                  
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion        
-
-        #region//搜索封包内容（异步）
-
-        private void bSearch_Click(object sender, EventArgs e)
-        {
-            this.ShowFindForm();
-
-            if (Socket_Cache.DoSearch)
-            {
-                this.bSearchNext.Focus();
-                this.SearchSocketListNext();
-            }
-        }
-
-        private void bSearchNext_Click(object sender, EventArgs e)
-        {
-            this.SearchSocketListNext();
-        }
-
-        private void HexBox_FindNext()
-        {
-            try
-            {
-                if (Socket_Cache.FindOptions.IsValid)
-                {
-                    if (!bgwSearchPacketData.IsBusy)
-                    {
-                        bgwSearchPacketData.RunWorkerAsync();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void SearchSocketListNext()
-        {
-            try
-            {
-                if (dgvSocketList.Rows.Count > 0)
-                {
-                    if (Socket_Cache.FindOptions.IsValid)
-                    {
-                        string sSearch_Text = string.Empty;
-                        string sSearch_Type = string.Empty;
-
-                        FindType fType = Socket_Cache.FindOptions.Type;
-
-                        Socket_Cache.SocketPacket.EncodingFormat efFormat = new Socket_Cache.SocketPacket.EncodingFormat();
-
-                        switch (fType)
-                        {
-                            case FindType.Text:
-                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.UTF7;
-                                sSearch_Text = Socket_Cache.FindOptions.Text;
-                                break;
-
-                            case FindType.Hex:
-                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
-                                byte[] bSearch_Hex = Socket_Cache.FindOptions.Hex;
-                                sSearch_Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
-                                break;
-                        }
-
-                        if (rbFromHead.Checked)
-                        {
-                            Search_Index = 0;
-                            this.rbFromIndex.Checked = true;
-                            this.hbPacketData.SelectionStart = 0;
-                        }
-
-                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
-
-                        if (iIndex >= 0)
-                        {
-                            this.dgvSocketList.Rows[iIndex].Selected = true;
-                            this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iIndex].Cells[0];
-
-                            this.HexBox_FindNext();
-                        }
-                        else
-                        {
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void ShowFindForm()
-        {
-            try
-            {
-                Socket_FindForm sffFindForm = new Socket_FindForm();
-                sffFindForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwSearchPacketData_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                e.Result = hbPacketData.Find(Socket_Cache.FindOptions);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwSearchPacketData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                long res = (long)e.Result;
-
-                if (res == -1)
-                {
-                    Search_Index += 1;
-                    this.SearchSocketListNext();
                 }
             }
             catch (Exception ex)

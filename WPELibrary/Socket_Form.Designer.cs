@@ -294,6 +294,7 @@ namespace WPELibrary
             this.tss20 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -2179,6 +2180,7 @@ namespace WPELibrary
             // bgwLogList
             // 
             this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
+            this.bgwLogList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwLogList_RunWorkerCompleted);
             // 
             // bgwSearchPacketData
             // 
@@ -2275,6 +2277,10 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // bgwSocketInfo
+            // 
+            this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
             // 
             // Socket_Form
             // 
@@ -2606,5 +2612,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlFilterReplace;
         private System.Windows.Forms.ToolStripStatusLabel tlFilterReplace_CNT;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel10;
+        private System.ComponentModel.BackgroundWorker bgwSocketInfo;
     }
 }
