@@ -2444,7 +2444,7 @@ namespace WPELibrary.Lib
                             {
                                 string sColValue = "";
 
-                                string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fff");
+                                string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");
                                 string sIndex = spi.PacketIndex.ToString();
                                 string sType = spi.PacketType.ToString();
                                 string sSocket = spi.PacketSocket.ToString();
@@ -2482,7 +2482,8 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//保存日志列表为Excel        
+        #region//保存日志列表为Excel
+        
         public static void SaveLogListToExcel()
         {
             int iSuccess = 0;
@@ -2511,9 +2512,9 @@ namespace WPELibrary.Lib
                         {
                             string sColValue = "";
 
-                            string sTime = sl.Time;
+                            string sTime = sl.LogTime;
                             string sFuncName = sl.FuncName;
-                            string sContent = sl.Content;
+                            string sContent = sl.LogContent;
 
                             sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
                             sw.WriteLine(sColValue);
@@ -2538,6 +2539,7 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion        
 
         #region//保存系统设置

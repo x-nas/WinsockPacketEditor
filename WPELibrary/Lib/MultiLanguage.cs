@@ -31,7 +31,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
         public static string[] MutiLan_20 = { "目标进程: ", "Process: " };
         public static string[] MutiLan_21 = { "不是有效的异或值!", "Not a valid XOR value!" };
-        public static string[] MutiLan_22 = { "只执行滤镜，不显示封包", "Only execute filters, do not display packets" };
+        public static string[] MutiLan_22 = { "只执行滤镜，不显示封包", "Only execute filters, No display" };
         public static string[] MutiLan_23 = { "没有找到匹配的内容！", "No matching content found!" };
         public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
         public static string[] MutiLan_25 = { "查找内容", "Search for content" };
@@ -72,8 +72,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_60 = { "WSA发送到", "WSASendTo" };
         public static string[] MutiLan_61 = { "WSA接收自", "WSARecvFromd" };
         public static string[] MutiLan_62 = { "{0} - 副本", "{0} - Copy" };
-        //public static string[] MutiLan_63 = { "拦截-接收", "B-Recv" };
-        //public static string[] MutiLan_64 = { "拦截-WSA接收", "B-WRecv" };
+        public static string[] MutiLan_63 = { "优先执行满足条件的，不执行其它的", "Prioritize executing those that meet the conditions and do not execute others" };
+        public static string[] MutiLan_64 = { "顺序执行所有满足条件的", "Execute all items that meet the conditions in sequence" };
         //public static string[] MutiLan_65 = { "拦截-接收自", "B-RecvF" };
         //public static string[] MutiLan_66 = { "[过滤封包大小] ", "[Filter packet size] " };
         //public static string[] MutiLan_67 = { "[过滤套接字] ", "[Filter sockets] " };

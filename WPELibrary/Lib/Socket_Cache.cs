@@ -364,6 +364,7 @@ namespace WPELibrary.Lib
                 {
                     if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sli))
                     {
+                        sli.LogIndex = lstRecLog.Count + 1;
                         RecSocketLog?.Invoke(sli);
                     }              
                 }

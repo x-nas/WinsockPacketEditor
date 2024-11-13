@@ -4,40 +4,61 @@ namespace WPELibrary.Lib
 {
     public class Socket_LogInfo
     {
-        #region//时间
-        protected string time;
-        public string Time
+        #region//序号
+
+        protected int logindex;
+
+        public int LogIndex
         {
-            get { return time; }
-            set { time = value; }
+            get { return logindex; }
+            set { logindex = value; }
         }
+
         #endregion
 
-        #region//模块
+        #region//时间戳
+
+        protected string logtime;
+
+        public string LogTime
+        {
+            get { return logtime; }
+            set { logtime = value; }
+        }
+
+        #endregion
+
+        #region//模块名称
+
         protected string funcname;
+
         public string FuncName
         {
             get { return funcname; }
             set { funcname = value; }
         }
+
         #endregion
 
-        #region//内容
-        protected string content;
-        public string Content
+        #region//日志内容
+
+        protected string logcontent;
+
+        public string LogContent
         {
-            get { return content; }
-            set { content = value; }
+            get { return logcontent; }
+            set { logcontent = value; }
         }
+
         #endregion
 
         #region//Socket_LogInfo
 
-        public Socket_LogInfo(string funcname, string content)
+        public Socket_LogInfo(string funcname, string logcontent)
         {
-            this.time = DateTime.Now.ToString("T");
+            this.logtime = DateTime.Now.ToString("HH:mm:ss:fff");
             this.funcname = funcname;
-            this.content = content;           
+            this.logcontent = logcontent;           
         }
 
         #endregion        

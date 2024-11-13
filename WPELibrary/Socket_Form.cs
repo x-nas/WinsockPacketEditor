@@ -161,8 +161,10 @@ namespace WPELibrary
                 this.tsslWinSock.Text = sWinSock;
 
                 tt.SetToolTip(cbSystemSet_WorkingSet_SpeedMode, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
+                tt.SetToolTip(rbSystemSet_FilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
+                tt.SetToolTip(rbSystemSet_FilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
-                tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));                
+                tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
@@ -1915,7 +1917,5 @@ namespace WPELibrary
         }
 
         #endregion
-
-        
     }
 }

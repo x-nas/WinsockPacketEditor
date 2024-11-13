@@ -32,7 +32,6 @@ namespace WPELibrary
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -40,12 +39,12 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlTotal = new System.Windows.Forms.ToolStripStatusLabel();
@@ -155,15 +154,12 @@ namespace WPELibrary
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.tlpSystemSet_WorkingSet = new System.Windows.Forms.TableLayoutPanel();
-            this.lSystemSet_WorkingSet_SpeedMode = new System.Windows.Forms.Label();
             this.cbSystemSet_WorkingSet_SpeedMode = new System.Windows.Forms.CheckBox();
             this.lSystemSet_WorkingSet = new System.Windows.Forms.Label();
             this.tlpSystemSet_FilterSet = new System.Windows.Forms.TableLayoutPanel();
-            this.label1 = new System.Windows.Forms.Label();
             this.rbSystemSet_FilterSet_Sequence = new System.Windows.Forms.RadioButton();
             this.lSystemSet_FilterSet = new System.Windows.Forms.Label();
             this.rbSystemSet_FilterSet_Priority = new System.Windows.Forms.RadioButton();
-            this.lSystemSet_FilterSet_Priority = new System.Windows.Forms.Label();
             this.tlpInformation = new System.Windows.Forms.TableLayoutPanel();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
@@ -272,9 +268,6 @@ namespace WPELibrary
             this.rtbPacketInfo_Encoding = new System.Windows.Forms.RichTextBox();
             this.tpSystemLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
-            this.cTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsLogList_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -305,6 +298,10 @@ namespace WPELibrary
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.cLogIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLogTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLogContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -419,8 +416,8 @@ namespace WPELibrary
             // 
             // tlTotal
             // 
-            resources.ApplyResources(this.tlTotal, "tlTotal");
             this.tlTotal.Name = "tlTotal";
+            resources.ApplyResources(this.tlTotal, "tlTotal");
             // 
             // tlTotal_CNT
             // 
@@ -451,8 +448,8 @@ namespace WPELibrary
             // 
             // tlQueue
             // 
-            resources.ApplyResources(this.tlQueue, "tlQueue");
             this.tlQueue.Name = "tlQueue";
+            resources.ApplyResources(this.tlQueue, "tlQueue");
             // 
             // tlQueue_CNT
             // 
@@ -483,8 +480,8 @@ namespace WPELibrary
             // 
             // tlSend
             // 
-            resources.ApplyResources(this.tlSend, "tlSend");
             this.tlSend.Name = "tlSend";
+            resources.ApplyResources(this.tlSend, "tlSend");
             // 
             // tlSend_CNT
             // 
@@ -499,8 +496,8 @@ namespace WPELibrary
             // 
             // tlRecv
             // 
-            resources.ApplyResources(this.tlRecv, "tlRecv");
             this.tlRecv.Name = "tlRecv";
+            resources.ApplyResources(this.tlRecv, "tlRecv");
             // 
             // tlRecv_CNT
             // 
@@ -515,8 +512,8 @@ namespace WPELibrary
             // 
             // tlSendTo
             // 
-            resources.ApplyResources(this.tlSendTo, "tlSendTo");
             this.tlSendTo.Name = "tlSendTo";
+            resources.ApplyResources(this.tlSendTo, "tlSendTo");
             // 
             // tlSendTo_CNT
             // 
@@ -531,8 +528,8 @@ namespace WPELibrary
             // 
             // tlRecvFrom
             // 
-            resources.ApplyResources(this.tlRecvFrom, "tlRecvFrom");
             this.tlRecvFrom.Name = "tlRecvFrom";
+            resources.ApplyResources(this.tlRecvFrom, "tlRecvFrom");
             // 
             // tlRecvFrom_CNT
             // 
@@ -547,8 +544,8 @@ namespace WPELibrary
             // 
             // tlWSASend
             // 
-            resources.ApplyResources(this.tlWSASend, "tlWSASend");
             this.tlWSASend.Name = "tlWSASend";
+            resources.ApplyResources(this.tlWSASend, "tlWSASend");
             // 
             // tlWSASend_CNT
             // 
@@ -563,8 +560,8 @@ namespace WPELibrary
             // 
             // tlWSARecv
             // 
-            resources.ApplyResources(this.tlWSARecv, "tlWSARecv");
             this.tlWSARecv.Name = "tlWSARecv";
+            resources.ApplyResources(this.tlWSARecv, "tlWSARecv");
             // 
             // tlWSARecv_CNT
             // 
@@ -579,8 +576,8 @@ namespace WPELibrary
             // 
             // tlWSASendTo
             // 
-            resources.ApplyResources(this.tlWSASendTo, "tlWSASendTo");
             this.tlWSASendTo.Name = "tlWSASendTo";
+            resources.ApplyResources(this.tlWSASendTo, "tlWSASendTo");
             // 
             // tlWSASendTo_CNT
             // 
@@ -595,8 +592,8 @@ namespace WPELibrary
             // 
             // tlWSARecvFrom
             // 
-            resources.ApplyResources(this.tlWSARecvFrom, "tlWSARecvFrom");
             this.tlWSARecvFrom.Name = "tlWSARecvFrom";
+            resources.ApplyResources(this.tlWSARecvFrom, "tlWSARecvFrom");
             // 
             // tlWSARecvFrom_CNT
             // 
@@ -612,7 +609,6 @@ namespace WPELibrary
             this.dgvSocketList.BackgroundColor = System.Drawing.SystemColors.ControlDark;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -632,8 +628,6 @@ namespace WPELibrary
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvSocketList.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
@@ -1216,16 +1210,9 @@ namespace WPELibrary
             // tlpSystemSet_WorkingSet
             // 
             resources.ApplyResources(this.tlpSystemSet_WorkingSet, "tlpSystemSet_WorkingSet");
-            this.tlpSystemSet_WorkingSet.Controls.Add(this.lSystemSet_WorkingSet_SpeedMode, 2, 0);
             this.tlpSystemSet_WorkingSet.Controls.Add(this.cbSystemSet_WorkingSet_SpeedMode, 1, 0);
             this.tlpSystemSet_WorkingSet.Controls.Add(this.lSystemSet_WorkingSet, 0, 0);
             this.tlpSystemSet_WorkingSet.Name = "tlpSystemSet_WorkingSet";
-            // 
-            // lSystemSet_WorkingSet_SpeedMode
-            // 
-            resources.ApplyResources(this.lSystemSet_WorkingSet_SpeedMode, "lSystemSet_WorkingSet_SpeedMode");
-            this.lSystemSet_WorkingSet_SpeedMode.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lSystemSet_WorkingSet_SpeedMode.Name = "lSystemSet_WorkingSet_SpeedMode";
             // 
             // cbSystemSet_WorkingSet_SpeedMode
             // 
@@ -1241,18 +1228,10 @@ namespace WPELibrary
             // tlpSystemSet_FilterSet
             // 
             resources.ApplyResources(this.tlpSystemSet_FilterSet, "tlpSystemSet_FilterSet");
-            this.tlpSystemSet_FilterSet.Controls.Add(this.label1, 4, 0);
-            this.tlpSystemSet_FilterSet.Controls.Add(this.rbSystemSet_FilterSet_Sequence, 3, 0);
+            this.tlpSystemSet_FilterSet.Controls.Add(this.rbSystemSet_FilterSet_Sequence, 2, 0);
             this.tlpSystemSet_FilterSet.Controls.Add(this.lSystemSet_FilterSet, 0, 0);
             this.tlpSystemSet_FilterSet.Controls.Add(this.rbSystemSet_FilterSet_Priority, 1, 0);
-            this.tlpSystemSet_FilterSet.Controls.Add(this.lSystemSet_FilterSet_Priority, 2, 0);
             this.tlpSystemSet_FilterSet.Name = "tlpSystemSet_FilterSet";
-            // 
-            // label1
-            // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.label1.Name = "label1";
             // 
             // rbSystemSet_FilterSet_Sequence
             // 
@@ -1272,12 +1251,6 @@ namespace WPELibrary
             this.rbSystemSet_FilterSet_Priority.Name = "rbSystemSet_FilterSet_Priority";
             this.rbSystemSet_FilterSet_Priority.TabStop = true;
             this.rbSystemSet_FilterSet_Priority.UseVisualStyleBackColor = true;
-            // 
-            // lSystemSet_FilterSet_Priority
-            // 
-            resources.ApplyResources(this.lSystemSet_FilterSet_Priority, "lSystemSet_FilterSet_Priority");
-            this.lSystemSet_FilterSet_Priority.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lSystemSet_FilterSet_Priority.Name = "lSystemSet_FilterSet_Priority";
             // 
             // tlpInformation
             // 
@@ -1330,10 +1303,10 @@ namespace WPELibrary
             // cIsCheck
             // 
             this.cIsCheck.DataPropertyName = "IsEnable";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.NullValue = false;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.NullValue = false;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle9;
             this.cIsCheck.FalseValue = "false";
             resources.ApplyResources(this.cIsCheck, "cIsCheck");
             this.cIsCheck.Name = "cIsCheck";
@@ -1549,6 +1522,7 @@ namespace WPELibrary
             this.hbPacketData.BuiltInContextMenu.CutMenuItemText = resources.GetString("hbPacketData.BuiltInContextMenu.CutMenuItemText");
             this.hbPacketData.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.PasteHS;
             this.hbPacketData.BuiltInContextMenu.PasteMenuItemText = resources.GetString("hbPacketData.BuiltInContextMenu.PasteMenuItemText");
+            this.hbPacketData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
             this.hbPacketData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbPacketData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbPacketData.ColumnInfoVisible = true;
             this.hbPacketData.ContextMenuStrip = this.cmsHexBox;
@@ -2132,55 +2106,28 @@ namespace WPELibrary
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cTime,
+            this.cLogIndex,
+            this.cLogTime,
             this.cFuncName,
-            this.cContent});
+            this.cLogContent});
             this.dgvLogList.ContextMenuStrip = this.cmsLogList;
             resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.MultiSelect = false;
             this.dgvLogList.Name = "dgvLogList";
             this.dgvLogList.ReadOnly = true;
             this.dgvLogList.RowHeadersVisible = false;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvLogList.RowsDefaultCellStyle = dataGridViewCellStyle14;
+            this.dgvLogList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            // 
-            // cTime
-            // 
-            this.cTime.DataPropertyName = "Time";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cTime.DefaultCellStyle = dataGridViewCellStyle12;
-            resources.ApplyResources(this.cTime, "cTime");
-            this.cTime.Name = "cTime";
-            this.cTime.ReadOnly = true;
-            // 
-            // cFuncName
-            // 
-            this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle13;
-            resources.ApplyResources(this.cFuncName, "cFuncName");
-            this.cFuncName.Name = "cFuncName";
-            this.cFuncName.ReadOnly = true;
-            // 
-            // cContent
-            // 
-            this.cContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cContent.DataPropertyName = "Content";
-            resources.ApplyResources(this.cContent, "cContent");
-            this.cContent.Name = "cContent";
-            this.cContent.ReadOnly = true;
             // 
             // cmsLogList
             // 
@@ -2366,15 +2313,50 @@ namespace WPELibrary
             // 
             // dataGridViewImageColumn1
             // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.NullValue = null;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.NullValue = null;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle14;
             resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
             this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // cLogIndex
+            // 
+            this.cLogIndex.DataPropertyName = "LogIndex";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogIndex.DefaultCellStyle = dataGridViewCellStyle11;
+            resources.ApplyResources(this.cLogIndex, "cLogIndex");
+            this.cLogIndex.Name = "cLogIndex";
+            this.cLogIndex.ReadOnly = true;
+            // 
+            // cLogTime
+            // 
+            this.cLogTime.DataPropertyName = "LogTime";
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle12;
+            resources.ApplyResources(this.cLogTime, "cLogTime");
+            this.cLogTime.Name = "cLogTime";
+            this.cLogTime.ReadOnly = true;
+            // 
+            // cFuncName
+            // 
+            this.cFuncName.DataPropertyName = "FuncName";
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle13;
+            resources.ApplyResources(this.cFuncName, "cFuncName");
+            this.cFuncName.Name = "cFuncName";
+            this.cFuncName.ReadOnly = true;
+            // 
+            // cLogContent
+            // 
+            this.cLogContent.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cLogContent.DataPropertyName = "LogContent";
+            resources.ApplyResources(this.cLogContent, "cLogContent");
+            this.cLogContent.Name = "cLogContent";
+            this.cLogContent.ReadOnly = true;
             // 
             // Socket_Form
             // 
@@ -2592,9 +2574,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_Comparison_B;
         private System.Windows.Forms.Button bComparison_Exchange;
         private System.Windows.Forms.DataGridView dgvLogList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cContent;
         private System.Windows.Forms.TabPage tpEncoding;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding_Button;
@@ -2719,8 +2698,9 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpSystemSet_WorkingSet;
         private System.Windows.Forms.CheckBox cbSystemSet_WorkingSet_SpeedMode;
         private System.Windows.Forms.Label lSystemSet_WorkingSet;
-        private System.Windows.Forms.Label lSystemSet_WorkingSet_SpeedMode;
-        private System.Windows.Forms.Label lSystemSet_FilterSet_Priority;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
     }
 }

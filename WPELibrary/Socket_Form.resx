@@ -132,9 +132,6 @@
   <data name="ssSocketList.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="tlTotal.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
   <data name="tlTotal.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
   </data>
@@ -142,7 +139,7 @@
     <value>封包总数:</value>
   </data>
   <data name="tlTotal_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+    <value>微软雅黑, 9pt, style=Bold</value>
   </data>
   <data name="tlTotal_CNT.Size" type="System.Drawing.Size, System.Drawing">
     <value>15, 17</value>
@@ -176,9 +173,6 @@
   </data>
   <data name="tlSplit4.Text" xml:space="preserve">
     <value>|</value>
-  </data>
-  <data name="tlQueue.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 17</value>
@@ -222,9 +216,6 @@
   <data name="toolStripStatusLabel9.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tlSend.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
   <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 17</value>
   </data>
@@ -245,9 +236,6 @@
   </data>
   <data name="tlSplit3.Text" xml:space="preserve">
     <value>|</value>
-  </data>
-  <data name="tlRecv.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 17</value>
@@ -270,9 +258,6 @@
   <data name="toolStripStatusLabel2.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tlSendTo.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
   <data name="tlSendTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 17</value>
   </data>
@@ -293,9 +278,6 @@
   </data>
   <data name="toolStripStatusLabel5.Text" xml:space="preserve">
     <value>|</value>
-  </data>
-  <data name="tlRecvFrom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 17</value>
@@ -318,9 +300,6 @@
   <data name="toolStripStatusLabel8.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tlWSASend.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
   <data name="tlWSASend.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 17</value>
   </data>
@@ -341,9 +320,6 @@
   </data>
   <data name="toolStripStatusLabel11.Text" xml:space="preserve">
     <value>|</value>
-  </data>
-  <data name="tlWSARecv.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlWSARecv.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 17</value>
@@ -366,9 +342,6 @@
   <data name="toolStripStatusLabel14.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tlWSASendTo.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
   <data name="tlWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 17</value>
   </data>
@@ -389,9 +362,6 @@
   </data>
   <data name="toolStripStatusLabel17.Text" xml:space="preserve">
     <value>|</value>
-  </data>
-  <data name="tlWSARecvFrom.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 17</value>
@@ -862,7 +832,7 @@
     <value>23</value>
   </data>
   <data name="bStopHook.Text" xml:space="preserve">
-    <value> 停止 (&amp;T)</value>
+    <value> 停 止 (&amp;T)</value>
   </data>
   <data name="bStopHook.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleRight</value>
@@ -904,7 +874,7 @@
     <value>1</value>
   </data>
   <data name="bStartHook.Text" xml:space="preserve">
-    <value> 开始 (&amp;K)</value>
+    <value> 开 始 (&amp;K)</value>
   </data>
   <data name="bStartHook.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleRight</value>
@@ -2211,46 +2181,7 @@
     <value>1</value>
   </data>
   <data name="tlpSystemSet_WorkingSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 3</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 24</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.Text" xml:space="preserve">
-    <value>[ 只执行滤镜，不缓存不显示封包和日志 ]</value>
-  </data>
-  <data name="lSystemSet_WorkingSet_SpeedMode.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_WorkingSet_SpeedMode.Name" xml:space="preserve">
-    <value>lSystemSet_WorkingSet_SpeedMode</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_WorkingSet_SpeedMode.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_WorkingSet_SpeedMode.Parent" xml:space="preserve">
-    <value>tlpSystemSet_WorkingSet</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_WorkingSet_SpeedMode.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="cbSystemSet_WorkingSet_SpeedMode.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2283,7 +2214,7 @@
     <value>tlpSystemSet_WorkingSet</value>
   </data>
   <data name="&gt;&gt;cbSystemSet_WorkingSet_SpeedMode.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="lSystemSet_WorkingSet.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2322,7 +2253,7 @@
     <value>tlpSystemSet_WorkingSet</value>
   </data>
   <data name="&gt;&gt;lSystemSet_WorkingSet.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tlpSystemSet_WorkingSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2355,49 +2286,10 @@
     <value>0</value>
   </data>
   <data name="tlpSystemSet_WorkingSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSystemSet_WorkingSet_SpeedMode" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbSystemSet_WorkingSet_SpeedMode" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lSystemSet_WorkingSet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbSystemSet_WorkingSet_SpeedMode" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lSystemSet_WorkingSet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpSystemSet_FilterSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>486, 3</value>
-  </data>
-  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 24</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>[ 顺序执行所有满足条件的 ]</value>
-  </data>
-  <data name="label1.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>tlpSystemSet_FilterSet</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="rbSystemSet_FilterSet_Sequence.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2409,7 +2301,7 @@
     <value>NoControl</value>
   </data>
   <data name="rbSystemSet_FilterSet_Sequence.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 3</value>
+    <value>172, 3</value>
   </data>
   <data name="rbSystemSet_FilterSet_Sequence.Size" type="System.Drawing.Size, System.Drawing">
     <value>86, 24</value>
@@ -2430,7 +2322,7 @@
     <value>tlpSystemSet_FilterSet</value>
   </data>
   <data name="&gt;&gt;rbSystemSet_FilterSet_Sequence.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="lSystemSet_FilterSet.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2466,7 +2358,7 @@
     <value>tlpSystemSet_FilterSet</value>
   </data>
   <data name="&gt;&gt;lSystemSet_FilterSet.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="rbSystemSet_FilterSet_Priority.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2496,43 +2388,7 @@
     <value>tlpSystemSet_FilterSet</value>
   </data>
   <data name="&gt;&gt;rbSystemSet_FilterSet_Priority.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.Location" type="System.Drawing.Point, System.Drawing">
-    <value>172, 3</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 24</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.Text" xml:space="preserve">
-    <value>[ 优先执行满足条件的，不执行其它的 ]</value>
-  </data>
-  <data name="lSystemSet_FilterSet_Priority.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_FilterSet_Priority.Name" xml:space="preserve">
-    <value>lSystemSet_FilterSet_Priority</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_FilterSet_Priority.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_FilterSet_Priority.Parent" xml:space="preserve">
-    <value>tlpSystemSet_FilterSet</value>
-  </data>
-  <data name="&gt;&gt;lSystemSet_FilterSet_Priority.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="tlpSystemSet_FilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2565,7 +2421,7 @@
     <value>1</value>
   </data>
   <data name="tlpSystemSet_FilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="rbSystemSet_FilterSet_Sequence" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lSystemSet_FilterSet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbSystemSet_FilterSet_Priority" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lSystemSet_FilterSet_Priority" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rbSystemSet_FilterSet_Sequence" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lSystemSet_FilterSet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbSystemSet_FilterSet_Priority" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpSystemSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -5175,14 +5031,20 @@
   <data name="&gt;&gt;tpEncoding.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <metadata name="cTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="cLogIndex.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="cTime.HeaderText" xml:space="preserve">
-    <value>记录时间</value>
+  <data name="cLogIndex.HeaderText" xml:space="preserve">
+    <value>序号</value>
   </data>
-  <data name="cTime.Width" type="System.Int32, mscorlib">
-    <value>80</value>
+  <data name="cLogIndex.Width" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <metadata name="cLogTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLogTime.HeaderText" xml:space="preserve">
+    <value>记录时间</value>
   </data>
   <metadata name="cFuncName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -5191,12 +5053,12 @@
     <value>模块</value>
   </data>
   <data name="cFuncName.Width" type="System.Int32, mscorlib">
-    <value>130</value>
+    <value>150</value>
   </data>
-  <metadata name="cContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="cLogContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="cContent.HeaderText" xml:space="preserve">
+  <data name="cLogContent.HeaderText" xml:space="preserve">
     <value>日志内容</value>
   </data>
   <metadata name="cmsLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -18470,24 +18332,6 @@
   <data name="&gt;&gt;cmsHexBox_SelectAll.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cTime.Name" xml:space="preserve">
-    <value>cTime</value>
-  </data>
-  <data name="&gt;&gt;cTime.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFuncName.Name" xml:space="preserve">
-    <value>cFuncName</value>
-  </data>
-  <data name="&gt;&gt;cFuncName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cContent.Name" xml:space="preserve">
-    <value>cContent</value>
-  </data>
-  <data name="&gt;&gt;cContent.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsLogList_CleanUp.Name" xml:space="preserve">
     <value>cmsLogList_CleanUp</value>
   </data>
@@ -18649,6 +18493,30 @@
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLogIndex.Name" xml:space="preserve">
+    <value>cLogIndex</value>
+  </data>
+  <data name="&gt;&gt;cLogIndex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLogTime.Name" xml:space="preserve">
+    <value>cLogTime</value>
+  </data>
+  <data name="&gt;&gt;cLogTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFuncName.Name" xml:space="preserve">
+    <value>cFuncName</value>
+  </data>
+  <data name="&gt;&gt;cFuncName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLogContent.Name" xml:space="preserve">
+    <value>cLogContent</value>
+  </data>
+  <data name="&gt;&gt;cLogContent.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>
