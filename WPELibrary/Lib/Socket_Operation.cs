@@ -1594,33 +1594,6 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
-        }        
-
-        #endregion
-
-        #region//获取滤镜作用类别字符串
-
-        public static string GetFilterFunctionString(Socket_Cache.Filter.FilterFunction FilterFunction)
-        { 
-            string sReturn = string.Empty;
-
-            try
-            {
-                sReturn += Convert.ToInt32(FilterFunction.Send) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.SendTo) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.Recv) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.RecvFrom) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSASend) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSASendTo) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSARecv) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
         }
 
         #endregion
@@ -1650,11 +1623,11 @@ namespace WPELibrary.Lib
                     else
                     {
                         ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74));
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
-            {                
+            {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
@@ -1699,7 +1672,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
                         Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
                         Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
-                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);                                           
+                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
 
                         Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify);
                     }
@@ -1712,6 +1685,33 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//获取滤镜作用类别字符串
+
+        public static string GetFilterFunctionString(Socket_Cache.Filter.FilterFunction FilterFunction)
+        { 
+            string sReturn = string.Empty;
+
+            try
+            {
+                sReturn += Convert.ToInt32(FilterFunction.Send) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.SendTo) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.Recv) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.RecvFrom) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSASend) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSASendTo) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSARecv) + ":";
+                sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion
@@ -1819,6 +1819,23 @@ namespace WPELibrary.Lib
             }
 
             return FStartFrom;
+        }
+
+        public static Socket_Cache.FilterList.Execute GetFilterListExecute_ByString(string sFLExecute)
+        {
+            Socket_Cache.FilterList.Execute FLExecute;
+
+            try
+            {
+                FLExecute = (Socket_Cache.FilterList.Execute)Enum.Parse(typeof(Socket_Cache.FilterList.Execute), sFLExecute);
+            }
+            catch (Exception ex)
+            {
+                FLExecute = Socket_Cache.FilterList.Execute.Priority;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return FLExecute;
         }
 
         #endregion
@@ -2538,13 +2555,13 @@ namespace WPELibrary.Lib
                 XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
                 doc.AppendChild(xmlDeclaration);
 
-                XmlElement xeSystemConfig = doc.CreateElement("SystemConfig");
-                doc.AppendChild(xeSystemConfig);
+                XmlElement xeConfig = doc.CreateElement("Config");
+                doc.AppendChild(xeConfig);
 
                 #region//滤镜设置
 
                 XmlElement xeFilterConfig = doc.CreateElement("FilterConfig");
-                xeSystemConfig.AppendChild(xeFilterConfig);
+                xeConfig.AppendChild(xeFilterConfig);
 
                 string sCheckNotShow = Socket_Cache.CheckNotShow.ToString();
                 string sCheckSocket = Socket_Cache.CheckSocket.ToString();
@@ -2613,7 +2630,7 @@ namespace WPELibrary.Lib
                 #region//拦截设置
 
                 XmlElement xeHookConfig = doc.CreateElement("HookConfig");
-                xeSystemConfig.AppendChild(xeHookConfig);
+                xeConfig.AppendChild(xeHookConfig);
 
                 string sHookSend = Socket_Cache.HookSend.ToString();
                 string sHookSendTo = Socket_Cache.HookSendTo.ToString();
@@ -2660,37 +2677,58 @@ namespace WPELibrary.Lib
 
                 #region//列表设置
 
-                XmlElement xeSocketListConfig = doc.CreateElement("SocketListConfig");
-                xeSystemConfig.AppendChild(xeSocketListConfig);
+                XmlElement xeListConfig = doc.CreateElement("ListConfig");
+                xeConfig.AppendChild(xeListConfig);
 
-                string sAutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();
-                string sAutoClear = Socket_Cache.SocketList.AutoClear.ToString();
-                string sAutoClear_Value = Socket_Cache.SocketList.AutoClear_Value.ToString();                
+                string sSocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();
+                string sSocketList_AutoClear = Socket_Cache.SocketList.AutoClear.ToString();
+                string sSocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value.ToString();                
 
-                XmlElement xeAutoRoll = doc.CreateElement("AutoRoll");
-                xeAutoRoll.InnerText = sAutoRoll;
-                xeSocketListConfig.AppendChild(xeAutoRoll);
+                XmlElement xeSocketList_AutoRoll = doc.CreateElement("SocketList_AutoRoll");
+                xeSocketList_AutoRoll.InnerText = sSocketList_AutoRoll;
+                xeListConfig.AppendChild(xeSocketList_AutoRoll);
 
-                XmlElement xeAutoClear = doc.CreateElement("AutoClear");
-                xeAutoClear.InnerText = sAutoClear;
-                xeSocketListConfig.AppendChild(xeAutoClear);
+                XmlElement xeSocketList_AutoClear = doc.CreateElement("SocketList_AutoClear");
+                xeSocketList_AutoClear.InnerText = sSocketList_AutoClear;
+                xeListConfig.AppendChild(xeSocketList_AutoClear);
 
-                XmlElement xesAutoClear_Value = doc.CreateElement("AutoClear_Value");
-                xesAutoClear_Value.InnerText = sAutoClear_Value;
-                xeSocketListConfig.AppendChild(xesAutoClear_Value);
+                XmlElement xeSocketList_AutoClear_Value = doc.CreateElement("SocketList_AutoClear_Value");
+                xeSocketList_AutoClear_Value.InnerText = sSocketList_AutoClear_Value;
+                xeListConfig.AppendChild(xeSocketList_AutoClear_Value);
+
+                string sFilterList_AutoRoll = Socket_Cache.FilterList.AutoRoll.ToString();
+                string sFilterList_AutoClear = Socket_Cache.FilterList.AutoClear.ToString();
+                string sFilterList_AutoClear_Value = Socket_Cache.FilterList.AutoClear_Value.ToString();
+
+                XmlElement xeFilterList_AutoRoll = doc.CreateElement("FilterList_AutoRoll");
+                xeFilterList_AutoRoll.InnerText = sFilterList_AutoRoll;
+                xeListConfig.AppendChild(xeFilterList_AutoRoll);
+
+                XmlElement xeFilterList_AutoClear = doc.CreateElement("FilterList_AutoClear");
+                xeFilterList_AutoClear.InnerText = sFilterList_AutoClear;
+                xeListConfig.AppendChild(xeFilterList_AutoClear);
+
+                XmlElement xeFilterList_AutoClear_Value = doc.CreateElement("FilterList_AutoClear_Value");
+                xeFilterList_AutoClear_Value.InnerText = sFilterList_AutoClear_Value;
+                xeListConfig.AppendChild(xeFilterList_AutoClear_Value);
 
                 #endregion
 
                 #region//系统设置
 
-                XmlElement xeSystemSetConfig = doc.CreateElement("SystemSetConfig");
-                xeSystemConfig.AppendChild(xeSystemSetConfig);
+                XmlElement xeSystemConfig = doc.CreateElement("SystemConfig");
+                xeConfig.AppendChild(xeSystemConfig);
 
-                string sSpeedMode = Socket_Cache.SpeedMode.ToString();             
+                string sSpeedMode = Socket_Cache.SpeedMode.ToString();
+                string sFilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
 
-                XmlElement xesSpeedMode = doc.CreateElement("SpeedMode");
-                xesSpeedMode.InnerText = sSpeedMode;
-                xeSystemSetConfig.AppendChild(xesSpeedMode);
+                XmlElement xeSpeedMode = doc.CreateElement("SpeedMode");
+                xeSpeedMode.InnerText = sSpeedMode;
+                xeSystemConfig.AppendChild(xeSpeedMode);
+
+                XmlElement xeFilterList_Execute = doc.CreateElement("FilterList_Execute");
+                xeFilterList_Execute.InnerText = sFilterList_Execute;
+                xeSystemConfig.AppendChild(xeFilterList_Execute);
 
                 #endregion
 
@@ -2721,11 +2759,11 @@ namespace WPELibrary.Lib
                 {
                     XmlDocument doc = new XmlDocument();
                     doc.Load(FilePath);
-                    XmlNode xnSystemConfig = doc.DocumentElement;
+                    XmlNode xnConfig = doc.DocumentElement;
 
                     #region//滤镜设置
 
-                    XmlNode xnFilterConfig = xnSystemConfig.SelectSingleNode("FilterConfig");
+                    XmlNode xnFilterConfig = xnConfig.SelectSingleNode("FilterConfig");
 
                     string sCheckNotShow = xnFilterConfig.SelectSingleNode("CheckNotShow").InnerText;
                     string sCheckSocket = xnFilterConfig.SelectSingleNode("CheckSocket").InnerText;
@@ -2759,7 +2797,7 @@ namespace WPELibrary.Lib
 
                     #region//拦截设置
 
-                    XmlNode xnHookConfig = xnSystemConfig.SelectSingleNode("HookConfig");
+                    XmlNode xnHookConfig = xnConfig.SelectSingleNode("HookConfig");
 
                     string sHookSend = xnHookConfig.SelectSingleNode("HookSend").InnerText;
                     string sHookSendTo = xnHookConfig.SelectSingleNode("HookSendTo").InnerText;
@@ -2783,25 +2821,35 @@ namespace WPELibrary.Lib
 
                     #region//列表设置
 
-                    XmlNode xnSocketListConfig = xnSystemConfig.SelectSingleNode("SocketListConfig");
+                    XmlNode xnListConfig = xnConfig.SelectSingleNode("ListConfig");
 
-                    string sAutoRoll = xnSocketListConfig.SelectSingleNode("AutoRoll").InnerText;
-                    string sAutoClear = xnSocketListConfig.SelectSingleNode("AutoClear").InnerText;
-                    string sAutoClear_Value = xnSocketListConfig.SelectSingleNode("AutoClear_Value").InnerText;
+                    string sSocketList_AutoRoll = xnListConfig.SelectSingleNode("SocketList_AutoRoll").InnerText;
+                    string sSocketList_AutoClear = xnListConfig.SelectSingleNode("SocketList_AutoClear").InnerText;
+                    string sSocketList_AutoClear_Value = xnListConfig.SelectSingleNode("SocketList_AutoClear_Value").InnerText;
 
-                    Socket_Cache.SocketList.AutoRoll = bool.Parse(sAutoRoll);
-                    Socket_Cache.SocketList.AutoClear = bool.Parse(sAutoClear);
-                    Socket_Cache.SocketList.AutoClear_Value = decimal.Parse(sAutoClear_Value);
+                    Socket_Cache.SocketList.AutoRoll = bool.Parse(sSocketList_AutoRoll);
+                    Socket_Cache.SocketList.AutoClear = bool.Parse(sSocketList_AutoClear);
+                    Socket_Cache.SocketList.AutoClear_Value = decimal.Parse(sSocketList_AutoClear_Value);
+
+                    string sFilterList_AutoRoll = xnListConfig.SelectSingleNode("FilterList_AutoRoll").InnerText;
+                    string sFilterList_AutoClear = xnListConfig.SelectSingleNode("FilterList_AutoClear").InnerText;
+                    string sFilterList_AutoClear_Value = xnListConfig.SelectSingleNode("FilterList_AutoClear_Value").InnerText;
+
+                    Socket_Cache.FilterList.AutoRoll = bool.Parse(sFilterList_AutoRoll);
+                    Socket_Cache.FilterList.AutoClear = bool.Parse(sFilterList_AutoClear);
+                    Socket_Cache.FilterList.AutoClear_Value = decimal.Parse(sFilterList_AutoClear_Value);
 
                     #endregion
 
                     #region//系统设置
 
-                    XmlNode xnSystemSetConfig = xnSystemConfig.SelectSingleNode("SystemSetConfig");
+                    XmlNode xnSystemConfig = xnConfig.SelectSingleNode("SystemConfig");
 
-                    string sSpeedMode = xnSystemSetConfig.SelectSingleNode("SpeedMode").InnerText;                
+                    string sSpeedMode = xnSystemConfig.SelectSingleNode("SpeedMode").InnerText;
+                    string sFilterList_Execute = xnSystemConfig.SelectSingleNode("FilterList_Execute").InnerText;
 
-                    Socket_Cache.SpeedMode = bool.Parse(sSpeedMode);                
+                    Socket_Cache.SpeedMode = bool.Parse(sSpeedMode);
+                    Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(sFilterList_Execute);
 
                     #endregion
                 }

@@ -92,6 +92,14 @@ namespace WPELibrary
                         case Socket_Cache.Filter.FilterAction.Intercept:
                             this.rbFilterAction_Intercept.Checked = true;
                             break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                            this.rbFilterAction_NoModify_Display.Checked = true;
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                            this.rbFilterAction_NoModify_NoDisplay.Checked = true;
+                            break;
                     }
 
                     switch (FilterStartFrom)
@@ -585,18 +593,34 @@ namespace WPELibrary
                 {
                     FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
                 }
-                else
+                else if (rbFilterMode_Advanced.Checked)
                 {
                     FilterMode_New = Socket_Cache.Filter.FilterMode.Advanced;
+                }
+                else
+                {
+                    FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
                 }
 
                 if (rbFilterAction_Replace.Checked)
                 {
                     FilterAction_New = Socket_Cache.Filter.FilterAction.Replace;
                 }
-                else
+                else if (rbFilterAction_Intercept.Checked)
                 {
                     FilterAction_New = Socket_Cache.Filter.FilterAction.Intercept;
+                }
+                else if (rbFilterAction_NoModify_Display.Checked)
+                {
+                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                }
+                else if (rbFilterAction_NoModify_NoDisplay.Checked)
+                {
+                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                }
+                else
+                {
+                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
                 }
 
                 FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;

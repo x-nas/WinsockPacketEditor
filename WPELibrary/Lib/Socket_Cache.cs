@@ -382,8 +382,7 @@ namespace WPELibrary.Lib
 
         public static class Filter
         {
-            public static long FilterReplace_CNT = 0;
-            public static long FilterIntercept_CNT = 0;
+            public static long FilterExecute_CNT = 0;            
             public static int FilterSize_MaxLen = 500;
 
             #region//定义结构        
@@ -398,6 +397,8 @@ namespace WPELibrary.Lib
             {
                 Replace,
                 Intercept,
+                NoModify_Display,
+                NoModify_NoDisplay,
             }
             
             public enum FilterStartFrom
@@ -446,8 +447,18 @@ namespace WPELibrary.Lib
         #region//滤镜列表
 
         public static class FilterList
-        {  
+        {
+            public enum Execute
+            {
+                Priority,
+                Sequence,
+            }
+
+            public static bool AutoRoll;
+            public static bool AutoClear;
+            public static decimal AutoClear_Value;
             public static int Filter_MaxNum = 3;
+            public static Execute FilterList_Execute;
             public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
 
             #region//初始化滤镜列表
@@ -771,82 +782,125 @@ namespace WPELibrary.Lib
 
             public static Socket_Cache.Filter.FilterAction GetFilterAction_ByDoFilter(Socket_Cache.SocketPacket.PacketType ptType, IntPtr ipBuff, Int32 iLen)
             {
+                bool bBreak = false;
                 Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.Replace;
                 string sFName = string.Empty;
 
                 try
                 {
                     foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
-                    {
+                    {  
                         sFName = sfi.FName;
 
                         if (Socket_Operation.CheckFilter_IsEffective(ipBuff, iLen, ptType, sfi))
                         {
-                            switch (sfi.FMode)
+                            if (sfi.FMode == Filter.FilterMode.Normal)
                             {
-                                case Socket_Cache.Filter.FilterMode.Normal:
-
-                                    if (Socket_Operation.CheckFilter_IsMatch_Normal(sfi, ipBuff, iLen))
+                                if (Socket_Operation.CheckFilter_IsMatch_Normal(sfi, ipBuff, iLen))
+                                {
+                                    switch (sfi.FAction)
                                     {
-                                        if (sfi.FAction == Filter.FilterAction.Replace)
-                                        {
-                                            if (Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen))
-                                            {
-                                                Socket_Cache.Filter.FilterReplace_CNT++;
-
-                                                if (!Socket_Cache.SpeedMode)
-                                                {
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
-                                                }
-                                            }
+                                        case Filter.FilterAction.Replace:
 
                                             faReturn = Filter.FilterAction.Replace;
-                                        }
-                                        else if (sfi.FAction == Filter.FilterAction.Intercept)
-                                        {
-                                            Socket_Cache.Filter.FilterIntercept_CNT++;
-                                            faReturn = Filter.FilterAction.Intercept;
-                                        }
+                                            Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen);
 
-                                        break;
+                                            if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                            {
+                                                bBreak = true;
+                                            }                                            
+
+                                            break;
+
+                                        case Filter.FilterAction.Intercept:
+
+                                            faReturn = Filter.FilterAction.Intercept;
+                                            bBreak = true;
+
+                                            break;
+
+                                        case Filter.FilterAction.NoModify_Display:
+
+                                            faReturn = Filter.FilterAction.NoModify_Display;
+                                            bBreak = true;
+
+                                            break;
+
+                                        case Filter.FilterAction.NoModify_NoDisplay:
+
+                                            faReturn = Filter.FilterAction.NoModify_NoDisplay;
+                                            bBreak = true;
+
+                                            break;
                                     }
 
-                                    break;
+                                    Socket_Cache.Filter.FilterExecute_CNT++;
 
-                                case Socket_Cache.Filter.FilterMode.Advanced:
-
-                                    List<int> MatchIndex = Socket_Operation.CheckFilter_IsMatch_Adcanced(sfi, ipBuff, iLen);
-
-                                    if (MatchIndex.Count > 0)
+                                    if (!Socket_Cache.SpeedMode)
                                     {
-                                        if (sfi.FAction == Filter.FilterAction.Replace)
-                                        {
+                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                    }
+                                }
+                            }
+                            else if (sfi.FMode == Filter.FilterMode.Advanced)
+                            {
+                                List<int> MatchIndex = Socket_Operation.CheckFilter_IsMatch_Adcanced(sfi, ipBuff, iLen);
+
+                                if (MatchIndex.Count > 0)
+                                {
+                                    switch (sfi.FAction)
+                                    {
+                                        case Filter.FilterAction.Replace:
+
+                                            faReturn = Filter.FilterAction.Replace;
+
                                             foreach (int iIndex in MatchIndex)
                                             {
-                                                if (Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen))
-                                                {
-                                                    Socket_Cache.Filter.FilterReplace_CNT++;
-
-                                                    if (!Socket_Cache.SpeedMode)
-                                                    {
-                                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
-                                                    }
-                                                }
+                                                Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen);
                                             }
-                                            
-                                            faReturn = Filter.FilterAction.Replace;
-                                        }
-                                        else if (sfi.FAction == Filter.FilterAction.Intercept)
-                                        {
-                                            Socket_Cache.Filter.FilterIntercept_CNT++;
-                                            faReturn = Filter.FilterAction.Intercept;
-                                        }
 
-                                        break;
+                                            if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                            {
+                                                bBreak = true;
+                                            }
+
+                                            break;
+
+                                        case Filter.FilterAction.Intercept:
+
+                                            faReturn = Filter.FilterAction.Intercept;
+                                            bBreak = true;
+
+                                            break;
+
+                                        case Filter.FilterAction.NoModify_Display:
+
+                                            faReturn = Filter.FilterAction.NoModify_Display;
+                                            bBreak = true;
+
+                                            break;
+
+                                        case Filter.FilterAction.NoModify_NoDisplay:
+
+                                            faReturn = Filter.FilterAction.NoModify_NoDisplay;
+                                            bBreak = true;
+
+                                            break;
                                     }
 
-                                    break;
+                                    Socket_Cache.Filter.FilterExecute_CNT++;
+
+                                    if (!Socket_Cache.SpeedMode)
+                                    {
+                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                    }
+                                }
                             }
+                        }
+
+                        if (bBreak)
+                        {
+                            break;
                         }
                     }
                 }
@@ -860,7 +914,7 @@ namespace WPELibrary.Lib
 
             public static Socket_Cache.Filter.FilterAction GetFilterAction_ByDoWSAFilter(Socket_Cache.SocketPacket.PacketType ptType, IntPtr lpBuffers, int dwBufferCount, int BytesCNT)
             {
-                Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.Replace;
+                Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.Replace;
 
                 try
                 {
@@ -891,7 +945,16 @@ namespace WPELibrary.Lib
                             if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                             {
                                 faReturn = Socket_Cache.Filter.FilterAction.Intercept;
-
+                                break;
+                            }
+                            else if (FilterAction == Socket_Cache.Filter.FilterAction.NoModify_Display)
+                            {
+                                faReturn = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                                break;
+                            }
+                            else if (FilterAction == Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                            {
+                                faReturn = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
                                 break;
                             }                            
                         }                            

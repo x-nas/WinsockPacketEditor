@@ -51,12 +51,9 @@ namespace WPELibrary
             this.tlTotal = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlTotal_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilterReplace = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilterReplace_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilterExecute = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlFilterExecute_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilterIntercept = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlFilterIntercept_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel10 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlQueue = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlQueue_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -107,15 +104,20 @@ namespace WPELibrary
             this.cmsSocketList_Comparison_A = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_Comparison_B = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpParameter = new System.Windows.Forms.TableLayoutPanel();
-            this.gbSystemSet = new System.Windows.Forms.GroupBox();
-            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
-            this.cbSystemSet_SpeedMode = new System.Windows.Forms.CheckBox();
-            this.gbSocketList_Set = new System.Windows.Forms.GroupBox();
-            this.tlpSocketList_Set = new System.Windows.Forms.TableLayoutPanel();
-            this.nudSocketList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
-            this.cbSocketList_AutoClear = new System.Windows.Forms.CheckBox();
-            this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
-            this.gbFilterSet = new System.Windows.Forms.GroupBox();
+            this.gbHookButton_Search = new System.Windows.Forms.GroupBox();
+            this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFromIndex = new System.Windows.Forms.RadioButton();
+            this.rbFromHead = new System.Windows.Forms.RadioButton();
+            this.tlpSearchButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bSearchNext = new System.Windows.Forms.Button();
+            this.bSearch = new System.Windows.Forms.Button();
+            this.tlpHookButton = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpHookButton_Start = new System.Windows.Forms.TableLayoutPanel();
+            this.bStopHook = new System.Windows.Forms.Button();
+            this.bStartHook = new System.Windows.Forms.Button();
+            this.bCleanUp = new System.Windows.Forms.Button();
+            this.tcSocketInfo = new System.Windows.Forms.TabControl();
+            this.tcSocketInfo_FilterSet = new System.Windows.Forms.TabPage();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilterSet_PacketLength = new System.Windows.Forms.TableLayoutPanel();
             this.nudCheckSizeTo = new System.Windows.Forms.NumericUpDown();
@@ -132,8 +134,8 @@ namespace WPELibrary
             this.cbCheckIP = new System.Windows.Forms.CheckBox();
             this.txtCheckSocket = new System.Windows.Forms.TextBox();
             this.txtCheckIP = new System.Windows.Forms.TextBox();
-            this.gbHookSet = new System.Windows.Forms.GroupBox();
-            this.tlpHookType = new System.Windows.Forms.TableLayoutPanel();
+            this.tcSocketInfo_HookSet = new System.Windows.Forms.TabPage();
+            this.tlpHookSet = new System.Windows.Forms.TableLayoutPanel();
             this.cbHookRecvFrom = new System.Windows.Forms.CheckBox();
             this.cbHookSend = new System.Windows.Forms.CheckBox();
             this.cbHookSendTo = new System.Windows.Forms.CheckBox();
@@ -142,18 +144,26 @@ namespace WPELibrary
             this.cbHookWSASendTo = new System.Windows.Forms.CheckBox();
             this.cbHookWSARecv = new System.Windows.Forms.CheckBox();
             this.cbHookWSARecvFrom = new System.Windows.Forms.CheckBox();
-            this.gbHookButton_Search = new System.Windows.Forms.GroupBox();
-            this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
-            this.rbFromIndex = new System.Windows.Forms.RadioButton();
-            this.rbFromHead = new System.Windows.Forms.RadioButton();
-            this.tlpSearchButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bSearchNext = new System.Windows.Forms.Button();
-            this.bSearch = new System.Windows.Forms.Button();
-            this.tlpHookButton = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpHookButton_Start = new System.Windows.Forms.TableLayoutPanel();
-            this.bStopHook = new System.Windows.Forms.Button();
-            this.bStartHook = new System.Windows.Forms.Button();
-            this.bCleanUp = new System.Windows.Forms.Button();
+            this.tcSocketInfo_ListSet = new System.Windows.Forms.TabPage();
+            this.tlpListSet = new System.Windows.Forms.TableLayoutPanel();
+            this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
+            this.cbLogList_AutoClear = new System.Windows.Forms.CheckBox();
+            this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
+            this.nudSocketList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
+            this.cbSocketList_AutoClear = new System.Windows.Forms.CheckBox();
+            this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
+            this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
+            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSystemSet_WorkingSet = new System.Windows.Forms.TableLayoutPanel();
+            this.lSystemSet_WorkingSet_SpeedMode = new System.Windows.Forms.Label();
+            this.cbSystemSet_WorkingSet_SpeedMode = new System.Windows.Forms.CheckBox();
+            this.lSystemSet_WorkingSet = new System.Windows.Forms.Label();
+            this.tlpSystemSet_FilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.rbSystemSet_FilterSet_Sequence = new System.Windows.Forms.RadioButton();
+            this.lSystemSet_FilterSet = new System.Windows.Forms.Label();
+            this.rbSystemSet_FilterSet_Priority = new System.Windows.Forms.RadioButton();
+            this.lSystemSet_FilterSet_Priority = new System.Windows.Forms.Label();
             this.tlpInformation = new System.Windows.Forms.TableLayoutPanel();
             this.gbFilterList = new System.Windows.Forms.GroupBox();
             this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
@@ -293,30 +303,34 @@ namespace WPELibrary
             this.cmsIcon_ShowSendList = new System.Windows.Forms.ToolStripMenuItem();
             this.tss20 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
+            this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
             this.cmsSocketList.SuspendLayout();
             this.tlpParameter.SuspendLayout();
-            this.gbSystemSet.SuspendLayout();
-            this.tlpSystemSet.SuspendLayout();
-            this.gbSocketList_Set.SuspendLayout();
-            this.tlpSocketList_Set.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
-            this.gbFilterSet.SuspendLayout();
-            this.tlpFilterSet.SuspendLayout();
-            this.tlpFilterSet_PacketLength.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).BeginInit();
-            this.gbHookSet.SuspendLayout();
-            this.tlpHookType.SuspendLayout();
             this.gbHookButton_Search.SuspendLayout();
             this.tlpSearch.SuspendLayout();
             this.tlpSearchButton.SuspendLayout();
             this.tlpHookButton.SuspendLayout();
             this.tlpHookButton_Start.SuspendLayout();
+            this.tcSocketInfo.SuspendLayout();
+            this.tcSocketInfo_FilterSet.SuspendLayout();
+            this.tlpFilterSet.SuspendLayout();
+            this.tlpFilterSet_PacketLength.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).BeginInit();
+            this.tcSocketInfo_HookSet.SuspendLayout();
+            this.tlpHookSet.SuspendLayout();
+            this.tcSocketInfo_ListSet.SuspendLayout();
+            this.tlpListSet.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
+            this.tcSocketInfo_SystemSet.SuspendLayout();
+            this.tlpSystemSet.SuspendLayout();
+            this.tlpSystemSet_WorkingSet.SuspendLayout();
+            this.tlpSystemSet_FilterSet.SuspendLayout();
             this.tlpInformation.SuspendLayout();
             this.gbFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
@@ -368,12 +382,9 @@ namespace WPELibrary
             this.tlTotal,
             this.tlTotal_CNT,
             this.tlSplit1,
-            this.tlFilterReplace,
-            this.tlFilterReplace_CNT,
+            this.tlFilterExecute,
+            this.tlFilterExecute_CNT,
             this.tlSplit4,
-            this.tlFilterIntercept,
-            this.tlFilterIntercept_CNT,
-            this.toolStripStatusLabel10,
             this.tlQueue,
             this.tlQueue_CNT,
             this.tlSplit2,
@@ -422,37 +433,21 @@ namespace WPELibrary
             this.tlSplit1.Name = "tlSplit1";
             resources.ApplyResources(this.tlSplit1, "tlSplit1");
             // 
-            // tlFilterReplace
+            // tlFilterExecute
             // 
-            this.tlFilterReplace.Name = "tlFilterReplace";
-            resources.ApplyResources(this.tlFilterReplace, "tlFilterReplace");
+            this.tlFilterExecute.Name = "tlFilterExecute";
+            resources.ApplyResources(this.tlFilterExecute, "tlFilterExecute");
             // 
-            // tlFilterReplace_CNT
+            // tlFilterExecute_CNT
             // 
-            resources.ApplyResources(this.tlFilterReplace_CNT, "tlFilterReplace_CNT");
-            this.tlFilterReplace_CNT.Name = "tlFilterReplace_CNT";
+            resources.ApplyResources(this.tlFilterExecute_CNT, "tlFilterExecute_CNT");
+            this.tlFilterExecute_CNT.Name = "tlFilterExecute_CNT";
             // 
             // tlSplit4
             // 
             this.tlSplit4.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit4.Name = "tlSplit4";
             resources.ApplyResources(this.tlSplit4, "tlSplit4");
-            // 
-            // tlFilterIntercept
-            // 
-            this.tlFilterIntercept.Name = "tlFilterIntercept";
-            resources.ApplyResources(this.tlFilterIntercept, "tlFilterIntercept");
-            // 
-            // tlFilterIntercept_CNT
-            // 
-            resources.ApplyResources(this.tlFilterIntercept_CNT, "tlFilterIntercept_CNT");
-            this.tlFilterIntercept_CNT.Name = "tlFilterIntercept_CNT";
-            // 
-            // toolStripStatusLabel10
-            // 
-            this.toolStripStatusLabel10.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel10.Name = "toolStripStatusLabel10";
-            resources.ApplyResources(this.toolStripStatusLabel10, "toolStripStatusLabel10");
             // 
             // tlQueue
             // 
@@ -805,82 +800,118 @@ namespace WPELibrary
             // tlpParameter
             // 
             resources.ApplyResources(this.tlpParameter, "tlpParameter");
-            this.tlpParameter.Controls.Add(this.gbSystemSet, 2, 0);
-            this.tlpParameter.Controls.Add(this.gbSocketList_Set, 3, 0);
-            this.tlpParameter.Controls.Add(this.gbFilterSet, 0, 0);
-            this.tlpParameter.Controls.Add(this.gbHookSet, 1, 0);
-            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 4, 0);
-            this.tlpParameter.Controls.Add(this.tlpHookButton, 5, 0);
+            this.tlpParameter.Controls.Add(this.gbHookButton_Search, 1, 0);
+            this.tlpParameter.Controls.Add(this.tlpHookButton, 2, 0);
+            this.tlpParameter.Controls.Add(this.tcSocketInfo, 0, 0);
             this.tlpParameter.Name = "tlpParameter";
             // 
-            // gbSystemSet
+            // gbHookButton_Search
             // 
-            this.gbSystemSet.Controls.Add(this.tlpSystemSet);
-            resources.ApplyResources(this.gbSystemSet, "gbSystemSet");
-            this.gbSystemSet.Name = "gbSystemSet";
-            this.gbSystemSet.TabStop = false;
+            this.gbHookButton_Search.Controls.Add(this.tlpSearch);
+            resources.ApplyResources(this.gbHookButton_Search, "gbHookButton_Search");
+            this.gbHookButton_Search.Name = "gbHookButton_Search";
+            this.gbHookButton_Search.TabStop = false;
             // 
-            // tlpSystemSet
+            // tlpSearch
             // 
-            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
-            this.tlpSystemSet.Controls.Add(this.cbSystemSet_SpeedMode, 0, 0);
-            this.tlpSystemSet.Name = "tlpSystemSet";
+            resources.ApplyResources(this.tlpSearch, "tlpSearch");
+            this.tlpSearch.Controls.Add(this.rbFromIndex, 0, 1);
+            this.tlpSearch.Controls.Add(this.rbFromHead, 0, 0);
+            this.tlpSearch.Controls.Add(this.tlpSearchButton, 0, 2);
+            this.tlpSearch.Name = "tlpSearch";
             // 
-            // cbSystemSet_SpeedMode
+            // rbFromIndex
             // 
-            resources.ApplyResources(this.cbSystemSet_SpeedMode, "cbSystemSet_SpeedMode");
-            this.cbSystemSet_SpeedMode.Name = "cbSystemSet_SpeedMode";
-            this.cbSystemSet_SpeedMode.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.rbFromIndex, "rbFromIndex");
+            this.rbFromIndex.Name = "rbFromIndex";
+            this.rbFromIndex.UseVisualStyleBackColor = true;
             // 
-            // gbSocketList_Set
+            // rbFromHead
             // 
-            this.gbSocketList_Set.Controls.Add(this.tlpSocketList_Set);
-            resources.ApplyResources(this.gbSocketList_Set, "gbSocketList_Set");
-            this.gbSocketList_Set.Name = "gbSocketList_Set";
-            this.gbSocketList_Set.TabStop = false;
+            resources.ApplyResources(this.rbFromHead, "rbFromHead");
+            this.rbFromHead.Checked = true;
+            this.rbFromHead.Name = "rbFromHead";
+            this.rbFromHead.TabStop = true;
+            this.rbFromHead.UseVisualStyleBackColor = true;
             // 
-            // tlpSocketList_Set
+            // tlpSearchButton
             // 
-            resources.ApplyResources(this.tlpSocketList_Set, "tlpSocketList_Set");
-            this.tlpSocketList_Set.Controls.Add(this.nudSocketList_AutoClearValue, 0, 2);
-            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_AutoClear, 0, 1);
-            this.tlpSocketList_Set.Controls.Add(this.cbSocketList_AutoRoll, 0, 0);
-            this.tlpSocketList_Set.Name = "tlpSocketList_Set";
+            resources.ApplyResources(this.tlpSearchButton, "tlpSearchButton");
+            this.tlpSearchButton.Controls.Add(this.bSearchNext, 2, 0);
+            this.tlpSearchButton.Controls.Add(this.bSearch, 0, 0);
+            this.tlpSearchButton.Name = "tlpSearchButton";
             // 
-            // nudSocketList_AutoClearValue
+            // bSearchNext
             // 
-            resources.ApplyResources(this.nudSocketList_AutoClearValue, "nudSocketList_AutoClearValue");
-            this.nudSocketList_AutoClearValue.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudSocketList_AutoClearValue.Name = "nudSocketList_AutoClearValue";
-            this.nudSocketList_AutoClearValue.Value = new decimal(new int[] {
-            5000,
-            0,
-            0,
-            0});
+            resources.ApplyResources(this.bSearchNext, "bSearchNext");
+            this.bSearchNext.FlatAppearance.BorderSize = 0;
+            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.Search16;
+            this.bSearchNext.Name = "bSearchNext";
+            this.bSearchNext.UseVisualStyleBackColor = true;
+            this.bSearchNext.Click += new System.EventHandler(this.bSearchNext_Click);
             // 
-            // cbSocketList_AutoClear
+            // bSearch
             // 
-            resources.ApplyResources(this.cbSocketList_AutoClear, "cbSocketList_AutoClear");
-            this.cbSocketList_AutoClear.Name = "cbSocketList_AutoClear";
-            this.cbSocketList_AutoClear.UseVisualStyleBackColor = true;
-            this.cbSocketList_AutoClear.CheckedChanged += new System.EventHandler(this.cbSocketList_AutoClear_CheckedChanged);
+            resources.ApplyResources(this.bSearch, "bSearch");
+            this.bSearch.FlatAppearance.BorderSize = 0;
+            this.bSearch.Image = global::WPELibrary.Properties.Resources.Settings;
+            this.bSearch.Name = "bSearch";
+            this.bSearch.UseVisualStyleBackColor = true;
+            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
             // 
-            // cbSocketList_AutoRoll
+            // tlpHookButton
             // 
-            resources.ApplyResources(this.cbSocketList_AutoRoll, "cbSocketList_AutoRoll");
-            this.cbSocketList_AutoRoll.Name = "cbSocketList_AutoRoll";
-            this.cbSocketList_AutoRoll.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.tlpHookButton, "tlpHookButton");
+            this.tlpHookButton.Controls.Add(this.tlpHookButton_Start, 3, 1);
+            this.tlpHookButton.Controls.Add(this.bCleanUp, 1, 1);
+            this.tlpHookButton.Name = "tlpHookButton";
             // 
-            // gbFilterSet
+            // tlpHookButton_Start
             // 
-            this.gbFilterSet.Controls.Add(this.tlpFilterSet);
-            resources.ApplyResources(this.gbFilterSet, "gbFilterSet");
-            this.gbFilterSet.Name = "gbFilterSet";
-            this.gbFilterSet.TabStop = false;
+            resources.ApplyResources(this.tlpHookButton_Start, "tlpHookButton_Start");
+            this.tlpHookButton_Start.Controls.Add(this.bStopHook, 0, 2);
+            this.tlpHookButton_Start.Controls.Add(this.bStartHook, 0, 0);
+            this.tlpHookButton_Start.Name = "tlpHookButton_Start";
+            // 
+            // bStopHook
+            // 
+            resources.ApplyResources(this.bStopHook, "bStopHook");
+            this.bStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
+            this.bStopHook.Name = "bStopHook";
+            this.bStopHook.UseVisualStyleBackColor = true;
+            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
+            // 
+            // bStartHook
+            // 
+            resources.ApplyResources(this.bStartHook, "bStartHook");
+            this.bStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
+            this.bStartHook.Name = "bStartHook";
+            this.bStartHook.UseVisualStyleBackColor = true;
+            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
+            // 
+            // bCleanUp
+            // 
+            resources.ApplyResources(this.bCleanUp, "bCleanUp");
+            this.bCleanUp.Name = "bCleanUp";
+            this.bCleanUp.UseVisualStyleBackColor = true;
+            this.bCleanUp.Click += new System.EventHandler(this.bCleanUp_Click);
+            // 
+            // tcSocketInfo
+            // 
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_FilterSet);
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_HookSet);
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_ListSet);
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_SystemSet);
+            resources.ApplyResources(this.tcSocketInfo, "tcSocketInfo");
+            this.tcSocketInfo.Name = "tcSocketInfo";
+            this.tcSocketInfo.SelectedIndex = 0;
+            // 
+            // tcSocketInfo_FilterSet
+            // 
+            this.tcSocketInfo_FilterSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_FilterSet.Controls.Add(this.tlpFilterSet);
+            resources.ApplyResources(this.tcSocketInfo_FilterSet, "tcSocketInfo_FilterSet");
+            this.tcSocketInfo_FilterSet.Name = "tcSocketInfo_FilterSet";
             // 
             // tlpFilterSet
             // 
@@ -1010,25 +1041,25 @@ namespace WPELibrary
             this.txtCheckIP.Name = "txtCheckIP";
             this.txtCheckIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_IP_KeyPress);
             // 
-            // gbHookSet
+            // tcSocketInfo_HookSet
             // 
-            this.gbHookSet.Controls.Add(this.tlpHookType);
-            resources.ApplyResources(this.gbHookSet, "gbHookSet");
-            this.gbHookSet.Name = "gbHookSet";
-            this.gbHookSet.TabStop = false;
+            this.tcSocketInfo_HookSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_HookSet.Controls.Add(this.tlpHookSet);
+            resources.ApplyResources(this.tcSocketInfo_HookSet, "tcSocketInfo_HookSet");
+            this.tcSocketInfo_HookSet.Name = "tcSocketInfo_HookSet";
             // 
-            // tlpHookType
+            // tlpHookSet
             // 
-            resources.ApplyResources(this.tlpHookType, "tlpHookType");
-            this.tlpHookType.Controls.Add(this.cbHookRecvFrom, 0, 3);
-            this.tlpHookType.Controls.Add(this.cbHookSend, 0, 0);
-            this.tlpHookType.Controls.Add(this.cbHookSendTo, 0, 1);
-            this.tlpHookType.Controls.Add(this.cbHookRecv, 0, 2);
-            this.tlpHookType.Controls.Add(this.cbHookWSASend, 1, 0);
-            this.tlpHookType.Controls.Add(this.cbHookWSASendTo, 1, 1);
-            this.tlpHookType.Controls.Add(this.cbHookWSARecv, 1, 2);
-            this.tlpHookType.Controls.Add(this.cbHookWSARecvFrom, 1, 3);
-            this.tlpHookType.Name = "tlpHookType";
+            resources.ApplyResources(this.tlpHookSet, "tlpHookSet");
+            this.tlpHookSet.Controls.Add(this.cbHookRecvFrom, 1, 2);
+            this.tlpHookSet.Controls.Add(this.cbHookSend, 0, 1);
+            this.tlpHookSet.Controls.Add(this.cbHookSendTo, 1, 1);
+            this.tlpHookSet.Controls.Add(this.cbHookRecv, 0, 2);
+            this.tlpHookSet.Controls.Add(this.cbHookWSASend, 2, 1);
+            this.tlpHookSet.Controls.Add(this.cbHookWSASendTo, 3, 1);
+            this.tlpHookSet.Controls.Add(this.cbHookWSARecv, 2, 2);
+            this.tlpHookSet.Controls.Add(this.cbHookWSARecvFrom, 3, 2);
+            this.tlpHookSet.Name = "tlpHookSet";
             // 
             // cbHookRecvFrom
             // 
@@ -1094,96 +1125,159 @@ namespace WPELibrary
             this.cbHookWSARecvFrom.Name = "cbHookWSARecvFrom";
             this.cbHookWSARecvFrom.UseVisualStyleBackColor = true;
             // 
-            // gbHookButton_Search
+            // tcSocketInfo_ListSet
             // 
-            this.gbHookButton_Search.Controls.Add(this.tlpSearch);
-            resources.ApplyResources(this.gbHookButton_Search, "gbHookButton_Search");
-            this.gbHookButton_Search.Name = "gbHookButton_Search";
-            this.gbHookButton_Search.TabStop = false;
+            this.tcSocketInfo_ListSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_ListSet.Controls.Add(this.tlpListSet);
+            resources.ApplyResources(this.tcSocketInfo_ListSet, "tcSocketInfo_ListSet");
+            this.tcSocketInfo_ListSet.Name = "tcSocketInfo_ListSet";
             // 
-            // tlpSearch
+            // tlpListSet
             // 
-            resources.ApplyResources(this.tlpSearch, "tlpSearch");
-            this.tlpSearch.Controls.Add(this.rbFromIndex, 0, 1);
-            this.tlpSearch.Controls.Add(this.rbFromHead, 0, 0);
-            this.tlpSearch.Controls.Add(this.tlpSearchButton, 0, 2);
-            this.tlpSearch.Name = "tlpSearch";
+            resources.ApplyResources(this.tlpListSet, "tlpListSet");
+            this.tlpListSet.Controls.Add(this.nudLogList_AutoClearValue, 2, 2);
+            this.tlpListSet.Controls.Add(this.cbLogList_AutoClear, 2, 1);
+            this.tlpListSet.Controls.Add(this.cbLogList_AutoRoll, 2, 0);
+            this.tlpListSet.Controls.Add(this.nudSocketList_AutoClearValue, 0, 2);
+            this.tlpListSet.Controls.Add(this.cbSocketList_AutoClear, 0, 1);
+            this.tlpListSet.Controls.Add(this.cbSocketList_AutoRoll, 0, 0);
+            this.tlpListSet.Name = "tlpListSet";
             // 
-            // rbFromIndex
+            // nudLogList_AutoClearValue
             // 
-            resources.ApplyResources(this.rbFromIndex, "rbFromIndex");
-            this.rbFromIndex.Name = "rbFromIndex";
-            this.rbFromIndex.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.nudLogList_AutoClearValue, "nudLogList_AutoClearValue");
+            this.nudLogList_AutoClearValue.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudLogList_AutoClearValue.Name = "nudLogList_AutoClearValue";
+            this.nudLogList_AutoClearValue.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             // 
-            // rbFromHead
+            // cbLogList_AutoClear
             // 
-            resources.ApplyResources(this.rbFromHead, "rbFromHead");
-            this.rbFromHead.Checked = true;
-            this.rbFromHead.Name = "rbFromHead";
-            this.rbFromHead.TabStop = true;
-            this.rbFromHead.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbLogList_AutoClear, "cbLogList_AutoClear");
+            this.cbLogList_AutoClear.Name = "cbLogList_AutoClear";
+            this.cbLogList_AutoClear.UseVisualStyleBackColor = true;
+            this.cbLogList_AutoClear.CheckedChanged += new System.EventHandler(this.cbLogList_AutoClear_CheckedChanged);
             // 
-            // tlpSearchButton
+            // cbLogList_AutoRoll
             // 
-            resources.ApplyResources(this.tlpSearchButton, "tlpSearchButton");
-            this.tlpSearchButton.Controls.Add(this.bSearchNext, 2, 0);
-            this.tlpSearchButton.Controls.Add(this.bSearch, 0, 0);
-            this.tlpSearchButton.Name = "tlpSearchButton";
+            resources.ApplyResources(this.cbLogList_AutoRoll, "cbLogList_AutoRoll");
+            this.cbLogList_AutoRoll.Name = "cbLogList_AutoRoll";
+            this.cbLogList_AutoRoll.UseVisualStyleBackColor = true;
             // 
-            // bSearchNext
+            // nudSocketList_AutoClearValue
             // 
-            resources.ApplyResources(this.bSearchNext, "bSearchNext");
-            this.bSearchNext.FlatAppearance.BorderSize = 0;
-            this.bSearchNext.Image = global::WPELibrary.Properties.Resources.Search16;
-            this.bSearchNext.Name = "bSearchNext";
-            this.bSearchNext.UseVisualStyleBackColor = true;
-            this.bSearchNext.Click += new System.EventHandler(this.bSearchNext_Click);
+            resources.ApplyResources(this.nudSocketList_AutoClearValue, "nudSocketList_AutoClearValue");
+            this.nudSocketList_AutoClearValue.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudSocketList_AutoClearValue.Name = "nudSocketList_AutoClearValue";
+            this.nudSocketList_AutoClearValue.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
             // 
-            // bSearch
+            // cbSocketList_AutoClear
             // 
-            resources.ApplyResources(this.bSearch, "bSearch");
-            this.bSearch.FlatAppearance.BorderSize = 0;
-            this.bSearch.Image = global::WPELibrary.Properties.Resources.Settings;
-            this.bSearch.Name = "bSearch";
-            this.bSearch.UseVisualStyleBackColor = true;
-            this.bSearch.Click += new System.EventHandler(this.bSearch_Click);
+            resources.ApplyResources(this.cbSocketList_AutoClear, "cbSocketList_AutoClear");
+            this.cbSocketList_AutoClear.Name = "cbSocketList_AutoClear";
+            this.cbSocketList_AutoClear.UseVisualStyleBackColor = true;
+            this.cbSocketList_AutoClear.CheckedChanged += new System.EventHandler(this.cbSocketList_AutoClear_CheckedChanged);
             // 
-            // tlpHookButton
+            // cbSocketList_AutoRoll
             // 
-            resources.ApplyResources(this.tlpHookButton, "tlpHookButton");
-            this.tlpHookButton.Controls.Add(this.tlpHookButton_Start, 3, 1);
-            this.tlpHookButton.Controls.Add(this.bCleanUp, 1, 1);
-            this.tlpHookButton.Name = "tlpHookButton";
+            resources.ApplyResources(this.cbSocketList_AutoRoll, "cbSocketList_AutoRoll");
+            this.cbSocketList_AutoRoll.Name = "cbSocketList_AutoRoll";
+            this.cbSocketList_AutoRoll.UseVisualStyleBackColor = true;
             // 
-            // tlpHookButton_Start
+            // tcSocketInfo_SystemSet
             // 
-            resources.ApplyResources(this.tlpHookButton_Start, "tlpHookButton_Start");
-            this.tlpHookButton_Start.Controls.Add(this.bStopHook, 0, 2);
-            this.tlpHookButton_Start.Controls.Add(this.bStartHook, 0, 0);
-            this.tlpHookButton_Start.Name = "tlpHookButton_Start";
+            this.tcSocketInfo_SystemSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_SystemSet.Controls.Add(this.tlpSystemSet);
+            resources.ApplyResources(this.tcSocketInfo_SystemSet, "tcSocketInfo_SystemSet");
+            this.tcSocketInfo_SystemSet.Name = "tcSocketInfo_SystemSet";
             // 
-            // bStopHook
+            // tlpSystemSet
             // 
-            resources.ApplyResources(this.bStopHook, "bStopHook");
-            this.bStopHook.Image = global::WPELibrary.Properties.Resources.Stop16;
-            this.bStopHook.Name = "bStopHook";
-            this.bStopHook.UseVisualStyleBackColor = true;
-            this.bStopHook.Click += new System.EventHandler(this.bStopHook_Click);
+            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
+            this.tlpSystemSet.Controls.Add(this.tlpSystemSet_WorkingSet, 0, 1);
+            this.tlpSystemSet.Controls.Add(this.tlpSystemSet_FilterSet, 0, 2);
+            this.tlpSystemSet.Name = "tlpSystemSet";
             // 
-            // bStartHook
+            // tlpSystemSet_WorkingSet
             // 
-            resources.ApplyResources(this.bStartHook, "bStartHook");
-            this.bStartHook.Image = global::WPELibrary.Properties.Resources.Play16;
-            this.bStartHook.Name = "bStartHook";
-            this.bStartHook.UseVisualStyleBackColor = true;
-            this.bStartHook.Click += new System.EventHandler(this.bStartHook_Click);
+            resources.ApplyResources(this.tlpSystemSet_WorkingSet, "tlpSystemSet_WorkingSet");
+            this.tlpSystemSet_WorkingSet.Controls.Add(this.lSystemSet_WorkingSet_SpeedMode, 2, 0);
+            this.tlpSystemSet_WorkingSet.Controls.Add(this.cbSystemSet_WorkingSet_SpeedMode, 1, 0);
+            this.tlpSystemSet_WorkingSet.Controls.Add(this.lSystemSet_WorkingSet, 0, 0);
+            this.tlpSystemSet_WorkingSet.Name = "tlpSystemSet_WorkingSet";
             // 
-            // bCleanUp
+            // lSystemSet_WorkingSet_SpeedMode
             // 
-            resources.ApplyResources(this.bCleanUp, "bCleanUp");
-            this.bCleanUp.Name = "bCleanUp";
-            this.bCleanUp.UseVisualStyleBackColor = true;
-            this.bCleanUp.Click += new System.EventHandler(this.bCleanUp_Click);
+            resources.ApplyResources(this.lSystemSet_WorkingSet_SpeedMode, "lSystemSet_WorkingSet_SpeedMode");
+            this.lSystemSet_WorkingSet_SpeedMode.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lSystemSet_WorkingSet_SpeedMode.Name = "lSystemSet_WorkingSet_SpeedMode";
+            // 
+            // cbSystemSet_WorkingSet_SpeedMode
+            // 
+            resources.ApplyResources(this.cbSystemSet_WorkingSet_SpeedMode, "cbSystemSet_WorkingSet_SpeedMode");
+            this.cbSystemSet_WorkingSet_SpeedMode.Name = "cbSystemSet_WorkingSet_SpeedMode";
+            this.cbSystemSet_WorkingSet_SpeedMode.UseVisualStyleBackColor = true;
+            // 
+            // lSystemSet_WorkingSet
+            // 
+            resources.ApplyResources(this.lSystemSet_WorkingSet, "lSystemSet_WorkingSet");
+            this.lSystemSet_WorkingSet.Name = "lSystemSet_WorkingSet";
+            // 
+            // tlpSystemSet_FilterSet
+            // 
+            resources.ApplyResources(this.tlpSystemSet_FilterSet, "tlpSystemSet_FilterSet");
+            this.tlpSystemSet_FilterSet.Controls.Add(this.label1, 4, 0);
+            this.tlpSystemSet_FilterSet.Controls.Add(this.rbSystemSet_FilterSet_Sequence, 3, 0);
+            this.tlpSystemSet_FilterSet.Controls.Add(this.lSystemSet_FilterSet, 0, 0);
+            this.tlpSystemSet_FilterSet.Controls.Add(this.rbSystemSet_FilterSet_Priority, 1, 0);
+            this.tlpSystemSet_FilterSet.Controls.Add(this.lSystemSet_FilterSet_Priority, 2, 0);
+            this.tlpSystemSet_FilterSet.Name = "tlpSystemSet_FilterSet";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label1.Name = "label1";
+            // 
+            // rbSystemSet_FilterSet_Sequence
+            // 
+            resources.ApplyResources(this.rbSystemSet_FilterSet_Sequence, "rbSystemSet_FilterSet_Sequence");
+            this.rbSystemSet_FilterSet_Sequence.Name = "rbSystemSet_FilterSet_Sequence";
+            this.rbSystemSet_FilterSet_Sequence.UseVisualStyleBackColor = true;
+            // 
+            // lSystemSet_FilterSet
+            // 
+            resources.ApplyResources(this.lSystemSet_FilterSet, "lSystemSet_FilterSet");
+            this.lSystemSet_FilterSet.Name = "lSystemSet_FilterSet";
+            // 
+            // rbSystemSet_FilterSet_Priority
+            // 
+            resources.ApplyResources(this.rbSystemSet_FilterSet_Priority, "rbSystemSet_FilterSet_Priority");
+            this.rbSystemSet_FilterSet_Priority.Checked = true;
+            this.rbSystemSet_FilterSet_Priority.Name = "rbSystemSet_FilterSet_Priority";
+            this.rbSystemSet_FilterSet_Priority.TabStop = true;
+            this.rbSystemSet_FilterSet_Priority.UseVisualStyleBackColor = true;
+            // 
+            // lSystemSet_FilterSet_Priority
+            // 
+            resources.ApplyResources(this.lSystemSet_FilterSet_Priority, "lSystemSet_FilterSet_Priority");
+            this.lSystemSet_FilterSet_Priority.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lSystemSet_FilterSet_Priority.Name = "lSystemSet_FilterSet_Priority";
             // 
             // tlpInformation
             // 
@@ -2266,6 +2360,10 @@ namespace WPELibrary
             this.cmsIcon_Exit.Name = "cmsIcon_Exit";
             resources.ApplyResources(this.cmsIcon_Exit, "cmsIcon_Exit");
             // 
+            // bgwSocketInfo
+            // 
+            this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
+            // 
             // dataGridViewImageColumn1
             // 
             dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -2277,10 +2375,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // bgwSocketInfo
-            // 
-            this.bgwSocketInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSocketInfo_DoWork);
             // 
             // Socket_Form
             // 
@@ -2298,29 +2392,34 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).EndInit();
             this.cmsSocketList.ResumeLayout(false);
             this.tlpParameter.ResumeLayout(false);
-            this.gbSystemSet.ResumeLayout(false);
-            this.tlpSystemSet.ResumeLayout(false);
-            this.tlpSystemSet.PerformLayout();
-            this.gbSocketList_Set.ResumeLayout(false);
-            this.tlpSocketList_Set.ResumeLayout(false);
-            this.tlpSocketList_Set.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).EndInit();
-            this.gbFilterSet.ResumeLayout(false);
-            this.tlpFilterSet.ResumeLayout(false);
-            this.tlpFilterSet.PerformLayout();
-            this.tlpFilterSet_PacketLength.ResumeLayout(false);
-            this.tlpFilterSet_PacketLength.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).EndInit();
-            this.gbHookSet.ResumeLayout(false);
-            this.tlpHookType.ResumeLayout(false);
-            this.tlpHookType.PerformLayout();
             this.gbHookButton_Search.ResumeLayout(false);
             this.tlpSearch.ResumeLayout(false);
             this.tlpSearch.PerformLayout();
             this.tlpSearchButton.ResumeLayout(false);
             this.tlpHookButton.ResumeLayout(false);
             this.tlpHookButton_Start.ResumeLayout(false);
+            this.tcSocketInfo.ResumeLayout(false);
+            this.tcSocketInfo_FilterSet.ResumeLayout(false);
+            this.tlpFilterSet.ResumeLayout(false);
+            this.tlpFilterSet.PerformLayout();
+            this.tlpFilterSet_PacketLength.ResumeLayout(false);
+            this.tlpFilterSet_PacketLength.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).EndInit();
+            this.tcSocketInfo_HookSet.ResumeLayout(false);
+            this.tlpHookSet.ResumeLayout(false);
+            this.tlpHookSet.PerformLayout();
+            this.tcSocketInfo_ListSet.ResumeLayout(false);
+            this.tlpListSet.ResumeLayout(false);
+            this.tlpListSet.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).EndInit();
+            this.tcSocketInfo_SystemSet.ResumeLayout(false);
+            this.tlpSystemSet.ResumeLayout(false);
+            this.tlpSystemSet_WorkingSet.ResumeLayout(false);
+            this.tlpSystemSet_WorkingSet.PerformLayout();
+            this.tlpSystemSet_FilterSet.ResumeLayout(false);
+            this.tlpSystemSet_FilterSet.PerformLayout();
             this.tlpInformation.ResumeLayout(false);
             this.gbFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
@@ -2366,17 +2465,6 @@ namespace WPELibrary
 
         private System.Windows.Forms.TableLayoutPanel tlpSocketForm;
         private System.Windows.Forms.TableLayoutPanel tlpParameter;
-        private System.Windows.Forms.GroupBox gbHookSet;
-        private System.Windows.Forms.TableLayoutPanel tlpHookType;
-        private System.Windows.Forms.CheckBox cbHookRecvFrom;
-        private System.Windows.Forms.CheckBox cbHookSend;
-        private System.Windows.Forms.CheckBox cbHookSendTo;
-        private System.Windows.Forms.CheckBox cbHookRecv;
-        private System.Windows.Forms.CheckBox cbHookWSASend;
-        private System.Windows.Forms.CheckBox cbHookWSASendTo;
-        private System.Windows.Forms.CheckBox cbHookWSARecv;
-        private System.Windows.Forms.CheckBox cbHookWSARecvFrom;
-        private System.Windows.Forms.GroupBox gbFilterSet;
         private System.Windows.Forms.DataGridView dgvSocketList;
         private System.Windows.Forms.TableLayoutPanel tlpInformation;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo;
@@ -2491,8 +2579,6 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFNum;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
-        private System.Windows.Forms.ToolStripStatusLabel tlFilterIntercept;
-        private System.Windows.Forms.ToolStripStatusLabel tlFilterIntercept_CNT;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel9;
         private System.Windows.Forms.TabPage tpComparison;
         private System.Windows.Forms.TableLayoutPanel tlpComparison;
@@ -2543,9 +2629,6 @@ namespace WPELibrary
         private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUTF32;
         private System.Windows.Forms.Label lPacketInfo_Encoding_ANSIUnicode;
         private System.Windows.Forms.TextBox txtPacketInfo_Encoding_ANSIUnicode;
-        private System.Windows.Forms.GroupBox gbSocketList_Set;
-        private System.Windows.Forms.TableLayoutPanel tlpSocketList_Set;
-        private System.Windows.Forms.CheckBox cbSocketList_AutoRoll;
         private System.Windows.Forms.RadioButton rbFromHead;
         private System.Windows.Forms.RadioButton rbFromIndex;
         private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss3;
@@ -2563,6 +2646,37 @@ namespace WPELibrary
         private System.Windows.Forms.Label lXOR2;
         private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss4;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
+        private System.Windows.Forms.Panel pComparison_A;
+        private System.Windows.Forms.RichTextBox rtbComparison_A;
+        private System.Windows.Forms.Panel pComparison_B;
+        private System.Windows.Forms.RichTextBox rtbComparison_B;
+        private System.Windows.Forms.Panel pComparison_Result;
+        private System.Windows.Forms.RichTextBox rtbComparison_Result;
+        private System.Windows.Forms.Panel pPacketInfo_Encoding;
+        private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
+        private System.Windows.Forms.ContextMenuStrip cmsFilterList;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveUp;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveDown;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveTop;
+        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss1;
+        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss2;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveBottom;
+        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss3;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Copy;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Delete;
+        private System.Windows.Forms.ToolStripButton tsFilterList_SelectAll;
+        private System.Windows.Forms.ToolStripButton tsFilterList_SelectNo;
+        private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss5;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Comparison_A;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Comparison_B;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel14;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel17;
+        private System.Windows.Forms.ToolStripStatusLabel tlFilterExecute;
+        private System.Windows.Forms.ToolStripStatusLabel tlFilterExecute_CNT;
+        private System.ComponentModel.BackgroundWorker bgwSocketInfo;
+        private System.Windows.Forms.TabControl tcSocketInfo;
+        private System.Windows.Forms.TabPage tcSocketInfo_FilterSet;
+        private System.Windows.Forms.TabPage tcSocketInfo_HookSet;
         private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
         private System.Windows.Forms.TableLayoutPanel tlpFilterSet_PacketLength;
         private System.Windows.Forms.NumericUpDown nudCheckSizeTo;
@@ -2579,39 +2693,34 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbCheckIP;
         private System.Windows.Forms.TextBox txtCheckSocket;
         private System.Windows.Forms.TextBox txtCheckIP;
-        private System.Windows.Forms.Panel pComparison_A;
-        private System.Windows.Forms.RichTextBox rtbComparison_A;
-        private System.Windows.Forms.Panel pComparison_B;
-        private System.Windows.Forms.RichTextBox rtbComparison_B;
-        private System.Windows.Forms.Panel pComparison_Result;
-        private System.Windows.Forms.RichTextBox rtbComparison_Result;
-        private System.Windows.Forms.Panel pPacketInfo_Encoding;
-        private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
+        private System.Windows.Forms.TableLayoutPanel tlpHookSet;
+        private System.Windows.Forms.CheckBox cbHookRecvFrom;
+        private System.Windows.Forms.CheckBox cbHookSend;
+        private System.Windows.Forms.CheckBox cbHookSendTo;
+        private System.Windows.Forms.CheckBox cbHookRecv;
+        private System.Windows.Forms.CheckBox cbHookWSASend;
+        private System.Windows.Forms.CheckBox cbHookWSASendTo;
+        private System.Windows.Forms.CheckBox cbHookWSARecv;
+        private System.Windows.Forms.CheckBox cbHookWSARecvFrom;
+        private System.Windows.Forms.TabPage tcSocketInfo_SystemSet;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet;
+        private System.Windows.Forms.TabPage tcSocketInfo_ListSet;
+        private System.Windows.Forms.TableLayoutPanel tlpListSet;
+        private System.Windows.Forms.NumericUpDown nudLogList_AutoClearValue;
+        private System.Windows.Forms.CheckBox cbLogList_AutoClear;
+        private System.Windows.Forms.CheckBox cbLogList_AutoRoll;
         private System.Windows.Forms.NumericUpDown nudSocketList_AutoClearValue;
         private System.Windows.Forms.CheckBox cbSocketList_AutoClear;
-        private System.Windows.Forms.ContextMenuStrip cmsFilterList;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveUp;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveDown;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveTop;
-        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss1;
-        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss2;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_MoveBottom;
-        private System.Windows.Forms.GroupBox gbSystemSet;
-        private System.Windows.Forms.TableLayoutPanel tlpSystemSet;
-        private System.Windows.Forms.CheckBox cbSystemSet_SpeedMode;
-        private System.Windows.Forms.ToolStripSeparator cmsFilterList_tss3;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Copy;
-        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Delete;
-        private System.Windows.Forms.ToolStripButton tsFilterList_SelectAll;
-        private System.Windows.Forms.ToolStripButton tsFilterList_SelectNo;
-        private System.Windows.Forms.ToolStripSeparator cmsHexBox_tss5;
-        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Comparison_A;
-        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Comparison_B;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel14;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel17;
-        private System.Windows.Forms.ToolStripStatusLabel tlFilterReplace;
-        private System.Windows.Forms.ToolStripStatusLabel tlFilterReplace_CNT;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel10;
-        private System.ComponentModel.BackgroundWorker bgwSocketInfo;
+        private System.Windows.Forms.CheckBox cbSocketList_AutoRoll;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet_FilterSet;
+        private System.Windows.Forms.RadioButton rbSystemSet_FilterSet_Sequence;
+        private System.Windows.Forms.Label lSystemSet_FilterSet;
+        private System.Windows.Forms.RadioButton rbSystemSet_FilterSet_Priority;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet_WorkingSet;
+        private System.Windows.Forms.CheckBox cbSystemSet_WorkingSet_SpeedMode;
+        private System.Windows.Forms.Label lSystemSet_WorkingSet;
+        private System.Windows.Forms.Label lSystemSet_WorkingSet_SpeedMode;
+        private System.Windows.Forms.Label lSystemSet_FilterSet_Priority;
+        private System.Windows.Forms.Label label1;
     }
 }

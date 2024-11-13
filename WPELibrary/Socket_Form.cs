@@ -160,7 +160,7 @@ namespace WPELibrary
                 }
                 this.tsslWinSock.Text = sWinSock;
 
-                tt.SetToolTip(cbSystemSet_SpeedMode, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
+                tt.SetToolTip(cbSystemSet_WorkingSet_SpeedMode, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));                
 
@@ -265,7 +265,23 @@ namespace WPELibrary
                     this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
                     this.SocketList_AutoClearChange();
 
-                    this.cbSystemSet_SpeedMode.Checked = Socket_Cache.SpeedMode;
+                    this.cbLogList_AutoRoll.Checked = Socket_Cache.FilterList.AutoRoll;
+                    this.cbLogList_AutoClear.Checked = Socket_Cache.FilterList.AutoClear;
+                    this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
+                    this.LogList_AutoClearChange();
+
+                    this.cbSystemSet_WorkingSet_SpeedMode.Checked = Socket_Cache.SpeedMode;
+
+                    switch (Socket_Cache.FilterList.FilterList_Execute)
+                    {
+                        case Socket_Cache.FilterList.Execute.Priority:
+                            this.rbSystemSet_FilterSet_Priority.Checked = true;
+                            break;
+
+                        case Socket_Cache.FilterList.Execute.Sequence:
+                            this.rbSystemSet_FilterSet_Sequence.Checked = true;
+                            break;
+                    }
 
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
                 }
@@ -311,7 +327,21 @@ namespace WPELibrary
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
                 Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
 
-                Socket_Cache.SpeedMode = this.cbSystemSet_SpeedMode.Checked;
+                Socket_Cache.FilterList.AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Socket_Cache.FilterList.AutoClear = this.cbLogList_AutoClear.Checked;
+                Socket_Cache.FilterList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+
+                Socket_Cache.SpeedMode = this.cbSystemSet_WorkingSet_SpeedMode.Checked;
+
+                if (this.rbSystemSet_FilterSet_Priority.Checked)
+                {
+                    Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Priority;
+                }
+                else
+                {
+                    Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Sequence;
+                }
+
             }
             catch (Exception ex)
             {
@@ -411,6 +441,30 @@ namespace WPELibrary
             }
         }
 
+        private void cbLogList_AutoClear_CheckedChanged(object sender, EventArgs e)
+        {
+            this.LogList_AutoClearChange();
+        }
+
+        private void LogList_AutoClearChange()
+        {
+            try
+            {
+                if (this.cbLogList_AutoClear.Checked)
+                {
+                    this.nudLogList_AutoClearValue.Enabled = true;
+                }
+                else
+                {
+                    this.nudLogList_AutoClearValue.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//清空数据
@@ -435,8 +489,7 @@ namespace WPELibrary
                 Socket_Cache.TotalPackets = 0;
                 Socket_Cache.Total_SendBytes = 0;
                 Socket_Cache.Total_RecvBytes = 0;
-                Socket_Cache.Filter.FilterReplace_CNT = 0;
-                Socket_Cache.Filter.FilterIntercept_CNT = 0;
+                Socket_Cache.Filter.FilterExecute_CNT = 0;              
             }
             catch (Exception ex)
             {
@@ -541,9 +594,9 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbSocketList_AutoClear.Checked)
+                if (this.cbLogList_AutoClear.Checked)
                 {
-                    decimal dClearCount = this.nudSocketList_AutoClearValue.Value;
+                    decimal dClearCount = this.nudLogList_AutoClearValue.Value;
 
                     if (dClearCount > 0)
                     {
@@ -575,9 +628,9 @@ namespace WPELibrary
             {
                 this.SetSystemParameter();
 
-                this.gbFilterSet.Enabled = false;
-                this.gbHookSet.Enabled = false;
-                this.gbSystemSet.Enabled = false;
+                this.tcSocketInfo_FilterSet.Enabled = false;
+                this.tcSocketInfo_HookSet.Enabled = false;
+                this.tcSocketInfo_SystemSet.Enabled = false;
 
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
@@ -587,7 +640,7 @@ namespace WPELibrary
 
                 ws.StartHook();
 
-                if (this.cbSystemSet_SpeedMode.Checked)
+                if (this.cbSystemSet_WorkingSet_SpeedMode.Checked)
                 {
                     this.CleanUp_MainForm();
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
@@ -620,9 +673,9 @@ namespace WPELibrary
         {
             try
             {
-                this.gbFilterSet.Enabled = true;
-                this.gbHookSet.Enabled = true;
-                this.gbSystemSet.Enabled = true;
+                this.tcSocketInfo_FilterSet.Enabled = true;
+                this.tcSocketInfo_HookSet.Enabled = true;
+                this.tcSocketInfo_SystemSet.Enabled = true;
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
@@ -691,14 +744,12 @@ namespace WPELibrary
             try
             {
                 long lTotal_CNT = Socket_Cache.TotalPackets;
-                long lFilterReplace_CNT = Socket_Cache.Filter.FilterReplace_CNT;
-                long iFilterIntercept_CNT = Socket_Cache.Filter.FilterIntercept_CNT;
+                long lFilterExecute_CNT = Socket_Cache.Filter.FilterExecute_CNT;                
                 string sTotal_SendBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_SendBytes);
                 string sTotal_RecvBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_RecvBytes);                                
 
                 this.tlTotal_CNT.Text = lTotal_CNT.ToString();
-                this.tlFilterReplace_CNT.Text = lFilterReplace_CNT.ToString();
-                this.tlFilterIntercept_CNT.Text = iFilterIntercept_CNT.ToString();
+                this.tlFilterExecute_CNT.Text = lFilterExecute_CNT.ToString();                
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), sTotal_SendBytes, sTotal_RecvBytes);
             }
             catch (Exception ex)
@@ -819,19 +870,27 @@ namespace WPELibrary
 
         private void bgwLogList_DoWork(object sender, DoWorkEventArgs e)
         {
-            try
-            {
-                Socket_Cache.LogList.LogToList();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            Socket_Cache.LogList.LogToList();
         }
 
         private void bgwLogList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.AutoCleanUp_LogList();
+            try
+            {
+                if (this.cbLogList_AutoRoll.Checked)
+                {
+                    if (dgvLogList.Rows.Count > 0)
+                    {
+                        dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
+                    }
+                }
+
+                this.AutoCleanUp_LogList();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         private void Event_RecSocketLog(Socket_LogInfo sli)
@@ -1856,5 +1915,7 @@ namespace WPELibrary
         }
 
         #endregion
+
+        
     }
 }
