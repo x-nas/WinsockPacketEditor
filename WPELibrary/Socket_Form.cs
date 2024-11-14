@@ -171,6 +171,7 @@ namespace WPELibrary
                 this.cmsIcon_StartHook.Enabled = true;
                 this.cmsIcon_StopHook.Enabled = false;
                 this.tSocketInfo.Enabled = true;
+                this.tSocketList.Enabled = true;
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
@@ -701,32 +702,28 @@ namespace WPELibrary
 
         private void tSocketInfo_Tick(object sender, EventArgs e)
         {
-            try
+            if (!bgwSocketInfo.IsBusy)
             {
-                if (!bgwSocketList.IsBusy)
-                {
-                    if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
-                    {
-                        bgwSocketList.RunWorkerAsync();
-                    }
-                }
+                bgwSocketInfo.RunWorkerAsync();
+            }
+        }
 
-                if (!bgwLogList.IsBusy)
+        private void tSocketList_Tick(object sender, EventArgs e)
+        {
+            if (!bgwSocketList.IsBusy)
+            {
+                if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                 {
-                    if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
-                    {
-                        bgwLogList.RunWorkerAsync();
-                    }
-                }
-
-                if (!bgwSocketInfo.IsBusy)
-                {
-                    bgwSocketInfo.RunWorkerAsync();
+                    bgwSocketList.RunWorkerAsync();
                 }
             }
-            catch (Exception ex)
+
+            if (!bgwLogList.IsBusy)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
+                {
+                    bgwLogList.RunWorkerAsync();
+                }
             }
         }
 
@@ -1895,5 +1892,7 @@ namespace WPELibrary
         }
 
         #endregion
+
+        
     }
 }

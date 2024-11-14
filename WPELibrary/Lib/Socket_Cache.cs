@@ -839,7 +839,7 @@ namespace WPELibrary.Lib
 
                                     if (!Socket_Cache.SpeedMode)
                                     {
-                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, iLen);
+                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Operation.GetName_ByPacketType(ptType), iLen);
                                         Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                                     }
                                 }
@@ -894,7 +894,7 @@ namespace WPELibrary.Lib
 
                                     if (!Socket_Cache.SpeedMode)
                                     {
-                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, iLen);
+                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Operation.GetName_ByPacketType(ptType), iLen);
                                         Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                                     }
                                 }

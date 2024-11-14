@@ -60,7 +60,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_48 = { "发送列表 - ", "Send List - " };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜", "Filter" };
-        public static string[] MutiLan_51 = { "[{0}] {1} | 封包长度: {2}", "[{0}] {1} | Packet Length: {2}" };
+        public static string[] MutiLan_51 = { "[{0}] {1} | [{2}] 封包长度: {3}", "[{0}] {1} | [{2}] Packet Length: {3}" };
         public static string[] MutiLan_52 = { "{0} | 封包长度: {1} | {2}", "{0} | Packet Length: {1} | {2}" };
         public static string[] MutiLan_53 = { "匹配滤镜出错: ", "Matching filter error: " };
         public static string[] MutiLan_54 = { "发送", "Send" };

@@ -302,6 +302,7 @@ namespace WPELibrary
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -2252,7 +2253,7 @@ namespace WPELibrary
             // 
             // tSocketInfo
             // 
-            this.tSocketInfo.Interval = 10;
+            this.tSocketInfo.Interval = 1000;
             this.tSocketInfo.Tick += new System.EventHandler(this.tSocketInfo_Tick);
             // 
             // bgwLogList
@@ -2360,6 +2361,11 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // tSocketList
+            // 
+            this.tSocketList.Interval = 10;
+            this.tSocketList.Tick += new System.EventHandler(this.tSocketList_Tick);
             // 
             // Socket_Form
             // 
@@ -2705,5 +2711,6 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
+        private System.Windows.Forms.Timer tSocketList;
     }
 }
