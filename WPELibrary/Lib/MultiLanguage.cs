@@ -60,8 +60,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_48 = { "发送列表 - ", "Send List - " };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜", "Filter" };
-        public static string[] MutiLan_51 = { "执行滤镜成功: {0} | 封包长度: {1}", "Filter execution successful: {0} | Packet Length: {1}" };
-        public static string[] MutiLan_52 = { "执行滤镜出错: {0} | 封包长度: {1} | {2}", "Error executing filter: {0} | Packet Length: {1} | {2}" };
+        public static string[] MutiLan_51 = { "[{0}] {1} | 封包长度: {2}", "[{0}] {1} | Packet Length: {2}" };
+        public static string[] MutiLan_52 = { "{0} | 封包长度: {1} | {2}", "{0} | Packet Length: {1} | {2}" };
         public static string[] MutiLan_53 = { "匹配滤镜出错: ", "Matching filter error: " };
         public static string[] MutiLan_54 = { "发送", "Send" };
         public static string[] MutiLan_55 = { "接收", "Recv" };
@@ -74,10 +74,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_62 = { "{0} - 副本", "{0} - Copy" };
         public static string[] MutiLan_63 = { "优先执行满足条件的，不执行其它的", "Prioritize executing those that meet the conditions and do not execute others" };
         public static string[] MutiLan_64 = { "顺序执行所有满足条件的", "Execute all items that meet the conditions in sequence" };
-        //public static string[] MutiLan_65 = { "拦截-接收自", "B-RecvF" };
-        //public static string[] MutiLan_66 = { "[过滤封包大小] ", "[Filter packet size] " };
-        //public static string[] MutiLan_67 = { "[过滤套接字] ", "[Filter sockets] " };
-        //public static string[] MutiLan_68 = { "[过滤IP地址] ", "[Filter IP addresses] " };
+        public static string[] MutiLan_65 = { "替换", "Replace" };
+        public static string[] MutiLan_66 = { "拦截", "Intercept" };
+        public static string[] MutiLan_67 = { "不修改 只显示", "No Modify Display" };
+        public static string[] MutiLan_68 = { "不修改 不显示", "No Modify No Display" };
         //public static string[] MutiLan_69 = { "[过滤封包内容] ", "[Filter packet content] " };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
         public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };

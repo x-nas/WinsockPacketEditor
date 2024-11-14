@@ -15,7 +15,7 @@ namespace WPELibrary.Lib
     {
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
-        public static long Total_RecvBytes = 0;
+        public static long Total_RecvBytes = 0;        
         public static bool SpeedMode;
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
@@ -839,7 +839,8 @@ namespace WPELibrary.Lib
 
                                     if (!Socket_Cache.SpeedMode)
                                     {
-                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, iLen);
+                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                                     }
                                 }
                             }
@@ -893,7 +894,8 @@ namespace WPELibrary.Lib
 
                                     if (!Socket_Cache.SpeedMode)
                                     {
-                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), sFName, iLen));
+                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Operation.GetName_ByFilterAction(sfi.FAction), sFName, iLen);
+                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                                     }
                                 }
                             }
@@ -907,7 +909,8 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52), sFName, iLen, ex.Message));
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52), sFName, iLen, ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                 }
 
                 return faReturn;

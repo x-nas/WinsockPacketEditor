@@ -825,6 +825,43 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//获取滤镜动作对应的名称
+
+        public static string GetName_ByFilterAction(Socket_Cache.Filter.FilterAction filterAction)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                switch (filterAction)
+                {
+                    case Socket_Cache.Filter.FilterAction.Replace:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.Intercept:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66);
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67);
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
         #region//获取封包类型对应的图标
 
         public static Image GetImg_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)

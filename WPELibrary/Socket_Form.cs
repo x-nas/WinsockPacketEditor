@@ -703,15 +703,8 @@ namespace WPELibrary
         {
             try
             {
-                if (!bgwSocketInfo.IsBusy)
-                {
-                    bgwSocketInfo.RunWorkerAsync();
-                }
-
                 if (!bgwSocketList.IsBusy)
                 {
-                    this.UpdateSocketListInfo();
-
                     if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                     {
                         bgwSocketList.RunWorkerAsync();
@@ -725,6 +718,11 @@ namespace WPELibrary
                         bgwLogList.RunWorkerAsync();
                     }
                 }
+
+                if (!bgwSocketInfo.IsBusy)
+                {
+                    bgwSocketInfo.RunWorkerAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -734,25 +732,13 @@ namespace WPELibrary
 
         #endregion
 
-        #region//更新封包信息数据（异步）
+        #region//显示封包信息（异步）
 
         private void bgwSocketInfo_DoWork(object sender, DoWorkEventArgs e)
         {
-            this.UpdateSocketInfo();
-        }
-
-        private void UpdateSocketInfo()
-        {
             try
             {
-                long lTotal_CNT = Socket_Cache.TotalPackets;
-                long lFilterExecute_CNT = Socket_Cache.Filter.FilterExecute_CNT;                
-                string sTotal_SendBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_SendBytes);
-                string sTotal_RecvBytes = Socket_Operation.GetDisplayBytes(Socket_Cache.Total_RecvBytes);                                
-
-                this.tlTotal_CNT.Text = lTotal_CNT.ToString();
-                this.tlFilterExecute_CNT.Text = lFilterExecute_CNT.ToString();                
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), sTotal_SendBytes, sTotal_RecvBytes);
+                e.Result = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.Total_RecvBytes));
             }
             catch (Exception ex)
             {
@@ -760,37 +746,29 @@ namespace WPELibrary
             }
         }
 
-        private void UpdateSocketListInfo()
+        private void bgwSocketInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {
-                int iQueue_CNT = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count;
-                int iFilterSocketList_CNT = Socket_Cache.SocketQueue.FilterSocketList_CNT;
-                int iSend_CNT = Socket_Cache.SocketQueue.Send_CNT;
-                int iRecv_CNT = Socket_Cache.SocketQueue.Recv_CNT;
-                int iSendTo_CNT = Socket_Cache.SocketQueue.SendTo_CNT;
-                int iRecvFrom_CNT = Socket_Cache.SocketQueue.RecvFrom_CNT;
-                int iWSASend_CNT = Socket_Cache.SocketQueue.WSASend_CNT;
-                int iWSARecv_CNT = Socket_Cache.SocketQueue.WSARecv_CNT;
-                int iWSASendTo_CNT = Socket_Cache.SocketQueue.WSASendTo_CNT;
-                int iWSARecvFrom_CNT = Socket_Cache.SocketQueue.WSARecvFrom_CNT;
-
-                this.tlQueue_CNT.Text = iQueue_CNT.ToString();
-                this.tlFilterSocketList_CNT.Text = iFilterSocketList_CNT.ToString();
-                this.tlSend_CNT.Text = iSend_CNT.ToString();
-                this.tlRecv_CNT.Text = iRecv_CNT.ToString();
-                this.tlSendTo_CNT.Text = iSendTo_CNT.ToString();
-                this.tlRecvFrom_CNT.Text = iRecvFrom_CNT.ToString();
-                this.tlWSASend_CNT.Text = iWSASend_CNT.ToString();
-                this.tlWSARecv_CNT.Text = iWSARecv_CNT.ToString();
-                this.tlWSASendTo_CNT.Text = iWSASendTo_CNT.ToString();
-                this.tlWSARecvFrom_CNT.Text = iWSARecvFrom_CNT.ToString();
+                this.tlTotal_CNT.Text = Socket_Cache.TotalPackets.ToString();
+                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
+                this.tsslTotalBytes.Text = e.Result.ToString();
+                this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
+                this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
+                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
+                this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
+                this.tlSendTo_CNT.Text = Socket_Cache.SocketQueue.SendTo_CNT.ToString();
+                this.tlRecvFrom_CNT.Text = Socket_Cache.SocketQueue.RecvFrom_CNT.ToString();
+                this.tlWSASend_CNT.Text = Socket_Cache.SocketQueue.WSASend_CNT.ToString();
+                this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
+                this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
+                this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
