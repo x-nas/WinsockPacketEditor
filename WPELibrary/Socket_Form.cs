@@ -164,9 +164,9 @@ namespace WPELibrary
                 }
                 this.tsslWinSock.Text = sWinSock;
 
-                tt.SetToolTip(cbSystemSet_WorkingSet_SpeedMode, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
-                tt.SetToolTip(rbSystemSet_FilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
-                tt.SetToolTip(rbSystemSet_FilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
+                tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
+                tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
+                tt.SetToolTip(rbFilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
@@ -244,6 +244,9 @@ namespace WPELibrary
             {
                 pcCPU = new PerformanceCounter("Processor", "% Processor Time", "_Total");
                 pcMEM = new PerformanceCounter("Memory", "Available MBytes");
+
+                pcCPU.NextValue();
+                pcMEM.NextValue();
             }
             catch (Exception ex)
             {
@@ -251,7 +254,7 @@ namespace WPELibrary
             }
         }
 
-        private string GetComputerInfo()
+        private string GetMonitorInfo()
         {
             string sReturn = string.Empty;
 
@@ -259,10 +262,32 @@ namespace WPELibrary
             {
                 if (!bgwPerformanceCounter.IsBusy)
                 {
-                    string sCPUInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80), pcCPU.NextValue().ToString("F1"));
-                    string sMEMInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81), (pcMEM.NextValue() / 160).ToString("F1"));
+                    float fCPU = pcCPU.NextValue();
+                    float fMEM = pcMEM.NextValue() / 160;
 
-                    sReturn = sCPUInfo + "  " + sMEMInfo;
+                    if (this.cbMonitorSet_Mem.Checked)
+                    {
+                        int iMEM_Monitor = ((int)this.nudMonitorSet_Mem.Value);
+
+                        if (fMEM < iMEM_Monitor)
+                        {
+                            this.tsslMonitorInfo.ForeColor = Color.Red;
+                        }
+                        else
+                        {
+                            this.tsslMonitorInfo.ForeColor = Color.FromName("ControlText");
+                        }
+                    }
+                    else
+                    {
+                        this.tsslMonitorInfo.ForeColor = Color.FromName("ControlText");
+                    }
+
+                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80), fCPU.ToString("F1")) + "  " + string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81), fMEM.ToString("F1"));
+                }
+                else
+                {
+                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
                 }
             }
             catch (Exception ex)
@@ -324,16 +349,19 @@ namespace WPELibrary
                     this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
                     this.LogList_AutoClearChange();
 
-                    this.cbSystemSet_WorkingSet_SpeedMode.Checked = Socket_Cache.SpeedMode;
+                    this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;
+                    this.cbMonitorSet_Mem.Checked = Socket_Cache.MonitorMEM;
+                    this.nudMonitorSet_Mem.Value = Socket_Cache.MonitorMEM_Value;
+                    this.MonitorMem_Change();
 
                     switch (Socket_Cache.FilterList.FilterList_Execute)
                     {
                         case Socket_Cache.FilterList.Execute.Priority:
-                            this.rbSystemSet_FilterSet_Priority.Checked = true;
+                            this.rbFilterSet_Priority.Checked = true;
                             break;
 
                         case Socket_Cache.FilterList.Execute.Sequence:
-                            this.rbSystemSet_FilterSet_Sequence.Checked = true;
+                            this.rbFilterSet_Sequence.Checked = true;
                             break;
                     }
 
@@ -385,9 +413,11 @@ namespace WPELibrary
                 Socket_Cache.FilterList.AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.FilterList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SpeedMode = this.cbSystemSet_WorkingSet_SpeedMode.Checked;
+                Socket_Cache.SpeedMode = this.cbWorkingMode_Speed.Checked;
+                Socket_Cache.MonitorMEM = this.cbMonitorSet_Mem.Checked;
+                Socket_Cache.MonitorMEM_Value = this.nudMonitorSet_Mem.Value;
 
-                if (this.rbSystemSet_FilterSet_Priority.Checked)
+                if (this.rbFilterSet_Priority.Checked)
                 {
                     Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Priority;
                 }
@@ -511,6 +541,34 @@ namespace WPELibrary
                 else
                 {
                     this.nudLogList_AutoClearValue.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//系统设置
+
+        private void cbMonitorSet_Mem_CheckedChanged(object sender, EventArgs e)
+        {
+            this.MonitorMem_Change();
+        }
+
+        private void MonitorMem_Change()
+        {
+            try
+            {
+                if (this.cbMonitorSet_Mem.Checked)
+                {
+                    this.nudMonitorSet_Mem.Enabled = true;
+                }
+                else
+                {
+                    this.nudMonitorSet_Mem.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -694,7 +752,7 @@ namespace WPELibrary
 
                 ws.StartHook();
 
-                if (this.cbSystemSet_WorkingSet_SpeedMode.Checked)
+                if (this.cbWorkingMode_Speed.Checked)
                 {
                     this.CleanUp_MainForm();
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
@@ -811,7 +869,7 @@ namespace WPELibrary
                 this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
                 this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
-                this.tsslComputerInfo.Text = this.GetComputerInfo();
+                this.tsslMonitorInfo.Text = this.GetMonitorInfo();
             }
             catch (Exception ex)
             {
@@ -1944,5 +2002,7 @@ namespace WPELibrary
         }
 
         #endregion
+
+        
     }
 }

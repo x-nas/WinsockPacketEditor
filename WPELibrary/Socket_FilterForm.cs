@@ -199,6 +199,8 @@ namespace WPELibrary
                 {
                     dgvFilterAdvanced_Search.Rows.Add();
                 }
+
+                dgvFilterAdvanced_Search.CurrentCell = dgvFilterAdvanced_Search.Rows[0].Cells[0];
             }
             catch (Exception ex)
             {
@@ -268,13 +270,10 @@ namespace WPELibrary
                     dgvFilterAdvanced_Modify_FromPosition.Rows.Add();
                 }
 
-                foreach (DataGridViewColumn column in dgvFilterAdvanced_Modify_FromPosition.Columns)
-                {
-                    if (column.Name == "col000")
-                    {
-                        dgvFilterAdvanced_Modify_FromPosition.CurrentCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[column.Index];
-                    }
-                }
+                int iColIndex = dgvFilterAdvanced_Modify_FromPosition.Columns["col000"].Index;
+                
+                dgvFilterAdvanced_Modify_FromPosition.CurrentCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iColIndex];
+                dgvFilterAdvanced_Modify_FromPosition.FirstDisplayedScrollingColumnIndex = iColIndex;
             }
             catch (Exception ex)
             {

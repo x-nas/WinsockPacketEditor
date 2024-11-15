@@ -73,6 +73,16 @@ namespace WPELibrary.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap aboutthis {
+            get {
+                object obj = ResourceManager.GetObject("aboutthis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Add {
             get {
                 object obj = ResourceManager.GetObject("Add", resourceCulture);
@@ -103,6 +113,26 @@ namespace WPELibrary.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap ChartLine {
+            get {
+                object obj = ResourceManager.GetObject("ChartLine", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap computer {
+            get {
+                object obj = ResourceManager.GetObject("computer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap copy {
             get {
                 object obj = ResourceManager.GetObject("copy", resourceCulture);
@@ -116,6 +146,16 @@ namespace WPELibrary.Properties {
         internal static System.Drawing.Bitmap CopyHS {
             get {
                 object obj = ResourceManager.GetObject("CopyHS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap cpuinfo {
+            get {
+                object obj = ResourceManager.GetObject("cpuinfo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -496,6 +536,16 @@ namespace WPELibrary.Properties {
         internal static System.Drawing.Bitmap Stop16 {
             get {
                 object obj = ResourceManager.GetObject("Stop16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Target {
+            get {
+                object obj = ResourceManager.GetObject("Target", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -67,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Lib\Socket_BitInfo.cs" />
     <Compile Include="Lib\User32.cs" />
     <Compile Include="Lib\WS2_32.cs" />
@@ -139,6 +145,11 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\cpuinfo.png" />
+    <None Include="Resources\aboutthis.png" />
+    <None Include="Resources\ChartLine.png" />
+    <None Include="Resources\Target.png" />
+    <None Include="Resources\computer.png" />
     <None Include="Resources\Settings.png" />
     <None Include="Resources\paste.png" />
     <None Include="Resources\cut.png" />
@@ -196,6 +207,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_FilterForm.en-US.resx">
       <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -17,6 +17,8 @@ namespace WPELibrary.Lib
         public static long Total_SendBytes = 0;
         public static long Total_RecvBytes = 0;        
         public static bool SpeedMode;
+        public static bool MonitorMEM;
+        public static decimal MonitorMEM_Value;
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
         public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
@@ -432,7 +434,7 @@ namespace WPELibrary.Lib
                     Send = bSend;
                     SendTo = bSendTo;
                     Recv = bRecv;
-                    RecvFrom = bWSARecvFrom;
+                    RecvFrom = bRecvFrom;
                     WSASend = bWSASend;
                     WSASendTo = bWSASendTo;
                     WSARecv = bWSARecv;
@@ -604,7 +606,7 @@ namespace WPELibrary.Lib
                 {
                     Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.Replace;
-                    Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, false, true, false, false, false, false, false);
+                    Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
                     AddFilter_New(string.Empty, false, string.Empty, FilterMode, FilterAction, FilterFunction, FilterStartFrom, string.Empty, string.Empty);
