@@ -62,16 +62,20 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Search = new System.Windows.Forms.DataGridView();
             this.dgvFilterAdvanced_Modify_FromHead = new System.Windows.Forms.DataGridView();
             this.tlpFilterParameter = new System.Windows.Forms.TableLayoutPanel();
+            this.gbFilterModifyFrom = new System.Windows.Forms.GroupBox();
+            this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterModifyFrom_Position = new System.Windows.Forms.RadioButton();
+            this.rbFilterModifyFrom_Head = new System.Windows.Forms.RadioButton();
+            this.gbFilterMode = new System.Windows.Forms.GroupBox();
+            this.tlpFilterMode = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterMode_Advanced = new System.Windows.Forms.RadioButton();
+            this.rbFilterMode_Normal = new System.Windows.Forms.RadioButton();
             this.gbFilterAction = new System.Windows.Forms.GroupBox();
             this.tlpFilterAction = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterAction_Intercept = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_Replace = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_NoModify_Display = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_NoModify_NoDisplay = new System.Windows.Forms.RadioButton();
-            this.gbFilterSet = new System.Windows.Forms.GroupBox();
-            this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
-            this.nudFilterSet_ModifyTimes = new System.Windows.Forms.NumericUpDown();
-            this.lFilterSet_ModifyTimes = new System.Windows.Forms.Label();
             this.gbFilterFunction = new System.Windows.Forms.GroupBox();
             this.tlpFilterFunction = new System.Windows.Forms.TableLayoutPanel();
             this.cbFilterFunction_RecvFrom = new System.Windows.Forms.CheckBox();
@@ -93,15 +97,6 @@ namespace WPELibrary
             this.gbFilterName = new System.Windows.Forms.GroupBox();
             this.tlpFilterName = new System.Windows.Forms.TableLayoutPanel();
             this.txtFilterName = new System.Windows.Forms.TextBox();
-            this.tlpFilterModeAndModifyFrom = new System.Windows.Forms.TableLayoutPanel();
-            this.gbFilterMode = new System.Windows.Forms.GroupBox();
-            this.tlpFilterMode = new System.Windows.Forms.TableLayoutPanel();
-            this.rbFilterMode_Advanced = new System.Windows.Forms.RadioButton();
-            this.rbFilterMode_Normal = new System.Windows.Forms.RadioButton();
-            this.gbFilterModifyFrom = new System.Windows.Forms.GroupBox();
-            this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
-            this.rbFilterModifyFrom_Position = new System.Windows.Forms.RadioButton();
-            this.rbFilterModifyFrom_Head = new System.Windows.Forms.RadioButton();
             this.tlpFilterForm.SuspendLayout();
             this.tcFilterInfo.SuspendLayout();
             this.tpNormal.SuspendLayout();
@@ -113,11 +108,12 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Search)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Modify_FromHead)).BeginInit();
             this.tlpFilterParameter.SuspendLayout();
+            this.gbFilterModifyFrom.SuspendLayout();
+            this.tlpFilterModifyFrom.SuspendLayout();
+            this.gbFilterMode.SuspendLayout();
+            this.tlpFilterMode.SuspendLayout();
             this.gbFilterAction.SuspendLayout();
             this.tlpFilterAction.SuspendLayout();
-            this.gbFilterSet.SuspendLayout();
-            this.tlpFilterSet.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFilterSet_ModifyTimes)).BeginInit();
             this.gbFilterFunction.SuspendLayout();
             this.tlpFilterFunction.SuspendLayout();
             this.tlpFilterButton.SuspendLayout();
@@ -126,11 +122,6 @@ namespace WPELibrary
             this.tlpFilterAppoint.SuspendLayout();
             this.gbFilterName.SuspendLayout();
             this.tlpFilterName.SuspendLayout();
-            this.tlpFilterModeAndModifyFrom.SuspendLayout();
-            this.gbFilterMode.SuspendLayout();
-            this.tlpFilterMode.SuspendLayout();
-            this.gbFilterModifyFrom.SuspendLayout();
-            this.tlpFilterModifyFrom.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpFilterForm
@@ -376,13 +367,75 @@ namespace WPELibrary
             // tlpFilterParameter
             // 
             resources.ApplyResources(this.tlpFilterParameter, "tlpFilterParameter");
+            this.tlpFilterParameter.Controls.Add(this.gbFilterModifyFrom, 1, 1);
+            this.tlpFilterParameter.Controls.Add(this.gbFilterMode, 0, 1);
             this.tlpFilterParameter.Controls.Add(this.gbFilterAction, 0, 0);
-            this.tlpFilterParameter.Controls.Add(this.gbFilterSet, 0, 1);
             this.tlpFilterParameter.Controls.Add(this.gbFilterFunction, 2, 0);
             this.tlpFilterParameter.Controls.Add(this.tlpFilterButton, 2, 1);
             this.tlpFilterParameter.Controls.Add(this.tlpFilterNameAndAppoint, 1, 0);
-            this.tlpFilterParameter.Controls.Add(this.tlpFilterModeAndModifyFrom, 1, 1);
             this.tlpFilterParameter.Name = "tlpFilterParameter";
+            // 
+            // gbFilterModifyFrom
+            // 
+            resources.ApplyResources(this.gbFilterModifyFrom, "gbFilterModifyFrom");
+            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
+            this.gbFilterModifyFrom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterModifyFrom.Name = "gbFilterModifyFrom";
+            this.gbFilterModifyFrom.TabStop = false;
+            // 
+            // tlpFilterModifyFrom
+            // 
+            resources.ApplyResources(this.tlpFilterModifyFrom, "tlpFilterModifyFrom");
+            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Position, 0, 1);
+            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Head, 0, 0);
+            this.tlpFilterModifyFrom.Name = "tlpFilterModifyFrom";
+            // 
+            // rbFilterModifyFrom_Position
+            // 
+            resources.ApplyResources(this.rbFilterModifyFrom_Position, "rbFilterModifyFrom_Position");
+            this.rbFilterModifyFrom_Position.Name = "rbFilterModifyFrom_Position";
+            this.rbFilterModifyFrom_Position.UseVisualStyleBackColor = true;
+            this.rbFilterModifyFrom_Position.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
+            // 
+            // rbFilterModifyFrom_Head
+            // 
+            resources.ApplyResources(this.rbFilterModifyFrom_Head, "rbFilterModifyFrom_Head");
+            this.rbFilterModifyFrom_Head.Checked = true;
+            this.rbFilterModifyFrom_Head.Name = "rbFilterModifyFrom_Head";
+            this.rbFilterModifyFrom_Head.TabStop = true;
+            this.rbFilterModifyFrom_Head.UseVisualStyleBackColor = true;
+            this.rbFilterModifyFrom_Head.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
+            // 
+            // gbFilterMode
+            // 
+            resources.ApplyResources(this.gbFilterMode, "gbFilterMode");
+            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
+            this.gbFilterMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterMode.Name = "gbFilterMode";
+            this.gbFilterMode.TabStop = false;
+            // 
+            // tlpFilterMode
+            // 
+            resources.ApplyResources(this.tlpFilterMode, "tlpFilterMode");
+            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Advanced, 1, 0);
+            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Normal, 0, 0);
+            this.tlpFilterMode.Name = "tlpFilterMode";
+            // 
+            // rbFilterMode_Advanced
+            // 
+            resources.ApplyResources(this.rbFilterMode_Advanced, "rbFilterMode_Advanced");
+            this.rbFilterMode_Advanced.Name = "rbFilterMode_Advanced";
+            this.rbFilterMode_Advanced.UseVisualStyleBackColor = true;
+            this.rbFilterMode_Advanced.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
+            // 
+            // rbFilterMode_Normal
+            // 
+            resources.ApplyResources(this.rbFilterMode_Normal, "rbFilterMode_Normal");
+            this.rbFilterMode_Normal.Checked = true;
+            this.rbFilterMode_Normal.Name = "rbFilterMode_Normal";
+            this.rbFilterMode_Normal.TabStop = true;
+            this.rbFilterMode_Normal.UseVisualStyleBackColor = true;
+            this.rbFilterMode_Normal.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
             // 
             // gbFilterAction
             // 
@@ -425,47 +478,6 @@ namespace WPELibrary
             resources.ApplyResources(this.rbFilterAction_NoModify_NoDisplay, "rbFilterAction_NoModify_NoDisplay");
             this.rbFilterAction_NoModify_NoDisplay.Name = "rbFilterAction_NoModify_NoDisplay";
             this.rbFilterAction_NoModify_NoDisplay.UseVisualStyleBackColor = true;
-            // 
-            // gbFilterSet
-            // 
-            resources.ApplyResources(this.gbFilterSet, "gbFilterSet");
-            this.gbFilterSet.Controls.Add(this.tlpFilterSet);
-            this.gbFilterSet.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterSet.Name = "gbFilterSet";
-            this.gbFilterSet.TabStop = false;
-            // 
-            // tlpFilterSet
-            // 
-            resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
-            this.tlpFilterSet.Controls.Add(this.nudFilterSet_ModifyTimes, 1, 0);
-            this.tlpFilterSet.Controls.Add(this.lFilterSet_ModifyTimes, 0, 0);
-            this.tlpFilterSet.Name = "tlpFilterSet";
-            // 
-            // nudFilterSet_ModifyTimes
-            // 
-            resources.ApplyResources(this.nudFilterSet_ModifyTimes, "nudFilterSet_ModifyTimes");
-            this.nudFilterSet_ModifyTimes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.nudFilterSet_ModifyTimes.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.nudFilterSet_ModifyTimes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudFilterSet_ModifyTimes.Name = "nudFilterSet_ModifyTimes";
-            this.nudFilterSet_ModifyTimes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lFilterSet_ModifyTimes
-            // 
-            resources.ApplyResources(this.lFilterSet_ModifyTimes, "lFilterSet_ModifyTimes");
-            this.lFilterSet_ModifyTimes.Name = "lFilterSet_ModifyTimes";
             // 
             // gbFilterFunction
             // 
@@ -630,75 +642,6 @@ namespace WPELibrary
             this.txtFilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtFilterName.Name = "txtFilterName";
             // 
-            // tlpFilterModeAndModifyFrom
-            // 
-            resources.ApplyResources(this.tlpFilterModeAndModifyFrom, "tlpFilterModeAndModifyFrom");
-            this.tlpFilterModeAndModifyFrom.Controls.Add(this.gbFilterMode, 1, 0);
-            this.tlpFilterModeAndModifyFrom.Controls.Add(this.gbFilterModifyFrom, 0, 0);
-            this.tlpFilterModeAndModifyFrom.Name = "tlpFilterModeAndModifyFrom";
-            // 
-            // gbFilterMode
-            // 
-            resources.ApplyResources(this.gbFilterMode, "gbFilterMode");
-            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
-            this.gbFilterMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterMode.Name = "gbFilterMode";
-            this.gbFilterMode.TabStop = false;
-            // 
-            // tlpFilterMode
-            // 
-            resources.ApplyResources(this.tlpFilterMode, "tlpFilterMode");
-            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Advanced, 0, 1);
-            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Normal, 0, 0);
-            this.tlpFilterMode.Name = "tlpFilterMode";
-            // 
-            // rbFilterMode_Advanced
-            // 
-            resources.ApplyResources(this.rbFilterMode_Advanced, "rbFilterMode_Advanced");
-            this.rbFilterMode_Advanced.Name = "rbFilterMode_Advanced";
-            this.rbFilterMode_Advanced.UseVisualStyleBackColor = true;
-            this.rbFilterMode_Advanced.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
-            // 
-            // rbFilterMode_Normal
-            // 
-            resources.ApplyResources(this.rbFilterMode_Normal, "rbFilterMode_Normal");
-            this.rbFilterMode_Normal.Checked = true;
-            this.rbFilterMode_Normal.Name = "rbFilterMode_Normal";
-            this.rbFilterMode_Normal.TabStop = true;
-            this.rbFilterMode_Normal.UseVisualStyleBackColor = true;
-            this.rbFilterMode_Normal.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
-            // 
-            // gbFilterModifyFrom
-            // 
-            resources.ApplyResources(this.gbFilterModifyFrom, "gbFilterModifyFrom");
-            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
-            this.gbFilterModifyFrom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterModifyFrom.Name = "gbFilterModifyFrom";
-            this.gbFilterModifyFrom.TabStop = false;
-            // 
-            // tlpFilterModifyFrom
-            // 
-            resources.ApplyResources(this.tlpFilterModifyFrom, "tlpFilterModifyFrom");
-            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Position, 0, 1);
-            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Head, 0, 0);
-            this.tlpFilterModifyFrom.Name = "tlpFilterModifyFrom";
-            // 
-            // rbFilterModifyFrom_Position
-            // 
-            resources.ApplyResources(this.rbFilterModifyFrom_Position, "rbFilterModifyFrom_Position");
-            this.rbFilterModifyFrom_Position.Name = "rbFilterModifyFrom_Position";
-            this.rbFilterModifyFrom_Position.UseVisualStyleBackColor = true;
-            this.rbFilterModifyFrom_Position.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
-            // 
-            // rbFilterModifyFrom_Head
-            // 
-            resources.ApplyResources(this.rbFilterModifyFrom_Head, "rbFilterModifyFrom_Head");
-            this.rbFilterModifyFrom_Head.Checked = true;
-            this.rbFilterModifyFrom_Head.Name = "rbFilterModifyFrom_Head";
-            this.rbFilterModifyFrom_Head.TabStop = true;
-            this.rbFilterModifyFrom_Head.UseVisualStyleBackColor = true;
-            this.rbFilterModifyFrom_Head.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
-            // 
             // Socket_FilterForm
             // 
             resources.ApplyResources(this, "$this");
@@ -718,13 +661,15 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Search)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Modify_FromHead)).EndInit();
             this.tlpFilterParameter.ResumeLayout(false);
+            this.gbFilterModifyFrom.ResumeLayout(false);
+            this.tlpFilterModifyFrom.ResumeLayout(false);
+            this.tlpFilterModifyFrom.PerformLayout();
+            this.gbFilterMode.ResumeLayout(false);
+            this.tlpFilterMode.ResumeLayout(false);
+            this.tlpFilterMode.PerformLayout();
             this.gbFilterAction.ResumeLayout(false);
             this.tlpFilterAction.ResumeLayout(false);
             this.tlpFilterAction.PerformLayout();
-            this.gbFilterSet.ResumeLayout(false);
-            this.tlpFilterSet.ResumeLayout(false);
-            this.tlpFilterSet.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFilterSet_ModifyTimes)).EndInit();
             this.gbFilterFunction.ResumeLayout(false);
             this.tlpFilterFunction.ResumeLayout(false);
             this.tlpFilterFunction.PerformLayout();
@@ -736,13 +681,6 @@ namespace WPELibrary
             this.gbFilterName.ResumeLayout(false);
             this.tlpFilterName.ResumeLayout(false);
             this.tlpFilterName.PerformLayout();
-            this.tlpFilterModeAndModifyFrom.ResumeLayout(false);
-            this.gbFilterMode.ResumeLayout(false);
-            this.tlpFilterMode.ResumeLayout(false);
-            this.tlpFilterMode.PerformLayout();
-            this.gbFilterModifyFrom.ResumeLayout(false);
-            this.tlpFilterModifyFrom.ResumeLayout(false);
-            this.tlpFilterModifyFrom.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -766,16 +704,12 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbFilterFunction_WSASendTo;
         private System.Windows.Forms.CheckBox cbFilterFunction_WSARecv;
         private System.Windows.Forms.CheckBox cbFilterFunction_WSARecvFrom;
-        private System.Windows.Forms.GroupBox gbFilterSet;
         private System.Windows.Forms.TableLayoutPanel tlpFilterButton;
         private System.Windows.Forms.Button bFilterButton_Save;
         private System.Windows.Forms.Button bFilterButton_Close;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
-        private System.Windows.Forms.NumericUpDown nudFilterSet_ModifyTimes;
         private System.Windows.Forms.DataGridView dgvFilterAdvanced_Modify_FromHead;
         private System.Windows.Forms.DataGridView dgvFilterAdvanced_Modify_FromPosition;
         private System.Windows.Forms.DataGridView dgvFilterAdvanced_Search;
-        private System.Windows.Forms.Label lFilterSet_ModifyTimes;
         private System.Windows.Forms.TableLayoutPanel tlpFilterNameAndAppoint;
         private System.Windows.Forms.GroupBox gbFilterAppoint;
         private System.Windows.Forms.TableLayoutPanel tlpFilterAppoint;
@@ -789,7 +723,12 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Copy;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Paste;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Cut;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterModeAndModifyFrom;
+        private System.Windows.Forms.GroupBox gbFilterAction;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterAction;
+        private System.Windows.Forms.RadioButton rbFilterAction_Intercept;
+        private System.Windows.Forms.RadioButton rbFilterAction_Replace;
+        private System.Windows.Forms.RadioButton rbFilterAction_NoModify_Display;
+        private System.Windows.Forms.RadioButton rbFilterAction_NoModify_NoDisplay;
         private System.Windows.Forms.GroupBox gbFilterModifyFrom;
         private System.Windows.Forms.TableLayoutPanel tlpFilterModifyFrom;
         private System.Windows.Forms.RadioButton rbFilterModifyFrom_Position;
@@ -798,11 +737,5 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpFilterMode;
         private System.Windows.Forms.RadioButton rbFilterMode_Advanced;
         private System.Windows.Forms.RadioButton rbFilterMode_Normal;
-        private System.Windows.Forms.GroupBox gbFilterAction;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterAction;
-        private System.Windows.Forms.RadioButton rbFilterAction_Intercept;
-        private System.Windows.Forms.RadioButton rbFilterAction_Replace;
-        private System.Windows.Forms.RadioButton rbFilterAction_NoModify_Display;
-        private System.Windows.Forms.RadioButton rbFilterAction_NoModify_NoDisplay;
     }
 }

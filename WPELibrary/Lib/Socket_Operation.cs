@@ -1568,8 +1568,7 @@ namespace WPELibrary.Lib
                         string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
                         string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
                         string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
-                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                        string sFModifyCNT = Socket_Cache.FilterList.lstFilter[i].FModifyCNT.ToString();
+                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();                        
                         string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
                         string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
@@ -1607,10 +1606,6 @@ namespace WPELibrary.Lib
                         XmlElement xeFStartFrom = doc.CreateElement("StartFrom");
                         xeFStartFrom.InnerText = sFStartFrom;
                         xeFilter.AppendChild(xeFStartFrom);
-
-                        XmlElement xeFModifyCNT = doc.CreateElement("ModifyCNT");
-                        xeFModifyCNT.InnerText = sFModifyCNT;
-                        xeFilter.AppendChild(xeFModifyCNT);
 
                         XmlElement xeSearch = doc.CreateElement("Search");
                         xeSearch.InnerText = sFSearch;
@@ -1697,12 +1692,9 @@ namespace WPELibrary.Lib
                         string sFMode = xnFilter.SelectSingleNode("Mode").InnerText;
                         string sFAction = xnFilter.SelectSingleNode("Action").InnerText;
                         string sFFunction = xnFilter.SelectSingleNode("Function").InnerText;
-                        string sFStartFrom = xnFilter.SelectSingleNode("StartFrom").InnerText;
-                        string sFModifyCNT = xnFilter.SelectSingleNode("ModifyCNT").InnerText;
+                        string sFStartFrom = xnFilter.SelectSingleNode("StartFrom").InnerText;                        
                         string sFSearch = xnFilter.SelectSingleNode("Search").InnerText;
                         string sFModify = xnFilter.SelectSingleNode("Modify").InnerText;
-
-                        int iFModifyCNT = int.Parse(sFModifyCNT);
 
                         bool bAppointHeader = bool.Parse(sFAppointHeader);
 
@@ -1711,7 +1703,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
                         Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
 
-                        Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, iFModifyCNT, sFSearch, sFModify);
+                        Socket_Cache.FilterList.AddFilter_New(sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
                     }
                 }
             }
@@ -1957,12 +1949,11 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
                 Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
                 Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
-                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
-                int FModifyCNT = Socket_Cache.FilterList.lstFilter[iFIndex].FModifyCNT;
+                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;                
                 string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
                 string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
 
-                Socket_Cache.FilterList.AddFilter_New(FName, bAppointHeader, HeaderContent, FMode, FAction, FFunction, FStartFrom, FModifyCNT, FSearch, FModify);
+                Socket_Cache.FilterList.AddFilter_New(FName, bAppointHeader, HeaderContent, FMode, FAction, FFunction, FStartFrom, FSearch, FModify);
 
                 iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
             }
@@ -2279,8 +2270,7 @@ namespace WPELibrary.Lib
             List<int> lReturn = new List<int>();
 
             try
-            {
-                int iFModifyCNT = sfi.FModifyCNT;
+            {  
                 byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
 
                 Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
@@ -2333,11 +2323,10 @@ namespace WPELibrary.Lib
 
                         if (iMatchIndex > -1)
                         {
-                            if (iFModifyCNT > 0)
-                            {
-                                lReturn.Add(iMatchIndex);
-                                iFModifyCNT--;
+                            lReturn.Add(iMatchIndex);
 
+                            if (iBuffIndex > i)
+                            {
                                 i = iBuffIndex;
                             }
                         }

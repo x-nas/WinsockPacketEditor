@@ -11,8 +11,7 @@ namespace WPELibrary
     public partial class Socket_FilterForm : Form
     {
         private int FilterNum = -1;
-        private int FilterIndex = -1;
-        private int FilterModifyCNT = 0;
+        private int FilterIndex = -1;        
         private string FilterName = string.Empty;
         private string FilterHeaderContent = string.Empty;
         private string FilterSearch = string.Empty;
@@ -66,8 +65,7 @@ namespace WPELibrary
                     this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
                     this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
                     this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
-                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
-                    this.FilterModifyCNT = Socket_Cache.FilterList.lstFilter[FilterIndex].FModifyCNT;
+                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;                    
                     this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
                     this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;                    
 
@@ -119,8 +117,6 @@ namespace WPELibrary
 
                     this.txtFilterName.Text = FilterName;                    
                     this.txtFilter_HeaderContent.Text = FilterHeaderContent;
-                    
-                    this.nudFilterSet_ModifyTimes.Value = FilterModifyCNT;
                     
                     this.cbFilterFunction_Send.Checked = FilterFunction.Send;
                     this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
@@ -335,8 +331,7 @@ namespace WPELibrary
                     this.tpNormal.Parent = this.tcFilterInfo;
                     this.tpAdvanced.Parent = null;
 
-                    this.gbFilterModifyFrom.Enabled = false;
-                    this.gbFilterSet.Enabled = false;
+                    this.gbFilterModifyFrom.Enabled = false;                    
                 }
                 else if (rbFilterMode_Advanced.Checked)
                 {
@@ -344,11 +339,6 @@ namespace WPELibrary
                     this.tpAdvanced.Parent = this.tcFilterInfo;
 
                     this.gbFilterModifyFrom.Enabled = true;
-
-                    if (rbFilterModifyFrom_Position.Checked)
-                    {
-                        this.gbFilterSet.Enabled = true;
-                    }
                 }
             }
             catch (Exception ex)
@@ -372,15 +362,11 @@ namespace WPELibrary
             {
                 if (rbFilterModifyFrom_Head.Checked)
                 {
-                    this.gbFilterSet.Enabled = false;
-
                     this.dgvFilterAdvanced_Modify_FromHead.Visible = true;
                     this.dgvFilterAdvanced_Modify_FromPosition.Visible = false;
                 }
                 else if (rbFilterModifyFrom_Position.Checked)
                 {
-                    this.gbFilterSet.Enabled = true;
-
                     this.dgvFilterAdvanced_Modify_FromHead.Visible = false;
                     this.dgvFilterAdvanced_Modify_FromPosition.Visible = true;
                 }
@@ -737,9 +723,7 @@ namespace WPELibrary
                 sSearch_New = sSearch_New.TrimEnd(',');
                 sModify_New = sModify_New.TrimEnd(',');
 
-                int iFModifyCNT_New = int.Parse(this.nudFilterSet_ModifyTimes.Value.ToString());                
-
-                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, bAppointHeader, sHeaderContent_New, FilterMode_New, FilterAction_New, FilterFunction_New, FilterStartFrom_New, iFModifyCNT_New, sSearch_New, sModify_New);                
+                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, bAppointHeader, sHeaderContent_New, FilterMode_New, FilterAction_New, FilterFunction_New, FilterStartFrom_New, sSearch_New, sModify_New);                
 
                 this.Close();
             }

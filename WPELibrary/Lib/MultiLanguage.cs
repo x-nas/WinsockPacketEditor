@@ -76,9 +76,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_64 = { "顺序执行所有满足条件的", "Execute all items that meet the conditions in sequence" };
         public static string[] MutiLan_65 = { "替换", "Replace" };
         public static string[] MutiLan_66 = { "拦截", "Intercept" };
-        public static string[] MutiLan_67 = { "不修改 只显示", "No Modify Display" };
-        public static string[] MutiLan_68 = { "不修改 不显示", "No Modify No Display" };
-        //public static string[] MutiLan_69 = { "[过滤封包内容] ", "[Filter packet content] " };
+        public static string[] MutiLan_67 = { "不修改 - 只显示", "No Modify - Display" };
+        public static string[] MutiLan_68 = { "不修改 - 不显示", "No Modify - No Display" };
+        public static string[] MutiLan_69 = { "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}", "[{0}] {1} | [{2}] Packet Length: {3} | Match: {4}" };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
         public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };
         public static string[] MutiLan_72 = { "保存失败!", "Save failed!" };
@@ -89,8 +89,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
         public static string[] MutiLan_78 = { "记录时间\t模块\t日志内容\t", "Log Time\tModule Name\tLog content\t" };
         public static string[] MutiLan_79 = { "提示", "Prompt" };
-        //public static string[] MutiLan_80 = { "发送封包成功", "Successfully sent packet" };
-        //public static string[] MutiLan_81 = { "发送封包失败", "Sending packet failed" };
+        public static string[] MutiLan_80 = { "CPU 占用: {0}%", "CPU Usage: {0}%" };
+        public static string[] MutiLan_81 = { "内存可用: {0}%", "Memory Available: {0}%" };
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
         public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };

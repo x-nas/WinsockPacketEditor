@@ -284,6 +284,8 @@ namespace WPELibrary
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslComputerInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
@@ -303,6 +305,7 @@ namespace WPELibrary
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
+            this.bgwPerformanceCounter = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -2205,7 +2208,9 @@ namespace WPELibrary
             this.toolStripStatusLabel4,
             this.tsslWinSock,
             this.toolStripStatusLabel3,
-            this.tsslTotalBytes});
+            this.tsslTotalBytes,
+            this.toolStripStatusLabel6,
+            this.tsslComputerInfo});
             this.ssProcessInfo.Name = "ssProcessInfo";
             // 
             // tsslProcessName
@@ -2245,6 +2250,17 @@ namespace WPELibrary
             // 
             this.tsslTotalBytes.Name = "tsslTotalBytes";
             resources.ApplyResources(this.tsslTotalBytes, "tsslTotalBytes");
+            // 
+            // toolStripStatusLabel6
+            // 
+            this.toolStripStatusLabel6.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
+            resources.ApplyResources(this.toolStripStatusLabel6, "toolStripStatusLabel6");
+            // 
+            // tsslComputerInfo
+            // 
+            this.tsslComputerInfo.Name = "tsslComputerInfo";
+            resources.ApplyResources(this.tsslComputerInfo, "tsslComputerInfo");
             // 
             // bgwSocketList
             // 
@@ -2366,6 +2382,10 @@ namespace WPELibrary
             // 
             this.tSocketList.Interval = 10;
             this.tSocketList.Tick += new System.EventHandler(this.tSocketList_Tick);
+            // 
+            // bgwPerformanceCounter
+            // 
+            this.bgwPerformanceCounter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPerformanceCounter_DoWork);
             // 
             // Socket_Form
             // 
@@ -2712,5 +2732,8 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
         private System.Windows.Forms.Timer tSocketList;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
+        private System.Windows.Forms.ToolStripStatusLabel tsslComputerInfo;
+        private System.ComponentModel.BackgroundWorker bgwPerformanceCounter;
     }
 }

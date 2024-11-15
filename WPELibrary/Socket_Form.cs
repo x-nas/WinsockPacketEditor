@@ -24,6 +24,9 @@ namespace WPELibrary
 
         private ToolTip tt = new ToolTip();
 
+        private PerformanceCounter pcCPU;
+        private PerformanceCounter pcMEM;
+
         #region//加载窗体
 
         public Socket_Form(string sLanguage)
@@ -33,6 +36,7 @@ namespace WPELibrary
                 MultiLanguage.SetDefaultLanguage(sLanguage);
                 InitializeComponent();
 
+                this.InitPerformanceCounter();
                 this.InitSocketForm();
                 this.InitSocketDGV();
                 this.InitHexBox();
@@ -181,6 +185,14 @@ namespace WPELibrary
             }
         }
 
+        private void InitPerformanceCounter()
+        {
+            if (!bgwPerformanceCounter.IsBusy)
+            {
+                bgwPerformanceCounter.RunWorkerAsync();
+            }
+        }
+
         private void InitHexBox()
         {
             try
@@ -220,6 +232,45 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }            
+        }
+
+        #endregion
+
+        #region//获取CPU和内存占用率
+
+        private void bgwPerformanceCounter_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                pcCPU = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                pcMEM = new PerformanceCounter("Memory", "Available MBytes");
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private string GetComputerInfo()
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                if (!bgwPerformanceCounter.IsBusy)
+                {
+                    string sCPUInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80), pcCPU.NextValue().ToString("F1"));
+                    string sMEMInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81), (pcMEM.NextValue() / 160).ToString("F1"));
+
+                    sReturn = sCPUInfo + "  " + sMEMInfo;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion
@@ -760,6 +811,7 @@ namespace WPELibrary
                 this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
                 this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
+                this.tsslComputerInfo.Text = this.GetComputerInfo();
             }
             catch (Exception ex)
             {
@@ -1892,7 +1944,5 @@ namespace WPELibrary
         }
 
         #endregion
-
-        
     }
 }

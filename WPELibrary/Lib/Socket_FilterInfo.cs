@@ -110,19 +110,7 @@ namespace WPELibrary.Lib
             set { fstartfrom = value; }
         }
 
-        #endregion
-
-        #region//修改次数
-
-        protected int fmodifycnt;
-
-        public int FModifyCNT
-        {
-            get { return fmodifycnt; }
-            set { fmodifycnt = value; }
-        }
-
-        #endregion
+        #endregion        
 
         #region//搜索内容
 
@@ -150,7 +138,7 @@ namespace WPELibrary.Lib
 
         #region//Socket_FilterInfo
 
-        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, int FModifyCNT, string FSearch, string FModify) 
+        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, string FSearch, string FModify) 
         {
             this.isenable = IsEnable;
             this.fnum = FNum;            
@@ -160,8 +148,7 @@ namespace WPELibrary.Lib
             this.fmode = FMode;
             this.faction = FAction;
             this.ffunction = FFunction;
-            this.fstartfrom = FStartFrom;
-            this.fmodifycnt = FModifyCNT;
+            this.fstartfrom = FStartFrom;            
             this.fsearch = FSearch;          
             this.fmodify = FModify;         
         }

@@ -155,6 +155,24 @@
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
   </data>
+  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
+    <value>[ Starting Modify ]</value>
+  </data>
+  <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
+    <value>From the position of the chain</value>
+  </data>
+  <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
+    <value>From the beginning of the packet</value>
+  </data>
+  <data name="gbFilterMode.Text" xml:space="preserve">
+    <value>[ Mode ]</value>
+  </data>
+  <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="rbFilterMode_Normal.Text" xml:space="preserve">
+    <value>Normal</value>
+  </data>
   <data name="gbFilterAction.Text" xml:space="preserve">
     <value>[ Action ]</value>
   </data>
@@ -165,25 +183,10 @@
     <value>Replace</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Text" xml:space="preserve">
-    <value>No Modify Display</value>
+    <value>No Modify - Display</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Text" xml:space="preserve">
-    <value>No Modify No Display</value>
-  </data>
-  <data name="gbFilterSet.Text" xml:space="preserve">
-    <value>[ Setting ]</value>
-  </data>
-  <data name="nudFilterSet_ModifyTimes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>99, 6</value>
-  </data>
-  <data name="nudFilterSet_ModifyTimes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 23</value>
-  </data>
-  <data name="lFilterSet_ModifyTimes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 23</value>
-  </data>
-  <data name="lFilterSet_ModifyTimes.Text" xml:space="preserve">
-    <value>Modify Times</value>
+    <value>No Modify - No Display</value>
   </data>
   <data name="gbFilterFunction.Text" xml:space="preserve">
     <value>[ Function ]</value>
@@ -235,24 +238,6 @@
   </data>
   <data name="gbFilterName.Text" xml:space="preserve">
     <value>[ Filter Name ]</value>
-  </data>
-  <data name="gbFilterMode.Text" xml:space="preserve">
-    <value>[ Mode ]</value>
-  </data>
-  <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
-    <value>Advanced</value>
-  </data>
-  <data name="rbFilterMode_Normal.Text" xml:space="preserve">
-    <value>Normal</value>
-  </data>
-  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
-    <value>[ Starting Modify From ]</value>
-  </data>
-  <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
-    <value>Position of the chain</value>
-  </data>
-  <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
-    <value>Beginning of the packet</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6425,8 +6410,5 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
 </root>
