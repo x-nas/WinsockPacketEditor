@@ -1067,6 +1067,29 @@ namespace WPELibrary.Lib
                     }
                 }
 
+                //指定包头
+                if (Socket_Cache.CheckHead)
+                {
+                    if (Socket_Cache.CheckNotShow)
+                    {
+                        if (ISFilter_ByHead(spi.PacketBuffer))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (ISFilter_ByHead(spi.PacketBuffer))
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+
                 //封包内容
                 if (Socket_Cache.CheckData)
                 {
@@ -1217,6 +1240,39 @@ namespace WPELibrary.Lib
                         }
                     }
                 }  
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//检测包头
+
+        private static bool ISFilter_ByHead(byte[] bBuffer)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(Socket_Cache.CheckHead_Value))
+                {
+                    string sHead = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+
+                    string[] sHeadArr = Socket_Cache.CheckHead_Value.Split(';');
+
+                    foreach (string sHeadCheck in sHeadArr)
+                    {
+                        if (sHead.IndexOf(sHeadCheck) == 0)
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1506,7 +1562,7 @@ namespace WPELibrary.Lib
 
         #region//保存滤镜列表数据
 
-        public static void SaveFilterList_Dialog()
+        public static void SaveFilterList_Dialog(string FileName, int FilterIndex)
         {
             try
             {
@@ -1515,11 +1571,17 @@ namespace WPELibrary.Lib
                     SaveFileDialog sfdSocketInfo = new SaveFileDialog();
 
                     sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
+
+                    if (!string.IsNullOrEmpty(FileName))
+                    {
+                        sfdSocketInfo.FileName = FileName;
+                    }
+                    
                     sfdSocketInfo.RestoreDirectory = true;
 
                     if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
                     {
-                        bool bOK = SaveFilterList(sfdSocketInfo.FileName);
+                        bool bOK = SaveFilterList(sfdSocketInfo.FileName, FilterIndex);
 
                         if (bOK)
                         {
@@ -1538,7 +1600,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static bool SaveFilterList(string FilePath)
+        public static bool SaveFilterList(string FilePath, int FilterIndex)
         {
             bool bReturn = true;
 
@@ -1559,16 +1621,25 @@ namespace WPELibrary.Lib
 
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
+                    int Start = 0;
+                    int End = Socket_Cache.FilterList.lstFilter.Count;
+
+                    if (FilterIndex > -1 && FilterIndex < End)
                     {
-                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();                        
+                        Start = FilterIndex;
+                        End = FilterIndex + 1;
+                    }
+
+                    for (int i = Start; i < End; i++)
+                    {
+                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
                         string sFName = Socket_Cache.FilterList.lstFilter[i].FName;
                         string sFAppointHeader = Socket_Cache.FilterList.lstFilter[i].AppointHeader.ToString();
                         string sFHeaderContent = Socket_Cache.FilterList.lstFilter[i].HeaderContent;
                         string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
                         string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
                         string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
-                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();                        
+                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
                         string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
                         string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
@@ -1677,8 +1748,6 @@ namespace WPELibrary.Lib
 
                 if (File.Exists(FilePath))
                 {
-                    Socket_Cache.FilterList.FilterListClear();
-
                     XmlDocument doc = new XmlDocument();
                     doc.Load(FilePath);
                     XmlNode xnFilterList = doc.DocumentElement;
@@ -1903,7 +1972,7 @@ namespace WPELibrary.Lib
                 if (dr.Equals(DialogResult.OK))
                 {
                     Socket_Cache.FilterList.FilterListClear();
-                    Socket_Operation.SaveFilterList("");
+                    Socket_Operation.SaveFilterList(string.Empty, -1);
                 }
             }
             catch (Exception ex)
@@ -1923,7 +1992,7 @@ namespace WPELibrary.Lib
                     if (dr.Equals(DialogResult.OK))
                     {
                         Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);
-                        Socket_Operation.SaveFilterList("");
+                        Socket_Operation.SaveFilterList(string.Empty, -1);
                     }
                 }
             }
@@ -2586,7 +2655,7 @@ namespace WPELibrary.Lib
                 XmlElement xeConfig = doc.CreateElement("Config");
                 doc.AppendChild(xeConfig);
 
-                #region//滤镜设置
+                #region//过滤设置
 
                 XmlElement xeFilterConfig = doc.CreateElement("FilterConfig");
                 xeConfig.AppendChild(xeFilterConfig);
@@ -2595,12 +2664,14 @@ namespace WPELibrary.Lib
                 string sCheckSocket = Socket_Cache.CheckSocket.ToString();
                 string sCheckIP = Socket_Cache.CheckIP.ToString();
                 string sCheckPort = Socket_Cache.CheckPort.ToString();
+                string sCheckHead = Socket_Cache.CheckHead.ToString();
                 string sCheckData = Socket_Cache.CheckData.ToString();
                 string sCheckSize = Socket_Cache.CheckSize.ToString();
 
                 string sCheckSocket_Value = Socket_Cache.CheckSocket_Value;
                 string sCheckIP_Value = Socket_Cache.CheckIP_Value;
                 string sCheckPort_Value = Socket_Cache.CheckPort_Value;
+                string sCheckHead_Value = Socket_Cache.CheckHead_Value;
                 string sCheckData_Value = Socket_Cache.CheckData_Value;
                 string sCheckSizeFrom_Value = Socket_Cache.CheckSizeFrom_Value.ToString();
                 string sCheckSizeTo_Value = Socket_Cache.CheckSizeTo_Value.ToString();
@@ -2621,6 +2692,10 @@ namespace WPELibrary.Lib
                 xeCheckPort.InnerText = sCheckPort;
                 xeFilterConfig.AppendChild(xeCheckPort);
 
+                XmlElement xeCheckHead = doc.CreateElement("CheckHead");
+                xeCheckHead.InnerText = sCheckHead;
+                xeFilterConfig.AppendChild(xeCheckHead);
+
                 XmlElement xeCheckData = doc.CreateElement("CheckData");
                 xeCheckData.InnerText = sCheckData;
                 xeFilterConfig.AppendChild(xeCheckData);
@@ -2640,6 +2715,10 @@ namespace WPELibrary.Lib
                 XmlElement xeCheckPort_Value = doc.CreateElement("CheckPort_Value");
                 xeCheckPort_Value.InnerText = sCheckPort_Value;
                 xeFilterConfig.AppendChild(xeCheckPort_Value);
+
+                XmlElement xeCheckHead_Value = doc.CreateElement("CheckHead_Value");
+                xeCheckHead_Value.InnerText = sCheckHead_Value;
+                xeFilterConfig.AppendChild(xeCheckHead_Value);
 
                 XmlElement xeCheckData_Value = doc.CreateElement("CheckData_Value");
                 xeCheckData_Value.InnerText = sCheckData_Value;
@@ -2799,7 +2878,7 @@ namespace WPELibrary.Lib
                     doc.Load(FilePath);
                     XmlNode xnConfig = doc.DocumentElement;
 
-                    #region//滤镜设置
+                    #region//过滤设置
 
                     XmlNode xnFilterConfig = xnConfig.SelectSingleNode("FilterConfig");
 
@@ -2807,12 +2886,14 @@ namespace WPELibrary.Lib
                     string sCheckSocket = xnFilterConfig.SelectSingleNode("CheckSocket").InnerText;
                     string sCheckIP = xnFilterConfig.SelectSingleNode("CheckIP").InnerText;
                     string sCheckPort = xnFilterConfig.SelectSingleNode("CheckPort").InnerText;
+                    string sCheckHead = xnFilterConfig.SelectSingleNode("CheckHead").InnerText;
                     string sCheckData = xnFilterConfig.SelectSingleNode("CheckData").InnerText;
                     string sCheckSize = xnFilterConfig.SelectSingleNode("CheckSize").InnerText;
 
                     string sCheckSocket_Value = xnFilterConfig.SelectSingleNode("CheckSocket_Value").InnerText;
                     string sCheckIP_Value = xnFilterConfig.SelectSingleNode("CheckIP_Value").InnerText;
                     string sCheckPort_Value = xnFilterConfig.SelectSingleNode("CheckPort_Value").InnerText;
+                    string sCheckHead_Value = xnFilterConfig.SelectSingleNode("CheckHead_Value").InnerText;
                     string sCheckData_Value = xnFilterConfig.SelectSingleNode("CheckData_Value").InnerText;
                     string sCheckSizeFrom_Value = xnFilterConfig.SelectSingleNode("CheckSizeFrom_Value").InnerText;
                     string sCheckSizeTo_Value = xnFilterConfig.SelectSingleNode("CheckSizeTo_Value").InnerText;
@@ -2821,12 +2902,14 @@ namespace WPELibrary.Lib
                     Socket_Cache.CheckSocket = bool.Parse(sCheckSocket);
                     Socket_Cache.CheckIP = bool.Parse(sCheckIP);
                     Socket_Cache.CheckPort = bool.Parse(sCheckPort);
+                    Socket_Cache.CheckHead = bool.Parse(sCheckHead);
                     Socket_Cache.CheckData = bool.Parse(sCheckData);
                     Socket_Cache.CheckSize = bool.Parse(sCheckSize);
 
                     Socket_Cache.CheckSocket_Value = sCheckSocket_Value;
                     Socket_Cache.CheckIP_Value = sCheckIP_Value;
                     Socket_Cache.CheckPort_Value = sCheckPort_Value;
+                    Socket_Cache.CheckHead_Value = sCheckHead_Value;
                     Socket_Cache.CheckData_Value = sCheckData_Value;
                     Socket_Cache.CheckSizeFrom_Value = decimal.Parse(sCheckSizeFrom_Value);
                     Socket_Cache.CheckSizeTo_Value = decimal.Parse(sCheckSizeTo_Value);

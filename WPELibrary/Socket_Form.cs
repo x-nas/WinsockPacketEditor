@@ -112,7 +112,7 @@ namespace WPELibrary
 
                 SetSystemParameter();
                 Socket_Operation.SaveSystemConfig();
-                Socket_Operation.SaveFilterList(string.Empty);
+                Socket_Operation.SaveFilterList(string.Empty, -1);
             }
             catch (Exception ex)
             {
@@ -332,12 +332,14 @@ namespace WPELibrary
                     cbCheckSocket.Checked = Socket_Cache.CheckSocket;
                     cbCheckIP.Checked = Socket_Cache.CheckIP;
                     cbCheckPort.Checked = Socket_Cache.CheckPort;
+                    cbCheckHead.Checked = Socket_Cache.CheckHead;
                     cbCheckData.Checked = Socket_Cache.CheckData;
                     cbCheckSize.Checked = Socket_Cache.CheckSize;
 
                     this.txtCheckSocket.Text = Socket_Cache.CheckSocket_Value;
                     this.txtCheckIP.Text = Socket_Cache.CheckIP_Value;
                     this.txtCheckPort.Text = Socket_Cache.CheckPort_Value;
+                    this.txtCheckHead.Text = Socket_Cache.CheckHead_Value;
                     this.txtCheckData.Text = Socket_Cache.CheckData_Value;
                     this.nudCheckSizeFrom.Value = Socket_Cache.CheckSizeFrom_Value;
                     this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
@@ -398,12 +400,14 @@ namespace WPELibrary
                 Socket_Cache.CheckSocket = cbCheckSocket.Checked;
                 Socket_Cache.CheckIP = cbCheckIP.Checked;
                 Socket_Cache.CheckPort = cbCheckPort.Checked;
+                Socket_Cache.CheckHead = cbCheckHead.Checked;
                 Socket_Cache.CheckData = cbCheckData.Checked;
                 Socket_Cache.CheckSize = cbCheckSize.Checked;
 
                 Socket_Cache.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
                 Socket_Cache.CheckIP_Value = this.txtCheckIP.Text.Trim();
                 Socket_Cache.CheckPort_Value = this.txtCheckPort.Text.Trim();
+                Socket_Cache.CheckHead_Value = this.txtCheckHead.Text.Trim();
                 Socket_Cache.CheckData_Value = this.txtCheckData.Text.Trim();
                 Socket_Cache.CheckSizeFrom_Value = this.nudCheckSizeFrom.Value;
                 Socket_Cache.CheckSizeTo_Value = this.nudCheckSizeTo.Value;
@@ -440,7 +444,7 @@ namespace WPELibrary
 
         #region//检测过滤参数输入
 
-        private void txtCheck_Socket_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtCheckSocket_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
@@ -455,7 +459,7 @@ namespace WPELibrary
             }
         }
 
-        private void txtCheck_Packet_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtCheckPacket_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
@@ -470,7 +474,22 @@ namespace WPELibrary
             }
         }
 
-        private void txtCheck_IP_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtCheckHead_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsHex(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtCheckIP_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
@@ -485,7 +504,7 @@ namespace WPELibrary
             }
         }
 
-        private void txtCheck_Port_KeyPress(object sender, KeyPressEventArgs e)
+        private void txtCheckPort_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
@@ -1432,16 +1451,21 @@ namespace WPELibrary
 
                                 break;
 
+                            case "cmsFilterList_Export":
+
+                                string sFName = this.dgvFilterList.CurrentRow.Cells["cFName"].Value.ToString();
+                                Socket_Operation.SaveFilterList_Dialog(sFName, iFIndex);
+                                iIndex = iFIndex;
+
+                                break;
+
                             case "cmsFilterList_Delete":
 
-                                if (dgvFilterList.Rows.Count > 0)
-                                {
-                                    int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
+                                int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
 
-                                    if (iFNum > 0)
-                                    {
-                                        Socket_Operation.DeleteFilter_ByFilterNum_Dialog(iFNum);
-                                    }
+                                if (iFNum > 0)
+                                {
+                                    Socket_Operation.DeleteFilter_ByFilterNum_Dialog(iFNum);
                                 }
 
                                 break;
@@ -1556,14 +1580,14 @@ namespace WPELibrary
         {
             if (dgvFilterList.Rows.Count > 0)
             {
-                Socket_Operation.SaveFilterList_Dialog();
+                Socket_Operation.SaveFilterList_Dialog(string.Empty, -1);
             }
         }
 
         private void tsFilterList_Add_Click(object sender, EventArgs e)
         {
             Socket_Cache.FilterList.AddFilter_New();
-            Socket_Operation.SaveFilterList("");
+            Socket_Operation.SaveFilterList(string.Empty, -1);
         }
 
         private void tsFilterList_CleanUp_Click(object sender, EventArgs e)
@@ -2037,6 +2061,8 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        
     }
 }

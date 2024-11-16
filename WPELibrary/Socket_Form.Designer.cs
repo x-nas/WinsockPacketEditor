@@ -118,6 +118,8 @@ namespace WPELibrary
             this.tcSocketInfo = new System.Windows.Forms.TabControl();
             this.tcSocketInfo_FilterSet = new System.Windows.Forms.TabPage();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.txtCheckHead = new System.Windows.Forms.TextBox();
+            this.cbCheckHead = new System.Windows.Forms.CheckBox();
             this.tlpFilterSet_PacketLength = new System.Windows.Forms.TableLayoutPanel();
             this.nudCheckSizeTo = new System.Windows.Forms.NumericUpDown();
             this.lCheck_Size = new System.Windows.Forms.Label();
@@ -189,6 +191,7 @@ namespace WPELibrary
             this.cmsFilterList_MoveBottom = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFilterList_tss3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsFilterList_Copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsFilterList_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFilterList_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.tsFilterList = new System.Windows.Forms.ToolStrip();
             this.tsFilterList_Load = new System.Windows.Forms.ToolStripButton();
@@ -961,19 +964,35 @@ namespace WPELibrary
             // tlpFilterSet
             // 
             resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
-            this.tlpFilterSet.Controls.Add(this.tlpFilterSet_PacketLength, 3, 0);
-            this.tlpFilterSet.Controls.Add(this.cbCheckSize, 2, 0);
+            this.tlpFilterSet.Controls.Add(this.txtCheckHead, 7, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckHead, 6, 1);
+            this.tlpFilterSet.Controls.Add(this.tlpFilterSet_PacketLength, 1, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckSize, 0, 2);
             this.tlpFilterSet.Controls.Add(this.rbFilter_Show, 1, 0);
             this.tlpFilterSet.Controls.Add(this.rbFilter_NotShow, 0, 0);
-            this.tlpFilterSet.Controls.Add(this.txtCheckPort, 3, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheckPort, 2, 2);
-            this.tlpFilterSet.Controls.Add(this.txtCheckData, 3, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheckData, 2, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheckPort, 4, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckPort, 3, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckData, 7, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckData, 6, 2);
             this.tlpFilterSet.Controls.Add(this.cbCheckSocket, 0, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheckIP, 0, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckIP, 3, 1);
             this.tlpFilterSet.Controls.Add(this.txtCheckSocket, 1, 1);
-            this.tlpFilterSet.Controls.Add(this.txtCheckIP, 1, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckIP, 4, 1);
             this.tlpFilterSet.Name = "tlpFilterSet";
+            // 
+            // txtCheckHead
+            // 
+            this.txtCheckHead.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCheckHead.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            resources.ApplyResources(this.txtCheckHead, "txtCheckHead");
+            this.txtCheckHead.Name = "txtCheckHead";
+            this.txtCheckHead.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckHead_KeyPress);
+            // 
+            // cbCheckHead
+            // 
+            resources.ApplyResources(this.cbCheckHead, "cbCheckHead");
+            this.cbCheckHead.Name = "cbCheckHead";
+            this.cbCheckHead.UseVisualStyleBackColor = true;
             // 
             // tlpFilterSet_PacketLength
             // 
@@ -1038,7 +1057,7 @@ namespace WPELibrary
             this.txtCheckPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtCheckPort, "txtCheckPort");
             this.txtCheckPort.Name = "txtCheckPort";
-            this.txtCheckPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Port_KeyPress);
+            this.txtCheckPort.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckPort_KeyPress);
             // 
             // cbCheckPort
             // 
@@ -1052,7 +1071,7 @@ namespace WPELibrary
             this.txtCheckData.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             resources.ApplyResources(this.txtCheckData, "txtCheckData");
             this.txtCheckData.Name = "txtCheckData";
-            this.txtCheckData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Packet_KeyPress);
+            this.txtCheckData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckPacket_KeyPress);
             // 
             // cbCheckData
             // 
@@ -1077,14 +1096,14 @@ namespace WPELibrary
             this.txtCheckSocket.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtCheckSocket, "txtCheckSocket");
             this.txtCheckSocket.Name = "txtCheckSocket";
-            this.txtCheckSocket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_Socket_KeyPress);
+            this.txtCheckSocket.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckSocket_KeyPress);
             // 
             // txtCheckIP
             // 
             this.txtCheckIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtCheckIP, "txtCheckIP");
             this.txtCheckIP.Name = "txtCheckIP";
-            this.txtCheckIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheck_IP_KeyPress);
+            this.txtCheckIP.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckIP_KeyPress);
             // 
             // tcSocketInfo_HookSet
             // 
@@ -1488,6 +1507,7 @@ namespace WPELibrary
             this.cmsFilterList_MoveBottom,
             this.cmsFilterList_tss3,
             this.cmsFilterList_Copy,
+            this.cmsFilterList_Export,
             this.cmsFilterList_Delete});
             this.cmsFilterList.Name = "cmsFilterList";
             resources.ApplyResources(this.cmsFilterList, "cmsFilterList");
@@ -1536,6 +1556,12 @@ namespace WPELibrary
             this.cmsFilterList_Copy.Image = global::WPELibrary.Properties.Resources.copy;
             this.cmsFilterList_Copy.Name = "cmsFilterList_Copy";
             resources.ApplyResources(this.cmsFilterList_Copy, "cmsFilterList_Copy");
+            // 
+            // cmsFilterList_Export
+            // 
+            this.cmsFilterList_Export.Image = global::WPELibrary.Properties.Resources.saveas;
+            this.cmsFilterList_Export.Name = "cmsFilterList_Export";
+            resources.ApplyResources(this.cmsFilterList_Export, "cmsFilterList_Export");
             // 
             // cmsFilterList_Delete
             // 
@@ -2953,10 +2979,6 @@ namespace WPELibrary
         private System.Windows.Forms.TabPage tcSocketInfo_FilterSet;
         private System.Windows.Forms.TabPage tcSocketInfo_HookSet;
         private System.Windows.Forms.TableLayoutPanel tlpFilterSet;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_PacketLength;
-        private System.Windows.Forms.NumericUpDown nudCheckSizeTo;
-        private System.Windows.Forms.Label lCheck_Size;
-        private System.Windows.Forms.NumericUpDown nudCheckSizeFrom;
         private System.Windows.Forms.CheckBox cbCheckSize;
         private System.Windows.Forms.RadioButton rbFilter_Show;
         private System.Windows.Forms.RadioButton rbFilter_NotShow;
@@ -3028,5 +3050,12 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
+        private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Export;
+        private System.Windows.Forms.CheckBox cbCheckHead;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_PacketLength;
+        private System.Windows.Forms.NumericUpDown nudCheckSizeTo;
+        private System.Windows.Forms.Label lCheck_Size;
+        private System.Windows.Forms.NumericUpDown nudCheckSizeFrom;
+        private System.Windows.Forms.TextBox txtCheckHead;
     }
 }

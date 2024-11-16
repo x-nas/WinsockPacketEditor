@@ -416,26 +416,41 @@
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 99</value>
   </data>
+  <data name="txtCheckHead.Location" type="System.Drawing.Point, System.Drawing">
+    <value>585, 36</value>
+  </data>
+  <data name="txtCheckHead.Size" type="System.Drawing.Size, System.Drawing">
+    <value>179, 23</value>
+  </data>
+  <data name="cbCheckHead.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 36</value>
+  </data>
+  <data name="cbCheckHead.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 24</value>
+  </data>
+  <data name="cbCheckHead.Text" xml:space="preserve">
+    <value>Packet Header:</value>
+  </data>
   <data name="tlpFilterSet_PacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>480, 3</value>
+    <value>93, 63</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>287, 30</value>
+    <value>138, 30</value>
   </data>
   <data name="nudCheckSizeTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>156, 3</value>
+    <value>82, 3</value>
   </data>
   <data name="nudCheckSizeTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 23</value>
+    <value>53, 23</value>
   </data>
   <data name="lCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>136, 3</value>
+    <value>62, 3</value>
   </data>
   <data name="nudCheckSizeFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 23</value>
+    <value>53, 23</value>
   </data>
   <data name="cbCheckSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 24</value>
+    <value>84, 24</value>
   </data>
   <data name="cbCheckSize.Text" xml:space="preserve">
     <value>Length:</value>
@@ -444,7 +459,7 @@
     <value>96, 6</value>
   </data>
   <data name="rbFilter_Show.Size" type="System.Drawing.Size, System.Drawing">
-    <value>280, 24</value>
+    <value>132, 24</value>
   </data>
   <data name="rbFilter_Show.Text" xml:space="preserve">
     <value>Display Only</value>
@@ -456,25 +471,31 @@
     <value>No Display</value>
   </data>
   <data name="txtCheckPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>483, 66</value>
+    <value>326, 66</value>
   </data>
   <data name="txtCheckPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 23</value>
+    <value>132, 23</value>
+  </data>
+  <data name="cbCheckPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>239, 66</value>
   </data>
   <data name="cbCheckPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 24</value>
+    <value>81, 24</value>
   </data>
   <data name="cbCheckPort.Text" xml:space="preserve">
     <value>Port Num:</value>
   </data>
   <data name="txtCheckData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>483, 36</value>
+    <value>585, 66</value>
   </data>
   <data name="txtCheckData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 23</value>
+    <value>179, 23</value>
+  </data>
+  <data name="cbCheckData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>469, 66</value>
   </data>
   <data name="cbCheckData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 24</value>
+    <value>110, 24</value>
   </data>
   <data name="cbCheckData.Text" xml:space="preserve">
     <value>Pakcet Data:</value>
@@ -485,8 +506,11 @@
   <data name="cbCheckSocket.Text" xml:space="preserve">
     <value>Socket:</value>
   </data>
+  <data name="cbCheckIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>239, 36</value>
+  </data>
   <data name="cbCheckIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 24</value>
+    <value>81, 24</value>
   </data>
   <data name="cbCheckIP.Text" xml:space="preserve">
     <value>IP Addr:</value>
@@ -495,13 +519,13 @@
     <value>96, 36</value>
   </data>
   <data name="txtCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>280, 23</value>
+    <value>132, 23</value>
   </data>
   <data name="txtCheckIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>96, 66</value>
+    <value>326, 36</value>
   </data>
   <data name="txtCheckIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>280, 23</value>
+    <value>132, 23</value>
   </data>
   <data name="tcSocketInfo_HookSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
@@ -521,14 +545,35 @@
   <data name="tlpHookSet_WinsockWSA.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
+  <data name="tlpHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
+    <value>373, 76</value>
+  </data>
+  <data name="cbHookWSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>189, 41</value>
+  </data>
+  <data name="cbHookWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 32</value>
+  </data>
   <data name="cbHookWSARecvFrom.Text" xml:space="preserve">
     <value>WSARecvFrom</value>
+  </data>
+  <data name="cbHookWSARecv.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 41</value>
+  </data>
+  <data name="cbHookWSARecv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 32</value>
   </data>
   <data name="cbHookWSARecv.Text" xml:space="preserve">
     <value>WSARecv</value>
   </data>
+  <data name="cbHookWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 32</value>
+  </data>
   <data name="cbHookWSASendTo.Text" xml:space="preserve">
     <value>WSASendTo</value>
+  </data>
+  <data name="cbHookWSASend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 32</value>
   </data>
   <data name="cbHookWSASend.Text" xml:space="preserve">
     <value>WSASend</value>
@@ -539,14 +584,35 @@
   <data name="tlpHookSet_Winsock.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
+  <data name="tlpHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
+    <value>373, 76</value>
+  </data>
+  <data name="cbHookRecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>189, 41</value>
+  </data>
+  <data name="cbHookRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 32</value>
+  </data>
   <data name="cbHookRecvFrom.Text" xml:space="preserve">
     <value>RecvFrom</value>
+  </data>
+  <data name="cbHookRecv.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 41</value>
+  </data>
+  <data name="cbHookRecv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 32</value>
   </data>
   <data name="cbHookRecv.Text" xml:space="preserve">
     <value>Recv</value>
   </data>
+  <data name="cbHookSendTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>181, 32</value>
+  </data>
   <data name="cbHookSendTo.Text" xml:space="preserve">
     <value>SendTo</value>
+  </data>
+  <data name="cbHookSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 32</value>
   </data>
   <data name="cbHookSend.Text" xml:space="preserve">
     <value>Send</value>
@@ -572,6 +638,9 @@
   <data name="tlpListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
+  <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>373, 76</value>
+  </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>172, 3</value>
   </data>
@@ -592,6 +661,9 @@
   </data>
   <data name="tlpListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
+  </data>
+  <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>373, 76</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>172, 3</value>
@@ -630,7 +702,7 @@
     <value>296, 76</value>
   </data>
   <data name="lMonitorSet_Mem.Location" type="System.Drawing.Point, System.Drawing">
-    <value>266, 3</value>
+    <value>276, 3</value>
   </data>
   <data name="lMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
     <value>18, 21</value>
@@ -642,7 +714,7 @@
     <value>206, 3</value>
   </data>
   <data name="nudMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
+    <value>64, 21</value>
   </data>
   <data name="cbMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
     <value>197, 21</value>
@@ -708,7 +780,7 @@
     <value>191, 219</value>
   </data>
   <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>147, 154</value>
+    <value>147, 176</value>
   </data>
   <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>185, 188</value>
@@ -767,6 +839,12 @@
   </data>
   <data name="cmsFilterList_Copy.Text" xml:space="preserve">
     <value>Copy</value>
+  </data>
+  <data name="cmsFilterList_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsFilterList_Export.Text" xml:space="preserve">
+    <value>Export</value>
   </data>
   <data name="cmsFilterList_Delete.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
@@ -13738,9 +13816,5 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>Inherit</value>
   </data>
 </root>

@@ -1005,7 +1005,70 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpHookButton_Start" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bCleanUp" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,5,Percent,35,Absolute,10,Percent,65" /&gt;&lt;Rows Styles="Absolute,10,Percent,100,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpFilterSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>8</value>
+  </data>
+  <data name="txtCheckHead.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtCheckHead.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="txtCheckHead.Location" type="System.Drawing.Point, System.Drawing">
+    <value>564, 36</value>
+  </data>
+  <data name="txtCheckHead.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="txtCheckHead.TabIndex" type="System.Int32, mscorlib">
+    <value>61</value>
+  </data>
+  <data name="txtCheckHead.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtCheckHead.Name" xml:space="preserve">
+    <value>txtCheckHead</value>
+  </data>
+  <data name="&gt;&gt;txtCheckHead.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtCheckHead.Parent" xml:space="preserve">
+    <value>tlpFilterSet</value>
+  </data>
+  <data name="&gt;&gt;txtCheckHead.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbCheckHead.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbCheckHead.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbCheckHead.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbCheckHead.Location" type="System.Drawing.Point, System.Drawing">
+    <value>480, 36</value>
+  </data>
+  <data name="cbCheckHead.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 24</value>
+  </data>
+  <data name="cbCheckHead.TabIndex" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <data name="cbCheckHead.Text" xml:space="preserve">
+    <value>指定包头:</value>
+  </data>
+  <data name="&gt;&gt;cbCheckHead.Name" xml:space="preserve">
+    <value>cbCheckHead</value>
+  </data>
+  <data name="&gt;&gt;cbCheckHead.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbCheckHead.Parent" xml:space="preserve">
+    <value>tlpFilterSet</value>
+  </data>
+  <data name="&gt;&gt;cbCheckHead.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="tlpFilterSet_PacketLength.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1017,10 +1080,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudCheckSizeTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>165, 3</value>
+    <value>90, 3</value>
   </data>
   <data name="nudCheckSizeTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 23</value>
+    <value>61, 23</value>
   </data>
   <data name="nudCheckSizeTo.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -1050,7 +1113,7 @@
     <value>NoControl</value>
   </data>
   <data name="lCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 3</value>
+    <value>70, 3</value>
   </data>
   <data name="lCheck_Size.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -1089,7 +1152,7 @@
     <value>3, 3</value>
   </data>
   <data name="nudCheckSizeFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 23</value>
+    <value>61, 23</value>
   </data>
   <data name="nudCheckSizeFrom.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -1113,7 +1176,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>463, 3</value>
+    <value>87, 63</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1122,7 +1185,7 @@
     <value>1</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 30</value>
+    <value>154, 30</value>
   </data>
   <data name="tlpFilterSet_PacketLength.TabIndex" type="System.Int32, mscorlib">
     <value>59</value>
@@ -1137,7 +1200,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;tlpFilterSet_PacketLength.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="tlpFilterSet_PacketLength.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudCheckSizeTo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lCheck_Size" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudCheckSizeFrom" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,20,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
@@ -1152,7 +1215,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>382, 6</value>
+    <value>6, 66</value>
   </data>
   <data name="cbCheckSize.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
@@ -1173,7 +1236,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;cbCheckSize.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="rbFilter_Show.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1185,10 +1248,10 @@
     <value>NoControl</value>
   </data>
   <data name="rbFilter_Show.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 6</value>
+    <value>90, 6</value>
   </data>
   <data name="rbFilter_Show.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 24</value>
+    <value>148, 24</value>
   </data>
   <data name="rbFilter_Show.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -1206,7 +1269,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;rbFilter_Show.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="rbFilter_NotShow.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1221,7 +1284,7 @@
     <value>6, 6</value>
   </data>
   <data name="rbFilter_NotShow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 24</value>
+    <value>78, 24</value>
   </data>
   <data name="rbFilter_NotShow.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -1239,7 +1302,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;rbFilter_NotShow.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="txtCheckPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1248,13 +1311,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>466, 66</value>
-  </data>
-  <data name="txtCheckPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 3</value>
+    <value>321, 66</value>
   </data>
   <data name="txtCheckPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 23</value>
+    <value>148, 23</value>
   </data>
   <data name="txtCheckPort.TabIndex" type="System.Int32, mscorlib">
     <value>55</value>
@@ -1272,7 +1332,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;txtCheckPort.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="cbCheckPort.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1284,10 +1344,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>382, 66</value>
+    <value>249, 66</value>
   </data>
   <data name="cbCheckPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 24</value>
+    <value>66, 24</value>
   </data>
   <data name="cbCheckPort.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -1305,7 +1365,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;cbCheckPort.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="txtCheckData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1314,13 +1374,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>466, 36</value>
-  </data>
-  <data name="txtCheckData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 3</value>
+    <value>564, 66</value>
   </data>
   <data name="txtCheckData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 23</value>
+    <value>200, 23</value>
   </data>
   <data name="txtCheckData.TabIndex" type="System.Int32, mscorlib">
     <value>53</value>
@@ -1338,7 +1395,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;txtCheckData.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="cbCheckData.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1350,7 +1407,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>382, 36</value>
+    <value>480, 66</value>
   </data>
   <data name="cbCheckData.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
@@ -1371,7 +1428,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;cbCheckData.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="cbCheckSocket.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1386,7 +1443,7 @@
     <value>6, 36</value>
   </data>
   <data name="cbCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 24</value>
+    <value>78, 24</value>
   </data>
   <data name="cbCheckSocket.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -1404,7 +1461,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;cbCheckSocket.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>10</value>
   </data>
   <data name="cbCheckIP.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1416,7 +1473,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 66</value>
+    <value>249, 36</value>
   </data>
   <data name="cbCheckIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 24</value>
@@ -1437,7 +1494,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;cbCheckIP.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>11</value>
   </data>
   <data name="txtCheckSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1446,10 +1503,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 36</value>
+    <value>90, 36</value>
   </data>
   <data name="txtCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 23</value>
+    <value>148, 23</value>
   </data>
   <data name="txtCheckSocket.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
@@ -1467,7 +1524,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;txtCheckSocket.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>12</value>
   </data>
   <data name="txtCheckIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1476,10 +1533,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 66</value>
+    <value>321, 36</value>
   </data>
   <data name="txtCheckIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 23</value>
+    <value>148, 23</value>
   </data>
   <data name="txtCheckIP.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
@@ -1497,7 +1554,7 @@
     <value>tlpFilterSet</value>
   </data>
   <data name="&gt;&gt;txtCheckIP.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>13</value>
   </data>
   <data name="tlpFilterSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1533,7 +1590,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSize" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckPort" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckData" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckData" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSocket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckIP" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckSocket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,50,AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtCheckHead" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckHead" Row="1" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSize" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckPort" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckData" Row="2" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckData" Row="2" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSocket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckIP" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckSocket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckIP" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,40" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tcSocketInfo_FilterSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -3042,6 +3099,12 @@
   <data name="cmsFilterList_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
+  <data name="cmsFilterList_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Export.Text" xml:space="preserve">
+    <value>导出</value>
+  </data>
   <data name="cmsFilterList_Delete.Size" type="System.Drawing.Size, System.Drawing">
     <value>128, 22</value>
   </data>
@@ -3049,7 +3112,7 @@
     <value>删除</value>
   </data>
   <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 154</value>
+    <value>129, 176</value>
   </data>
   <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
     <value>cmsFilterList</value>
@@ -19008,6 +19071,12 @@
     <value>cmsFilterList_Copy</value>
   </data>
   <data name="&gt;&gt;cmsFilterList_Copy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Export.Name" xml:space="preserve">
+    <value>cmsFilterList_Export</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Export.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsFilterList_Delete.Name" xml:space="preserve">
