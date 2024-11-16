@@ -157,23 +157,17 @@
   <data name="pbSocketType.Location" type="System.Drawing.Point, System.Drawing">
     <value>580, 0</value>
   </data>
-  <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 54</value>
-  </data>
-  <data name="cmsHexBox_SendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
   <data name="cmsHexBox_SendList.Text" xml:space="preserve">
     <value>Add To Send List</value>
   </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 6</value>
-  </data>
-  <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 22</value>
-  </data>
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>Add To Filter List</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 82</value>
   </data>
   <data name="tlSendTimes.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 17</value>

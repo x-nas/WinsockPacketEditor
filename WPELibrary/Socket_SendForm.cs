@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System.Threading;
 using WPELibrary.Lib;
-using System.Diagnostics;
 using System.Reflection;
 using Be.Windows.Forms;
 
@@ -157,36 +156,30 @@ namespace WPELibrary
 
         private void ShowStepValue()
         {
+            string sStepHex = string.Empty;
+            string sStepHex_New = string.Empty;
+
             try
             {
-                string sStepHex = string.Empty;
-                string sStepHex_New = string.Empty;
+                int iStepPosition = (int)this.nudSendStep_Position.Value;                
+                int iStepLen = (int)this.nudSendStep_Len.Value;
 
-                int iSelectIndex = (int)this.nudSendStep_Position.Value;
-                int iPacketLen = (int)hbPacketData.ByteProvider.Length;
-
-                if (iPacketLen >= iSelectIndex + 1)
+                if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > iStepPosition)
                 {
-                    int iStepPosition = (int)this.nudSendStep_Position.Value;
-                    int iStepLen = (int)this.nudSendStep_Len.Value;
+                    byte bStepBuffer = hbPacketData.ByteProvider.ReadByte(iStepPosition);
+                    byte bStepBuffer_New = Socket_Operation.GetStepByte(bStepBuffer, iStepLen);
 
-                    if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > iStepPosition)
-                    {
-                        byte bStepBuffer = hbPacketData.ByteProvider.ReadByte(iStepPosition);
-                        byte bStepBuffer_New = Socket_Operation.GetStepByte(bStepBuffer, iStepLen);
-
-                        sStepHex = bStepBuffer.ToString("X2");
-                        sStepHex_New = bStepBuffer_New.ToString("X2");
-                    }
+                    sStepHex = bStepBuffer.ToString("X2");
+                    sStepHex_New = bStepBuffer_New.ToString("X2");
                 }
-
-                this.lSendStep_Position_Value.Text = sStepHex;
-                this.lSendStep_Len_Value.Text = sStepHex_New;
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            this.lSendStep_Position_Value.Text = sStepHex;
+            this.lSendStep_Len_Value.Text = sStepHex_New;
         }
 
         #endregion        
@@ -510,6 +503,12 @@ namespace WPELibrary
                         }
 
                         break;
+
+                    case "cmsHexBox_SelectAll":
+
+                        this.hbPacketData.SelectAll();
+
+                        break;
                 }
             }
             catch (Exception ex)
@@ -568,8 +567,7 @@ namespace WPELibrary
         {
             try
             {
-                this.nudSendSocket_Len.Value = this.hbPacketData.ByteProvider.Length;
-                this.nudSendStep_Position.Maximum = this.hbPacketData.ByteProvider.Length - 1;
+                this.nudSendSocket_Len.Value = this.hbPacketData.ByteProvider.Length;                
             }
             catch (Exception ex)
             {
@@ -582,11 +580,7 @@ namespace WPELibrary
             try
             {
                 int iSelectIndex = (int)hbPacketData.SelectionStart;
-
-                if (iSelectIndex >= 0 && iSelectIndex <= this.nudSendStep_Position.Maximum)
-                {
-                    this.nudSendStep_Position.Value = iSelectIndex;
-                }                
+                this.nudSendStep_Position.Value = iSelectIndex;                  
 
                 string sPacketDataPosition = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine, iSelectIndex);
 

@@ -5,5 +5,8 @@
     <Setting Name="DefaultLanguage" Type="System.String" Scope="User">
       <Value Profile="(Default)">zh-CN</Value>
     </Setting>
+    <Setting Name="LastInjection" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

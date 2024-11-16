@@ -6,14 +6,16 @@ using WPELibrary.Lib;
 using EasyHook;
 using System.Reflection;
 using System.Net;
+using System.Diagnostics;
 
 namespace WinsockPacketEditor
 {
     public partial class Injector_Form : Form
-    {        
-        private string ProcessName = "";
-        private string ProcessPath = "";        
+    {
         private int ProcessID = -1;
+        private string LastInjection = string.Empty;
+        private string ProcessName = string.Empty;
+        private string ProcessPath = string.Empty;        
         private string sDllName = "WPELibrary.dll";
         private string sWPE64_URL = "https://www.wpe64.com";
         private string sWPE64_IP = "http://101.132.222.195";
@@ -25,11 +27,11 @@ namespace WinsockPacketEditor
         public Injector_Form()
         {
             Process_Injector.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
+            InitializeComponent();
 
-            InitializeComponent();                        
-            
             this.rtbLog.Clear();
             this.InitToolTip();
+            this.InitLastInjection();
         }
 
         private void InitToolTip()
@@ -51,6 +53,48 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//初始化上次注入信息
+
+        private void InitLastInjection()
+        {
+            try
+            {
+                this.LastInjection = Properties.Settings.Default.LastInjection;
+
+                if (!string.IsNullOrEmpty(this.LastInjection))
+                {
+                    Process[] plProcess = Process.GetProcessesByName(this.LastInjection);
+
+                    if (plProcess.Length > 0)
+                    { 
+                        Program.PID = plProcess[0].Id;
+                        Program.PNAME = plProcess[0].ProcessName;
+
+                        this.ShowSelectProcess();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowLog(ex.Message);
+            }
+        }
+
+        private void SetLastInjection()
+        {
+            try
+            {
+                Properties.Settings.Default.LastInjection = Program.PNAME;
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                ShowLog(ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//选择进程
 
         private void bSelectProcess_Click(object sender, EventArgs e)
@@ -60,6 +104,18 @@ namespace WinsockPacketEditor
                 ProcessList_Form plf = new ProcessList_Form();
                 plf.ShowDialog();
 
+                this.ShowSelectProcess();
+            }
+            catch (Exception ex)
+            {
+                ShowLog(ex.Message);
+            }
+        }
+
+        private void ShowSelectProcess()
+        {
+            try
+            {
                 if (Program.PID != -1 && Program.PNAME != string.Empty)
                 {
                     tbProcessID.Text = Program.PNAME + " [" + Program.PID + "]";
@@ -95,8 +151,8 @@ namespace WinsockPacketEditor
                 }
                 else
                 {
-                    string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
-                    string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sDllName);
+                    string injectionLibrary_x86 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), sDllName);
+                    string injectionLibrary_x64 = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), sDllName);
                                         
                     ShowLog(DateTime.Now.ToString("G"));
                     ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_7) + " =>> " + ProcessName);
@@ -117,6 +173,8 @@ namespace WinsockPacketEditor
                     ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_10));
 
                     MultiLanguage.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
+
+                    this.SetLastInjection();
                 }
             }
             catch (Exception ex)
@@ -125,7 +183,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
 
         #region//关于, 选择语言
 

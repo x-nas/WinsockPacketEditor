@@ -177,6 +177,9 @@ namespace WPELibrary
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
 
+                this.cbbExtractionFrom.SelectedIndex = 0;
+                this.cbbExtractionTo.SelectedIndex = 0;
+
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
             catch (Exception ex)
@@ -899,7 +902,7 @@ namespace WPELibrary
             {
                 if (this.cbSocketList_AutoRoll.Checked)
                 {
-                    if (dgvSocketList.Rows.Count > 0)
+                    if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
                     {
                         dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
                     }
@@ -966,7 +969,7 @@ namespace WPELibrary
             {
                 if (this.cbLogList_AutoRoll.Checked)
                 {
-                    if (dgvLogList.Rows.Count > 0)
+                    if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
                     {
                         dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
                     }
@@ -2003,6 +2006,37 @@ namespace WPELibrary
 
         #endregion
 
-        
+        #region//数据提取
+
+        private void bExtraction_Clear_Click(object sender, EventArgs e)
+        {
+            this.rtbExtractionFrom.Clear();
+            this.rtbExtractionTo.Clear();
+        }
+
+        private void bExtraction_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string sReturn = string.Empty;
+
+                foreach (string line in this.rtbExtractionFrom.Lines)
+                {
+                    string sHex = line.Substring(10, 48);
+
+                    sReturn += sHex;
+                }
+
+                sReturn = sReturn.Trim().ToUpper();
+
+                this.rtbExtractionTo.Text = sReturn;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
     }
 }

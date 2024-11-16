@@ -86,8 +86,10 @@ namespace WPELibrary
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_Split1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_FilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsHexBox_Split2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_SelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.lHexBox_Position = new System.Windows.Forms.Label();
             this.ssSocketSend = new System.Windows.Forms.StatusStrip();
             this.tlSendTimes = new System.Windows.Forms.ToolStripStatusLabel();
@@ -549,8 +551,10 @@ namespace WPELibrary
             // 
             this.cmsHexBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsHexBox_SendList,
-            this.toolStripSeparator1,
-            this.cmsHexBox_FilterList});
+            this.cmsHexBox_Split1,
+            this.cmsHexBox_FilterList,
+            this.cmsHexBox_Split2,
+            this.cmsHexBox_SelectAll});
             this.cmsHexBox.Name = "cmsSocketSend";
             resources.ApplyResources(this.cmsHexBox, "cmsHexBox");
             this.cmsHexBox.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsHexBox_ItemClicked);
@@ -561,16 +565,27 @@ namespace WPELibrary
             this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
             resources.ApplyResources(this.cmsHexBox_SendList, "cmsHexBox_SendList");
             // 
-            // toolStripSeparator1
+            // cmsHexBox_Split1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.cmsHexBox_Split1.Name = "cmsHexBox_Split1";
+            resources.ApplyResources(this.cmsHexBox_Split1, "cmsHexBox_Split1");
             // 
             // cmsHexBox_FilterList
             // 
             this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
             this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
             resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
+            // 
+            // cmsHexBox_Split2
+            // 
+            this.cmsHexBox_Split2.Name = "cmsHexBox_Split2";
+            resources.ApplyResources(this.cmsHexBox_Split2, "cmsHexBox_Split2");
+            // 
+            // cmsHexBox_SelectAll
+            // 
+            this.cmsHexBox_SelectAll.Image = global::WPELibrary.Properties.Resources.SelectAll;
+            this.cmsHexBox_SelectAll.Name = "cmsHexBox_SelectAll";
+            resources.ApplyResources(this.cmsHexBox_SelectAll, "cmsHexBox_SelectAll");
             // 
             // lHexBox_Position
             // 
@@ -993,7 +1008,7 @@ namespace WPELibrary
         private System.Windows.Forms.GroupBox gbSendStep;
         private System.Windows.Forms.ContextMenuStrip cmsHexBox;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator cmsHexBox_Split1;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_FilterList;
         private System.ComponentModel.BackgroundWorker bgwSendPacket;
         private System.Windows.Forms.TableLayoutPanel tlpPacketData;
@@ -1078,5 +1093,7 @@ namespace WPELibrary
         private System.Windows.Forms.Label lSendSocket_Len;
         private System.Windows.Forms.Label lSendSocket_Socket;
         private System.Windows.Forms.NumericUpDown nudSendSocket_Socket;
+        private System.Windows.Forms.ToolStripSeparator cmsHexBox_Split2;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
     }
 }

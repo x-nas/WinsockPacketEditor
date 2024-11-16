@@ -10,6 +10,7 @@ namespace WinsockPacketEditor
         private string SelectLanguage = "zh-CN";
 
         #region//初始化
+
         public LanguageList_Form()
         {
             InitializeComponent();
@@ -35,9 +36,11 @@ namespace WinsockPacketEditor
                 //
             }        
         }
+
         #endregion
 
         #region//选择语言
+
         private void rb_zhCN_Click(object sender, System.EventArgs e)
         {
             this.SelectLanguage = "zh-CN";
@@ -47,9 +50,11 @@ namespace WinsockPacketEditor
         {
             this.SelectLanguage = "en-US";
         }
+
         #endregion
 
         #region//重启程序
+
         private void LanguageList_Form_FormClosed(object sender, FormClosedEventArgs e)
         {
             try
@@ -69,6 +74,7 @@ namespace WinsockPacketEditor
                 //
             }            
         }
+
         #endregion
     }
 }

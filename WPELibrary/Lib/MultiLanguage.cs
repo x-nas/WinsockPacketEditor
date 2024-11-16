@@ -102,6 +102,7 @@ namespace WPELibrary.Lib
         #endregion
 
         #region//设置默认语言参数
+
         public static void SetDefaultLanguage(string lang)
         {
             try
@@ -114,9 +115,11 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
         }
+
         #endregion
 
         #region//获取默认语言参数
+
         public static string GetDefaultLanguage(string[] MutiLanID)
         {
             string sReturn = string.Empty;
@@ -141,6 +144,7 @@ namespace WPELibrary.Lib
 
             return sReturn;
         }
+
         #endregion
     }
 }

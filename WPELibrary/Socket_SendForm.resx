@@ -475,13 +475,13 @@
     <value>6, 25</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
     <value>复制 Hex</value>
@@ -499,13 +499,13 @@
     <value>6, 25</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
     <value>粘贴</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
     <value>粘贴 Hex</value>
@@ -1512,7 +1512,7 @@
   <data name="cmsHexBox_SendList.Text" xml:space="preserve">
     <value>添加到 发送列表</value>
   </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 6</value>
   </data>
   <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
@@ -1521,8 +1521,17 @@
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>添加到 滤镜列表</value>
   </data>
+  <data name="cmsHexBox_Split2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 6</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 22</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
+    <value>全选</value>
+  </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 54</value>
+    <value>165, 82</value>
   </data>
   <data name="&gt;&gt;cmsHexBox.Name" xml:space="preserve">
     <value>cmsHexBox</value>
@@ -9166,16 +9175,28 @@
   <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
+  <data name="&gt;&gt;cmsHexBox_Split1.Name" xml:space="preserve">
+    <value>cmsHexBox_Split1</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsHexBox_Split1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
     <value>cmsHexBox_FilterList</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Split2.Name" xml:space="preserve">
+    <value>cmsHexBox_Split2</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_Split2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_SelectAll.Name" xml:space="preserve">
+    <value>cmsHexBox_SelectAll</value>
+  </data>
+  <data name="&gt;&gt;cmsHexBox_SelectAll.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tlSendTimes.Name" xml:space="preserve">
