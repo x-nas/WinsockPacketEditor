@@ -148,7 +148,7 @@ namespace WinsockPacketEditor
                 dtClear.Rows.Clear();
                 dgvProcessList.DataSource = dtClear;
 
-                this.txtProcessSearch.Text = "";
+                this.txtProcessSearch.Text = string.Empty;
                 this.ShowProcessList();
             }
             catch
@@ -169,7 +169,7 @@ namespace WinsockPacketEditor
                                 
                 ofdCreate.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_14);
                 ofdCreate.Multiselect = false;
-                ofdCreate.InitialDirectory = "";                                
+                ofdCreate.InitialDirectory = string.Empty;                                
                 ofdCreate.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_15);
                 ofdCreate.ShowDialog();
 

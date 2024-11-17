@@ -36,7 +36,7 @@ namespace WPELibrary
                 this.InitSocketForm();
                 this.InitSocketDGV();
                 this.InitHexBox();
-                this.LoadSystemParameter();
+                this.LoadConfigs_Parameter();
 
                 Socket_Cache.SendList.InitSendList();
                 Socket_Cache.FilterList.InitFilterList(Socket_Cache.FilterList.Filter_MaxNum);                
@@ -106,8 +106,8 @@ namespace WPELibrary
             {
                 ws.ExitHook();
 
-                SetSystemParameter();
-                Socket_Operation.SaveSystemConfig();
+                SetConfigs_Parameter();
+                Socket_Operation.SaveConfigs();
                 Socket_Operation.SaveFilterList(string.Empty, -1);
             }
             catch (Exception ex)
@@ -229,74 +229,69 @@ namespace WPELibrary
 
         #region//设置系统参数
 
-        private void LoadSystemParameter()
+        private void LoadConfigs_Parameter()
         {
             try
             {
-                if (Socket_Operation.LoadSystemConfig())
+                Socket_Operation.LoadConfigs();
+
+                cbHookSend.Checked = Socket_Cache.HookSend;
+                cbHookSendTo.Checked = Socket_Cache.HookSendTo;
+                cbHookRecv.Checked = Socket_Cache.HookRecv;
+                cbHookRecvFrom.Checked = Socket_Cache.HookRecvFrom;
+                cbHookWSASend.Checked = Socket_Cache.HookWSASend;
+                cbHookWSASendTo.Checked = Socket_Cache.HookWSASendTo;
+                cbHookWSARecv.Checked = Socket_Cache.HookWSARecv;
+                cbHookWSARecvFrom.Checked = Socket_Cache.HookWSARecvFrom;
+
+                if (Socket_Cache.CheckNotShow)
                 {
-                    cbHookSend.Checked = Socket_Cache.HookSend;
-                    cbHookSendTo.Checked = Socket_Cache.HookSendTo;
-                    cbHookRecv.Checked = Socket_Cache.HookRecv;
-                    cbHookRecvFrom.Checked = Socket_Cache.HookRecvFrom;
-                    cbHookWSASend.Checked = Socket_Cache.HookWSASend;
-                    cbHookWSASendTo.Checked = Socket_Cache.HookWSASendTo;
-                    cbHookWSARecv.Checked = Socket_Cache.HookWSARecv;
-                    cbHookWSARecvFrom.Checked = Socket_Cache.HookWSARecvFrom;
-
-                    if (Socket_Cache.CheckNotShow)
-                    {
-                        rbFilter_NotShow.Checked = true;
-                    }
-                    else
-                    {
-                        rbFilter_Show.Checked = true;
-                    }
-
-                    cbCheckSocket.Checked = Socket_Cache.CheckSocket;
-                    cbCheckIP.Checked = Socket_Cache.CheckIP;
-                    cbCheckPort.Checked = Socket_Cache.CheckPort;
-                    cbCheckHead.Checked = Socket_Cache.CheckHead;
-                    cbCheckData.Checked = Socket_Cache.CheckData;
-                    cbCheckSize.Checked = Socket_Cache.CheckSize;
-
-                    this.txtCheckSocket.Text = Socket_Cache.CheckSocket_Value;
-                    this.txtCheckIP.Text = Socket_Cache.CheckIP_Value;
-                    this.txtCheckPort.Text = Socket_Cache.CheckPort_Value;
-                    this.txtCheckHead.Text = Socket_Cache.CheckHead_Value;
-                    this.txtCheckData.Text = Socket_Cache.CheckData_Value;
-                    this.nudCheckSizeFrom.Value = Socket_Cache.CheckSizeFrom_Value;
-                    this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
-
-                    this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
-                    this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
-                    this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
-                    this.SocketList_AutoClearChange();
-
-                    this.cbLogList_AutoRoll.Checked = Socket_Cache.FilterList.AutoRoll;
-                    this.cbLogList_AutoClear.Checked = Socket_Cache.FilterList.AutoClear;
-                    this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
-                    this.LogList_AutoClearChange();
-
-                    this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;                
-
-                    switch (Socket_Cache.FilterList.FilterList_Execute)
-                    {
-                        case Socket_Cache.FilterList.Execute.Priority:
-                            this.rbFilterSet_Priority.Checked = true;
-                            break;
-
-                        case Socket_Cache.FilterList.Execute.Sequence:
-                            this.rbFilterSet_Sequence.Checked = true;
-                            break;
-                    }
-
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
+                    rbFilter_NotShow.Checked = true;
                 }
                 else
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36));
+                    rbFilter_Show.Checked = true;
                 }
+
+                cbCheckSocket.Checked = Socket_Cache.CheckSocket;
+                cbCheckIP.Checked = Socket_Cache.CheckIP;
+                cbCheckPort.Checked = Socket_Cache.CheckPort;
+                cbCheckHead.Checked = Socket_Cache.CheckHead;
+                cbCheckData.Checked = Socket_Cache.CheckData;
+                cbCheckSize.Checked = Socket_Cache.CheckSize;
+
+                this.txtCheckSocket.Text = Socket_Cache.CheckSocket_Value;
+                this.txtCheckIP.Text = Socket_Cache.CheckIP_Value;
+                this.txtCheckPort.Text = Socket_Cache.CheckPort_Value;
+                this.txtCheckHead.Text = Socket_Cache.CheckHead_Value;
+                this.txtCheckData.Text = Socket_Cache.CheckData_Value;
+                this.nudCheckSizeFrom.Value = Socket_Cache.CheckSizeFrom_Value;
+                this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
+
+                this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
+                this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
+                this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
+                this.SocketList_AutoClearChange();
+
+                this.cbLogList_AutoRoll.Checked = Socket_Cache.FilterList.AutoRoll;
+                this.cbLogList_AutoClear.Checked = Socket_Cache.FilterList.AutoClear;
+                this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
+                this.LogList_AutoClearChange();
+
+                this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;
+
+                switch (Socket_Cache.FilterList.FilterList_Execute)
+                {
+                    case Socket_Cache.FilterList.Execute.Priority:
+                        this.rbFilterSet_Priority.Checked = true;
+                        break;
+
+                    case Socket_Cache.FilterList.Execute.Sequence:
+                        this.rbFilterSet_Sequence.Checked = true;
+                        break;
+                }
+
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
@@ -304,7 +299,7 @@ namespace WPELibrary
             }
         }
 
-        private void SetSystemParameter()
+        private void SetConfigs_Parameter()
         {
             try
             {  
@@ -651,7 +646,7 @@ namespace WPELibrary
         {
             try
             {
-                this.SetSystemParameter();
+                this.SetConfigs_Parameter();
 
                 this.tcSocketInfo_FilterSet.Enabled = false;
                 this.tcSocketInfo_HookSet.Enabled = false;

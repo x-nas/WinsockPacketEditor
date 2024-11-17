@@ -7,14 +7,17 @@ namespace WinsockPacketEditor
 {
     public partial class LanguageList_Form : Form
     {
-        private string SelectLanguage = "zh-CN";
-
         #region//初始化
 
         public LanguageList_Form()
         {
             InitializeComponent();
 
+            this.InitSelectLanguage();                    
+        }
+
+        private void InitSelectLanguage()
+        {
             try
             {
                 switch (Properties.Settings.Default.DefaultLanguage)
@@ -34,21 +37,7 @@ namespace WinsockPacketEditor
             catch
             {
                 //
-            }        
-        }
-
-        #endregion
-
-        #region//选择语言
-
-        private void rb_zhCN_Click(object sender, System.EventArgs e)
-        {
-            this.SelectLanguage = "zh-CN";
-        }
-
-        private void rb_enUS_Click(object sender, System.EventArgs e)
-        {
-            this.SelectLanguage = "en-US";
+            }
         }
 
         #endregion
@@ -59,6 +48,17 @@ namespace WinsockPacketEditor
         {
             try
             {
+                string SelectLanguage = string.Empty;
+
+                if (this.rb_zhCN.Checked)
+                {
+                    SelectLanguage = "zh-CN";
+                }
+                else if (this.rb_enUS.Checked)
+                {
+                    SelectLanguage = "en-US";
+                }
+
                 if (!Properties.Settings.Default.DefaultLanguage.Equals(SelectLanguage))
                 {
                     Process_Injector.SetDefaultLanguage(SelectLanguage);

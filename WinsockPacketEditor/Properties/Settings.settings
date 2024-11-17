@@ -8,5 +8,14 @@
     <Setting Name="LastInjection" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="WPE64_URL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.wpe64.com</Value>
+    </Setting>
+    <Setting Name="WPE64_IP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">http://101.132.222.195</Value>
+    </Setting>
+    <Setting Name="WPE64_DLL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">WPELibrary.dll</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

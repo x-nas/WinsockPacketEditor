@@ -2646,207 +2646,48 @@ namespace WPELibrary.Lib
 
         #region//保存系统设置
 
-        public static bool SaveSystemConfig()
+        public static bool SaveConfigs()
         {
             bool bReturn = true;
 
             try
             {
-                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\system.config";
+                Properties.Settings.Default.FilterConfig_CheckNotShow = Socket_Cache.CheckNotShow;
+                Properties.Settings.Default.FilterConfig_CheckSocket = Socket_Cache.CheckSocket;
+                Properties.Settings.Default.FilterConfig_CheckIP = Socket_Cache.CheckIP;
+                Properties.Settings.Default.FilterConfig_CheckPort = Socket_Cache.CheckPort;
+                Properties.Settings.Default.FilterConfig_CheckHead = Socket_Cache.CheckHead;
+                Properties.Settings.Default.FilterConfig_CheckData = Socket_Cache.CheckData;
+                Properties.Settings.Default.FilterConfig_CheckSize = Socket_Cache.CheckSize;
 
-                XmlDocument doc = new XmlDocument();
+                Properties.Settings.Default.FilterConfig_CheckSocket_Value = Socket_Cache.CheckSocket_Value;
+                Properties.Settings.Default.FilterConfig_CheckIP_Value = Socket_Cache.CheckIP_Value;
+                Properties.Settings.Default.FilterConfig_CheckPort_Value = Socket_Cache.CheckPort_Value;
+                Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.CheckHead_Value;
+                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.CheckData_Value;
+                Properties.Settings.Default.FilterConfig_CheckSizeFrom_Value = Socket_Cache.CheckSizeFrom_Value;
+                Properties.Settings.Default.FilterConfig_CheckSizeTo_Value = Socket_Cache.CheckSizeTo_Value;
 
-                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-                doc.AppendChild(xmlDeclaration);
+                Properties.Settings.Default.HookConfig_HookSend = Socket_Cache.HookSend;
+                Properties.Settings.Default.HookConfig_HookSendTo = Socket_Cache.HookSendTo;
+                Properties.Settings.Default.HookConfig_HookRecv = Socket_Cache.HookRecv;
+                Properties.Settings.Default.HookConfig_HookRecvFrom = Socket_Cache.HookRecvFrom;
+                Properties.Settings.Default.HookConfig_HookWSASend = Socket_Cache.HookWSASend;
+                Properties.Settings.Default.HookConfig_HookWSASendTo = Socket_Cache.HookWSASendTo;
+                Properties.Settings.Default.HookConfig_HookWSARecv = Socket_Cache.HookWSARecv;
+                Properties.Settings.Default.HookConfig_HookWSARecvFrom = Socket_Cache.HookWSARecvFrom;
 
-                XmlElement xeConfig = doc.CreateElement("Config");
-                doc.AppendChild(xeConfig);
+                Properties.Settings.Default.ListConfig_SocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll;
+                Properties.Settings.Default.ListConfig_SocketList_AutoClear = Socket_Cache.SocketList.AutoClear;
+                Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value;
+                Properties.Settings.Default.ListConfig_FilterList_AutoRoll = Socket_Cache.FilterList.AutoRoll;
+                Properties.Settings.Default.ListConfig_FilterList_AutoClear = Socket_Cache.FilterList.AutoClear;
+                Properties.Settings.Default.ListConfig_FilterList_AutoClear_Value = Socket_Cache.FilterList.AutoClear_Value;
 
-                #region//过滤设置
+                Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SpeedMode;
+                Properties.Settings.Default.SystemConfig_FilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
 
-                XmlElement xeFilterConfig = doc.CreateElement("FilterConfig");
-                xeConfig.AppendChild(xeFilterConfig);
-
-                string sCheckNotShow = Socket_Cache.CheckNotShow.ToString();
-                string sCheckSocket = Socket_Cache.CheckSocket.ToString();
-                string sCheckIP = Socket_Cache.CheckIP.ToString();
-                string sCheckPort = Socket_Cache.CheckPort.ToString();
-                string sCheckHead = Socket_Cache.CheckHead.ToString();
-                string sCheckData = Socket_Cache.CheckData.ToString();
-                string sCheckSize = Socket_Cache.CheckSize.ToString();
-
-                string sCheckSocket_Value = Socket_Cache.CheckSocket_Value;
-                string sCheckIP_Value = Socket_Cache.CheckIP_Value;
-                string sCheckPort_Value = Socket_Cache.CheckPort_Value;
-                string sCheckHead_Value = Socket_Cache.CheckHead_Value;
-                string sCheckData_Value = Socket_Cache.CheckData_Value;
-                string sCheckSizeFrom_Value = Socket_Cache.CheckSizeFrom_Value.ToString();
-                string sCheckSizeTo_Value = Socket_Cache.CheckSizeTo_Value.ToString();
-
-                XmlElement xeCheckNotShow = doc.CreateElement("CheckNotShow");
-                xeCheckNotShow.InnerText = sCheckNotShow;
-                xeFilterConfig.AppendChild(xeCheckNotShow);
-
-                XmlElement xeCheckSocket = doc.CreateElement("CheckSocket");
-                xeCheckSocket.InnerText = sCheckSocket;
-                xeFilterConfig.AppendChild(xeCheckSocket);
-
-                XmlElement xeCheckIP = doc.CreateElement("CheckIP");
-                xeCheckIP.InnerText = sCheckIP;
-                xeFilterConfig.AppendChild(xeCheckIP);
-
-                XmlElement xeCheckPort = doc.CreateElement("CheckPort");
-                xeCheckPort.InnerText = sCheckPort;
-                xeFilterConfig.AppendChild(xeCheckPort);
-
-                XmlElement xeCheckHead = doc.CreateElement("CheckHead");
-                xeCheckHead.InnerText = sCheckHead;
-                xeFilterConfig.AppendChild(xeCheckHead);
-
-                XmlElement xeCheckData = doc.CreateElement("CheckData");
-                xeCheckData.InnerText = sCheckData;
-                xeFilterConfig.AppendChild(xeCheckData);
-
-                XmlElement xeCheckSize = doc.CreateElement("CheckSize");
-                xeCheckSize.InnerText = sCheckSize;
-                xeFilterConfig.AppendChild(xeCheckSize);
-
-                XmlElement xeCheckSocket_Value = doc.CreateElement("CheckSocket_Value");
-                xeCheckSocket_Value.InnerText = sCheckSocket_Value;
-                xeFilterConfig.AppendChild(xeCheckSocket_Value);
-
-                XmlElement xeCheckIP_Value = doc.CreateElement("CheckIP_Value");
-                xeCheckIP_Value.InnerText = sCheckIP_Value;
-                xeFilterConfig.AppendChild(xeCheckIP_Value);
-
-                XmlElement xeCheckPort_Value = doc.CreateElement("CheckPort_Value");
-                xeCheckPort_Value.InnerText = sCheckPort_Value;
-                xeFilterConfig.AppendChild(xeCheckPort_Value);
-
-                XmlElement xeCheckHead_Value = doc.CreateElement("CheckHead_Value");
-                xeCheckHead_Value.InnerText = sCheckHead_Value;
-                xeFilterConfig.AppendChild(xeCheckHead_Value);
-
-                XmlElement xeCheckData_Value = doc.CreateElement("CheckData_Value");
-                xeCheckData_Value.InnerText = sCheckData_Value;
-                xeFilterConfig.AppendChild(xeCheckData_Value);
-
-                XmlElement xeCheckSizeFrom_Value = doc.CreateElement("CheckSizeFrom_Value");
-                xeCheckSizeFrom_Value.InnerText = sCheckSizeFrom_Value;
-                xeFilterConfig.AppendChild(xeCheckSizeFrom_Value);
-
-                XmlElement xeCheckSizeTo_Value = doc.CreateElement("CheckSizeTo_Value");
-                xeCheckSizeTo_Value.InnerText = sCheckSizeTo_Value;
-                xeFilterConfig.AppendChild(xeCheckSizeTo_Value);
-
-                #endregion
-
-                #region//拦截设置
-
-                XmlElement xeHookConfig = doc.CreateElement("HookConfig");
-                xeConfig.AppendChild(xeHookConfig);
-
-                string sHookSend = Socket_Cache.HookSend.ToString();
-                string sHookSendTo = Socket_Cache.HookSendTo.ToString();
-                string sHookRecv = Socket_Cache.HookRecv.ToString();
-                string sHookRecvFrom = Socket_Cache.HookRecvFrom.ToString();
-                string sHookWSASend = Socket_Cache.HookWSASend.ToString();
-                string sHookWSASendTo = Socket_Cache.HookWSASendTo.ToString();
-                string sHookWSARecv = Socket_Cache.HookWSARecv.ToString();
-                string sHookWSARecvFrom = Socket_Cache.HookWSARecvFrom.ToString();
-
-                XmlElement xeHookSend = doc.CreateElement("HookSend");
-                xeHookSend.InnerText = sHookSend;
-                xeHookConfig.AppendChild(xeHookSend);
-
-                XmlElement xeHookSendTo = doc.CreateElement("HookSendTo");
-                xeHookSendTo.InnerText = sHookSendTo;
-                xeHookConfig.AppendChild(xeHookSendTo);
-
-                XmlElement xeHookRecv = doc.CreateElement("HookRecv");
-                xeHookRecv.InnerText = sHookRecv;
-                xeHookConfig.AppendChild(xeHookRecv);
-
-                XmlElement xeHookRecvFrom = doc.CreateElement("HookRecvFrom");
-                xeHookRecvFrom.InnerText = sHookRecvFrom;
-                xeHookConfig.AppendChild(xeHookRecvFrom);
-
-                XmlElement xeHookWSASend = doc.CreateElement("HookWSASend");
-                xeHookWSASend.InnerText = sHookWSASend;
-                xeHookConfig.AppendChild(xeHookWSASend);
-
-                XmlElement xeHookWSASendTo = doc.CreateElement("HookWSASendTo");
-                xeHookWSASendTo.InnerText = sHookWSASendTo;
-                xeHookConfig.AppendChild(xeHookWSASendTo);
-
-                XmlElement xeHookWSARecv = doc.CreateElement("HookWSARecv");
-                xeHookWSARecv.InnerText = sHookWSARecv;
-                xeHookConfig.AppendChild(xeHookWSARecv);
-
-                XmlElement xeHookWSARecvFrom = doc.CreateElement("HookWSARecvFrom");
-                xeHookWSARecvFrom.InnerText = sHookWSARecvFrom;
-                xeHookConfig.AppendChild(xeHookWSARecvFrom);
-
-                #endregion
-
-                #region//列表设置
-
-                XmlElement xeListConfig = doc.CreateElement("ListConfig");
-                xeConfig.AppendChild(xeListConfig);
-
-                string sSocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll.ToString();
-                string sSocketList_AutoClear = Socket_Cache.SocketList.AutoClear.ToString();
-                string sSocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value.ToString();                
-
-                XmlElement xeSocketList_AutoRoll = doc.CreateElement("SocketList_AutoRoll");
-                xeSocketList_AutoRoll.InnerText = sSocketList_AutoRoll;
-                xeListConfig.AppendChild(xeSocketList_AutoRoll);
-
-                XmlElement xeSocketList_AutoClear = doc.CreateElement("SocketList_AutoClear");
-                xeSocketList_AutoClear.InnerText = sSocketList_AutoClear;
-                xeListConfig.AppendChild(xeSocketList_AutoClear);
-
-                XmlElement xeSocketList_AutoClear_Value = doc.CreateElement("SocketList_AutoClear_Value");
-                xeSocketList_AutoClear_Value.InnerText = sSocketList_AutoClear_Value;
-                xeListConfig.AppendChild(xeSocketList_AutoClear_Value);
-
-                string sFilterList_AutoRoll = Socket_Cache.FilterList.AutoRoll.ToString();
-                string sFilterList_AutoClear = Socket_Cache.FilterList.AutoClear.ToString();
-                string sFilterList_AutoClear_Value = Socket_Cache.FilterList.AutoClear_Value.ToString();
-
-                XmlElement xeFilterList_AutoRoll = doc.CreateElement("FilterList_AutoRoll");
-                xeFilterList_AutoRoll.InnerText = sFilterList_AutoRoll;
-                xeListConfig.AppendChild(xeFilterList_AutoRoll);
-
-                XmlElement xeFilterList_AutoClear = doc.CreateElement("FilterList_AutoClear");
-                xeFilterList_AutoClear.InnerText = sFilterList_AutoClear;
-                xeListConfig.AppendChild(xeFilterList_AutoClear);
-
-                XmlElement xeFilterList_AutoClear_Value = doc.CreateElement("FilterList_AutoClear_Value");
-                xeFilterList_AutoClear_Value.InnerText = sFilterList_AutoClear_Value;
-                xeListConfig.AppendChild(xeFilterList_AutoClear_Value);
-
-                #endregion
-
-                #region//系统设置
-
-                XmlElement xeSystemConfig = doc.CreateElement("SystemConfig");
-                xeConfig.AppendChild(xeSystemConfig);
-
-                string sSpeedMode = Socket_Cache.SpeedMode.ToString();
-                string sFilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();             
-
-                XmlElement xeSpeedMode = doc.CreateElement("SpeedMode");
-                xeSpeedMode.InnerText = sSpeedMode;
-                xeSystemConfig.AppendChild(xeSpeedMode);
-
-                XmlElement xeFilterList_Execute = doc.CreateElement("FilterList_Execute");
-                xeFilterList_Execute.InnerText = sFilterList_Execute;
-                xeSystemConfig.AppendChild(xeFilterList_Execute);           
-
-                #endregion
-
-                doc.Save(FilePath);
+                Properties.Settings.Default.Save();
             }
             catch (Exception ex)
             {
@@ -2861,128 +2702,49 @@ namespace WPELibrary.Lib
 
         #region//加载系统设置
 
-        public static bool LoadSystemConfig()
+        public static void LoadConfigs()
         {
-            bool bReturn = true;
-
             try
             {
-                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\system.config";
+                Socket_Cache.CheckNotShow = Properties.Settings.Default.FilterConfig_CheckNotShow;
+                Socket_Cache.CheckSocket = Properties.Settings.Default.FilterConfig_CheckSocket;
+                Socket_Cache.CheckIP = Properties.Settings.Default.FilterConfig_CheckIP;
+                Socket_Cache.CheckPort = Properties.Settings.Default.FilterConfig_CheckPort;
+                Socket_Cache.CheckHead = Properties.Settings.Default.FilterConfig_CheckHead;
+                Socket_Cache.CheckData = Properties.Settings.Default.FilterConfig_CheckData;
+                Socket_Cache.CheckSize = Properties.Settings.Default.FilterConfig_CheckSize;
 
-                if (File.Exists(FilePath))
-                {
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(FilePath);
-                    XmlNode xnConfig = doc.DocumentElement;
+                Socket_Cache.CheckSocket_Value = Properties.Settings.Default.FilterConfig_CheckSocket_Value;
+                Socket_Cache.CheckIP_Value = Properties.Settings.Default.FilterConfig_CheckIP_Value;
+                Socket_Cache.CheckPort_Value = Properties.Settings.Default.FilterConfig_CheckPort_Value;
+                Socket_Cache.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
+                Socket_Cache.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;
+                Socket_Cache.CheckSizeFrom_Value = Properties.Settings.Default.FilterConfig_CheckSizeFrom_Value;
+                Socket_Cache.CheckSizeTo_Value = Properties.Settings.Default.FilterConfig_CheckSizeTo_Value;
 
-                    #region//过滤设置
+                Socket_Cache.HookSend = Properties.Settings.Default.HookConfig_HookSend;
+                Socket_Cache.HookSendTo = Properties.Settings.Default.HookConfig_HookSendTo;
+                Socket_Cache.HookRecv = Properties.Settings.Default.HookConfig_HookRecv;
+                Socket_Cache.HookRecvFrom = Properties.Settings.Default.HookConfig_HookRecvFrom;
+                Socket_Cache.HookWSASend = Properties.Settings.Default.HookConfig_HookWSASend;
+                Socket_Cache.HookWSASendTo = Properties.Settings.Default.HookConfig_HookWSASendTo;
+                Socket_Cache.HookWSARecv = Properties.Settings.Default.HookConfig_HookWSARecv;
+                Socket_Cache.HookWSARecvFrom = Properties.Settings.Default.HookConfig_HookWSARecvFrom;            
 
-                    XmlNode xnFilterConfig = xnConfig.SelectSingleNode("FilterConfig");
+                Socket_Cache.SocketList.AutoRoll = Properties.Settings.Default.ListConfig_SocketList_AutoRoll;
+                Socket_Cache.SocketList.AutoClear = Properties.Settings.Default.ListConfig_SocketList_AutoClear;
+                Socket_Cache.SocketList.AutoClear_Value = Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value;
+                Socket_Cache.FilterList.AutoRoll = Properties.Settings.Default.ListConfig_FilterList_AutoRoll;
+                Socket_Cache.FilterList.AutoClear = Properties.Settings.Default.ListConfig_FilterList_AutoClear;
+                Socket_Cache.FilterList.AutoClear_Value = Properties.Settings.Default.ListConfig_FilterList_AutoClear_Value;
 
-                    string sCheckNotShow = xnFilterConfig.SelectSingleNode("CheckNotShow").InnerText;
-                    string sCheckSocket = xnFilterConfig.SelectSingleNode("CheckSocket").InnerText;
-                    string sCheckIP = xnFilterConfig.SelectSingleNode("CheckIP").InnerText;
-                    string sCheckPort = xnFilterConfig.SelectSingleNode("CheckPort").InnerText;
-                    string sCheckHead = xnFilterConfig.SelectSingleNode("CheckHead").InnerText;
-                    string sCheckData = xnFilterConfig.SelectSingleNode("CheckData").InnerText;
-                    string sCheckSize = xnFilterConfig.SelectSingleNode("CheckSize").InnerText;
-
-                    string sCheckSocket_Value = xnFilterConfig.SelectSingleNode("CheckSocket_Value").InnerText;
-                    string sCheckIP_Value = xnFilterConfig.SelectSingleNode("CheckIP_Value").InnerText;
-                    string sCheckPort_Value = xnFilterConfig.SelectSingleNode("CheckPort_Value").InnerText;
-                    string sCheckHead_Value = xnFilterConfig.SelectSingleNode("CheckHead_Value").InnerText;
-                    string sCheckData_Value = xnFilterConfig.SelectSingleNode("CheckData_Value").InnerText;
-                    string sCheckSizeFrom_Value = xnFilterConfig.SelectSingleNode("CheckSizeFrom_Value").InnerText;
-                    string sCheckSizeTo_Value = xnFilterConfig.SelectSingleNode("CheckSizeTo_Value").InnerText;
-
-                    Socket_Cache.CheckNotShow = bool.Parse(sCheckNotShow);
-                    Socket_Cache.CheckSocket = bool.Parse(sCheckSocket);
-                    Socket_Cache.CheckIP = bool.Parse(sCheckIP);
-                    Socket_Cache.CheckPort = bool.Parse(sCheckPort);
-                    Socket_Cache.CheckHead = bool.Parse(sCheckHead);
-                    Socket_Cache.CheckData = bool.Parse(sCheckData);
-                    Socket_Cache.CheckSize = bool.Parse(sCheckSize);
-
-                    Socket_Cache.CheckSocket_Value = sCheckSocket_Value;
-                    Socket_Cache.CheckIP_Value = sCheckIP_Value;
-                    Socket_Cache.CheckPort_Value = sCheckPort_Value;
-                    Socket_Cache.CheckHead_Value = sCheckHead_Value;
-                    Socket_Cache.CheckData_Value = sCheckData_Value;
-                    Socket_Cache.CheckSizeFrom_Value = decimal.Parse(sCheckSizeFrom_Value);
-                    Socket_Cache.CheckSizeTo_Value = decimal.Parse(sCheckSizeTo_Value);
-
-                    #endregion
-
-                    #region//拦截设置
-
-                    XmlNode xnHookConfig = xnConfig.SelectSingleNode("HookConfig");
-
-                    string sHookSend = xnHookConfig.SelectSingleNode("HookSend").InnerText;
-                    string sHookSendTo = xnHookConfig.SelectSingleNode("HookSendTo").InnerText;
-                    string sHookRecv = xnHookConfig.SelectSingleNode("HookRecv").InnerText;
-                    string sHookRecvFrom = xnHookConfig.SelectSingleNode("HookRecvFrom").InnerText;
-                    string sHookWSASend = xnHookConfig.SelectSingleNode("HookWSASend").InnerText;
-                    string sHookWSASendTo = xnHookConfig.SelectSingleNode("HookWSASendTo").InnerText;
-                    string sHookWSARecv = xnHookConfig.SelectSingleNode("HookWSARecv").InnerText;
-                    string sHookWSARecvFrom = xnHookConfig.SelectSingleNode("HookWSARecvFrom").InnerText;
-
-                    Socket_Cache.HookSend = bool.Parse(sHookSend);
-                    Socket_Cache.HookSendTo = bool.Parse(sHookSendTo);
-                    Socket_Cache.HookRecv = bool.Parse(sHookRecv);
-                    Socket_Cache.HookRecvFrom = bool.Parse(sHookRecvFrom);
-                    Socket_Cache.HookWSASend = bool.Parse(sHookWSASend);
-                    Socket_Cache.HookWSASendTo = bool.Parse(sHookWSASendTo);
-                    Socket_Cache.HookWSARecv = bool.Parse(sHookWSARecv);
-                    Socket_Cache.HookWSARecvFrom = bool.Parse(sHookWSARecvFrom);
-
-                    #endregion
-
-                    #region//列表设置
-
-                    XmlNode xnListConfig = xnConfig.SelectSingleNode("ListConfig");
-
-                    string sSocketList_AutoRoll = xnListConfig.SelectSingleNode("SocketList_AutoRoll").InnerText;
-                    string sSocketList_AutoClear = xnListConfig.SelectSingleNode("SocketList_AutoClear").InnerText;
-                    string sSocketList_AutoClear_Value = xnListConfig.SelectSingleNode("SocketList_AutoClear_Value").InnerText;
-
-                    Socket_Cache.SocketList.AutoRoll = bool.Parse(sSocketList_AutoRoll);
-                    Socket_Cache.SocketList.AutoClear = bool.Parse(sSocketList_AutoClear);
-                    Socket_Cache.SocketList.AutoClear_Value = decimal.Parse(sSocketList_AutoClear_Value);
-
-                    string sFilterList_AutoRoll = xnListConfig.SelectSingleNode("FilterList_AutoRoll").InnerText;
-                    string sFilterList_AutoClear = xnListConfig.SelectSingleNode("FilterList_AutoClear").InnerText;
-                    string sFilterList_AutoClear_Value = xnListConfig.SelectSingleNode("FilterList_AutoClear_Value").InnerText;
-
-                    Socket_Cache.FilterList.AutoRoll = bool.Parse(sFilterList_AutoRoll);
-                    Socket_Cache.FilterList.AutoClear = bool.Parse(sFilterList_AutoClear);
-                    Socket_Cache.FilterList.AutoClear_Value = decimal.Parse(sFilterList_AutoClear_Value);
-
-                    #endregion
-
-                    #region//系统设置
-
-                    XmlNode xnSystemConfig = xnConfig.SelectSingleNode("SystemConfig");
-
-                    string sSpeedMode = xnSystemConfig.SelectSingleNode("SpeedMode").InnerText;
-                    string sFilterList_Execute = xnSystemConfig.SelectSingleNode("FilterList_Execute").InnerText;                  
-
-                    Socket_Cache.SpeedMode = bool.Parse(sSpeedMode);
-                    Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(sFilterList_Execute);                 
-
-                    #endregion
-                }
-                else
-                {
-                    bReturn = false;
-                }
+                Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
+                Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
             }
             catch (Exception ex)
-            {
-                bReturn = false;
+            {                
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
+            }            
         }
 
         #endregion

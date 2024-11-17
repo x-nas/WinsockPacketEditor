@@ -55,7 +55,6 @@
             this.rb_enUS.Name = "rb_enUS";
             this.rb_enUS.TabStop = true;
             this.rb_enUS.UseVisualStyleBackColor = true;
-            this.rb_enUS.Click += new System.EventHandler(this.rb_enUS_Click);
             // 
             // rb_zhCN
             // 
@@ -63,7 +62,6 @@
             this.rb_zhCN.Name = "rb_zhCN";
             this.rb_zhCN.TabStop = true;
             this.rb_zhCN.UseVisualStyleBackColor = true;
-            this.rb_zhCN.Click += new System.EventHandler(this.rb_zhCN_Click);
             // 
             // pb_zhCN
             // 

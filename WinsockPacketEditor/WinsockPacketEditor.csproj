@@ -132,6 +132,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>

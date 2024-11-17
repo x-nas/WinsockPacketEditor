@@ -46,5 +46,32 @@ namespace WinsockPacketEditor.Properties {
                 this["LastInjection"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.wpe64.com")]
+        public string WPE64_URL {
+            get {
+                return ((string)(this["WPE64_URL"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://101.132.222.195")]
+        public string WPE64_IP {
+            get {
+                return ((string)(this["WPE64_IP"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("WPELibrary.dll")]
+        public string WPE64_DLL {
+            get {
+                return ((string)(this["WPE64_DLL"]));
+            }
+        }
     }
 }

@@ -14,13 +14,13 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_2 = { "注入进程", "Inject Process" };
         public static string[] MutiLan_3 = { "关于", "about" };
         public static string[] MutiLan_4 = { "选择语言", "Language" };
-        public static string[] MutiLan_5 = { "当前内核版本", "Current kernel version" };
+        public static string[] MutiLan_5 = { "当前内核版本: {0}", "Current kernel version: {0}" };
         public static string[] MutiLan_6 = { "请先选择要注入的进程", "Please select a process first" };
-        public static string[] MutiLan_7 = { "开始注入目标进程", "Start injecting target process" };
+        public static string[] MutiLan_7 = { "开始注入目标进程 =>> {0}", "Start injecting target process =>> {0}" };
         public static string[] MutiLan_8 = { "目标进程是{0}位程序，已自动调用{0}位的注入模块", "The target process is a {0} bit program and has automatically called the {0} bit injection module" };
-        public static string[] MutiLan_9 = { "已成功注入目标进程", "Successfully injected into the target process" };
+        public static string[] MutiLan_9 = { "已成功注入目标进程 =>> {0}[{1}]", "Successfully injected into the target process =>> {0}[{1}]" };
         public static string[] MutiLan_10 = { "注入完成，可关闭当前注入器或注入其它进程", "Injection completed, the current injector can be closed or inject other processes" };
-        public static string[] MutiLan_11 = { "出现错误", "Error" };
+        public static string[] MutiLan_11 = { "出现错误: {0}", "Error: {0}" };
         public static string[] MutiLan_12 = { "程序即将重新启动", "The program is about to restart" };
         public static string[] MutiLan_13 = { "请选择一个进程", "Please select a process" };
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
@@ -45,7 +45,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
-        public static string[] MutiLan_36 = { "加载默认系统配置！", "Load System Default Config!" };
+        //public static string[] MutiLan_36 = { "", "" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         public static string[] MutiLan_39 = { "开始拦截!", "Start Intercepting!" };
