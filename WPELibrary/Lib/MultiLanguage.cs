@@ -89,15 +89,15 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
         public static string[] MutiLan_78 = { "记录时间\t模块\t日志内容\t", "Log Time\tModule Name\tLog content\t" };
         public static string[] MutiLan_79 = { "提示", "Prompt" };
-        public static string[] MutiLan_80 = { "CPU: {0}%", "CPU: {0}%" };
-        public static string[] MutiLan_81 = { "内存: {0}%", "Memory: {0}%" };
+        //public static string[] MutiLan_80 = { "CPU: {0}%", "CPU: {0}%" };
+        //public static string[] MutiLan_81 = { "内存: {0}%", "Memory: {0}%" };
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
         public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };
         public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
         public static string[] MutiLan_86 = { "二进制", "Binary" };
         public static string[] MutiLan_87 = { "十进制", "Decimal" };
-        public static string[] MutiLan_88 = { "正在读取数据 . . .", "Loading . . ." };
+        //public static string[] MutiLan_88 = { "正在读取数据 . . .", "Loading . . ." };
 
         #endregion
 

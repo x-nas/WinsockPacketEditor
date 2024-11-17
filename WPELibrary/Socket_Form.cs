@@ -22,10 +22,7 @@ namespace WPELibrary
         private Color col_Del = Color.Red;
         private Color col_Add = Color.Green;
 
-        private ToolTip tt = new ToolTip();
-
-        private PerformanceCounter pcCPU;
-        private PerformanceCounter pcMEM;
+        private ToolTip tt = new ToolTip();        
 
         #region//加载窗体
 
@@ -35,8 +32,7 @@ namespace WPELibrary
             {
                 MultiLanguage.SetDefaultLanguage(sLanguage);
                 InitializeComponent();
-
-                this.InitPerformanceCounter();
+              
                 this.InitSocketForm();
                 this.InitSocketDGV();
                 this.InitHexBox();
@@ -186,15 +182,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void InitPerformanceCounter()
-        {
-            if (!bgwPerformanceCounter.IsBusy)
-            {
-                bgwPerformanceCounter.RunWorkerAsync();
-            }
-        }
+        }        
 
         private void InitHexBox()
         {
@@ -237,71 +225,7 @@ namespace WPELibrary
             }            
         }
 
-        #endregion
-
-        #region//获取CPU和内存占用率
-
-        private void bgwPerformanceCounter_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                pcCPU = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                pcMEM = new PerformanceCounter("Memory", "Available MBytes");
-
-                pcCPU.NextValue();
-                pcMEM.NextValue();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private string GetMonitorInfo()
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                if (!bgwPerformanceCounter.IsBusy)
-                {
-                    float fCPU = pcCPU.NextValue();
-                    float fMEM = pcMEM.NextValue() / 160;
-
-                    if (this.cbMonitorSet_Mem.Checked)
-                    {
-                        int iMEM_Monitor = ((int)this.nudMonitorSet_Mem.Value);
-
-                        if (fMEM < iMEM_Monitor)
-                        {
-                            this.tsslMonitorInfo.ForeColor = Color.Red;
-                        }
-                        else
-                        {
-                            this.tsslMonitorInfo.ForeColor = Color.FromName("ControlText");
-                        }
-                    }
-                    else
-                    {
-                        this.tsslMonitorInfo.ForeColor = Color.FromName("ControlText");
-                    }
-
-                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80), fCPU.ToString("F1")) + "  " + string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81), fMEM.ToString("F1"));
-                }
-                else
-                {
-                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #region//设置系统参数
 
@@ -354,10 +278,7 @@ namespace WPELibrary
                     this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
                     this.LogList_AutoClearChange();
 
-                    this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;
-                    this.cbMonitorSet_Mem.Checked = Socket_Cache.MonitorMEM;
-                    this.nudMonitorSet_Mem.Value = Socket_Cache.MonitorMEM_Value;
-                    this.MonitorMem_Change();
+                    this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;                
 
                     switch (Socket_Cache.FilterList.FilterList_Execute)
                     {
@@ -420,9 +341,7 @@ namespace WPELibrary
                 Socket_Cache.FilterList.AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.FilterList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SpeedMode = this.cbWorkingMode_Speed.Checked;
-                Socket_Cache.MonitorMEM = this.cbMonitorSet_Mem.Checked;
-                Socket_Cache.MonitorMEM_Value = this.nudMonitorSet_Mem.Value;
+                Socket_Cache.SpeedMode = this.cbWorkingMode_Speed.Checked;            
 
                 if (this.rbFilterSet_Priority.Checked)
                 {
@@ -571,35 +490,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//系统设置
-
-        private void cbMonitorSet_Mem_CheckedChanged(object sender, EventArgs e)
-        {
-            this.MonitorMem_Change();
-        }
-
-        private void MonitorMem_Change()
-        {
-            try
-            {
-                if (this.cbMonitorSet_Mem.Checked)
-                {
-                    this.nudMonitorSet_Mem.Enabled = true;
-                }
-                else
-                {
-                    this.nudMonitorSet_Mem.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//清空数据
 
@@ -890,8 +781,7 @@ namespace WPELibrary
                 this.tlWSASend_CNT.Text = Socket_Cache.SocketQueue.WSASend_CNT.ToString();
                 this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
                 this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
-                this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
-                this.tsslMonitorInfo.Text = this.GetMonitorInfo();
+                this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();                
             }
             catch (Exception ex)
             {
@@ -2061,8 +1951,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        
+        #endregion        
     }
 }

@@ -122,7 +122,7 @@
     <value>1</value>
   </data>
   <metadata name="ssSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1549, 17</value>
+    <value>1365, 17</value>
   </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ssSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -379,7 +379,7 @@
     <value>0</value>
   </data>
   <data name="ssSocketList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 130</value>
+    <value>3, 125</value>
   </data>
   <data name="ssSocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
@@ -553,10 +553,10 @@
     <value>Fill</value>
   </data>
   <data name="dgvSocketList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 158</value>
+    <value>3, 153</value>
   </data>
   <data name="dgvSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1078, 236</value>
+    <value>1078, 238</value>
   </data>
   <data name="dgvSocketList.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -754,7 +754,7 @@
     <value>3</value>
   </data>
   <data name="tlpSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 105</value>
+    <value>108, 100</value>
   </data>
   <data name="tlpSearch.TabIndex" type="System.Int32, mscorlib">
     <value>73</value>
@@ -784,7 +784,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbHookButton_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 127</value>
+    <value>114, 122</value>
   </data>
   <data name="gbHookButton_Search.TabIndex" type="System.Int32, mscorlib">
     <value>58</value>
@@ -820,13 +820,13 @@
     <value>NoControl</value>
   </data>
   <data name="bStopHook.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 54</value>
+    <value>3, 51</value>
   </data>
   <data name="bStopHook.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bStopHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 41</value>
+    <value>94, 39</value>
   </data>
   <data name="bStopHook.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -868,7 +868,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bStartHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 41</value>
+    <value>94, 38</value>
   </data>
   <data name="bStartHook.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -910,7 +910,7 @@
     <value>3</value>
   </data>
   <data name="tlpHookButton_Start.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 98</value>
+    <value>100, 93</value>
   </data>
   <data name="tlpHookButton_Start.TabIndex" type="System.Int32, mscorlib">
     <value>71</value>
@@ -946,7 +946,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="bCleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 98</value>
+    <value>53, 93</value>
   </data>
   <data name="bCleanUp.TabIndex" type="System.Int32, mscorlib">
     <value>69</value>
@@ -984,7 +984,7 @@
     <value>3</value>
   </data>
   <data name="tlpHookButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 124</value>
+    <value>174, 119</value>
   </data>
   <data name="tlpHookButton.TabIndex" type="System.Int32, mscorlib">
     <value>59</value>
@@ -1014,7 +1014,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckHead.Location" type="System.Drawing.Point, System.Drawing">
-    <value>564, 36</value>
+    <value>564, 33</value>
   </data>
   <data name="txtCheckHead.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 23</value>
@@ -1047,10 +1047,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckHead.Location" type="System.Drawing.Point, System.Drawing">
-    <value>480, 36</value>
+    <value>480, 33</value>
   </data>
   <data name="cbCheckHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 24</value>
+    <value>78, 23</value>
   </data>
   <data name="cbCheckHead.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -1176,7 +1176,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 63</value>
+    <value>87, 59</value>
   </data>
   <data name="tlpFilterSet_PacketLength.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1215,7 +1215,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 66</value>
+    <value>6, 62</value>
   </data>
   <data name="cbCheckSize.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
@@ -1251,7 +1251,7 @@
     <value>90, 6</value>
   </data>
   <data name="rbFilter_Show.Size" type="System.Drawing.Size, System.Drawing">
-    <value>148, 24</value>
+    <value>148, 21</value>
   </data>
   <data name="rbFilter_Show.TabIndex" type="System.Int32, mscorlib">
     <value>57</value>
@@ -1284,7 +1284,7 @@
     <value>6, 6</value>
   </data>
   <data name="rbFilter_NotShow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 24</value>
+    <value>78, 21</value>
   </data>
   <data name="rbFilter_NotShow.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -1311,7 +1311,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>321, 66</value>
+    <value>321, 62</value>
   </data>
   <data name="txtCheckPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 23</value>
@@ -1344,7 +1344,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>249, 66</value>
+    <value>249, 62</value>
   </data>
   <data name="cbCheckPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 24</value>
@@ -1374,7 +1374,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>564, 66</value>
+    <value>564, 62</value>
   </data>
   <data name="txtCheckData.Size" type="System.Drawing.Size, System.Drawing">
     <value>200, 23</value>
@@ -1407,7 +1407,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>480, 66</value>
+    <value>480, 62</value>
   </data>
   <data name="cbCheckData.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 24</value>
@@ -1440,10 +1440,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 36</value>
+    <value>6, 33</value>
   </data>
   <data name="cbCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 24</value>
+    <value>78, 23</value>
   </data>
   <data name="cbCheckSocket.TabIndex" type="System.Int32, mscorlib">
     <value>43</value>
@@ -1473,10 +1473,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbCheckIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>249, 36</value>
+    <value>249, 33</value>
   </data>
   <data name="cbCheckIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 24</value>
+    <value>66, 23</value>
   </data>
   <data name="cbCheckIP.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
@@ -1503,7 +1503,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 36</value>
+    <value>90, 33</value>
   </data>
   <data name="txtCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 23</value>
@@ -1533,7 +1533,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="txtCheckIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>321, 36</value>
+    <value>321, 33</value>
   </data>
   <data name="txtCheckIP.Size" type="System.Drawing.Size, System.Drawing">
     <value>148, 23</value>
@@ -1572,7 +1572,7 @@
     <value>4</value>
   </data>
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tlpFilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>47</value>
@@ -1590,7 +1590,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtCheckHead" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckHead" Row="1" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSize" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckPort" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckData" Row="2" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckData" Row="2" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSocket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckIP" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckSocket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckIP" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,40" /&gt;&lt;Rows Styles="Absolute,30,Absolute,30,Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtCheckHead" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckHead" Row="1" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterSet_PacketLength" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSize" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_Show" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilter_NotShow" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckPort" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckData" Row="2" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckData" Row="2" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckSocket" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbCheckIP" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckSocket" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtCheckIP" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,30,Absolute,5,AutoSize,0,Percent,40" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tcSocketInfo_FilterSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -1599,7 +1599,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tcSocketInfo_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tcSocketInfo_FilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1638,10 +1638,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHookWSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 39</value>
+    <value>189, 36</value>
   </data>
   <data name="cbHookWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+    <value>181, 28</value>
   </data>
   <data name="cbHookWSARecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>39</value>
@@ -1674,10 +1674,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHookWSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 39</value>
+    <value>3, 36</value>
   </data>
   <data name="cbHookWSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+    <value>180, 28</value>
   </data>
   <data name="cbHookWSARecv.TabIndex" type="System.Int32, mscorlib">
     <value>38</value>
@@ -1713,7 +1713,7 @@
     <value>189, 3</value>
   </data>
   <data name="cbHookWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+    <value>181, 27</value>
   </data>
   <data name="cbHookWSASendTo.TabIndex" type="System.Int32, mscorlib">
     <value>37</value>
@@ -1749,7 +1749,7 @@
     <value>3, 3</value>
   </data>
   <data name="cbHookWSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+    <value>180, 27</value>
   </data>
   <data name="cbHookWSASend.TabIndex" type="System.Int32, mscorlib">
     <value>36</value>
@@ -1782,7 +1782,7 @@
     <value>2</value>
   </data>
   <data name="tlpHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpHookSet_WinsockWSA.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1812,7 +1812,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbHookSet_WinsockWSA.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1848,10 +1848,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHookRecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 39</value>
+    <value>189, 36</value>
   </data>
   <data name="cbHookRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+    <value>181, 28</value>
   </data>
   <data name="cbHookRecvFrom.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -1884,10 +1884,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbHookRecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 39</value>
+    <value>3, 36</value>
   </data>
   <data name="cbHookRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+    <value>180, 28</value>
   </data>
   <data name="cbHookRecv.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -1923,7 +1923,7 @@
     <value>189, 3</value>
   </data>
   <data name="cbHookSendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+    <value>181, 27</value>
   </data>
   <data name="cbHookSendTo.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -1959,7 +1959,7 @@
     <value>3, 3</value>
   </data>
   <data name="cbHookSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+    <value>180, 27</value>
   </data>
   <data name="cbHookSend.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -1992,7 +1992,7 @@
     <value>2</value>
   </data>
   <data name="tlpHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpHookSet_Winsock.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2022,7 +2022,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbHookSet_Winsock.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2055,7 +2055,7 @@
     <value>1</value>
   </data>
   <data name="tlpHookSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tlpHookSet.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2082,7 +2082,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tcSocketInfo_HookSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tcSocketInfo_HookSet.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2106,7 +2106,7 @@
     <value>2</value>
   </data>
   <data name="tlpListSet_LogList.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="nudLogList_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2118,10 +2118,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
-    <value>165, 3</value>
+    <value>84, 30</value>
   </data>
   <data name="nudLogList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
+    <value>94, 23</value>
   </data>
   <data name="nudLogList_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -2151,7 +2151,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbLogList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 3</value>
+    <value>3, 30</value>
   </data>
   <data name="cbLogList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -2187,7 +2187,7 @@
     <value>3, 3</value>
   </data>
   <data name="cbLogList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 21</value>
   </data>
   <data name="cbLogList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2217,10 +2217,10 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpListSet_LogList.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpListSet_LogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2238,7 +2238,7 @@
     <value>0</value>
   </data>
   <data name="tlpListSet_LogList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLogList_AutoClearValue" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoClear" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLogList_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbListSet_LogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2250,7 +2250,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbListSet_LogList.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2271,7 +2271,7 @@
     <value>0</value>
   </data>
   <data name="tlpListSet_SocketList.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2283,10 +2283,10 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
-    <value>165, 3</value>
+    <value>84, 30</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
+    <value>94, 23</value>
   </data>
   <data name="nudSocketList_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
@@ -2316,7 +2316,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbSocketList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 3</value>
+    <value>3, 30</value>
   </data>
   <data name="cbSocketList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
     <value>75, 23</value>
@@ -2352,7 +2352,7 @@
     <value>3, 3</value>
   </data>
   <data name="cbSocketList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+    <value>75, 21</value>
   </data>
   <data name="cbSocketList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2382,10 +2382,10 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpListSet_SocketList.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2403,7 +2403,7 @@
     <value>0</value>
   </data>
   <data name="tlpListSet_SocketList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocketList_AutoClearValue" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoClear" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocketList_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbListSet_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2415,7 +2415,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2448,7 +2448,7 @@
     <value>1</value>
   </data>
   <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tlpListSet.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2472,7 +2472,7 @@
     <value>4, 26</value>
   </data>
   <data name="tcSocketInfo_ListSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tcSocketInfo_ListSet.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2493,172 +2493,7 @@
     <value>2</value>
   </data>
   <data name="tlpSystemSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lMonitorSet_Mem.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lMonitorSet_Mem.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lMonitorSet_Mem.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lMonitorSet_Mem.Location" type="System.Drawing.Point, System.Drawing">
-    <value>178, 3</value>
-  </data>
-  <data name="lMonitorSet_Mem.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 23</value>
-  </data>
-  <data name="lMonitorSet_Mem.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lMonitorSet_Mem.Text" xml:space="preserve">
-    <value>% 红字预警</value>
-  </data>
-  <data name="lMonitorSet_Mem.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lMonitorSet_Mem.Name" xml:space="preserve">
-    <value>lMonitorSet_Mem</value>
-  </data>
-  <data name="&gt;&gt;lMonitorSet_Mem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lMonitorSet_Mem.Parent" xml:space="preserve">
-    <value>tlpSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;lMonitorSet_Mem.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="nudMonitorSet_Mem.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudMonitorSet_Mem.Location" type="System.Drawing.Point, System.Drawing">
-    <value>108, 3</value>
-  </data>
-  <data name="nudMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>64, 23</value>
-  </data>
-  <data name="nudMonitorSet_Mem.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="nudMonitorSet_Mem.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudMonitorSet_Mem.Name" xml:space="preserve">
-    <value>nudMonitorSet_Mem</value>
-  </data>
-  <data name="&gt;&gt;nudMonitorSet_Mem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudMonitorSet_Mem.Parent" xml:space="preserve">
-    <value>tlpSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;nudMonitorSet_Mem.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cbMonitorSet_Mem.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbMonitorSet_Mem.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbMonitorSet_Mem.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbMonitorSet_Mem.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="cbMonitorSet_Mem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 23</value>
-  </data>
-  <data name="cbMonitorSet_Mem.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
-  </data>
-  <data name="cbMonitorSet_Mem.Text" xml:space="preserve">
-    <value>可用内存低于</value>
-  </data>
-  <data name="&gt;&gt;cbMonitorSet_Mem.Name" xml:space="preserve">
-    <value>cbMonitorSet_Mem</value>
-  </data>
-  <data name="&gt;&gt;cbMonitorSet_Mem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbMonitorSet_Mem.Parent" xml:space="preserve">
-    <value>tlpSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;cbMonitorSet_Mem.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 72</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemSet_MonitorSet.Name" xml:space="preserve">
-    <value>tlpSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemSet_MonitorSet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemSet_MonitorSet.Parent" xml:space="preserve">
-    <value>gbSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemSet_MonitorSet.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpSystemSet_MonitorSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lMonitorSet_Mem" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="nudMonitorSet_Mem" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbMonitorSet_Mem" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,70,AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>465, 3</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 94</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="gbSystemSet_MonitorSet.Text" xml:space="preserve">
-    <value>运行监控</value>
-  </data>
-  <data name="&gt;&gt;gbSystemSet_MonitorSet.Name" xml:space="preserve">
-    <value>gbSystemSet_MonitorSet</value>
-  </data>
-  <data name="&gt;&gt;gbSystemSet_MonitorSet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSystemSet_MonitorSet.Parent" xml:space="preserve">
-    <value>tlpSystemSet</value>
-  </data>
-  <data name="&gt;&gt;gbSystemSet_MonitorSet.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="tlpSystemSet_FilterSet.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2676,7 +2511,7 @@
     <value>3, 30</value>
   </data>
   <data name="rbFilterSet_Sequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 21</value>
+    <value>367, 21</value>
   </data>
   <data name="rbFilterSet_Sequence.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2709,7 +2544,7 @@
     <value>3, 3</value>
   </data>
   <data name="rbFilterSet_Priority.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 21</value>
+    <value>367, 21</value>
   </data>
   <data name="rbFilterSet_Priority.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2742,7 +2577,7 @@
     <value>3</value>
   </data>
   <data name="tlpSystemSet_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpSystemSet_FilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2766,13 +2601,13 @@
     <value>Fill</value>
   </data>
   <data name="gbSystemSet_FilterSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>234, 3</value>
+    <value>388, 3</value>
   </data>
   <data name="gbSystemSet_FilterSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbSystemSet_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbSystemSet_FilterSet.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2790,7 +2625,7 @@
     <value>tlpSystemSet</value>
   </data>
   <data name="&gt;&gt;gbSystemSet_FilterSet.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="tlpSystemSet_WorkMode.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2808,7 +2643,7 @@
     <value>3, 3</value>
   </data>
   <data name="cbWorkingMode_Speed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 21</value>
+    <value>367, 21</value>
   </data>
   <data name="cbWorkingMode_Speed.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2841,7 +2676,7 @@
     <value>2</value>
   </data>
   <data name="tlpSystemSet_WorkMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 72</value>
+    <value>373, 67</value>
   </data>
   <data name="tlpSystemSet_WorkMode.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2871,7 +2706,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbSystemSet_WorkMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>225, 94</value>
+    <value>379, 89</value>
   </data>
   <data name="gbSystemSet_WorkMode.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2889,7 +2724,7 @@
     <value>tlpSystemSet</value>
   </data>
   <data name="&gt;&gt;gbSystemSet_WorkMode.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tlpSystemSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2904,7 +2739,7 @@
     <value>1</value>
   </data>
   <data name="tlpSystemSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tlpSystemSet.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2922,13 +2757,13 @@
     <value>0</value>
   </data>
   <data name="tlpSystemSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSystemSet_MonitorSet" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSystemSet_FilterSet" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSystemSet_WorkMode" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSystemSet_FilterSet" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSystemSet_WorkMode" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tcSocketInfo_SystemSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
   </data>
   <data name="tcSocketInfo_SystemSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>770, 97</value>
+    <value>770, 92</value>
   </data>
   <data name="tcSocketInfo_SystemSet.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2958,7 +2793,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="tcSocketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>778, 127</value>
+    <value>778, 122</value>
   </data>
   <data name="tcSocketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>63</value>
@@ -2988,7 +2823,7 @@
     <value>1</value>
   </data>
   <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 130</value>
+    <value>1084, 125</value>
   </data>
   <data name="tlpParameter.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3127,7 +2962,7 @@
     <value>3, 28</value>
   </data>
   <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 186</value>
+    <value>185, 188</value>
   </data>
   <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -3253,7 +3088,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 217</value>
+    <value>191, 219</value>
   </data>
   <data name="tlpFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3286,7 +3121,7 @@
     <value>3, 3, 0, 0</value>
   </data>
   <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 239</value>
+    <value>197, 241</value>
   </data>
   <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
     <value>68</value>
@@ -3430,7 +3265,7 @@
     <value>3, 3</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>864, 203</value>
+    <value>864, 205</value>
   </data>
   <data name="hbPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -3460,7 +3295,7 @@
     <value>1</value>
   </data>
   <data name="tlpHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpHexBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -3478,7 +3313,7 @@
     <value>0</value>
   </data>
   <data name="tlpHexBox.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hbPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,209,Absolute,209" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hbPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,211,Absolute,211" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3493,7 +3328,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3511,13 +3346,13 @@
     <value>0</value>
   </data>
   <data name="tlpPacketData.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpHexBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,209" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpHexBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,211" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpPacketData.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
   </data>
   <data name="tpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -3757,7 +3592,7 @@
     <value>3, 1, 3, 1</value>
   </data>
   <data name="rtbComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 171</value>
+    <value>277, 173</value>
   </data>
   <data name="rtbComparison_A.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -3790,7 +3625,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 179</value>
+    <value>285, 181</value>
   </data>
   <data name="pComparison_A.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -3820,7 +3655,7 @@
     <value>3, 1, 3, 1</value>
   </data>
   <data name="rtbComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 171</value>
+    <value>277, 173</value>
   </data>
   <data name="rtbComparison_B.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -3853,7 +3688,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>285, 179</value>
+    <value>285, 181</value>
   </data>
   <data name="pComparison_B.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -3883,7 +3718,7 @@
     <value>3, 1, 3, 1</value>
   </data>
   <data name="rtbComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 171</value>
+    <value>286, 173</value>
   </data>
   <data name="rtbComparison_Result.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -3916,7 +3751,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 179</value>
+    <value>294, 181</value>
   </data>
   <data name="pComparison_Result.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -3946,7 +3781,7 @@
     <value>2</value>
   </data>
   <data name="tlpComparison.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpComparison.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -3970,7 +3805,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpComparison.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpComparison.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -4012,10 +3847,10 @@
     <value>Microsoft YaHei UI, 9pt</value>
   </data>
   <data name="hbXOR_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 122</value>
+    <value>3, 123</value>
   </data>
   <data name="hbXOR_To.Size" type="System.Drawing.Size, System.Drawing">
-    <value>864, 84</value>
+    <value>864, 85</value>
   </data>
   <data name="hbXOR_To.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -4201,7 +4036,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpPacketInfo_XOR_Button.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 89</value>
+    <value>0, 90</value>
   </data>
   <data name="tlpPacketInfo_XOR_Button.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -4252,7 +4087,7 @@
     <value>3, 3</value>
   </data>
   <data name="hbXOR_From.Size" type="System.Drawing.Size, System.Drawing">
-    <value>864, 83</value>
+    <value>864, 84</value>
   </data>
   <data name="hbXOR_From.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -4282,7 +4117,7 @@
     <value>3</value>
   </data>
   <data name="tlpPacketInfo_XOR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpPacketInfo_XOR.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -4306,7 +4141,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpXOR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpXOR.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -4342,7 +4177,7 @@
     <value>NoControl</value>
   </data>
   <data name="bPacketInfo_Decoding.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 123</value>
+    <value>10, 124</value>
   </data>
   <data name="bPacketInfo_Decoding.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
@@ -4375,7 +4210,7 @@
     <value>NoControl</value>
   </data>
   <data name="bPacketInfo_Encoding.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 51</value>
+    <value>10, 52</value>
   </data>
   <data name="bPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
@@ -4402,7 +4237,7 @@
     <value>Fill</value>
   </data>
   <data name="pbEncoding.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 86</value>
+    <value>10, 87</value>
   </data>
   <data name="pbEncoding.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 31</value>
@@ -4435,7 +4270,7 @@
     <value>5</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Button.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 203</value>
+    <value>94, 205</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Button.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -5395,7 +5230,7 @@
     <value>8</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>539, 209</value>
+    <value>539, 211</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -5422,7 +5257,7 @@
     <value>3, 3</value>
   </data>
   <data name="rtbPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>221, 201</value>
+    <value>221, 203</value>
   </data>
   <data name="rtbPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -5455,7 +5290,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 209</value>
+    <value>229, 211</value>
   </data>
   <data name="pPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -5485,7 +5320,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -5509,7 +5344,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpEncoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpEncoding.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -5566,7 +5401,7 @@
     <value>3, 3</value>
   </data>
   <data name="rtbExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 165</value>
+    <value>371, 167</value>
   </data>
   <data name="rtbExtractionTo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5596,7 +5431,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 173</value>
+    <value>379, 175</value>
   </data>
   <data name="pExtractionTo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5620,7 +5455,7 @@
     <value>3, 3</value>
   </data>
   <data name="rtbExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 165</value>
+    <value>371, 167</value>
   </data>
   <data name="rtbExtractionFrom.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -5650,7 +5485,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 173</value>
+    <value>379, 175</value>
   </data>
   <data name="pExtractionFrom.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -5677,7 +5512,7 @@
     <value>NoControl</value>
   </data>
   <data name="bExtraction_Clear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 39</value>
+    <value>13, 40</value>
   </data>
   <data name="bExtraction_Clear.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
@@ -5707,7 +5542,7 @@
     <value>NoControl</value>
   </data>
   <data name="bExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 111</value>
+    <value>13, 112</value>
   </data>
   <data name="bExtraction.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
@@ -5737,7 +5572,7 @@
     <value>NoControl</value>
   </data>
   <data name="pbExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 74</value>
+    <value>13, 75</value>
   </data>
   <data name="pbExtraction.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 31</value>
@@ -5773,7 +5608,7 @@
     <value>5</value>
   </data>
   <data name="tlpExtractionButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 179</value>
+    <value>100, 181</value>
   </data>
   <data name="tlpExtractionButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -5833,7 +5668,7 @@
     <value>2</value>
   </data>
   <data name="tlpExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tlpExtraction.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -5857,7 +5692,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpExtraction.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -5947,7 +5782,7 @@
     <value>0, 0</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -5968,7 +5803,7 @@
     <value>4, 26</value>
   </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>870, 209</value>
+    <value>870, 211</value>
   </data>
   <data name="tpSystemLog.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -6001,7 +5836,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="tcPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>878, 239</value>
+    <value>878, 241</value>
   </data>
   <data name="tcPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
@@ -6031,7 +5866,7 @@
     <value>1</value>
   </data>
   <data name="tlpPacketInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>884, 242</value>
+    <value>884, 244</value>
   </data>
   <data name="tlpPacketInfo.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -6055,7 +5890,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpInformation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 397</value>
+    <value>0, 394</value>
   </data>
   <data name="tlpInformation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -6064,7 +5899,7 @@
     <value>1</value>
   </data>
   <data name="tlpInformation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 242</value>
+    <value>1084, 244</value>
   </data>
   <data name="tlpInformation.TabIndex" type="System.Int32, mscorlib">
     <value>61</value>
@@ -6085,79 +5920,61 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="ssProcessInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1658, 17</value>
+    <value>1474, 17</value>
   </metadata>
   <data name="ssProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="tsslProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 17</value>
+    <value>88, 18</value>
   </data>
   <data name="tsslProcessName.Text" xml:space="preserve">
     <value>ProcessName</value>
   </data>
   <data name="tsslSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
+    <value>11, 18</value>
   </data>
   <data name="tsslSplit1.Text" xml:space="preserve">
     <value>|</value>
   </data>
   <data name="tsslProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 17</value>
+    <value>76, 18</value>
   </data>
   <data name="tsslProcessInfo.Text" xml:space="preserve">
     <value>ProcessInfo</value>
   </data>
   <data name="tsslSplit2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
+    <value>11, 18</value>
   </data>
   <data name="tsslSplit2.Text" xml:space="preserve">
     <value>|</value>
   </data>
   <data name="tsslWinSock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 17</value>
+    <value>58, 18</value>
   </data>
   <data name="tsslWinSock.Text" xml:space="preserve">
     <value>WinSock</value>
   </data>
   <data name="tsslSplit3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
+    <value>11, 18</value>
   </data>
   <data name="tsslSplit3.Text" xml:space="preserve">
     <value>|</value>
   </data>
   <data name="tsslTotalBytes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
+    <value>68, 18</value>
   </data>
   <data name="tsslTotalBytes.Text" xml:space="preserve">
     <value>TotalBytes</value>
   </data>
-  <data name="tsslSplit4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tsslSplit4.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="tsslMonitorInfo.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="tsslMonitorInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 17</value>
-  </data>
-  <data name="tsslMonitorInfo.Text" xml:space="preserve">
-    <value>MonitorInfo</value>
-  </data>
-  <data name="tsslMonitorInfo.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
   <data name="ssProcessInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 639</value>
+    <value>3, 638</value>
   </data>
   <data name="ssProcessInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 3</value>
   </data>
   <data name="ssProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1078, 22</value>
+    <value>1078, 23</value>
   </data>
   <data name="ssProcessInfo.TabIndex" type="System.Int32, mscorlib">
     <value>71</value>
@@ -6205,7 +6022,7 @@
     <value>5</value>
   </data>
   <data name="tlpSocketForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSocketList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,130,Absolute,25,Percent,50,Percent,50,Absolute,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSocketList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,125,Absolute,25,Percent,50,Percent,50,Absolute,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="bgwSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>970, 17</value>
@@ -6220,7 +6037,7 @@
     <value>1197, 17</value>
   </metadata>
   <metadata name="niWPE.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1777, 17</value>
+    <value>1593, 17</value>
   </metadata>
   <metadata name="cmsIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>651, 17</value>
@@ -12480,9 +12297,6 @@
   </metadata>
   <metadata name="tSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>122, 17</value>
-  </metadata>
-  <metadata name="bgwPerformanceCounter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1365, 17</value>
   </metadata>
   <data name="dataGridViewImageColumn1.HeaderText" xml:space="preserve">
     <value />
@@ -19295,18 +19109,6 @@
   <data name="&gt;&gt;tsslTotalBytes.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsslSplit4.Name" xml:space="preserve">
-    <value>tsslSplit4</value>
-  </data>
-  <data name="&gt;&gt;tsslSplit4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslMonitorInfo.Name" xml:space="preserve">
-    <value>tsslMonitorInfo</value>
-  </data>
-  <data name="&gt;&gt;tsslMonitorInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;bgwSocketList.Name" xml:space="preserve">
     <value>bgwSocketList</value>
   </data>
@@ -19408,12 +19210,6 @@
   </data>
   <data name="&gt;&gt;tSocketList.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bgwPerformanceCounter.Name" xml:space="preserve">
-    <value>bgwPerformanceCounter</value>
-  </data>
-  <data name="&gt;&gt;bgwPerformanceCounter.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
     <value>dataGridViewImageColumn1</value>

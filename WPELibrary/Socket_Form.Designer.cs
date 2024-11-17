@@ -163,11 +163,6 @@ namespace WPELibrary
             this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
-            this.gbSystemSet_MonitorSet = new System.Windows.Forms.GroupBox();
-            this.tlpSystemSet_MonitorSet = new System.Windows.Forms.TableLayoutPanel();
-            this.lMonitorSet_Mem = new System.Windows.Forms.Label();
-            this.nudMonitorSet_Mem = new System.Windows.Forms.NumericUpDown();
-            this.cbMonitorSet_Mem = new System.Windows.Forms.CheckBox();
             this.gbSystemSet_FilterSet = new System.Windows.Forms.GroupBox();
             this.tlpSystemSet_FilterSet = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterSet_Sequence = new System.Windows.Forms.RadioButton();
@@ -313,8 +308,6 @@ namespace WPELibrary
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslSplit4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslMonitorInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.bgwSocketList = new System.ComponentModel.BackgroundWorker();
             this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
@@ -333,7 +326,6 @@ namespace WPELibrary
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
-            this.bgwPerformanceCounter = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
@@ -367,9 +359,6 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
             this.tcSocketInfo_SystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
-            this.gbSystemSet_MonitorSet.SuspendLayout();
-            this.tlpSystemSet_MonitorSet.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMonitorSet_Mem)).BeginInit();
             this.gbSystemSet_FilterSet.SuspendLayout();
             this.tlpSystemSet_FilterSet.SuspendLayout();
             this.gbSystemSet_WorkMode.SuspendLayout();
@@ -1239,8 +1228,8 @@ namespace WPELibrary
             // tlpListSet_LogList
             // 
             resources.ApplyResources(this.tlpListSet_LogList, "tlpListSet_LogList");
-            this.tlpListSet_LogList.Controls.Add(this.nudLogList_AutoClearValue, 2, 0);
-            this.tlpListSet_LogList.Controls.Add(this.cbLogList_AutoClear, 1, 0);
+            this.tlpListSet_LogList.Controls.Add(this.nudLogList_AutoClearValue, 1, 1);
+            this.tlpListSet_LogList.Controls.Add(this.cbLogList_AutoClear, 0, 1);
             this.tlpListSet_LogList.Controls.Add(this.cbLogList_AutoRoll, 0, 0);
             this.tlpListSet_LogList.Name = "tlpListSet_LogList";
             // 
@@ -1282,8 +1271,8 @@ namespace WPELibrary
             // tlpListSet_SocketList
             // 
             resources.ApplyResources(this.tlpListSet_SocketList, "tlpListSet_SocketList");
-            this.tlpListSet_SocketList.Controls.Add(this.nudSocketList_AutoClearValue, 2, 0);
-            this.tlpListSet_SocketList.Controls.Add(this.cbSocketList_AutoClear, 1, 0);
+            this.tlpListSet_SocketList.Controls.Add(this.nudSocketList_AutoClearValue, 1, 1);
+            this.tlpListSet_SocketList.Controls.Add(this.cbSocketList_AutoClear, 0, 1);
             this.tlpListSet_SocketList.Controls.Add(this.cbSocketList_AutoRoll, 0, 0);
             this.tlpListSet_SocketList.Name = "tlpListSet_SocketList";
             // 
@@ -1325,54 +1314,9 @@ namespace WPELibrary
             // tlpSystemSet
             // 
             resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
-            this.tlpSystemSet.Controls.Add(this.gbSystemSet_MonitorSet, 2, 0);
             this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterSet, 1, 0);
             this.tlpSystemSet.Controls.Add(this.gbSystemSet_WorkMode, 0, 0);
             this.tlpSystemSet.Name = "tlpSystemSet";
-            // 
-            // gbSystemSet_MonitorSet
-            // 
-            this.gbSystemSet_MonitorSet.Controls.Add(this.tlpSystemSet_MonitorSet);
-            resources.ApplyResources(this.gbSystemSet_MonitorSet, "gbSystemSet_MonitorSet");
-            this.gbSystemSet_MonitorSet.Name = "gbSystemSet_MonitorSet";
-            this.gbSystemSet_MonitorSet.TabStop = false;
-            // 
-            // tlpSystemSet_MonitorSet
-            // 
-            resources.ApplyResources(this.tlpSystemSet_MonitorSet, "tlpSystemSet_MonitorSet");
-            this.tlpSystemSet_MonitorSet.Controls.Add(this.lMonitorSet_Mem, 2, 0);
-            this.tlpSystemSet_MonitorSet.Controls.Add(this.nudMonitorSet_Mem, 1, 0);
-            this.tlpSystemSet_MonitorSet.Controls.Add(this.cbMonitorSet_Mem, 0, 0);
-            this.tlpSystemSet_MonitorSet.Name = "tlpSystemSet_MonitorSet";
-            // 
-            // lMonitorSet_Mem
-            // 
-            resources.ApplyResources(this.lMonitorSet_Mem, "lMonitorSet_Mem");
-            this.lMonitorSet_Mem.Name = "lMonitorSet_Mem";
-            // 
-            // nudMonitorSet_Mem
-            // 
-            resources.ApplyResources(this.nudMonitorSet_Mem, "nudMonitorSet_Mem");
-            this.nudMonitorSet_Mem.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMonitorSet_Mem.Name = "nudMonitorSet_Mem";
-            this.nudMonitorSet_Mem.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // cbMonitorSet_Mem
-            // 
-            resources.ApplyResources(this.cbMonitorSet_Mem, "cbMonitorSet_Mem");
-            this.cbMonitorSet_Mem.Checked = true;
-            this.cbMonitorSet_Mem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbMonitorSet_Mem.Name = "cbMonitorSet_Mem";
-            this.cbMonitorSet_Mem.UseVisualStyleBackColor = true;
-            this.cbMonitorSet_Mem.CheckedChanged += new System.EventHandler(this.cbMonitorSet_Mem_CheckedChanged);
             // 
             // gbSystemSet_FilterSet
             // 
@@ -2478,9 +2422,7 @@ namespace WPELibrary
             this.tsslSplit2,
             this.tsslWinSock,
             this.tsslSplit3,
-            this.tsslTotalBytes,
-            this.tsslSplit4,
-            this.tsslMonitorInfo});
+            this.tsslTotalBytes});
             this.ssProcessInfo.Name = "ssProcessInfo";
             // 
             // tsslProcessName
@@ -2520,17 +2462,6 @@ namespace WPELibrary
             // 
             this.tsslTotalBytes.Name = "tsslTotalBytes";
             resources.ApplyResources(this.tsslTotalBytes, "tsslTotalBytes");
-            // 
-            // tsslSplit4
-            // 
-            this.tsslSplit4.ForeColor = System.Drawing.Color.DarkGray;
-            this.tsslSplit4.Name = "tsslSplit4";
-            resources.ApplyResources(this.tsslSplit4, "tsslSplit4");
-            // 
-            // tsslMonitorInfo
-            // 
-            resources.ApplyResources(this.tsslMonitorInfo, "tsslMonitorInfo");
-            this.tsslMonitorInfo.Name = "tsslMonitorInfo";
             // 
             // bgwSocketList
             // 
@@ -2641,10 +2572,6 @@ namespace WPELibrary
             this.tSocketList.Interval = 10;
             this.tSocketList.Tick += new System.EventHandler(this.tSocketList_Tick);
             // 
-            // bgwPerformanceCounter
-            // 
-            this.bgwPerformanceCounter.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPerformanceCounter_DoWork);
-            // 
             // dataGridViewImageColumn1
             // 
             dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -2707,10 +2634,6 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).EndInit();
             this.tcSocketInfo_SystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
-            this.gbSystemSet_MonitorSet.ResumeLayout(false);
-            this.tlpSystemSet_MonitorSet.ResumeLayout(false);
-            this.tlpSystemSet_MonitorSet.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMonitorSet_Mem)).EndInit();
             this.gbSystemSet_FilterSet.ResumeLayout(false);
             this.tlpSystemSet_FilterSet.ResumeLayout(false);
             this.tlpSystemSet_FilterSet.PerformLayout();
@@ -2993,9 +2916,6 @@ namespace WPELibrary
         private System.Windows.Forms.TabPage tcSocketInfo_SystemSet;
         private System.Windows.Forms.TabPage tcSocketInfo_ListSet;
         private System.Windows.Forms.Timer tSocketList;
-        private System.Windows.Forms.ToolStripStatusLabel tsslSplit4;
-        private System.Windows.Forms.ToolStripStatusLabel tsslMonitorInfo;
-        private System.ComponentModel.BackgroundWorker bgwPerformanceCounter;
         private System.Windows.Forms.TableLayoutPanel tlpListSet;
         private System.Windows.Forms.GroupBox gbListSet_SocketList;
         private System.Windows.Forms.TableLayoutPanel tlpListSet_SocketList;
@@ -3015,11 +2935,6 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpSystemSet_FilterSet;
         private System.Windows.Forms.RadioButton rbFilterSet_Priority;
         private System.Windows.Forms.RadioButton rbFilterSet_Sequence;
-        private System.Windows.Forms.GroupBox gbSystemSet_MonitorSet;
-        private System.Windows.Forms.TableLayoutPanel tlpSystemSet_MonitorSet;
-        private System.Windows.Forms.CheckBox cbMonitorSet_Mem;
-        private System.Windows.Forms.NumericUpDown nudMonitorSet_Mem;
-        private System.Windows.Forms.Label lMonitorSet_Mem;
         private System.Windows.Forms.TableLayoutPanel tlpHookSet;
         private System.Windows.Forms.GroupBox gbHookSet_Winsock;
         private System.Windows.Forms.TableLayoutPanel tlpHookSet_Winsock;

@@ -2827,9 +2827,7 @@ namespace WPELibrary.Lib
                 xeConfig.AppendChild(xeSystemConfig);
 
                 string sSpeedMode = Socket_Cache.SpeedMode.ToString();
-                string sFilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
-                string sMonitorMEM = Socket_Cache.MonitorMEM.ToString();
-                string sMonitorMEM_Value = Socket_Cache.MonitorMEM_Value.ToString();
+                string sFilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();             
 
                 XmlElement xeSpeedMode = doc.CreateElement("SpeedMode");
                 xeSpeedMode.InnerText = sSpeedMode;
@@ -2837,15 +2835,7 @@ namespace WPELibrary.Lib
 
                 XmlElement xeFilterList_Execute = doc.CreateElement("FilterList_Execute");
                 xeFilterList_Execute.InnerText = sFilterList_Execute;
-                xeSystemConfig.AppendChild(xeFilterList_Execute);
-
-                XmlElement xeMonitorMEM = doc.CreateElement("MonitorMEM");
-                xeMonitorMEM.InnerText = sMonitorMEM;
-                xeSystemConfig.AppendChild(xeMonitorMEM);
-
-                XmlElement xeMonitorMEM_Value = doc.CreateElement("MonitorMEM_Value");
-                xeMonitorMEM_Value.InnerText = sMonitorMEM_Value;
-                xeSystemConfig.AppendChild(xeMonitorMEM_Value);
+                xeSystemConfig.AppendChild(xeFilterList_Execute);           
 
                 #endregion
 
@@ -2967,14 +2957,10 @@ namespace WPELibrary.Lib
                     XmlNode xnSystemConfig = xnConfig.SelectSingleNode("SystemConfig");
 
                     string sSpeedMode = xnSystemConfig.SelectSingleNode("SpeedMode").InnerText;
-                    string sFilterList_Execute = xnSystemConfig.SelectSingleNode("FilterList_Execute").InnerText;
-                    string sMonitorMEM = xnSystemConfig.SelectSingleNode("MonitorMEM").InnerText;
-                    string sMonitorMEM_Value = xnSystemConfig.SelectSingleNode("MonitorMEM_Value").InnerText;
+                    string sFilterList_Execute = xnSystemConfig.SelectSingleNode("FilterList_Execute").InnerText;                  
 
                     Socket_Cache.SpeedMode = bool.Parse(sSpeedMode);
-                    Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(sFilterList_Execute);
-                    Socket_Cache.MonitorMEM = bool.Parse(sMonitorMEM);
-                    Socket_Cache.MonitorMEM_Value = decimal.Parse(sMonitorMEM_Value);
+                    Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(sFilterList_Execute);                 
 
                     #endregion
                 }

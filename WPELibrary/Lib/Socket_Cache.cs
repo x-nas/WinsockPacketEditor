@@ -16,9 +16,7 @@ namespace WPELibrary.Lib
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
         public static long Total_RecvBytes = 0;        
-        public static bool SpeedMode;
-        public static bool MonitorMEM;
-        public static decimal MonitorMEM_Value;
+        public static bool SpeedMode;      
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
         public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
