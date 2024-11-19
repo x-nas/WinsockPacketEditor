@@ -12,7 +12,7 @@ namespace WPELibrary.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.12.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,7 +25,7 @@ namespace WPELibrary.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool FilterConfig_CheckNotShow {
             get {
                 return ((bool)(this["FilterConfig_CheckNotShow"]));
@@ -326,36 +326,36 @@ namespace WPELibrary.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ListConfig_FilterList_AutoRoll {
+        public bool ListConfig_LogList_AutoRoll {
             get {
-                return ((bool)(this["ListConfig_FilterList_AutoRoll"]));
+                return ((bool)(this["ListConfig_LogList_AutoRoll"]));
             }
             set {
-                this["ListConfig_FilterList_AutoRoll"] = value;
+                this["ListConfig_LogList_AutoRoll"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ListConfig_FilterList_AutoClear {
+        public bool ListConfig_LogList_AutoClear {
             get {
-                return ((bool)(this["ListConfig_FilterList_AutoClear"]));
+                return ((bool)(this["ListConfig_LogList_AutoClear"]));
             }
             set {
-                this["ListConfig_FilterList_AutoClear"] = value;
+                this["ListConfig_LogList_AutoClear"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5000")]
-        public decimal ListConfig_FilterList_AutoClear_Value {
+        public decimal ListConfig_LogList_AutoClear_Value {
             get {
-                return ((decimal)(this["ListConfig_FilterList_AutoClear_Value"]));
+                return ((decimal)(this["ListConfig_LogList_AutoClear_Value"]));
             }
             set {
-                this["ListConfig_FilterList_AutoClear_Value"] = value;
+                this["ListConfig_LogList_AutoClear_Value"] = value;
             }
         }
         
@@ -380,6 +380,18 @@ namespace WPELibrary.Properties {
             }
             set {
                 this["SystemConfig_FilterList_Execute"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ListConfig_FilterList_UseEncryption {
+            get {
+                return ((bool)(this["ListConfig_FilterList_UseEncryption"]));
+            }
+            set {
+                this["ListConfig_FilterList_UseEncryption"] = value;
             }
         }
     }

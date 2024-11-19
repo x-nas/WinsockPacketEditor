@@ -45,7 +45,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
-        //public static string[] MutiLan_36 = { "", "" };
+        public static string[] MutiLan_36 = { "导出滤镜列表", "Export Filter List" };
         public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         public static string[] MutiLan_39 = { "开始拦截!", "Start Intercepting!" };
@@ -82,22 +82,26 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
         public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };
         public static string[] MutiLan_72 = { "保存失败!", "Save failed!" };
-        public static string[] MutiLan_73 = { "加载成功!", "Load successful!" };
-        public static string[] MutiLan_74 = { "加载失败!", "Load failed!" };
+        //public static string[] MutiLan_73 = { "", "" };
+        //public static string[] MutiLan_74 = { "", "" };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
         public static string[] MutiLan_78 = { "记录时间\t模块\t日志内容\t", "Log Time\tModule Name\tLog content\t" };
         public static string[] MutiLan_79 = { "提示", "Prompt" };
-        //public static string[] MutiLan_80 = { "CPU: {0}%", "CPU: {0}%" };
-        //public static string[] MutiLan_81 = { "内存: {0}%", "Memory: {0}%" };
+        public static string[] MutiLan_80 = { "加载滤镜列表 [未加密]", "Load filter list [unencrypted]" };
+        public static string[] MutiLan_81 = { "加载滤镜列表 [已加密]", "Load filter list [encrypted]" };
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
         public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };
         public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
         public static string[] MutiLan_86 = { "二进制", "Binary" };
         public static string[] MutiLan_87 = { "十进制", "Decimal" };
-        //public static string[] MutiLan_88 = { "正在读取数据 . . .", "Loading . . ." };
+        public static string[] MutiLan_88 = { " 请输入密码, 此密码在导入滤镜列表时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!", " Please enter the password. This password will require verification when importing the filter list.\r\n If you do not need to set a password, please click the [ Cancel ] button!" };
+        public static string[] MutiLan_89 = { "密码不能为空!", "Password cannot be empty!" };
+        public static string[] MutiLan_90 = { "导入滤镜列表", "Import Filter List" };
+        public static string[] MutiLan_91 = { " 请输入密码", " Please enter the password" };
+        public static string[] MutiLan_92 = { "加载滤镜列表失败: 密码错误!", "Failed to load filter list: Password incorrect!" };
 
         #endregion
 

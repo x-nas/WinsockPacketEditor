@@ -32,14 +32,18 @@ namespace WPELibrary
             {
                 MultiLanguage.SetDefaultLanguage(sLanguage);
                 InitializeComponent();
-              
+
                 this.InitSocketForm();
                 this.InitSocketDGV();
                 this.InitHexBox();
                 this.LoadConfigs_Parameter();
 
                 Socket_Cache.SendList.InitSendList();
-                Socket_Cache.FilterList.InitFilterList(Socket_Cache.FilterList.Filter_MaxNum);                
+
+                if (!bgwFilterList.IsBusy)
+                {
+                    bgwFilterList.RunWorkerAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -195,7 +199,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
-        }
+        }        
 
         #endregion
 
@@ -273,10 +277,12 @@ namespace WPELibrary
                 this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
                 this.SocketList_AutoClearChange();
 
-                this.cbLogList_AutoRoll.Checked = Socket_Cache.FilterList.AutoRoll;
-                this.cbLogList_AutoClear.Checked = Socket_Cache.FilterList.AutoClear;
-                this.nudLogList_AutoClearValue.Value = Socket_Cache.FilterList.AutoClear_Value;
+                this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.AutoRoll;
+                this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.AutoClear;
+                this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.AutoClear_Value;
                 this.LogList_AutoClearChange();
+
+                this.cbFilterList_UseEncryption.Checked = Socket_Cache.FilterList.UseEncryption;
 
                 this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;
 
@@ -332,9 +338,11 @@ namespace WPELibrary
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
                 Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
 
-                Socket_Cache.FilterList.AutoRoll = this.cbLogList_AutoRoll.Checked;
-                Socket_Cache.FilterList.AutoClear = this.cbLogList_AutoClear.Checked;
-                Socket_Cache.FilterList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+                Socket_Cache.LogList.AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Socket_Cache.LogList.AutoClear = this.cbLogList_AutoClear.Checked;
+                Socket_Cache.LogList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+
+                Socket_Cache.FilterList.UseEncryption = this.cbFilterList_UseEncryption.Checked;
 
                 Socket_Cache.SpeedMode = this.cbWorkingMode_Speed.Checked;            
 
@@ -346,7 +354,6 @@ namespace WPELibrary
                 {
                     Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Sequence;
                 }
-
             }
             catch (Exception ex)
             {
@@ -1471,8 +1478,7 @@ namespace WPELibrary
 
         private void tsFilterList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.FilterList.AddFilter_New();
-            Socket_Operation.SaveFilterList(string.Empty, -1);
+            Socket_Cache.FilterList.AddFilter_New();            
         }
 
         private void tsFilterList_CleanUp_Click(object sender, EventArgs e)
@@ -1946,6 +1952,15 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        private void bgwFilterList_DoWork(object sender, DoWorkEventArgs e)
+        {
+            
+
+            
+
+            Socket_Operation.LoadFilterList(string.Empty);
+        }
     }
 }

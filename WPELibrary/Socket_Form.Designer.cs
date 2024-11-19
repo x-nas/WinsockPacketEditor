@@ -151,6 +151,9 @@ namespace WPELibrary
             this.cbHookSend = new System.Windows.Forms.CheckBox();
             this.tcSocketInfo_ListSet = new System.Windows.Forms.TabPage();
             this.tlpListSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbListSet_FilterList = new System.Windows.Forms.GroupBox();
+            this.tlpListSet_FilterList = new System.Windows.Forms.TableLayoutPanel();
+            this.cbFilterList_UseEncryption = new System.Windows.Forms.CheckBox();
             this.gbListSet_LogList = new System.Windows.Forms.GroupBox();
             this.tlpListSet_LogList = new System.Windows.Forms.TableLayoutPanel();
             this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
@@ -327,6 +330,7 @@ namespace WPELibrary
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.bgwFilterList = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -351,6 +355,8 @@ namespace WPELibrary
             this.tlpHookSet_Winsock.SuspendLayout();
             this.tcSocketInfo_ListSet.SuspendLayout();
             this.tlpListSet.SuspendLayout();
+            this.gbListSet_FilterList.SuspendLayout();
+            this.tlpListSet_FilterList.SuspendLayout();
             this.gbListSet_LogList.SuspendLayout();
             this.tlpListSet_LogList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
@@ -1214,9 +1220,29 @@ namespace WPELibrary
             // tlpListSet
             // 
             resources.ApplyResources(this.tlpListSet, "tlpListSet");
+            this.tlpListSet.Controls.Add(this.gbListSet_FilterList, 2, 0);
             this.tlpListSet.Controls.Add(this.gbListSet_LogList, 1, 0);
             this.tlpListSet.Controls.Add(this.gbListSet_SocketList, 0, 0);
             this.tlpListSet.Name = "tlpListSet";
+            // 
+            // gbListSet_FilterList
+            // 
+            this.gbListSet_FilterList.Controls.Add(this.tlpListSet_FilterList);
+            resources.ApplyResources(this.gbListSet_FilterList, "gbListSet_FilterList");
+            this.gbListSet_FilterList.Name = "gbListSet_FilterList";
+            this.gbListSet_FilterList.TabStop = false;
+            // 
+            // tlpListSet_FilterList
+            // 
+            resources.ApplyResources(this.tlpListSet_FilterList, "tlpListSet_FilterList");
+            this.tlpListSet_FilterList.Controls.Add(this.cbFilterList_UseEncryption, 0, 0);
+            this.tlpListSet_FilterList.Name = "tlpListSet_FilterList";
+            // 
+            // cbFilterList_UseEncryption
+            // 
+            resources.ApplyResources(this.cbFilterList_UseEncryption, "cbFilterList_UseEncryption");
+            this.cbFilterList_UseEncryption.Name = "cbFilterList_UseEncryption";
+            this.cbFilterList_UseEncryption.UseVisualStyleBackColor = true;
             // 
             // gbListSet_LogList
             // 
@@ -2584,6 +2610,10 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
+            // bgwFilterList
+            // 
+            this.bgwFilterList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwFilterList_DoWork);
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -2624,6 +2654,9 @@ namespace WPELibrary
             this.tlpHookSet_Winsock.PerformLayout();
             this.tcSocketInfo_ListSet.ResumeLayout(false);
             this.tlpListSet.ResumeLayout(false);
+            this.gbListSet_FilterList.ResumeLayout(false);
+            this.tlpListSet_FilterList.ResumeLayout(false);
+            this.tlpListSet_FilterList.PerformLayout();
             this.gbListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.PerformLayout();
@@ -2972,5 +3005,9 @@ namespace WPELibrary
         private System.Windows.Forms.Label lCheck_Size;
         private System.Windows.Forms.NumericUpDown nudCheckSizeFrom;
         private System.Windows.Forms.TextBox txtCheckHead;
+        private System.Windows.Forms.GroupBox gbListSet_FilterList;
+        private System.Windows.Forms.TableLayoutPanel tlpListSet_FilterList;
+        private System.Windows.Forms.CheckBox cbFilterList_UseEncryption;
+        private System.ComponentModel.BackgroundWorker bgwFilterList;
     }
 }

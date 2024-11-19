@@ -16,6 +16,9 @@ using System.Xml;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Security.Cryptography;
+using System.Xml.Linq;
+using System.Management;
 
 namespace WPELibrary.Lib
 {   
@@ -1581,6 +1584,9 @@ namespace WPELibrary.Lib
 
                     if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
                     {
+                        Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Export);
+                        pwForm.ShowDialog();
+
                         bool bOK = SaveFilterList(sfdSocketInfo.FileName, FilterIndex);
 
                         if (bOK)
@@ -1606,18 +1612,29 @@ namespace WPELibrary.Lib
 
             try
             {
+                bool bDoEncrypt = true;
+                string sPassword = string.Empty;
+
                 if (string.IsNullOrEmpty(FilePath))
                 {
                     FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                    sPassword = Socket_Operation.GetComputerCode();
+
+                    if (!Socket_Cache.FilterList.UseEncryption)
+                    {
+                        bDoEncrypt = false;
+                    }                    
+                }
+                else
+                {
+                    sPassword = Socket_Cache.FilterList.AESKey;                    
                 }
 
-                XmlDocument doc = new XmlDocument();
+                XDocument xdoc = new XDocument();
+                xdoc.Declaration = new XDeclaration("1.0", "utf-8", "yes");
 
-                XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-                doc.AppendChild(xmlDeclaration);
-
-                XmlElement xeFilterList = doc.CreateElement("FilterList");
-                doc.AppendChild(xeFilterList);
+                XElement xeRoot = new XElement("FilterList");
+                xdoc.Add(xeRoot);
 
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
@@ -1644,56 +1661,34 @@ namespace WPELibrary.Lib
                         string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
                         string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
-                        XmlElement xeFilter = doc.CreateElement("Filter");
-                        xeFilterList.AppendChild(xeFilter);
+                        XElement xeFilter = 
+                            new XElement("Filter",
+                            new XElement("IsEnable", sIsEnable),
+                            new XElement("Num", sFNum),
+                            new XElement("Name", sFName),
+                            new XElement("AppointHeader", sFAppointHeader),
+                            new XElement("HeaderContent", sFHeaderContent),
+                            new XElement("Mode", sFMode),
+                            new XElement("Action", sFAction),
+                            new XElement("Function", sFFunction),
+                            new XElement("StartFrom", sFStartFrom),
+                            new XElement("Search", sFSearch),
+                            new XElement("Modify", sFModify)
+                            );
 
-                        XmlElement xeIsEnable = doc.CreateElement("IsEnable");
-                        xeIsEnable.InnerText = sIsEnable;
-                        xeFilter.AppendChild(xeIsEnable);
-
-                        XmlElement xeFNum = doc.CreateElement("Num");
-                        xeFNum.InnerText = sFNum;
-                        xeFilter.AppendChild(xeFNum);
-
-                        XmlElement xeFName = doc.CreateElement("Name");
-                        xeFName.InnerText = sFName;
-                        xeFilter.AppendChild(xeFName);
-
-                        XmlElement xeAppointHeader = doc.CreateElement("AppointHeader");
-                        xeAppointHeader.InnerText = sFAppointHeader;
-                        xeFilter.AppendChild(xeAppointHeader);
-
-                        XmlElement xeHeaderContent = doc.CreateElement("HeaderContent");
-                        xeHeaderContent.InnerText = sFHeaderContent;
-                        xeFilter.AppendChild(xeHeaderContent);
-
-                        XmlElement xeFMode = doc.CreateElement("Mode");
-                        xeFMode.InnerText = sFMode;
-                        xeFilter.AppendChild(xeFMode);
-
-                        XmlElement xeFAction = doc.CreateElement("Action");
-                        xeFAction.InnerText = sFAction;
-                        xeFilter.AppendChild(xeFAction);
-
-                        XmlElement xeFFunction = doc.CreateElement("Function");
-                        xeFFunction.InnerText = sFFunction;
-                        xeFilter.AppendChild(xeFFunction);
-
-                        XmlElement xeFStartFrom = doc.CreateElement("StartFrom");
-                        xeFStartFrom.InnerText = sFStartFrom;
-                        xeFilter.AppendChild(xeFStartFrom);
-
-                        XmlElement xeSearch = doc.CreateElement("Search");
-                        xeSearch.InnerText = sFSearch;
-                        xeFilter.AppendChild(xeSearch);
-
-                        XmlElement xeModify = doc.CreateElement("Modify");
-                        xeModify.InnerText = sFModify;
-                        xeFilter.AppendChild(xeModify);
+                        xeRoot.Add(xeFilter);
                     }
                 }
 
-                doc.Save(FilePath);
+                xdoc.Save(FilePath);
+
+                if (bDoEncrypt)
+                {
+                    if (!string.IsNullOrEmpty(sPassword))
+                    {
+                        EncryptFilterList(FilePath, sPassword);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1722,16 +1717,7 @@ namespace WPELibrary.Lib
 
                 if (!string.IsNullOrEmpty(FilePath))
                 {
-                    bool bOK = LoadFilterList(FilePath);
-
-                    if (bOK)
-                    {
-                        ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
-                    }
-                    else
-                    {
-                        ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74));
-                    }
+                    LoadFilterList(FilePath);
                 }
             }
             catch (Exception ex)
@@ -1740,56 +1726,216 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static bool LoadFilterList(string FilePath)
+        public static void LoadFilterList(string FilePath)
         {
-            bool bReturn = true;
-
             try
             {
+                bool bIsSystemLoad = false;
+                bool bIsEncrypt = false;                
+
                 if (string.IsNullOrEmpty(FilePath))
                 {
                     FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                    bIsSystemLoad = true;
                 }
 
                 if (File.Exists(FilePath))
                 {
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(FilePath);
-                    XmlNode xnFilterList = doc.DocumentElement;
+                    XDocument xdoc = new XDocument();
 
-                    foreach (XmlNode xnFilter in xnFilterList.ChildNodes)
+                    bIsEncrypt = IsEncrypt_FilterList(FilePath);
+
+                    if (bIsEncrypt)
                     {
-                        string sIsEnable = xnFilter.SelectSingleNode("IsEnable").InnerText;
-                        string sFNum = xnFilter.SelectSingleNode("Num").InnerText;
-                        string sFName = xnFilter.SelectSingleNode("Name").InnerText;
-                        string sFAppointHeader = xnFilter.SelectSingleNode("AppointHeader").InnerText;
-                        string sFHeaderContent = xnFilter.SelectSingleNode("HeaderContent").InnerText;
-                        string sFMode = xnFilter.SelectSingleNode("Mode").InnerText;
-                        string sFAction = xnFilter.SelectSingleNode("Action").InnerText;
-                        string sFFunction = xnFilter.SelectSingleNode("Function").InnerText;
-                        string sFStartFrom = xnFilter.SelectSingleNode("StartFrom").InnerText;                        
-                        string sFSearch = xnFilter.SelectSingleNode("Search").InnerText;
-                        string sFModify = xnFilter.SelectSingleNode("Modify").InnerText;
+                        string sPassword = string.Empty;
 
-                        bool bIsEnable = bool.Parse(sIsEnable);
-                        bool bAppointHeader = bool.Parse(sFAppointHeader);
+                        if (bIsSystemLoad)
+                        {
+                            sPassword = Socket_Operation.GetComputerCode();
+                        }
+                        else
+                        {
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Import);
+                            pwForm.ShowDialog();
 
-                        Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
-                        Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
-                        Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
-                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
+                            sPassword = Socket_Cache.FilterList.AESKey;
+                        }
 
-                        Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
+                        xdoc = DecryptFilterList(FilePath, sPassword);
+                    }
+                    else
+                    {
+                        xdoc = XDocument.Load(FilePath);
+                    }
+
+                    if (xdoc == null)
+                    {
+                        string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+
+                        if (bIsSystemLoad)
+                        {
+                            DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                        }
+                        else
+                        {
+                            ShowMessageBox(sError);
+                        }
+                    }
+                    else
+                    {
+                        foreach (XElement xeFilter in xdoc.Root.Elements())
+                        {
+                            string sIsEnable = xeFilter.Element("IsEnable").Value;
+                            string sFNum = xeFilter.Element("Num").Value;
+                            string sFName = xeFilter.Element("Name").Value;
+                            string sFAppointHeader = xeFilter.Element("AppointHeader").Value;
+                            string sFHeaderContent = xeFilter.Element("HeaderContent").Value;
+                            string sFMode = xeFilter.Element("Mode").Value;
+                            string sFAction = xeFilter.Element("Action").Value;
+                            string sFFunction = xeFilter.Element("Function").Value;
+                            string sFStartFrom = xeFilter.Element("StartFrom").Value;
+                            string sFSearch = xeFilter.Element("Search").Value;
+                            string sFModify = xeFilter.Element("Modify").Value;
+
+                            bool bIsEnable = bool.Parse(sIsEnable);
+                            bool bAppointHeader = bool.Parse(sFAppointHeader);
+                            Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
+                            Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
+                            Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
+                            Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
+
+                            Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
+                        }
+
+                        if (bIsEncrypt)
+                        {
+                            DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
+                        }
+                        else
+                        {
+                            DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
+                        }
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {  
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//加解密滤镜列表文件
+
+        private static bool IsEncrypt_FilterList(string FilePath)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                XDocument xdoc = XDocument.Load(FilePath);
+                XElement xeRoot = xdoc.Root;
+            }
+            catch
+            {
+                bReturn = true;
+            }
+
+            return bReturn;
+        }
+
+        private static byte[] GetAESKeyFromString(string Password)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] bPW = Encoding.Default.GetBytes(Password);
+
+                    byte[] bPW_MD5 = md5.ComputeHash(bPW);
+                    string sPW_MD5 = BitConverter.ToString(bPW_MD5, 4, 8).Replace("-", "");                    
+
+                    bReturn = Encoding.UTF8.GetBytes(sPW_MD5);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        private static void EncryptFilterList(string FilterList_Path, string Password)
+        {
+            try
+            {
+                byte[] bAES = GetAESKeyFromString(Password);
+
+                using (Aes aesAlg = Aes.Create())
+                {
+                    aesAlg.Key = bAES;
+                    aesAlg.IV = bAES;
+
+                    XDocument xmlDoc = XDocument.Load(FilterList_Path);
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
+                        {
+                            xmlDoc.Save(cs);
+                        }
+
+                        File.WriteAllBytes(FilterList_Path, ms.ToArray());
                     }
                 }
             }
             catch (Exception ex)
             {
-                bReturn = false;
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        private static XDocument DecryptFilterList(string FilterList_Path, string Password)
+        {
+            XDocument xdReturn = new XDocument();
+
+            try
+            {
+                byte[] bAES = GetAESKeyFromString(Password);
+
+                using (Aes aesAlg = Aes.Create())
+                {
+                    aesAlg.Key = bAES;
+                    aesAlg.IV = bAES;
+
+                    byte[] xmlBytes = File.ReadAllBytes(FilterList_Path);
+
+                    using (MemoryStream ms = new MemoryStream(xmlBytes))
+                    {
+                        try
+                        {
+                            using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
+                            {
+                                xdReturn = XDocument.Load(cs);
+                            }
+                        }
+                        catch
+                        {
+                            xdReturn = null;
+                        }                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
+            return xdReturn;
         }
 
         #endregion
@@ -1978,8 +2124,7 @@ namespace WPELibrary.Lib
 
                 if (dr.Equals(DialogResult.OK))
                 {
-                    Socket_Cache.FilterList.FilterListClear();
-                    Socket_Operation.SaveFilterList(string.Empty, -1);
+                    Socket_Cache.FilterList.FilterListClear();                    
                 }
             }
             catch (Exception ex)
@@ -1998,8 +2143,7 @@ namespace WPELibrary.Lib
 
                     if (dr.Equals(DialogResult.OK))
                     {
-                        Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);
-                        Socket_Operation.SaveFilterList(string.Empty, -1);
+                        Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);                        
                     }
                 }
             }
@@ -2680,9 +2824,10 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ListConfig_SocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll;
                 Properties.Settings.Default.ListConfig_SocketList_AutoClear = Socket_Cache.SocketList.AutoClear;
                 Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value;
-                Properties.Settings.Default.ListConfig_FilterList_AutoRoll = Socket_Cache.FilterList.AutoRoll;
-                Properties.Settings.Default.ListConfig_FilterList_AutoClear = Socket_Cache.FilterList.AutoClear;
-                Properties.Settings.Default.ListConfig_FilterList_AutoClear_Value = Socket_Cache.FilterList.AutoClear_Value;
+                Properties.Settings.Default.ListConfig_LogList_AutoRoll = Socket_Cache.LogList.AutoRoll;
+                Properties.Settings.Default.ListConfig_LogList_AutoClear = Socket_Cache.LogList.AutoClear;
+                Properties.Settings.Default.ListConfig_LogList_AutoClear_Value = Socket_Cache.LogList.AutoClear_Value;
+                Properties.Settings.Default.ListConfig_FilterList_UseEncryption = Socket_Cache.FilterList.UseEncryption;
 
                 Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SpeedMode;
                 Properties.Settings.Default.SystemConfig_FilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
@@ -2734,9 +2879,10 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketList.AutoRoll = Properties.Settings.Default.ListConfig_SocketList_AutoRoll;
                 Socket_Cache.SocketList.AutoClear = Properties.Settings.Default.ListConfig_SocketList_AutoClear;
                 Socket_Cache.SocketList.AutoClear_Value = Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value;
-                Socket_Cache.FilterList.AutoRoll = Properties.Settings.Default.ListConfig_FilterList_AutoRoll;
-                Socket_Cache.FilterList.AutoClear = Properties.Settings.Default.ListConfig_FilterList_AutoClear;
-                Socket_Cache.FilterList.AutoClear_Value = Properties.Settings.Default.ListConfig_FilterList_AutoClear_Value;
+                Socket_Cache.LogList.AutoRoll = Properties.Settings.Default.ListConfig_LogList_AutoRoll;
+                Socket_Cache.LogList.AutoClear = Properties.Settings.Default.ListConfig_LogList_AutoClear;
+                Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;
+                Socket_Cache.FilterList.UseEncryption = Properties.Settings.Default.ListConfig_FilterList_UseEncryption;
 
                 Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
                 Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
@@ -2847,6 +2993,70 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//获取本机的机器码
+
+        public static string GetComputerCode()
+        {
+            string sReturn = string.Empty;
+
+            try
+            {  
+                sReturn = GetCPUID() + GetMacAddress();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        private static string GetCPUID()
+        {
+            string sReturn = string.Empty;
+
+            try
+            {  
+                ManagementClass mc = new ManagementClass("Win32_Processor");
+                ManagementObjectCollection moc = mc.GetInstances();
+
+                foreach (ManagementObject mo in moc)
+                {
+                    sReturn = mo.Properties["ProcessorId"].Value.ToString();
+                    break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            
+            return sReturn;
+        }
+
+        private static string GetMacAddress()
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE ((MACAddress Is NOt NULL) AND (Manufacturer <> 'Microsoft'))");
+                
+                foreach (ManagementObject mo in searcher.Get())
+                {
+                    sReturn = mo["MACAddress"].ToString().Trim().Replace(":", "");
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;            
         }
 
         #endregion

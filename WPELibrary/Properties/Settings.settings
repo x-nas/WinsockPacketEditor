@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="FilterConfig_CheckNotShow" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="FilterConfig_CheckSocket" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
@@ -77,13 +77,13 @@
     <Setting Name="ListConfig_SocketList_AutoClear_Value" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
-    <Setting Name="ListConfig_FilterList_AutoRoll" Type="System.Boolean" Scope="User">
+    <Setting Name="ListConfig_LogList_AutoRoll" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ListConfig_FilterList_AutoClear" Type="System.Boolean" Scope="User">
+    <Setting Name="ListConfig_LogList_AutoClear" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="ListConfig_FilterList_AutoClear_Value" Type="System.Decimal" Scope="User">
+    <Setting Name="ListConfig_LogList_AutoClear_Value" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
     <Setting Name="SystemConfig_SpeedMode" Type="System.Boolean" Scope="User">
@@ -91,6 +91,9 @@
     </Setting>
     <Setting Name="SystemConfig_FilterList_Execute" Type="System.String" Scope="User">
       <Value Profile="(Default)">Sequence</Value>
+    </Setting>
+    <Setting Name="ListConfig_FilterList_UseEncryption" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

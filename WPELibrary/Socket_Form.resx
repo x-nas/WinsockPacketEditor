@@ -2103,7 +2103,106 @@
     <value>1</value>
   </data>
   <data name="tlpListSet.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpListSet_FilterList.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Size" type="System.Drawing.Size, System.Drawing">
+    <value>99, 21</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Text" xml:space="preserve">
+    <value>加密自动保存</value>
+  </data>
+  <data name="&gt;&gt;cbFilterList_UseEncryption.Name" xml:space="preserve">
+    <value>cbFilterList_UseEncryption</value>
+  </data>
+  <data name="&gt;&gt;cbFilterList_UseEncryption.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbFilterList_UseEncryption.Parent" xml:space="preserve">
+    <value>tlpListSet_FilterList</value>
+  </data>
+  <data name="&gt;&gt;cbFilterList_UseEncryption.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpListSet_FilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpListSet_FilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpListSet_FilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpListSet_FilterList.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>220, 67</value>
+  </data>
+  <data name="tlpListSet_FilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_FilterList.Name" xml:space="preserve">
+    <value>tlpListSet_FilterList</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_FilterList.Parent" xml:space="preserve">
+    <value>gbListSet_FilterList</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_FilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpListSet_FilterList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbFilterList_UseEncryption" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbListSet_FilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbListSet_FilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>541, 3</value>
+  </data>
+  <data name="gbListSet_FilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 89</value>
+  </data>
+  <data name="gbListSet_FilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbListSet_FilterList.Text" xml:space="preserve">
+    <value>滤镜列表</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_FilterList.Name" xml:space="preserve">
+    <value>gbListSet_FilterList</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_FilterList.Parent" xml:space="preserve">
+    <value>tlpListSet</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_FilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="tlpListSet_LogList.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2220,7 +2319,7 @@
     <value>3</value>
   </data>
   <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 67</value>
+    <value>257, 67</value>
   </data>
   <data name="tlpListSet_LogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2244,13 +2343,13 @@
     <value>Fill</value>
   </data>
   <data name="gbListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>388, 3</value>
+    <value>272, 3</value>
   </data>
   <data name="gbListSet_LogList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 89</value>
+    <value>263, 89</value>
   </data>
   <data name="gbListSet_LogList.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2268,7 +2367,7 @@
     <value>tlpListSet</value>
   </data>
   <data name="&gt;&gt;gbListSet_LogList.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="tlpListSet_SocketList.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2385,7 +2484,7 @@
     <value>3</value>
   </data>
   <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 67</value>
+    <value>257, 67</value>
   </data>
   <data name="tlpListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2415,7 +2514,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 89</value>
+    <value>263, 89</value>
   </data>
   <data name="gbListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2433,7 +2532,7 @@
     <value>tlpListSet</value>
   </data>
   <data name="&gt;&gt;gbListSet_SocketList.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="tlpListSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2466,7 +2565,7 @@
     <value>0</value>
   </data>
   <data name="tlpListSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbListSet_FilterList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,35,Percent,35,Percent,30" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tcSocketInfo_ListSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -12304,6 +12403,9 @@
   <data name="dataGridViewImageColumn1.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
+  <metadata name="bgwFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1668, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -19216,6 +19318,12 @@
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bgwFilterList.Name" xml:space="preserve">
+    <value>bgwFilterList</value>
+  </data>
+  <data name="&gt;&gt;bgwFilterList.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

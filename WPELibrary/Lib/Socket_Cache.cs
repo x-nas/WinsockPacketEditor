@@ -351,6 +351,9 @@ namespace WPELibrary.Lib
 
         public static class LogList
         {
+            public static bool AutoRoll;
+            public static bool AutoClear;
+            public static decimal AutoClear_Value;
             public static BindingList<Socket_LogInfo> lstRecLog = new BindingList<Socket_LogInfo>();
 
             public delegate void SocketLogReceived(Socket_LogInfo sl);
@@ -449,44 +452,23 @@ namespace WPELibrary.Lib
 
         public static class FilterList
         {
+            public enum PWType
+            { 
+                Import,
+                Export,
+            }
+
             public enum Execute
             {
                 Priority,
                 Sequence,
             }
+            
+            public static bool UseEncryption = false;            
+            public static string AESKey = string.Empty;
+            public static Execute FilterList_Execute;            
 
-            public static bool AutoRoll;
-            public static bool AutoClear;
-            public static decimal AutoClear_Value;
-            public static int Filter_MaxNum = 3;
-            public static Execute FilterList_Execute;
-            public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
-
-            #region//初始化滤镜列表
-
-            public static void InitFilterList(int iFilterMaxNum)
-            {
-                try
-                {
-                    bool bOK = Socket_Operation.LoadFilterList(string.Empty);
-
-                    if (!bOK)
-                    {
-                        FilterListClear();
-
-                        for (int i = 0; i < iFilterMaxNum; i++)
-                        {
-                            AddFilter_New();
-                        }
-                    }                      
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
+            public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();            
 
             #region//清空滤镜列表
 

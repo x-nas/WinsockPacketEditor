@@ -133,14 +133,7 @@ namespace WPELibrary
 
                     case "tsmiLoadSendList":
 
-                        if (Socket_Operation.LoadSendList())
-                        {
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
-                        }
-                        else
-                        {
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_74));
-                        }
+                        Socket_Operation.LoadSendList();
 
                         break;
                 }
