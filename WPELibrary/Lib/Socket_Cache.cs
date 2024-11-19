@@ -15,17 +15,15 @@ namespace WPELibrary.Lib
     {
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
-        public static long Total_RecvBytes = 0;        
+        public static long Total_RecvBytes = 0;
+        public static string SystemKey = string.Empty;
         public static bool SpeedMode;      
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
         public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
         public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
         public static string CheckSocket_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
-        public static decimal CheckSizeFrom_Value, CheckSizeTo_Value;        
-
-        public static FindOptions FindOptions = new FindOptions();
-        public static bool DoSearch;
+        public static decimal CheckSizeFrom_Value, CheckSizeTo_Value;
 
         #region//封包
 
@@ -221,9 +219,12 @@ namespace WPELibrary.Lib
 
         public static class SocketList
         {
+            public static bool DoSearch;
             public static bool AutoRoll;
             public static bool AutoClear;
             public static decimal AutoClear_Value;
+
+            public static FindOptions FindOptions = new FindOptions();
 
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
 

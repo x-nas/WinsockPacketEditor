@@ -22,23 +22,23 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.DoSearch = false;                
+                Socket_Cache.SocketList.DoSearch = false;                
 
-                if (Socket_Cache.FindOptions.Type == FindType.Text)
+                if (Socket_Cache.SocketList.FindOptions.Type == FindType.Text)
                 { 
                     this.rbString.Checked = true;                    
                 }
-                else if(Socket_Cache.FindOptions.Type == FindType.Hex)
+                else if(Socket_Cache.SocketList.FindOptions.Type == FindType.Hex)
                 {                    
                     this.rbHex.Checked = true;                    
                 }
 
-                this.txtFind.Text = Socket_Cache.FindOptions.Text;
-                this.chkMatchCase.Checked = Socket_Cache.FindOptions.MatchCase;              
+                this.txtFind.Text = Socket_Cache.SocketList.FindOptions.Text;
+                this.chkMatchCase.Checked = Socket_Cache.SocketList.FindOptions.MatchCase;              
 
-                if (Socket_Cache.FindOptions.Hex != null && Socket_Cache.FindOptions.Hex.Length > 0)
+                if (Socket_Cache.SocketList.FindOptions.Hex != null && Socket_Cache.SocketList.FindOptions.Hex.Length > 0)
                 {
-                    hexFind.ByteProvider = new DynamicByteProvider(Socket_Cache.FindOptions.Hex);                   
+                    hexFind.ByteProvider = new DynamicByteProvider(Socket_Cache.SocketList.FindOptions.Hex);                   
                 }
                 else
                 {
@@ -92,25 +92,25 @@ namespace WPELibrary
                 {
                     if (rbString.Checked)
                     {
-                        Socket_Cache.FindOptions.Type = FindType.Text;
+                        Socket_Cache.SocketList.FindOptions.Type = FindType.Text;
                     }
                     else
                     {
-                        Socket_Cache.FindOptions.Type = FindType.Hex;
+                        Socket_Cache.SocketList.FindOptions.Type = FindType.Hex;
                     }
 
-                    Socket_Cache.FindOptions.Text = txtFind.Text;
-                    Socket_Cache.FindOptions.MatchCase = chkMatchCase.Checked;
+                    Socket_Cache.SocketList.FindOptions.Text = txtFind.Text;
+                    Socket_Cache.SocketList.FindOptions.MatchCase = chkMatchCase.Checked;
 
                     DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
 
                     if (dbp != null && dbp.Bytes.Count > 0)
                     {
-                        Socket_Cache.FindOptions.Hex = dbp.Bytes.ToArray();
+                        Socket_Cache.SocketList.FindOptions.Hex = dbp.Bytes.ToArray();
                     }
 
-                    Socket_Cache.FindOptions.IsValid = true;
-                    Socket_Cache.DoSearch = true;
+                    Socket_Cache.SocketList.FindOptions.IsValid = true;
+                    Socket_Cache.SocketList.DoSearch = true;
                     this.Close();
                 }
                 else

@@ -635,8 +635,26 @@
   <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
   </data>
+  <data name="gbListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>226, 91</value>
+  </data>
+  <data name="gbListSet_FilterList.Text" xml:space="preserve">
+    <value>Filter List</value>
+  </data>
+  <data name="tlpListSet_FilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>220, 71</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 19</value>
+  </data>
+  <data name="cbFilterList_UseEncryption.Text" xml:space="preserve">
+    <value>Encrypt Save</value>
+  </data>
   <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>263, 91</value>
   </data>
   <data name="gbListSet_LogList.Text" xml:space="preserve">
     <value>Log List</value>
@@ -645,7 +663,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>257, 71</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>91, 28</value>
@@ -666,7 +684,7 @@
     <value>Auto Roll</value>
   </data>
   <data name="gbListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>263, 91</value>
   </data>
   <data name="gbListSet_SocketList.Text" xml:space="preserve">
     <value>Socket List</value>
@@ -675,7 +693,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>257, 71</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>91, 28</value>

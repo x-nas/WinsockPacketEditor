@@ -1618,12 +1618,15 @@ namespace WPELibrary.Lib
                 if (string.IsNullOrEmpty(FilePath))
                 {
                     FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                    sPassword = Socket_Operation.GetComputerCode();
 
-                    if (!Socket_Cache.FilterList.UseEncryption)
+                    if (Socket_Cache.FilterList.UseEncryption)
+                    {
+                        sPassword = Socket_Operation.GetComputerCode();                        
+                    }
+                    else
                     {
                         bDoEncrypt = false;
-                    }                    
+                    }
                 }
                 else
                 {
@@ -3004,8 +3007,13 @@ namespace WPELibrary.Lib
             string sReturn = string.Empty;
 
             try
-            {  
-                sReturn = GetCPUID() + GetMacAddress();
+            {
+                if (string.IsNullOrEmpty(Socket_Cache.SystemKey))
+                {
+                    Socket_Cache.SystemKey = GetCPUID() + GetMacAddress();
+                }
+
+                sReturn = Socket_Cache.SystemKey;
             }
             catch (Exception ex)
             {

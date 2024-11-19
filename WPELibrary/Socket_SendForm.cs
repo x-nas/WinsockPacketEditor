@@ -10,12 +10,10 @@ namespace WPELibrary
     public partial class Socket_SendForm : Form
     {
         private int Select_Index = 0;
-
+        
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
-
-        private int Send_SocketID = 0;     
         private Socket_Cache.SocketPacket.PacketType Send_PacketType;        
 
         #region//窗体加载
@@ -50,8 +48,7 @@ namespace WPELibrary
         private void InitSendInfo()
         {
             try
-            {
-                this.Send_SocketID = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
+            {  
                 this.Send_PacketType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;            
 
                 this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fffffff");              
@@ -761,7 +758,7 @@ namespace WPELibrary
             {
                 this.ShowFindForm();
 
-                if (Socket_Cache.DoSearch)
+                if (Socket_Cache.SocketList.DoSearch)
                 {
                     this.HexBox_FindNext();
                 }
@@ -794,9 +791,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.FindOptions.IsValid)
+                if (Socket_Cache.SocketList.FindOptions.IsValid)
                 {
-                    long res = hbPacketData.Find(Socket_Cache.FindOptions);
+                    long res = hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
 
                     if (res == -1)
                     {

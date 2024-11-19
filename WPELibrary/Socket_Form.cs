@@ -35,14 +35,10 @@ namespace WPELibrary
 
                 this.InitSocketForm();
                 this.InitSocketDGV();
-                this.InitHexBox();
-                this.LoadConfigs_Parameter();
 
-                Socket_Cache.SendList.InitSendList();
-
-                if (!bgwFilterList.IsBusy)
+                if (!bgwInit.IsBusy)
                 {
-                    bgwFilterList.RunWorkerAsync();
+                    bgwInit.RunWorkerAsync();
                 }
             }
             catch (Exception ex)
@@ -123,6 +119,18 @@ namespace WPELibrary
         #endregion
 
         #region//初始化
+
+        private void bgwInit_DoWork(object sender, DoWorkEventArgs e)
+        {
+            this.InitHexBox();
+            Socket_Cache.SendList.InitSendList();
+            Socket_Operation.LoadFilterList(string.Empty);
+        }
+
+        private void bgwInit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.LoadConfigs_Parameter();
+        }
 
         private void InitSocketForm()
         {
@@ -920,7 +928,7 @@ namespace WPELibrary
         {
             this.ShowFindForm();
 
-            if (Socket_Cache.DoSearch)
+            if (Socket_Cache.SocketList.DoSearch)
             {
                 this.bSearchNext.Focus();
                 this.SearchSocketListNext();
@@ -936,7 +944,7 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.FindOptions.IsValid)
+                if (Socket_Cache.SocketList.FindOptions.IsValid)
                 {
                     if (!bgwSearchPacketData.IsBusy)
                     {
@@ -956,12 +964,12 @@ namespace WPELibrary
             {
                 if (dgvSocketList.Rows.Count > 0)
                 {
-                    if (Socket_Cache.FindOptions.IsValid)
+                    if (Socket_Cache.SocketList.FindOptions.IsValid)
                     {
                         string sSearch_Text = string.Empty;
                         string sSearch_Type = string.Empty;
 
-                        FindType fType = Socket_Cache.FindOptions.Type;
+                        FindType fType = Socket_Cache.SocketList.FindOptions.Type;
 
                         Socket_Cache.SocketPacket.EncodingFormat efFormat = new Socket_Cache.SocketPacket.EncodingFormat();
 
@@ -969,12 +977,12 @@ namespace WPELibrary
                         {
                             case FindType.Text:
                                 efFormat = Socket_Cache.SocketPacket.EncodingFormat.UTF7;
-                                sSearch_Text = Socket_Cache.FindOptions.Text;
+                                sSearch_Text = Socket_Cache.SocketList.FindOptions.Text;
                                 break;
 
                             case FindType.Hex:
                                 efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
-                                byte[] bSearch_Hex = Socket_Cache.FindOptions.Hex;
+                                byte[] bSearch_Hex = Socket_Cache.SocketList.FindOptions.Hex;
                                 sSearch_Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
                                 break;
                         }
@@ -986,7 +994,7 @@ namespace WPELibrary
                             this.hbPacketData.SelectionStart = 0;
                         }
 
-                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.FindOptions.MatchCase);
+                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -1025,7 +1033,7 @@ namespace WPELibrary
         {
             try
             {
-                e.Result = hbPacketData.Find(Socket_Cache.FindOptions);
+                e.Result = hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
             }
             catch (Exception ex)
             {
@@ -1952,15 +1960,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        private void bgwFilterList_DoWork(object sender, DoWorkEventArgs e)
-        {
-            
-
-            
-
-            Socket_Operation.LoadFilterList(string.Empty);
-        }
+        #endregion              
     }
 }

@@ -330,7 +330,7 @@ namespace WPELibrary
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.bgwFilterList = new System.ComponentModel.BackgroundWorker();
+            this.bgwInit = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -2610,9 +2610,10 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
-            // bgwFilterList
+            // bgwInit
             // 
-            this.bgwFilterList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwFilterList_DoWork);
+            this.bgwInit.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwInit_DoWork);
+            this.bgwInit.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwInit_RunWorkerCompleted);
             // 
             // Socket_Form
             // 
@@ -3008,6 +3009,6 @@ namespace WPELibrary
         private System.Windows.Forms.GroupBox gbListSet_FilterList;
         private System.Windows.Forms.TableLayoutPanel tlpListSet_FilterList;
         private System.Windows.Forms.CheckBox cbFilterList_UseEncryption;
-        private System.ComponentModel.BackgroundWorker bgwFilterList;
+        private System.ComponentModel.BackgroundWorker bgwInit;
     }
 }
