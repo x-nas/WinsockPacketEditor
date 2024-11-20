@@ -92,8 +92,5 @@
     <Setting Name="SystemConfig_FilterList_Execute" Type="System.String" Scope="User">
       <Value Profile="(Default)">Sequence</Value>
     </Setting>
-    <Setting Name="ListConfig_FilterList_UseEncryption" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

@@ -1760,7 +1760,7 @@ namespace WPELibrary.Lib
 
                 if (!string.IsNullOrEmpty(FilePath))
                 {
-                    LoadFilterList(FilePath);
+                    LoadFilterList(FilePath, true);
                 }
             }
             catch (Exception ex)
@@ -1769,65 +1769,49 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static void LoadFilterList(string FilePath, bool LoadFromSystem)
+        public static void LoadFilterList(string FilePath, bool LoadFromUser)
         {
             try
-            {  
-                bool bIsEncrypt = false;                
-
-                if (string.IsNullOrEmpty(FilePath))
-                {
-                    FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                    bIsSystemLoad = true;
-                }
-
+            {
                 if (File.Exists(FilePath))
                 {
                     XDocument xdoc = new XDocument();
 
-                    bIsEncrypt = IsEncrypt_FilterList(FilePath);
+                    bool bEncrypt = IsEncrypt_FilterList(FilePath);
 
-                    if (bIsEncrypt)
+                    if (bEncrypt)
                     {
-                        string sPassword = string.Empty;
-
-                        if (bIsSystemLoad)
-                        {
-                            sPassword = Socket_Operation.GetComputerCode();
-                        }
-                        else
+                        if (LoadFromUser)
                         {
                             Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Import);
                             pwForm.ShowDialog();
-
-                            sPassword = Socket_Cache.FilterList.AESKey;
                         }
 
-                        xdoc = DecryptFilterList(FilePath, sPassword);
+                        xdoc = DecryptFilterList(FilePath, Socket_Cache.FilterList.AESKey);
                     }
                     else
                     {
                         xdoc = XDocument.Load(FilePath);
-                    }
+                    }                    
 
                     if (xdoc == null)
                     {
                         string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
 
-                        if (bIsSystemLoad)
+                        if (LoadFromUser)
                         {
-                            DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                            ShowMessageBox(sError);
                         }
                         else
                         {
-                            ShowMessageBox(sError);
+                            DoLog(MethodBase.GetCurrentMethod().Name, sError);
                         }
                     }
                     else
                     {
                         LoadFilterList_FromXDocument(xdoc);
 
-                        if (bIsEncrypt)
+                        if (bEncrypt)
                         {
                             DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
                         }
@@ -2873,8 +2857,7 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value;
                 Properties.Settings.Default.ListConfig_LogList_AutoRoll = Socket_Cache.LogList.AutoRoll;
                 Properties.Settings.Default.ListConfig_LogList_AutoClear = Socket_Cache.LogList.AutoClear;
-                Properties.Settings.Default.ListConfig_LogList_AutoClear_Value = Socket_Cache.LogList.AutoClear_Value;
-                Properties.Settings.Default.ListConfig_FilterList_UseEncryption = Socket_Cache.FilterList.UseEncryption;
+                Properties.Settings.Default.ListConfig_LogList_AutoClear_Value = Socket_Cache.LogList.AutoClear_Value;                
 
                 Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SpeedMode;
                 Properties.Settings.Default.SystemConfig_FilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
@@ -2928,8 +2911,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketList.AutoClear_Value = Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value;
                 Socket_Cache.LogList.AutoRoll = Properties.Settings.Default.ListConfig_LogList_AutoRoll;
                 Socket_Cache.LogList.AutoClear = Properties.Settings.Default.ListConfig_LogList_AutoClear;
-                Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;
-                Socket_Cache.FilterList.UseEncryption = Properties.Settings.Default.ListConfig_FilterList_UseEncryption;
+                Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;                
 
                 Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
                 Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);

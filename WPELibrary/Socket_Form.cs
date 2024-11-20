@@ -41,7 +41,7 @@ namespace WPELibrary
                 Socket_Cache.SendList.InitSendList();
 
                 string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                Socket_Operation.LoadFilterList(FilePath, true);              
+                Socket_Operation.LoadFilterList(FilePath, false);              
             }
             catch (Exception ex)
             {
@@ -253,9 +253,7 @@ namespace WPELibrary
                 this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.AutoRoll;
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.AutoClear_Value;
-                this.LogList_AutoClearChange();
-
-                this.cbFilterList_UseEncryption.Checked = Socket_Cache.FilterList.UseEncryption;
+                this.LogList_AutoClearChange();                
 
                 this.cbWorkingMode_Speed.Checked = Socket_Cache.SpeedMode;
 
@@ -313,9 +311,7 @@ namespace WPELibrary
 
                 Socket_Cache.LogList.AutoRoll = this.cbLogList_AutoRoll.Checked;
                 Socket_Cache.LogList.AutoClear = this.cbLogList_AutoClear.Checked;
-                Socket_Cache.LogList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
-
-                Socket_Cache.FilterList.UseEncryption = this.cbFilterList_UseEncryption.Checked;
+                Socket_Cache.LogList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;                
 
                 Socket_Cache.SpeedMode = this.cbWorkingMode_Speed.Checked;            
 

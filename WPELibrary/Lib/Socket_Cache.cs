@@ -15,8 +15,7 @@ namespace WPELibrary.Lib
     {
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
-        public static long Total_RecvBytes = 0;
-        public static string SystemKey = string.Empty;
+        public static long Total_RecvBytes = 0;        
         public static bool SpeedMode;      
         public static byte[] bByteBuff = new byte[0];
         public static bool Support_WS1, Support_WS2;
@@ -463,9 +462,8 @@ namespace WPELibrary.Lib
             {
                 Priority,
                 Sequence,
-            }          
-
-            public static bool UseEncryption = false;            
+            }
+            
             public static string AESKey = string.Empty;
             public static Execute FilterList_Execute;            
 

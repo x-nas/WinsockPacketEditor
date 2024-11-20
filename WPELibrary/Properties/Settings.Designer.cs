@@ -382,17 +382,5 @@ namespace WPELibrary.Properties {
                 this["SystemConfig_FilterList_Execute"] = value;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ListConfig_FilterList_UseEncryption {
-            get {
-                return ((bool)(this["ListConfig_FilterList_UseEncryption"]));
-            }
-            set {
-                this["ListConfig_FilterList_UseEncryption"] = value;
-            }
-        }
     }
 }
