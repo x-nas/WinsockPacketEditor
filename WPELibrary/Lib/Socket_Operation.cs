@@ -18,7 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Xml.Linq;
-using System.Management;
+using EasyHook;
 
 namespace WPELibrary.Lib
 {   
@@ -446,10 +446,65 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//初始化进程支持的Winsock版本
+        #region//获取当前进程的格式化名称
 
-        public static void InitProcessWinSockSupport()
+        public static string GetProcessName()
         {
+            string sReturn = string.Empty;
+
+            try
+            {
+                Process pProcess = Process.GetCurrentProcess();
+                sReturn = string.Format("{0}{1} [{2}]", MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20), pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//获取当前进程的信息
+
+        public static string GetProcessInfo()
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                Process pProcess = Process.GetCurrentProcess();
+
+                string sMainWindowTitle = pProcess.MainWindowTitle;
+                string sMainWindowHandle = pProcess.MainWindowHandle.ToString();
+
+                if (String.IsNullOrEmpty(sMainWindowTitle))
+                {
+                    sReturn = pProcess.MainModule.ModuleName;
+                }
+                else
+                {
+                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//获取当前进程支持的Winsock版本信息
+
+        public static string GetWinSockSupportInfo()
+        {
+            string sReturn = "WinSock";
+
             try
             {
                 Socket_Cache.Support_WS1 = false;
@@ -463,12 +518,14 @@ namespace WPELibrary.Lib
 
                     if (sModuleName.Equals(WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Socket_Cache.Support_WS1 = true;                        
+                        Socket_Cache.Support_WS1 = true;
+                        sReturn += " 1.1";
                     }
 
                     if (sModuleName.Equals(WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Socket_Cache.Support_WS2 = true;                        
+                        Socket_Cache.Support_WS2 = true;
+                        sReturn += " 2.0";
                     }
                 }
             }
@@ -476,6 +533,8 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+
+            return sReturn;
         }
 
         #endregion
@@ -1587,16 +1646,7 @@ namespace WPELibrary.Lib
                         Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Export);
                         pwForm.ShowDialog();
 
-                        bool bOK = SaveFilterList(sfdSocketInfo.FileName, FilterIndex);
-
-                        if (bOK)
-                        {
-                            ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71));
-                        }
-                        else
-                        {
-                            ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72));
-                        }
+                        SaveFilterList(sfdSocketInfo.FileName, FilterIndex, true);                    
                     }
                 }  
             }
@@ -1604,37 +1654,38 @@ namespace WPELibrary.Lib
             {                
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
-        public static bool SaveFilterList(string FilePath, int FilterIndex)
+        public static void SaveFilterList(string FilePath, int FilterIndex, bool DoEncrypt)
         {
-            bool bReturn = true;
-
             try
             {
-                bool bDoEncrypt = true;
-                string sPassword = string.Empty;
+                SaveFilterList_ToXDocument(FilePath, FilterIndex);
 
-                if (string.IsNullOrEmpty(FilePath))
+                if (DoEncrypt)
                 {
-                    FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                    string sPassword = Socket_Cache.FilterList.AESKey;
 
-                    if (Socket_Cache.FilterList.UseEncryption)
+                    if (!string.IsNullOrEmpty(sPassword))
                     {
-                        sPassword = Socket_Operation.GetComputerCode();                        
-                    }
-                    else
-                    {
-                        bDoEncrypt = false;
+                        EncryptFilterList(FilePath, sPassword);
                     }
                 }
-                else
-                {
-                    sPassword = Socket_Cache.FilterList.AESKey;                    
-                }
+            }
+            catch (Exception ex)
+            {  
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
-                XDocument xdoc = new XDocument();
-                xdoc.Declaration = new XDeclaration("1.0", "utf-8", "yes");
+        private static void SaveFilterList_ToXDocument(string FilePath, int FilterIndex)
+        {
+            try
+            {
+                XDocument xdoc = new XDocument
+                {
+                    Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                };
 
                 XElement xeRoot = new XElement("FilterList");
                 xdoc.Add(xeRoot);
@@ -1664,7 +1715,7 @@ namespace WPELibrary.Lib
                         string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
                         string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
-                        XElement xeFilter = 
+                        XElement xeFilter =
                             new XElement("Filter",
                             new XElement("IsEnable", sIsEnable),
                             new XElement("Num", sFNum),
@@ -1684,22 +1735,11 @@ namespace WPELibrary.Lib
                 }
 
                 xdoc.Save(FilePath);
-
-                if (bDoEncrypt)
-                {
-                    if (!string.IsNullOrEmpty(sPassword))
-                    {
-                        EncryptFilterList(FilePath, sPassword);
-                    }
-                }
             }
             catch (Exception ex)
             {
-                bReturn = false;
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-
-            return bReturn;
         }
 
         #endregion
@@ -1729,11 +1769,10 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static void LoadFilterList(string FilePath)
+        public static void LoadFilterList(string FilePath, bool LoadFromSystem)
         {
             try
-            {
-                bool bIsSystemLoad = false;
+            {  
                 bool bIsEncrypt = false;                
 
                 if (string.IsNullOrEmpty(FilePath))
@@ -1786,29 +1825,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        foreach (XElement xeFilter in xdoc.Root.Elements())
-                        {
-                            string sIsEnable = xeFilter.Element("IsEnable").Value;
-                            string sFNum = xeFilter.Element("Num").Value;
-                            string sFName = xeFilter.Element("Name").Value;
-                            string sFAppointHeader = xeFilter.Element("AppointHeader").Value;
-                            string sFHeaderContent = xeFilter.Element("HeaderContent").Value;
-                            string sFMode = xeFilter.Element("Mode").Value;
-                            string sFAction = xeFilter.Element("Action").Value;
-                            string sFFunction = xeFilter.Element("Function").Value;
-                            string sFStartFrom = xeFilter.Element("StartFrom").Value;
-                            string sFSearch = xeFilter.Element("Search").Value;
-                            string sFModify = xeFilter.Element("Modify").Value;
-
-                            bool bIsEnable = bool.Parse(sIsEnable);
-                            bool bAppointHeader = bool.Parse(sFAppointHeader);
-                            Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
-                            Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
-                            Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
-                            Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
-
-                            Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
-                        }
+                        LoadFilterList_FromXDocument(xdoc);
 
                         if (bIsEncrypt)
                         {
@@ -1824,6 +1841,40 @@ namespace WPELibrary.Lib
             catch (Exception ex)
             {  
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private static void LoadFilterList_FromXDocument(XDocument xdoc)
+        {
+            try
+            {
+                foreach (XElement xeFilter in xdoc.Root.Elements())
+                {
+                    string sIsEnable = xeFilter.Element("IsEnable").Value;
+                    string sFNum = xeFilter.Element("Num").Value;
+                    string sFName = xeFilter.Element("Name").Value;
+                    string sFAppointHeader = xeFilter.Element("AppointHeader").Value;
+                    string sFHeaderContent = xeFilter.Element("HeaderContent").Value;
+                    string sFMode = xeFilter.Element("Mode").Value;
+                    string sFAction = xeFilter.Element("Action").Value;
+                    string sFFunction = xeFilter.Element("Function").Value;
+                    string sFStartFrom = xeFilter.Element("StartFrom").Value;
+                    string sFSearch = xeFilter.Element("Search").Value;
+                    string sFModify = xeFilter.Element("Modify").Value;
+
+                    bool bIsEnable = bool.Parse(sIsEnable);
+                    bool bAppointHeader = bool.Parse(sFAppointHeader);
+                    Socket_Cache.Filter.FilterMode FilterMode = GetFilterMode_ByString(sFMode);
+                    Socket_Cache.Filter.FilterAction FilterAction = GetFilterAction_ByString(sFAction);
+                    Socket_Cache.Filter.FilterFunction FilterFunction = GetFilterFunction_ByString(sFFunction);
+                    Socket_Cache.Filter.FilterStartFrom FilterStartFrom = GetFilterStartFrom_ByString(sFStartFrom);
+
+                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2715,16 +2766,12 @@ namespace WPELibrary.Lib
                         }
 
                         sw.Close();
-                        myStream.Close();
-
-                        ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
+                        myStream.Close();                        
                     }
                 }
             }
             catch(Exception ex)
-            {                
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
-
+            {
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
@@ -2778,13 +2825,10 @@ namespace WPELibrary.Lib
 
                     sw.Close();
                     myStream.Close();
-                                        
-                    ShowMessageBox(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71), iSuccess));
                 }
             }
             catch (Exception ex)
-            {                
-                ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72) + ex.Message);
+            {  
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
@@ -2998,75 +3042,6 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        #endregion
-
-        #region//获取本机的机器码
-
-        public static string GetComputerCode()
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                if (string.IsNullOrEmpty(Socket_Cache.SystemKey))
-                {
-                    Socket_Cache.SystemKey = GetCPUID() + GetMacAddress();
-                }
-
-                sReturn = Socket_Cache.SystemKey;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        private static string GetCPUID()
-        {
-            string sReturn = string.Empty;
-
-            try
-            {  
-                ManagementClass mc = new ManagementClass("Win32_Processor");
-                ManagementObjectCollection moc = mc.GetInstances();
-
-                foreach (ManagementObject mo in moc)
-                {
-                    sReturn = mo.Properties["ProcessorId"].Value.ToString();
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-            
-            return sReturn;
-        }
-
-        private static string GetMacAddress()
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE ((MACAddress Is NOt NULL) AND (Manufacturer <> 'Microsoft'))");
-                
-                foreach (ManagementObject mo in searcher.Get())
-                {
-                    sReturn = mo["MACAddress"].ToString().Trim().Replace(":", "");
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;            
-        }
-
-        #endregion
+        #endregion        
     }
 }

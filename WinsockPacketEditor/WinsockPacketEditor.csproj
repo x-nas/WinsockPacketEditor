@@ -60,11 +60,10 @@
     <ApplicationIcon>Icon\wpe.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>78410D478A4DA25BF0BD69B64FD9B6339012F51A</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>C463B7A3B15443BF437515C7F7B0BC411550FF7F</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>
-    </ManifestKeyFile>
+    <ManifestKeyFile>WPE64.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -168,6 +167,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="WPE64.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">

@@ -119,14 +119,7 @@ namespace WPELibrary
 
                         if (dgvSendList.Rows.Count > 0)
                         {
-                            if (Socket_Operation.SaveSendList())
-                            {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_71));
-                            }
-                            else
-                            {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_72));
-                            }
+                            Socket_Operation.SaveSendList();
                         }
 
                         break;

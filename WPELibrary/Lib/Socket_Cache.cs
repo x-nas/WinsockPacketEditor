@@ -463,8 +463,8 @@ namespace WPELibrary.Lib
             {
                 Priority,
                 Sequence,
-            }
-            
+            }          
+
             public static bool UseEncryption = false;            
             public static string AESKey = string.Empty;
             public static Execute FilterList_Execute;            

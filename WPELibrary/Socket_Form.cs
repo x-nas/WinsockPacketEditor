@@ -35,11 +35,13 @@ namespace WPELibrary
 
                 this.InitSocketForm();
                 this.InitSocketDGV();
+                this.InitHexBox_XOR();
+                this.LoadConfigs_Parameter();
 
-                if (!bgwInit.IsBusy)
-                {
-                    bgwInit.RunWorkerAsync();
-                }
+                Socket_Cache.SendList.InitSendList();
+
+                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                Socket_Operation.LoadFilterList(FilePath, true);              
             }
             catch (Exception ex)
             {
@@ -106,9 +108,11 @@ namespace WPELibrary
             {
                 ws.ExitHook();
 
-                SetConfigs_Parameter();
+                this.SetConfigs_Parameter();
                 Socket_Operation.SaveConfigs();
-                Socket_Operation.SaveFilterList(string.Empty, -1);
+
+                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                Socket_Operation.SaveFilterList(FilePath, -1, false);
             }
             catch (Exception ex)
             {
@@ -118,19 +122,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//初始化
-
-        private void bgwInit_DoWork(object sender, DoWorkEventArgs e)
-        {
-            this.InitHexBox();
-            Socket_Cache.SendList.InitSendList();
-            Socket_Operation.LoadFilterList(string.Empty);
-        }
-
-        private void bgwInit_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            this.LoadConfigs_Parameter();
-        }
+        #region//初始化      
 
         private void InitSocketForm()
         {
@@ -138,45 +130,18 @@ namespace WPELibrary
             {
                 this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
-                Process pProcess = Process.GetCurrentProcess();
-                Socket_Operation.InitProcessWinSockSupport();                
-
-                string sProcessName = string.Format("{0}{1} [{2}]", MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20), pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());                                
-                this.tsslProcessName.Text = sProcessName;
-                this.niWPE.Text = "Winsock Packet Editor" + "\r\n" + sProcessName;
-
-                string sMainWindowTitle = pProcess.MainWindowTitle;
-                string sMainWindowHandle = pProcess.MainWindowHandle.ToString();
-                string sProcessInfo = string.Empty;
-
-                if (String.IsNullOrEmpty(sMainWindowTitle))
-                {
-                    sProcessInfo = pProcess.MainModule.ModuleName;
-                }
-                else
-                {
-                    sProcessInfo = string.Format("{0} 句柄: {1}", pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
-                }
-                
-                this.tsslProcessInfo.Text = sProcessInfo;
-
-                string sWinSock = "WinSock";
-                if (Socket_Cache.Support_WS1)
-                {
-                    sWinSock += " 1.1";
-                }
-
-                if (Socket_Cache.Support_WS2)
-                {
-                    sWinSock += " 2.0";
-                }
-                this.tsslWinSock.Text = sWinSock;
-
                 tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
                 tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
                 tt.SetToolTip(rbFilterSet_Sequence, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_64));
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
+
+                string sProcessName = Socket_Operation.GetProcessName();
+                this.tsslProcessName.Text = sProcessName;
+                this.niWPE.Text = "Winsock Packet Editor x64" + "\r\n" + sProcessName;                
+                
+                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();             
+                this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
@@ -194,14 +159,14 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
-        private void InitHexBox()
+        private void InitHexBox_XOR()
         {
             try
             {  
                 this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
+                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);                
             }
             catch (Exception ex)
             {
@@ -1923,7 +1888,7 @@ namespace WPELibrary
 
         private void bXOR_Clear_Click(object sender, EventArgs e)
         {
-            this.InitHexBox();
+            this.InitHexBox_XOR();
             this.txtXOR.Clear();
         }
 
