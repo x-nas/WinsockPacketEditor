@@ -131,7 +131,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -190,6 +189,8 @@
     </Content>
     <Content Include="Icon\enUS.png" />
     <Content Include="Icon\loading.gif" />
+    <Content Include="Icon\WPE64.ico" />
+    <Content Include="WPE64.ico" />
     <None Include="Icon\Search.png" />
     <None Include="Icon\searchbox_button.png" />
     <Content Include="Icon\zhCN.png" />
@@ -214,6 +215,20 @@
       <Project>{14612b06-5b07-47a4-8fe5-d3568aabaa8a}</Project>
       <Name>WPELibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".fp">
+      <Visible>False</Visible>
+      <Description>WPE64 Filter List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".sp">
+      <Visible>False</Visible>
+      <Description>WPE64 Send List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

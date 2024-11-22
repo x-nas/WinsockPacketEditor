@@ -5431,175 +5431,64 @@
     <value>3</value>
   </data>
   <data name="tlpExtraction.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>1</value>
   </data>
-  <data name="cbbExtractionTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="rtbExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbbExtractionTo.Items" xml:space="preserve">
-    <value>十六进制（ 带空格大写 ）</value>
-  </data>
-  <data name="cbbExtractionTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>488, 3</value>
-  </data>
-  <data name="cbbExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 25</value>
-  </data>
-  <data name="cbbExtractionTo.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cbbExtractionTo.Name" xml:space="preserve">
-    <value>cbbExtractionTo</value>
-  </data>
-  <data name="&gt;&gt;cbbExtractionTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbbExtractionTo.Parent" xml:space="preserve">
-    <value>tlpExtraction</value>
-  </data>
-  <data name="&gt;&gt;cbbExtractionTo.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rtbExtractionTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbExtractionTo.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rtbExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="rtbExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 167</value>
+  <data name="rtbExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>856, 167</value>
   </data>
-  <data name="rtbExtractionTo.TabIndex" type="System.Int32, mscorlib">
+  <data name="rtbExtraction.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="rtbExtractionTo.Text" xml:space="preserve">
+  <data name="rtbExtraction.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;rtbExtractionTo.Name" xml:space="preserve">
-    <value>rtbExtractionTo</value>
+  <data name="&gt;&gt;rtbExtraction.Name" xml:space="preserve">
+    <value>rtbExtraction</value>
   </data>
-  <data name="&gt;&gt;rtbExtractionTo.Type" xml:space="preserve">
+  <data name="&gt;&gt;rtbExtraction.Type" xml:space="preserve">
     <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rtbExtractionTo.Parent" xml:space="preserve">
-    <value>pExtractionTo</value>
+  <data name="&gt;&gt;rtbExtraction.Parent" xml:space="preserve">
+    <value>pExtraction</value>
   </data>
-  <data name="&gt;&gt;rtbExtractionTo.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rtbExtraction.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="pExtractionTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="pExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="pExtractionTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>488, 33</value>
-  </data>
-  <data name="pExtractionTo.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="pExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 175</value>
-  </data>
-  <data name="pExtractionTo.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;pExtractionTo.Name" xml:space="preserve">
-    <value>pExtractionTo</value>
-  </data>
-  <data name="&gt;&gt;pExtractionTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pExtractionTo.Parent" xml:space="preserve">
-    <value>tlpExtraction</value>
-  </data>
-  <data name="&gt;&gt;pExtractionTo.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="rtbExtractionFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbExtractionFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="rtbExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 167</value>
-  </data>
-  <data name="rtbExtractionFrom.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="rtbExtractionFrom.Text" xml:space="preserve">
-    <value />
-  </data>
-  <data name="&gt;&gt;rtbExtractionFrom.Name" xml:space="preserve">
-    <value>rtbExtractionFrom</value>
-  </data>
-  <data name="&gt;&gt;rtbExtractionFrom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rtbExtractionFrom.Parent" xml:space="preserve">
-    <value>pExtractionFrom</value>
-  </data>
-  <data name="&gt;&gt;rtbExtractionFrom.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="pExtractionFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pExtractionFrom.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="pExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 33</value>
   </data>
-  <data name="pExtractionFrom.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="pExtraction.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="pExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 175</value>
+  <data name="pExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>864, 175</value>
   </data>
-  <data name="pExtractionFrom.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="pExtraction.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
-  <data name="&gt;&gt;pExtractionFrom.Name" xml:space="preserve">
-    <value>pExtractionFrom</value>
+  <data name="&gt;&gt;pExtraction.Name" xml:space="preserve">
+    <value>pExtraction</value>
   </data>
-  <data name="&gt;&gt;pExtractionFrom.Type" xml:space="preserve">
+  <data name="&gt;&gt;pExtraction.Type" xml:space="preserve">
     <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;pExtractionFrom.Parent" xml:space="preserve">
+  <data name="&gt;&gt;pExtraction.Parent" xml:space="preserve">
     <value>tlpExtraction</value>
   </data>
-  <data name="&gt;&gt;pExtractionFrom.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpExtractionButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="bExtraction_Clear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bExtraction_Clear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bExtraction_Clear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 40</value>
-  </data>
-  <data name="bExtraction_Clear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 29</value>
-  </data>
-  <data name="bExtraction_Clear.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="bExtraction_Clear.Text" xml:space="preserve">
-    <value>清 空</value>
-  </data>
-  <data name="&gt;&gt;bExtraction_Clear.Name" xml:space="preserve">
-    <value>bExtraction_Clear</value>
-  </data>
-  <data name="&gt;&gt;bExtraction_Clear.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bExtraction_Clear.Parent" xml:space="preserve">
-    <value>tlpExtractionButton</value>
-  </data>
-  <data name="&gt;&gt;bExtraction_Clear.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;pExtraction.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="tlpExtraction_Button.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="bExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -5608,16 +5497,19 @@
     <value>NoControl</value>
   </data>
   <data name="bExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 112</value>
+    <value>771, 1</value>
+  </data>
+  <data name="bExtraction.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
   </data>
   <data name="bExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 29</value>
+    <value>98, 28</value>
   </data>
   <data name="bExtraction.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+    <value>7</value>
   </data>
   <data name="bExtraction.Text" xml:space="preserve">
-    <value>提 取</value>
+    <value>选择文件</value>
   </data>
   <data name="&gt;&gt;bExtraction.Name" xml:space="preserve">
     <value>bExtraction</value>
@@ -5626,100 +5518,73 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;bExtraction.Parent" xml:space="preserve">
-    <value>tlpExtractionButton</value>
+    <value>tlpExtraction_Button</value>
   </data>
   <data name="&gt;&gt;bExtraction.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
-  <data name="pbExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbbExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="pbExtraction.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="cbbExtraction.Items" xml:space="preserve">
+    <value>{ Charles XML 会话文件（.chlsx）} =&gt; { 十六进制数据 }</value>
   </data>
-  <data name="pbExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 75</value>
+  <data name="cbbExtraction.Items1" xml:space="preserve">
+    <value>{ FILT过滤器文件（.filt）} =&gt; { WPE64 滤镜文件（.sp）}</value>
   </data>
-  <data name="pbExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 31</value>
-  </data>
-  <data name="pbExtraction.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>CenterImage</value>
-  </data>
-  <data name="pbExtraction.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;pbExtraction.Name" xml:space="preserve">
-    <value>pbExtraction</value>
-  </data>
-  <data name="&gt;&gt;pbExtraction.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pbExtraction.Parent" xml:space="preserve">
-    <value>tlpExtractionButton</value>
-  </data>
-  <data name="&gt;&gt;pbExtraction.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpExtractionButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpExtractionButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>385, 30</value>
-  </data>
-  <data name="tlpExtractionButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpExtractionButton.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tlpExtractionButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 181</value>
-  </data>
-  <data name="tlpExtractionButton.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tlpExtractionButton.Name" xml:space="preserve">
-    <value>tlpExtractionButton</value>
-  </data>
-  <data name="&gt;&gt;tlpExtractionButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpExtractionButton.Parent" xml:space="preserve">
-    <value>tlpExtraction</value>
-  </data>
-  <data name="&gt;&gt;tlpExtractionButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpExtractionButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bExtraction_Clear" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bExtraction" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbExtraction" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,80,Percent,50" /&gt;&lt;Rows Styles="Percent,50,Absolute,35,AutoSize,0,Absolute,35,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="cbbExtractionFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbbExtractionFrom.Items" xml:space="preserve">
-    <value>Charles 十六进制格式</value>
-  </data>
-  <data name="cbbExtractionFrom.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbbExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="cbbExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 25</value>
+  <data name="cbbExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>764, 25</value>
   </data>
-  <data name="cbbExtractionFrom.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="cbbExtraction.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
-  <data name="&gt;&gt;cbbExtractionFrom.Name" xml:space="preserve">
-    <value>cbbExtractionFrom</value>
+  <data name="&gt;&gt;cbbExtraction.Name" xml:space="preserve">
+    <value>cbbExtraction</value>
   </data>
-  <data name="&gt;&gt;cbbExtractionFrom.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbbExtraction.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbbExtractionFrom.Parent" xml:space="preserve">
+  <data name="&gt;&gt;cbbExtraction.Parent" xml:space="preserve">
+    <value>tlpExtraction_Button</value>
+  </data>
+  <data name="&gt;&gt;cbbExtraction.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpExtraction_Button.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpExtraction_Button.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpExtraction_Button.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpExtraction_Button.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpExtraction_Button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>870, 30</value>
+  </data>
+  <data name="tlpExtraction_Button.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tlpExtraction_Button.Name" xml:space="preserve">
+    <value>tlpExtraction_Button</value>
+  </data>
+  <data name="&gt;&gt;tlpExtraction_Button.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpExtraction_Button.Parent" xml:space="preserve">
     <value>tlpExtraction</value>
   </data>
-  <data name="&gt;&gt;cbbExtractionFrom.ZOrder" xml:space="preserve">
-    <value>4</value>
+  <data name="&gt;&gt;tlpExtraction_Button.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpExtraction_Button.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bExtraction" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbbExtraction" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -5752,7 +5617,7 @@
     <value>0</value>
   </data>
   <data name="tlpExtraction.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbExtractionTo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="pExtractionTo" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="pExtractionFrom" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpExtractionButton" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbbExtractionFrom" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="pExtraction" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpExtraction_Button" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,30,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -12370,6 +12235,9 @@
   <data name="dataGridViewImageColumn1.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
+  <metadata name="ofdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1668, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -19282,6 +19150,12 @@
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ofdExtraction.Name" xml:space="preserve">
+    <value>ofdExtraction</value>
+  </data>
+  <data name="&gt;&gt;ofdExtraction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

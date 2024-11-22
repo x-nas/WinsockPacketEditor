@@ -155,23 +155,29 @@
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
   </data>
-  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
-    <value>[ Starting Modify ]</value>
+  <data name="gbFilterAppoint.Text" xml:space="preserve">
+    <value>[ Appoint Type ]</value>
   </data>
-  <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
-    <value>From the position of the chain</value>
+  <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>78, 35</value>
   </data>
-  <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
-    <value>From the beginning of the packet</value>
+  <data name="cbFilter_AppointLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 35</value>
   </data>
-  <data name="gbFilterMode.Text" xml:space="preserve">
-    <value>[ Mode ]</value>
+  <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 23</value>
   </data>
-  <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
-    <value>Advanced</value>
+  <data name="cbFilter_AppointLength.Text" xml:space="preserve">
+    <value>Length</value>
   </data>
-  <data name="rbFilterMode_Normal.Text" xml:space="preserve">
-    <value>Normal</value>
+  <data name="cbFilter_AppointSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 23</value>
+  </data>
+  <data name="cbFilter_AppointSocket.Text" xml:space="preserve">
+    <value>Socket</value>
+  </data>
+  <data name="nudFilter_SocketContent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>78, 6</value>
   </data>
   <data name="gbFilterAction.Text" xml:space="preserve">
     <value>[ Action ]</value>
@@ -221,8 +227,8 @@
   <data name="bFilterButton_Close.Text" xml:space="preserve">
     <value>Close (&amp;C)</value>
   </data>
-  <data name="gbFilterAppoint.Text" xml:space="preserve">
-    <value>[ Appoint Type ]</value>
+  <data name="gbFilterAppoint_Advance.Text" xml:space="preserve">
+    <value>[ Advance Appoint ]</value>
   </data>
   <data name="txtFilter_HeaderContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>82, 6</value>
@@ -238,6 +244,24 @@
   </data>
   <data name="gbFilterName.Text" xml:space="preserve">
     <value>[ Filter Name ]</value>
+  </data>
+  <data name="gbFilterMode.Text" xml:space="preserve">
+    <value>[ Mode ]</value>
+  </data>
+  <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
+    <value>Advanced</value>
+  </data>
+  <data name="rbFilterMode_Normal.Text" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="gbFilterModifyFrom.Text" xml:space="preserve">
+    <value>[ Starting Modify From ]</value>
+  </data>
+  <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
+    <value>Position of the chain</value>
+  </data>
+  <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
+    <value>Beginning of the packet</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

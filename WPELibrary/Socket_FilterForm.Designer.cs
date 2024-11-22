@@ -31,10 +31,6 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_FilterForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -47,6 +43,10 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpFilterForm = new System.Windows.Forms.TableLayoutPanel();
             this.tcFilterInfo = new System.Windows.Forms.TabControl();
             this.tpNormal = new System.Windows.Forms.TabPage();
@@ -62,14 +62,12 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Search = new System.Windows.Forms.DataGridView();
             this.dgvFilterAdvanced_Modify_FromHead = new System.Windows.Forms.DataGridView();
             this.tlpFilterParameter = new System.Windows.Forms.TableLayoutPanel();
-            this.gbFilterModifyFrom = new System.Windows.Forms.GroupBox();
-            this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
-            this.rbFilterModifyFrom_Position = new System.Windows.Forms.RadioButton();
-            this.rbFilterModifyFrom_Head = new System.Windows.Forms.RadioButton();
-            this.gbFilterMode = new System.Windows.Forms.GroupBox();
-            this.tlpFilterMode = new System.Windows.Forms.TableLayoutPanel();
-            this.rbFilterMode_Advanced = new System.Windows.Forms.RadioButton();
-            this.rbFilterMode_Normal = new System.Windows.Forms.RadioButton();
+            this.gbFilterAppoint = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.nudFilter_LengthContent = new System.Windows.Forms.NumericUpDown();
+            this.cbFilter_AppointLength = new System.Windows.Forms.CheckBox();
+            this.cbFilter_AppointSocket = new System.Windows.Forms.CheckBox();
+            this.nudFilter_SocketContent = new System.Windows.Forms.NumericUpDown();
             this.gbFilterAction = new System.Windows.Forms.GroupBox();
             this.tlpFilterAction = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterAction_Intercept = new System.Windows.Forms.RadioButton();
@@ -90,13 +88,22 @@ namespace WPELibrary
             this.bFilterButton_Save = new System.Windows.Forms.Button();
             this.bFilterButton_Close = new System.Windows.Forms.Button();
             this.tlpFilterNameAndAppoint = new System.Windows.Forms.TableLayoutPanel();
-            this.gbFilterAppoint = new System.Windows.Forms.GroupBox();
+            this.gbFilterAppoint_Advance = new System.Windows.Forms.GroupBox();
             this.tlpFilterAppoint = new System.Windows.Forms.TableLayoutPanel();
             this.txtFilter_HeaderContent = new System.Windows.Forms.TextBox();
             this.cbFilter_AppointHeader = new System.Windows.Forms.CheckBox();
             this.gbFilterName = new System.Windows.Forms.GroupBox();
             this.tlpFilterName = new System.Windows.Forms.TableLayoutPanel();
             this.txtFilterName = new System.Windows.Forms.TextBox();
+            this.tlpFilterModifyFromAndMode = new System.Windows.Forms.TableLayoutPanel();
+            this.gbFilterMode = new System.Windows.Forms.GroupBox();
+            this.tlpFilterMode = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterMode_Advanced = new System.Windows.Forms.RadioButton();
+            this.rbFilterMode_Normal = new System.Windows.Forms.RadioButton();
+            this.gbFilterModifyFrom = new System.Windows.Forms.GroupBox();
+            this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
+            this.rbFilterModifyFrom_Position = new System.Windows.Forms.RadioButton();
+            this.rbFilterModifyFrom_Head = new System.Windows.Forms.RadioButton();
             this.tlpFilterForm.SuspendLayout();
             this.tcFilterInfo.SuspendLayout();
             this.tpNormal.SuspendLayout();
@@ -108,20 +115,25 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Search)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Modify_FromHead)).BeginInit();
             this.tlpFilterParameter.SuspendLayout();
-            this.gbFilterModifyFrom.SuspendLayout();
-            this.tlpFilterModifyFrom.SuspendLayout();
-            this.gbFilterMode.SuspendLayout();
-            this.tlpFilterMode.SuspendLayout();
+            this.gbFilterAppoint.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_LengthContent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_SocketContent)).BeginInit();
             this.gbFilterAction.SuspendLayout();
             this.tlpFilterAction.SuspendLayout();
             this.gbFilterFunction.SuspendLayout();
             this.tlpFilterFunction.SuspendLayout();
             this.tlpFilterButton.SuspendLayout();
             this.tlpFilterNameAndAppoint.SuspendLayout();
-            this.gbFilterAppoint.SuspendLayout();
+            this.gbFilterAppoint_Advance.SuspendLayout();
             this.tlpFilterAppoint.SuspendLayout();
             this.gbFilterName.SuspendLayout();
             this.tlpFilterName.SuspendLayout();
+            this.tlpFilterModifyFromAndMode.SuspendLayout();
+            this.gbFilterMode.SuspendLayout();
+            this.tlpFilterMode.SuspendLayout();
+            this.gbFilterModifyFrom.SuspendLayout();
+            this.tlpFilterModifyFrom.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpFilterForm
@@ -133,100 +145,100 @@ namespace WPELibrary
             // 
             // tcFilterInfo
             // 
-            resources.ApplyResources(this.tcFilterInfo, "tcFilterInfo");
             this.tcFilterInfo.Controls.Add(this.tpNormal);
             this.tcFilterInfo.Controls.Add(this.tpAdvanced);
+            resources.ApplyResources(this.tcFilterInfo, "tcFilterInfo");
             this.tcFilterInfo.Name = "tcFilterInfo";
             this.tcFilterInfo.SelectedIndex = 0;
             // 
             // tpNormal
             // 
-            resources.ApplyResources(this.tpNormal, "tpNormal");
             this.tpNormal.Controls.Add(this.dgvFilterNormal);
+            resources.ApplyResources(this.tpNormal, "tpNormal");
             this.tpNormal.Name = "tpNormal";
             this.tpNormal.UseVisualStyleBackColor = true;
             // 
             // dgvFilterNormal
             // 
-            resources.ApplyResources(this.dgvFilterNormal, "dgvFilterNormal");
             this.dgvFilterNormal.AllowUserToAddRows = false;
             this.dgvFilterNormal.AllowUserToDeleteRows = false;
             this.dgvFilterNormal.AllowUserToResizeColumns = false;
             this.dgvFilterNormal.AllowUserToResizeRows = false;
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterNormal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterNormal.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvFilterNormal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvFilterNormal.ContextMenuStrip = this.cmsDGV;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterNormal.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterNormal.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.dgvFilterNormal, "dgvFilterNormal");
             this.dgvFilterNormal.MultiSelect = false;
             this.dgvFilterNormal.Name = "dgvFilterNormal";
-            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle19.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle19.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle19.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle19.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle19.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterNormal.RowHeadersDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterNormal.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dgvFilterNormal.RowHeadersVisible = false;
-            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle20.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFilterNormal.RowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvFilterNormal.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvFilterNormal.RowTemplate.Height = 30;
             this.dgvFilterNormal.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // cmsDGV
             // 
-            resources.ApplyResources(this.cmsDGV, "cmsDGV");
             this.cmsDGV.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsDGV_Copy,
             this.cmsDGV_Cut,
             this.cmsDGV_Paste,
             this.cmsDGV_Delete});
             this.cmsDGV.Name = "cmsDGV";
+            resources.ApplyResources(this.cmsDGV, "cmsDGV");
             this.cmsDGV.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsDGV_ItemClicked);
             // 
             // cmsDGV_Copy
             // 
-            resources.ApplyResources(this.cmsDGV_Copy, "cmsDGV_Copy");
             this.cmsDGV_Copy.Image = global::WPELibrary.Properties.Resources.copy;
             this.cmsDGV_Copy.Name = "cmsDGV_Copy";
+            resources.ApplyResources(this.cmsDGV_Copy, "cmsDGV_Copy");
             // 
             // cmsDGV_Cut
             // 
-            resources.ApplyResources(this.cmsDGV_Cut, "cmsDGV_Cut");
             this.cmsDGV_Cut.Image = global::WPELibrary.Properties.Resources.cut;
             this.cmsDGV_Cut.Name = "cmsDGV_Cut";
+            resources.ApplyResources(this.cmsDGV_Cut, "cmsDGV_Cut");
             // 
             // cmsDGV_Paste
             // 
-            resources.ApplyResources(this.cmsDGV_Paste, "cmsDGV_Paste");
             this.cmsDGV_Paste.Image = global::WPELibrary.Properties.Resources.paste;
+            resources.ApplyResources(this.cmsDGV_Paste, "cmsDGV_Paste");
             this.cmsDGV_Paste.Name = "cmsDGV_Paste";
             // 
             // cmsDGV_Delete
             // 
-            resources.ApplyResources(this.cmsDGV_Delete, "cmsDGV_Delete");
             this.cmsDGV_Delete.Image = global::WPELibrary.Properties.Resources.Delete;
+            resources.ApplyResources(this.cmsDGV_Delete, "cmsDGV_Delete");
             this.cmsDGV_Delete.Name = "cmsDGV_Delete";
             // 
             // tpAdvanced
             // 
-            resources.ApplyResources(this.tpAdvanced, "tpAdvanced");
             this.tpAdvanced.Controls.Add(this.tlpFilterAdvanced);
+            resources.ApplyResources(this.tpAdvanced, "tpAdvanced");
             this.tpAdvanced.Name = "tpAdvanced";
             this.tpAdvanced.UseVisualStyleBackColor = true;
             // 
@@ -240,53 +252,10 @@ namespace WPELibrary
             // 
             // dgvFilterAdvanced_Modify_FromPosition
             // 
-            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromPosition, "dgvFilterAdvanced_Modify_FromPosition");
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToAddRows = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToResizeColumns = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromPosition.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvFilterAdvanced_Modify_FromPosition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFilterAdvanced_Modify_FromPosition.ContextMenuStrip = this.cmsDGV;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromPosition.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dgvFilterAdvanced_Modify_FromPosition.MultiSelect = false;
-            this.dgvFilterAdvanced_Modify_FromPosition.Name = "dgvFilterAdvanced_Modify_FromPosition";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromPosition.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.dgvFilterAdvanced_Modify_FromPosition.RowHeadersVisible = false;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFilterAdvanced_Modify_FromPosition.RowsDefaultCellStyle = dataGridViewCellStyle4;
-            this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.Height = 30;
-            this.dgvFilterAdvanced_Modify_FromPosition.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
-            // 
-            // dgvFilterAdvanced_Search
-            // 
-            resources.ApplyResources(this.dgvFilterAdvanced_Search, "dgvFilterAdvanced_Search");
-            this.dgvFilterAdvanced_Search.AllowUserToAddRows = false;
-            this.dgvFilterAdvanced_Search.AllowUserToDeleteRows = false;
-            this.dgvFilterAdvanced_Search.AllowUserToResizeColumns = false;
-            this.dgvFilterAdvanced_Search.AllowUserToResizeRows = false;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -294,9 +263,9 @@ namespace WPELibrary
             dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Search.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
-            this.dgvFilterAdvanced_Search.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFilterAdvanced_Search.ContextMenuStrip = this.cmsDGV;
+            this.dgvFilterAdvanced_Modify_FromPosition.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            this.dgvFilterAdvanced_Modify_FromPosition.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFilterAdvanced_Modify_FromPosition.ContextMenuStrip = this.cmsDGV;
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -304,9 +273,10 @@ namespace WPELibrary
             dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Search.DefaultCellStyle = dataGridViewCellStyle6;
-            this.dgvFilterAdvanced_Search.MultiSelect = false;
-            this.dgvFilterAdvanced_Search.Name = "dgvFilterAdvanced_Search";
+            this.dgvFilterAdvanced_Modify_FromPosition.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromPosition, "dgvFilterAdvanced_Modify_FromPosition");
+            this.dgvFilterAdvanced_Modify_FromPosition.MultiSelect = false;
+            this.dgvFilterAdvanced_Modify_FromPosition.Name = "dgvFilterAdvanced_Modify_FromPosition";
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle7.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -314,21 +284,20 @@ namespace WPELibrary
             dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Search.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            this.dgvFilterAdvanced_Search.RowHeadersVisible = false;
+            this.dgvFilterAdvanced_Modify_FromPosition.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvFilterAdvanced_Modify_FromPosition.RowHeadersVisible = false;
             dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFilterAdvanced_Search.RowsDefaultCellStyle = dataGridViewCellStyle8;
-            this.dgvFilterAdvanced_Search.RowTemplate.Height = 30;
-            this.dgvFilterAdvanced_Search.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            this.dgvFilterAdvanced_Modify_FromPosition.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.Height = 30;
+            this.dgvFilterAdvanced_Modify_FromPosition.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
-            // dgvFilterAdvanced_Modify_FromHead
+            // dgvFilterAdvanced_Search
             // 
-            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromHead, "dgvFilterAdvanced_Modify_FromHead");
-            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToAddRows = false;
-            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToDeleteRows = false;
-            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeColumns = false;
-            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeRows = false;
+            this.dgvFilterAdvanced_Search.AllowUserToAddRows = false;
+            this.dgvFilterAdvanced_Search.AllowUserToDeleteRows = false;
+            this.dgvFilterAdvanced_Search.AllowUserToResizeColumns = false;
+            this.dgvFilterAdvanced_Search.AllowUserToResizeRows = false;
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -336,9 +305,9 @@ namespace WPELibrary
             dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromHead.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
-            this.dgvFilterAdvanced_Modify_FromHead.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvFilterAdvanced_Modify_FromHead.ContextMenuStrip = this.cmsDGV;
+            this.dgvFilterAdvanced_Search.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this.dgvFilterAdvanced_Search.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFilterAdvanced_Search.ContextMenuStrip = this.cmsDGV;
             dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -346,9 +315,10 @@ namespace WPELibrary
             dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromHead.DefaultCellStyle = dataGridViewCellStyle10;
-            this.dgvFilterAdvanced_Modify_FromHead.MultiSelect = false;
-            this.dgvFilterAdvanced_Modify_FromHead.Name = "dgvFilterAdvanced_Modify_FromHead";
+            this.dgvFilterAdvanced_Search.DefaultCellStyle = dataGridViewCellStyle10;
+            resources.ApplyResources(this.dgvFilterAdvanced_Search, "dgvFilterAdvanced_Search");
+            this.dgvFilterAdvanced_Search.MultiSelect = false;
+            this.dgvFilterAdvanced_Search.Name = "dgvFilterAdvanced_Search";
             dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -356,91 +326,122 @@ namespace WPELibrary
             dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvFilterAdvanced_Modify_FromHead.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
-            this.dgvFilterAdvanced_Modify_FromHead.RowHeadersVisible = false;
+            this.dgvFilterAdvanced_Search.RowHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.dgvFilterAdvanced_Search.RowHeadersVisible = false;
             dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle12.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dgvFilterAdvanced_Modify_FromHead.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            this.dgvFilterAdvanced_Search.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            this.dgvFilterAdvanced_Search.RowTemplate.Height = 30;
+            this.dgvFilterAdvanced_Search.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            // 
+            // dgvFilterAdvanced_Modify_FromHead
+            // 
+            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToAddRows = false;
+            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToDeleteRows = false;
+            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeColumns = false;
+            this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeRows = false;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterAdvanced_Modify_FromHead.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            this.dgvFilterAdvanced_Modify_FromHead.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvFilterAdvanced_Modify_FromHead.ContextMenuStrip = this.cmsDGV;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterAdvanced_Modify_FromHead.DefaultCellStyle = dataGridViewCellStyle14;
+            resources.ApplyResources(this.dgvFilterAdvanced_Modify_FromHead, "dgvFilterAdvanced_Modify_FromHead");
+            this.dgvFilterAdvanced_Modify_FromHead.MultiSelect = false;
+            this.dgvFilterAdvanced_Modify_FromHead.Name = "dgvFilterAdvanced_Modify_FromHead";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvFilterAdvanced_Modify_FromHead.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
+            this.dgvFilterAdvanced_Modify_FromHead.RowHeadersVisible = false;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dgvFilterAdvanced_Modify_FromHead.RowsDefaultCellStyle = dataGridViewCellStyle16;
             this.dgvFilterAdvanced_Modify_FromHead.RowTemplate.Height = 30;
             this.dgvFilterAdvanced_Modify_FromHead.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
             // 
             // tlpFilterParameter
             // 
             resources.ApplyResources(this.tlpFilterParameter, "tlpFilterParameter");
-            this.tlpFilterParameter.Controls.Add(this.gbFilterModifyFrom, 1, 1);
-            this.tlpFilterParameter.Controls.Add(this.gbFilterMode, 0, 1);
+            this.tlpFilterParameter.Controls.Add(this.gbFilterAppoint, 0, 1);
             this.tlpFilterParameter.Controls.Add(this.gbFilterAction, 0, 0);
             this.tlpFilterParameter.Controls.Add(this.gbFilterFunction, 2, 0);
             this.tlpFilterParameter.Controls.Add(this.tlpFilterButton, 2, 1);
             this.tlpFilterParameter.Controls.Add(this.tlpFilterNameAndAppoint, 1, 0);
+            this.tlpFilterParameter.Controls.Add(this.tlpFilterModifyFromAndMode, 1, 1);
             this.tlpFilterParameter.Name = "tlpFilterParameter";
             // 
-            // gbFilterModifyFrom
+            // gbFilterAppoint
             // 
-            resources.ApplyResources(this.gbFilterModifyFrom, "gbFilterModifyFrom");
-            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
-            this.gbFilterModifyFrom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterModifyFrom.Name = "gbFilterModifyFrom";
-            this.gbFilterModifyFrom.TabStop = false;
+            this.gbFilterAppoint.Controls.Add(this.tableLayoutPanel1);
+            resources.ApplyResources(this.gbFilterAppoint, "gbFilterAppoint");
+            this.gbFilterAppoint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterAppoint.Name = "gbFilterAppoint";
+            this.gbFilterAppoint.TabStop = false;
             // 
-            // tlpFilterModifyFrom
+            // tableLayoutPanel1
             // 
-            resources.ApplyResources(this.tlpFilterModifyFrom, "tlpFilterModifyFrom");
-            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Position, 0, 1);
-            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Head, 0, 0);
-            this.tlpFilterModifyFrom.Name = "tlpFilterModifyFrom";
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.nudFilter_LengthContent, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cbFilter_AppointLength, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.cbFilter_AppointSocket, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.nudFilter_SocketContent, 1, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
-            // rbFilterModifyFrom_Position
+            // nudFilter_LengthContent
             // 
-            resources.ApplyResources(this.rbFilterModifyFrom_Position, "rbFilterModifyFrom_Position");
-            this.rbFilterModifyFrom_Position.Name = "rbFilterModifyFrom_Position";
-            this.rbFilterModifyFrom_Position.UseVisualStyleBackColor = true;
-            this.rbFilterModifyFrom_Position.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
+            resources.ApplyResources(this.nudFilter_LengthContent, "nudFilter_LengthContent");
+            this.nudFilter_LengthContent.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudFilter_LengthContent.Name = "nudFilter_LengthContent";
             // 
-            // rbFilterModifyFrom_Head
+            // cbFilter_AppointLength
             // 
-            resources.ApplyResources(this.rbFilterModifyFrom_Head, "rbFilterModifyFrom_Head");
-            this.rbFilterModifyFrom_Head.Checked = true;
-            this.rbFilterModifyFrom_Head.Name = "rbFilterModifyFrom_Head";
-            this.rbFilterModifyFrom_Head.TabStop = true;
-            this.rbFilterModifyFrom_Head.UseVisualStyleBackColor = true;
-            this.rbFilterModifyFrom_Head.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
+            resources.ApplyResources(this.cbFilter_AppointLength, "cbFilter_AppointLength");
+            this.cbFilter_AppointLength.Name = "cbFilter_AppointLength";
+            this.cbFilter_AppointLength.UseVisualStyleBackColor = true;
+            this.cbFilter_AppointLength.CheckedChanged += new System.EventHandler(this.cbFilter_AppointLength_CheckedChanged);
             // 
-            // gbFilterMode
+            // cbFilter_AppointSocket
             // 
-            resources.ApplyResources(this.gbFilterMode, "gbFilterMode");
-            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
-            this.gbFilterMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterMode.Name = "gbFilterMode";
-            this.gbFilterMode.TabStop = false;
+            resources.ApplyResources(this.cbFilter_AppointSocket, "cbFilter_AppointSocket");
+            this.cbFilter_AppointSocket.Name = "cbFilter_AppointSocket";
+            this.cbFilter_AppointSocket.UseVisualStyleBackColor = true;
+            this.cbFilter_AppointSocket.CheckedChanged += new System.EventHandler(this.cbFilter_AppointSocket_CheckedChanged);
             // 
-            // tlpFilterMode
+            // nudFilter_SocketContent
             // 
-            resources.ApplyResources(this.tlpFilterMode, "tlpFilterMode");
-            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Advanced, 1, 0);
-            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Normal, 0, 0);
-            this.tlpFilterMode.Name = "tlpFilterMode";
-            // 
-            // rbFilterMode_Advanced
-            // 
-            resources.ApplyResources(this.rbFilterMode_Advanced, "rbFilterMode_Advanced");
-            this.rbFilterMode_Advanced.Name = "rbFilterMode_Advanced";
-            this.rbFilterMode_Advanced.UseVisualStyleBackColor = true;
-            this.rbFilterMode_Advanced.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
-            // 
-            // rbFilterMode_Normal
-            // 
-            resources.ApplyResources(this.rbFilterMode_Normal, "rbFilterMode_Normal");
-            this.rbFilterMode_Normal.Checked = true;
-            this.rbFilterMode_Normal.Name = "rbFilterMode_Normal";
-            this.rbFilterMode_Normal.TabStop = true;
-            this.rbFilterMode_Normal.UseVisualStyleBackColor = true;
-            this.rbFilterMode_Normal.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
+            resources.ApplyResources(this.nudFilter_SocketContent, "nudFilter_SocketContent");
+            this.nudFilter_SocketContent.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudFilter_SocketContent.Name = "nudFilter_SocketContent";
             // 
             // gbFilterAction
             // 
-            resources.ApplyResources(this.gbFilterAction, "gbFilterAction");
             this.gbFilterAction.Controls.Add(this.tlpFilterAction);
+            resources.ApplyResources(this.gbFilterAction, "gbFilterAction");
             this.gbFilterAction.Name = "gbFilterAction";
             this.gbFilterAction.TabStop = false;
             // 
@@ -481,8 +482,8 @@ namespace WPELibrary
             // 
             // gbFilterFunction
             // 
-            resources.ApplyResources(this.gbFilterFunction, "gbFilterFunction");
             this.gbFilterFunction.Controls.Add(this.tlpFilterFunction);
+            resources.ApplyResources(this.gbFilterFunction, "gbFilterFunction");
             this.gbFilterFunction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterFunction.Name = "gbFilterFunction";
             this.gbFilterFunction.TabStop = false;
@@ -588,17 +589,17 @@ namespace WPELibrary
             // tlpFilterNameAndAppoint
             // 
             resources.ApplyResources(this.tlpFilterNameAndAppoint, "tlpFilterNameAndAppoint");
-            this.tlpFilterNameAndAppoint.Controls.Add(this.gbFilterAppoint, 0, 1);
+            this.tlpFilterNameAndAppoint.Controls.Add(this.gbFilterAppoint_Advance, 0, 1);
             this.tlpFilterNameAndAppoint.Controls.Add(this.gbFilterName, 0, 0);
             this.tlpFilterNameAndAppoint.Name = "tlpFilterNameAndAppoint";
             // 
-            // gbFilterAppoint
+            // gbFilterAppoint_Advance
             // 
-            resources.ApplyResources(this.gbFilterAppoint, "gbFilterAppoint");
-            this.gbFilterAppoint.Controls.Add(this.tlpFilterAppoint);
-            this.gbFilterAppoint.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gbFilterAppoint.Name = "gbFilterAppoint";
-            this.gbFilterAppoint.TabStop = false;
+            this.gbFilterAppoint_Advance.Controls.Add(this.tlpFilterAppoint);
+            resources.ApplyResources(this.gbFilterAppoint_Advance, "gbFilterAppoint_Advance");
+            this.gbFilterAppoint_Advance.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterAppoint_Advance.Name = "gbFilterAppoint_Advance";
+            this.gbFilterAppoint_Advance.TabStop = false;
             // 
             // tlpFilterAppoint
             // 
@@ -609,9 +610,9 @@ namespace WPELibrary
             // 
             // txtFilter_HeaderContent
             // 
-            resources.ApplyResources(this.txtFilter_HeaderContent, "txtFilter_HeaderContent");
             this.txtFilter_HeaderContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtFilter_HeaderContent.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            resources.ApplyResources(this.txtFilter_HeaderContent, "txtFilter_HeaderContent");
             this.txtFilter_HeaderContent.Name = "txtFilter_HeaderContent";
             this.txtFilter_HeaderContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtFilter_HeaderContent_KeyPress);
             // 
@@ -624,8 +625,8 @@ namespace WPELibrary
             // 
             // gbFilterName
             // 
-            resources.ApplyResources(this.gbFilterName, "gbFilterName");
             this.gbFilterName.Controls.Add(this.tlpFilterName);
+            resources.ApplyResources(this.gbFilterName, "gbFilterName");
             this.gbFilterName.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.gbFilterName.Name = "gbFilterName";
             this.gbFilterName.TabStop = false;
@@ -638,9 +639,78 @@ namespace WPELibrary
             // 
             // txtFilterName
             // 
-            resources.ApplyResources(this.txtFilterName, "txtFilterName");
             this.txtFilterName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtFilterName, "txtFilterName");
             this.txtFilterName.Name = "txtFilterName";
+            // 
+            // tlpFilterModifyFromAndMode
+            // 
+            resources.ApplyResources(this.tlpFilterModifyFromAndMode, "tlpFilterModifyFromAndMode");
+            this.tlpFilterModifyFromAndMode.Controls.Add(this.gbFilterMode, 1, 0);
+            this.tlpFilterModifyFromAndMode.Controls.Add(this.gbFilterModifyFrom, 0, 0);
+            this.tlpFilterModifyFromAndMode.Name = "tlpFilterModifyFromAndMode";
+            // 
+            // gbFilterMode
+            // 
+            this.gbFilterMode.Controls.Add(this.tlpFilterMode);
+            resources.ApplyResources(this.gbFilterMode, "gbFilterMode");
+            this.gbFilterMode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterMode.Name = "gbFilterMode";
+            this.gbFilterMode.TabStop = false;
+            // 
+            // tlpFilterMode
+            // 
+            resources.ApplyResources(this.tlpFilterMode, "tlpFilterMode");
+            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Advanced, 0, 1);
+            this.tlpFilterMode.Controls.Add(this.rbFilterMode_Normal, 0, 0);
+            this.tlpFilterMode.Name = "tlpFilterMode";
+            // 
+            // rbFilterMode_Advanced
+            // 
+            resources.ApplyResources(this.rbFilterMode_Advanced, "rbFilterMode_Advanced");
+            this.rbFilterMode_Advanced.Name = "rbFilterMode_Advanced";
+            this.rbFilterMode_Advanced.UseVisualStyleBackColor = true;
+            this.rbFilterMode_Advanced.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
+            // 
+            // rbFilterMode_Normal
+            // 
+            resources.ApplyResources(this.rbFilterMode_Normal, "rbFilterMode_Normal");
+            this.rbFilterMode_Normal.Checked = true;
+            this.rbFilterMode_Normal.Name = "rbFilterMode_Normal";
+            this.rbFilterMode_Normal.TabStop = true;
+            this.rbFilterMode_Normal.UseVisualStyleBackColor = true;
+            this.rbFilterMode_Normal.CheckedChanged += new System.EventHandler(this.rbFilterMode_CheckedChanged);
+            // 
+            // gbFilterModifyFrom
+            // 
+            this.gbFilterModifyFrom.Controls.Add(this.tlpFilterModifyFrom);
+            resources.ApplyResources(this.gbFilterModifyFrom, "gbFilterModifyFrom");
+            this.gbFilterModifyFrom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.gbFilterModifyFrom.Name = "gbFilterModifyFrom";
+            this.gbFilterModifyFrom.TabStop = false;
+            // 
+            // tlpFilterModifyFrom
+            // 
+            resources.ApplyResources(this.tlpFilterModifyFrom, "tlpFilterModifyFrom");
+            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Position, 0, 1);
+            this.tlpFilterModifyFrom.Controls.Add(this.rbFilterModifyFrom_Head, 0, 0);
+            this.tlpFilterModifyFrom.Name = "tlpFilterModifyFrom";
+            // 
+            // rbFilterModifyFrom_Position
+            // 
+            resources.ApplyResources(this.rbFilterModifyFrom_Position, "rbFilterModifyFrom_Position");
+            this.rbFilterModifyFrom_Position.Name = "rbFilterModifyFrom_Position";
+            this.rbFilterModifyFrom_Position.UseVisualStyleBackColor = true;
+            this.rbFilterModifyFrom_Position.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
+            // 
+            // rbFilterModifyFrom_Head
+            // 
+            resources.ApplyResources(this.rbFilterModifyFrom_Head, "rbFilterModifyFrom_Head");
+            this.rbFilterModifyFrom_Head.Checked = true;
+            this.rbFilterModifyFrom_Head.Name = "rbFilterModifyFrom_Head";
+            this.rbFilterModifyFrom_Head.TabStop = true;
+            this.rbFilterModifyFrom_Head.UseVisualStyleBackColor = true;
+            this.rbFilterModifyFrom_Head.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
             // 
             // Socket_FilterForm
             // 
@@ -661,12 +731,11 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Search)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterAdvanced_Modify_FromHead)).EndInit();
             this.tlpFilterParameter.ResumeLayout(false);
-            this.gbFilterModifyFrom.ResumeLayout(false);
-            this.tlpFilterModifyFrom.ResumeLayout(false);
-            this.tlpFilterModifyFrom.PerformLayout();
-            this.gbFilterMode.ResumeLayout(false);
-            this.tlpFilterMode.ResumeLayout(false);
-            this.tlpFilterMode.PerformLayout();
+            this.gbFilterAppoint.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_LengthContent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_SocketContent)).EndInit();
             this.gbFilterAction.ResumeLayout(false);
             this.tlpFilterAction.ResumeLayout(false);
             this.tlpFilterAction.PerformLayout();
@@ -675,12 +744,19 @@ namespace WPELibrary
             this.tlpFilterFunction.PerformLayout();
             this.tlpFilterButton.ResumeLayout(false);
             this.tlpFilterNameAndAppoint.ResumeLayout(false);
-            this.gbFilterAppoint.ResumeLayout(false);
+            this.gbFilterAppoint_Advance.ResumeLayout(false);
             this.tlpFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint.PerformLayout();
             this.gbFilterName.ResumeLayout(false);
             this.tlpFilterName.ResumeLayout(false);
             this.tlpFilterName.PerformLayout();
+            this.tlpFilterModifyFromAndMode.ResumeLayout(false);
+            this.gbFilterMode.ResumeLayout(false);
+            this.tlpFilterMode.ResumeLayout(false);
+            this.tlpFilterMode.PerformLayout();
+            this.gbFilterModifyFrom.ResumeLayout(false);
+            this.tlpFilterModifyFrom.ResumeLayout(false);
+            this.tlpFilterModifyFrom.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -711,7 +787,7 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridView dgvFilterAdvanced_Modify_FromPosition;
         private System.Windows.Forms.DataGridView dgvFilterAdvanced_Search;
         private System.Windows.Forms.TableLayoutPanel tlpFilterNameAndAppoint;
-        private System.Windows.Forms.GroupBox gbFilterAppoint;
+        private System.Windows.Forms.GroupBox gbFilterAppoint_Advance;
         private System.Windows.Forms.TableLayoutPanel tlpFilterAppoint;
         private System.Windows.Forms.TextBox txtFilter_HeaderContent;
         private System.Windows.Forms.GroupBox gbFilterName;
@@ -729,13 +805,20 @@ namespace WPELibrary
         private System.Windows.Forms.RadioButton rbFilterAction_Replace;
         private System.Windows.Forms.RadioButton rbFilterAction_NoModify_Display;
         private System.Windows.Forms.RadioButton rbFilterAction_NoModify_NoDisplay;
-        private System.Windows.Forms.GroupBox gbFilterModifyFrom;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterModifyFrom;
-        private System.Windows.Forms.RadioButton rbFilterModifyFrom_Position;
-        private System.Windows.Forms.RadioButton rbFilterModifyFrom_Head;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterModifyFromAndMode;
         private System.Windows.Forms.GroupBox gbFilterMode;
         private System.Windows.Forms.TableLayoutPanel tlpFilterMode;
         private System.Windows.Forms.RadioButton rbFilterMode_Advanced;
         private System.Windows.Forms.RadioButton rbFilterMode_Normal;
+        private System.Windows.Forms.GroupBox gbFilterModifyFrom;
+        private System.Windows.Forms.TableLayoutPanel tlpFilterModifyFrom;
+        private System.Windows.Forms.RadioButton rbFilterModifyFrom_Position;
+        private System.Windows.Forms.RadioButton rbFilterModifyFrom_Head;
+        private System.Windows.Forms.GroupBox gbFilterAppoint;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.CheckBox cbFilter_AppointSocket;
+        private System.Windows.Forms.CheckBox cbFilter_AppointLength;
+        private System.Windows.Forms.NumericUpDown nudFilter_SocketContent;
+        private System.Windows.Forms.NumericUpDown nudFilter_LengthContent;
     }
 }

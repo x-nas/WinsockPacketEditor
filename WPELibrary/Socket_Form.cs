@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.ComponentModel;
 using System.Reflection;
 using WPELibrary.Lib;
@@ -8,6 +7,9 @@ using EasyHook;
 using Be.Windows.Forms;
 using System.Drawing;
 using System.Linq;
+using System.IO;
+using System.Xml.Linq;
+using System.Text;
 
 namespace WPELibrary
 {
@@ -35,13 +37,11 @@ namespace WPELibrary
 
                 this.InitSocketForm();
                 this.InitSocketDGV();
+                this.InitFilterList();
                 this.InitHexBox_XOR();
                 this.LoadConfigs_Parameter();
-
+                
                 Socket_Cache.SendList.InitSendList();
-
-                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                Socket_Operation.LoadFilterList(FilePath, false);              
             }
             catch (Exception ex)
             {
@@ -108,8 +108,7 @@ namespace WPELibrary
             {
                 ws.ExitHook();
 
-                this.SetConfigs_Parameter();
-                Socket_Operation.SaveConfigs();
+                this.SaveConfigs_Parameter();                
 
                 string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
                 Socket_Operation.SaveFilterList(FilePath, -1, false);
@@ -150,10 +149,22 @@ namespace WPELibrary
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
 
-                this.cbbExtractionFrom.SelectedIndex = 0;
-                this.cbbExtractionTo.SelectedIndex = 0;
+                this.cbbExtraction.SelectedIndex = 0;                
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitFilterList()
+        {
+            try
+            {
+                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+                Socket_Operation.LoadFilterList(FilePath, false);
             }
             catch (Exception ex)
             {
@@ -276,7 +287,7 @@ namespace WPELibrary
             }
         }
 
-        private void SetConfigs_Parameter()
+        private void SaveConfigs_Parameter()
         {
             try
             {  
@@ -323,6 +334,8 @@ namespace WPELibrary
                 {
                     Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Sequence;
                 }
+
+                Socket_Operation.SaveConfigs();
             }
             catch (Exception ex)
             {
@@ -622,7 +635,7 @@ namespace WPELibrary
         {
             try
             {
-                this.SetConfigs_Parameter();
+                this.SaveConfigs_Parameter();
 
                 this.tcSocketInfo_FilterSet.Enabled = false;
                 this.tcSocketInfo_HookSet.Enabled = false;
@@ -1890,30 +1903,240 @@ namespace WPELibrary
 
         #endregion
 
-        #region//数据提取
-
-        private void bExtraction_Clear_Click(object sender, EventArgs e)
-        {
-            this.rtbExtractionFrom.Clear();
-            this.rtbExtractionTo.Clear();
-        }
+        #region//数据提取        
 
         private void bExtraction_Click(object sender, EventArgs e)
         {
             try
             {
-                string sReturn = string.Empty;
+                this.rtbExtraction.Clear();
 
-                foreach (string line in this.rtbExtractionFrom.Lines)
+                int iSelectIndex = this.cbbExtraction.SelectedIndex;
+
+                if (iSelectIndex == 0)
                 {
-                    string sHex = line.Substring(10, 48);
-
-                    sReturn += sHex;
+                    this.ofdExtraction.Filter = "Charles 会话文件（*.chlsx）|*.chlsx";
+                }
+                else if (iSelectIndex == 1)
+                {
+                    this.ofdExtraction.Filter = "FILT 过滤器文件（*.filt）|*.filt";
                 }
 
-                sReturn = sReturn.Trim().ToUpper();
+                ofdExtraction.ShowDialog();
 
-                this.rtbExtractionTo.Text = sReturn;
+                string FilePath = ofdExtraction.FileName;
+
+                if (!string.IsNullOrEmpty(FilePath))
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        switch (iSelectIndex)
+                        {
+                            case 0:
+
+                                #region//Charles XML 会话文件
+
+                                try
+                                {
+                                    XDocument xdoc_Charles = new XDocument();
+                                    xdoc_Charles = XDocument.Load(FilePath);
+
+                                    XElement xeRoot_Charles = xdoc_Charles.Descendants("response").FirstOrDefault();
+
+                                    if (xeRoot_Charles != null)
+                                    {
+                                        if (xeRoot_Charles.Element("body") != null)
+                                        {
+                                            string sBody = xeRoot_Charles.Element("body").Value;
+
+                                            byte[] bBody = Convert.FromBase64String(sBody);
+                                            this.rtbExtraction.Text = BitConverter.ToString(bBody).Replace("-", " ");
+                                        }
+                                    }
+                                }
+                                catch
+                                {
+                                    //                            
+                                }
+
+                                #endregion
+
+                                break;
+
+                            case 1:
+
+                                #region//FILT 过滤器文件
+
+                                string[] lines = File.ReadAllLines(FilePath, Encoding.Default);
+
+                                XDocument xdoc_Filt = new XDocument
+                                {
+                                    Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                                };
+
+                                XElement xeRoot_Filt = new XElement("FilterList");
+                                xdoc_Filt.Add(xeRoot_Filt);
+
+                                foreach (string line in lines)
+                                {
+                                    if (line.IndexOf("￥") >= 0)
+                                    {
+                                        string[] slFilter = line.Split('￥');
+
+                                        if (slFilter.Length == 35)
+                                        {
+                                            string s0 = slFilter[0].ToString();//是否指定长度 bool （真，假）
+                                            string s1 = slFilter[1].ToString();//指定长度 int
+                                            string s2 = slFilter[2].ToString();//是否指定套接字 bool （真，假）
+                                            string s3 = slFilter[3].ToString();//套接字 int
+                                            string s4 = slFilter[4].ToString();//是否指定包头 bool （真，假）
+                                            string s5 = slFilter[5].ToString();//包头 string (十六进制不带空格)
+                                            string s6 = slFilter[6].ToString();//未知 bool （真，假）
+                                            string s7 = slFilter[7].ToString();//未知 int 0
+                                            string s8 = slFilter[8].ToString();//未知 int 0
+                                            string s9 = slFilter[9].ToString();//是否替换 bool （真，假）
+                                            string s10 = slFilter[10].ToString();//是否拦截 bool （真，假）
+                                            string s11 = slFilter[11].ToString();//是否不可视 bool （真，假）
+                                            string s12 = slFilter[12].ToString();//步长 int
+                                            string s13 = slFilter[13].ToString();//过滤器名称 string
+                                            string s14 = slFilter[14].ToString();//发送 bool （1，0）
+                                            string s15 = slFilter[15].ToString();//接收 bool （1，0）
+                                            string s16 = slFilter[16].ToString();//发送到 bool （1，0）
+                                            string s17 = slFilter[17].ToString();//接收自 bool （1，0）
+                                            string s18 = slFilter[18].ToString();//WSA发送 bool （1，0）
+                                            string s19 = slFilter[19].ToString();//WSA接收 bool （1，0）
+                                            string s20 = slFilter[20].ToString();//WSA发送到 bool （1，0）
+                                            string s21 = slFilter[21].ToString();//未知 -1
+                                            string s22 = slFilter[22].ToString();//普通模式 bool （真，假）
+                                            string s23 = slFilter[23].ToString();//高级模式 bool （真，假）
+                                            string s24 = slFilter[24].ToString();//数据包开头 bool （真，假）
+                                            string s25 = slFilter[25].ToString();//自发式连锁位 bool （真，假）
+                                            string s26 = slFilter[26].ToString();//普通-搜索 string （列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s27 = slFilter[27].ToString();//普通-修改 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s28 = slFilter[28].ToString();//高级-搜索 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s29 = slFilter[29].ToString();//高级-修改 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s30 = slFilter[30].ToString();//递进 bool （真，假）
+                                            string s31 = slFilter[31].ToString();//普通-修改-递进 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s32 = slFilter[32].ToString();//高级-修改-递进 string（列Index（支持负数）$十六进制数值不带空格$数据个数$）
+                                            string s33 = slFilter[33].ToString();//未知 1
+
+                                            string sIsEnable = bool.FalseString;
+                                            string sFNum = string.Empty;
+                                            string sFName = s13;
+                                            string sFAppointHeader = Socket_Operation.GetBoolFromChineseString(s4).ToString();
+                                            string sFHeaderContent = s5;
+                                            string sFAppointSocket = Socket_Operation.GetBoolFromChineseString(s2).ToString();
+                                            string sFSocketContent = s3;
+                                            string sFAppointLength = Socket_Operation.GetBoolFromChineseString(s0).ToString();
+                                            string sFLengthContent = s1;
+
+                                            Socket_Cache.Filter.FilterMode FMode = new Socket_Cache.Filter.FilterMode();
+                                            if (Socket_Operation.GetBoolFromChineseString(s22) == true)
+                                            {
+                                                FMode = Socket_Cache.Filter.FilterMode.Normal;
+                                            }
+                                            else if (Socket_Operation.GetBoolFromChineseString(s23) == true)
+                                            {
+                                                FMode = Socket_Cache.Filter.FilterMode.Advanced;
+                                            }
+                                            string sFMode = ((int)FMode).ToString();
+
+                                            Socket_Cache.Filter.FilterAction FAction = new Socket_Cache.Filter.FilterAction();
+                                            if (Socket_Operation.GetBoolFromChineseString(s9) == true)
+                                            {
+                                                FAction = Socket_Cache.Filter.FilterAction.Replace;
+                                            }
+                                            else if (Socket_Operation.GetBoolFromChineseString(s10) == true)
+                                            {
+                                                FAction = Socket_Cache.Filter.FilterAction.Intercept;
+                                            }
+                                            else if (Socket_Operation.GetBoolFromChineseString(s11) == true)
+                                            {
+                                                FAction = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                                            }
+                                            else
+                                            {
+                                                FAction = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                                            }
+                                            string sFAction = ((int)FAction).ToString();
+
+                                            bool bSend = Convert.ToBoolean(int.Parse(s14));
+                                            bool bRecv = Convert.ToBoolean(int.Parse(s15));
+                                            bool bSendTo = Convert.ToBoolean(int.Parse(s16));
+                                            bool bRecvFrom = Convert.ToBoolean(int.Parse(s17));
+                                            bool bWSASend = Convert.ToBoolean(int.Parse(s18));
+                                            bool bWSARecv = Convert.ToBoolean(int.Parse(s19));
+                                            bool bWSASendTo = Convert.ToBoolean(int.Parse(s20));
+                                            bool bWSARecvFrom = false;
+
+                                            Socket_Cache.Filter.FilterFunction filterFunction = new Socket_Cache.Filter.FilterFunction(bSend, bSendTo, bRecv, bRecvFrom, bWSASend, bWSASendTo, bWSARecv, bWSARecvFrom);
+                                            string sFFunction = Socket_Operation.GetFilterFunctionString(filterFunction);
+
+                                            Socket_Cache.Filter.FilterStartFrom FStartFrom = new Socket_Cache.Filter.FilterStartFrom();
+                                            if (Socket_Operation.GetBoolFromChineseString(s24) == true)
+                                            {
+                                                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
+                                            }
+                                            else if (Socket_Operation.GetBoolFromChineseString(s25) == true)
+                                            {
+                                                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Position;
+                                            }
+                                            string sFStartFrom = ((int)FStartFrom).ToString();
+
+                                            string sFSearch = string.Empty;
+                                            string sFModify = string.Empty;
+                                            if (FMode == Socket_Cache.Filter.FilterMode.Normal)
+                                            {
+                                                sFSearch = Socket_Operation.ConvertFILTString(s26, false);
+                                                sFModify = Socket_Operation.ConvertFILTString(s27, false);
+                                            }
+                                            else if (FMode == Socket_Cache.Filter.FilterMode.Advanced)
+                                            {
+                                                sFSearch = Socket_Operation.ConvertFILTString(s28, false);
+
+                                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                                                {
+                                                    sFModify = Socket_Operation.ConvertFILTString(s29, true);
+                                                }
+                                                else
+                                                {
+                                                    sFModify = Socket_Operation.ConvertFILTString(s29, false);
+                                                }
+                                            }
+
+                                            XElement xeFilter =
+                                                new XElement("Filter",
+                                                new XElement("IsEnable", sIsEnable),
+                                                new XElement("Num", sFNum),
+                                                new XElement("Name", sFName),
+                                                new XElement("AppointHeader", sFAppointHeader),
+                                                new XElement("HeaderContent", sFHeaderContent),
+                                                new XElement("AppointSocket", sFAppointSocket),
+                                                new XElement("SocketContent", sFSocketContent),
+                                                new XElement("AppointLength", sFAppointLength),
+                                                new XElement("LengthContent", sFLengthContent),
+                                                new XElement("Mode", sFMode),
+                                                new XElement("Action", sFAction),
+                                                new XElement("Function", sFFunction),
+                                                new XElement("StartFrom", sFStartFrom),
+                                                new XElement("Search", sFSearch),
+                                                new XElement("Modify", sFModify)
+                                                );
+
+                                            xeRoot_Filt.Add(xeFilter);
+                                        }
+
+                                    }
+                                }
+
+                                this.rtbExtraction.Text = xdoc_Filt.ToString();
+
+                                #endregion
+
+                                break;
+                        }
+                    }
+                }              
             }
             catch (Exception ex)
             {

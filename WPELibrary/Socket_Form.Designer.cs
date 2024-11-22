@@ -282,16 +282,11 @@ namespace WPELibrary
             this.rtbPacketInfo_Encoding = new System.Windows.Forms.RichTextBox();
             this.tpExtraction = new System.Windows.Forms.TabPage();
             this.tlpExtraction = new System.Windows.Forms.TableLayoutPanel();
-            this.cbbExtractionTo = new System.Windows.Forms.ComboBox();
-            this.pExtractionTo = new System.Windows.Forms.Panel();
-            this.rtbExtractionTo = new System.Windows.Forms.RichTextBox();
-            this.pExtractionFrom = new System.Windows.Forms.Panel();
-            this.rtbExtractionFrom = new System.Windows.Forms.RichTextBox();
-            this.tlpExtractionButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bExtraction_Clear = new System.Windows.Forms.Button();
+            this.pExtraction = new System.Windows.Forms.Panel();
+            this.rtbExtraction = new System.Windows.Forms.RichTextBox();
+            this.tlpExtraction_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bExtraction = new System.Windows.Forms.Button();
-            this.pbExtraction = new System.Windows.Forms.PictureBox();
-            this.cbbExtractionFrom = new System.Windows.Forms.ComboBox();
+            this.cbbExtraction = new System.Windows.Forms.ComboBox();
             this.tpSystemLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cLogIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -329,6 +324,7 @@ namespace WPELibrary
             this.bgwSocketInfo = new System.ComponentModel.BackgroundWorker();
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.ofdExtraction = new System.Windows.Forms.OpenFileDialog();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -395,10 +391,8 @@ namespace WPELibrary
             this.pPacketInfo_Encoding.SuspendLayout();
             this.tpExtraction.SuspendLayout();
             this.tlpExtraction.SuspendLayout();
-            this.pExtractionTo.SuspendLayout();
-            this.pExtractionFrom.SuspendLayout();
-            this.tlpExtractionButton.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbExtraction)).BeginInit();
+            this.pExtraction.SuspendLayout();
+            this.tlpExtraction_Button.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.cmsLogList.SuspendLayout();
@@ -2247,62 +2241,29 @@ namespace WPELibrary
             // tlpExtraction
             // 
             resources.ApplyResources(this.tlpExtraction, "tlpExtraction");
-            this.tlpExtraction.Controls.Add(this.cbbExtractionTo, 2, 0);
-            this.tlpExtraction.Controls.Add(this.pExtractionTo, 2, 1);
-            this.tlpExtraction.Controls.Add(this.pExtractionFrom, 0, 1);
-            this.tlpExtraction.Controls.Add(this.tlpExtractionButton, 1, 1);
-            this.tlpExtraction.Controls.Add(this.cbbExtractionFrom, 0, 0);
+            this.tlpExtraction.Controls.Add(this.pExtraction, 0, 1);
+            this.tlpExtraction.Controls.Add(this.tlpExtraction_Button, 0, 0);
             this.tlpExtraction.Name = "tlpExtraction";
             // 
-            // cbbExtractionTo
+            // pExtraction
             // 
-            resources.ApplyResources(this.cbbExtractionTo, "cbbExtractionTo");
-            this.cbbExtractionTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbExtractionTo.FormattingEnabled = true;
-            this.cbbExtractionTo.Items.AddRange(new object[] {
-            resources.GetString("cbbExtractionTo.Items")});
-            this.cbbExtractionTo.Name = "cbbExtractionTo";
+            this.pExtraction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pExtraction.Controls.Add(this.rtbExtraction);
+            resources.ApplyResources(this.pExtraction, "pExtraction");
+            this.pExtraction.Name = "pExtraction";
             // 
-            // pExtractionTo
+            // rtbExtraction
             // 
-            this.pExtractionTo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pExtractionTo.Controls.Add(this.rtbExtractionTo);
-            resources.ApplyResources(this.pExtractionTo, "pExtractionTo");
-            this.pExtractionTo.Name = "pExtractionTo";
+            this.rtbExtraction.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbExtraction, "rtbExtraction");
+            this.rtbExtraction.Name = "rtbExtraction";
             // 
-            // rtbExtractionTo
+            // tlpExtraction_Button
             // 
-            this.rtbExtractionTo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbExtractionTo, "rtbExtractionTo");
-            this.rtbExtractionTo.Name = "rtbExtractionTo";
-            // 
-            // pExtractionFrom
-            // 
-            this.pExtractionFrom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pExtractionFrom.Controls.Add(this.rtbExtractionFrom);
-            resources.ApplyResources(this.pExtractionFrom, "pExtractionFrom");
-            this.pExtractionFrom.Name = "pExtractionFrom";
-            // 
-            // rtbExtractionFrom
-            // 
-            this.rtbExtractionFrom.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            resources.ApplyResources(this.rtbExtractionFrom, "rtbExtractionFrom");
-            this.rtbExtractionFrom.Name = "rtbExtractionFrom";
-            // 
-            // tlpExtractionButton
-            // 
-            resources.ApplyResources(this.tlpExtractionButton, "tlpExtractionButton");
-            this.tlpExtractionButton.Controls.Add(this.bExtraction_Clear, 1, 1);
-            this.tlpExtractionButton.Controls.Add(this.bExtraction, 1, 3);
-            this.tlpExtractionButton.Controls.Add(this.pbExtraction, 1, 2);
-            this.tlpExtractionButton.Name = "tlpExtractionButton";
-            // 
-            // bExtraction_Clear
-            // 
-            resources.ApplyResources(this.bExtraction_Clear, "bExtraction_Clear");
-            this.bExtraction_Clear.Name = "bExtraction_Clear";
-            this.bExtraction_Clear.UseVisualStyleBackColor = true;
-            this.bExtraction_Clear.Click += new System.EventHandler(this.bExtraction_Clear_Click);
+            resources.ApplyResources(this.tlpExtraction_Button, "tlpExtraction_Button");
+            this.tlpExtraction_Button.Controls.Add(this.bExtraction, 1, 0);
+            this.tlpExtraction_Button.Controls.Add(this.cbbExtraction, 0, 0);
+            this.tlpExtraction_Button.Name = "tlpExtraction_Button";
             // 
             // bExtraction
             // 
@@ -2311,21 +2272,15 @@ namespace WPELibrary
             this.bExtraction.UseVisualStyleBackColor = true;
             this.bExtraction.Click += new System.EventHandler(this.bExtraction_Click);
             // 
-            // pbExtraction
+            // cbbExtraction
             // 
-            resources.ApplyResources(this.pbExtraction, "pbExtraction");
-            this.pbExtraction.Image = global::WPELibrary.Properties.Resources.ForwardArrow;
-            this.pbExtraction.Name = "pbExtraction";
-            this.pbExtraction.TabStop = false;
-            // 
-            // cbbExtractionFrom
-            // 
-            resources.ApplyResources(this.cbbExtractionFrom, "cbbExtractionFrom");
-            this.cbbExtractionFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbExtractionFrom.FormattingEnabled = true;
-            this.cbbExtractionFrom.Items.AddRange(new object[] {
-            resources.GetString("cbbExtractionFrom.Items")});
-            this.cbbExtractionFrom.Name = "cbbExtractionFrom";
+            resources.ApplyResources(this.cbbExtraction, "cbbExtraction");
+            this.cbbExtraction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbExtraction.FormattingEnabled = true;
+            this.cbbExtraction.Items.AddRange(new object[] {
+            resources.GetString("cbbExtraction.Items"),
+            resources.GetString("cbbExtraction.Items1")});
+            this.cbbExtraction.Name = "cbbExtraction";
             // 
             // tpSystemLog
             // 
@@ -2692,10 +2647,8 @@ namespace WPELibrary
             this.pPacketInfo_Encoding.ResumeLayout(false);
             this.tpExtraction.ResumeLayout(false);
             this.tlpExtraction.ResumeLayout(false);
-            this.pExtractionTo.ResumeLayout(false);
-            this.pExtractionFrom.ResumeLayout(false);
-            this.tlpExtractionButton.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbExtraction)).EndInit();
+            this.pExtraction.ResumeLayout(false);
+            this.tlpExtraction_Button.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.cmsLogList.ResumeLayout(false);
@@ -2968,16 +2921,6 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbHookWSARecvFrom;
         private System.Windows.Forms.TabPage tpExtraction;
         private System.Windows.Forms.TableLayoutPanel tlpExtraction;
-        private System.Windows.Forms.Panel pExtractionTo;
-        private System.Windows.Forms.RichTextBox rtbExtractionTo;
-        private System.Windows.Forms.Panel pExtractionFrom;
-        private System.Windows.Forms.RichTextBox rtbExtractionFrom;
-        private System.Windows.Forms.TableLayoutPanel tlpExtractionButton;
-        private System.Windows.Forms.ComboBox cbbExtractionFrom;
-        private System.Windows.Forms.ComboBox cbbExtractionTo;
-        private System.Windows.Forms.Button bExtraction;
-        private System.Windows.Forms.Button bExtraction_Clear;
-        private System.Windows.Forms.PictureBox pbExtraction;
         private System.Windows.Forms.PictureBox pbEncoding;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
@@ -2992,5 +2935,11 @@ namespace WPELibrary
         private System.Windows.Forms.TextBox txtCheckHead;
         private System.Windows.Forms.GroupBox gbListSet_FilterList;
         private System.Windows.Forms.TableLayoutPanel tlpListSet_FilterList;
+        private System.Windows.Forms.Panel pExtraction;
+        private System.Windows.Forms.RichTextBox rtbExtraction;
+        private System.Windows.Forms.TableLayoutPanel tlpExtraction_Button;
+        private System.Windows.Forms.Button bExtraction;
+        private System.Windows.Forms.ComboBox cbbExtraction;
+        private System.Windows.Forms.OpenFileDialog ofdExtraction;
     }
 }

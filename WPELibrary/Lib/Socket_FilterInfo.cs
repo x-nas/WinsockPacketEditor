@@ -40,7 +40,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//是否指定包头
+        #region//指定包头
 
         protected bool appointheader;
 
@@ -49,10 +49,6 @@ namespace WPELibrary.Lib
             get { return appointheader; }
             set { appointheader = value; }
         }
-
-        #endregion
-
-        #region//包头内容
 
         protected string headercontent;
 
@@ -63,6 +59,46 @@ namespace WPELibrary.Lib
         }
 
         #endregion        
+
+        #region//指定套接字
+
+        protected bool appointsocket;
+
+        public bool AppointSocket
+        {
+            get { return appointsocket; }
+            set { appointsocket = value; }
+        }
+
+        protected decimal socketcontent;
+
+        public decimal SocketContent
+        {
+            get { return socketcontent; }
+            set { socketcontent = value; }
+        }
+
+        #endregion
+
+        #region//指定长度
+
+        protected bool appointlength;
+
+        public bool AppointLength
+        {
+            get { return appointlength; }
+            set { appointlength = value; }
+        }
+
+        protected decimal lengthcontent;
+
+        public decimal LengthContent
+        {
+            get { return lengthcontent; }
+            set { lengthcontent = value; }
+        }
+
+        #endregion
 
         #region//模式
 
@@ -138,13 +174,17 @@ namespace WPELibrary.Lib
 
         #region//Socket_FilterInfo
 
-        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, string FSearch, string FModify) 
+        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, bool AppointSocket, decimal SocketContent, bool AppointLength, decimal LengthContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, string FSearch, string FModify) 
         {
             this.isenable = IsEnable;
             this.fnum = FNum;            
             this.fname = FName;
             this.appointheader = AppointHeader;
             this.headercontent = HeaderContent;
+            this.appointsocket = AppointSocket;
+            this.socketcontent = SocketContent;
+            this.appointlength = AppointLength;
+            this.lengthcontent = LengthContent;
             this.fmode = FMode;
             this.faction = FAction;
             this.ffunction = FFunction;
