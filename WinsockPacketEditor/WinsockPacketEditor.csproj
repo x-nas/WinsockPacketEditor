@@ -28,7 +28,7 @@
     <PublisherName>X-NAS</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>45</ApplicationRevision>
+    <ApplicationRevision>46</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -190,7 +190,6 @@
     <Content Include="Icon\enUS.png" />
     <Content Include="Icon\loading.gif" />
     <Content Include="Icon\WPE64.ico" />
-    <Content Include="WPE64.ico" />
     <None Include="Icon\Search.png" />
     <None Include="Icon\searchbox_button.png" />
     <Content Include="Icon\zhCN.png" />
