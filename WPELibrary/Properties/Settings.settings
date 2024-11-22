@@ -38,11 +38,8 @@
     <Setting Name="FilterConfig_CheckData_Value" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="FilterConfig_CheckSizeFrom_Value" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="FilterConfig_CheckSizeTo_Value" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">100</Value>
+    <Setting Name="FilterConfig_CheckLength_Value" Type="System.String" Scope="User">
+      <Value Profile="(Default)">0-99;100</Value>
     </Setting>
     <Setting Name="HookConfig_HookSend" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

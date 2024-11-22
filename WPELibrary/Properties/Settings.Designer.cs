@@ -169,25 +169,13 @@ namespace WPELibrary.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal FilterConfig_CheckSizeFrom_Value {
+        [global::System.Configuration.DefaultSettingValueAttribute("0-99;100")]
+        public string FilterConfig_CheckLength_Value {
             get {
-                return ((decimal)(this["FilterConfig_CheckSizeFrom_Value"]));
+                return ((string)(this["FilterConfig_CheckLength_Value"]));
             }
             set {
-                this["FilterConfig_CheckSizeFrom_Value"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public decimal FilterConfig_CheckSizeTo_Value {
-            get {
-                return ((decimal)(this["FilterConfig_CheckSizeTo_Value"]));
-            }
-            set {
-                this["FilterConfig_CheckSizeTo_Value"] = value;
+                this["FilterConfig_CheckLength_Value"] = value;
             }
         }
         

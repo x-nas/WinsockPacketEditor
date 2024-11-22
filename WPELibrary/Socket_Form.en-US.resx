@@ -416,6 +416,12 @@
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
   </data>
+  <data name="txtCheckLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>96, 60</value>
+  </data>
+  <data name="txtCheckLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 23</value>
+  </data>
   <data name="txtCheckHead.Location" type="System.Drawing.Point, System.Drawing">
     <value>585, 31</value>
   </data>
@@ -431,29 +437,11 @@
   <data name="cbCheckHead.Text" xml:space="preserve">
     <value>Packet Header:</value>
   </data>
-  <data name="tlpFilterSet_PacketLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>93, 57</value>
-  </data>
-  <data name="tlpFilterSet_PacketLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 30</value>
-  </data>
-  <data name="nudCheckSizeTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>82, 3</value>
-  </data>
-  <data name="nudCheckSizeTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 23</value>
-  </data>
-  <data name="lCheck_Size.Location" type="System.Drawing.Point, System.Drawing">
-    <value>62, 3</value>
-  </data>
-  <data name="nudCheckSizeFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 23</value>
-  </data>
   <data name="cbCheckSize.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 60</value>
   </data>
   <data name="cbCheckSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 24</value>
+    <value>84, 23</value>
   </data>
   <data name="cbCheckSize.Text" xml:space="preserve">
     <value>Length:</value>
@@ -483,7 +471,7 @@
     <value>239, 60</value>
   </data>
   <data name="cbCheckPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 24</value>
+    <value>81, 23</value>
   </data>
   <data name="cbCheckPort.Text" xml:space="preserve">
     <value>Port Num:</value>
@@ -498,7 +486,7 @@
     <value>469, 60</value>
   </data>
   <data name="cbCheckData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 24</value>
+    <value>110, 23</value>
   </data>
   <data name="cbCheckData.Text" xml:space="preserve">
     <value>Pakcet Data:</value>
@@ -635,26 +623,8 @@
   <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
   </data>
-  <data name="gbListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>226, 91</value>
-  </data>
-  <data name="gbListSet_FilterList.Text" xml:space="preserve">
-    <value>Filter List</value>
-  </data>
-  <data name="tlpListSet_FilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 17</value>
-  </data>
-  <data name="tlpListSet_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 71</value>
-  </data>
-  <data name="cbFilterList_UseEncryption.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 19</value>
-  </data>
-  <data name="cbFilterList_UseEncryption.Text" xml:space="preserve">
-    <value>Encrypt Save</value>
-  </data>
   <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>263, 91</value>
+    <value>379, 91</value>
   </data>
   <data name="gbListSet_LogList.Text" xml:space="preserve">
     <value>Log List</value>
@@ -663,7 +633,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>257, 71</value>
+    <value>373, 71</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>91, 28</value>
@@ -684,7 +654,7 @@
     <value>Auto Roll</value>
   </data>
   <data name="gbListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>263, 91</value>
+    <value>379, 91</value>
   </data>
   <data name="gbListSet_SocketList.Text" xml:space="preserve">
     <value>Socket List</value>
@@ -693,7 +663,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>257, 71</value>
+    <value>373, 71</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>91, 28</value>
@@ -1305,47 +1275,32 @@
   <data name="tlpExtraction.Size" type="System.Drawing.Size, System.Drawing">
     <value>870, 213</value>
   </data>
-  <data name="cbbExtractionTo.Items" xml:space="preserve">
-    <value>Hex（ uppercase with spaces ）</value>
+  <data name="pExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>864, 177</value>
   </data>
-  <data name="cbbExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 23</value>
+  <data name="cmsExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>157, 26</value>
   </data>
-  <data name="pExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 177</value>
+  <data name="rtbExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>856, 169</value>
   </data>
-  <data name="rtbExtractionTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 169</value>
+  <data name="cmsExtraction_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 22</value>
   </data>
-  <data name="pExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 177</value>
-  </data>
-  <data name="rtbExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>371, 169</value>
-  </data>
-  <data name="tlpExtractionButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 183</value>
-  </data>
-  <data name="bExtraction_Clear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 41</value>
-  </data>
-  <data name="bExtraction_Clear.Text" xml:space="preserve">
-    <value>Clear</value>
-  </data>
-  <data name="bExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 113</value>
+  <data name="cmsExtraction_Export.Text" xml:space="preserve">
+    <value>Export To File</value>
   </data>
   <data name="bExtraction.Text" xml:space="preserve">
     <value>Extraction</value>
   </data>
-  <data name="pbExtraction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>13, 76</value>
+  <data name="cbbExtraction.Items" xml:space="preserve">
+    <value>{ Charles XML Session File（.chlsx）} =&gt; { HEX }</value>
   </data>
-  <data name="cbbExtractionFrom.Items" xml:space="preserve">
-    <value>Charles Hex</value>
+  <data name="cbbExtraction.Items1" xml:space="preserve">
+    <value>{ FILT Filter List（.filt）} =&gt; { WPE64 Filter List（.sp）}</value>
   </data>
-  <data name="cbbExtractionFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 23</value>
+  <data name="cbbExtraction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>764, 23</value>
   </data>
   <data name="tpSystemLog.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>

@@ -39,7 +39,7 @@ namespace WPELibrary
 
                 this.InitFrom();
                 this.InitDGV();
-                this.ShowFilterInfo();
+                this.ShowFilterInfo();                
             }
             catch (Exception ex)
             {
@@ -154,11 +154,47 @@ namespace WPELibrary
             }
         }
 
+        private void InitDGV()
+        {
+            try
+            {
+                dgvFilterNormal.AutoGenerateColumns = false;
+                dgvFilterNormal.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterNormal, true, null);
+
+                dgvFilterAdvanced_Search.AutoGenerateColumns = false;
+                dgvFilterAdvanced_Search.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Search, true, null);
+
+                dgvFilterAdvanced_Modify_FromHead.AutoGenerateColumns = false;
+                dgvFilterAdvanced_Modify_FromHead.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Modify_FromHead, true, null);
+
+                dgvFilterAdvanced_Modify_FromPosition.AutoGenerateColumns = false;
+                dgvFilterAdvanced_Modify_FromPosition.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Modify_FromPosition, true, null);
+
+                this.InitDGV_Normal();
+                this.InitDGV_Advanced_Search();
+                this.InitDGV_Advanced_Modify_Head();
+                this.InitDGV_Advanced_Modify_Position();
+
+                this.dgvFilterAdvanced_Search.Height = 85;
+                this.dgvFilterAdvanced_Modify_FromHead.Height = 85;
+                this.dgvFilterAdvanced_Modify_FromPosition.Height = 85;
+
+                dgvFilterAdvanced_Modify_FromPosition.FirstDisplayedCell = dgvFilterAdvanced_Modify_FromPosition.CurrentCell;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void InitDGV_Normal()
         {
             try
             {
-                this.dgvFilterNormal.Columns.Clear();
+                if (this.dgvFilterNormal.Columns.Count > 0)
+                {
+                    this.dgvFilterNormal.Columns.Clear();
+                }                
 
                 for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
                 {
@@ -192,7 +228,10 @@ namespace WPELibrary
         {
             try
             {
-                this.dgvFilterAdvanced_Search.Columns.Clear();
+                if (this.dgvFilterAdvanced_Search.Columns.Count > 0)
+                {
+                    this.dgvFilterAdvanced_Search.Columns.Clear();
+                }                
 
                 for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
                 {
@@ -227,7 +266,10 @@ namespace WPELibrary
         {
             try
             {
-                this.dgvFilterAdvanced_Modify_FromHead.Columns.Clear();                
+                if (this.dgvFilterAdvanced_Modify_FromHead.Columns.Count > 0)
+                {
+                    this.dgvFilterAdvanced_Modify_FromHead.Columns.Clear();
+                }                                
 
                 for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
                 {
@@ -260,7 +302,10 @@ namespace WPELibrary
         {
             try
             {
-                this.dgvFilterAdvanced_Modify_FromPosition.Columns.Clear();
+                if (this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count > 0)
+                {
+                    this.dgvFilterAdvanced_Modify_FromPosition.Columns.Clear();
+                }
 
                 int iSize = Socket_Cache.Filter.FilterSize_MaxLen / 2;
 
@@ -285,47 +330,16 @@ namespace WPELibrary
                     dgvFilterAdvanced_Modify_FromPosition.Rows.Add();
                 }
 
-                int iColIndex = dgvFilterAdvanced_Modify_FromPosition.Columns["col000"].Index;
-                
-                dgvFilterAdvanced_Modify_FromPosition.CurrentCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iColIndex];
-                dgvFilterAdvanced_Modify_FromPosition.FirstDisplayedScrollingColumnIndex = iColIndex;
+                if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"] != null)
+                {
+                    dgvFilterAdvanced_Modify_FromPosition.CurrentCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"];
+                }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void InitDGV()
-        {
-            try
-            {
-                dgvFilterNormal.AutoGenerateColumns = false;
-                dgvFilterNormal.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterNormal, true, null);
-
-                dgvFilterAdvanced_Search.AutoGenerateColumns = false;
-                dgvFilterAdvanced_Search.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Search, true, null);
-
-                dgvFilterAdvanced_Modify_FromHead.AutoGenerateColumns = false;
-                dgvFilterAdvanced_Modify_FromHead.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Modify_FromHead, true, null);
-
-                dgvFilterAdvanced_Modify_FromPosition.AutoGenerateColumns = false;
-                dgvFilterAdvanced_Modify_FromPosition.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterAdvanced_Modify_FromPosition, true, null);
-
-                this.InitDGV_Normal();
-                this.InitDGV_Advanced_Search();
-                this.InitDGV_Advanced_Modify_Head();
-                this.InitDGV_Advanced_Modify_Position();
-
-                this.dgvFilterAdvanced_Search.Height = 85;
-                this.dgvFilterAdvanced_Modify_FromHead.Height = 85;
-                this.dgvFilterAdvanced_Modify_FromPosition.Height = 85;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
+        }                
 
         #endregion
 

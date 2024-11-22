@@ -118,12 +118,9 @@ namespace WPELibrary
             this.tcSocketInfo = new System.Windows.Forms.TabControl();
             this.tcSocketInfo_FilterSet = new System.Windows.Forms.TabPage();
             this.tlpFilterSet = new System.Windows.Forms.TableLayoutPanel();
+            this.txtCheckLength = new System.Windows.Forms.TextBox();
             this.txtCheckHead = new System.Windows.Forms.TextBox();
             this.cbCheckHead = new System.Windows.Forms.CheckBox();
-            this.tlpFilterSet_PacketLength = new System.Windows.Forms.TableLayoutPanel();
-            this.nudCheckSizeTo = new System.Windows.Forms.NumericUpDown();
-            this.lCheck_Size = new System.Windows.Forms.Label();
-            this.nudCheckSizeFrom = new System.Windows.Forms.NumericUpDown();
             this.cbCheckSize = new System.Windows.Forms.CheckBox();
             this.rbFilter_Show = new System.Windows.Forms.RadioButton();
             this.rbFilter_NotShow = new System.Windows.Forms.RadioButton();
@@ -151,8 +148,6 @@ namespace WPELibrary
             this.cbHookSend = new System.Windows.Forms.CheckBox();
             this.tcSocketInfo_ListSet = new System.Windows.Forms.TabPage();
             this.tlpListSet = new System.Windows.Forms.TableLayoutPanel();
-            this.gbListSet_FilterList = new System.Windows.Forms.GroupBox();
-            this.tlpListSet_FilterList = new System.Windows.Forms.TableLayoutPanel();
             this.gbListSet_LogList = new System.Windows.Forms.GroupBox();
             this.tlpListSet_LogList = new System.Windows.Forms.TableLayoutPanel();
             this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
@@ -284,6 +279,8 @@ namespace WPELibrary
             this.tlpExtraction = new System.Windows.Forms.TableLayoutPanel();
             this.pExtraction = new System.Windows.Forms.Panel();
             this.rtbExtraction = new System.Windows.Forms.RichTextBox();
+            this.cmsExtraction = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsExtraction_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpExtraction_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bExtraction = new System.Windows.Forms.Button();
             this.cbbExtraction = new System.Windows.Forms.ComboBox();
@@ -325,6 +322,7 @@ namespace WPELibrary
             this.tSocketList = new System.Windows.Forms.Timer(this.components);
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.ofdExtraction = new System.Windows.Forms.OpenFileDialog();
+            this.sfdExtraction = new System.Windows.Forms.SaveFileDialog();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -338,9 +336,6 @@ namespace WPELibrary
             this.tcSocketInfo.SuspendLayout();
             this.tcSocketInfo_FilterSet.SuspendLayout();
             this.tlpFilterSet.SuspendLayout();
-            this.tlpFilterSet_PacketLength.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).BeginInit();
             this.tcSocketInfo_HookSet.SuspendLayout();
             this.tlpHookSet.SuspendLayout();
             this.gbHookSet_WinsockWSA.SuspendLayout();
@@ -349,7 +344,6 @@ namespace WPELibrary
             this.tlpHookSet_Winsock.SuspendLayout();
             this.tcSocketInfo_ListSet.SuspendLayout();
             this.tlpListSet.SuspendLayout();
-            this.gbListSet_FilterList.SuspendLayout();
             this.gbListSet_LogList.SuspendLayout();
             this.tlpListSet_LogList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
@@ -392,6 +386,7 @@ namespace WPELibrary
             this.tpExtraction.SuspendLayout();
             this.tlpExtraction.SuspendLayout();
             this.pExtraction.SuspendLayout();
+            this.cmsExtraction.SuspendLayout();
             this.tlpExtraction_Button.SuspendLayout();
             this.tpSystemLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
@@ -950,9 +945,9 @@ namespace WPELibrary
             // tlpFilterSet
             // 
             resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
+            this.tlpFilterSet.Controls.Add(this.txtCheckLength, 1, 2);
             this.tlpFilterSet.Controls.Add(this.txtCheckHead, 7, 1);
             this.tlpFilterSet.Controls.Add(this.cbCheckHead, 6, 1);
-            this.tlpFilterSet.Controls.Add(this.tlpFilterSet_PacketLength, 1, 2);
             this.tlpFilterSet.Controls.Add(this.cbCheckSize, 0, 2);
             this.tlpFilterSet.Controls.Add(this.rbFilter_Show, 1, 0);
             this.tlpFilterSet.Controls.Add(this.rbFilter_NotShow, 0, 0);
@@ -965,6 +960,13 @@ namespace WPELibrary
             this.tlpFilterSet.Controls.Add(this.txtCheckSocket, 1, 1);
             this.tlpFilterSet.Controls.Add(this.txtCheckIP, 4, 1);
             this.tlpFilterSet.Name = "tlpFilterSet";
+            // 
+            // txtCheckLength
+            // 
+            this.txtCheckLength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtCheckLength, "txtCheckLength");
+            this.txtCheckLength.Name = "txtCheckLength";
+            this.txtCheckLength.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCheckLength_KeyPress);
             // 
             // txtCheckHead
             // 
@@ -979,44 +981,6 @@ namespace WPELibrary
             resources.ApplyResources(this.cbCheckHead, "cbCheckHead");
             this.cbCheckHead.Name = "cbCheckHead";
             this.cbCheckHead.UseVisualStyleBackColor = true;
-            // 
-            // tlpFilterSet_PacketLength
-            // 
-            resources.ApplyResources(this.tlpFilterSet_PacketLength, "tlpFilterSet_PacketLength");
-            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheckSizeTo, 2, 0);
-            this.tlpFilterSet_PacketLength.Controls.Add(this.lCheck_Size, 1, 0);
-            this.tlpFilterSet_PacketLength.Controls.Add(this.nudCheckSizeFrom, 0, 0);
-            this.tlpFilterSet_PacketLength.Name = "tlpFilterSet_PacketLength";
-            // 
-            // nudCheckSizeTo
-            // 
-            resources.ApplyResources(this.nudCheckSizeTo, "nudCheckSizeTo");
-            this.nudCheckSizeTo.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudCheckSizeTo.Name = "nudCheckSizeTo";
-            this.nudCheckSizeTo.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // lCheck_Size
-            // 
-            resources.ApplyResources(this.lCheck_Size, "lCheck_Size");
-            this.lCheck_Size.Name = "lCheck_Size";
-            // 
-            // nudCheckSizeFrom
-            // 
-            resources.ApplyResources(this.nudCheckSizeFrom, "nudCheckSizeFrom");
-            this.nudCheckSizeFrom.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudCheckSizeFrom.Name = "nudCheckSizeFrom";
             // 
             // cbCheckSize
             // 
@@ -1211,22 +1175,9 @@ namespace WPELibrary
             // tlpListSet
             // 
             resources.ApplyResources(this.tlpListSet, "tlpListSet");
-            this.tlpListSet.Controls.Add(this.gbListSet_FilterList, 2, 0);
             this.tlpListSet.Controls.Add(this.gbListSet_LogList, 1, 0);
             this.tlpListSet.Controls.Add(this.gbListSet_SocketList, 0, 0);
             this.tlpListSet.Name = "tlpListSet";
-            // 
-            // gbListSet_FilterList
-            // 
-            this.gbListSet_FilterList.Controls.Add(this.tlpListSet_FilterList);
-            resources.ApplyResources(this.gbListSet_FilterList, "gbListSet_FilterList");
-            this.gbListSet_FilterList.Name = "gbListSet_FilterList";
-            this.gbListSet_FilterList.TabStop = false;
-            // 
-            // tlpListSet_FilterList
-            // 
-            resources.ApplyResources(this.tlpListSet_FilterList, "tlpListSet_FilterList");
-            this.tlpListSet_FilterList.Name = "tlpListSet_FilterList";
             // 
             // gbListSet_LogList
             // 
@@ -2255,8 +2206,23 @@ namespace WPELibrary
             // rtbExtraction
             // 
             this.rtbExtraction.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtbExtraction.ContextMenuStrip = this.cmsExtraction;
             resources.ApplyResources(this.rtbExtraction, "rtbExtraction");
             this.rtbExtraction.Name = "rtbExtraction";
+            // 
+            // cmsExtraction
+            // 
+            this.cmsExtraction.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsExtraction_Export});
+            this.cmsExtraction.Name = "cmsExtraction";
+            resources.ApplyResources(this.cmsExtraction, "cmsExtraction");
+            this.cmsExtraction.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsExtraction_ItemClicked);
+            // 
+            // cmsExtraction_Export
+            // 
+            this.cmsExtraction_Export.Image = global::WPELibrary.Properties.Resources.export;
+            this.cmsExtraction_Export.Name = "cmsExtraction_Export";
+            resources.ApplyResources(this.cmsExtraction_Export, "cmsExtraction_Export");
             // 
             // tlpExtraction_Button
             // 
@@ -2582,10 +2548,6 @@ namespace WPELibrary
             this.tcSocketInfo_FilterSet.ResumeLayout(false);
             this.tlpFilterSet.ResumeLayout(false);
             this.tlpFilterSet.PerformLayout();
-            this.tlpFilterSet_PacketLength.ResumeLayout(false);
-            this.tlpFilterSet_PacketLength.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeTo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCheckSizeFrom)).EndInit();
             this.tcSocketInfo_HookSet.ResumeLayout(false);
             this.tlpHookSet.ResumeLayout(false);
             this.gbHookSet_WinsockWSA.ResumeLayout(false);
@@ -2596,7 +2558,6 @@ namespace WPELibrary
             this.tlpHookSet_Winsock.PerformLayout();
             this.tcSocketInfo_ListSet.ResumeLayout(false);
             this.tlpListSet.ResumeLayout(false);
-            this.gbListSet_FilterList.ResumeLayout(false);
             this.gbListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.PerformLayout();
@@ -2648,6 +2609,7 @@ namespace WPELibrary
             this.tpExtraction.ResumeLayout(false);
             this.tlpExtraction.ResumeLayout(false);
             this.pExtraction.ResumeLayout(false);
+            this.cmsExtraction.ResumeLayout(false);
             this.tlpExtraction_Button.ResumeLayout(false);
             this.tpSystemLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
@@ -2928,18 +2890,16 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
         private System.Windows.Forms.ToolStripMenuItem cmsFilterList_Export;
         private System.Windows.Forms.CheckBox cbCheckHead;
-        private System.Windows.Forms.TableLayoutPanel tlpFilterSet_PacketLength;
-        private System.Windows.Forms.NumericUpDown nudCheckSizeTo;
-        private System.Windows.Forms.Label lCheck_Size;
-        private System.Windows.Forms.NumericUpDown nudCheckSizeFrom;
         private System.Windows.Forms.TextBox txtCheckHead;
-        private System.Windows.Forms.GroupBox gbListSet_FilterList;
-        private System.Windows.Forms.TableLayoutPanel tlpListSet_FilterList;
         private System.Windows.Forms.Panel pExtraction;
         private System.Windows.Forms.RichTextBox rtbExtraction;
         private System.Windows.Forms.TableLayoutPanel tlpExtraction_Button;
         private System.Windows.Forms.Button bExtraction;
         private System.Windows.Forms.ComboBox cbbExtraction;
         private System.Windows.Forms.OpenFileDialog ofdExtraction;
+        private System.Windows.Forms.TextBox txtCheckLength;
+        private System.Windows.Forms.ContextMenuStrip cmsExtraction;
+        private System.Windows.Forms.ToolStripMenuItem cmsExtraction_Export;
+        private System.Windows.Forms.SaveFileDialog sfdExtraction;
     }
 }

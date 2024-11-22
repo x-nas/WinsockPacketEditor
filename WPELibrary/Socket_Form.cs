@@ -249,12 +249,11 @@ namespace WPELibrary
                 cbCheckSize.Checked = Socket_Cache.CheckSize;
 
                 this.txtCheckSocket.Text = Socket_Cache.CheckSocket_Value;
+                this.txtCheckLength.Text = Socket_Cache.CheckLength_Value;
                 this.txtCheckIP.Text = Socket_Cache.CheckIP_Value;
                 this.txtCheckPort.Text = Socket_Cache.CheckPort_Value;
                 this.txtCheckHead.Text = Socket_Cache.CheckHead_Value;
-                this.txtCheckData.Text = Socket_Cache.CheckData_Value;
-                this.nudCheckSizeFrom.Value = Socket_Cache.CheckSizeFrom_Value;
-                this.nudCheckSizeTo.Value = Socket_Cache.CheckSizeTo_Value;
+                this.txtCheckData.Text = Socket_Cache.CheckData_Value;             
 
                 this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
                 this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
@@ -309,12 +308,11 @@ namespace WPELibrary
                 Socket_Cache.CheckSize = cbCheckSize.Checked;
 
                 Socket_Cache.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
+                Socket_Cache.CheckLength_Value = this.txtCheckLength.Text.Trim();
                 Socket_Cache.CheckIP_Value = this.txtCheckIP.Text.Trim();
                 Socket_Cache.CheckPort_Value = this.txtCheckPort.Text.Trim();
                 Socket_Cache.CheckHead_Value = this.txtCheckHead.Text.Trim();
-                Socket_Cache.CheckData_Value = this.txtCheckData.Text.Trim();
-                Socket_Cache.CheckSizeFrom_Value = this.nudCheckSizeFrom.Value;
-                Socket_Cache.CheckSizeTo_Value = this.nudCheckSizeTo.Value;
+                Socket_Cache.CheckData_Value = this.txtCheckData.Text.Trim();            
 
                 Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
@@ -348,6 +346,21 @@ namespace WPELibrary
         #region//检测过滤参数输入
 
         private void txtCheckSocket_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            try
+            {
+                if (!Socket_Operation.CheckTextInput_IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtCheckLength_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
             {
@@ -2129,7 +2142,7 @@ namespace WPELibrary
                                     }
                                 }
 
-                                this.rtbExtraction.Text = xdoc_Filt.ToString();
+                                this.rtbExtraction.Text = xdoc_Filt.Declaration.ToString() + "\r\n" + xdoc_Filt.ToString();
 
                                 #endregion
 
@@ -2144,6 +2157,58 @@ namespace WPELibrary
             }
         }
 
-        #endregion              
+        private void cmsExtraction_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsExtraction.Close();
+
+            try
+            {
+                switch (sItemText)
+                {
+                    case "cmsExtraction_Export":
+
+                        string sFileContent = this.rtbExtraction.Text.Trim();
+
+                        if (!string.IsNullOrEmpty(sFileContent))
+                        {
+                            int iSelectIndex = this.cbbExtraction.SelectedIndex;
+
+                            switch (iSelectIndex)
+                            {
+                                case 0:
+
+                                    this.sfdExtraction.Filter = "TXT（*.txt）|*.txt";
+
+                                    break;
+
+                                case 1:
+
+                                    this.sfdExtraction.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
+
+                                    break;
+                            }
+
+                            if (this.sfdExtraction.ShowDialog() == DialogResult.OK)
+                            {
+                                string sFilePath = this.sfdExtraction.FileName;
+
+                                if (!string.IsNullOrEmpty(sFilePath))
+                                {
+                                    File.WriteAllText(sFilePath, sFileContent);
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

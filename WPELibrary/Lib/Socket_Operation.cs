@@ -466,7 +466,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (char.IsControl(keyChar) || char.IsDigit(keyChar) || keyChar.Equals(';') || keyChar.Equals('.'))
+                if (char.IsControl(keyChar) || char.IsDigit(keyChar) || keyChar.Equals(';') || keyChar.Equals('.') || keyChar.Equals('-'))
                 {
                     bReturn = true;
                 }
@@ -1281,7 +1281,7 @@ namespace WPELibrary.Lib
 
         #region//检测套接字
 
-        private static bool ISFilter_BySocket(int iSocket)
+        private static bool ISFilter_BySocket(int iPacketSocket)
         {
             bool bReturn = false;
 
@@ -1293,13 +1293,17 @@ namespace WPELibrary.Lib
 
                     foreach (string sSocket in sSocketArr)
                     {
-                        int iSocketCheck = int.Parse(sSocket);
-
-                        if (iSocket == iSocketCheck)
+                        if (!string.IsNullOrEmpty(sSocket))
                         {
-                            return true;
+                            if (int.TryParse(sSocket, out int iCheckSocket))
+                            {
+                                if (iPacketSocket == iCheckSocket)
+                                {
+                                    return true;
+                                }
+                            }
                         }                        
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -1314,27 +1318,30 @@ namespace WPELibrary.Lib
 
         #region//检测IP地址
 
-        private static bool ISFilter_ByIP(string sCheckIP)
+        private static bool ISFilter_ByIP(string sPacketIP)
         {
             bool bReturn = false;
 
             try
             {
-                if (!string.IsNullOrEmpty(sCheckIP))
+                if (!string.IsNullOrEmpty(sPacketIP))
                 {
-                    string sIP = sCheckIP.Split(':')[0];
-                    string sPort = sCheckIP.Split(':')[1];
+                    string sIP = sPacketIP.Split(':')[0];
+                    string sPort = sPacketIP.Split(':')[1];
                     
                     if (!string.IsNullOrEmpty(Socket_Cache.CheckIP_Value))
                     {
                         string[] sIPArr = Socket_Cache.CheckIP_Value.Split(';');
 
-                        foreach (string s in sIPArr)
+                        foreach (string sCheckIP in sIPArr)
                         {
-                            if (sIP.Equals(s))
+                            if (!string.IsNullOrEmpty(sCheckIP))
                             {
-                                return true;
-                            }
+                                if (sIP.Equals(sCheckIP))
+                                {
+                                    return true;
+                                }
+                            }                            
                         }
                     }
                 }                  
@@ -1351,27 +1358,30 @@ namespace WPELibrary.Lib
 
         #region//检测端口号
 
-        private static bool ISFilter_ByPort(string sCheckPort)
+        private static bool ISFilter_ByPort(string sPacketPort)
         {
             bool bReturn = false;
 
             try
             {
-                if (!string.IsNullOrEmpty(sCheckPort))
+                if (!string.IsNullOrEmpty(sPacketPort))
                 {
-                    string sIP = sCheckPort.Split(':')[0];
-                    string sPort = sCheckPort.Split(':')[1];
+                    string sIP = sPacketPort.Split(':')[0];
+                    string sPort = sPacketPort.Split(':')[1];
 
                     if (!string.IsNullOrEmpty(Socket_Cache.CheckPort_Value))
                     {
                         string[] sPortArr = Socket_Cache.CheckPort_Value.Split(';');
 
-                        foreach (string s in sPortArr)
+                        foreach (string sCheckPort in sPortArr)
                         {
-                            if (sPort.Equals(s))
+                            if (!string.IsNullOrEmpty(sCheckPort))
                             {
-                                return true;
-                            }
+                                if (sPort.Equals(sCheckPort))
+                                {
+                                    return true;
+                                }
+                            }                                
                         }
                     }
                 }  
@@ -1396,16 +1406,19 @@ namespace WPELibrary.Lib
             {
                 if (!string.IsNullOrEmpty(Socket_Cache.CheckHead_Value))
                 {
-                    string sHead = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                    string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer).Replace(" ", "");
 
-                    string[] sHeadArr = Socket_Cache.CheckHead_Value.Split(';');
+                    string[] sHeadArr = Socket_Cache.CheckHead_Value.Replace(" ", "").Split(';');
 
-                    foreach (string sHeadCheck in sHeadArr)
+                    foreach (string sCheckHead in sHeadArr)
                     {
-                        if (sHead.IndexOf(sHeadCheck) == 0)
+                        if (!string.IsNullOrEmpty(sCheckHead))
                         {
-                            return true;
-                        }
+                            if (sPacket.IndexOf(sCheckHead) == 0)
+                            {
+                                return true;
+                            }
+                        }                        
                     }
                 }
             }
@@ -1429,16 +1442,19 @@ namespace WPELibrary.Lib
             {
                 if (!string.IsNullOrEmpty(Socket_Cache.CheckData_Value))
                 {
-                    string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                    string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer).Replace(" ", "");
 
-                    string[] sPacketArr = Socket_Cache.CheckData_Value.Split(';');
+                    string[] sPacketArr = Socket_Cache.CheckData_Value.Replace(" ", "").Split(';');
 
-                    foreach (string sPacketCheck in sPacketArr)
+                    foreach (string sCheckPacket in sPacketArr)
                     {
-                        if (sPacket.IndexOf(sPacketCheck) >= 0)
+                        if (!string.IsNullOrEmpty(sCheckPacket))
                         {
-                            return true;
-                        }
+                            if (sPacket.IndexOf(sCheckPacket) >= 0)
+                            {
+                                return true;
+                            }
+                        }                        
                     }
                 }                    
             }
@@ -1454,15 +1470,42 @@ namespace WPELibrary.Lib
 
         #region//检测封包大小
 
-        private static bool ISFilter_BySize(int iLength)
+        private static bool ISFilter_BySize(int PacketLength)
         {
             bool bReturn = false;
 
             try
             {
-                if (iLength >= Socket_Cache.CheckSizeFrom_Value && iLength <= Socket_Cache.CheckSizeTo_Value)
+                if (!string.IsNullOrEmpty(Socket_Cache.CheckLength_Value))
                 {
-                    bReturn = true;
+                    string[] sLengthArr = Socket_Cache.CheckLength_Value.Split(';');
+
+                    foreach (string sLength in sLengthArr)
+                    {
+                        if (!string.IsNullOrEmpty(sLength))
+                        {
+                            if (sLength.IndexOf("-") > 0)
+                            {
+                                if (int.TryParse(sLength.Split('-')[0], out int iFrom) && int.TryParse(sLength.Split('-')[1], out int iTo))
+                                {
+                                    if (PacketLength >= iFrom && PacketLength <= iTo)
+                                    {
+                                        bReturn = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (int.TryParse(sLength, out int iLength))
+                                {
+                                    if (PacketLength == iLength)
+                                    {
+                                        bReturn = true;
+                                    }
+                                }
+                            }
+                        }                        
+                    }
                 }
             }
             catch (Exception ex)
@@ -2706,27 +2749,33 @@ namespace WPELibrary.Lib
 
             try
             {
-                string[] slSearch = sfi.FSearch.Split(',');
-
-                foreach (string s in slSearch)
+                if (!string.IsNullOrEmpty(sfi.FSearch))
                 {
-                    int iIndex = int.Parse(s.Split('-')[0]);
-                    string sValue = s.Split('-')[1];
+                    string[] slSearch = sfi.FSearch.Split(',');
 
-                    if (iIndex >= 0 && iIndex < iLen)
+                    foreach (string sSearch in slSearch)
                     {
-                        string sBuffValue = Marshal.ReadByte(ipBuff, iIndex).ToString("X2");
-
-                        if (!sValue.Equals(sBuffValue))
+                        if (!string.IsNullOrEmpty(sSearch) && sSearch.IndexOf("-") > 0)
                         {
-                            bResult = false;
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        bResult = false;
-                        break;
+                            int iIndex = int.Parse(sSearch.Split('-')[0]);
+                            string sValue = sSearch.Split('-')[1];
+
+                            if (iIndex >= 0 && iIndex < iLen)
+                            {
+                                string sBuffValue = Marshal.ReadByte(ipBuff, iIndex).ToString("X2");
+
+                                if (!sValue.Equals(sBuffValue))
+                                {
+                                    bResult = false;
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                bResult = false;
+                                break;
+                            }
+                        }                        
                     }
                 }
             }
@@ -2748,68 +2797,71 @@ namespace WPELibrary.Lib
             List<int> lReturn = new List<int>();
 
             try
-            {  
-                byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
-
-                Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
-                Dictionary<int, byte> dSearchValue = new Dictionary<int, byte>();
-
-                string[] slSearch = sfi.FSearch.Split(',');
-
-                for (int i = 0; i < slSearch.Length; i++)
+            {
+                if (!string.IsNullOrEmpty(sfi.FSearch))
                 {
-                    int iIndex = int.Parse(slSearch[i].Split('-')[0]);
-                    string sValue = slSearch[i].Split('-')[1];
-                    byte bValue = Convert.ToByte(sValue, 16);
+                    byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
 
-                    dSearchIndex.Add(i, iIndex);
-                    dSearchValue.Add(i, bValue);
-                }
+                    Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
+                    Dictionary<int, byte> dSearchValue = new Dictionary<int, byte>();
 
-                int iMatchIndex = -1;
-                int iBuffIndex = -1;
+                    string[] slSearch = sfi.FSearch.Split(',');
 
-                byte bFirst_SearchValue = dSearchValue[0];
-
-                for (int i = 0; i < iLen; i++)
-                {
-                    if (bBUffer[i] == bFirst_SearchValue)
+                    for (int i = 0; i < slSearch.Length; i++)
                     {
-                        iMatchIndex = i;
+                        int iIndex = int.Parse(slSearch[i].Split('-')[0]);
+                        string sValue = slSearch[i].Split('-')[1];
+                        byte bValue = Convert.ToByte(sValue, 16);
 
-                        for (int j = 1; j < slSearch.Length; j++)
+                        dSearchIndex.Add(i, iIndex);
+                        dSearchValue.Add(i, bValue);
+                    }
+
+                    int iMatchIndex = -1;
+                    int iBuffIndex = -1;
+
+                    byte bFirst_SearchValue = dSearchValue[0];
+
+                    for (int i = 0; i < iLen; i++)
+                    {
+                        if (bBUffer[i] == bFirst_SearchValue)
                         {
-                            int iIndex = dSearchIndex[j];
-                            byte bValue = dSearchValue[j];
+                            iMatchIndex = i;
 
-                            iBuffIndex = i + iIndex;
-
-                            if (iBuffIndex >= 0 && iBuffIndex < iLen)
+                            for (int j = 1; j < slSearch.Length; j++)
                             {
-                                if (bBUffer[iBuffIndex] != bValue)
+                                int iIndex = dSearchIndex[j];
+                                byte bValue = dSearchValue[j];
+
+                                iBuffIndex = i + iIndex;
+
+                                if (iBuffIndex >= 0 && iBuffIndex < iLen)
+                                {
+                                    if (bBUffer[iBuffIndex] != bValue)
+                                    {
+                                        iMatchIndex = -1;
+                                        break;
+                                    }
+                                }
+                                else
                                 {
                                     iMatchIndex = -1;
                                     break;
-                                }                                
+                                }
                             }
-                            else
-                            {
-                                iMatchIndex = -1;
-                                break;
-                            }
-                        }
 
-                        if (iMatchIndex > -1)
-                        {
-                            lReturn.Add(iMatchIndex);
-
-                            if (iBuffIndex > i)
+                            if (iMatchIndex > -1)
                             {
-                                i = iBuffIndex;
+                                lReturn.Add(iMatchIndex);
+
+                                if (iBuffIndex > i)
+                                {
+                                    i = iBuffIndex;
+                                }
                             }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -2829,25 +2881,28 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (string.IsNullOrEmpty(sfi.FModify))
-                {
-                    bReturn = false;
-                }
-                else
+                if (!string.IsNullOrEmpty(sfi.FSearch) && !string.IsNullOrEmpty(sfi.FModify))
                 {
                     string[] slModify = sfi.FModify.Split(',');
 
-                    foreach (string s in slModify)
+                    foreach (string sModify in slModify)
                     {
-                        int iIndex = int.Parse(s.Split('-')[0]);
-                        string sValue = s.Split('-')[1];
-
-                        if (iIndex >= 0 && iIndex < iLen)
+                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
                         {
-                            byte bValue = Convert.ToByte(sValue, 16);
-                            Marshal.WriteByte(ipBuff, iIndex, bValue);
-                        }
-                    }
+                            int iIndex = int.Parse(sModify.Split('-')[0]);
+                            string sValue = sModify.Split('-')[1];
+
+                            if (iIndex >= 0 && iIndex < iLen)
+                            {
+                                byte bValue = Convert.ToByte(sValue, 16);
+                                Marshal.WriteByte(ipBuff, iIndex, bValue);
+                            }
+                        }                        
+                    }                    
+                }
+                else
+                {
+                    bReturn = false;
                 }
             }
             catch (Exception ex)
@@ -2869,11 +2924,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (string.IsNullOrEmpty(sfi.FModify))
-                {
-                    bReturn = false;
-                }
-                else
+                if (!string.IsNullOrEmpty(sfi.FSearch) && !string.IsNullOrEmpty(sfi.FModify))
                 {
                     string[] slModify = sfi.FModify.Split(',');
 
@@ -2881,28 +2932,35 @@ namespace WPELibrary.Lib
 
                     int iBufferIndex = -1;
 
-                    foreach (string s in slModify)
+                    foreach (string sModify in slModify)
                     {
-                        int iIndex = int.Parse(s.Split('-')[0]);
-                        string sValue = s.Split('-')[1];
-
-                        switch (FStartFrom)
+                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
                         {
-                            case Socket_Cache.Filter.FilterStartFrom.Head:
-                                iBufferIndex = iIndex;
-                                break;
+                            int iIndex = int.Parse(sModify.Split('-')[0]);
+                            string sValue = sModify.Split('-')[1];
 
-                            case Socket_Cache.Filter.FilterStartFrom.Position:
-                                iBufferIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
-                                break;
-                        }
+                            switch (FStartFrom)
+                            {
+                                case Socket_Cache.Filter.FilterStartFrom.Head:
+                                    iBufferIndex = iIndex;
+                                    break;
 
-                        if (iBufferIndex >= 0 && iBufferIndex < iLen)
-                        {
-                            byte bValue = Convert.ToByte(sValue, 16);
-                            Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
-                        }
-                    }
+                                case Socket_Cache.Filter.FilterStartFrom.Position:
+                                    iBufferIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                    break;
+                            }
+
+                            if (iBufferIndex >= 0 && iBufferIndex < iLen)
+                            {
+                                byte bValue = Convert.ToByte(sValue, 16);
+                                Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
+                            }
+                        }                        
+                    }                    
+                }
+                else
+                {
+                    bReturn = false;
                 }                
             }
             catch (Exception ex)
@@ -3056,12 +3114,11 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.FilterConfig_CheckSize = Socket_Cache.CheckSize;
 
                 Properties.Settings.Default.FilterConfig_CheckSocket_Value = Socket_Cache.CheckSocket_Value;
+                Properties.Settings.Default.FilterConfig_CheckLength_Value = Socket_Cache.CheckLength_Value;
                 Properties.Settings.Default.FilterConfig_CheckIP_Value = Socket_Cache.CheckIP_Value;
                 Properties.Settings.Default.FilterConfig_CheckPort_Value = Socket_Cache.CheckPort_Value;
                 Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.CheckHead_Value;
-                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.CheckData_Value;
-                Properties.Settings.Default.FilterConfig_CheckSizeFrom_Value = Socket_Cache.CheckSizeFrom_Value;
-                Properties.Settings.Default.FilterConfig_CheckSizeTo_Value = Socket_Cache.CheckSizeTo_Value;
+                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.CheckData_Value;                
 
                 Properties.Settings.Default.HookConfig_HookSend = Socket_Cache.HookSend;
                 Properties.Settings.Default.HookConfig_HookSendTo = Socket_Cache.HookSendTo;
@@ -3110,12 +3167,11 @@ namespace WPELibrary.Lib
                 Socket_Cache.CheckSize = Properties.Settings.Default.FilterConfig_CheckSize;
 
                 Socket_Cache.CheckSocket_Value = Properties.Settings.Default.FilterConfig_CheckSocket_Value;
+                Socket_Cache.CheckLength_Value = Properties.Settings.Default.FilterConfig_CheckLength_Value;
                 Socket_Cache.CheckIP_Value = Properties.Settings.Default.FilterConfig_CheckIP_Value;
                 Socket_Cache.CheckPort_Value = Properties.Settings.Default.FilterConfig_CheckPort_Value;
                 Socket_Cache.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
-                Socket_Cache.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;
-                Socket_Cache.CheckSizeFrom_Value = Properties.Settings.Default.FilterConfig_CheckSizeFrom_Value;
-                Socket_Cache.CheckSizeTo_Value = Properties.Settings.Default.FilterConfig_CheckSizeTo_Value;
+                Socket_Cache.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;             
 
                 Socket_Cache.HookSend = Properties.Settings.Default.HookConfig_HookSend;
                 Socket_Cache.HookSendTo = Properties.Settings.Default.HookConfig_HookSendTo;

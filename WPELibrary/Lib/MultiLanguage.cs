@@ -76,8 +76,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_64 = { "顺序执行所有满足条件的", "Execute all items that meet the conditions in sequence" };
         public static string[] MutiLan_65 = { "替换", "Replace" };
         public static string[] MutiLan_66 = { "拦截", "Intercept" };
-        public static string[] MutiLan_67 = { "不修改 - 只显示", "No Modify - Display" };
-        public static string[] MutiLan_68 = { "不修改 - 不显示", "No Modify - No Display" };
+        public static string[] MutiLan_67 = { "不修改-只显示", "No Modify-Display" };
+        public static string[] MutiLan_68 = { "不修改-不显示", "No Modify-No Display" };
         public static string[] MutiLan_69 = { "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}", "[{0}] {1} | [{2}] Packet Length: {3} | Match: {4}" };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
         //public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };
