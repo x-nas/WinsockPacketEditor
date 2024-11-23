@@ -146,7 +146,31 @@ namespace WPELibrary.Lib
             set { fstartfrom = value; }
         }
 
-        #endregion        
+        #endregion
+
+        #region//递进步长
+
+        protected decimal progressionstep;
+
+        public decimal ProgressionStep
+        {
+            get { return progressionstep; }
+            set { progressionstep = value; }
+        }
+
+        #endregion
+
+        #region//递进位置
+
+        protected string progressionposition;
+
+        public string ProgressionPosition
+        {
+            get { return progressionposition; }
+            set { progressionposition = value; }
+        }
+
+        #endregion
 
         #region//搜索内容
 
@@ -174,7 +198,24 @@ namespace WPELibrary.Lib
 
         #region//Socket_FilterInfo
 
-        public Socket_FilterInfo(bool IsEnable, int FNum, string FName, bool AppointHeader, string HeaderContent, bool AppointSocket, decimal SocketContent, bool AppointLength, decimal LengthContent, Socket_Cache.Filter.FilterMode FMode, Socket_Cache.Filter.FilterAction FAction, Socket_Cache.Filter.FilterFunction FFunction, Socket_Cache.Filter.FilterStartFrom FStartFrom, string FSearch, string FModify) 
+        public Socket_FilterInfo(
+            bool IsEnable, 
+            int FNum, 
+            string FName, 
+            bool AppointHeader, 
+            string HeaderContent, 
+            bool AppointSocket, 
+            decimal SocketContent, 
+            bool AppointLength, 
+            decimal LengthContent, 
+            Socket_Cache.Filter.FilterMode FMode, 
+            Socket_Cache.Filter.FilterAction FAction, 
+            Socket_Cache.Filter.FilterFunction FFunction, 
+            Socket_Cache.Filter.FilterStartFrom FStartFrom,
+            decimal ProgressionStep,
+            string ProgressionPosition,
+            string FSearch, 
+            string FModify) 
         {
             this.isenable = IsEnable;
             this.fnum = FNum;            
@@ -188,7 +229,9 @@ namespace WPELibrary.Lib
             this.fmode = FMode;
             this.faction = FAction;
             this.ffunction = FFunction;
-            this.fstartfrom = FStartFrom;            
+            this.fstartfrom = FStartFrom;
+            this.progressionstep = ProgressionStep;
+            this.progressionposition = ProgressionPosition;
             this.fsearch = FSearch;          
             this.fmodify = FModify;         
         }

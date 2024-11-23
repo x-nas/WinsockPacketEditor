@@ -14,8 +14,10 @@ namespace WPELibrary
         private int FilterIndex = -1;
         private decimal FilterSocketContent = 1;
         private decimal FilterLengthContent = 1;
+        private decimal FilterProgressionStep = 1;
         private string FilterName = string.Empty;
         private string FilterHeaderContent = string.Empty;
+        private string FilterProgressionPosition = string.Empty;
         private string FilterSearch = string.Empty;
         private string FilterModify = string.Empty;
         private bool FilterAppointHeader = false;
@@ -73,7 +75,9 @@ namespace WPELibrary
                     this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
                     this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
                     this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
-                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;                    
+                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
+                    this.FilterProgressionStep = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionStep;
+                    this.FilterProgressionPosition = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionPosition;
                     this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
                     this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;                    
 
@@ -132,6 +136,8 @@ namespace WPELibrary
                     this.nudFilter_LengthContent.Value = FilterLengthContent;
                     this.FilterAppointLengthChange();
 
+                    this.nudProgressionStep.Value = FilterProgressionStep;                    
+
                     this.txtFilterName.Text = FilterName;
                     this.cbFilterFunction_Send.Checked = FilterFunction.Send;
                     this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
@@ -177,9 +183,14 @@ namespace WPELibrary
 
                 this.dgvFilterAdvanced_Search.Height = 85;
                 this.dgvFilterAdvanced_Modify_FromHead.Height = 85;
-                this.dgvFilterAdvanced_Modify_FromPosition.Height = 85;
+                this.dgvFilterAdvanced_Modify_FromPosition.Height = 85;                
 
-                dgvFilterAdvanced_Modify_FromPosition.FirstDisplayedCell = dgvFilterAdvanced_Modify_FromPosition.CurrentCell;
+                if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"] != null)
+                {
+                    dgvFilterAdvanced_Modify_FromPosition.FirstDisplayedCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"];
+                }                
+
+                this.InitProgressionPosition();
             }
             catch (Exception ex)
             {
@@ -216,7 +227,7 @@ namespace WPELibrary
                 {
                     dgvFilterNormal.Rows.Add();
                     dgvFilterNormal.Rows.Add();
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -252,9 +263,7 @@ namespace WPELibrary
                 if (dgvFilterAdvanced_Search.Rows.Count == 0)
                 {
                     dgvFilterAdvanced_Search.Rows.Add();
-                }
-
-                dgvFilterAdvanced_Search.CurrentCell = dgvFilterAdvanced_Search.Rows[0].Cells[0];
+                }                
             }
             catch (Exception ex)
             {
@@ -328,18 +337,74 @@ namespace WPELibrary
                 if (dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 0)
                 {
                     dgvFilterAdvanced_Modify_FromPosition.Rows.Add();
-                }
-
-                if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"] != null)
-                {
-                    dgvFilterAdvanced_Modify_FromPosition.CurrentCell = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells["col000"];
-                }
+                }                
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }                
+        }
+
+        private void InitProgressionPosition()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(FilterProgressionPosition))
+                {
+                    string[] slProgressionPosition = FilterProgressionPosition.Split(',');
+
+                    foreach (string sPosition in slProgressionPosition)
+                    {
+                        if (!string.IsNullOrEmpty(sPosition))
+                        {
+                            if (int.TryParse(sPosition, out int iIndex))
+                            {
+                                switch (FilterMode)
+                                {
+                                    case Socket_Cache.Filter.FilterMode.Normal:
+
+                                        if (dgvFilterNormal.Rows.Count == 2 && dgvFilterNormal.Columns.Count > iIndex)
+                                        {
+                                            this.dgvFilterNormal.Rows[1].Cells[iIndex].Style.BackColor = Color.DarkRed;
+                                        }                                        
+
+                                        break;
+
+                                    case Socket_Cache.Filter.FilterMode.Advanced:
+
+                                        switch (FilterStartFrom)
+                                        {
+                                            case Socket_Cache.Filter.FilterStartFrom.Head:
+
+                                                if (dgvFilterAdvanced_Modify_FromHead.Rows.Count == 1 && dgvFilterAdvanced_Modify_FromHead.Columns.Count > iIndex)
+                                                {
+                                                    this.dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[iIndex].Style.BackColor = Color.DarkRed;
+                                                }                                                
+
+                                                break;
+
+                                            case Socket_Cache.Filter.FilterStartFrom.Position:
+
+                                                if (dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 1 && dgvFilterAdvanced_Modify_FromPosition.Columns.Count > iIndex)
+                                                {
+                                                    this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iIndex].Style.BackColor = Color.DarkRed;
+                                                }                                                
+
+                                                break;
+                                        }
+
+                                        break;
+                                }                                
+                            }
+                        }
+                    }                    
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion
 
@@ -633,8 +698,10 @@ namespace WPELibrary
                 string sHeaderContent_New = string.Empty;
                 decimal dSocketContent_New = 0;
                 decimal dLengthContent_New = 0;
+                decimal dProgressionStep_New = 0;
+                string sProgression_New = string.Empty;
                 string sSearch_New = string.Empty;
-                string sModify_New = string.Empty;
+                string sModify_New = string.Empty;                
 
                 Socket_Cache.Filter.FilterMode FilterMode_New;
                 Socket_Cache.Filter.FilterAction FilterAction_New;
@@ -656,6 +723,7 @@ namespace WPELibrary
                 sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
                 dSocketContent_New = this.nudFilter_SocketContent.Value;
                 dLengthContent_New = this.nudFilter_LengthContent.Value;
+                dProgressionStep_New = this.nudProgressionStep.Value;
 
                 if (rbFilterMode_Normal.Checked)
                 {
@@ -715,27 +783,29 @@ namespace WPELibrary
 
                         for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
                         {
-                            string sSearchValue = string.Empty;
-                            string sModifyValue = string.Empty;
+                            if (dgvFilterNormal.Rows[1].Cells[i].Style.BackColor == Color.DarkRed)
+                            {
+                                sProgression_New += i.ToString() + ",";
+                            }
 
                             if (dgvFilterNormal.Rows[0].Cells[i].Value != null)
                             {
-                                sSearchValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
-                            }
+                                string sSearchValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
 
-                            if (!String.IsNullOrEmpty(sSearchValue))
-                            {
-                                sSearch_New += i.ToString() + "-" + sSearchValue + ",";
+                                if (!String.IsNullOrEmpty(sSearchValue))
+                                {
+                                    sSearch_New += i.ToString() + "-" + sSearchValue + ",";
+                                }
                             }
 
                             if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
                             {
-                                sModifyValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
-                            }
+                                string sModifyValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
 
-                            if (!String.IsNullOrEmpty(sModifyValue))
-                            {
-                                sModify_New += i.ToString() + "-" + sModifyValue + ",";
+                                if (!String.IsNullOrEmpty(sModifyValue))
+                                {
+                                    sModify_New += i.ToString() + "-" + sModifyValue + ",";
+                                }
                             }
                         }                    
 
@@ -764,16 +834,19 @@ namespace WPELibrary
 
                                 for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
                                 {
-                                    string sValue = string.Empty;
+                                    if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
+                                    {
+                                        sProgression_New += i.ToString() + ",";
+                                    }
 
                                     if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
                                     {
-                                        sValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
-                                    }
+                                        string sValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
 
-                                    if (!String.IsNullOrEmpty(sValue))
-                                    {
-                                        sModify_New += i.ToString() + "-" + sValue + ",";
+                                        if (!String.IsNullOrEmpty(sValue))
+                                        {
+                                            sModify_New += i.ToString() + "-" + sValue + ",";
+                                        }
                                     }
                                 }
 
@@ -783,16 +856,19 @@ namespace WPELibrary
 
                                 for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
                                 {
-                                    string sValue = string.Empty;
+                                    if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
+                                    {
+                                        sProgression_New += i.ToString() + ",";
+                                    }
 
                                     if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
                                     {
-                                        sValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
-                                    }
+                                        string sValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
 
-                                    if (!String.IsNullOrEmpty(sValue))
-                                    {
-                                        sModify_New += i.ToString() + "-" + sValue + ",";
+                                        if (!String.IsNullOrEmpty(sValue))
+                                        {
+                                            sModify_New += i.ToString() + "-" + sValue + ",";
+                                        }
                                     }
                                 }
 
@@ -802,10 +878,27 @@ namespace WPELibrary
                         break;
                 }
 
+                sProgression_New = sProgression_New.TrimEnd(',');
                 sSearch_New = sSearch_New.TrimEnd(',');
                 sModify_New = sModify_New.TrimEnd(',');
 
-                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(FilterNum, sFName_New, bAppointHeader, sHeaderContent_New, bAppointSocket, dSocketContent_New, bAppointLength, dLengthContent_New, FilterMode_New, FilterAction_New, FilterFunction_New, FilterStartFrom_New, sSearch_New, sModify_New);                
+                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(
+                    FilterNum, 
+                    sFName_New, 
+                    bAppointHeader, 
+                    sHeaderContent_New, 
+                    bAppointSocket, 
+                    dSocketContent_New, 
+                    bAppointLength, 
+                    dLengthContent_New, 
+                    FilterMode_New, 
+                    FilterAction_New, 
+                    FilterFunction_New, 
+                    FilterStartFrom_New,
+                    dProgressionStep_New,
+                    sProgression_New,
+                    sSearch_New, 
+                    sModify_New);                
 
                 this.Close();
             }
@@ -884,6 +977,37 @@ namespace WPELibrary
                     case "cmsDGV_Delete":
 
                         dgv.CurrentCell.Value = null;
+
+                        break;
+
+                    case "cmsDGV_Progression_Enable":
+
+                        if (dgv.Name.Equals("dgvFilterAdvanced_Search"))
+                        {
+                            Socket_Operation.ShowMessageBox("搜索位置不可设置递进！");
+                            break;
+                        }
+
+                        if (dgv.Name.Equals("dgvFilterNormal"))
+                        {
+                            int iRowIndex = dgv.CurrentCell.RowIndex;
+
+                            if (iRowIndex == 0)
+                            {
+                                Socket_Operation.ShowMessageBox("搜索位置不可设置递进！");
+                                break;
+                            }
+                        }
+
+                        dgv.CurrentCell.Style.BackColor = Color.DarkRed;
+                        dgv.CurrentCell.Selected = false;
+
+                        break;
+
+                    case "cmsDGV_Progression_Disable":
+
+                        dgv.CurrentCell.Style.BackColor = dgv.Rows[0].DefaultCellStyle.BackColor;
+                        dgv.CurrentCell.Selected = false;
 
                         break;
                 }

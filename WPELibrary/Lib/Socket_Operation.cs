@@ -1832,6 +1832,8 @@ namespace WPELibrary.Lib
                         string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
                         string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
                         string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
+                        string sFProgressionStep = Socket_Cache.FilterList.lstFilter[i].ProgressionStep.ToString();
+                        string sFProgressionPosition = Socket_Cache.FilterList.lstFilter[i].ProgressionPosition;
                         string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
                         string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
 
@@ -1850,6 +1852,8 @@ namespace WPELibrary.Lib
                             new XElement("Action", sFAction),
                             new XElement("Function", sFFunction),
                             new XElement("StartFrom", sFStartFrom),
+                            new XElement("ProgressionStep", sFProgressionStep),
+                            new XElement("ProgressionPosition", sFProgressionPosition),
                             new XElement("Search", sFSearch),
                             new XElement("Modify", sFModify)
                             );
@@ -2036,6 +2040,18 @@ namespace WPELibrary.Lib
                         FilterStartFrom = GetFilterStartFrom_ByString(xeFilter.Element("StartFrom").Value);
                     }
 
+                    decimal dFProgressionStep = 1;
+                    if (xeFilter.Element("ProgressionStep") != null)
+                    {
+                        dFProgressionStep = decimal.Parse(xeFilter.Element("ProgressionStep").Value);
+                    }
+
+                    string sFProgressionPosition = string.Empty;
+                    if (xeFilter.Element("ProgressionPosition") != null)
+                    {
+                        sFProgressionPosition = xeFilter.Element("ProgressionPosition").Value;
+                    }
+
                     string sFSearch = string.Empty;
                     if (xeFilter.Element("Search") != null)
                     {
@@ -2048,7 +2064,7 @@ namespace WPELibrary.Lib
                         sFModify = xeFilter.Element("Modify").Value;
                     }
 
-                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, sFSearch, sFModify);
+                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, dFProgressionStep, sFProgressionPosition, sFSearch, sFModify);
                 }
             }
             catch (Exception ex)
@@ -2406,11 +2422,13 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
                 Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
                 Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
-                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;                
+                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
+                decimal ProgressionStep = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep;
+                string ProgressionPosition = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition;
                 string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
                 string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
 
-                Socket_Cache.FilterList.AddFilter_New(false, FName, bAppointHeader, HeaderContent, bAppointSocket, SocketContent, bAppointLength, LengthContent, FMode, FAction, FFunction, FStartFrom, FSearch, FModify);
+                Socket_Cache.FilterList.AddFilter_New(false, FName, bAppointHeader, HeaderContent, bAppointSocket, SocketContent, bAppointLength, LengthContent, FMode, FAction, FFunction, FStartFrom, ProgressionStep, ProgressionPosition, FSearch, FModify);
 
                 iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
             }
@@ -2858,6 +2876,11 @@ namespace WPELibrary.Lib
                                 {
                                     i = iBuffIndex;
                                 }
+
+                                if (sfi.FStartFrom == Socket_Cache.Filter.FilterStartFrom.Head)
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
@@ -2881,7 +2904,17 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(sfi.FSearch) && !string.IsNullOrEmpty(sfi.FModify))
+                if (string.IsNullOrEmpty(sfi.FSearch))
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
+                {
+                    return false;
+                }
+
+                if (!string.IsNullOrEmpty(sfi.FModify))
                 {
                     string[] slModify = sfi.FModify.Split(',');
 
@@ -2897,12 +2930,30 @@ namespace WPELibrary.Lib
                                 byte bValue = Convert.ToByte(sValue, 16);
                                 Marshal.WriteByte(ipBuff, iIndex, bValue);
                             }
-                        }                        
-                    }                    
+                        }
+                    }
                 }
-                else
+
+                if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
                 {
-                    bReturn = false;
+                    int iStep = ((int)sfi.ProgressionStep);
+                    string[] slProgression = sfi.ProgressionPosition.Split(',');
+
+                    foreach (string sProgression in slProgression)
+                    {
+                        if (!string.IsNullOrEmpty(sProgression))
+                        {
+                            if (int.TryParse(sProgression, out int iIndex))
+                            {
+                                if (iIndex >= 0 && iIndex < iLen)
+                                {
+                                    byte bValue = Marshal.ReadByte(ipBuff, iIndex);
+                                    bValue = GetStepByte(bValue, iStep);
+                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                }  
+                            }                           
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -2924,44 +2975,71 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(sfi.FSearch) && !string.IsNullOrEmpty(sfi.FModify))
+                if (string.IsNullOrEmpty(sfi.FSearch))
+                {
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
+                {
+                    return false;
+                }
+
+                Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
+
+                if (!string.IsNullOrEmpty(sfi.FModify))
                 {
                     string[] slModify = sfi.FModify.Split(',');
-
-                    Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
-
-                    int iBufferIndex = -1;
 
                     foreach (string sModify in slModify)
                     {
                         if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
                         {
-                            int iIndex = int.Parse(sModify.Split('-')[0]);
-                            string sValue = sModify.Split('-')[1];
-
-                            switch (FStartFrom)
+                            if (int.TryParse(sModify.Split('-')[0], out int iIndex))
                             {
-                                case Socket_Cache.Filter.FilterStartFrom.Head:
-                                    iBufferIndex = iIndex;
-                                    break;
+                                string sValue = sModify.Split('-')[1];
 
-                                case Socket_Cache.Filter.FilterStartFrom.Position:
-                                    iBufferIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
-                                    break;
-                            }
+                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                                {
+                                    iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                }                             
 
-                            if (iBufferIndex >= 0 && iBufferIndex < iLen)
-                            {
-                                byte bValue = Convert.ToByte(sValue, 16);
-                                Marshal.WriteByte(ipBuff, iBufferIndex, bValue);
+                                if (iIndex >= 0 && iIndex < iLen)
+                                {
+                                    byte bValue = Convert.ToByte(sValue, 16);
+                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                }
                             }
-                        }                        
-                    }                    
+                        }
+                    }
                 }
-                else
+
+                if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
                 {
-                    bReturn = false;
-                }                
+                    int iStep = ((int)sfi.ProgressionStep);
+                    string[] slProgression = sfi.ProgressionPosition.Split(',');                    
+
+                    foreach (string sProgression in slProgression)
+                    {
+                        if (!string.IsNullOrEmpty(sProgression))
+                        {
+                            if (int.TryParse(sProgression, out int iIndex))
+                            {
+                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                                {
+                                    iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                }                                
+
+                                if (iIndex >= 0 && iIndex < iLen)
+                                {
+                                    byte bValue = Marshal.ReadByte(ipBuff, iIndex);                                    
+                                    bValue = GetStepByte(bValue, iStep);                                    
+                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                }
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

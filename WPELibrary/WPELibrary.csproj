@@ -145,6 +145,8 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\off.png" />
+    <None Include="Resources\on.png" />
     <None Include="Resources\ForwardArrow.png" />
     <None Include="Resources\cpuinfo.png" />
     <None Include="Resources\aboutthis.png" />
