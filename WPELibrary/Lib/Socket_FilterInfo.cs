@@ -148,6 +148,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否递进完成
+
+        protected bool isprogressiondone;
+
+        public bool IsProgressionDone
+        {
+            get { return isprogressiondone; }
+            set { isprogressiondone = value; }
+        }
+
+        #endregion
+
         #region//递进步长
 
         protected decimal progressionstep;
@@ -168,6 +180,18 @@ namespace WPELibrary.Lib
         {
             get { return progressionposition; }
             set { progressionposition = value; }
+        }
+
+        #endregion
+
+        #region//递进已执行次数
+
+        protected int progressioncount;
+
+        public int ProgressionCount
+        {
+            get { return progressioncount; }
+            set { progressioncount = value; }
         }
 
         #endregion
@@ -212,8 +236,10 @@ namespace WPELibrary.Lib
             Socket_Cache.Filter.FilterAction FAction, 
             Socket_Cache.Filter.FilterFunction FFunction, 
             Socket_Cache.Filter.FilterStartFrom FStartFrom,
+            bool IsProgressionDone,
             decimal ProgressionStep,
             string ProgressionPosition,
+            int ProgressionCount,
             string FSearch, 
             string FModify) 
         {
@@ -230,8 +256,10 @@ namespace WPELibrary.Lib
             this.faction = FAction;
             this.ffunction = FFunction;
             this.fstartfrom = FStartFrom;
+            this.isprogressiondone = IsProgressionDone;
             this.progressionstep = ProgressionStep;
             this.progressionposition = ProgressionPosition;
+            this.progressioncount = ProgressionCount;
             this.fsearch = FSearch;          
             this.fmodify = FModify;         
         }

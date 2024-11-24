@@ -853,8 +853,13 @@ namespace WPELibrary
             // nudSendStep_Len
             // 
             resources.ApplyResources(this.nudSendStep_Len, "nudSendStep_Len");
+            this.nudSendStep_Len.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
             this.nudSendStep_Len.Minimum = new decimal(new int[] {
-            100,
+            255,
             0,
             0,
             -2147483648});

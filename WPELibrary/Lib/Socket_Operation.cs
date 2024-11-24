@@ -871,6 +871,16 @@ namespace WPELibrary.Lib
                 int iStepValue = Convert.ToInt32(bStepByte);
                 iStepValue += iStepLen;
 
+                while (iStepValue > 255)
+                {
+                    iStepValue -= 256;
+                }
+
+                while (iStepValue < 0)
+                {
+                    iStepValue += 256;
+                }
+
                 bReturn = Convert.ToByte(iStepValue);
             }
             catch (Exception ex)
@@ -2040,6 +2050,8 @@ namespace WPELibrary.Lib
                         FilterStartFrom = GetFilterStartFrom_ByString(xeFilter.Element("StartFrom").Value);
                     }
 
+                    bool IsProgressionDone = false;
+
                     decimal dFProgressionStep = 1;
                     if (xeFilter.Element("ProgressionStep") != null)
                     {
@@ -2051,6 +2063,8 @@ namespace WPELibrary.Lib
                     {
                         sFProgressionPosition = xeFilter.Element("ProgressionPosition").Value;
                     }
+
+                    int iProgressionCount = 0;
 
                     string sFSearch = string.Empty;
                     if (xeFilter.Element("Search") != null)
@@ -2064,7 +2078,7 @@ namespace WPELibrary.Lib
                         sFModify = xeFilter.Element("Modify").Value;
                     }
 
-                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, dFProgressionStep, sFProgressionPosition, sFSearch, sFModify);
+                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, IsProgressionDone, dFProgressionStep, sFProgressionPosition, iProgressionCount, sFSearch, sFModify);
                 }
             }
             catch (Exception ex)
@@ -2411,7 +2425,8 @@ namespace WPELibrary.Lib
             int iReturn = -1;
 
             try
-            {  
+            {
+                bool IsEnable = false;
                 string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.FilterList.lstFilter[iFIndex].FName);
                 bool bAppointHeader = Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader;
                 string HeaderContent = Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent;
@@ -2423,12 +2438,32 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
                 Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
                 Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
+                bool IsProgressionDone = false;
                 decimal ProgressionStep = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep;
                 string ProgressionPosition = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition;
+                int ProgressionCount = 0;
                 string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
                 string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
 
-                Socket_Cache.FilterList.AddFilter_New(false, FName, bAppointHeader, HeaderContent, bAppointSocket, SocketContent, bAppointLength, LengthContent, FMode, FAction, FFunction, FStartFrom, ProgressionStep, ProgressionPosition, FSearch, FModify);
+                Socket_Cache.FilterList.AddFilter_New(
+                    IsEnable, 
+                    FName, 
+                    bAppointHeader, 
+                    HeaderContent, 
+                    bAppointSocket, 
+                    SocketContent, 
+                    bAppointLength, 
+                    LengthContent, 
+                    FMode, 
+                    FAction, 
+                    FFunction, 
+                    FStartFrom, 
+                    IsProgressionDone, 
+                    ProgressionStep, 
+                    ProgressionPosition, 
+                    ProgressionCount, 
+                    FSearch, 
+                    FModify);
 
                 iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
             }
@@ -2946,14 +2981,16 @@ namespace WPELibrary.Lib
                             if (int.TryParse(sProgression, out int iIndex))
                             {
                                 if (iIndex >= 0 && iIndex < iLen)
-                                {
+                                {  
                                     byte bValue = Marshal.ReadByte(ipBuff, iIndex);
-                                    bValue = GetStepByte(bValue, iStep);
+                                    bValue = GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
                                     Marshal.WriteByte(ipBuff, iIndex, bValue);
+
+                                    sfi.IsProgressionDone = true;
                                 }  
                             }                           
                         }
-                    }
+                    }                 
                 }
             }
             catch (Exception ex)
@@ -3033,8 +3070,10 @@ namespace WPELibrary.Lib
                                 if (iIndex >= 0 && iIndex < iLen)
                                 {
                                     byte bValue = Marshal.ReadByte(ipBuff, iIndex);                                    
-                                    bValue = GetStepByte(bValue, iStep);                                    
+                                    bValue = GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));                                    
                                     Marshal.WriteByte(ipBuff, iIndex, bValue);
+
+                                    sfi.IsProgressionDone = true;
                                 }
                             }
                         }

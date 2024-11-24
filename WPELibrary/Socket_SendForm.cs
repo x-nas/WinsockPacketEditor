@@ -368,6 +368,14 @@ namespace WPELibrary
         {
             try
             {
+                if (this.cbSendStep.Checked)
+                {
+                    int iStepIndex = (int)this.nudSendStep_Position.Value;
+                    int iStepLen = (int)this.nudSendStep_Len.Value;
+
+                    bSendBuff = Socket_Operation.GetStepBytes(bSendBuff, iStepIndex, iStepLen);
+                }
+
                 bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sIPFrom, sIPTo, bSendBuff);
 
                 if (bSendOK)
@@ -379,15 +387,7 @@ namespace WPELibrary
                     this.Send_Fail++;
                 }
 
-                this.Send_CNT++;
-
-                if (this.cbSendStep.Checked)
-                {
-                    int iStepIndex = (int)this.nudSendStep_Position.Value;
-                    int iStepLen = (int)this.nudSendStep_Len.Value;
-
-                    bSendBuff = Socket_Operation.GetStepBytes(bSendBuff, iStepIndex, iStepLen);
-                }
+                this.Send_CNT++;                
             }
             catch (Exception ex)
             {

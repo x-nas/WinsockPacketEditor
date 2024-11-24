@@ -466,7 +466,26 @@ namespace WPELibrary.Lib
             public static string AESKey = string.Empty;
             public static Execute FilterList_Execute;            
 
-            public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();            
+            public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
+
+            #region//初始化所有滤镜的递进次数
+
+            public static void InitFilterList_ProgressionCount()
+            {
+                try
+                {
+                    foreach (Socket_FilterInfo sfi in lstFilter) 
+                    {
+                        sfi.ProgressionCount = 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
 
             #region//清空滤镜列表
 
@@ -569,7 +588,7 @@ namespace WPELibrary.Lib
 
                     string sFSearch = Socket_Operation.GetFilterString_ByBytes(bBuffer);                    
 
-                    Socket_Cache.FilterList.AddFilter_New(false, sFName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, sFSearch, string.Empty);                    
+                    Socket_Cache.FilterList.AddFilter_New(false, sFName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);                    
                 }
                 catch (Exception ex)
                 {
@@ -586,7 +605,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    AddFilter_New(false, string.Empty, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, 1, string.Empty, string.Empty, string.Empty);
+                    AddFilter_New(false, string.Empty, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -606,8 +625,10 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterAction FilterAction, 
                 Socket_Cache.Filter.FilterFunction FilterFunction, 
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom,
+                bool IsProgressionDone,
                 decimal ProgressionStep,
                 string ProgressionPosition,
+                int ProgressionCount,
                 string FSearch, 
                 string FModify)
             {
@@ -634,8 +655,10 @@ namespace WPELibrary.Lib
                         FilterAction, 
                         FilterFunction, 
                         FilterStartFrom, 
+                        IsProgressionDone,
                         ProgressionStep,
                         ProgressionPosition,
+                        ProgressionCount,
                         FSearch, 
                         FModify);
 
@@ -840,7 +863,14 @@ namespace WPELibrary.Lib
 
                                             faReturn = Filter.FilterAction.Replace;
 
+                                            sfi.IsProgressionDone = false;
+
                                             bDoFilter = Socket_Operation.DoFilter_Normal(sfi, ipBuff, iLen);
+
+                                            if (sfi.IsProgressionDone)
+                                            {
+                                                sfi.ProgressionCount++;
+                                            }
 
                                             if (bDoFilter)
                                             {
@@ -889,11 +919,18 @@ namespace WPELibrary.Lib
 
                                         faReturn = Filter.FilterAction.Replace;
 
+                                        sfi.IsProgressionDone = false;
+
                                         if (MatchIndex.Count > 0)
                                         {
                                             foreach (int iIndex in MatchIndex)
                                             {
                                                 Socket_Operation.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen);
+                                            }
+
+                                            if (sfi.IsProgressionDone)
+                                            {
+                                                sfi.ProgressionCount++;
                                             }
 
                                             if (sfi.FStartFrom == Filter.FilterStartFrom.Position)

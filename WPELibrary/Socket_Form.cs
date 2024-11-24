@@ -648,8 +648,6 @@ namespace WPELibrary
         {
             try
             {
-                this.SaveConfigs_Parameter();
-
                 this.tcSocketInfo_FilterSet.Enabled = false;
                 this.tcSocketInfo_HookSet.Enabled = false;
                 this.tcSocketInfo_SystemSet.Enabled = false;
@@ -659,6 +657,9 @@ namespace WPELibrary
 
                 this.cmsIcon_StartHook.Enabled = false;
                 this.cmsIcon_StopHook.Enabled = true;
+
+                this.SaveConfigs_Parameter();
+                Socket_Cache.FilterList.InitFilterList_ProgressionCount();
 
                 ws.StartHook();
 
