@@ -1607,6 +1607,8 @@ namespace WPELibrary.Lib
 
                 Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
                 Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
+
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {                

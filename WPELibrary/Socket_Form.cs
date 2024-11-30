@@ -265,9 +265,7 @@ namespace WPELibrary
                     case Socket_Cache.FilterList.Execute.Sequence:
                         this.rbFilterSet_Sequence.Checked = true;
                         break;
-                }
-
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
+                }                
             }
             catch (Exception ex)
             {
@@ -1080,31 +1078,25 @@ namespace WPELibrary
 
             try
             {
-                switch (sItemText)
+                if (Select_Index > -1)
                 {
-                    case "cmsHexBox_Send":
+                    switch (sItemText)
+                    {
+                        case "cmsHexBox_Send":
 
-                        if (Select_Index > -1)
-                        {
-                            Socket_Operation.ShowSendForm(Select_Index);                            
-                        }
+                            Socket_Operation.ShowSendForm(Select_Index);
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_SendList":
+                        case "cmsHexBox_SendList":
 
-                        if (Select_Index > -1)
-                        {
                             Socket_Cache.SendList.AddToSendList_BytIndex(Select_Index);
                             Socket_Operation.ShowSendListForm();
-                        }
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_FilterList":
+                        case "cmsHexBox_FilterList":
 
-                        if (Select_Index > -1)
-                        {
                             if (this.hbPacketData.CanCopy())
                             {
                                 this.hbPacketData.CopyHex();
@@ -1116,41 +1108,41 @@ namespace WPELibrary
                             {
                                 Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, null);
                             }
-                        }
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_CopyHex":
+                        case "cmsHexBox_CopyHex":
 
-                        this.hbPacketData.CopyHex();
+                            this.hbPacketData.CopyHex();
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_CopyText":
+                        case "cmsHexBox_CopyText":
 
-                        this.hbPacketData.Copy();
+                            this.hbPacketData.Copy();
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_Comparison_A":
+                        case "cmsHexBox_Comparison_A":
 
-                        this.hbPacketData.CopyHex();
-                        this.rtbComparison_A.Text = Clipboard.GetText();
+                            this.hbPacketData.CopyHex();
+                            this.rtbComparison_A.Text = Clipboard.GetText();
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_Comparison_B":
+                        case "cmsHexBox_Comparison_B":
 
-                        this.hbPacketData.CopyHex();
-                        this.rtbComparison_B.Text = Clipboard.GetText();
+                            this.hbPacketData.CopyHex();
+                            this.rtbComparison_B.Text = Clipboard.GetText();
 
-                        break;
+                            break;
 
-                    case "cmsHexBox_SelectAll":
+                        case "cmsHexBox_SelectAll":
 
-                        this.hbPacketData.SelectAll();
+                            this.hbPacketData.SelectAll();
 
-                        break;
+                            break;
+                    }
                 }
             }
             catch (Exception ex)

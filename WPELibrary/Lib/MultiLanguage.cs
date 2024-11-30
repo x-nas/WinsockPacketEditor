@@ -45,7 +45,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
-        public static string[] MutiLan_36 = { "导出滤镜列表", "Export Filter List" };
+        public static string[] MutiLan_36 = { "导出列表文件", "Export List File" };
         public static string[] MutiLan_37 = { "确定删除选中的数据吗", "Are you sure to delete the selected data" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         public static string[] MutiLan_39 = { "开始拦截!", "Start Intercepting!" };
@@ -79,7 +79,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_67 = { "不修改-只显示", "No Modify-Display" };
         public static string[] MutiLan_68 = { "不修改-不显示", "No Modify-No Display" };
         public static string[] MutiLan_69 = { "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}", "[{0}] {1} | [{2}] Packet Length: {3} | Match: {4}" };
-        public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
+        public static string[] MutiLan_70 = { "发送列表文件", "Send List File" };
         public static string[] MutiLan_71 = { "加载机器人列表成功! [未加密]", "Load robot list successful! [Unencrypted]" };
         public static string[] MutiLan_72 = { "加载机器人列表成功! [已加密]", "Load robot list successful! [Encrypted]" };
         public static string[] MutiLan_73 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
@@ -97,9 +97,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
         public static string[] MutiLan_86 = { "二进制", "Binary" };
         public static string[] MutiLan_87 = { "十进制", "Decimal" };
-        public static string[] MutiLan_88 = { " 请输入密码, 此密码在导入列表时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!", " Please enter the password. This password will require verification when importing the list.\r\n If you do not need to set a password, please click the [ Cancel ] button!" };
+        public static string[] MutiLan_88 = { " 请输入密码, 此密码在导入列表文件时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!", " Please enter the password. This password will require verification when importing the list file.\r\n If you do not need to set a password, please click the [ Cancel ] button!" };
         public static string[] MutiLan_89 = { "密码不能为空!", "Password cannot be empty!" };
-        public static string[] MutiLan_90 = { "导入滤镜列表", "Import Filter List" };
+        public static string[] MutiLan_90 = { "导入列表文件", "Import List File" };
         public static string[] MutiLan_91 = { " 请输入密码", " Please enter the password" };
         public static string[] MutiLan_92 = { "加载失败: 密码错误!", "Failed to load: Password incorrect!" };
         public static string[] MutiLan_93 = { "机器人 -【 序号 {0}】- {1} [{2}]", "Robot -【 ID {0}】- {1} [{2}]" };

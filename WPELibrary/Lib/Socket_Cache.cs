@@ -3458,7 +3458,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (iSIndex > -1 && iSIndex < SocketList.lstRecPacket.Count)
+                    if (iSIndex > -1 && iSIndex < dtSendList.Rows.Count)
                     {
                         dtSendList.Rows[iSIndex].Delete();
                     }                        

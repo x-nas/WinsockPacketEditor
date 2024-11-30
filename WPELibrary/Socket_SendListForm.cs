@@ -111,23 +111,23 @@ namespace WPELibrary
 
                 switch (sItemText)
                 {
-                    case "tsmiDeleteSendList":
+                    case "cmsSendList_Delete":
 
-                        if (this.dgvSendList.SelectedRows.Count == 1)
+                        if (dgvSendList.CurrentCell != null)
                         {
-                            int iSelectIndex = this.dgvSendList.SelectedRows[0].Index;
+                            int iSelectIndex = dgvSendList.CurrentCell.RowIndex;
                             Socket_Cache.SendList.DeleteFromSendList_ByIndex(iSelectIndex);
-                        }
+                        }                    
 
                         break;
 
-                    case "tsmiClear":
+                    case "cmsSendList_CleanUp":
 
                         Socket_Cache.SendList.CleanUpSendList_Dialog();
 
                         break;
 
-                    case "tsmiSaveSendList":
+                    case "cmsSendList_Save":
 
                         if (dgvSendList.Rows.Count > 0)
                         {
@@ -136,7 +136,7 @@ namespace WPELibrary
 
                         break;
 
-                    case "tsmiLoadSendList":
+                    case "cmsSendList_Load":
 
                         Socket_Cache.SendList.LoadSendList_Dialog();
 

@@ -270,53 +270,53 @@
   <metadata name="cmsSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>267, 17</value>
   </metadata>
-  <data name="tsmiDeleteSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsSendList_Delete.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
   </data>
-  <data name="tsmiDeleteSendList.Text" xml:space="preserve">
+  <data name="cmsSendList_Delete.Text" xml:space="preserve">
     <value>从列表中移除</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
+    <value>149, 6</value>
   </data>
-  <data name="tsmiClear.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsSendList_CleanUp.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="cmsSendList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
   </data>
-  <data name="tsmiClear.Text" xml:space="preserve">
-    <value>清空发送列表</value>
+  <data name="cmsSendList_CleanUp.Text" xml:space="preserve">
+    <value>清空 发送列表</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
+    <value>149, 6</value>
   </data>
-  <data name="tsmiSaveSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsSendList_Save.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="tsmiSaveSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="cmsSendList_Save.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
   </data>
-  <data name="tsmiSaveSendList.Text" xml:space="preserve">
-    <value>保存此列表数据</value>
+  <data name="cmsSendList_Save.Text" xml:space="preserve">
+    <value>保存 发送列表</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
+    <value>149, 6</value>
   </data>
-  <data name="tsmiLoadSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsSendList_Load.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="tsmiLoadSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
+  <data name="cmsSendList_Load.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
   </data>
-  <data name="tsmiLoadSendList.Text" xml:space="preserve">
-    <value>加载发送列表</value>
+  <data name="cmsSendList_Load.Text" xml:space="preserve">
+    <value>加载 发送列表</value>
   </data>
   <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 110</value>
+    <value>153, 110</value>
   </data>
   <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
     <value>cmsSendList</value>
@@ -7222,54 +7222,6 @@
   <data name="&gt;&gt;tlSendList_Fail_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiDeleteSendList.Name" xml:space="preserve">
-    <value>tsmiDeleteSendList</value>
-  </data>
-  <data name="&gt;&gt;tsmiDeleteSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiClear.Name" xml:space="preserve">
-    <value>tsmiClear</value>
-  </data>
-  <data name="&gt;&gt;tsmiClear.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
-    <value>toolStripSeparator2</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiSaveSendList.Name" xml:space="preserve">
-    <value>tsmiSaveSendList</value>
-  </data>
-  <data name="&gt;&gt;tsmiSaveSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
-    <value>toolStripSeparator3</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadSendList.Name" xml:space="preserve">
-    <value>tsmiLoadSendList</value>
-  </data>
-  <data name="&gt;&gt;tsmiLoadSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bgwSendList.Name" xml:space="preserve">
-    <value>bgwSendList</value>
-  </data>
-  <data name="&gt;&gt;bgwSendList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cCheck.Name" xml:space="preserve">
     <value>cCheck</value>
   </data>
@@ -7311,6 +7263,54 @@
   </data>
   <data name="&gt;&gt;cData.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Delete.Name" xml:space="preserve">
+    <value>cmsSendList_Delete</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_CleanUp.Name" xml:space="preserve">
+    <value>cmsSendList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
+    <value>toolStripSeparator2</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Save.Name" xml:space="preserve">
+    <value>cmsSendList_Save</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
+    <value>toolStripSeparator3</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Load.Name" xml:space="preserve">
+    <value>cmsSendList_Load</value>
+  </data>
+  <data name="&gt;&gt;cmsSendList_Load.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bgwSendList.Name" xml:space="preserve">
+    <value>bgwSendList</value>
+  </data>
+  <data name="&gt;&gt;bgwSendList.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_SendListForm</value>
