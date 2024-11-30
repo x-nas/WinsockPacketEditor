@@ -8,16 +8,16 @@ namespace WPELibrary
     public partial class Socket_PasswordFrom : Form
     {
         private string SocketList_Password = string.Empty;
-        Socket_Cache.FilterList.PWType PWType;
+        Socket_Cache.PWType PWType;
 
         #region//初始化
 
-        public Socket_PasswordFrom(Socket_Cache.FilterList.PWType PWType)
+        public Socket_PasswordFrom(Socket_Cache.PWType PWType)
         {
+            MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
             InitializeComponent();
 
-            this.PWType = PWType;            
-
+            this.PWType = PWType;
             InitForm();
         }
 
@@ -30,12 +30,12 @@ namespace WPELibrary
 
                 switch (PWType)
                 {
-                    case Socket_Cache.FilterList.PWType.Import:
+                    case Socket_Cache.PWType.Import:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_90);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_91);
                         break;
 
-                    case Socket_Cache.FilterList.PWType.Export:
+                    case Socket_Cache.PWType.Export:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
                         break;

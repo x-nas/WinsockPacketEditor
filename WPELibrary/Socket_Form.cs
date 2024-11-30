@@ -36,12 +36,12 @@ namespace WPELibrary
                 InitializeComponent();
 
                 this.InitSocketForm();
-                this.InitSocketDGV();
-                this.InitFilterList();
+                this.InitSocketDGV();                
                 this.InitHexBox_XOR();
-                this.LoadConfigs_Parameter();
                 
-                Socket_Cache.SendList.InitSendList();
+                this.LoadConfigs_Parameter();
+                Socket_Operation.LoadSystemList();
+
             }
             catch (Exception ex)
             {
@@ -108,10 +108,8 @@ namespace WPELibrary
             {
                 ws.ExitHook();
 
-                this.SaveConfigs_Parameter();                
-
-                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                Socket_Operation.SaveFilterList(FilePath, -1, false);
+                this.SaveConfigs_Parameter();
+                Socket_Operation.SaveSystemList();                
             }
             catch (Exception ex)
             {
@@ -157,20 +155,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void InitFilterList()
-        {
-            try
-            {
-                string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
-                Socket_Operation.LoadFilterList(FilePath, false);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         private void InitHexBox_XOR()
         {
@@ -202,6 +187,10 @@ namespace WPELibrary
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
 
+                dgvRobotList.AutoGenerateColumns = false;
+                dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
+                dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
+
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstRecLog;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
@@ -215,7 +204,7 @@ namespace WPELibrary
 
         #endregion        
 
-        #region//设置系统参数
+        #region//加载系统参数
 
         private void LoadConfigs_Parameter()
         {
@@ -285,6 +274,10 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        #endregion
+
+        #region//保存系统参数
 
         private void SaveConfigs_Parameter()
         {
@@ -739,7 +732,7 @@ namespace WPELibrary
             }
 
             if (!bgwLogList.IsBusy)
-            {
+            {   
                 if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
                     bgwLogList.RunWorkerAsync();
@@ -845,13 +838,13 @@ namespace WPELibrary
                 if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
                 {
                     Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
-                    e.Value = Socket_Operation.GetImg_ByPacketType(ptType);
+                    e.Value = Socket_Cache.SocketPacket.GetImg_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cPacketType"].Index)
                 {
                     Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
-                    e.Value = Socket_Operation.GetName_ByPacketType(ptType);
+                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
             }
@@ -982,7 +975,7 @@ namespace WPELibrary
                             this.hbPacketData.SelectionStart = 0;
                         }
 
-                        int iIndex = Socket_Operation.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
+                        int iIndex = Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -1102,7 +1095,7 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            Socket_Cache.SendList.AddToSendList_BySocketListIndex(Select_Index);
+                            Socket_Cache.SendList.AddToSendList_BytIndex(Select_Index);
                             Socket_Operation.ShowSendListForm();
                         }
 
@@ -1117,11 +1110,11 @@ namespace WPELibrary
                                 this.hbPacketData.CopyHex();
 
                                 byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBuffer);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBuffer);
                             }
                             else
                             {
-                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, null);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, null);
                             }
                         }
 
@@ -1232,6 +1225,25 @@ namespace WPELibrary
 
                         break;
 
+                    case "cmsSocketList_SendList":
+
+                        if (Select_Index > -1)
+                        {
+                            Socket_Cache.SendList.AddToSendList_BytIndex(Select_Index);
+                            Socket_Operation.ShowSendListForm();
+                        }
+
+                        break;
+
+                    case "cmsSocketList_FilterList":
+
+                        if (Select_Index > -1)
+                        {
+                            Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, null);
+                        }
+
+                        break;
+
                     case "cmsSocketList_ShowSendList":
 
                         Socket_Operation.ShowSendListForm();
@@ -1251,7 +1263,7 @@ namespace WPELibrary
 
                         if (dgvSocketList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveSocketListToExcel();
+                            Socket_Cache.SocketList.SaveSocketListToExcel();
                         }
 
                         break;
@@ -1285,7 +1297,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//滤镜菜单
+        #region//滤镜列表菜单
 
         private void cmsFilterList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -1301,61 +1313,34 @@ namespace WPELibrary
 
                     if (iFIndex > -1)
                     {
-                        Socket_Cache.Filter.FilterMove filterMove = Socket_Cache.Filter.FilterMove.Up;
-
                         switch (sItemText)
                         {
-                            case "cmsFilterList_MoveTop":
-
-                                filterMove = Socket_Cache.Filter.FilterMove.Top;
-                                iIndex = Socket_Operation.MoveFilter_ByFilterIndex(iFIndex, filterMove);
-
+                            case "cmsFilterList_Top":
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Top, iFIndex);
                                 break;
 
-                            case "cmsFilterList_MoveUp":
-
-                                filterMove = Socket_Cache.Filter.FilterMove.Up;
-                                iIndex = Socket_Operation.MoveFilter_ByFilterIndex(iFIndex, filterMove);
-
+                            case "cmsFilterList_Up":
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Up, iFIndex);
                                 break;
 
-                            case "cmsFilterList_MoveDown":
-
-                                filterMove = Socket_Cache.Filter.FilterMove.Down;
-                                iIndex = Socket_Operation.MoveFilter_ByFilterIndex(iFIndex, filterMove);
-
+                            case "cmsFilterList_Down":
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Down, iFIndex);
                                 break;
 
-                            case "cmsFilterList_MoveBottom":
-
-                                filterMove = Socket_Cache.Filter.FilterMove.Bottom;
-                                iIndex = Socket_Operation.MoveFilter_ByFilterIndex(iFIndex, filterMove);
-
+                            case "cmsFilterList_Bottom":
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Bottom, iFIndex);
                                 break;
 
                             case "cmsFilterList_Copy":
-
-                                iIndex = Socket_Operation.CopyFilter_ByFilterIndex(iFIndex);
-
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Copy, iFIndex);
                                 break;
 
                             case "cmsFilterList_Export":
-
-                                string sFName = this.dgvFilterList.CurrentRow.Cells["cFName"].Value.ToString();
-                                Socket_Operation.SaveFilterList_Dialog(sFName, iFIndex);
-                                iIndex = iFIndex;
-
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Export, iFIndex);
                                 break;
 
                             case "cmsFilterList_Delete":
-
-                                int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
-
-                                if (iFNum > 0)
-                                {
-                                    Socket_Operation.DeleteFilter_ByFilterNum_Dialog(iFNum);
-                                }
-
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Delete, iFIndex);
                                 break;
                         }
 
@@ -1365,6 +1350,62 @@ namespace WPELibrary
                             this.dgvFilterList.Rows[iIndex].Selected = true;
                             this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[iIndex].Cells[0];
                         }                       
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//机器人列表菜单
+
+        private void cmsRobotList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsRobotList.Close();
+
+            try
+            {
+                if (dgvRobotList.Rows.Count > 0)
+                {
+                    int iIndex = 0;
+                    int iRIndex = this.dgvRobotList.CurrentRow.Index;
+
+                    if (iRIndex > -1)
+                    {
+                        switch (sItemText)
+                        {
+                            case "cmsRobotList_Copy":
+
+                                iIndex = Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
+
+                                break;
+
+                            case "cmsRobotList_Export":
+
+                                string sRName = this.dgvRobotList.CurrentRow.Cells["cRName"].Value.ToString();
+                                Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, iRIndex);
+                                iIndex = iRIndex;
+
+                                break;
+
+                            case "cmsRobotList_Delete":
+
+                                Socket_Cache.Robot.DeleteRobot_ByRobotIndex_Dialog(iRIndex);
+
+                                break;
+                        }
+
+                        if (iIndex > -1 && iIndex < dgvRobotList.RowCount)
+                        {
+                            this.dgvRobotList.ClearSelection();
+                            this.dgvRobotList.Rows[iIndex].Selected = true;
+                            this.dgvRobotList.CurrentCell = this.dgvRobotList.Rows[iIndex].Cells[0];
+                        }
                     }
                 }
             }
@@ -1391,7 +1432,7 @@ namespace WPELibrary
 
                         if (dgvLogList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveLogListToExcel();
+                            Socket_Cache.LogList.SaveLogListToExcel();
                         }
 
                         break;
@@ -1419,14 +1460,12 @@ namespace WPELibrary
             {
                 if (dgvFilterList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
                 {
+                    int FIndex = e.RowIndex;
                     bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
 
-                    int FIndex = e.RowIndex;
-                    int FNum = Socket_Cache.FilterList.GetFilterNum_ByFilterIndex(FIndex);
-
-                    Socket_Cache.FilterList.SetIsCheck_ByFilterNum(FNum, bCheck);
+                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(FIndex, bCheck);
                 }
             }
             catch (Exception ex)
@@ -1441,11 +1480,11 @@ namespace WPELibrary
             {
                 if (dgvFilterList.Rows.Count > 0)
                 {
-                    int iFNum = (int)this.dgvFilterList.CurrentRow.Cells["cFNum"].Value;
+                    int FIndex = e.RowIndex;
 
-                    if (iFNum > 0)
+                    if (FIndex > -1)
                     {
-                        Socket_Operation.ShowFilterForm_Dialog(iFNum);
+                        Socket_Operation.ShowFilterForm_Dialog(FIndex);
                     }
                 }
             }
@@ -1457,31 +1496,31 @@ namespace WPELibrary
 
         #endregion
 
-        #region//滤镜功能按钮
+        #region//滤镜列表按钮
 
         private void tsFilterList_Load_Click(object sender, EventArgs e)
         {
-            Socket_Operation.LoadFilterList_Dialog();
+            Socket_Cache.FilterList.LoadFilterList_Dialog();
         }
 
         private void tsFilterList_Save_Click(object sender, EventArgs e)
         {
             if (dgvFilterList.Rows.Count > 0)
             {
-                Socket_Operation.SaveFilterList_Dialog(string.Empty, -1);
+                Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, -1);
             }
         }
 
         private void tsFilterList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.FilterList.AddFilter_New();            
+            Socket_Cache.Filter.AddFilter_New();            
         }
 
         private void tsFilterList_CleanUp_Click(object sender, EventArgs e)
         {
             if (dgvFilterList.Rows.Count > 0)
             {
-                Socket_Operation.CleanUpFilterList_Dialog();
+                Socket_Cache.FilterList.CleanUpFilterList_Dialog();
             }
         }
 
@@ -1489,15 +1528,13 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
+                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++) 
                 {
-                    int FNum = sfi.FNum;
-
-                    Socket_Cache.FilterList.SetIsCheck_ByFilterNum(FNum, true);
-
-                    this.dgvFilterList.Refresh();
-                    this.dgvSocketList.Focus();
+                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(i, true);
                 }
+
+                this.dgvFilterList.Refresh();
+                this.dgvSocketList.Focus();
             }
             catch (Exception ex)
             {
@@ -1509,14 +1546,36 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
+                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
                 {
-                    int FNum = sfi.FNum;
+                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(i, false);
+                }
 
-                    Socket_Cache.FilterList.SetIsCheck_ByFilterNum(FNum, false);
+                this.dgvFilterList.Refresh();
+                this.dgvSocketList.Focus();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
-                    this.dgvFilterList.Refresh();
-                    this.dgvSocketList.Focus();
+        #endregion
+
+        #region//机器人列表操作
+
+        private void dgvRobotList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvRobotList.Rows.Count > 0)
+                {
+                    int RIndex = e.RowIndex;
+
+                    if (RIndex > -1)
+                    {
+                        Socket_Operation.ShowRobotForm_Dialog(RIndex);
+                    }
                 }
             }
             catch (Exception ex)
@@ -1524,6 +1583,36 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        #endregion
+
+        #region//机器人列表按钮
+
+        private void tsRobotList_Load_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.RobotList.LoadRobotList_Dialog();
+        }
+
+        private void tsRobotList_Save_Click(object sender, EventArgs e)
+        {
+            if (dgvRobotList.Rows.Count > 0)
+            {
+                Socket_Cache.RobotList.SaveRobotList_Dialog(string.Empty, -1);
+            }
+        }
+
+        private void tsRobotList_Add_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.Robot.AddRobot_New();
+        }
+
+        private void tsRobotList_CleanUp_Click(object sender, EventArgs e)
+        {
+            if (dgvRobotList.Rows.Count > 0)
+            {
+                Socket_Cache.RobotList.CleanUpRobotList_Dialog();
+            }
+        }        
 
         #endregion
 
@@ -2084,7 +2173,7 @@ namespace WPELibrary
                                             bool bWSARecvFrom = false;
 
                                             Socket_Cache.Filter.FilterFunction filterFunction = new Socket_Cache.Filter.FilterFunction(bSend, bSendTo, bRecv, bRecvFrom, bWSASend, bWSASendTo, bWSARecv, bWSARecvFrom);
-                                            string sFFunction = Socket_Operation.GetFilterFunctionString(filterFunction);
+                                            string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(filterFunction);
 
                                             Socket_Cache.Filter.FilterStartFrom FStartFrom = new Socket_Cache.Filter.FilterStartFrom();
                                             if (Socket_Operation.GetBoolFromChineseString(s24) == true)
@@ -2097,15 +2186,20 @@ namespace WPELibrary
                                             }
                                             string sFStartFrom = ((int)FStartFrom).ToString();
 
+                                            string sFProgressionStep = s12;
+                                            string sFProgressionPosition = string.Empty;
+
                                             string sFSearch = string.Empty;
                                             string sFModify = string.Empty;
                                             if (FMode == Socket_Cache.Filter.FilterMode.Normal)
                                             {
+                                                sFProgressionPosition = Socket_Operation.ConvertFILTString(s31, false);
                                                 sFSearch = Socket_Operation.ConvertFILTString(s26, false);
                                                 sFModify = Socket_Operation.ConvertFILTString(s27, false);
                                             }
                                             else if (FMode == Socket_Cache.Filter.FilterMode.Advanced)
                                             {
+                                                sFProgressionPosition = Socket_Operation.ConvertFILTString(s32, false);
                                                 sFSearch = Socket_Operation.ConvertFILTString(s28, false);
 
                                                 if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
@@ -2133,6 +2227,8 @@ namespace WPELibrary
                                                 new XElement("Action", sFAction),
                                                 new XElement("Function", sFFunction),
                                                 new XElement("StartFrom", sFStartFrom),
+                                                new XElement("ProgressionStep", sFProgressionStep),
+                                                new XElement("ProgressionPosition", sFProgressionPosition),
                                                 new XElement("Search", sFSearch),
                                                 new XElement("Modify", sFModify)
                                                 );
@@ -2210,6 +2306,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

@@ -14,6 +14,7 @@ namespace WPELibrary
 
         public Socket_FindForm()
         {
+            MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
             InitializeComponent();
             InitForm();
         }        

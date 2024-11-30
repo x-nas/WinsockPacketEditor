@@ -7,12 +7,9 @@ using System.Reflection;
 using System.Data;
 using System.Linq;
 using System.Diagnostics;
-using System.Drawing;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Xml;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -917,142 +914,6 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取封包类型对应的名称
-
-        public static string GetName_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                switch (socketType)
-                {
-                    case Socket_Cache.SocketPacket.PacketType.Send:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion
-
-        #region//获取滤镜动作对应的名称
-
-        public static string GetName_ByFilterAction(Socket_Cache.Filter.FilterAction filterAction)
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                switch (filterAction)
-                {
-                    case Socket_Cache.Filter.FilterAction.Replace:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
-                        break;
-
-                    case Socket_Cache.Filter.FilterAction.Intercept:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66);
-                        break;
-
-                    case Socket_Cache.Filter.FilterAction.NoModify_Display:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67);
-                        break;
-
-                    case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion
-
-        #region//获取封包类型对应的图标
-
-        public static Image GetImg_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
-        {
-            Image imgReturn = null;
-
-            try
-            {
-                switch (socketType)
-                {
-                    case Socket_Cache.SocketPacket.PacketType.Send:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        imgReturn = Properties.Resources.sent;
-                        break;
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        imgReturn = Properties.Resources.received;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return imgReturn;
-        }
-
-        #endregion
-
         #region//获取字节长度对应的字符串
 
         public static string GetDisplayBytes(long size)
@@ -1135,7 +996,7 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion
+        #endregion        
 
         #region//是否显示封包（过滤条件）        
 
@@ -1530,52 +1391,6 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//搜索封包数据        
-
-        public static int FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
-        {
-            int iResult = -1;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(SearchData))
-                {
-                    int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
-
-                    if (iListCNT > 0 && FromIndex < iListCNT)
-                    {
-                        string sSearch = "";
-
-                        for (int i = FromIndex; i < iListCNT; i++)
-                        {
-                            byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
-                            sSearch = BytesToString(efFormat, bSearch);
-
-                            if (!MatchCase)
-                            {
-                                sSearch = sSearch.ToLower();
-                                SearchData = SearchData.ToLower();
-                            }
-
-                            if (sSearch.IndexOf(SearchData) >= 0)
-                            {
-                                iResult = i;
-                                break;
-                            }
-                        }
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return iResult;
-        }
-
-        #endregion      
-
         #region//显示发送窗体
 
         public static void ShowSendForm(int iSLIndex)
@@ -1616,755 +1431,17 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//保存发送列表数据
-
-        public static bool SaveSendList()
-        {
-            bool bReturn = true;
-
-            try
-            {
-                SaveFileDialog sfdSocketInfo = new SaveFileDialog();
-                                
-                sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
-                sfdSocketInfo.RestoreDirectory = true;
-
-                if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
-                {
-                    XmlDocument doc = new XmlDocument();
-
-                    XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-                    doc.AppendChild(xmlDeclaration);
-
-                    XmlElement xeSendList = doc.CreateElement("SendList");
-                    doc.AppendChild(xeSendList);
-
-                    if (Socket_Cache.SendList.dtSocketSendList.Rows.Count > 0)
-                    {
-                        for (int i = 0; i < Socket_Cache.SendList.dtSocketSendList.Rows.Count; i++)
-                        {
-                            string sIndex = (i + 1).ToString();
-                            string sNote = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Remark"].ToString().Trim();
-                            string sSocket = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Socket"].ToString().Trim();
-                            string sIPTo = Socket_Cache.SendList.dtSocketSendList.Rows[i]["ToAddress"].ToString().Trim();
-                            string sLen = Socket_Cache.SendList.dtSocketSendList.Rows[i]["Len"].ToString().Trim();
-                            byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSocketSendList.Rows[i]["Bytes"];
-                            string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
-
-                            XmlElement xeSend = doc.CreateElement("Send");
-                            xeSendList.AppendChild(xeSend);
-
-                            XmlElement xeIndex = doc.CreateElement("Index");
-                            xeIndex.InnerText = sIndex;
-                            xeSend.AppendChild(xeIndex);
-
-                            XmlElement xeNote = doc.CreateElement("Note");
-                            xeNote.InnerText = sNote;
-                            xeSend.AppendChild(xeNote);
-
-                            XmlElement xeSocket = doc.CreateElement("Socket");
-                            xeSocket.InnerText = sSocket;
-                            xeSend.AppendChild(xeSocket);
-
-                            XmlElement xeIPTo = doc.CreateElement("IPTo");
-                            xeIPTo.InnerText = sIPTo;
-                            xeSend.AppendChild(xeIPTo);
-
-                            XmlElement xeLen = doc.CreateElement("Len");
-                            xeLen.InnerText = sLen;
-                            xeSend.AppendChild(xeLen);
-
-                            XmlElement xeData = doc.CreateElement("Data");
-                            xeData.InnerText = sData;
-                            xeSend.AppendChild(xeData);
-                        }
-                    }
-
-                    doc.Save(sfdSocketInfo.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                bReturn = false;
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-            
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//加载发送列表数据
-
-        public static bool LoadSendList()
-        {
-            bool bReturn = true;
-
-            try
-            {
-                OpenFileDialog ofdLoadSocket = new OpenFileDialog();
-
-                ofdLoadSocket.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_70) + "（*.sp）|*.sp";
-                ofdLoadSocket.RestoreDirectory = true;
-
-                ofdLoadSocket.ShowDialog();
-                string FilePath = ofdLoadSocket.FileName;
-
-                if (!string.IsNullOrEmpty(FilePath))
-                {  
-                    Socket_Cache.SendList.SendListClear();
-
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(FilePath);
-                    XmlNode xnSendList = doc.DocumentElement;
-
-                    foreach (XmlNode xnSend in xnSendList.ChildNodes)
-                    {
-                        string sIndex = xnSend.SelectSingleNode("Index").InnerText;
-                        string sNote = xnSend.SelectSingleNode("Note").InnerText;
-                        string sSocket = xnSend.SelectSingleNode("Socket").InnerText;
-                        string sIPTo = xnSend.SelectSingleNode("IPTo").InnerText;
-                        string sLen = xnSend.SelectSingleNode("Len").InnerText;
-                        string sData = xnSend.SelectSingleNode("Data").InnerText;
-
-                        int iIndex = int.Parse(sIndex);                        
-                        int iSocket = int.Parse(sSocket);                        
-                        int iLen = int.Parse(sLen);
-
-                        byte[] bBuffer = StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sData);
-
-                        Socket_Cache.SendList.AddToSendList_New(iIndex, sNote, iSocket, sIPTo, sData, bBuffer);
-                    }
-                }            
-            }
-            catch (Exception ex)
-            {
-                bReturn = false;
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//保存滤镜列表数据
-
-        public static void SaveFilterList_Dialog(string FileName, int FilterIndex)
-        {
-            try
-            {
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
-                {
-                    SaveFileDialog sfdSocketInfo = new SaveFileDialog();
-
-                    sfdSocketInfo.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
-
-                    if (!string.IsNullOrEmpty(FileName))
-                    {
-                        sfdSocketInfo.FileName = FileName;
-                    }
-                    
-                    sfdSocketInfo.RestoreDirectory = true;
-
-                    if (sfdSocketInfo.ShowDialog() == DialogResult.OK)
-                    {
-                        Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Export);
-                        pwForm.ShowDialog();
-
-                        SaveFilterList(sfdSocketInfo.FileName, FilterIndex, true);                    
-                    }
-                }  
-            }
-            catch (Exception ex)
-            {                
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        public static void SaveFilterList(string FilePath, int FilterIndex, bool DoEncrypt)
-        {
-            try
-            {
-                SaveFilterList_ToXDocument(FilePath, FilterIndex);
-
-                if (DoEncrypt)
-                {
-                    string sPassword = Socket_Cache.FilterList.AESKey;
-
-                    if (!string.IsNullOrEmpty(sPassword))
-                    {
-                        EncryptFilterList(FilePath, sPassword);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {  
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private static void SaveFilterList_ToXDocument(string FilePath, int FilterIndex)
-        {
-            try
-            {
-                XDocument xdoc = new XDocument
-                {
-                    Declaration = new XDeclaration("1.0", "utf-8", "yes")
-                };
-
-                XElement xeRoot = new XElement("FilterList");
-                xdoc.Add(xeRoot);
-
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
-                {
-                    int Start = 0;
-                    int End = Socket_Cache.FilterList.lstFilter.Count;
-
-                    if (FilterIndex > -1 && FilterIndex < End)
-                    {
-                        Start = FilterIndex;
-                        End = FilterIndex + 1;
-                    }
-
-                    for (int i = Start; i < End; i++)
-                    {
-                        string sIsEnable = Socket_Cache.FilterList.lstFilter[i].IsEnable.ToString();
-                        string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
-                        string sFName = Socket_Cache.FilterList.lstFilter[i].FName;
-                        string sFAppointHeader = Socket_Cache.FilterList.lstFilter[i].AppointHeader.ToString();
-                        string sFHeaderContent = Socket_Cache.FilterList.lstFilter[i].HeaderContent;
-                        string sFAppointSocket = Socket_Cache.FilterList.lstFilter[i].AppointSocket.ToString();
-                        string sFSocketContent = Socket_Cache.FilterList.lstFilter[i].SocketContent.ToString();
-                        string sFAppointLength = Socket_Cache.FilterList.lstFilter[i].AppointLength.ToString();
-                        string sFLengthContent = Socket_Cache.FilterList.lstFilter[i].LengthContent.ToString();
-                        string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
-                        string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
-                        string sFFunction = GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
-                        string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                        string sFProgressionStep = Socket_Cache.FilterList.lstFilter[i].ProgressionStep.ToString();
-                        string sFProgressionPosition = Socket_Cache.FilterList.lstFilter[i].ProgressionPosition;
-                        string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
-                        string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
-
-                        XElement xeFilter =
-                            new XElement("Filter",
-                            new XElement("IsEnable", sIsEnable),
-                            new XElement("Num", sFNum),
-                            new XElement("Name", sFName),
-                            new XElement("AppointHeader", sFAppointHeader),
-                            new XElement("HeaderContent", sFHeaderContent),
-                            new XElement("AppointSocket", sFAppointSocket),
-                            new XElement("SocketContent", sFSocketContent),
-                            new XElement("AppointLength", sFAppointLength),
-                            new XElement("LengthContent", sFLengthContent),
-                            new XElement("Mode", sFMode),
-                            new XElement("Action", sFAction),
-                            new XElement("Function", sFFunction),
-                            new XElement("StartFrom", sFStartFrom),
-                            new XElement("ProgressionStep", sFProgressionStep),
-                            new XElement("ProgressionPosition", sFProgressionPosition),
-                            new XElement("Search", sFSearch),
-                            new XElement("Modify", sFModify)
-                            );
-
-                        xeRoot.Add(xeFilter);
-                    }
-                }
-
-                xdoc.Save(FilePath);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//加载滤镜列表数据
-
-        public static void LoadFilterList_Dialog()
-        {
-            try
-            {
-                OpenFileDialog ofdLoadSocket = new OpenFileDialog();
-
-                ofdLoadSocket.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
-                ofdLoadSocket.RestoreDirectory = true;
-
-                ofdLoadSocket.ShowDialog();
-                string FilePath = ofdLoadSocket.FileName;
-
-                if (!string.IsNullOrEmpty(FilePath))
-                {
-                    LoadFilterList(FilePath, true);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static void LoadFilterList(string FilePath, bool LoadFromUser)
-        {
-            try
-            {
-                if (File.Exists(FilePath))
-                {
-                    XDocument xdoc = new XDocument();
-
-                    bool bEncrypt = IsEncrypt_FilterList(FilePath);
-
-                    if (bEncrypt)
-                    {
-                        if (LoadFromUser)
-                        {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.FilterList.PWType.Import);
-                            pwForm.ShowDialog();
-                        }
-
-                        xdoc = DecryptFilterList(FilePath, Socket_Cache.FilterList.AESKey);
-                    }
-                    else
-                    {
-                        xdoc = XDocument.Load(FilePath);
-                    }                    
-
-                    if (xdoc == null)
-                    {
-                        string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
-
-                        if (LoadFromUser)
-                        {
-                            ShowMessageBox(sError);
-                        }
-                        else
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, sError);
-                        }
-                    }
-                    else
-                    {
-                        LoadFilterList_FromXDocument(xdoc);
-
-                        if (bEncrypt)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_81));
-                        }
-                        else
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
-                        }
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {  
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private static void LoadFilterList_FromXDocument(XDocument xdoc)
-        {
-            try
-            {
-                foreach (XElement xeFilter in xdoc.Root.Elements())
-                {
-                    bool bIsEnable = false;
-                    if (xeFilter.Element("IsEnable") != null)
-                    {
-                        bIsEnable = bool.Parse(xeFilter.Element("IsEnable").Value);
-                    }                  
-                    
-                    string sFNum = string.Empty;
-                    if (xeFilter.Element("Num") != null)
-                    {
-                        sFNum = xeFilter.Element("Num").Value;
-                    }
-
-                    string sFName = string.Empty;
-                    if (xeFilter.Element("Name") != null)
-                    {
-                        sFName = xeFilter.Element("Name").Value;
-                    }
-
-                    bool bAppointHeader = false;
-                    if (xeFilter.Element("AppointHeader") != null)
-                    {
-                        bAppointHeader = bool.Parse(xeFilter.Element("AppointHeader").Value);
-                    }
-                    
-                    string sFHeaderContent = string.Empty;
-                    if (xeFilter.Element("HeaderContent") != null)
-                    {
-                        sFHeaderContent = xeFilter.Element("HeaderContent").Value;
-                    }
-
-                    bool bAppointSocket = false;
-                    if (xeFilter.Element("AppointSocket") != null)
-                    {
-                        bAppointSocket = bool.Parse(xeFilter.Element("AppointSocket").Value);
-                    }
-
-                    decimal dFSocketContent = 1;
-                    if (xeFilter.Element("SocketContent") != null)
-                    {
-                        dFSocketContent = decimal.Parse(xeFilter.Element("SocketContent").Value);
-                    }
-
-                    bool bAppointLength = false;
-                    if (xeFilter.Element("AppointLength") != null)
-                    {
-                        bAppointLength = bool.Parse(xeFilter.Element("AppointLength").Value);
-                    }
-
-                    decimal dFLengthContent = 1;
-                    if (xeFilter.Element("LengthContent") != null)
-                    {
-                        dFLengthContent = decimal.Parse(xeFilter.Element("LengthContent").Value);
-                    }
-
-                    Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
-                    if (xeFilter.Element("Mode") != null)
-                    {
-                        FilterMode = GetFilterMode_ByString(xeFilter.Element("Mode").Value);
-                    }
-
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.NoModify_Display;
-                    if (xeFilter.Element("Action") != null)
-                    {
-                        FilterAction = GetFilterAction_ByString(xeFilter.Element("Action").Value);
-                    }
-
-                    Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction();
-                    if (xeFilter.Element("Function") != null)
-                    {
-                        FilterFunction = GetFilterFunction_ByString(xeFilter.Element("Function").Value);
-                    }
-
-                    Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
-                    if (xeFilter.Element("StartFrom") != null)
-                    {
-                        FilterStartFrom = GetFilterStartFrom_ByString(xeFilter.Element("StartFrom").Value);
-                    }
-
-                    bool IsProgressionDone = false;
-
-                    decimal dFProgressionStep = 1;
-                    if (xeFilter.Element("ProgressionStep") != null)
-                    {
-                        dFProgressionStep = decimal.Parse(xeFilter.Element("ProgressionStep").Value);
-                    }
-
-                    string sFProgressionPosition = string.Empty;
-                    if (xeFilter.Element("ProgressionPosition") != null)
-                    {
-                        sFProgressionPosition = xeFilter.Element("ProgressionPosition").Value;
-                    }
-
-                    int iProgressionCount = 0;
-
-                    string sFSearch = string.Empty;
-                    if (xeFilter.Element("Search") != null)
-                    {
-                        sFSearch = xeFilter.Element("Search").Value;
-                    }
-
-                    string sFModify = string.Empty;
-                    if (xeFilter.Element("Modify") != null)
-                    {
-                        sFModify = xeFilter.Element("Modify").Value;
-                    }
-
-                    Socket_Cache.FilterList.AddFilter_New(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, IsProgressionDone, dFProgressionStep, sFProgressionPosition, iProgressionCount, sFSearch, sFModify);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//加解密滤镜列表文件
-
-        private static bool IsEncrypt_FilterList(string FilePath)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                XDocument xdoc = XDocument.Load(FilePath);
-                XElement xeRoot = xdoc.Root;
-            }
-            catch
-            {
-                bReturn = true;
-            }
-
-            return bReturn;
-        }
-
-        private static byte[] GetAESKeyFromString(string Password)
-        {
-            byte[] bReturn = null;
-
-            try
-            {
-                using (MD5 md5 = MD5.Create())
-                {
-                    byte[] bPW = Encoding.Default.GetBytes(Password);
-
-                    byte[] bPW_MD5 = md5.ComputeHash(bPW);
-                    string sPW_MD5 = BitConverter.ToString(bPW_MD5, 4, 8).Replace("-", "");                    
-
-                    bReturn = Encoding.UTF8.GetBytes(sPW_MD5);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        private static void EncryptFilterList(string FilterList_Path, string Password)
-        {
-            try
-            {
-                byte[] bAES = GetAESKeyFromString(Password);
-
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = bAES;
-                    aesAlg.IV = bAES;
-
-                    XDocument xmlDoc = XDocument.Load(FilterList_Path);
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
-                        {
-                            xmlDoc.Save(cs);
-                        }
-
-                        File.WriteAllBytes(FilterList_Path, ms.ToArray());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        private static XDocument DecryptFilterList(string FilterList_Path, string Password)
-        {
-            XDocument xdReturn = new XDocument();
-
-            try
-            {
-                byte[] bAES = GetAESKeyFromString(Password);
-
-                using (Aes aesAlg = Aes.Create())
-                {
-                    aesAlg.Key = bAES;
-                    aesAlg.IV = bAES;
-
-                    byte[] xmlBytes = File.ReadAllBytes(FilterList_Path);
-
-                    using (MemoryStream ms = new MemoryStream(xmlBytes))
-                    {
-                        try
-                        {
-                            using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
-                            {
-                                xdReturn = XDocument.Load(cs);
-                            }
-                        }
-                        catch
-                        {
-                            xdReturn = null;
-                        }                        
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return xdReturn;
-        }
-
-        #endregion
-
-        #region//获取滤镜作用类别字符串
-
-        public static string GetFilterFunctionString(Socket_Cache.Filter.FilterFunction FilterFunction)
-        { 
-            string sReturn = string.Empty;
-
-            try
-            {
-                sReturn += Convert.ToInt32(FilterFunction.Send) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.SendTo) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.Recv) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.RecvFrom) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSASend) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSASendTo) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSARecv) + ":";
-                sReturn += Convert.ToInt32(FilterFunction.WSARecvFrom);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion
-
-        #region//获取滤镜字符串
-
-        public static string GetFilterString_ByBytes(byte[] bBuffer)
-        {
-            string sReturn = "";
-
-            try
-            {
-                for (int i = 0; i < bBuffer.Length; i++)
-                {
-                    string sHex = bBuffer[i].ToString("X2");
-                    sReturn += i.ToString() + "-" + sHex + ",";
-                }
-
-                sReturn = sReturn.Trim(',');
-            }
-            catch (Exception ex)
-            {
-                sReturn = "";
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }    
-
-        #endregion
-
-        #region//获取滤镜选项
-
-        public static Socket_Cache.Filter.FilterMode GetFilterMode_ByString(string FilterMode)
-        {
-            Socket_Cache.Filter.FilterMode FMode;
-
-            try
-            {
-                FMode = (Socket_Cache.Filter.FilterMode)Enum.Parse(typeof(Socket_Cache.Filter.FilterMode), FilterMode);
-            }
-            catch (Exception ex)
-            {
-                FMode = Socket_Cache.Filter.FilterMode.Normal;
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }                       
-
-            return FMode;
-        }
-
-        public static Socket_Cache.Filter.FilterAction GetFilterAction_ByString(string FilterAction)
-        {
-            Socket_Cache.Filter.FilterAction FAction;
-
-            try
-            {
-                FAction = (Socket_Cache.Filter.FilterAction)Enum.Parse(typeof(Socket_Cache.Filter.FilterAction), FilterAction);
-            }
-            catch (Exception ex)
-            {
-                FAction = Socket_Cache.Filter.FilterAction.Replace;
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return FAction;
-        }
-
-        public static Socket_Cache.Filter.FilterFunction GetFilterFunction_ByString(string FilterFunction)
-        {
-            Socket_Cache.Filter.FilterFunction FFunction = new Socket_Cache.Filter.FilterFunction();
-
-            try
-            {
-                string[] slFilterFunction = FilterFunction.Split(':');                
-
-                FFunction.Send = Convert.ToBoolean(int.Parse(slFilterFunction[0]));
-                FFunction.SendTo = Convert.ToBoolean(int.Parse(slFilterFunction[1]));
-                FFunction.Recv = Convert.ToBoolean(int.Parse(slFilterFunction[2]));
-                FFunction.RecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[3]));
-                FFunction.WSASend = Convert.ToBoolean(int.Parse(slFilterFunction[4]));
-                FFunction.WSASendTo = Convert.ToBoolean(int.Parse(slFilterFunction[5]));
-                FFunction.WSARecv = Convert.ToBoolean(int.Parse(slFilterFunction[6]));
-                FFunction.WSARecvFrom = Convert.ToBoolean(int.Parse(slFilterFunction[7]));
-            }
-            catch (Exception ex)
-            {  
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return FFunction;
-        }
-
-        public static Socket_Cache.Filter.FilterStartFrom GetFilterStartFrom_ByString(string sFStartFrom)
-        {
-            Socket_Cache.Filter.FilterStartFrom FStartFrom;
-
-            try
-            {
-                FStartFrom = (Socket_Cache.Filter.FilterStartFrom)Enum.Parse(typeof(Socket_Cache.Filter.FilterStartFrom), sFStartFrom);
-            }
-            catch (Exception ex)
-            {
-                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return FStartFrom;
-        }
-
-        public static Socket_Cache.FilterList.Execute GetFilterListExecute_ByString(string sFLExecute)
-        {
-            Socket_Cache.FilterList.Execute FLExecute;
-
-            try
-            {
-                FLExecute = (Socket_Cache.FilterList.Execute)Enum.Parse(typeof(Socket_Cache.FilterList.Execute), sFLExecute);
-            }
-            catch (Exception ex)
-            {
-                FLExecute = Socket_Cache.FilterList.Execute.Priority;
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return FLExecute;
-        }
-
-        #endregion
-
         #region//显示滤镜窗体（对话框）
 
-        public static void ShowFilterForm_Dialog(int iFNum)
+        public static void ShowFilterForm_Dialog(int FIndex)
         {
             try
             {
                 if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    if (iFNum > 0)
-                    {
-                        Socket_FilterForm fFilterForm = new Socket_FilterForm(iFNum);
+                    if (FIndex > -1)
+                    {  
+                        Socket_FilterForm fFilterForm = new Socket_FilterForm(FIndex);
                         fFilterForm.ShowDialog();
                     }
                 }
@@ -2375,844 +1452,66 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion
+        #endregion                
 
-        #region//删除滤镜（对话框）
+        #region//显示机器人窗体（对话框）
 
-        public static void CleanUpFilterList_Dialog()
+        public static void ShowRobotForm_Dialog(int RIndex)
         {
             try
             {
-                DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                if (dr.Equals(DialogResult.OK))
+                if (Socket_Cache.RobotList.lstRobot.Count > 0)
                 {
-                    Socket_Cache.FilterList.FilterListClear();                    
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static void DeleteFilter_ByFilterNum_Dialog(int iFNum)
-        {
-            try
-            {
-                if (iFNum > 0)
-                {
-                    DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                    if (dr.Equals(DialogResult.OK))
+                    if (RIndex > -1)
                     {
-                        Socket_Cache.FilterList.DeleteFilter_ByFilterNum(iFNum);                        
+                        Socket_RobotForm fRobotForm = new Socket_RobotForm(RIndex);
+                        fRobotForm.ShowDialog();
                     }
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//复制滤镜
-
-        public static int CopyFilter_ByFilterIndex(int iFIndex)
-        {
-            int iReturn = -1;
-
-            try
-            {
-                bool IsEnable = false;
-                string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.FilterList.lstFilter[iFIndex].FName);
-                bool bAppointHeader = Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader;
-                string HeaderContent = Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent;
-                bool bAppointSocket = Socket_Cache.FilterList.lstFilter[iFIndex].AppointSocket;
-                decimal SocketContent = Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent;
-                bool bAppointLength = Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength;
-                decimal LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
-                Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
-                Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
-                Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
-                Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
-                bool IsProgressionDone = false;
-                decimal ProgressionStep = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep;
-                string ProgressionPosition = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition;
-                int ProgressionCount = 0;
-                string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
-                string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
-
-                Socket_Cache.FilterList.AddFilter_New(
-                    IsEnable, 
-                    FName, 
-                    bAppointHeader, 
-                    HeaderContent, 
-                    bAppointSocket, 
-                    SocketContent, 
-                    bAppointLength, 
-                    LengthContent, 
-                    FMode, 
-                    FAction, 
-                    FFunction, 
-                    FStartFrom, 
-                    IsProgressionDone, 
-                    ProgressionStep, 
-                    ProgressionPosition, 
-                    ProgressionCount, 
-                    FSearch, 
-                    FModify);
-
-                iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return iReturn;
-        }
-
-        #endregion
-
-        #region//移动滤镜在列表中的位置
-
-        public static int MoveFilter_ByFilterIndex(int iFIndex, Socket_Cache.Filter.FilterMove filterMove)
-        {
-            int iReturn = -1;
-
-            try
-            {
-                int iFilterListCount = Socket_Cache.FilterList.lstFilter.Count;
-
-                Socket_FilterInfo sfi = Socket_Cache.FilterList.lstFilter[iFIndex];
-
-                switch (filterMove)
-                {
-                    case Socket_Cache.Filter.FilterMove.Top:
-
-                        if (iFIndex > 0)
-                        {
-                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                            Socket_Cache.FilterList.lstFilter.Insert(0, sfi);
-
-                            iReturn = 0;
-                        }
-
-                        break;
-
-                    case Socket_Cache.Filter.FilterMove.Up:
-
-                        if (iFIndex > 0)
-                        {
-                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                            Socket_Cache.FilterList.lstFilter.Insert(iFIndex - 1, sfi);
-
-                            iReturn = iFIndex - 1;
-                        }
-
-                        break;
-
-                    case Socket_Cache.Filter.FilterMove.Down:
-
-                        if (iFIndex < iFilterListCount - 1)
-                        {
-                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                            Socket_Cache.FilterList.lstFilter.Insert(iFIndex + 1, sfi);
-
-                            iReturn = iFIndex + 1;
-                        }
-
-                        break;
-
-                    case Socket_Cache.Filter.FilterMove.Bottom:
-
-                        if (iFIndex < iFilterListCount - 1)
-                        {
-                            Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                            Socket_Cache.FilterList.lstFilter.Add(sfi);
-
-                            iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
-                        }
-
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return iReturn;
-        }
-
-        #endregion
-
-        #region//检查滤镜是否生效
-
-        public static bool CheckFilter_IsEffective(Int32 iSocket, IntPtr ipBuff, int iLen, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
-        {
-            bool bResult = true;
-
-            try
-            {
-                if (sfi.IsEnable)
-                {
-                    if (CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
-                    {
-                        if (sfi.AppointSocket)
-                        {
-                            if (!CheckPacket_IsMatch_AppointSocket(iSocket, sfi.SocketContent))
-                            {
-                                return false;
-                            }
-                        }
-
-                        if (sfi.AppointLength)
-                        {
-                            if (!CheckPacket_IsMatch_AppointLength(iLen, sfi.LengthContent))
-                            {
-                                return false;
-                            }
-                        }
-
-                        if (sfi.AppointHeader)
-                        {
-                            if (!CheckPacket_IsMatch_AppointHeader(ipBuff, iLen, sfi.HeaderContent))
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return false;
-            }
-
-            return bResult;
-        }
-
-        #endregion
-
-        #region//获取封包类别对应的滤镜作用类别
-
-        public static Socket_Cache.Filter.FilterFunction GetFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType)
-        {
-            Socket_Cache.Filter.FilterFunction ffReturn = new Socket_Cache.Filter.FilterFunction();
-
-            try
-            {
-                switch (ptType)
-                {
-                    case Socket_Cache.SocketPacket.PacketType.Send:
-                        ffReturn.Send = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        ffReturn.SendTo = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        ffReturn.Recv = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        ffReturn.RecvFrom = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        ffReturn.WSASend = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        ffReturn.WSASendTo = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        ffReturn.WSARecv = true;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        ffReturn.WSARecvFrom = true;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return ffReturn;
-        }
-
-        #endregion
-
-        #region//检查滤镜作用类别
-
-        public static bool CheckFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.Filter.FilterFunction ffFunction)
-        { 
-            bool bReturn = false;
-
-            try
-            {
-                switch (ptType)
-                {
-                    case Socket_Cache.SocketPacket.PacketType.Send:
-                        bReturn = ffFunction.Send;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        bReturn = ffFunction.SendTo;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        bReturn = ffFunction.Recv;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        bReturn = ffFunction.RecvFrom;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        bReturn = ffFunction.WSASend;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        bReturn = ffFunction.WSASendTo;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        bReturn = ffFunction.WSARecv;
-                        break;
-
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        bReturn = ffFunction.WSARecvFrom;
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//检查是否匹配指定套接字
-
-        public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, decimal dSocketContent)
-        {
-            bool bResult = false;
-
-            try
-            {
-                if (iSocket == dSocketContent)
-                {
-                    bResult = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-            }
-
-            return bResult;
-        }
-
-        #endregion
-
-        #region//检查是否匹配指定长度
-
-        public static bool CheckPacket_IsMatch_AppointLength(int iLen, decimal dLengthContent)
-        {
-            bool bResult = false;
-
-            try
-            {
-                if (iLen == dLengthContent)
-                {
-                    bResult = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-            }
-
-            return bResult;
-        }
-
-        #endregion
-
-        #region//检查是否匹配指定包头
-
-        public static bool CheckPacket_IsMatch_AppointHeader(IntPtr ipBuff, int iLen, string sHeaderContent)
-        {
-            bool bResult = false;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(sHeaderContent))
-                {
-                    byte[] bHeaderContent = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sHeaderContent);
-                    int iHeaderContent_Len = bHeaderContent.Length;
-
-                    if (iHeaderContent_Len > 0 && iHeaderContent_Len <= iLen)
-                    {
-                        byte[] bPacketHeader = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iHeaderContent_Len);
-                        string sPacketHeader = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bPacketHeader);
-
-                        if (sHeaderContent.Equals(sPacketHeader))
-                        {
-                            bResult = true;
-                        }
-                    }                    
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-            }
-
-            return bResult;
-        }
-
-        #endregion
-
-        #region//检查滤镜是否匹配成功（普通滤镜）
-
-        public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
-        {
-            bool bResult = true;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(sfi.FSearch))
-                {
-                    string[] slSearch = sfi.FSearch.Split(',');
-
-                    foreach (string sSearch in slSearch)
-                    {
-                        if (!string.IsNullOrEmpty(sSearch) && sSearch.IndexOf("-") > 0)
-                        {
-                            int iIndex = int.Parse(sSearch.Split('-')[0]);
-                            string sValue = sSearch.Split('-')[1];
-
-                            if (iIndex >= 0 && iIndex < iLen)
-                            {
-                                string sBuffValue = Marshal.ReadByte(ipBuff, iIndex).ToString("X2");
-
-                                if (!sValue.Equals(sBuffValue))
-                                {
-                                    bResult = false;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                bResult = false;
-                                break;
-                            }
-                        }                        
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-                bResult = false;
-            }
-
-            return bResult;
-        }
-
-        #endregion
-
-        #region//检查滤镜是否匹配成功（高级滤镜）
-
-        public static List<int> CheckFilter_IsMatch_Adcanced(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
-        {
-            List<int> lReturn = new List<int>();
-
-            try
-            {
-                if (!string.IsNullOrEmpty(sfi.FSearch))
-                {
-                    byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
-
-                    Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
-                    Dictionary<int, byte> dSearchValue = new Dictionary<int, byte>();
-
-                    string[] slSearch = sfi.FSearch.Split(',');
-
-                    for (int i = 0; i < slSearch.Length; i++)
-                    {
-                        int iIndex = int.Parse(slSearch[i].Split('-')[0]);
-                        string sValue = slSearch[i].Split('-')[1];
-                        byte bValue = Convert.ToByte(sValue, 16);
-
-                        dSearchIndex.Add(i, iIndex);
-                        dSearchValue.Add(i, bValue);
-                    }
-
-                    int iMatchIndex = -1;
-                    int iBuffIndex = -1;
-
-                    byte bFirst_SearchValue = dSearchValue[0];
-
-                    for (int i = 0; i < iLen; i++)
-                    {
-                        if (bBUffer[i] == bFirst_SearchValue)
-                        {
-                            iMatchIndex = i;
-
-                            for (int j = 1; j < slSearch.Length; j++)
-                            {
-                                int iIndex = dSearchIndex[j];
-                                byte bValue = dSearchValue[j];
-
-                                iBuffIndex = i + iIndex;
-
-                                if (iBuffIndex >= 0 && iBuffIndex < iLen)
-                                {
-                                    if (bBUffer[iBuffIndex] != bValue)
-                                    {
-                                        iMatchIndex = -1;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    iMatchIndex = -1;
-                                    break;
-                                }
-                            }
-
-                            if (iMatchIndex > -1)
-                            {
-                                lReturn.Add(iMatchIndex);
-
-                                if (iBuffIndex > i)
-                                {
-                                    i = iBuffIndex;
-                                }
-
-                                if (sfi.FStartFrom == Socket_Cache.Filter.FilterStartFrom.Head)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-            }
-
-            return lReturn;
-        }
-
-        #endregion
-
-        #region//执行滤镜（普通滤镜）
-
-        public static bool DoFilter_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
-        {
-            bool bReturn = true;
-
-            try
-            {
-                if (string.IsNullOrEmpty(sfi.FSearch))
-                {
-                    return false;
-                }
-
-                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
-                    return false;
-                }
-
-                if (!string.IsNullOrEmpty(sfi.FModify))
-                {
-                    string[] slModify = sfi.FModify.Split(',');
-
-                    foreach (string sModify in slModify)
-                    {
-                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
-                        {
-                            int iIndex = int.Parse(sModify.Split('-')[0]);
-                            string sValue = sModify.Split('-')[1];
-
-                            if (iIndex >= 0 && iIndex < iLen)
-                            {
-                                byte bValue = Convert.ToByte(sValue, 16);
-                                Marshal.WriteByte(ipBuff, iIndex, bValue);
-                            }
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
-                    int iStep = ((int)sfi.ProgressionStep);
-                    string[] slProgression = sfi.ProgressionPosition.Split(',');
-
-                    foreach (string sProgression in slProgression)
-                    {
-                        if (!string.IsNullOrEmpty(sProgression))
-                        {
-                            if (int.TryParse(sProgression, out int iIndex))
-                            {
-                                if (iIndex >= 0 && iIndex < iLen)
-                                {  
-                                    byte bValue = Marshal.ReadByte(ipBuff, iIndex);
-                                    bValue = GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
-                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
-
-                                    sfi.IsProgressionDone = true;
-                                }  
-                            }                           
-                        }
-                    }                 
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                bReturn = false;
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//执行滤镜（高级滤镜）
-
-        public static bool DoFilter_Advanced(Socket_FilterInfo sfi, int iMatch, IntPtr ipBuff, int iLen)
-        {
-            bool bReturn = true;
-
-            try
-            {
-                if (string.IsNullOrEmpty(sfi.FSearch))
-                {
-                    return false;
-                }
-
-                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
-                    return false;
-                }
-
-                Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
-
-                if (!string.IsNullOrEmpty(sfi.FModify))
-                {
-                    string[] slModify = sfi.FModify.Split(',');
-
-                    foreach (string sModify in slModify)
-                    {
-                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
-                        {
-                            if (int.TryParse(sModify.Split('-')[0], out int iIndex))
-                            {
-                                string sValue = sModify.Split('-')[1];
-
-                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
-                                {
-                                    iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
-                                }                             
-
-                                if (iIndex >= 0 && iIndex < iLen)
-                                {
-                                    byte bValue = Convert.ToByte(sValue, 16);
-                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
-                    int iStep = ((int)sfi.ProgressionStep);
-                    string[] slProgression = sfi.ProgressionPosition.Split(',');                    
-
-                    foreach (string sProgression in slProgression)
-                    {
-                        if (!string.IsNullOrEmpty(sProgression))
-                        {
-                            if (int.TryParse(sProgression, out int iIndex))
-                            {
-                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
-                                {
-                                    iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
-                                }                                
-
-                                if (iIndex >= 0 && iIndex < iLen)
-                                {
-                                    byte bValue = Marshal.ReadByte(ipBuff, iIndex);                                    
-                                    bValue = GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));                                    
-                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
-
-                                    sfi.IsProgressionDone = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                bReturn = false;
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//保存封包列表为Excel
-
-        public static void SaveSocketListToExcel()
-        {
-            int iSuccess = 0;
-
-            try
-            {
-                if (Socket_Cache.SocketList.lstRecPacket.Count > 0)
-                {
-                    SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                    sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                    sfdSaveToExcel.FilterIndex = 0;
-                    sfdSaveToExcel.RestoreDirectory = true;
-                    sfdSaveToExcel.CreatePrompt = true;
-
-                    sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
-
-                    if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
-                    {
-                        Stream myStream = sfdSaveToExcel.OpenFile();
-                        StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-
-                        string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
-                        sw.WriteLine(sColTitle);
-
-                        foreach (Socket_PacketInfo spi in Socket_Cache.SocketList.lstRecPacket)
-                        {
-                            try
-                            {
-                                string sColValue = "";
-
-                                string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");
-                                string sIndex = spi.PacketIndex.ToString();
-                                string sType = spi.PacketType.ToString();
-                                string sSocket = spi.PacketSocket.ToString();
-                                string sFrom = spi.PacketFrom;
-                                string sTo = spi.PacketTo;
-                                string sLen = spi.PacketLen.ToString();
-                                byte[] bBuff = spi.PacketBuffer;
-                                string sData = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
-
-                                sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
-                                sw.WriteLine(sColValue);
-
-                                iSuccess++;
-                            }
-                            catch (Exception ex)
-                            {
-                                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                            }
-                        }
-
-                        sw.Close();
-                        myStream.Close();                        
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion
-
-        #region//保存日志列表为Excel
-        
-        public static void SaveLogListToExcel()
-        {
-            int iSuccess = 0;
-
-            try
-            {
-                SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                sfdSaveToExcel.FilterIndex = 0;
-                sfdSaveToExcel.RestoreDirectory = true;
-                sfdSaveToExcel.CreatePrompt = true;
-                                
-                sfdSaveToExcel.Title = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_76);
-
-                if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
-                {
-                    Stream myStream = sfdSaveToExcel.OpenFile();
-                    StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-                                        
-                    string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_78);
-                    sw.WriteLine(sColTitle);
-
-                    foreach (Socket_LogInfo sl in Socket_Cache.LogList.lstRecLog)
-                    {
-                        try
-                        {
-                            string sColValue = "";
-
-                            string sTime = sl.LogTime;
-                            string sFuncName = sl.FuncName;
-                            string sContent = sl.LogContent;
-
-                            sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
-                            sw.WriteLine(sColValue);
-
-                            iSuccess++;
-                        }
-                        catch (Exception ex)
-                        {
-                            DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
-                    }
-
-                    sw.Close();
-                    myStream.Close();
-                }
-            }
-            catch (Exception ex)
-            {  
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
         #endregion        
+
+        #region//保存系统列表数据
+
+        public static void SaveSystemList()
+        {
+            try
+            {
+                Socket_Cache.FilterList.SaveFilterList(Socket_Cache.FilterList.FilePath, -1, false);
+                Socket_Cache.RobotList.SaveRobotList(Socket_Cache.RobotList.FilePath, -1, false);
+                Socket_Cache.SendList.SaveSendList(Socket_Cache.SendList.FilePath, -1, false);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//加载系统列表数据
+
+        public static void LoadSystemList()
+        {
+            try
+            {
+                Socket_Cache.SendList.LoadSendList(Socket_Cache.SendList.FilePath, false);
+                Socket_Cache.FilterList.LoadFilterList(Socket_Cache.FilterList.FilePath, false);
+                Socket_Cache.RobotList.LoadRobotList(Socket_Cache.RobotList.FilePath, false);                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//保存系统设置
 
@@ -3307,7 +1606,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;                
 
                 Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
-                Socket_Cache.FilterList.FilterList_Execute = GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
+                Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
             }
             catch (Exception ex)
             {                
@@ -3317,7 +1616,122 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//加解密滤XML文件
+
+        public static bool IsEncryptXMLFile(string FilePath)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                XDocument xdoc = XDocument.Load(FilePath);
+                XElement xeRoot = xdoc.Root;
+            }
+            catch
+            {
+                bReturn = true;
+            }
+
+            return bReturn;
+        }
+
+        private static byte[] GetAESKeyFromString(string Password)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                using (MD5 md5 = MD5.Create())
+                {
+                    byte[] bPW = Encoding.Default.GetBytes(Password);
+
+                    byte[] bPW_MD5 = md5.ComputeHash(bPW);
+                    string sPW_MD5 = BitConverter.ToString(bPW_MD5, 4, 8).Replace("-", "");
+
+                    bReturn = Encoding.UTF8.GetBytes(sPW_MD5);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        public static void EncryptXMLFile(string FilePath, string Password)
+        {
+            try
+            {
+                byte[] bAES = GetAESKeyFromString(Password);
+
+                using (Aes aesAlg = Aes.Create())
+                {
+                    aesAlg.Key = bAES;
+                    aesAlg.IV = bAES;
+
+                    XDocument xmlDoc = XDocument.Load(FilePath);
+
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
+                        {
+                            xmlDoc.Save(cs);
+                        }
+
+                        File.WriteAllBytes(FilePath, ms.ToArray());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static XDocument DecryptXMLFile(string FilterList_Path, string Password)
+        {
+            XDocument xdReturn = new XDocument();
+
+            try
+            {
+                byte[] bAES = GetAESKeyFromString(Password);
+
+                using (Aes aesAlg = Aes.Create())
+                {
+                    aesAlg.Key = bAES;
+                    aesAlg.IV = bAES;
+
+                    byte[] xmlBytes = File.ReadAllBytes(FilterList_Path);
+
+                    using (MemoryStream ms = new MemoryStream(xmlBytes))
+                    {
+                        try
+                        {
+                            using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
+                            {
+                                xdReturn = XDocument.Load(cs);
+                            }
+                        }
+                        catch
+                        {
+                            xdReturn = null;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return xdReturn;
+        }
+
+        #endregion
+
         #region//弹出对话框
+
         public static void ShowMessageBox(string sMessage)
         {
             try
@@ -3345,6 +1759,7 @@ namespace WPELibrary.Lib
 
             return dr;
         }
+
         #endregion
 
         #region//记录日志        

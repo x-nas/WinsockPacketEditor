@@ -122,7 +122,7 @@
     <value>1</value>
   </data>
   <metadata name="ssSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1484, 17</value>
+    <value>1601, 17</value>
   </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ssSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -478,55 +478,76 @@
     <value>None</value>
   </data>
   <data name="cmsSocketList_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_Send.Text" xml:space="preserve">
     <value>发送</value>
   </data>
   <data name="cmsSocketList_tss1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 6</value>
+    <value>162, 6</value>
+  </data>
+  <data name="cmsSocketList_SendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="cmsSocketList_SendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 24</value>
+  </data>
+  <data name="cmsSocketList_SendList.Text" xml:space="preserve">
+    <value>添加到 发送列表</value>
+  </data>
+  <data name="cmsSocketList_FilterList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="cmsSocketList_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 24</value>
+  </data>
+  <data name="cmsSocketList_FilterList.Text" xml:space="preserve">
+    <value>添加到 滤镜列表</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>162, 6</value>
   </data>
   <data name="cmsSocketList_UseSocket.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsSocketList_UseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_UseSocket.Text" xml:space="preserve">
     <value>使用 此套接字</value>
   </data>
   <data name="tss4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 6</value>
+    <value>162, 6</value>
   </data>
   <data name="cmsSocketList_ShowSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsSocketList_ShowSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_ShowSendList.Text" xml:space="preserve">
     <value>查看 发送列表</value>
   </data>
   <data name="tss5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 6</value>
+    <value>162, 6</value>
   </data>
   <data name="cmsSocketList_ToExcel.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsSocketList_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_ToExcel.Text" xml:space="preserve">
     <value>导出到 Excel</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 6</value>
+    <value>162, 6</value>
   </data>
   <data name="cmsSocketList_Comparison_A.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsSocketList_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_Comparison_A.Text" xml:space="preserve">
     <value>添加到 文本A</value>
@@ -535,13 +556,13 @@
     <value>None</value>
   </data>
   <data name="cmsSocketList_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 24</value>
+    <value>165, 24</value>
   </data>
   <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
     <value>添加到 文本B</value>
   </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 172</value>
+    <value>166, 226</value>
   </data>
   <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
     <value>cmsSocketList</value>
@@ -2741,301 +2762,6 @@
   <data name="tlpInformation.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tlpFilterList.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <metadata name="cIsCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cIsCheck.HeaderText" xml:space="preserve">
-    <value>开关</value>
-  </data>
-  <data name="cIsCheck.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <metadata name="cFNum.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cFNum.HeaderText" xml:space="preserve">
-    <value>序号</value>
-  </data>
-  <data name="cFNum.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="cFNum.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <metadata name="cFName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cFName.HeaderText" xml:space="preserve">
-    <value>滤镜名称</value>
-  </data>
-  <metadata name="cmsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>542, 17</value>
-  </metadata>
-  <data name="cmsFilterList_MoveTop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_MoveTop.Text" xml:space="preserve">
-    <value>置顶</value>
-  </data>
-  <data name="cmsFilterList_tss1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 6</value>
-  </data>
-  <data name="cmsFilterList_MoveUp.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vAAADrwBlbxySQAAAjdJREFUOE/FkUtoE1EUhqNgRVrX6SJuaquSmoTmOZPJJFFrszBELaIudGfavJPm
-        UTWY+sKKVCxoBUFdibrQhYhFcKEgSNpqY1rzcBI1LaZqMQU3Iuji9yQTFEGtXfnBhZl7zv/NuXcki9BA
-        a4X4uETWbr+5xhIde9zSNeim16VLzLHJ2/xACVuPZeabmlXt9e1/o33/fZs1UYQhXoJtaA663rvXaLtJ
-        rC5Gq38lF0kL2tgrsIkZWAfL2Hm+/FXKeu1UXSY2/QV1z8O4sb8ITU0wC+vpOdhHPsJ2PDVBZanY9Qfa
-        uq+38NHMZ21YgCb6c4Ku4XnsuboA+e7LcWqr/pnfo3E+uWOKCdBHBHSExTvgT77FlqH32DZSwY7hUqVR
-        xirq7b+yYdctO+PPgA3nwUYFqIICtAdfwzgwAwtN0Xn2A7ovVWDwjd6g9tViqo6M7VvF9CSLBhIwoRw4
-        Eij9L2mKAvSHSHJ0FuZTZWw+8w6Oc+VvUsbtoNhyMU107LuXMAUy0HtfgAlkwfbloQnmofDlaxIdSZgj
-        JXAk2kQiS38yRbHmWlhmu9hq8T39onNNQeeZphFpimAODEnkriw2kkQVKkAdLdaOpD/8Bp0nSmhzXEhQ
-        vEHCHXgwavRQuDeNqkT/Q5KFxp/FemcGcneuJlIG6G5C1QsugI+lFxplBqWEdz76ZHYnwbvHYPKMg/NM
-        wOh5BsY7CYP3OZTOFBS0VK401N40SeljgSlwkWmsc1zZWzvGf0Qi+Q67bios5+wb/QAAAABJRU5ErkJg
-        gg==
-</value>
-  </data>
-  <data name="cmsFilterList_MoveUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_MoveUp.Text" xml:space="preserve">
-    <value>向上 移动</value>
-  </data>
-  <data name="cmsFilterList_MoveDown.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_MoveDown.Text" xml:space="preserve">
-    <value>向下 移动</value>
-  </data>
-  <data name="cmsFilterList_tss2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 6</value>
-  </data>
-  <data name="cmsFilterList_MoveBottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_MoveBottom.Text" xml:space="preserve">
-    <value>置底</value>
-  </data>
-  <data name="cmsFilterList_tss3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 6</value>
-  </data>
-  <data name="cmsFilterList_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_Copy.Text" xml:space="preserve">
-    <value>复制</value>
-  </data>
-  <data name="cmsFilterList_Export.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_Export.Text" xml:space="preserve">
-    <value>导出</value>
-  </data>
-  <data name="cmsFilterList_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 22</value>
-  </data>
-  <data name="cmsFilterList_Delete.Text" xml:space="preserve">
-    <value>删除</value>
-  </data>
-  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 176</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
-    <value>cmsFilterList</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 28</value>
-  </data>
-  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>185, 188</value>
-  </data>
-  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
-    <value>dgvFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
-    <value>tlpFilterList</value>
-  </data>
-  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="tsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>223, 17</value>
-  </metadata>
-  <data name="tsFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tsFilterList_Load.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_Load.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_Load.Text" xml:space="preserve">
-    <value>加载滤镜列表</value>
-  </data>
-  <data name="tsFilterList_Save.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_Save.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_Save.Text" xml:space="preserve">
-    <value>保存滤镜列表</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 25</value>
-  </data>
-  <data name="tsFilterList_SelectAll.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsFilterList_SelectAll.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_SelectAll.Text" xml:space="preserve">
-    <value>全选</value>
-  </data>
-  <data name="tsFilterList_SelectNo.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsFilterList_SelectNo.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_SelectNo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_SelectNo.Text" xml:space="preserve">
-    <value>取消</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 25</value>
-  </data>
-  <data name="tsFilterList_Add.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_Add.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_Add.Text" xml:space="preserve">
-    <value>新增滤镜</value>
-  </data>
-  <data name="tsFilterList_CleanUp.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="tsFilterList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>23, 25</value>
-  </data>
-  <data name="tsFilterList_CleanUp.Text" xml:space="preserve">
-    <value>清空滤镜列表</value>
-  </data>
-  <data name="tsFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tsFilterList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tsFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 25</value>
-  </data>
-  <data name="tsFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList.Name" xml:space="preserve">
-    <value>tsFilterList</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList.Parent" xml:space="preserve">
-    <value>tlpFilterList</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpFilterList.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 219</value>
-  </data>
-  <data name="tlpFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpFilterList.Name" xml:space="preserve">
-    <value>tlpFilterList</value>
-  </data>
-  <data name="&gt;&gt;tlpFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpFilterList.Parent" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;tlpFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpFilterList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvFilterList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tsFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbFilterList.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="gbFilterList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="gbFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 0</value>
-  </data>
-  <data name="gbFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 241</value>
-  </data>
-  <data name="gbFilterList.TabIndex" type="System.Int32, mscorlib">
-    <value>68</value>
-  </data>
-  <data name="gbFilterList.Text" xml:space="preserve">
-    <value>[ 滤镜列表 ]</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Name" xml:space="preserve">
-    <value>gbFilterList</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.Parent" xml:space="preserve">
-    <value>tlpInformation</value>
-  </data>
-  <data name="&gt;&gt;gbFilterList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="tlpPacketInfo.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
@@ -3058,7 +2784,7 @@
     <value>全选</value>
   </data>
   <metadata name="cmsHexBox.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>738, 17</value>
+    <value>855, 17</value>
   </metadata>
   <data name="cmsHexBox_Send.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
@@ -4130,6 +3856,9 @@
   </data>
   <data name="pbEncoding.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="pbEncoding.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="pbEncoding.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 87</value>
@@ -5263,7 +4992,7 @@
     <value>1</value>
   </data>
   <metadata name="cmsExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>844, 17</value>
+    <value>961, 17</value>
   </metadata>
   <data name="cmsExtraction_Export.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 22</value>
@@ -5659,10 +5388,494 @@
     <value>tlpInformation</value>
   </data>
   <data name="&gt;&gt;tlpPacketInfo.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="tlpPacketInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tcPacketInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpFilterList.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <metadata name="cIsCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIsCheck.HeaderText" xml:space="preserve">
+    <value>开关</value>
+  </data>
+  <data name="cIsCheck.Width" type="System.Int32, mscorlib">
+    <value>30</value>
+  </data>
+  <metadata name="cFName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cFName.HeaderText" xml:space="preserve">
+    <value>滤镜名称</value>
+  </data>
+  <metadata name="cmsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>542, 17</value>
+  </metadata>
+  <data name="cmsFilterList_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Top.Text" xml:space="preserve">
+    <value>置顶</value>
+  </data>
+  <data name="cmsFilterList_tss1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 6</value>
+  </data>
+  <data name="cmsFilterList_Up.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vAAADrwBlbxySQAAAjdJREFUOE/FkUtoE1EUhqNgRVrX6SJuaquSmoTmOZPJJFFrszBELaIudGfavJPm
+        UTWY+sKKVCxoBUFdibrQhYhFcKEgSNpqY1rzcBI1LaZqMQU3Iuji9yQTFEGtXfnBhZl7zv/NuXcki9BA
+        a4X4uETWbr+5xhIde9zSNeim16VLzLHJ2/xACVuPZeabmlXt9e1/o33/fZs1UYQhXoJtaA663rvXaLtJ
+        rC5Gq38lF0kL2tgrsIkZWAfL2Hm+/FXKeu1UXSY2/QV1z8O4sb8ITU0wC+vpOdhHPsJ2PDVBZanY9Qfa
+        uq+38NHMZ21YgCb6c4Ku4XnsuboA+e7LcWqr/pnfo3E+uWOKCdBHBHSExTvgT77FlqH32DZSwY7hUqVR
+        xirq7b+yYdctO+PPgA3nwUYFqIICtAdfwzgwAwtN0Xn2A7ovVWDwjd6g9tViqo6M7VvF9CSLBhIwoRw4
+        Eij9L2mKAvSHSHJ0FuZTZWw+8w6Oc+VvUsbtoNhyMU107LuXMAUy0HtfgAlkwfbloQnmofDlaxIdSZgj
+        JXAk2kQiS38yRbHmWlhmu9hq8T39onNNQeeZphFpimAODEnkriw2kkQVKkAdLdaOpD/8Bp0nSmhzXEhQ
+        vEHCHXgwavRQuDeNqkT/Q5KFxp/FemcGcneuJlIG6G5C1QsugI+lFxplBqWEdz76ZHYnwbvHYPKMg/NM
+        wOh5BsY7CYP3OZTOFBS0VK401N40SeljgSlwkWmsc1zZWzvGf0Qi+Q67bios5+wb/QAAAABJRU5ErkJg
+        gg==
+</value>
+  </data>
+  <data name="cmsFilterList_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Up.Text" xml:space="preserve">
+    <value>向上 移动</value>
+  </data>
+  <data name="cmsFilterList_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Down.Text" xml:space="preserve">
+    <value>向下 移动</value>
+  </data>
+  <data name="cmsFilterList_tss2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 6</value>
+  </data>
+  <data name="cmsFilterList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Bottom.Text" xml:space="preserve">
+    <value>置底</value>
+  </data>
+  <data name="cmsFilterList_tss3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 6</value>
+  </data>
+  <data name="cmsFilterList_Copy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Copy.Text" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="cmsFilterList_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Export.Text" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="cmsFilterList_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 22</value>
+  </data>
+  <data name="cmsFilterList_Delete.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>129, 176</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
+    <value>cmsFilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dgvFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 32</value>
+  </data>
+  <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>183, 176</value>
+  </data>
+  <data name="dgvFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Name" xml:space="preserve">
+    <value>dgvFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.Parent" xml:space="preserve">
+    <value>tlpFilterList</value>
+  </data>
+  <data name="&gt;&gt;dgvFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="tsFilterList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>229, 17</value>
+  </metadata>
+  <data name="tsFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tsFilterList_Load.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_Load.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_Load.Text" xml:space="preserve">
+    <value>加载滤镜列表</value>
+  </data>
+  <data name="tsFilterList_Save.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_Save.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_Save.Text" xml:space="preserve">
+    <value>保存滤镜列表</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 23</value>
+  </data>
+  <data name="tsFilterList_SelectAll.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsFilterList_SelectAll.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_SelectAll.Text" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="tsFilterList_SelectNo.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsFilterList_SelectNo.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_SelectNo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_SelectNo.Text" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 23</value>
+  </data>
+  <data name="tsFilterList_Add.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_Add.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_Add.Text" xml:space="preserve">
+    <value>新增滤镜</value>
+  </data>
+  <data name="tsFilterList_CleanUp.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsFilterList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsFilterList_CleanUp.Text" xml:space="preserve">
+    <value>清空滤镜列表</value>
+  </data>
+  <data name="tsFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 3</value>
+  </data>
+  <data name="tsFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 3, 1, 1</value>
+  </data>
+  <data name="tsFilterList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tsFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>187, 25</value>
+  </data>
+  <data name="tsFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList.Name" xml:space="preserve">
+    <value>tsFilterList</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList.Parent" xml:space="preserve">
+    <value>tlpFilterList</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpFilterList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFilterList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFilterList.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 211</value>
+  </data>
+  <data name="tlpFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Name" xml:space="preserve">
+    <value>tlpFilterList</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.Parent" xml:space="preserve">
+    <value>tpFilterList</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFilterList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvFilterList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tsFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpFilterList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpFilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 211</value>
+  </data>
+  <data name="tpFilterList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpFilterList.Text" xml:space="preserve">
+    <value>[ 滤镜列表 ]</value>
+  </data>
+  <data name="&gt;&gt;tpFilterList.Name" xml:space="preserve">
+    <value>tpFilterList</value>
+  </data>
+  <data name="&gt;&gt;tpFilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpFilterList.Parent" xml:space="preserve">
+    <value>tcAutomation</value>
+  </data>
+  <data name="&gt;&gt;tpFilterList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpRobotList.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <metadata name="cRName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cRName.HeaderText" xml:space="preserve">
+    <value>机器人名称</value>
+  </data>
+  <metadata name="cmsRobotList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>651, 17</value>
+  </metadata>
+  <data name="cmsRobotList_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
+  <data name="cmsRobotList_Delete.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="cmsRobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 26</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotList.Name" xml:space="preserve">
+    <value>cmsRobotList</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dgvRobotList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvRobotList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 32</value>
+  </data>
+  <data name="dgvRobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>183, 176</value>
+  </data>
+  <data name="dgvRobotList.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;dgvRobotList.Name" xml:space="preserve">
+    <value>dgvRobotList</value>
+  </data>
+  <data name="&gt;&gt;dgvRobotList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvRobotList.Parent" xml:space="preserve">
+    <value>tlpRobotList</value>
+  </data>
+  <data name="&gt;&gt;dgvRobotList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="tsRobotList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>2134, 17</value>
+  </metadata>
+  <data name="tsRobotList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tsRobotList_Load.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsRobotList_Load.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsRobotList_Load.Text" xml:space="preserve">
+    <value>加载机器人列表</value>
+  </data>
+  <data name="tsRobotList_Save.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsRobotList_Save.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsRobotList_Save.Text" xml:space="preserve">
+    <value>保存机器人列表</value>
+  </data>
+  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 23</value>
+  </data>
+  <data name="tsRobotList_Add.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsRobotList_Add.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsRobotList_Add.Text" xml:space="preserve">
+    <value>新增机器人</value>
+  </data>
+  <data name="tsRobotList_CleanUp.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="tsRobotList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 23</value>
+  </data>
+  <data name="tsRobotList_CleanUp.Text" xml:space="preserve">
+    <value>清空机器人列表</value>
+  </data>
+  <data name="tsRobotList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1, 3</value>
+  </data>
+  <data name="tsRobotList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 3, 1, 1</value>
+  </data>
+  <data name="tsRobotList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tsRobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>187, 25</value>
+  </data>
+  <data name="tsRobotList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList.Name" xml:space="preserve">
+    <value>tsRobotList</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList.Parent" xml:space="preserve">
+    <value>tlpRobotList</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpRobotList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpRobotList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpRobotList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpRobotList.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpRobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 211</value>
+  </data>
+  <data name="tlpRobotList.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotList.Name" xml:space="preserve">
+    <value>tlpRobotList</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotList.Parent" xml:space="preserve">
+    <value>tpRobotList</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpRobotList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvRobotList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tsRobotList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpRobotList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpRobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 211</value>
+  </data>
+  <data name="tpRobotList.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tpRobotList.Text" xml:space="preserve">
+    <value>[ 机器人列表 ]</value>
+  </data>
+  <data name="&gt;&gt;tpRobotList.Name" xml:space="preserve">
+    <value>tpRobotList</value>
+  </data>
+  <data name="&gt;&gt;tpRobotList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpRobotList.Parent" xml:space="preserve">
+    <value>tcAutomation</value>
+  </data>
+  <data name="&gt;&gt;tpRobotList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tcAutomation.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcAutomation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tcAutomation.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 0, 0</value>
+  </data>
+  <data name="tcAutomation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>197, 241</value>
+  </data>
+  <data name="tcAutomation.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="&gt;&gt;tcAutomation.Name" xml:space="preserve">
+    <value>tcAutomation</value>
+  </data>
+  <data name="&gt;&gt;tcAutomation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcAutomation.Parent" xml:space="preserve">
+    <value>tlpInformation</value>
+  </data>
+  <data name="&gt;&gt;tcAutomation.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="tlpInformation.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -5695,10 +5908,10 @@
     <value>3</value>
   </data>
   <data name="tlpInformation.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbFilterList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcAutomation" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="ssProcessInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1593, 17</value>
+    <value>1710, 17</value>
   </metadata>
   <data name="ssProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -5797,28 +6010,28 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;tlpSocketForm.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="tlpSocketForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSocketList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,125,Absolute,25,Percent,50,Percent,50,Absolute,25" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="bgwSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1089, 17</value>
+    <value>1206, 17</value>
   </metadata>
   <metadata name="tSocketInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <metadata name="bgwLogList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1211, 17</value>
+    <value>1328, 17</value>
   </metadata>
   <metadata name="bgwSearchPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1316, 17</value>
+    <value>1433, 17</value>
   </metadata>
   <metadata name="niWPE.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1712, 17</value>
+    <value>1829, 17</value>
   </metadata>
   <metadata name="cmsIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>651, 17</value>
+    <value>768, 17</value>
   </metadata>
   <data name="cmsIcon_Show.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
@@ -12071,10 +12284,16 @@
     <value>True</value>
   </data>
   <metadata name="bgwSocketInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>963, 17</value>
+    <value>1080, 17</value>
   </metadata>
   <metadata name="tSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>122, 17</value>
+  </metadata>
+  <metadata name="ofdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1904, 17</value>
+  </metadata>
+  <metadata name="sfdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>2020, 17</value>
   </metadata>
   <data name="dataGridViewImageColumn1.HeaderText" xml:space="preserve">
     <value />
@@ -12082,12 +12301,6 @@
   <data name="dataGridViewImageColumn1.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
-  <metadata name="ofdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1787, 17</value>
-  </metadata>
-  <metadata name="sfdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1903, 17</value>
-  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -18605,132 +18818,6 @@
   <data name="&gt;&gt;cmsSocketList_Comparison_B.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
-    <value>cIsCheck</value>
-  </data>
-  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Name" xml:space="preserve">
-    <value>cFNum</value>
-  </data>
-  <data name="&gt;&gt;cFNum.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
-    <value>cFName</value>
-  </data>
-  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveTop.Name" xml:space="preserve">
-    <value>cmsFilterList_MoveTop</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveTop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss1.Name" xml:space="preserve">
-    <value>cmsFilterList_tss1</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveUp.Name" xml:space="preserve">
-    <value>cmsFilterList_MoveUp</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveDown.Name" xml:space="preserve">
-    <value>cmsFilterList_MoveDown</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveDown.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss2.Name" xml:space="preserve">
-    <value>cmsFilterList_tss2</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveBottom.Name" xml:space="preserve">
-    <value>cmsFilterList_MoveBottom</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_MoveBottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss3.Name" xml:space="preserve">
-    <value>cmsFilterList_tss3</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_tss3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Copy.Name" xml:space="preserve">
-    <value>cmsFilterList_Copy</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Copy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Export.Name" xml:space="preserve">
-    <value>cmsFilterList_Export</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Export.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Delete.Name" xml:space="preserve">
-    <value>cmsFilterList_Delete</value>
-  </data>
-  <data name="&gt;&gt;cmsFilterList_Delete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Load.Name" xml:space="preserve">
-    <value>tsFilterList_Load</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Load.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Save.Name" xml:space="preserve">
-    <value>tsFilterList_Save</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Save.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_SelectAll.Name" xml:space="preserve">
-    <value>tsFilterList_SelectAll</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_SelectAll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_SelectNo.Name" xml:space="preserve">
-    <value>tsFilterList_SelectNo</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_SelectNo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
-    <value>toolStripSeparator2</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Add.Name" xml:space="preserve">
-    <value>tsFilterList_Add</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_Add.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_CleanUp.Name" xml:space="preserve">
-    <value>tsFilterList_CleanUp</value>
-  </data>
-  <data name="&gt;&gt;tsFilterList_CleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsHexBox_Send.Name" xml:space="preserve">
     <value>cmsHexBox_Send</value>
   </data>
@@ -18856,6 +18943,168 @@
   </data>
   <data name="&gt;&gt;cmsLogList_ToExcel.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIsCheck.Name" xml:space="preserve">
+    <value>cIsCheck</value>
+  </data>
+  <data name="&gt;&gt;cIsCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cFName.Name" xml:space="preserve">
+    <value>cFName</value>
+  </data>
+  <data name="&gt;&gt;cFName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Top.Name" xml:space="preserve">
+    <value>cmsFilterList_Top</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Top.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss1.Name" xml:space="preserve">
+    <value>cmsFilterList_tss1</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Up.Name" xml:space="preserve">
+    <value>cmsFilterList_Up</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Down.Name" xml:space="preserve">
+    <value>cmsFilterList_Down</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss2.Name" xml:space="preserve">
+    <value>cmsFilterList_tss2</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Bottom.Name" xml:space="preserve">
+    <value>cmsFilterList_Bottom</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Bottom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss3.Name" xml:space="preserve">
+    <value>cmsFilterList_tss3</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_tss3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Copy.Name" xml:space="preserve">
+    <value>cmsFilterList_Copy</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Copy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Export.Name" xml:space="preserve">
+    <value>cmsFilterList_Export</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Export.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Delete.Name" xml:space="preserve">
+    <value>cmsFilterList_Delete</value>
+  </data>
+  <data name="&gt;&gt;cmsFilterList_Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Load.Name" xml:space="preserve">
+    <value>tsFilterList_Load</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Load.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Save.Name" xml:space="preserve">
+    <value>tsFilterList_Save</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
+    <value>toolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_SelectAll.Name" xml:space="preserve">
+    <value>tsFilterList_SelectAll</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_SelectAll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_SelectNo.Name" xml:space="preserve">
+    <value>tsFilterList_SelectNo</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_SelectNo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
+    <value>toolStripSeparator2</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Add.Name" xml:space="preserve">
+    <value>tsFilterList_Add</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_Add.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_CleanUp.Name" xml:space="preserve">
+    <value>tsFilterList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;tsFilterList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cRName.Name" xml:space="preserve">
+    <value>cRName</value>
+  </data>
+  <data name="&gt;&gt;cRName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotList_Delete.Name" xml:space="preserve">
+    <value>cmsRobotList_Delete</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotList_Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Load.Name" xml:space="preserve">
+    <value>tsRobotList_Load</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Load.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Save.Name" xml:space="preserve">
+    <value>tsRobotList_Save</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Save.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator4.Name" xml:space="preserve">
+    <value>toolStripSeparator4</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Add.Name" xml:space="preserve">
+    <value>tsRobotList_Add</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_Add.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_CleanUp.Name" xml:space="preserve">
+    <value>tsRobotList_CleanUp</value>
+  </data>
+  <data name="&gt;&gt;tsRobotList_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
     <value>tsslProcessName</value>
@@ -19001,12 +19250,6 @@
   <data name="&gt;&gt;tSocketList.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
-    <value>dataGridViewImageColumn1</value>
-  </data>
-  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;ofdExtraction.Name" xml:space="preserve">
     <value>ofdExtraction</value>
   </data>
@@ -19018,6 +19261,30 @@
   </data>
   <data name="&gt;&gt;sfdExtraction.Type" xml:space="preserve">
     <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
+    <value>dataGridViewImageColumn1</value>
+  </data>
+  <data name="&gt;&gt;dataGridViewImageColumn1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_SendList.Name" xml:space="preserve">
+    <value>cmsSocketList_SendList</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_SendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_FilterList.Name" xml:space="preserve">
+    <value>cmsSocketList_FilterList</value>
+  </data>
+  <data name="&gt;&gt;cmsSocketList_FilterList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Name" xml:space="preserve">
+    <value>toolStripSeparator6</value>
+  </data>
+  <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

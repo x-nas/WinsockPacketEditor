@@ -222,6 +222,12 @@
       <Progid>WPE64</Progid>
       <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
     </FileAssociation>
+    <FileAssociation Include=".rp">
+      <Visible>False</Visible>
+      <Description>WPE64 Robot List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
     <FileAssociation Include=".sp">
       <Visible>False</Visible>
       <Description>WPE64 Send List File</Description>

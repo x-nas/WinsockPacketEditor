@@ -16,6 +16,7 @@ namespace WinsockPacketEditor
         private string LastInjection = string.Empty;
         private string ProcessName = string.Empty;
         private string ProcessPath = string.Empty;
+        private string WebSiteURL = string.Empty;
 
         private ToolTip tt = new ToolTip();
 
@@ -29,6 +30,11 @@ namespace WinsockPacketEditor
             this.rtbLog.Clear();
             this.InitToolTip();
             this.InitLastInjection();
+
+            if (!bgwCheckURL.IsBusy)
+            {
+                bgwCheckURL.RunWorkerAsync();
+            }
         }
 
         private void InitToolTip()
@@ -164,20 +170,22 @@ namespace WinsockPacketEditor
                     }
 
                     int targetPlat = Process_Injector.IsWin64Process(ProcessID) ? 64 : 32;
-                    
+
                     ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_8), targetPlat));                    
                     ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_9), ProcessName, ProcessID));
                     ShowLog(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_10));
 
-                    MultiLanguage.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
-
                     this.SetLastInjection();
+                    MultiLanguage.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
                 }
             }
             catch (Exception ex)
             {  
                 ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_11), ex.Message));
+                ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_102), Properties.Settings.Default.WPE64_URL));
             }
+
+            this.rtbLog.ScrollToCaret();
         }
 
         #endregion        
@@ -188,10 +196,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (!bgwCheckURL.IsBusy)
-                {
-                    bgwCheckURL.RunWorkerAsync();
-                }
+                Process.Start(this.WebSiteURL);
             }
             catch (Exception ex)
             {
@@ -210,29 +215,7 @@ namespace WinsockPacketEditor
             {
                 ShowLog(ex.Message);
             }            
-        }
-
-        private bool CheckWebSiteIsOK(string sURL)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
-                HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse();
-
-                if (resp.StatusCode == HttpStatusCode.OK)
-                {
-                    bReturn = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }        
-
-            return bReturn;
-        }
+        }        
 
         #endregion        
 
@@ -281,17 +264,51 @@ namespace WinsockPacketEditor
 
                 if (bWPE64_URL)
                 {
-                    Process.Start(Properties.Settings.Default.WPE64_URL);
+                    this.WebSiteURL = Properties.Settings.Default.WPE64_URL;                    
                 }
                 else
                 {
-                    Process.Start(Properties.Settings.Default.WPE64_IP);
+                    this.WebSiteURL = Properties.Settings.Default.WPE64_IP;                    
                 }
             }
             catch (Exception ex)
             {
                 ShowLog(ex.Message);
             }            
+        }
+
+        private bool CheckWebSiteIsOK(string sURL)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
+                HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse();
+
+                if (resp.StatusCode == HttpStatusCode.OK)
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        private void rtbLog_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start(e.LinkText);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion

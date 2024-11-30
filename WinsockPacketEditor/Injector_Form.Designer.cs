@@ -114,6 +114,7 @@ namespace WinsockPacketEditor
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
+            this.rtbLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbLog_LinkClicked);
             // 
             // bgwCheckURL
             // 

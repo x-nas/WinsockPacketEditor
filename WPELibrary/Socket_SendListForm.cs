@@ -14,11 +14,9 @@ namespace WPELibrary
         public Socket_SendListForm()
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
-
             InitializeComponent();
 
             Socket_Cache.SendList.bShow_SendListForm = false;
-
             this.InitSendListDGV();
         }
 
@@ -47,6 +45,20 @@ namespace WPELibrary
 
         #region//初始化
 
+        private void InitSendListDGV()
+        {
+            try
+            {
+                dgvSendList.AutoGenerateColumns = false;
+                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
+                dgvSendList.DataSource = Socket_Cache.SendList.dtSendList;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void InitSendListForm()
         {
             try
@@ -70,23 +82,23 @@ namespace WPELibrary
             }          
         }
 
-        #endregion
-
-        #region//初始化数据表
-        private void InitSendListDGV()
+        private void dgvSendList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
-                dgvSendList.AutoGenerateColumns = false;
-                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
-                dgvSendList.DataSource = Socket_Cache.SendList.dtSocketSendList;
+                if (e.ColumnIndex == dgvSendList.Columns["cID"].Index)
+                {                    
+                    e.Value = (e.RowIndex + 1).ToString();                    
+                    e.FormattingApplied = true;
+                }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-        #endregion
+
+        #endregion        
 
         #region//右键菜单
 
@@ -104,14 +116,14 @@ namespace WPELibrary
                         if (this.dgvSendList.SelectedRows.Count == 1)
                         {
                             int iSelectIndex = this.dgvSendList.SelectedRows[0].Index;
-                            Socket_Cache.SendList.DeleteSendList_ByIndex(iSelectIndex);
+                            Socket_Cache.SendList.DeleteFromSendList_ByIndex(iSelectIndex);
                         }
 
                         break;
 
                     case "tsmiClear":
 
-                        Socket_Cache.SendList.SendListClear();
+                        Socket_Cache.SendList.CleanUpSendList_Dialog();
 
                         break;
 
@@ -119,14 +131,14 @@ namespace WPELibrary
 
                         if (dgvSendList.Rows.Count > 0)
                         {
-                            Socket_Operation.SaveSendList();
+                            Socket_Cache.SendList.SaveSendList_Dialog(string.Empty, -1);
                         }
 
                         break;
 
                     case "tsmiLoadSendList":
 
-                        Socket_Operation.LoadSendList();
+                        Socket_Cache.SendList.LoadSendList_Dialog();
 
                         break;
                 }
@@ -287,7 +299,7 @@ namespace WPELibrary
                                         iSocket = (int)this.dgvSendList.Rows[j].Cells["cSocket"].Value;
                                     }
 
-                                    Socket_Cache.SendList.SendPacketList_ByIndex(iSocket, j);
+                                    Socket_Cache.SendList.DoSendList_ByIndex(iSocket, j);
                                     Socket_Cache.SendList.Loop_Send_CNT++;
                                 }
                             }
@@ -327,6 +339,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

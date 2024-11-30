@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lib\Socket_BitInfo.cs" />
+    <Compile Include="Lib\Socket_RobotInfo.cs" />
     <Compile Include="Lib\User32.cs" />
     <Compile Include="Lib\WS2_32.cs" />
     <Compile Include="Lib\WSock32.cs" />
@@ -112,6 +113,12 @@
     </Compile>
     <Compile Include="Socket_PasswordFrom.Designer.cs">
       <DependentUpon>Socket_PasswordFrom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Socket_RobotForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Socket_RobotForm.Designer.cs">
+      <DependentUpon>Socket_RobotForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_SendListForm.cs">
       <SubType>Form</SubType>
@@ -238,6 +245,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_PasswordFrom.resx">
       <DependentUpon>Socket_PasswordFrom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Socket_RobotForm.resx">
+      <DependentUpon>Socket_RobotForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_SendListForm.en-US.resx">
       <DependentUpon>Socket_SendListForm.cs</DependentUpon>

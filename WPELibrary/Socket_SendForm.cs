@@ -52,11 +52,11 @@ namespace WPELibrary
                 this.Send_PacketType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;            
 
                 this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fffffff");              
-                this.txtPacketType.Text = Socket_Operation.GetName_ByPacketType(Send_PacketType);
+                this.txtPacketType.Text = Socket_Cache.SocketPacket.GetName_ByPacketType(Send_PacketType);
 
                 this.txtIPFrom.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketFrom;
                 this.txtIPTo.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
-                this.pbSocketType.Image = Socket_Operation.GetImg_ByPacketType(Send_PacketType);
+                this.pbSocketType.Image = Socket_Cache.SocketPacket.GetImg_ByPacketType(Send_PacketType);
                 
                 this.nudSendSocket_Len.Value = hbPacketData.ByteProvider.Length;
                 this.nudSendSocket_Socket.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
@@ -477,7 +477,7 @@ namespace WPELibrary
                         int iSocket = (int)this.nudSendSocket_Socket.Value;
                         string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
 
-                        Socket_Cache.SendList.AddToSendList_New(iPacketIndex, "", iSocket, sIPTo, sHex, bBuffer);
+                        Socket_Cache.SendList.AddToSendList(string.Empty, iSocket, sIPTo, sHex, bBuffer);
                         Socket_Operation.ShowSendListForm();                       
 
                         break;
@@ -491,11 +491,11 @@ namespace WPELibrary
                                 this.hbPacketData.CopyHex();
 
                                 byte[] bBufferCopy = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBufferCopy);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBufferCopy);
                             }
                             else
                             {
-                                Socket_Cache.FilterList.AddToFilterList_BySocketListIndex(Select_Index, bBuffer);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBuffer);
                             }
                         }
 

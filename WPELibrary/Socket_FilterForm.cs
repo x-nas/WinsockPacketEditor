@@ -9,8 +9,7 @@ using System.Reflection;
 namespace WPELibrary
 {
     public partial class Socket_FilterForm : Form
-    {
-        private int FilterNum = -1;
+    {  
         private int FilterIndex = -1;
         private decimal FilterSocketContent = 1;
         private decimal FilterLengthContent = 1;
@@ -30,14 +29,14 @@ namespace WPELibrary
 
         #region//窗体加载
 
-        public Socket_FilterForm(int FNum)
+        public Socket_FilterForm(int FIndex)
         {
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
                 InitializeComponent();
 
-                this.FilterNum = FNum;
+                this.FilterIndex = FIndex;
 
                 this.InitFrom();
                 this.InitDGV();
@@ -59,11 +58,9 @@ namespace WPELibrary
             {
                 int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
                 string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
-                this.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16) + FilterNum + " 】- " + sInjectProcesName + " [" + iInjectProcessID.ToString() + "]";
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sInjectProcesName, iInjectProcessID);
 
-                this.FilterIndex = Socket_Cache.FilterList.GetFilterIndex_ByFilterNum(FilterNum);
-
-                if (FilterIndex >= 0)
+                if (this.FilterIndex > -1)
                 {
                     this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
                     this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
@@ -692,29 +689,26 @@ namespace WPELibrary
         {
             try
             {
-                bool bAppointHeader, bAppointSocket, bAppointLength;
+                string sFName_New = this.txtFilterName.Text.Trim();
+                if (string.IsNullOrEmpty(sFName_New))
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
+                    return;
+                }
 
-                string sFName_New = string.Empty;
                 string sHeaderContent_New = string.Empty;
                 decimal dSocketContent_New = 0;
                 decimal dLengthContent_New = 0;
                 decimal dProgressionStep_New = 0;
                 string sProgression_New = string.Empty;
                 string sSearch_New = string.Empty;
-                string sModify_New = string.Empty;                
+                string sModify_New = string.Empty;
+                bool bAppointHeader, bAppointSocket, bAppointLength;
 
                 Socket_Cache.Filter.FilterMode FilterMode_New;
                 Socket_Cache.Filter.FilterAction FilterAction_New;
                 Socket_Cache.Filter.FilterFunction FilterFunction_New;
-                Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;                
-
-                sFName_New = this.txtFilterName.Text.Trim();
-
-                if (string.IsNullOrEmpty(sFName_New))
-                {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
-                    return;
-                }
+                Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
 
                 bAppointHeader = this.cbFilter_AppointHeader.Checked;
                 bAppointSocket = this.cbFilter_AppointSocket.Checked;
@@ -882,8 +876,8 @@ namespace WPELibrary
                 sSearch_New = sSearch_New.TrimEnd(',');
                 sModify_New = sModify_New.TrimEnd(',');
 
-                Socket_Cache.FilterList.UpdateFilter_ByFilterNum(
-                    FilterNum, 
+                Socket_Cache.Filter.UpdateFilter_ByFilterIndex(
+                    this.FilterIndex, 
                     sFName_New, 
                     bAppointHeader, 
                     sHeaderContent_New, 

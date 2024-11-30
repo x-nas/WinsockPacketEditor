@@ -118,114 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpSendList.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tlpRobotForm.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <metadata name="ssSocketSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ssSocketSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="tlpListInfo.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="tlLoop_Send.Text" xml:space="preserve">
-    <value>发送总数:</value>
-  </data>
-  <data name="tlLoop_Send_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="tlLoop_Send_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlLoop_Send_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlSplit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="tlSplit.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="tlSendList_Success.Text" xml:space="preserve">
-    <value>成功:</value>
-  </data>
-  <data name="tlSendList_Success_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="tlSendList_Success_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlSendList_Success_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 17</value>
-  </data>
-  <data name="tlSendList_Fail.Text" xml:space="preserve">
-    <value>失败:</value>
-  </data>
-  <data name="tlSendList_Fail_CNT.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="tlSendList_Fail_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="tlSendList_Fail_CNT.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 279</value>
-  </data>
-  <data name="ssSocketSendList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>928, 22</value>
-  </data>
-  <data name="ssSocketSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Name" xml:space="preserve">
-    <value>ssSocketSendList</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.Parent" xml:space="preserve">
-    <value>tlpSendList</value>
-  </data>
-  <data name="&gt;&gt;ssSocketSendList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <metadata name="cCheck.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="cSendList_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <data name="cCheck.HeaderText" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cCheck.Width" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <metadata name="cID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cID.HeaderText" xml:space="preserve">
+  <data name="cSendList_ID.HeaderText" xml:space="preserve">
     <value>序号</value>
   </data>
-  <data name="cID.Width" type="System.Int32, mscorlib">
+  <data name="cSendList_ID.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
   <metadata name="cNote.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -261,83 +166,19 @@
   <data name="cLen.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
-  <metadata name="cData.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cData.HeaderText" xml:space="preserve">
-    <value>数据</value>
-  </data>
-  <metadata name="cmsSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>267, 17</value>
-  </metadata>
-  <data name="tsmiDeleteSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsmiDeleteSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiDeleteSendList.Text" xml:space="preserve">
-    <value>从列表中移除</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiClear.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsmiClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiClear.Text" xml:space="preserve">
-    <value>清空发送列表</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiSaveSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsmiSaveSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiSaveSendList.Text" xml:space="preserve">
-    <value>保存此列表数据</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 6</value>
-  </data>
-  <data name="tsmiLoadSendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="tsmiLoadSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 22</value>
-  </data>
-  <data name="tsmiLoadSendList.Text" xml:space="preserve">
-    <value>加载发送列表</value>
-  </data>
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 110</value>
-  </data>
-  <data name="&gt;&gt;cmsSendList.Name" xml:space="preserve">
-    <value>cmsSendList</value>
-  </data>
-  <data name="&gt;&gt;cmsSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="dgvSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="dgvSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="dgvSendList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
+    <value>6, 22</value>
   </data>
   <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>928, 226</value>
+    <value>524, 387</value>
   </data>
   <data name="dgvSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>61</value>
+    <value>64</value>
   </data>
   <data name="&gt;&gt;dgvSendList.Name" xml:space="preserve">
     <value>dgvSendList</value>
@@ -346,638 +187,1226 @@
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dgvSendList.Parent" xml:space="preserve">
-    <value>tlpSendList</value>
+    <value>gbSendList</value>
   </data>
   <data name="&gt;&gt;dgvSendList.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpParameter.ColumnCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tlpSendListForm4.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="nudLoop_Int.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>88, 4</value>
-  </data>
-  <data name="nudLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
-  </data>
-  <data name="nudLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>113</value>
-  </data>
-  <data name="nudLoop_Int.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Name" xml:space="preserve">
-    <value>nudLoop_Int</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.Parent" xml:space="preserve">
-    <value>tlpSendListForm4</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_Int.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="lLoop_Int.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lLoop_Int.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lLoop_Int.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="gbSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>545, 3</value>
   </data>
-  <data name="lLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 1</value>
+  <data name="gbSendList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>6, 6, 6, 6</value>
   </data>
-  <data name="lLoop_Int.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 29</value>
+  <data name="gbSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>536, 415</value>
   </data>
-  <data name="lLoop_Int.TabIndex" type="System.Int32, mscorlib">
-    <value>105</value>
+  <data name="gbSendList.TabIndex" type="System.Int32, mscorlib">
+    <value>68</value>
   </data>
-  <data name="lLoop_Int.Text" xml:space="preserve">
-    <value>间隔(毫秒):</value>
+  <data name="gbSendList.Text" xml:space="preserve">
+    <value>[ 发送列表 ]</value>
   </data>
-  <data name="lLoop_Int.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;gbSendList.Name" xml:space="preserve">
+    <value>gbSendList</value>
   </data>
-  <data name="&gt;&gt;lLoop_Int.Name" xml:space="preserve">
-    <value>lLoop_Int</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.Parent" xml:space="preserve">
-    <value>tlpSendListForm4</value>
-  </data>
-  <data name="&gt;&gt;lLoop_Int.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm4.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="tlpSendListForm4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSendListForm4.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="tlpSendListForm4.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 31</value>
-  </data>
-  <data name="tlpSendListForm4.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm4.Name" xml:space="preserve">
-    <value>tlpSendListForm4</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm4.Parent" xml:space="preserve">
-    <value>gbSendListForm4</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm4.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpSendListForm4.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLoop_Int" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lLoop_Int" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,31" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbSendListForm4.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>550, 0</value>
-  </data>
-  <data name="gbSendListForm4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 0</value>
-  </data>
-  <data name="gbSendListForm4.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="gbSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 50</value>
-  </data>
-  <data name="gbSendListForm4.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm4.Name" xml:space="preserve">
-    <value>gbSendListForm4</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm4.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbSendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm4.Parent" xml:space="preserve">
-    <value>tlpParameter</value>
+  <data name="&gt;&gt;gbSendList.Parent" xml:space="preserve">
+    <value>tlpListInfo</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm4.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbSendList.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpSendListForm3.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="tlpRobotInfo.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="nudLoop_CNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="txtRobotName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>88, 4</value>
+  <data name="txtRobotName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 22</value>
   </data>
-  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
+  <data name="txtRobotName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>524, 23</value>
   </data>
-  <data name="nudLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>112</value>
-  </data>
-  <data name="nudLoop_CNT.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Name" xml:space="preserve">
-    <value>nudLoop_CNT</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.Parent" xml:space="preserve">
-    <value>tlpSendListForm3</value>
-  </data>
-  <data name="&gt;&gt;nudLoop_CNT.ZOrder" xml:space="preserve">
+  <data name="txtRobotName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="lLoop_CNT.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="&gt;&gt;txtRobotName.Name" xml:space="preserve">
+    <value>txtRobotName</value>
   </data>
-  <data name="lLoop_CNT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;txtRobotName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="lLoop_CNT.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;txtRobotName.Parent" xml:space="preserve">
+    <value>gbRobotName</value>
   </data>
-  <data name="lLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 1</value>
-  </data>
-  <data name="lLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 29</value>
-  </data>
-  <data name="lLoop_CNT.TabIndex" type="System.Int32, mscorlib">
-    <value>104</value>
-  </data>
-  <data name="lLoop_CNT.Text" xml:space="preserve">
-    <value>循环次数：</value>
-  </data>
-  <data name="lLoop_CNT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Name" xml:space="preserve">
-    <value>lLoop_CNT</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.Parent" xml:space="preserve">
-    <value>tlpSendListForm3</value>
-  </data>
-  <data name="&gt;&gt;lLoop_CNT.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="tlpSendListForm3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSendListForm3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="tlpSendListForm3.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 31</value>
-  </data>
-  <data name="tlpSendListForm3.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm3.Name" xml:space="preserve">
-    <value>tlpSendListForm3</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm3.Parent" xml:space="preserve">
-    <value>gbSendListForm3</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm3.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;txtRobotName.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpSendListForm3.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLoop_CNT" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lLoop_CNT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,31" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbSendListForm3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbRobotName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="gbSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>368, 0</value>
+  <data name="gbRobotName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
-  <data name="gbSendListForm3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 0</value>
+  <data name="gbRobotName.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>6, 6, 6, 6</value>
   </data>
-  <data name="gbSendListForm3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
+  <data name="gbRobotName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>536, 54</value>
   </data>
-  <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 50</value>
+  <data name="gbRobotName.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
   </data>
-  <data name="gbSendListForm3.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="gbRobotName.Text" xml:space="preserve">
+    <value>[ 机器人名称 ]</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm3.Name" xml:space="preserve">
-    <value>gbSendListForm3</value>
+  <data name="&gt;&gt;gbRobotName.Name" xml:space="preserve">
+    <value>gbRobotName</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm3.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbRobotName.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm3.Parent" xml:space="preserve">
-    <value>tlpParameter</value>
+  <data name="&gt;&gt;gbRobotName.Parent" xml:space="preserve">
+    <value>tlpRobotInfo</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm3.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm2.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="nudSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>127, 4</value>
-  </data>
-  <data name="nudSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 23</value>
-  </data>
-  <data name="nudSocket.TabIndex" type="System.Int32, mscorlib">
-    <value>115</value>
-  </data>
-  <data name="nudSocket.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudSocket.Name" xml:space="preserve">
-    <value>nudSocket</value>
-  </data>
-  <data name="&gt;&gt;nudSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudSocket.Parent" xml:space="preserve">
-    <value>tlpSendListForm2</value>
-  </data>
-  <data name="&gt;&gt;nudSocket.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbRobotName.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cbUseSocket.AutoSize" type="System.Boolean, mscorlib">
+  <metadata name="cRobotInstruction_ID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <data name="cRobotInstruction_ID.HeaderText" xml:space="preserve">
+    <value>序号</value>
   </data>
-  <data name="cbUseSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cRobotInstruction_ID.Width" type="System.Int32, mscorlib">
+    <value>60</value>
+  </data>
+  <metadata name="cRobotInstruction_Type.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cRobotInstruction_Type.HeaderText" xml:space="preserve">
+    <value>指令类型</value>
+  </data>
+  <data name="cRobotInstruction_Type.Width" type="System.Int32, mscorlib">
+    <value>80</value>
+  </data>
+  <metadata name="cRobotInstruction_Content.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cRobotInstruction_Content.HeaderText" xml:space="preserve">
+    <value>指令内容</value>
+  </data>
+  <metadata name="cmsRobotInstruction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="cmsRobotInstruction_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_Top.Text" xml:space="preserve">
+    <value>置顶</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 6</value>
+  </data>
+  <data name="cmsRobotInstruction_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_Up.Text" xml:space="preserve">
+    <value>向上 移动</value>
+  </data>
+  <data name="cmsRobotInstruction_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_Down.Text" xml:space="preserve">
+    <value>向下 移动</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 6</value>
+  </data>
+  <data name="cmsRobotInstruction_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_Bottom.Text" xml:space="preserve">
+    <value>置底</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 6</value>
+  </data>
+  <data name="cmsRobotInstruction_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_Delete.Text" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="cmsRobotInstruction_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 22</value>
+  </data>
+  <data name="cmsRobotInstruction_CleanUp.Text" xml:space="preserve">
+    <value>清空 指令集</value>
+  </data>
+  <data name="cmsRobotInstruction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>141, 154</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotInstruction.Name" xml:space="preserve">
+    <value>cmsRobotInstruction</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotInstruction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="dgvRobotInstruction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbUseSocket.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="dgvRobotInstruction.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 22</value>
   </data>
-  <data name="cbUseSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
+  <data name="dgvRobotInstruction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>524, 327</value>
   </data>
-  <data name="cbUseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 23</value>
+  <data name="dgvRobotInstruction.TabIndex" type="System.Int32, mscorlib">
+    <value>65</value>
   </data>
-  <data name="cbUseSocket.TabIndex" type="System.Int32, mscorlib">
-    <value>95</value>
+  <data name="&gt;&gt;dgvRobotInstruction.Name" xml:space="preserve">
+    <value>dgvRobotInstruction</value>
   </data>
-  <data name="cbUseSocket.Text" xml:space="preserve">
-    <value>使用此套接字：</value>
+  <data name="&gt;&gt;dgvRobotInstruction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbUseSocket.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;dgvRobotInstruction.Parent" xml:space="preserve">
+    <value>gbRobotInstruction</value>
   </data>
-  <data name="&gt;&gt;cbUseSocket.Name" xml:space="preserve">
-    <value>cbUseSocket</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.Parent" xml:space="preserve">
-    <value>tlpSendListForm2</value>
-  </data>
-  <data name="&gt;&gt;cbUseSocket.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="tlpSendListForm2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSendListForm2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="tlpSendListForm2.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>207, 31</value>
-  </data>
-  <data name="tlpSendListForm2.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;dgvRobotInstruction.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;tlpSendListForm2.Name" xml:space="preserve">
-    <value>tlpSendListForm2</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm2.Parent" xml:space="preserve">
-    <value>gbSendListForm2</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm2.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpSendListForm2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbUseSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,60,Percent,40" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbSendListForm2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbRobotInstruction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="gbSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>149, 0</value>
+  <data name="gbRobotInstruction.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 63</value>
   </data>
-  <data name="gbSendListForm2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 0</value>
+  <data name="gbRobotInstruction.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>6, 6, 6, 6</value>
   </data>
-  <data name="gbSendListForm2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
+  <data name="gbRobotInstruction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>536, 355</value>
   </data>
-  <data name="gbSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 50</value>
+  <data name="gbRobotInstruction.TabIndex" type="System.Int32, mscorlib">
+    <value>66</value>
   </data>
-  <data name="gbSendListForm2.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="gbRobotInstruction.Text" xml:space="preserve">
+    <value>[ 机器人指令集 ]</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm2.Name" xml:space="preserve">
-    <value>gbSendListForm2</value>
+  <data name="&gt;&gt;gbRobotInstruction.Name" xml:space="preserve">
+    <value>gbRobotInstruction</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm2.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbRobotInstruction.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm2.Parent" xml:space="preserve">
-    <value>tlpParameter</value>
+  <data name="&gt;&gt;gbRobotInstruction.Parent" xml:space="preserve">
+    <value>tlpRobotInfo</value>
   </data>
-  <data name="&gt;&gt;gbSendListForm2.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="cbSelectAll.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbSelectAll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbSelectAll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbSelectAll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 16</value>
-  </data>
-  <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>128, 28</value>
-  </data>
-  <data name="cbSelectAll.TabIndex" type="System.Int32, mscorlib">
-    <value>114</value>
-  </data>
-  <data name="cbSelectAll.Text" xml:space="preserve">
-    <value>全选 / 取消</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Name" xml:space="preserve">
-    <value>cbSelectAll</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.Parent" xml:space="preserve">
-    <value>gbSendListForm1</value>
-  </data>
-  <data name="&gt;&gt;cbSelectAll.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbSendListForm1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbSendListForm1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 0</value>
-  </data>
-  <data name="gbSendListForm1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 0</value>
-  </data>
-  <data name="gbSendListForm1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>6, 0, 6, 6</value>
-  </data>
-  <data name="gbSendListForm1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 50</value>
-  </data>
-  <data name="gbSendListForm1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm1.Name" xml:space="preserve">
-    <value>gbSendListForm1</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm1.Parent" xml:space="preserve">
-    <value>tlpParameter</value>
-  </data>
-  <data name="&gt;&gt;gbSendListForm1.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpSendListForm5.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="bSendListStop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bSendListStop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>107, 6</value>
-  </data>
-  <data name="bSendListStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 32</value>
-  </data>
-  <data name="bSendListStop.TabIndex" type="System.Int32, mscorlib">
-    <value>109</value>
-  </data>
-  <data name="bSendListStop.Text" xml:space="preserve">
-    <value>停 止 (&amp;T)</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.Name" xml:space="preserve">
-    <value>bSendListStop</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.Parent" xml:space="preserve">
-    <value>tlpSendListForm5</value>
-  </data>
-  <data name="&gt;&gt;bSendListStop.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bSendList.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 6</value>
-  </data>
-  <data name="bSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>85, 32</value>
-  </data>
-  <data name="bSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>108</value>
-  </data>
-  <data name="bSendList.Text" xml:space="preserve">
-    <value>发 送 (&amp;F)</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Name" xml:space="preserve">
-    <value>bSendList</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSendList.Parent" xml:space="preserve">
-    <value>tlpSendListForm5</value>
-  </data>
-  <data name="&gt;&gt;bSendList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbRobotInstruction.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpSendListForm5.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpRobotInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpSendListForm5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>732, 3</value>
-  </data>
-  <data name="tlpSendListForm5.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tlpSendListForm5.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpSendListForm5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 44</value>
-  </data>
-  <data name="tlpSendListForm5.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm5.Name" xml:space="preserve">
-    <value>tlpSendListForm5</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm5.Parent" xml:space="preserve">
-    <value>tlpParameter</value>
-  </data>
-  <data name="&gt;&gt;tlpSendListForm5.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="tlpSendListForm5.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSendListStop" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bSendList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,10,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpParameter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpParameter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 229</value>
-  </data>
-  <data name="tlpParameter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpParameter.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 50</value>
-  </data>
-  <data name="tlpParameter.TabIndex" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
-  <data name="&gt;&gt;tlpParameter.Name" xml:space="preserve">
-    <value>tlpParameter</value>
-  </data>
-  <data name="&gt;&gt;tlpParameter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpParameter.Parent" xml:space="preserve">
-    <value>tlpSendList</value>
-  </data>
-  <data name="&gt;&gt;tlpParameter.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpParameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendListForm4" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="gbSendListForm3" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSendListForm2" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSendListForm1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpSendListForm5" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,30,Percent,25,Percent,25,Absolute,204" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSendList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tlpRobotInfo.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="tlpSendList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tlpRobotInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="tlpSendList.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="tlpRobotInfo.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 304</value>
+  <data name="tlpRobotInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>542, 421</value>
   </data>
-  <data name="tlpSendList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="tlpRobotInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
   </data>
-  <data name="&gt;&gt;tlpSendList.Name" xml:space="preserve">
-    <value>tlpSendList</value>
+  <data name="&gt;&gt;tlpRobotInfo.Name" xml:space="preserve">
+    <value>tlpRobotInfo</value>
   </data>
-  <data name="&gt;&gt;tlpSendList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlpRobotInfo.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlpSendList.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;tlpRobotInfo.Parent" xml:space="preserve">
+    <value>tlpListInfo</value>
   </data>
-  <data name="&gt;&gt;tlpSendList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tlpRobotInfo.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpSendList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketSendList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSendList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,50,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="tlpRobotInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbRobotName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbRobotInstruction" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,60,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <metadata name="bgwSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>155, 17</value>
-  </metadata>
+  <data name="tlpListInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpListInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpListInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpListInfo.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpListInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 421</value>
+  </data>
+  <data name="tlpListInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpListInfo.Name" xml:space="preserve">
+    <value>tlpListInfo</value>
+  </data>
+  <data name="&gt;&gt;tlpListInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpListInfo.Parent" xml:space="preserve">
+    <value>tlpRobotForm</value>
+  </data>
+  <data name="&gt;&gt;tlpListInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpListInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpRobotInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpInstruction_Socket.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpLoop.ColumnCount" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="bLoopEnd.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bLoopEnd.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bLoopEnd.Location" type="System.Drawing.Point, System.Drawing">
+    <value>255, 1</value>
+  </data>
+  <data name="bLoopEnd.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bLoopEnd.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bLoopEnd.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="bLoopEnd.Text" xml:space="preserve">
+    <value>添加 结束</value>
+  </data>
+  <data name="&gt;&gt;bLoopEnd.Name" xml:space="preserve">
+    <value>bLoopEnd</value>
+  </data>
+  <data name="&gt;&gt;bLoopEnd.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bLoopEnd.Parent" xml:space="preserve">
+    <value>tlpLoop</value>
+  </data>
+  <data name="&gt;&gt;bLoopEnd.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bLoopStart.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bLoopStart.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bLoopStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>155, 1</value>
+  </data>
+  <data name="bLoopStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bLoopStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bLoopStart.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="bLoopStart.Text" xml:space="preserve">
+    <value>添加 开始</value>
+  </data>
+  <data name="&gt;&gt;bLoopStart.Name" xml:space="preserve">
+    <value>bLoopStart</value>
+  </data>
+  <data name="&gt;&gt;bLoopStart.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bLoopStart.Parent" xml:space="preserve">
+    <value>tlpLoop</value>
+  </data>
+  <data name="&gt;&gt;bLoopStart.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lLoop.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lLoop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lLoop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lLoop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 3</value>
+  </data>
+  <data name="lLoop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lLoop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 23</value>
+  </data>
+  <data name="lLoop.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="lLoop.Text" xml:space="preserve">
+    <value>( 次数 )</value>
+  </data>
+  <data name="lLoop.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lLoop.Name" xml:space="preserve">
+    <value>lLoop</value>
+  </data>
+  <data name="&gt;&gt;lLoop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lLoop.Parent" xml:space="preserve">
+    <value>tlpLoop</value>
+  </data>
+  <data name="&gt;&gt;lLoop.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="nudLoop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudLoop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="nudLoop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudLoop.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="nudLoop.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudLoop.Name" xml:space="preserve">
+    <value>nudLoop</value>
+  </data>
+  <data name="&gt;&gt;nudLoop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudLoop.Parent" xml:space="preserve">
+    <value>tlpLoop</value>
+  </data>
+  <data name="&gt;&gt;nudLoop.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpLoop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpLoop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpLoop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpLoop.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpLoop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>414, 51</value>
+  </data>
+  <data name="tlpLoop.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpLoop.Name" xml:space="preserve">
+    <value>tlpLoop</value>
+  </data>
+  <data name="&gt;&gt;tlpLoop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpLoop.Parent" xml:space="preserve">
+    <value>gbLoop</value>
+  </data>
+  <data name="&gt;&gt;tlpLoop.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpLoop.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bLoopEnd" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="bLoopStart" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lLoop" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudLoop" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,AutoSize,0,Absolute,80,Absolute,20,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbLoop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbLoop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>641, 82</value>
+  </data>
+  <data name="gbLoop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>420, 73</value>
+  </data>
+  <data name="gbLoop.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbLoop.Text" xml:space="preserve">
+    <value>循环</value>
+  </data>
+  <data name="&gt;&gt;gbLoop.Name" xml:space="preserve">
+    <value>gbLoop</value>
+  </data>
+  <data name="&gt;&gt;gbLoop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbLoop.Parent" xml:space="preserve">
+    <value>tlpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;gbLoop.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSend.ColumnCount" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lSendInterval_Value.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSendInterval_Value.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lSendInterval_Value.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lSendInterval_Value.Location" type="System.Drawing.Point, System.Drawing">
+    <value>474, 3</value>
+  </data>
+  <data name="lSendInterval_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lSendInterval_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 23</value>
+  </data>
+  <data name="lSendInterval_Value.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lSendInterval_Value.Text" xml:space="preserve">
+    <value>( 毫秒 )</value>
+  </data>
+  <data name="lSendInterval_Value.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval_Value.Name" xml:space="preserve">
+    <value>lSendInterval_Value</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval_Value.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval_Value.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nudSendInterval.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudSendInterval.Location" type="System.Drawing.Point, System.Drawing">
+    <value>374, 3</value>
+  </data>
+  <data name="nudSendInterval.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudSendInterval.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="nudSendInterval.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudSendInterval.Name" xml:space="preserve">
+    <value>nudSendInterval</value>
+  </data>
+  <data name="&gt;&gt;nudSendInterval.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudSendInterval.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;nudSendInterval.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lSendInterval.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSendInterval.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lSendInterval.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lSendInterval.Location" type="System.Drawing.Point, System.Drawing">
+    <value>309, 3</value>
+  </data>
+  <data name="lSendInterval.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lSendInterval.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="lSendInterval.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lSendInterval.Text" xml:space="preserve">
+    <value>每次间隔:</value>
+  </data>
+  <data name="lSendInterval.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval.Name" xml:space="preserve">
+    <value>lSendInterval</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;lSendInterval.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="nudSendTimes.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudSendTimes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>209, 3</value>
+  </data>
+  <data name="nudSendTimes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudSendTimes.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="nudSendTimes.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudSendTimes.Name" xml:space="preserve">
+    <value>nudSendTimes</value>
+  </data>
+  <data name="&gt;&gt;nudSendTimes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudSendTimes.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;nudSendTimes.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lSendTimes.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSendTimes.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lSendTimes.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lSendTimes.Location" type="System.Drawing.Point, System.Drawing">
+    <value>168, 3</value>
+  </data>
+  <data name="lSendTimes.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lSendTimes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 23</value>
+  </data>
+  <data name="lSendTimes.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lSendTimes.Text" xml:space="preserve">
+    <value>次数:</value>
+  </data>
+  <data name="lSendTimes.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lSendTimes.Name" xml:space="preserve">
+    <value>lSendTimes</value>
+  </data>
+  <data name="&gt;&gt;lSendTimes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSendTimes.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;lSendTimes.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lSendIndex.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSendIndex.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lSendIndex.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lSendIndex.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lSendIndex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="lSendIndex.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lSendIndex.Text" xml:space="preserve">
+    <value>封包序号:</value>
+  </data>
+  <data name="lSendIndex.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lSendIndex.Name" xml:space="preserve">
+    <value>lSendIndex</value>
+  </data>
+  <data name="&gt;&gt;lSendIndex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSendIndex.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;lSendIndex.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="nudSendIndex.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudSendIndex.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 3</value>
+  </data>
+  <data name="nudSendIndex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudSendIndex.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="nudSendIndex.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudSendIndex.Name" xml:space="preserve">
+    <value>nudSendIndex</value>
+  </data>
+  <data name="&gt;&gt;nudSendIndex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudSendIndex.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;nudSendIndex.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="bSend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bSend.Location" type="System.Drawing.Point, System.Drawing">
+    <value>526, 1</value>
+  </data>
+  <data name="bSend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bSend.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="bSend.Text" xml:space="preserve">
+    <value>添 加</value>
+  </data>
+  <data name="&gt;&gt;bSend.Name" xml:space="preserve">
+    <value>bSend</value>
+  </data>
+  <data name="&gt;&gt;bSend.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSend.Parent" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;bSend.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tlpSend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSend.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpSend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSend.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>626, 51</value>
+  </data>
+  <data name="tlpSend.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpSend.Name" xml:space="preserve">
+    <value>tlpSend</value>
+  </data>
+  <data name="&gt;&gt;tlpSend.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSend.Parent" xml:space="preserve">
+    <value>gbSend</value>
+  </data>
+  <data name="&gt;&gt;tlpSend.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSend.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSendInterval_Value" Row="0" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="nudSendInterval" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="lSendInterval" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="nudSendTimes" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lSendTimes" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lSendIndex" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudSendIndex" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSend" Row="0" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,AutoSize,0,Absolute,100,AutoSize,0,Absolute,100,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbSend.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbSend.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbSend.Size" type="System.Drawing.Size, System.Drawing">
+    <value>632, 73</value>
+  </data>
+  <data name="gbSend.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="gbSend.Text" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="&gt;&gt;gbSend.Name" xml:space="preserve">
+    <value>gbSend</value>
+  </data>
+  <data name="&gt;&gt;gbSend.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSend.Parent" xml:space="preserve">
+    <value>tlpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;gbSend.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpDelay.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="bDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bDelay.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>155, 1</value>
+  </data>
+  <data name="bDelay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="bDelay.Text" xml:space="preserve">
+    <value>添 加</value>
+  </data>
+  <data name="&gt;&gt;bDelay.Name" xml:space="preserve">
+    <value>bDelay</value>
+  </data>
+  <data name="&gt;&gt;bDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bDelay.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;bDelay.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lDelay.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lDelay.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 3</value>
+  </data>
+  <data name="lDelay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 23</value>
+  </data>
+  <data name="lDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="lDelay.Text" xml:space="preserve">
+    <value>( 毫秒 )</value>
+  </data>
+  <data name="lDelay.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lDelay.Name" xml:space="preserve">
+    <value>lDelay</value>
+  </data>
+  <data name="&gt;&gt;lDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lDelay.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;lDelay.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="nudDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="nudDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="nudDelay.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudDelay.Name" xml:space="preserve">
+    <value>nudDelay</value>
+  </data>
+  <data name="&gt;&gt;nudDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudDelay.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;nudDelay.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpDelay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpDelay.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>414, 51</value>
+  </data>
+  <data name="tlpDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpDelay.Name" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;tlpDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpDelay.Parent" xml:space="preserve">
+    <value>gbDelay</value>
+  </data>
+  <data name="&gt;&gt;tlpDelay.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpDelay.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bDelay" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lDelay" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudDelay" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,AutoSize,0,Absolute,80,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>641, 3</value>
+  </data>
+  <data name="gbDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>420, 73</value>
+  </data>
+  <data name="gbDelay.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="gbDelay.Text" xml:space="preserve">
+    <value>延迟</value>
+  </data>
+  <data name="&gt;&gt;gbDelay.Name" xml:space="preserve">
+    <value>gbDelay</value>
+  </data>
+  <data name="&gt;&gt;gbDelay.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbDelay.Parent" xml:space="preserve">
+    <value>tlpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;gbDelay.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpInstruction_Socket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpInstruction_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tlpInstruction_Socket.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpInstruction_Socket.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpInstruction_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1064, 158</value>
+  </data>
+  <data name="tlpInstruction_Socket.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpInstruction_Socket.Name" xml:space="preserve">
+    <value>tlpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;tlpInstruction_Socket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpInstruction_Socket.Parent" xml:space="preserve">
+    <value>tpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;tlpInstruction_Socket.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpInstruction_Socket.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbLoop" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSend" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbDelay" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,60,Percent,40" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpInstruction_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpInstruction_Socket.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tpInstruction_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1070, 164</value>
+  </data>
+  <data name="tpInstruction_Socket.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpInstruction_Socket.Text" xml:space="preserve">
+    <value>[ 封包指令 ]</value>
+  </data>
+  <data name="&gt;&gt;tpInstruction_Socket.Name" xml:space="preserve">
+    <value>tpInstruction_Socket</value>
+  </data>
+  <data name="&gt;&gt;tpInstruction_Socket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpInstruction_Socket.Parent" xml:space="preserve">
+    <value>tcRobotInstruction</value>
+  </data>
+  <data name="&gt;&gt;tpInstruction_Socket.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tcRobotInstruction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcRobotInstruction.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 424</value>
+  </data>
+  <data name="tcRobotInstruction.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1078, 194</value>
+  </data>
+  <data name="tcRobotInstruction.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tcRobotInstruction.Name" xml:space="preserve">
+    <value>tcRobotInstruction</value>
+  </data>
+  <data name="&gt;&gt;tcRobotInstruction.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcRobotInstruction.Parent" xml:space="preserve">
+    <value>tlpRobotForm</value>
+  </data>
+  <data name="&gt;&gt;tcRobotInstruction.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="bExecute.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bExecute.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bExecute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>365, 3</value>
+  </data>
+  <data name="bExecute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="bExecute.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="bExecute.Text" xml:space="preserve">
+    <value>执 行（&amp;E）</value>
+  </data>
+  <data name="&gt;&gt;bExecute.Name" xml:space="preserve">
+    <value>bExecute</value>
+  </data>
+  <data name="&gt;&gt;bExecute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bExecute.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bExecute.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bClose.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bClose.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bClose.Location" type="System.Drawing.Point, System.Drawing">
+    <value>625, 3</value>
+  </data>
+  <data name="bClose.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="bClose.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bClose.Text" xml:space="preserve">
+    <value>关 闭（&amp;C）</value>
+  </data>
+  <data name="&gt;&gt;bClose.Name" xml:space="preserve">
+    <value>bClose</value>
+  </data>
+  <data name="&gt;&gt;bClose.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bClose.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bClose.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="bSave.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bSave.Location" type="System.Drawing.Point, System.Drawing">
+    <value>495, 3</value>
+  </data>
+  <data name="bSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="bSave.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="bSave.Text" xml:space="preserve">
+    <value>保 存（&amp;S）</value>
+  </data>
+  <data name="&gt;&gt;bSave.Name" xml:space="preserve">
+    <value>bSave</value>
+  </data>
+  <data name="&gt;&gt;bSave.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSave.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bSave.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 621</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 40</value>
+  </data>
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpRobotForm</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bExecute" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bClose" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bSave" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,100,Absolute,30,Absolute,100,Absolute,30,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="Absolute,35,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpRobotForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpRobotForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpRobotForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpRobotForm.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpRobotForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 661</value>
+  </data>
+  <data name="tlpRobotForm.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotForm.Name" xml:space="preserve">
+    <value>tlpRobotForm</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotForm.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpRobotForm.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpRobotForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpListInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tcRobotInstruction" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,200,Absolute,40,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -988,7 +1417,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>934, 304</value>
+    <value>1084, 661</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -7165,67 +7594,13 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
+    <value>CenterParent</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>发送列表</value>
+  <data name="&gt;&gt;cmsRobotInstruction_Top.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_Top</value>
   </data>
-  <data name="&gt;&gt;tlLoop_Send.Name" xml:space="preserve">
-    <value>tlLoop_Send</value>
-  </data>
-  <data name="&gt;&gt;tlLoop_Send.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlLoop_Send_CNT.Name" xml:space="preserve">
-    <value>tlLoop_Send_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlLoop_Send_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Name" xml:space="preserve">
-    <value>tlSplit</value>
-  </data>
-  <data name="&gt;&gt;tlSplit.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success.Name" xml:space="preserve">
-    <value>tlSendList_Success</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success_CNT.Name" xml:space="preserve">
-    <value>tlSendList_Success_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Success_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
-    <value>toolStripStatusLabel3</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail.Name" xml:space="preserve">
-    <value>tlSendList_Fail</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail_CNT.Name" xml:space="preserve">
-    <value>tlSendList_Fail_CNT</value>
-  </data>
-  <data name="&gt;&gt;tlSendList_Fail_CNT.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsmiDeleteSendList.Name" xml:space="preserve">
-    <value>tsmiDeleteSendList</value>
-  </data>
-  <data name="&gt;&gt;tsmiDeleteSendList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsRobotInstruction_Top.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
@@ -7234,10 +7609,16 @@
   <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiClear.Name" xml:space="preserve">
-    <value>tsmiClear</value>
+  <data name="&gt;&gt;cmsRobotInstruction_Up.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_Up</value>
   </data>
-  <data name="&gt;&gt;tsmiClear.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsRobotInstruction_Up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotInstruction_Down.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_Down</value>
+  </data>
+  <data name="&gt;&gt;cmsRobotInstruction_Down.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
@@ -7246,10 +7627,10 @@
   <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiSaveSendList.Name" xml:space="preserve">
-    <value>tsmiSaveSendList</value>
+  <data name="&gt;&gt;cmsRobotInstruction_Bottom.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_Bottom</value>
   </data>
-  <data name="&gt;&gt;tsmiSaveSendList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsRobotInstruction_Bottom.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
@@ -7258,28 +7639,22 @@
   <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmiLoadSendList.Name" xml:space="preserve">
-    <value>tsmiLoadSendList</value>
+  <data name="&gt;&gt;cmsRobotInstruction_Delete.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_Delete</value>
   </data>
-  <data name="&gt;&gt;tsmiLoadSendList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsRobotInstruction_Delete.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;bgwSendList.Name" xml:space="preserve">
-    <value>bgwSendList</value>
+  <data name="&gt;&gt;cmsRobotInstruction_CleanUp.Name" xml:space="preserve">
+    <value>cmsRobotInstruction_CleanUp</value>
   </data>
-  <data name="&gt;&gt;bgwSendList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cmsRobotInstruction_CleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cCheck.Name" xml:space="preserve">
-    <value>cCheck</value>
+  <data name="&gt;&gt;cSendList_ID.Name" xml:space="preserve">
+    <value>cSendList_ID</value>
   </data>
-  <data name="&gt;&gt;cCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cID.Name" xml:space="preserve">
-    <value>cID</value>
-  </data>
-  <data name="&gt;&gt;cID.Type" xml:space="preserve">
+  <data name="&gt;&gt;cSendList_ID.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cNote.Name" xml:space="preserve">
@@ -7306,14 +7681,26 @@
   <data name="&gt;&gt;cLen.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cData.Name" xml:space="preserve">
-    <value>cData</value>
+  <data name="&gt;&gt;cRobotInstruction_ID.Name" xml:space="preserve">
+    <value>cRobotInstruction_ID</value>
   </data>
-  <data name="&gt;&gt;cData.Type" xml:space="preserve">
+  <data name="&gt;&gt;cRobotInstruction_ID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cRobotInstruction_Type.Name" xml:space="preserve">
+    <value>cRobotInstruction_Type</value>
+  </data>
+  <data name="&gt;&gt;cRobotInstruction_Type.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cRobotInstruction_Content.Name" xml:space="preserve">
+    <value>cRobotInstruction_Content</value>
+  </data>
+  <data name="&gt;&gt;cRobotInstruction_Content.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Socket_SendListForm</value>
+    <value>Socket_RobotForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

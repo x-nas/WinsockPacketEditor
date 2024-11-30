@@ -25,10 +25,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_13 = { "请选择一个进程", "Please select a process" };
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
         public static string[] MutiLan_15 = { "应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*" };
-        public static string[] MutiLan_16 = { "滤镜 -【 序号", "Filter -【 ID" };
+        public static string[] MutiLan_16 = { "滤镜 -【 序号 {0}】- {1} [{2}]", "Filter -【 ID {0}】- {1} [{2}]" };
         public static string[] MutiLan_17 = { "确定重置为上次保存时的数据吗?", "Are you sure to reset to the last saved data?" };
         public static string[] MutiLan_18 = { "确定保存当前数据吗?", "Are you sure to save the current data?" };
-        public static string[] MutiLan_19 = { "滤镜名称不能为空", "Filter name cannot be empty" };
+        public static string[] MutiLan_19 = { "名称不能为空!", "The name cannot be empty!" };
         public static string[] MutiLan_20 = { "目标进程: ", "Process: " };
         public static string[] MutiLan_21 = { "不是有效的异或值!", "Not a valid XOR value!" };
         public static string[] MutiLan_22 = { "只执行滤镜，不显示封包", "Only execute filters, No display" };
@@ -36,7 +36,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_24 = { "[ 行 {0}  列 {1}  位置 {2} ]", "[ Ln {0}  Col {1}  Pstn {2} ]" };
         public static string[] MutiLan_25 = { "查找内容", "Search for content" };
         public static string[] MutiLan_26 = { "查找", "Search" };
-        //public static string[] MutiLan_27 = { "滤镜 {0} 添加完成", "Filter {0} added completed" };
+        public static string[] MutiLan_27 = { "机器人 {0}", "Robot {0}" };
         public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
         public static string[] MutiLan_29 = { "两个文本相同", "The two texts are the same" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
@@ -46,7 +46,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
         public static string[] MutiLan_36 = { "导出滤镜列表", "Export Filter List" };
-        public static string[] MutiLan_37 = { "确定删除选中的滤镜吗", "Are you sure to delete the selected filter" };
+        public static string[] MutiLan_37 = { "确定删除选中的数据吗", "Are you sure to delete the selected data" };
         public static string[] MutiLan_38 = { "确定删除所有数据吗", "Are you sure to delete all data" };
         public static string[] MutiLan_39 = { "开始拦截!", "Start Intercepting!" };
         public static string[] MutiLan_40 = { "结束拦截!", "Stop Intercepting!" };
@@ -59,7 +59,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_47 = { "递进设置错误", "Progressive setting error" };
         public static string[] MutiLan_48 = { "发送列表 - ", "Send List - " };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
-        public static string[] MutiLan_50 = { "滤镜", "Filter" };
+        public static string[] MutiLan_50 = { "滤镜 {0}", "Filter {0}" };
         public static string[] MutiLan_51 = { "[{0}] {1} | [{2}] 封包长度: {3}", "[{0}] {1} | [{2}] Packet Length: {3}" };
         public static string[] MutiLan_52 = { "{0} | 封包长度: {1} | {2}", "{0} | Packet Length: {1} | {2}" };
         public static string[] MutiLan_53 = { "匹配滤镜出错: ", "Matching filter error: " };
@@ -80,10 +80,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_68 = { "不修改-不显示", "No Modify-No Display" };
         public static string[] MutiLan_69 = { "[{0}] {1} | [{2}] 封包长度: {3} | 匹配数: {4}", "[{0}] {1} | [{2}] Packet Length: {3} | Match: {4}" };
         public static string[] MutiLan_70 = { "封包数据文件", "Package data file" };
-        //public static string[] MutiLan_71 = { "保存成功!", "Save successful!" };
-        //public static string[] MutiLan_72 = { "保存失败!", "Save failed!" };
+        public static string[] MutiLan_71 = { "加载机器人列表成功! [未加密]", "Load robot list successful! [Unencrypted]" };
+        public static string[] MutiLan_72 = { "加载机器人列表成功! [已加密]", "Load robot list successful! [Encrypted]" };
         public static string[] MutiLan_73 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
-        //public static string[] MutiLan_74 = { "", "" };
+        public static string[] MutiLan_74 = { "机器人数据文件", "Robot data file" };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };
         public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
@@ -97,11 +97,21 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
         public static string[] MutiLan_86 = { "二进制", "Binary" };
         public static string[] MutiLan_87 = { "十进制", "Decimal" };
-        public static string[] MutiLan_88 = { " 请输入密码, 此密码在导入滤镜列表时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!", " Please enter the password. This password will require verification when importing the filter list.\r\n If you do not need to set a password, please click the [ Cancel ] button!" };
+        public static string[] MutiLan_88 = { " 请输入密码, 此密码在导入列表时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!", " Please enter the password. This password will require verification when importing the list.\r\n If you do not need to set a password, please click the [ Cancel ] button!" };
         public static string[] MutiLan_89 = { "密码不能为空!", "Password cannot be empty!" };
         public static string[] MutiLan_90 = { "导入滤镜列表", "Import Filter List" };
         public static string[] MutiLan_91 = { " 请输入密码", " Please enter the password" };
-        public static string[] MutiLan_92 = { "加载滤镜列表失败: 密码错误!", "Failed to load filter list: Password incorrect!" };
+        public static string[] MutiLan_92 = { "加载失败: 密码错误!", "Failed to load: Password incorrect!" };
+        public static string[] MutiLan_93 = { "机器人 -【 序号 {0}】- {1} [{2}]", "Robot -【 ID {0}】- {1} [{2}]" };
+        public static string[] MutiLan_94 = { "发送", "Send" };
+        public static string[] MutiLan_95 = { "延迟", "Delay" };
+        public static string[] MutiLan_96 = { "循环开始", "Loop Start" };
+        public static string[] MutiLan_97 = { "循环结束", "Loop End" };
+        public static string[] MutiLan_98 = { "指令 {0}", "Inst {0}" };
+        public static string[] MutiLan_99 = { "循环指令设置错误！", "Loop instruction setting error!" };
+        public static string[] MutiLan_100 = { "加载发送列表成功! [未加密]", "Load send list successful! [Unencrypted]" };
+        public static string[] MutiLan_101 = { "加载发送列表成功! [已加密]", "Load send list successful! [Encrypted]" };
+        public static string[] MutiLan_102 = { "请参阅: {0}/tutorials.html 问题与解答!", "Please refer to the {0}/tutorials_enUS.html Q&A!" };
 
         #endregion
 
