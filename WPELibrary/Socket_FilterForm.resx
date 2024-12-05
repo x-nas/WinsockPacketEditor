@@ -133,7 +133,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="bFilterButton_Save.Location" type="System.Drawing.Point, System.Drawing">
-    <value>292, 3</value>
+    <value>302, 3</value>
   </data>
   <data name="bFilterButton_Save.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -166,7 +166,7 @@
     <value>NoControl</value>
   </data>
   <data name="bFilterButton_Close.Location" type="System.Drawing.Point, System.Drawing">
-    <value>432, 3</value>
+    <value>442, 3</value>
   </data>
   <data name="bFilterButton_Close.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -208,7 +208,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>814, 50</value>
+    <value>834, 50</value>
   </data>
   <data name="tlpFilterButton.TabIndex" type="System.Int32, mscorlib">
     <value>26</value>
@@ -298,7 +298,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilterNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 174</value>
+    <value>820, 174</value>
   </data>
   <data name="dgvFilterNormal.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -322,7 +322,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tpNormal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>806, 180</value>
+    <value>826, 180</value>
   </data>
   <data name="tpNormal.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -358,7 +358,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromPosition.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 30</value>
+    <value>820, 30</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromPosition.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -388,7 +388,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilterAdvanced_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 108</value>
+    <value>820, 108</value>
   </data>
   <data name="dgvFilterAdvanced_Search.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -418,7 +418,7 @@
     <value>100</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 30</value>
+    <value>820, 30</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromHead.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -448,7 +448,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>800, 174</value>
+    <value>820, 174</value>
   </data>
   <data name="tlpFilterAdvanced.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -478,7 +478,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tpAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>806, 180</value>
+    <value>826, 180</value>
   </data>
   <data name="tpAdvanced.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -511,7 +511,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tcFilterInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>814, 210</value>
+    <value>834, 210</value>
   </data>
   <data name="tcFilterInfo.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -616,7 +616,7 @@
     <value>2</value>
   </data>
   <data name="tlpProgression.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 63</value>
+    <value>197, 63</value>
   </data>
   <data name="tlpProgression.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -640,13 +640,13 @@
     <value>Fill</value>
   </data>
   <data name="gbProgression.Location" type="System.Drawing.Point, System.Drawing">
-    <value>572, 125</value>
+    <value>628, 125</value>
   </data>
   <data name="gbProgression.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbProgression.Size" type="System.Drawing.Size, System.Drawing">
-    <value>239, 85</value>
+    <value>203, 85</value>
   </data>
   <data name="gbProgression.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -667,7 +667,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAppoint.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="nudFilter_LengthContent.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -676,7 +676,7 @@
     <value>99, 35</value>
   </data>
   <data name="nudFilter_LengthContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 23</value>
+    <value>94, 23</value>
   </data>
   <data name="nudFilter_LengthContent.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -769,7 +769,7 @@
     <value>99, 6</value>
   </data>
   <data name="nudFilter_SocketContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 23</value>
+    <value>94, 23</value>
   </data>
   <data name="nudFilter_SocketContent.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -805,7 +805,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 63</value>
+    <value>238, 63</value>
   </data>
   <data name="tlpFilterAppoint.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -823,7 +823,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAppoint.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudFilter_LengthContent" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointLength" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_SocketContent" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudFilter_LengthContent" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointLength" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_SocketContent" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterAppoint.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -835,7 +835,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 85</value>
+    <value>244, 85</value>
   </data>
   <data name="gbFilterAppoint.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -856,7 +856,70 @@
     <value>1</value>
   </data>
   <data name="tlpFilterAction.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>2</value>
+  </data>
+  <data name="cbbFilterAction_Execute.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>62, 56</value>
+  </data>
+  <data name="cbbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>170, 25</value>
+  </data>
+  <data name="cbbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
+    <value>17</value>
+  </data>
+  <data name="&gt;&gt;cbbFilterAction_Execute.Name" xml:space="preserve">
+    <value>cbbFilterAction_Execute</value>
+  </data>
+  <data name="&gt;&gt;cbbFilterAction_Execute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbbFilterAction_Execute.Parent" xml:space="preserve">
+    <value>tlpFilterAction</value>
+  </data>
+  <data name="&gt;&gt;cbbFilterAction_Execute.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="rbFilterAction_Execute.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbFilterAction_Execute.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbFilterAction_Execute.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rbFilterAction_Execute.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 55</value>
+  </data>
+  <data name="rbFilterAction_Execute.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 2, 3, 2</value>
+  </data>
+  <data name="rbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 27</value>
+  </data>
+  <data name="rbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
+  </data>
+  <data name="rbFilterAction_Execute.Text" xml:space="preserve">
+    <value>执行</value>
+  </data>
+  <data name="&gt;&gt;rbFilterAction_Execute.Name" xml:space="preserve">
+    <value>rbFilterAction_Execute</value>
+  </data>
+  <data name="&gt;&gt;rbFilterAction_Execute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbFilterAction_Execute.Parent" xml:space="preserve">
+    <value>tlpFilterAction</value>
+  </data>
+  <data name="&gt;&gt;rbFilterAction_Execute.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="rbFilterAction_Intercept.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -895,7 +958,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_Intercept.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
   <data name="rbFilterAction_Replace.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -934,7 +997,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_Replace.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -949,13 +1012,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 5</value>
+    <value>62, 5</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 21</value>
+    <value>170, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -973,7 +1036,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_NoModify_Display.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -988,13 +1051,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 30</value>
+    <value>62, 30</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 21</value>
+    <value>170, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -1012,7 +1075,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_NoModify_NoDisplay.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="tlpFilterAction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1027,10 +1090,10 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tlpFilterAction.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tlpFilterAction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 103</value>
+    <value>238, 103</value>
   </data>
   <data name="tlpFilterAction.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1048,7 +1111,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAction.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rbFilterAction_Intercept" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Replace" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_Display" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_NoDisplay" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbFilterAction_Execute" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Execute" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Intercept" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Replace" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_Display" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_NoDisplay" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterAction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1060,7 +1123,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterAction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>197, 125</value>
+    <value>244, 125</value>
   </data>
   <data name="gbFilterAction.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -1252,7 +1315,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbFilterFunction_WSASend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>133, 3</value>
+    <value>97, 3</value>
   </data>
   <data name="cbFilterFunction_WSASend.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 2</value>
@@ -1291,7 +1354,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbFilterFunction_WSASendTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>133, 28</value>
+    <value>97, 28</value>
   </data>
   <data name="cbFilterFunction_WSASendTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -1330,7 +1393,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbFilterFunction_WSARecv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>133, 53</value>
+    <value>97, 53</value>
   </data>
   <data name="cbFilterFunction_WSARecv.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -1369,7 +1432,7 @@
     <value>NoControl</value>
   </data>
   <data name="cbFilterFunction_WSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>133, 78</value>
+    <value>97, 78</value>
   </data>
   <data name="cbFilterFunction_WSARecvFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
@@ -1411,7 +1474,7 @@
     <value>5</value>
   </data>
   <data name="tlpFilterFunction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 103</value>
+    <value>197, 103</value>
   </data>
   <data name="tlpFilterFunction.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1435,13 +1498,13 @@
     <value>Fill</value>
   </data>
   <data name="gbFilterFunction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>572, 0</value>
+    <value>628, 0</value>
   </data>
   <data name="gbFilterFunction.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterFunction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>239, 125</value>
+    <value>203, 125</value>
   </data>
   <data name="gbFilterFunction.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -1477,7 +1540,7 @@
     <value>87, 6</value>
   </data>
   <data name="txtFilter_HeaderContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>261, 23</value>
+    <value>270, 23</value>
   </data>
   <data name="txtFilter_HeaderContent.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -1546,7 +1609,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterAppoint_Advance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>354, 41</value>
+    <value>363, 41</value>
   </data>
   <data name="tlpFilterAppoint_Advance.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1576,7 +1639,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterAppoint_Advance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>360, 63</value>
+    <value>369, 63</value>
   </data>
   <data name="gbFilterAppoint_Advance.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -1609,7 +1672,7 @@
     <value>6, 6</value>
   </data>
   <data name="txtFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>342, 23</value>
+    <value>351, 23</value>
   </data>
   <data name="txtFilterName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1645,7 +1708,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>354, 40</value>
+    <value>363, 40</value>
   </data>
   <data name="tlpFilterName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1675,7 +1738,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>360, 62</value>
+    <value>369, 62</value>
   </data>
   <data name="gbFilterName.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -1699,7 +1762,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpFilterNameAndAppoint.Location" type="System.Drawing.Point, System.Drawing">
-    <value>203, 0</value>
+    <value>250, 0</value>
   </data>
   <data name="tlpFilterNameAndAppoint.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1708,7 +1771,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterNameAndAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>366, 125</value>
+    <value>375, 125</value>
   </data>
   <data name="tlpFilterNameAndAppoint.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -1750,7 +1813,7 @@
     <value>6, 33</value>
   </data>
   <data name="rbFilterMode_Advanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 21</value>
+    <value>89, 21</value>
   </data>
   <data name="rbFilterMode_Advanced.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1786,7 +1849,7 @@
     <value>6, 6</value>
   </data>
   <data name="rbFilterMode_Normal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 21</value>
+    <value>89, 21</value>
   </data>
   <data name="rbFilterMode_Normal.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1822,7 +1885,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 63</value>
+    <value>101, 63</value>
   </data>
   <data name="tlpFilterMode.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -1846,13 +1909,13 @@
     <value>Fill</value>
   </data>
   <data name="gbFilterMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>259, 0</value>
+    <value>265, 0</value>
   </data>
   <data name="gbFilterMode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 85</value>
+    <value>107, 85</value>
   </data>
   <data name="gbFilterMode.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -1891,7 +1954,7 @@
     <value>6, 33</value>
   </data>
   <data name="rbFilterModifyFrom_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 21</value>
+    <value>238, 21</value>
   </data>
   <data name="rbFilterModifyFrom_Position.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1927,7 +1990,7 @@
     <value>6, 6</value>
   </data>
   <data name="rbFilterModifyFrom_Head.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 21</value>
+    <value>238, 21</value>
   </data>
   <data name="rbFilterModifyFrom_Head.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1963,7 +2026,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterModifyFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>244, 63</value>
+    <value>250, 63</value>
   </data>
   <data name="tlpFilterModifyFrom.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
@@ -1993,7 +2056,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="gbFilterModifyFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 85</value>
+    <value>256, 85</value>
   </data>
   <data name="gbFilterModifyFrom.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -2017,7 +2080,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>203, 125</value>
+    <value>250, 125</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2026,7 +2089,7 @@
     <value>1</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>366, 85</value>
+    <value>375, 85</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.TabIndex" type="System.Int32, mscorlib">
     <value>31</value>
@@ -2059,7 +2122,7 @@
     <value>3</value>
   </data>
   <data name="tlpFilterParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>814, 215</value>
+    <value>834, 215</value>
   </data>
   <data name="tlpFilterParameter.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -2077,7 +2140,7 @@
     <value>2</value>
   </data>
   <data name="tlpFilterParameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProgression" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterAppoint" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterAction" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterFunction" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterNameAndAppoint" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterModifyFromAndMode" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,25,Percent,45,Percent,30" /&gt;&lt;Rows Styles="Absolute,125,Absolute,85,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProgression" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterAppoint" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterAction" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbFilterFunction" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterNameAndAppoint" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterModifyFromAndMode" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,45,Percent,25" /&gt;&lt;Rows Styles="Absolute,125,Absolute,85,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpFilterForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2092,7 +2155,7 @@
     <value>4</value>
   </data>
   <data name="tlpFilterForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>814, 471</value>
+    <value>834, 471</value>
   </data>
   <data name="tlpFilterForm.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2122,7 +2185,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>814, 471</value>
+    <value>834, 471</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>

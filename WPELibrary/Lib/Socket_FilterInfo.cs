@@ -6,12 +6,12 @@ namespace WPELibrary.Lib
     {
         #region//序号
 
-        protected int fnum;
+        protected Guid fid;
 
-        public int FNum
+        public Guid FID
         {
-            get { return fnum; }
-            set { fnum = value; }
+            get { return fid; }
+            set { fid = value; }
         }
 
         #endregion
@@ -124,6 +124,18 @@ namespace WPELibrary.Lib
 
         #endregion        
 
+        #region//机器人序号
+
+        protected Guid rid;
+
+        public Guid RID
+        {
+            get { return rid; }
+            set { rid = value; }
+        }
+
+        #endregion        
+
         #region//作用类别
 
         protected Socket_Cache.Filter.FilterFunction ffunction;
@@ -224,7 +236,7 @@ namespace WPELibrary.Lib
 
         public Socket_FilterInfo(
             bool IsEnable, 
-            int FNum, 
+            Guid FID, 
             string FName, 
             bool AppointHeader, 
             string HeaderContent, 
@@ -233,7 +245,8 @@ namespace WPELibrary.Lib
             bool AppointLength, 
             decimal LengthContent, 
             Socket_Cache.Filter.FilterMode FMode, 
-            Socket_Cache.Filter.FilterAction FAction, 
+            Socket_Cache.Filter.FilterAction FAction,
+            Guid RID,
             Socket_Cache.Filter.FilterFunction FFunction, 
             Socket_Cache.Filter.FilterStartFrom FStartFrom,
             bool IsProgressionDone,
@@ -244,7 +257,7 @@ namespace WPELibrary.Lib
             string FModify) 
         {
             this.isenable = IsEnable;
-            this.fnum = FNum;            
+            this.fid = FID;            
             this.fname = FName;
             this.appointheader = AppointHeader;
             this.headercontent = HeaderContent;
@@ -254,6 +267,7 @@ namespace WPELibrary.Lib
             this.lengthcontent = LengthContent;
             this.fmode = FMode;
             this.faction = FAction;
+            this.rid = RID;
             this.ffunction = FFunction;
             this.fstartfrom = FStartFrom;
             this.isprogressiondone = IsProgressionDone;

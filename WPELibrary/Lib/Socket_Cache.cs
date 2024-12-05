@@ -2,7 +2,6 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.ComponentModel;
 using System.Reflection;
 using Be.Windows.Forms;
@@ -13,6 +12,7 @@ using System.Xml.Linq;
 using System.IO;
 using System.Drawing;
 using System.Text;
+using System.Linq;
 
 namespace WPELibrary.Lib
 {
@@ -692,11 +692,13 @@ namespace WPELibrary.Lib
             }
 
             public enum FilterAction
-            {
+            {  
                 Replace,
                 Intercept,
                 NoModify_Display,
                 NoModify_NoDisplay,
+                Execute,
+                None,
             }
             
             public enum FilterStartFrom
@@ -737,12 +739,17 @@ namespace WPELibrary.Lib
             {
                 try
                 {
+                    Guid FID = Guid.NewGuid();
+                    int FNum = Socket_Cache.FilterList.lstFilter.Count + 1;
+                    string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50), FNum.ToString());
+
                     Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.Replace;
+                    Guid RID = Guid.Empty;
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    Socket_Cache.Filter.AddFilter(false, string.Empty, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -756,6 +763,7 @@ namespace WPELibrary.Lib
                 {
                     if (SocketList.lstRecPacket.Count > 0 && iSLIndex >= 0)
                     {
+                        Guid FID = Guid.NewGuid();
                         int iIndex = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketIndex;
                         string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
                         Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketType;
@@ -767,12 +775,13 @@ namespace WPELibrary.Lib
 
                         Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                         Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.Replace;
+                        Guid RID = Guid.Empty;
                         Socket_Cache.Filter.FilterFunction FilterFunction = Socket_Cache.Filter.GetFilterFunction_ByPacketType(ptType);
                         Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
                         string sFSearch = Socket_Cache.Filter.GetFilterString_ByBytes(bBuffer);
 
-                        Socket_Cache.Filter.AddFilter(false, sFName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
                     }
                 }
                 catch (Exception ex)
@@ -783,6 +792,7 @@ namespace WPELibrary.Lib
 
             public static void AddFilter(
                 bool IsEnable,
+                Guid FID,
                 string FName,
                 bool bAppointHeader,
                 string HeaderContent,
@@ -792,6 +802,7 @@ namespace WPELibrary.Lib
                 decimal LengthContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
                 Socket_Cache.Filter.FilterAction FilterAction,
+                Guid RID,
                 Socket_Cache.Filter.FilterFunction FilterFunction,
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom,
                 bool IsProgressionDone,
@@ -803,16 +814,11 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    int FNum = GetFilterNum_New();
-
-                    if (string.IsNullOrEmpty(FName))
+                    if (FID != null && !string.IsNullOrEmpty(FName))
                     {
-                        FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50), FNum.ToString());
-                    }
-
-                    Socket_FilterInfo sfi = new Socket_FilterInfo(
+                        Socket_FilterInfo sfi = new Socket_FilterInfo(
                         IsEnable,
-                        FNum,
+                        FID,
                         FName,
                         bAppointHeader,
                         HeaderContent,
@@ -822,6 +828,7 @@ namespace WPELibrary.Lib
                         LengthContent,
                         FilterMode,
                         FilterAction,
+                        RID,
                         FilterFunction,
                         FilterStartFrom,
                         IsProgressionDone,
@@ -831,41 +838,14 @@ namespace WPELibrary.Lib
                         FSearch,
                         FModify);
 
-                    Socket_Cache.FilterList.lstFilter.Add(sfi);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            private static int GetFilterNum_New()
-            {
-                int iReturn = 0;
-
-                try
-                {
-                    for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
-                    {
-                        int iFNum = Socket_Cache.FilterList.lstFilter[i].FNum;
-
-                        if (iFNum > iReturn)
-                        {
-                            iReturn = iFNum;
-                        }
+                        Socket_Cache.FilterList.lstFilter.Add(sfi);
                     }
-
-                    iReturn = iReturn + 1;
                 }
                 catch (Exception ex)
                 {
-                    iReturn = 0;
-
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
-            }
+            }            
 
             #endregion
 
@@ -882,6 +862,7 @@ namespace WPELibrary.Lib
                 decimal LengthContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
                 Socket_Cache.Filter.FilterAction FilterAction,
+                Guid RID,
                 Socket_Cache.Filter.FilterFunction FilterFunction,
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom,
                 decimal ProgressionStep,
@@ -892,8 +873,7 @@ namespace WPELibrary.Lib
                 try
                 {
                     if (iFIndex > -1)
-                    {
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FNum = iFIndex + 1;
+                    {                        
                         Socket_Cache.FilterList.lstFilter[iFIndex].FName = FName;
                         Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader = AppointHeader;
                         Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent = HeaderContent;
@@ -903,6 +883,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent = LengthContent;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FMode = FilterMode;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FAction = FilterAction;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].RID = RID;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FFunction = FilterFunction;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom = FilterStartFrom;
                         Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep = ProgressionStep;
@@ -965,6 +946,7 @@ namespace WPELibrary.Lib
                 try
                 {
                     bool IsEnable = false;
+                    Guid FID = Guid.NewGuid();
                     string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.FilterList.lstFilter[iFIndex].FName);
                     bool bAppointHeader = Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader;
                     string HeaderContent = Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent;
@@ -974,6 +956,7 @@ namespace WPELibrary.Lib
                     decimal LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
                     Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
                     Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
+                    Guid RID = Socket_Cache.FilterList.lstFilter[iFIndex].RID;
                     Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
                     Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
                     bool IsProgressionDone = false;
@@ -985,6 +968,7 @@ namespace WPELibrary.Lib
 
                     Socket_Cache.Filter.AddFilter(
                         IsEnable,
+                        FID,
                         FName,
                         bAppointHeader,
                         HeaderContent,
@@ -994,6 +978,7 @@ namespace WPELibrary.Lib
                         LengthContent,
                         FMode,
                         FAction,
+                        RID,
                         FFunction,
                         FStartFrom,
                         IsProgressionDone,
@@ -1142,6 +1127,10 @@ namespace WPELibrary.Lib
 
                         case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Execute:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109);
                             break;
                     }
                 }
@@ -1937,17 +1926,19 @@ namespace WPELibrary.Lib
             public static Socket_Cache.Filter.FilterAction DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, IntPtr ipBuff, Int32 iLen)
             {
                 bool bBreak = false;
-                Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.Replace;
                 string sFName = string.Empty;
+                Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.None;                
 
                 try
                 {
                     foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
                     {
-                        sFName = sfi.FName;
+                        sFName = sfi.FName;                        
 
                         if (Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, ipBuff, iLen, ptType, sfi))
                         {
+                            faReturn = sfi.FAction;
+
                             int iMatchCNT = 0;
                             bool bDoFilter = true;
 
@@ -1958,8 +1949,6 @@ namespace WPELibrary.Lib
                                     switch (sfi.FAction)
                                     {
                                         case Filter.FilterAction.Replace:
-
-                                            faReturn = Filter.FilterAction.Replace;
 
                                             sfi.IsProgressionDone = false;
 
@@ -1981,23 +1970,31 @@ namespace WPELibrary.Lib
                                             break;
 
                                         case Filter.FilterAction.Intercept:
-
-                                            faReturn = Filter.FilterAction.Intercept;
+                                                                                        
                                             bBreak = true;
 
                                             break;
 
                                         case Filter.FilterAction.NoModify_Display:
 
-                                            faReturn = Filter.FilterAction.NoModify_Display;
                                             bBreak = true;
 
                                             break;
 
                                         case Filter.FilterAction.NoModify_NoDisplay:
 
-                                            faReturn = Filter.FilterAction.NoModify_NoDisplay;
                                             bBreak = true;
+
+                                            break;
+
+                                        case Filter.FilterAction.Execute:                                            
+
+                                            Socket_Cache.Robot.DoRobot(sfi.RID);
+
+                                            if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                            {
+                                                bBreak = true;
+                                            }
 
                                             break;
                                     }
@@ -2014,8 +2011,6 @@ namespace WPELibrary.Lib
                                 switch (sfi.FAction)
                                 {
                                     case Filter.FilterAction.Replace:
-
-                                        faReturn = Filter.FilterAction.Replace;
 
                                         sfi.IsProgressionDone = false;
 
@@ -2050,22 +2045,30 @@ namespace WPELibrary.Lib
 
                                     case Filter.FilterAction.Intercept:
 
-                                        faReturn = Filter.FilterAction.Intercept;
                                         bBreak = true;
 
                                         break;
 
                                     case Filter.FilterAction.NoModify_Display:
 
-                                        faReturn = Filter.FilterAction.NoModify_Display;
                                         bBreak = true;
 
                                         break;
 
                                     case Filter.FilterAction.NoModify_NoDisplay:
 
-                                        faReturn = Filter.FilterAction.NoModify_NoDisplay;
                                         bBreak = true;
+
+                                        break;
+
+                                    case Filter.FilterAction.Execute:
+
+                                        Socket_Cache.Robot.DoRobot(sfi.RID);
+
+                                        if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                        {
+                                            bBreak = true;
+                                        }
 
                                         break;
                                 }
@@ -2110,7 +2113,7 @@ namespace WPELibrary.Lib
 
             public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, IntPtr lpBuffers, int dwBufferCount, int BytesCNT)
             {
-                Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.Replace;
+                Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.None;
 
                 try
                 {
@@ -2137,22 +2140,12 @@ namespace WPELibrary.Lib
                             BytesLeft -= iBuffLen;
 
                             Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, wsBuffer.buf, iBuffLen);
+                            faReturn = FilterAction;
 
-                            if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                            if (FilterAction != Filter.FilterAction.Replace && FilterAction != Filter.FilterAction.None)
                             {
-                                faReturn = Socket_Cache.Filter.FilterAction.Intercept;
                                 break;
-                            }
-                            else if (FilterAction == Socket_Cache.Filter.FilterAction.NoModify_Display)
-                            {
-                                faReturn = Socket_Cache.Filter.FilterAction.NoModify_Display;
-                                break;
-                            }
-                            else if (FilterAction == Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
-                            {
-                                faReturn = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
-                                break;
-                            }
+                            }                         
                         }
                     }
                 }
@@ -2253,7 +2246,7 @@ namespace WPELibrary.Lib
                         for (int i = Start; i < End; i++)
                         {
                             string sIsEnable = Socket_Cache.FilterList.lstFilter[i].IsEnable.ToString();
-                            string sFNum = Socket_Cache.FilterList.lstFilter[i].FNum.ToString();
+                            string sFID = Socket_Cache.FilterList.lstFilter[i].FID.ToString().ToUpper();
                             string sFName = Socket_Cache.FilterList.lstFilter[i].FName;
                             string sFAppointHeader = Socket_Cache.FilterList.lstFilter[i].AppointHeader.ToString();
                             string sFHeaderContent = Socket_Cache.FilterList.lstFilter[i].HeaderContent;
@@ -2263,6 +2256,7 @@ namespace WPELibrary.Lib
                             string sFLengthContent = Socket_Cache.FilterList.lstFilter[i].LengthContent.ToString();
                             string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
                             string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
+                            string sRID = Socket_Cache.FilterList.lstFilter[i].RID.ToString().ToUpper();
                             string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
                             string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
                             string sFProgressionStep = Socket_Cache.FilterList.lstFilter[i].ProgressionStep.ToString();
@@ -2273,7 +2267,7 @@ namespace WPELibrary.Lib
                             XElement xeFilter =
                                 new XElement("Filter",
                                 new XElement("IsEnable", sIsEnable),
-                                new XElement("Num", sFNum),
+                                new XElement("ID", sFID),
                                 new XElement("Name", sFName),
                                 new XElement("AppointHeader", sFAppointHeader),
                                 new XElement("HeaderContent", sFHeaderContent),
@@ -2283,6 +2277,7 @@ namespace WPELibrary.Lib
                                 new XElement("LengthContent", sFLengthContent),
                                 new XElement("Mode", sFMode),
                                 new XElement("Action", sFAction),
+                                new XElement("RobotID", sRID),
                                 new XElement("Function", sFFunction),
                                 new XElement("StartFrom", sFStartFrom),
                                 new XElement("ProgressionStep", sFProgressionStep),
@@ -2403,10 +2398,14 @@ namespace WPELibrary.Lib
                             bIsEnable = bool.Parse(xeFilter.Element("IsEnable").Value);
                         }
 
-                        string sFNum = string.Empty;
-                        if (xeFilter.Element("Num") != null)
+                        Guid gFID = Guid.Empty;
+                        if (xeFilter.Element("ID") != null)
                         {
-                            sFNum = xeFilter.Element("Num").Value;
+                            gFID = Guid.Parse(xeFilter.Element("ID").Value);
+                        }
+                        else
+                        {
+                            gFID = Guid.NewGuid();
                         }
 
                         string sFName = string.Empty;
@@ -2463,6 +2462,16 @@ namespace WPELibrary.Lib
                             FilterAction = Socket_Cache.Filter.GetFilterAction_ByString(xeFilter.Element("Action").Value);
                         }
 
+                        Guid gRID = Guid.Empty;
+                        if (xeFilter.Element("RobotID") != null)
+                        {
+                            gRID = Guid.Parse(xeFilter.Element("RobotID").Value);
+                        }
+                        else
+                        {
+                            gRID = Guid.Empty;
+                        }
+
                         Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction();
                         if (xeFilter.Element("Function") != null)
                         {
@@ -2503,7 +2512,27 @@ namespace WPELibrary.Lib
                             sFModify = xeFilter.Element("Modify").Value;
                         }
 
-                        Socket_Cache.Filter.AddFilter(bIsEnable, sFName, bAppointHeader, sFHeaderContent, bAppointSocket, dFSocketContent, bAppointLength, dFLengthContent, FilterMode, FilterAction, FilterFunction, FilterStartFrom, IsProgressionDone, dFProgressionStep, sFProgressionPosition, iProgressionCount, sFSearch, sFModify);
+                        Socket_Cache.Filter.AddFilter(
+                            bIsEnable, 
+                            gFID, 
+                            sFName, 
+                            bAppointHeader, 
+                            sFHeaderContent, 
+                            bAppointSocket, 
+                            dFSocketContent, 
+                            bAppointLength, 
+                            dFLengthContent, 
+                            FilterMode, 
+                            FilterAction, 
+                            gRID, 
+                            FilterFunction, 
+                            FilterStartFrom, 
+                            IsProgressionDone, 
+                            dFProgressionStep, 
+                            sFProgressionPosition, 
+                            iProgressionCount, 
+                            sFSearch, 
+                            sFModify);
                     }
                 }
                 catch (Exception ex)
@@ -2529,6 +2558,7 @@ namespace WPELibrary.Lib
                 Delay,
                 LoopStart,
                 LoopEnd,
+                KeyBoard,
             }
 
             #endregion
@@ -2560,7 +2590,11 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    AddRobot(string.Empty, Socket_Cache.Robot.InitInstructions());
+                    Guid RID = Guid.NewGuid();
+                    int RNum = Socket_Cache.RobotList.lstRobot.Count + 1;
+                    string RName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), RNum.ToString());
+
+                    AddRobot(RID, RName, Socket_Cache.Robot.InitInstructions());
                 }
                 catch (Exception ex)
                 {
@@ -2568,74 +2602,32 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddRobot(
-                string RName,
-                DataTable RInstructions
-                )
+            public static void AddRobot(Guid RID, string RName, DataTable RInstructions)
             {
                 try
                 {
-                    int RNum = GetRobotNum_New();
-
-                    if (string.IsNullOrEmpty(RName))
+                    if (RID != Guid.Empty && !string.IsNullOrEmpty(RName))
                     {
-                        RName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), RNum.ToString());
-                    }
-
-                    Socket_RobotInfo sri = new Socket_RobotInfo(
-                        RNum,
-                        RName,
-                        RInstructions);
-
-                    Socket_Cache.RobotList.lstRobot.Add(sri);
+                        Socket_RobotInfo sri = new Socket_RobotInfo(RID, RName, RInstructions);
+                        Socket_Cache.RobotList.lstRobot.Add(sri);
+                    }                    
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
-
-            private static int GetRobotNum_New()
-            {
-                int iReturn = 0;
-
-                try
-                {
-                    for (int i = 0; i < Socket_Cache.RobotList.lstRobot.Count; i++)
-                    {
-                        int iRNum = Socket_Cache.RobotList.lstRobot[i].RNum;
-
-                        if (iRNum > iReturn)
-                        {
-                            iReturn = iRNum;
-                        }
-                    }
-
-                    iReturn = iReturn + 1;
-                }
-                catch (Exception ex)
-                {
-                    iReturn = 0;
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return iReturn;
-            }
+            }            
 
             #endregion
 
             #region//更新机器人
 
-            public static void UpdateRobot_ByRobotIndex(
-                int RIndex,
-                string RName,
-                DataTable RInstruction)
+            public static void UpdateRobot_ByRobotIndex(int RIndex, string RName, DataTable RInstruction)
             {
                 try
                 {
                     if (RIndex > -1)
-                    {
-                        Socket_Cache.RobotList.lstRobot[RIndex].RNum = RIndex + 1;
+                    {  
                         Socket_Cache.RobotList.lstRobot[RIndex].RName = RName;
                         Socket_Cache.RobotList.lstRobot[RIndex].RInstruction = RInstruction.Copy();
                     }
@@ -2656,13 +2648,11 @@ namespace WPELibrary.Lib
 
                 try
                 {
+                    Guid RID_New = Guid.NewGuid();
                     string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.RobotList.lstRobot[RIndex].RName);
-                    DataTable RInstruction_New = Socket_Cache.RobotList.lstRobot[RIndex].RInstruction;
+                    DataTable RInstruction_Copy = Socket_Cache.RobotList.lstRobot[RIndex].RInstruction.Copy();
 
-                    Socket_Cache.Robot.AddRobot(
-                        RName_Copy,
-                        RInstruction_New);
-
+                    Socket_Cache.Robot.AddRobot(RID_New, RName_Copy, RInstruction_Copy);
                     iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
                 }
                 catch (Exception ex)
@@ -2739,6 +2729,10 @@ namespace WPELibrary.Lib
                         case Socket_Cache.Robot.InstructionType.LoopEnd:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_97);
                             break;
+
+                        case Socket_Cache.Robot.InstructionType.KeyBoard:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_105);
+                            break;
                     }
                 }
                 catch (Exception ex)
@@ -2776,6 +2770,10 @@ namespace WPELibrary.Lib
                         case Socket_Cache.Robot.InstructionType.LoopEnd:
                             cReturn = Color.Orchid;
                             break;
+
+                        case Socket_Cache.Robot.InstructionType.KeyBoard:
+                            cReturn = Color.LightSeaGreen;
+                            break;
                     }
                 }
                 catch (Exception ex)
@@ -2802,16 +2800,15 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
                             {
-                                string[] slSend = sContent.Split('|');
+                                string SendPacket_Index = sContent.Split('|')[0];                             
+                                string SendPacket_Socket = sContent.Split('|')[1];                            
 
-                                if (slSend.Length == 3)
-                                {  
-                                    string SendPacket_Index = slSend[0];
-                                    string SendPacket_Times = slSend[1];
-                                    string SendPacket_Interval = slSend[2];
+                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_113), SendPacket_Index);
 
-                                    sReturn = string.Format("封包 {0} 次 - [序号 {1}]，每次间隔 {2} 毫秒", SendPacket_Times, SendPacket_Index, SendPacket_Interval);
-                                }
+                                if (!string.IsNullOrEmpty(SendPacket_Socket) && !SendPacket_Socket.Equals("0"))
+                                {
+                                    sReturn += string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114), SendPacket_Socket);
+                                }                           
                             }
 
                             break;
@@ -2820,7 +2817,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(sContent))
                             {
-                                sReturn = string.Format("{0} 毫秒", sContent);
+                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_115), sContent);
                             }
                             
                             break;
@@ -2829,13 +2826,25 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(sContent))
                             {
-                                sReturn = string.Format("循环 {0} 次", sContent);
+                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_116), sContent);
                             }
                             
                             break;
 
                         case Socket_Cache.Robot.InstructionType.LoopEnd:
                             
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.KeyBoard:
+
+                            if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                            {
+                                string KeyType = Socket_Operation.GetName_ByKeyType(int.Parse(sContent.Split('|')[0]));
+                                string KeyCode = sContent.Split('|')[1];                                
+
+                                sReturn = string.Format("{0} {1}", KeyType, KeyCode);                            
+                            }
+
                             break;
                     }
                 }
@@ -2950,17 +2959,16 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//检查指令集有效性
+            #region//检查指令集
 
-            public static bool CheckRobotInstruction(DataTable dtRInstruction)
+            public static int CheckRobotInstruction(DataTable dtRInstruction)
             {
-                bool bReturn = true;
+                int iReturn = -1;
 
                 try
                 {
                     if (dtRInstruction != null && dtRInstruction.Rows.Count > 0)
                     {
-
                         List<int> listSend = new List<int>();
                         List<int> listDelay = new List<int>();
                         List<int> listLoopStart = new List<int>();
@@ -2990,12 +2998,44 @@ namespace WPELibrary.Lib
                             }                      
                         }
 
+                        #region//检测发送指令
+
+                        foreach (int iSendIndex in listSend)
+                        { 
+                            string sSendContent = dtRInstruction.Rows[iSendIndex]["Content"].ToString();
+
+                            if (!string.IsNullOrEmpty(sSendContent) && sSendContent.IndexOf("|") > 0)
+                            {
+                                int iSendPacketID = int.Parse(sSendContent.Split('|')[0].ToString());
+
+                                if (iSendPacketID < 1 || iSendPacketID > Socket_Cache.SendList.dtSendList.Rows.Count)
+                                {
+                                    string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iSendIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_103));
+                                    Socket_Operation.ShowMessageBox(sError);
+                                    return iSendIndex;
+                                }
+                            }
+                        }                      
+
+                        #endregion
+
                         #region//检测循环指令
 
                         if (listLoopStart.Count != listLoopEnd.Count)
                         {
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99));
-                            return false;
+                            int iErrorIndex = 0;
+                            if (listLoopStart.Count > 0)
+                            {
+                                iErrorIndex = listLoopStart[0];
+                            }
+                            else if (listLoopEnd.Count > 0)
+                            {
+                                iErrorIndex = listLoopEnd[0];
+                            }
+
+                            string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iErrorIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
+                            Socket_Operation.ShowMessageBox(sError);
+                            return iErrorIndex;
                         }
 
                         for (int i = 0; i < listLoopStart.Count; i++) 
@@ -3005,8 +3045,9 @@ namespace WPELibrary.Lib
 
                             if (iLoopStartIndex >= iLoopEndIndex)
                             {
-                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99));
-                                return false;
+                                string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iLoopEndIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
+                                Socket_Operation.ShowMessageBox(sError);
+                                return iLoopEndIndex;
                             }
                         }
 
@@ -3018,10 +3059,38 @@ namespace WPELibrary.Lib
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return bReturn;
+                return iReturn;
             }
 
             #endregion
+
+            #region//执行机器人
+
+            public static void DoRobot(Guid RID)
+            {
+                try
+                {
+                    if (RID != Guid.Empty)
+                    {
+                        Socket_RobotInfo sri = Socket_Cache.RobotList.lstRobot.Where(item => item.RID == RID).FirstOrDefault();
+
+                        if (sri != null) 
+                        {
+                            if (sri.RInstruction.Rows.Count > 0)
+                            {
+                                Socket_Robot sr = new Socket_Robot();                                
+                                sr.Start(sri.RName, sri.RInstruction);                             
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion                        
         }
 
         #endregion
@@ -3159,19 +3228,23 @@ namespace WPELibrary.Lib
                 {
                     foreach (XElement xeRobot in xdoc.Root.Elements())
                     {
-                        string sRNum = string.Empty;
-                        if (xeRobot.Element("Num") != null)
+                        Guid RID = Guid.Empty;
+                        if (xeRobot.Element("ID") != null)
                         {
-                            sRNum = xeRobot.Element("Num").Value;
+                            RID = Guid.Parse(xeRobot.Element("ID").Value);
+                        }
+                        else
+                        {
+                            RID = Guid.NewGuid();
                         }
 
-                        string sRName = string.Empty;
+                        string RName = string.Empty;
                         if (xeRobot.Element("Name") != null)
                         {
-                            sRName = xeRobot.Element("Name").Value;
+                            RName = xeRobot.Element("Name").Value;
                         }
 
-                        DataTable dtRInstruction = Socket_Cache.Robot.InitInstructions();
+                        DataTable RInstruction = Socket_Cache.Robot.InitInstructions();
                         if (xeRobot.Element("Instructions") != null)
                         {
                             foreach (XElement xeInstruction in xeRobot.Element("Instructions").Elements())
@@ -3179,15 +3252,15 @@ namespace WPELibrary.Lib
                                 string sType = xeInstruction.Attribute("Type").Value;
                                 string sContent = xeInstruction.Value;
 
-                                DataRow dr = dtRInstruction.NewRow();
+                                DataRow dr = RInstruction.NewRow();
                                 dr[0] = Socket_Cache.Robot.GetInstructionType_ByString(sType);
                                 dr[1] = sContent;
 
-                                dtRInstruction.Rows.Add(dr);
+                                RInstruction.Rows.Add(dr);
                             }
                         }
 
-                        Socket_Cache.Robot.AddRobot(sRName, dtRInstruction);
+                        Socket_Cache.Robot.AddRobot(RID, RName, RInstruction);
                     }
                 }
                 catch (Exception ex)
@@ -3284,13 +3357,13 @@ namespace WPELibrary.Lib
 
                         for (int i = Start; i < End; i++)
                         {
-                            string sRNum = Socket_Cache.RobotList.lstRobot[i].RNum.ToString();
+                            string sRID = Socket_Cache.RobotList.lstRobot[i].RID.ToString().ToUpper();
                             string sRName = Socket_Cache.RobotList.lstRobot[i].RName;
                             DataTable dtRInstruction = Socket_Cache.RobotList.lstRobot[i].RInstruction;
 
                             XElement xeRobot =
                                 new XElement("Robot",
-                                new XElement("Num", sRNum),
+                                new XElement("ID", sRID),
                                 new XElement("Name", sRName)
                                 );
 
@@ -3372,27 +3445,23 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    int iLen = (int)dtSendList.Rows[iIndex]["Len"];
-                    byte[] bBuffer = (byte[])dtSendList.Rows[iIndex]["Bytes"];
-
-                    if (bBuffer.Length > 0)
+                    if (iIndex > -1 && iIndex < dtSendList.Rows.Count)
                     {
-                        IntPtr ipSend = Marshal.AllocHGlobal(bBuffer.Length);
-                        Marshal.Copy(bBuffer, 0, ipSend, bBuffer.Length);
+                        byte[] bBuffer = (byte[])dtSendList.Rows[iIndex]["Bytes"];
 
-                        bool bReturn = WinSockHook.SendPacket(iSocket, ipSend, bBuffer.Length);
-
-                        if (bReturn)
+                        if (bBuffer.Length > 0)
                         {
-                            SendList_Success_CNT++;
-                        }
-                        else
-                        {
-                            SendList_Fail_CNT++;
-                        }
+                            IntPtr ipSend = Marshal.AllocHGlobal(bBuffer.Length);
+                            Marshal.Copy(bBuffer, 0, ipSend, bBuffer.Length);
 
-                        Thread.Sleep(Loop_Int);
-                    }
+                            if (iSocket == 0)
+                            {
+                                iSocket = (int)dtSendList.Rows[iIndex]["Socket"];
+                            }
+
+                            bResult = WinSockHook.SendPacket(iSocket, ipSend, bBuffer.Length);                          
+                        }
+                    }                    
                 }
                 catch (Exception ex)
                 {

@@ -109,7 +109,7 @@ namespace WinsockPacketEditor
             // 
             // rtbLog
             // 
-            this.rtbLog.BackColor = System.Drawing.Color.Black;
+            this.rtbLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             resources.ApplyResources(this.rtbLog, "rtbLog");
             this.rtbLog.ForeColor = System.Drawing.Color.LawnGreen;
             this.rtbLog.Name = "rtbLog";

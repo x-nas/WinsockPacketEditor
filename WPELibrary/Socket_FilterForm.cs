@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Drawing;
-using System.Diagnostics;
 using System.Windows.Forms;
 using WPELibrary.Lib;
-using EasyHook;
 using System.Reflection;
 
 namespace WPELibrary
@@ -24,6 +22,7 @@ namespace WPELibrary
         private bool FilterAppointLength = false;
         private Socket_Cache.Filter.FilterMode FilterMode;
         private Socket_Cache.Filter.FilterAction FilterAction;
+        private Guid RID = Guid.Empty;
         private Socket_Cache.Filter.FilterFunction FilterFunction;        
         private Socket_Cache.Filter.FilterStartFrom FilterStartFrom;
 
@@ -34,13 +33,21 @@ namespace WPELibrary
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
-                InitializeComponent();
+                InitializeComponent();                
 
-                this.FilterIndex = FIndex;
+                if (FIndex > -1)
+                {
+                    this.FilterIndex = FIndex;
 
-                this.InitFrom();
-                this.InitDGV();
-                this.ShowFilterInfo();                
+                    this.InitFrom();
+                    this.InitDGV();
+                    this.ShowFilterInfo();
+                }
+                else
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
+                    this.Close();
+                }                                
             }
             catch (Exception ex)
             {
@@ -56,100 +63,98 @@ namespace WPELibrary
         {
             try
             {
-                int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-                string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sInjectProcesName, iInjectProcessID);
+                string sFID = Socket_Cache.FilterList.lstFilter[FilterIndex].FID.ToString().ToUpper();
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sFID);
 
-                if (this.FilterIndex > -1)
+                this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
+                this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
+                this.FilterHeaderContent = Socket_Cache.FilterList.lstFilter[FilterIndex].HeaderContent;
+                this.FilterAppointSocket = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointSocket;
+                this.FilterSocketContent = Socket_Cache.FilterList.lstFilter[FilterIndex].SocketContent;
+                this.FilterAppointLength = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointLength;
+                this.FilterLengthContent = Socket_Cache.FilterList.lstFilter[FilterIndex].LengthContent;
+                this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
+                this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
+                this.RID = Socket_Cache.FilterList.lstFilter[FilterIndex].RID;
+                this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
+                this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
+                this.FilterProgressionStep = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionStep;
+                this.FilterProgressionPosition = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionPosition;
+                this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
+                this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;
+
+                switch (FilterMode)
                 {
-                    this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
-                    this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
-                    this.FilterHeaderContent = Socket_Cache.FilterList.lstFilter[FilterIndex].HeaderContent;
-                    this.FilterAppointSocket = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointSocket;
-                    this.FilterSocketContent = Socket_Cache.FilterList.lstFilter[FilterIndex].SocketContent;
-                    this.FilterAppointLength = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointLength;
-                    this.FilterLengthContent = Socket_Cache.FilterList.lstFilter[FilterIndex].LengthContent;
-                    this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
-                    this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
-                    this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
-                    this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
-                    this.FilterProgressionStep = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionStep;
-                    this.FilterProgressionPosition = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionPosition;
-                    this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
-                    this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;                    
+                    case Socket_Cache.Filter.FilterMode.Normal:
+                        this.rbFilterMode_Normal.Checked = true;
+                        break;
 
-                    switch (FilterMode)
-                    {
-                        case Socket_Cache.Filter.FilterMode.Normal:
-                            this.rbFilterMode_Normal.Checked = true;
-                            break;
-
-                        case Socket_Cache.Filter.FilterMode.Advanced:
-                            this.rbFilterMode_Advanced.Checked = true;
-                            break;
-                    }
-                    this.FilterModeChange();
-
-                    switch (FilterAction)
-                    {
-                        case Socket_Cache.Filter.FilterAction.Replace:
-                            this.rbFilterAction_Replace.Checked = true;
-                            break;
-
-                        case Socket_Cache.Filter.FilterAction.Intercept:
-                            this.rbFilterAction_Intercept.Checked = true;
-                            break;
-
-                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
-                            this.rbFilterAction_NoModify_Display.Checked = true;
-                            break;
-
-                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
-                            this.rbFilterAction_NoModify_NoDisplay.Checked = true;
-                            break;
-                    }
-
-                    switch (FilterStartFrom)
-                    {
-                        case Socket_Cache.Filter.FilterStartFrom.Head:
-                            this.rbFilterModifyFrom_Head.Checked = true;
-                            break;
-
-                        case Socket_Cache.Filter.FilterStartFrom.Position:
-                            this.rbFilterModifyFrom_Position.Checked = true;
-                            break;
-                    }
-                    this.FilterModifyFromChange();
-
-                    this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
-                    this.txtFilter_HeaderContent.Text = FilterHeaderContent;
-                    this.FilterAppointHeaderChange();
-
-                    this.cbFilter_AppointSocket.Checked = FilterAppointSocket;
-                    this.nudFilter_SocketContent.Value = FilterSocketContent;
-                    this.FilterAppointSocketChange();
-
-                    this.cbFilter_AppointLength.Checked = FilterAppointLength;
-                    this.nudFilter_LengthContent.Value = FilterLengthContent;
-                    this.FilterAppointLengthChange();
-
-                    this.nudProgressionStep.Value = FilterProgressionStep;                    
-
-                    this.txtFilterName.Text = FilterName;
-                    this.cbFilterFunction_Send.Checked = FilterFunction.Send;
-                    this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
-                    this.cbFilterFunction_Recv.Checked = FilterFunction.Recv;
-                    this.cbFilterFunction_RecvFrom.Checked = FilterFunction.RecvFrom;
-                    this.cbFilterFunction_WSASend.Checked = FilterFunction.WSASend;
-                    this.cbFilterFunction_WSASendTo.Checked = FilterFunction.WSASendTo;
-                    this.cbFilterFunction_WSARecv.Checked = FilterFunction.WSARecv;
-                    this.cbFilterFunction_WSARecvFrom.Checked = FilterFunction.WSARecvFrom;
+                    case Socket_Cache.Filter.FilterMode.Advanced:
+                        this.rbFilterMode_Advanced.Checked = true;
+                        break;
                 }
-                else
+                this.FilterModeChange();
+
+                switch (FilterAction)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
-                    this.Close();
+                    case Socket_Cache.Filter.FilterAction.Replace:
+                        this.rbFilterAction_Replace.Checked = true;
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.Intercept:
+                        this.rbFilterAction_Intercept.Checked = true;
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        this.rbFilterAction_NoModify_Display.Checked = true;
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        this.rbFilterAction_NoModify_NoDisplay.Checked = true;
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.Execute:
+                        this.rbFilterAction_Execute.Checked = true;
+                        break;
                 }
+
+                switch (FilterStartFrom)
+                {
+                    case Socket_Cache.Filter.FilterStartFrom.Head:
+                        this.rbFilterModifyFrom_Head.Checked = true;
+                        break;
+
+                    case Socket_Cache.Filter.FilterStartFrom.Position:
+                        this.rbFilterModifyFrom_Position.Checked = true;
+                        break;
+                }
+                this.FilterModifyFromChange();
+
+                this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
+                this.txtFilter_HeaderContent.Text = FilterHeaderContent;
+                this.FilterAppointHeaderChange();
+
+                this.cbFilter_AppointSocket.Checked = FilterAppointSocket;
+                this.nudFilter_SocketContent.Value = FilterSocketContent;
+                this.FilterAppointSocketChange();
+
+                this.cbFilter_AppointLength.Checked = FilterAppointLength;
+                this.nudFilter_LengthContent.Value = FilterLengthContent;
+                this.FilterAppointLengthChange();
+
+                this.nudProgressionStep.Value = FilterProgressionStep;
+
+                this.txtFilterName.Text = FilterName;
+                this.cbFilterFunction_Send.Checked = FilterFunction.Send;
+                this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
+                this.cbFilterFunction_Recv.Checked = FilterFunction.Recv;
+                this.cbFilterFunction_RecvFrom.Checked = FilterFunction.RecvFrom;
+                this.cbFilterFunction_WSASend.Checked = FilterFunction.WSASend;
+                this.cbFilterFunction_WSASendTo.Checked = FilterFunction.WSASendTo;
+                this.cbFilterFunction_WSARecv.Checked = FilterFunction.WSARecv;
+                this.cbFilterFunction_WSARecvFrom.Checked = FilterFunction.WSARecvFrom;
+
+                this.InitRobotInfo();
             }
             catch (Exception ex)
             {
@@ -396,6 +401,55 @@ namespace WPELibrary
                         }
                     }                    
                 }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitRobotInfo()
+        {
+            try
+            {
+                if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                {
+                    cbbFilterAction_Execute.DataSource = Socket_Cache.RobotList.lstRobot;
+                    cbbFilterAction_Execute.DisplayMember = "RName";
+                    cbbFilterAction_Execute.ValueMember = "RID";
+
+                    this.cbbFilterAction_Execute.SelectedValue = this.RID;
+                }                
+
+                this.FilterAction_ExecuteChange();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//机器人信息
+
+        private void rbFilterAction_Execute_CheckedChanged(object sender, EventArgs e)
+        {
+            this.FilterAction_ExecuteChange();
+        }
+
+        private void FilterAction_ExecuteChange()
+        {
+            try
+            {
+                if (rbFilterAction_Execute.Checked)
+                {
+                    this.cbbFilterAction_Execute.Enabled = true;
+                }
+                else
+                {
+                    this.cbbFilterAction_Execute.Enabled = false;
+                }
             }
             catch (Exception ex)
             {
@@ -707,6 +761,7 @@ namespace WPELibrary
 
                 Socket_Cache.Filter.FilterMode FilterMode_New;
                 Socket_Cache.Filter.FilterAction FilterAction_New;
+                Guid RID_New = Guid.Empty;
                 Socket_Cache.Filter.FilterFunction FilterFunction_New;
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
 
@@ -747,6 +802,15 @@ namespace WPELibrary
                 else if (rbFilterAction_NoModify_NoDisplay.Checked)
                 {
                     FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                }
+                else if (rbFilterAction_Execute.Checked)
+                {
+                    FilterAction_New = Socket_Cache.Filter.FilterAction.Execute;
+
+                    if (cbbFilterAction_Execute.SelectedValue != null)
+                    {
+                        RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                    }
                 }
                 else
                 {
@@ -886,7 +950,8 @@ namespace WPELibrary
                     bAppointLength, 
                     dLengthContent_New, 
                     FilterMode_New, 
-                    FilterAction_New, 
+                    FilterAction_New,
+                    RID_New,
                     FilterFunction_New, 
                     FilterStartFrom_New,
                     dProgressionStep_New,
@@ -1046,6 +1111,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
     }
 }

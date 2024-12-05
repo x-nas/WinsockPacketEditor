@@ -29,31 +29,29 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, socket, buffer, length);
 
                 if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
-                {
-                    res = 0;
-                }                
-                else
-                {
-                    res = send(socket, buffer, length, flags);
+                {  
+                    return 0;
+                }
 
-                    if (res > 0)
+                res = send(socket, buffer, length, flags);
+
+                if (res > 0)
+                {
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, res);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, res);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, new Socket_Cache.SocketPacket.sockaddr(), res);
-                                });
-                            }
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, new Socket_Cache.SocketPacket.sockaddr(), res);
+                            });
                         }
                     }
                 }
@@ -92,27 +90,25 @@ namespace WPELibrary.Lib
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
-                        res = 0;
+                        return 0;
                     }
-                    else
+
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, res);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, res);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, new Socket_Cache.SocketPacket.sockaddr(), res);
-                                });
-                            }
-                        }  
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, new Socket_Cache.SocketPacket.sockaddr(), res);
+                            });
+                        }
                     }
                 }
             }
@@ -146,31 +142,29 @@ namespace WPELibrary.Lib
 
                 if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                 {
-                    res = 0;
+                    return 0;
                 }
-                else
+
+                res = sendto(socket, buffer, length, flags, To, toLenth);
+
+                if (res > 0)
                 {
-                    res = sendto(socket, buffer, length, flags, To, toLenth);
-
-                    if (res > 0)
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, res);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, res);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, saTo, res);
-                                });
-                            }
+                                Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, saTo, res);
+                            });
                         }
                     }
                 }
@@ -209,27 +203,25 @@ namespace WPELibrary.Lib
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
-                        res = 0;
+                        return 0;
                     }
-                    else
+
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, res);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, res);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuffer = Socket_Operation.GetBytes_FromIntPtr(buffer, res);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, saFrom, res);
-                                });
-                            }
+                                Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bBuffer, ptType, saFrom, res);
+                            });
                         }
                     }
                 }
@@ -266,32 +258,30 @@ namespace WPELibrary.Lib
 
                 if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                 {
-                    res = SocketError.Success;
+                    return SocketError.Success;
                 }
-                else
+
+                res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, lpOverlapped, lpCompletionRoutine);
+
+                if (res == SocketError.Success)
                 {
-                    res = WSASend(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, lpOverlapped, lpCompletionRoutine);
+                    BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                    if (res == SocketError.Success)
+                    Task.Run(() =>
                     {
-                        BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
+                        Socket_Operation.CountSocketInfo(ptType, BytesSent);
+                    });
 
-                        Task.Run(() =>
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            Socket_Operation.CountSocketInfo(ptType, BytesSent);
-                        });
+                            byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
-                        {
-                            if (!Socket_Cache.SpeedMode)
+                            Task.Run(() =>
                             {
-                                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
-                                });
-                            }
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
+                            });
                         }
                     }
                 }
@@ -333,26 +323,24 @@ namespace WPELibrary.Lib
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
                         Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
-                        res = SocketError.Success;
+                        return SocketError.Success;
                     }
-                    else
+
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
-                                });
-                            }
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, new Socket_Cache.SocketPacket.sockaddr(), bBuff.Length);
+                            });
                         }
                     }
                 }
@@ -389,34 +377,32 @@ namespace WPELibrary.Lib
 
                 if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                 {
-                    res = SocketError.Success;
+                    return SocketError.Success;
                 }
-                else
+
+                res = WSASendTo(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, To, toLenth, lpOverlapped, lpCompletionRoutine);
+
+                if (res == SocketError.Success)
                 {
-                    res = WSASendTo(Socket, lpBuffers, dwBufferCount, lpNumberOfBytesSent, ref dwFlags, To, toLenth, lpOverlapped, lpCompletionRoutine);
+                    BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                    if (res == SocketError.Success)
+                    Task.Run(() =>
                     {
-                        BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
+                        Socket_Operation.CountSocketInfo(ptType, BytesSent);
+                    });
 
-                        Task.Run(() =>
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            Socket_Operation.CountSocketInfo(ptType, BytesSent);
-                        });
+                            byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
-                        {
-                            if (!Socket_Cache.SpeedMode)
+                            Task.Run(() =>
                             {
-                                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSent);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, saTo, bBuff.Length);
-                                });
-                            }
-                        }                      
+                                Socket_Cache.SocketPacket.sockaddr saTo = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(To);
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, saTo, bBuff.Length);
+                            });
+                        }
                     }
                 }
             }
@@ -457,27 +443,25 @@ namespace WPELibrary.Lib
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
                         Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
-                        res = SocketError.Success;
+                        return SocketError.Success;
                     }
-                    else
+
+                    Task.Run(() =>
                     {
-                        Task.Run(() =>
-                        {
-                            Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
-                        });
+                        Socket_Operation.CountSocketInfo(ptType, BytesRecvd);
+                    });
 
-                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (!Socket_Cache.SpeedMode)
                         {
-                            if (!Socket_Cache.SpeedMode)
+                            byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
+
+                            Task.Run(() =>
                             {
-                                byte[] bBuff = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
-
-                                Task.Run(() =>
-                                {
-                                    Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, saFrom, bBuff.Length);
-                                });
-                            }
+                                Socket_Cache.SocketPacket.sockaddr saFrom = Marshal.PtrToStructure<Socket_Cache.SocketPacket.sockaddr>(from);
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(Socket, bBuff, ptType, saFrom, bBuff.Length);
+                            });
                         }
                     }
                 }

@@ -68,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Lib\Socket_BitInfo.cs" />
+    <Compile Include="Lib\Socket_Robot.cs" />
     <Compile Include="Lib\Socket_RobotInfo.cs" />
     <Compile Include="Lib\User32.cs" />
     <Compile Include="Lib\WS2_32.cs" />

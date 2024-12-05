@@ -25,7 +25,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_13 = { "请选择一个进程", "Please select a process" };
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
         public static string[] MutiLan_15 = { "应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*" };
-        public static string[] MutiLan_16 = { "滤镜 -【 序号 {0}】- {1} [{2}]", "Filter -【 ID {0}】- {1} [{2}]" };
+        public static string[] MutiLan_16 = { "滤镜 - [ 序号 {0} ] - {1}", "Filter - [ ID {0} ] - {1}" };
         public static string[] MutiLan_17 = { "确定重置为上次保存时的数据吗?", "Are you sure to reset to the last saved data?" };
         public static string[] MutiLan_18 = { "确定保存当前数据吗?", "Are you sure to save the current data?" };
         public static string[] MutiLan_19 = { "名称不能为空!", "The name cannot be empty!" };
@@ -37,7 +37,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_25 = { "查找内容", "Search for content" };
         public static string[] MutiLan_26 = { "查找", "Search" };
         public static string[] MutiLan_27 = { "机器人 {0}", "Robot {0}" };
-        public static string[] MutiLan_28 = { "滤镜数据加载出错!", "Filter data loading error!" };
+        public static string[] MutiLan_28 = { "数据加载出错!", "Data loading error!" };
         public static string[] MutiLan_29 = { "两个文本相同", "The two texts are the same" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "已发送: {0}  已接收: {1}", "Sent: {0} Bytes  Received: {1} Bytes" };
@@ -102,16 +102,30 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_90 = { "导入列表文件", "Import List File" };
         public static string[] MutiLan_91 = { " 请输入密码", " Please enter the password" };
         public static string[] MutiLan_92 = { "加载失败: 密码错误!", "Failed to load: Password incorrect!" };
-        public static string[] MutiLan_93 = { "机器人 -【 序号 {0}】- {1} [{2}]", "Robot -【 ID {0}】- {1} [{2}]" };
+        public static string[] MutiLan_93 = { "机器人 - [ 序号 {0} ] - {1}", "Robot - [ ID {0} ] - {1}" };
         public static string[] MutiLan_94 = { "发送", "Send" };
         public static string[] MutiLan_95 = { "延迟", "Delay" };
         public static string[] MutiLan_96 = { "循环开始", "Loop Start" };
         public static string[] MutiLan_97 = { "循环结束", "Loop End" };
         public static string[] MutiLan_98 = { "指令 {0}", "Inst {0}" };
-        public static string[] MutiLan_99 = { "循环指令设置错误！", "Loop instruction setting error!" };
+        public static string[] MutiLan_99 = { "[ 指令 {0} ] 错误: {1}", "[Inst {0}] Error: {1}" };
         public static string[] MutiLan_100 = { "加载发送列表成功! [未加密]", "Load send list successful! [Unencrypted]" };
         public static string[] MutiLan_101 = { "加载发送列表成功! [已加密]", "Load send list successful! [Encrypted]" };
         public static string[] MutiLan_102 = { "请参阅: {0}/tutorials.html 问题与解答!", "Please refer to the {0}/tutorials_enUS.html Q&A!" };
+        public static string[] MutiLan_103 = { "封包序号不正确!", "Incorrect packet ID!" };
+        public static string[] MutiLan_104 = { "循环指令设置不正确!", "The loop instruction setting is incorrect!" };
+        public static string[] MutiLan_105 = { "键盘", "Keyboard" };
+        public static string[] MutiLan_106 = { "按键", "Key Press" };
+        public static string[] MutiLan_107 = { "按下", "Key Down" };
+        public static string[] MutiLan_108 = { "弹起", "Key Up" };
+        public static string[] MutiLan_109 = { "执行机器人", "Execute Robot" };
+        public static string[] MutiLan_110 = { "机器人 [{0}] 已停止!", "Robot [{0}] has stopped!" };
+        public static string[] MutiLan_111 = { "机器人 [{0}] 发生错误: {1}", "Robot [{0}] error occurred: {1}" };
+        public static string[] MutiLan_112 = { "机器人 [{0}] 执行完毕!", "Robot [{0}] execution completed!" };
+        public static string[] MutiLan_113 = { "封包 - [序号 {0}]", "Packet - [ID {0}]" };
+        public static string[] MutiLan_114 = { ", 使用套接字: {0}", ", Use Socket: {0}" };
+        public static string[] MutiLan_115 = { "{0} 毫秒", "{0} ms" };
+        public static string[] MutiLan_116 = { "循环 {0} 次", "Loop {0} Times" };
 
         #endregion
 

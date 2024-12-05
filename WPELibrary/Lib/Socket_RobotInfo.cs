@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WPELibrary.Lib
 {
@@ -11,12 +7,12 @@ namespace WPELibrary.Lib
     {
         #region//序号
 
-        protected int rnum;
+        protected Guid rid;
 
-        public int RNum
+        public Guid RID
         {
-            get { return rnum; }
-            set { rnum = value; }
+            get { return rid; }
+            set { rid = value; }
         }
 
         #endregion
@@ -47,15 +43,11 @@ namespace WPELibrary.Lib
 
         #region//Socket_RobotInfo
 
-        public Socket_RobotInfo(            
-            int RNum,
-            string RName,
-            DataTable RInstructions
-            )
+        public Socket_RobotInfo(Guid RID, string RName, DataTable RInstructions)
         {
+            this.rid = RID;
+            this.rname = RName;
             this.rinstruction = RInstructions;
-            this.rnum = RNum;
-            this.rname = RName;           
         }
 
         #endregion

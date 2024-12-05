@@ -1,7 +1,5 @@
-﻿using EasyHook;
-using System;
+﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -10,9 +8,12 @@ using WPELibrary.Lib;
 namespace WPELibrary
 {
     public partial class Socket_RobotForm : Form
-    {
+    {  
         private int RobotIndex = -1;
+        private string RobotName = string.Empty;
+        
         DataTable dtRobotInstruction = new DataTable();
+        Socket_Robot sr = new Socket_Robot();
 
         #region//窗体加载
 
@@ -21,14 +22,15 @@ namespace WPELibrary
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
-                InitializeComponent();
+                InitializeComponent();                
 
-                this.RobotIndex = RIndex;
-
-                if (this.RobotIndex > -1)
+                if (RIndex > -1)
                 {
+                    this.RobotIndex = RIndex;
+
                     this.InitFrom();
                     this.InitDGV();
+                    this.InitRobot();
                 }
                 else
                 {
@@ -49,13 +51,31 @@ namespace WPELibrary
         private void InitFrom()
         {
             try
-            {
-                int iInjectProcessID = RemoteHooking.GetCurrentProcessId();
-                string sInjectProcesName = Process.GetCurrentProcess().ProcessName;
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_93), (RobotIndex + 1), sInjectProcesName, iInjectProcessID);
+            {              
+                string sRID = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RID.ToString().ToUpper();
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_93), (RobotIndex + 1), sRID);
 
-                this.txtRobotName.Text = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RName;
-                this.dtRobotInstruction = Socket_Cache.RobotList.lstRobot[RobotIndex].RInstruction.Copy();
+                this.RobotName = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RName;
+                this.txtRobotName.Text = this.RobotName;
+                this.dtRobotInstruction = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RInstruction.Copy();
+
+                this.cbKeyBoard_Type.SelectedIndex = 0;             
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitRobot()
+        {
+            try
+            {
+                this.sr.Worker.ProgressChanged -= this.Worker_ProgressChanged;
+                this.sr.Worker.ProgressChanged += this.Worker_ProgressChanged;
+
+                this.sr.Worker.RunWorkerCompleted -= this.Worker_RunWorkerCompleted;
+                this.sr.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
             }
             catch (Exception ex)
             {
@@ -128,6 +148,33 @@ namespace WPELibrary
             }
         }
 
+        private void dgvSendList_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dgvSendList.SelectedRows.Count == 1)
+                {
+                    int iSelectSocket = 0;
+                    int iSelectIndex = dgvSendList.SelectedRows[0].Index;
+
+                    if (iSelectIndex < Socket_Cache.SendList.dtSendList.Rows.Count)
+                    {
+                        if (int.TryParse(Socket_Cache.SendList.dtSendList.Rows[iSelectIndex]["Socket"].ToString(), out int iSocket))
+                        {
+                            iSelectSocket = iSocket;
+                        }
+                        
+                        this.nudSendIndex.Value = iSelectIndex + 1;
+                        this.nudSendSocket.Value = iSelectSocket;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//保存按钮
@@ -171,17 +218,101 @@ namespace WPELibrary
         {
             try
             {
-                bool bCheck = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction);
+                if (this.dtRobotInstruction.Rows.Count > 0)
+                {
+                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction);
 
-                if (bCheck) 
-                { 
-                    //
-                }
+                    if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
+                    {
+                        this.dgvRobotInstruction.CurrentCell = dgvRobotInstruction.Rows[iReturn].Cells[0];
+                        this.dgvRobotInstruction.FirstDisplayedScrollingRowIndex = iReturn;
+                    }
+                    else
+                    {
+                        if (!this.sr.Worker.IsBusy)
+                        {
+                            this.bExecute.Enabled = false;
+                            this.bStop.Enabled = true;
+                            this.dgvRobotInstruction.Enabled = false;
+                            this.dgvSendList.Enabled = false;
+                            this.tcRobotInstruction.Enabled = false;
+                            
+                            sr.Start(this.RobotName, this.dtRobotInstruction);
+                        }
+                    }
+                }                
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private void Worker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Cancelled)
+                {
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_110), this.RobotName);
+                    Socket_Operation.ShowMessageBox(sMsg);
+                }
+                else if (e.Error != null)
+                {
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_111), this.RobotName, e.Error.Message);
+                    Socket_Operation.ShowMessageBox(sMsg);
+                }
+                else
+                {
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_112), this.RobotName);
+                    Socket_Operation.ShowMessageBox(sMsg);
+                }                
+
+                this.bExecute.Enabled = true;
+                this.bStop.Enabled = false;
+                this.dgvRobotInstruction.Enabled = true;
+                this.dgvSendList.Enabled = true;
+                this.tcRobotInstruction.Enabled = true;
+
+                this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
+                this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
+                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void Worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            try
+            {
+                int iIndex = e.ProgressPercentage;                
+
+                if (iIndex > -1 && iIndex < dgvRobotInstruction.Rows.Count)
+                {
+                    this.dgvRobotInstruction.CurrentCell = this.dgvRobotInstruction.Rows[iIndex].Cells[0];
+                    this.dgvRobotInstruction.FirstDisplayedScrollingRowIndex = iIndex;
+                }
+
+                this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
+                this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
+                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//终止按钮
+
+        private void bStop_Click(object sender, EventArgs e)
+        {
+            this.sr.Stop();
         }
 
         #endregion        
@@ -356,7 +487,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//发送指令
+        #region//封包指令 - 发送
 
         private void bSend_Click(object sender, EventArgs e)
         {
@@ -365,9 +496,21 @@ namespace WPELibrary
                 int SendPacket_Index = ((int)this.nudSendIndex.Value);
                 int SendPacket_Times = ((int)this.nudSendTimes.Value);
                 int SendPacket_Interval = ((int)this.nudSendInterval.Value);
+                int SendPacket_Socket = ((int)this.nudSendSocket.Value);
+                string sContent = SendPacket_Index + "|" + SendPacket_Socket;
 
-                string sContent = SendPacket_Index + "|" + SendPacket_Times + "|" + SendPacket_Interval;
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Send, sContent);                
+                if (SendPacket_Times > 1)
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, SendPacket_Times.ToString());
+                }
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.Send, sContent);
+
+                if (SendPacket_Times > 1)
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, SendPacket_Interval.ToString());
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
+                }            
             }
             catch (Exception ex)
             {
@@ -377,7 +520,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//延迟指令
+        #region//封包指令 - 延迟
 
         private void bDelay_Click(object sender, EventArgs e)
         {
@@ -396,15 +539,15 @@ namespace WPELibrary
 
         #endregion
 
-        #region//循环指令
+        #region//封包指令 - 循环
 
         private void bLoopStart_Click(object sender, EventArgs e)
         {
             try
             {
                 int Loop = ((int)this.nudLoop.Value);
-
                 string sContent = Loop.ToString();
+
                 this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, sContent);                     
             }
             catch (Exception ex)
@@ -427,6 +570,49 @@ namespace WPELibrary
 
         #endregion
 
-        
+        #region//键盘指令 - 按键
+
+        private void txtKeyBoard_Key_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                this.txtKeyBoard_KeyCode.Text = e.KeyCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        private void bKeyBoard_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string KeyCode = this.txtKeyBoard_KeyCode.Text;
+                int KeyType = this.cbKeyBoard_Type.SelectedIndex;
+                int KeyTimes = ((int)this.nudKeyBoard_Times.Value);
+                int KeyInterval = ((int)this.nudKeyBoard_Interval.Value);
+                string sContent = KeyType + "|" + KeyCode;
+
+                if (KeyTimes > 1)
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, KeyTimes.ToString());
+                }
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+
+                if (KeyTimes > 1)
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, KeyInterval.ToString());
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
     }
 }

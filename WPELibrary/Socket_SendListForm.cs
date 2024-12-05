@@ -4,6 +4,7 @@ using System.Diagnostics;
 using EasyHook;
 using WPELibrary.Lib;
 using System.Reflection;
+using System.Threading;
 
 namespace WPELibrary
 {
@@ -299,8 +300,23 @@ namespace WPELibrary
                                         iSocket = (int)this.dgvSendList.Rows[j].Cells["cSocket"].Value;
                                     }
 
-                                    Socket_Cache.SendList.DoSendList_ByIndex(iSocket, j);
+                                    bool bOK = Socket_Cache.SendList.DoSendList_ByIndex(iSocket, j);
+
+                                    if (bOK)
+                                    {
+                                        Socket_Cache.SendList.SendList_Success_CNT++;
+                                    }
+                                    else
+                                    {
+                                        Socket_Cache.SendList.SendList_Fail_CNT++;
+                                    }
+
                                     Socket_Cache.SendList.Loop_Send_CNT++;
+
+                                    if (Socket_Cache.SendList.Loop_Int > 0)
+                                    {
+                                        Thread.Sleep(Socket_Cache.SendList.Loop_Int);
+                                    }                                    
                                 }
                             }
                         }

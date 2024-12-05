@@ -94,6 +94,9 @@ namespace WPELibrary
             this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSocketList_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsSocketList_SendList = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsSocketList_FilterList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSocketList_UseSocket = new System.Windows.Forms.ToolStripMenuItem();
             this.tss4 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSocketList_ShowSendList = new System.Windows.Forms.ToolStripMenuItem();
@@ -335,9 +338,6 @@ namespace WPELibrary
             this.ofdExtraction = new System.Windows.Forms.OpenFileDialog();
             this.sfdExtraction = new System.Windows.Forms.SaveFileDialog();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.cmsSocketList_SendList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsSocketList_FilterList = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -661,7 +661,7 @@ namespace WPELibrary
             this.dgvSocketList.AllowUserToDeleteRows = false;
             this.dgvSocketList.AllowUserToResizeColumns = false;
             this.dgvSocketList.AllowUserToResizeRows = false;
-            this.dgvSocketList.BackgroundColor = System.Drawing.SystemColors.ControlDark;
+            this.dgvSocketList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -684,7 +684,7 @@ namespace WPELibrary
             this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
-            this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.WindowText;
+            this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dgvSocketList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
             this.dgvSocketList.RowTemplate.Height = 23;
@@ -804,6 +804,23 @@ namespace WPELibrary
             // 
             this.cmsSocketList_tss1.Name = "cmsSocketList_tss1";
             resources.ApplyResources(this.cmsSocketList_tss1, "cmsSocketList_tss1");
+            // 
+            // cmsSocketList_SendList
+            // 
+            this.cmsSocketList_SendList.Image = global::WPELibrary.Properties.Resources.addto;
+            resources.ApplyResources(this.cmsSocketList_SendList, "cmsSocketList_SendList");
+            this.cmsSocketList_SendList.Name = "cmsSocketList_SendList";
+            // 
+            // cmsSocketList_FilterList
+            // 
+            this.cmsSocketList_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
+            resources.ApplyResources(this.cmsSocketList_FilterList, "cmsSocketList_FilterList");
+            this.cmsSocketList_FilterList.Name = "cmsSocketList_FilterList";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             // 
             // cmsSocketList_UseSocket
             // 
@@ -2659,23 +2676,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             this.dataGridViewImageColumn1.ReadOnly = true;
             this.dataGridViewImageColumn1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // cmsSocketList_SendList
-            // 
-            this.cmsSocketList_SendList.Image = global::WPELibrary.Properties.Resources.addto;
-            resources.ApplyResources(this.cmsSocketList_SendList, "cmsSocketList_SendList");
-            this.cmsSocketList_SendList.Name = "cmsSocketList_SendList";
-            // 
-            // cmsSocketList_FilterList
-            // 
-            this.cmsSocketList_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
-            resources.ApplyResources(this.cmsSocketList_FilterList, "cmsSocketList_FilterList");
-            this.cmsSocketList_FilterList.Name = "cmsSocketList_FilterList";
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             // 
             // Socket_Form
             // 
