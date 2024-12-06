@@ -124,6 +124,18 @@ namespace WPELibrary.Lib
 
         #endregion        
 
+        #region//是否执行机器人
+
+        protected bool isexecute;
+
+        public bool IsExecute
+        {
+            get { return isexecute; }
+            set { isexecute = value; }
+        }
+
+        #endregion
+
         #region//机器人序号
 
         protected Guid rid;
@@ -246,6 +258,7 @@ namespace WPELibrary.Lib
             decimal LengthContent, 
             Socket_Cache.Filter.FilterMode FMode, 
             Socket_Cache.Filter.FilterAction FAction,
+            bool IsExecute,
             Guid RID,
             Socket_Cache.Filter.FilterFunction FFunction, 
             Socket_Cache.Filter.FilterStartFrom FStartFrom,
@@ -267,6 +280,7 @@ namespace WPELibrary.Lib
             this.lengthcontent = LengthContent;
             this.fmode = FMode;
             this.faction = FAction;
+            this.isexecute = IsExecute;
             this.rid = RID;
             this.ffunction = FFunction;
             this.fstartfrom = FStartFrom;

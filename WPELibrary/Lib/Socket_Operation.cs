@@ -556,6 +556,7 @@ namespace WPELibrary.Lib
                 }
                 else
                 {
+                    Socket_Cache.MainHandle = pProcess.MainWindowHandle;
                     sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
                 }
             }
@@ -996,40 +997,7 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion
-
-        #region//获取键盘按键类型名称
-
-        public static string GetName_ByKeyType(int KeyType)
-        {
-            string sReturn = string.Empty;
-
-            try
-            {
-                switch (KeyType)
-                { 
-                    case 0:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_106);
-                        break;
-
-                    case 1:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_107);
-                        break;
-
-                    case 2:
-                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_108);
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #region//是否显示封包（过滤条件）        
 

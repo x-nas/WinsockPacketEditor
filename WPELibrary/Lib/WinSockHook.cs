@@ -28,7 +28,7 @@ namespace WPELibrary.Lib
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
-                    User32.SetProcessDPIAware();
+                    User32.NativeMethods.SetProcessDPIAware();
                 }
 
                 Application.EnableVisualStyles();                

@@ -862,13 +862,13 @@
     <value>Fill</value>
   </data>
   <data name="cbbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>62, 56</value>
+    <value>99, 72</value>
   </data>
   <data name="cbbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 25</value>
+    <value>133, 25</value>
   </data>
   <data name="cbbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
+    <value>19</value>
   </data>
   <data name="&gt;&gt;cbbFilterAction_Execute.Name" xml:space="preserve">
     <value>cbbFilterAction_Execute</value>
@@ -881,45 +881,6 @@
   </data>
   <data name="&gt;&gt;cbbFilterAction_Execute.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="rbFilterAction_Execute.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rbFilterAction_Execute.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rbFilterAction_Execute.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="rbFilterAction_Execute.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 55</value>
-  </data>
-  <data name="rbFilterAction_Execute.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 2, 3, 2</value>
-  </data>
-  <data name="rbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 27</value>
-  </data>
-  <data name="rbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="rbFilterAction_Execute.Text" xml:space="preserve">
-    <value>执行</value>
-  </data>
-  <data name="&gt;&gt;rbFilterAction_Execute.Name" xml:space="preserve">
-    <value>rbFilterAction_Execute</value>
-  </data>
-  <data name="&gt;&gt;rbFilterAction_Execute.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rbFilterAction_Execute.Parent" xml:space="preserve">
-    <value>tlpFilterAction</value>
-  </data>
-  <data name="&gt;&gt;rbFilterAction_Execute.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="rbFilterAction_Intercept.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -940,7 +901,7 @@
     <value>3, 2, 3, 2</value>
   </data>
   <data name="rbFilterAction_Intercept.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 21</value>
+    <value>87, 21</value>
   </data>
   <data name="rbFilterAction_Intercept.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -958,7 +919,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_Intercept.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="rbFilterAction_Replace.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -979,7 +940,7 @@
     <value>3, 0, 3, 2</value>
   </data>
   <data name="rbFilterAction_Replace.Size" type="System.Drawing.Size, System.Drawing">
-    <value>50, 23</value>
+    <value>87, 23</value>
   </data>
   <data name="rbFilterAction_Replace.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -997,7 +958,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_Replace.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1012,13 +973,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>62, 5</value>
+    <value>99, 5</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 21</value>
+    <value>133, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -1036,7 +997,7 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_NoModify_Display.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1051,13 +1012,13 @@
     <value>NoControl</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>62, 30</value>
+    <value>99, 30</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 2, 3, 2</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>170, 21</value>
+    <value>133, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -1075,6 +1036,36 @@
     <value>tlpFilterAction</value>
   </data>
   <data name="&gt;&gt;rbFilterAction_NoModify_NoDisplay.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="cbFilterAction_Execute.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbFilterAction_Execute.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 72</value>
+  </data>
+  <data name="cbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 25</value>
+  </data>
+  <data name="cbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="cbFilterAction_Execute.Text" xml:space="preserve">
+    <value>执行机器人</value>
+  </data>
+  <data name="&gt;&gt;cbFilterAction_Execute.Name" xml:space="preserve">
+    <value>cbFilterAction_Execute</value>
+  </data>
+  <data name="&gt;&gt;cbFilterAction_Execute.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbFilterAction_Execute.Parent" xml:space="preserve">
+    <value>tlpFilterAction</value>
+  </data>
+  <data name="&gt;&gt;cbFilterAction_Execute.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
   <data name="tlpFilterAction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -1111,7 +1102,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAction.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbFilterAction_Execute" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Execute" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Intercept" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Replace" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_Display" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_NoDisplay" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbFilterAction_Execute" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Intercept" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_Replace" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_Display" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbFilterAction_NoModify_NoDisplay" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbFilterAction_Execute" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterAction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

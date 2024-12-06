@@ -8,7 +8,8 @@ using WPELibrary.Lib;
 namespace WPELibrary
 {
     public partial class Socket_RobotForm : Form
-    {  
+    {
+        bool bIsModifierKeys = true;
         private int RobotIndex = -1;
         private string RobotName = string.Empty;
         
@@ -29,8 +30,7 @@ namespace WPELibrary
                     this.RobotIndex = RIndex;
 
                     this.InitFrom();
-                    this.InitDGV();
-                    this.InitRobot();
+                    this.InitDGV();                    
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace WPELibrary
                 this.txtRobotName.Text = this.RobotName;
                 this.dtRobotInstruction = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RInstruction.Copy();
 
-                this.cbKeyBoard_Type.SelectedIndex = 0;             
+                this.InitRobot();                               
             }
             catch (Exception ex)
             {
@@ -81,7 +81,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         private void InitDGV()
         {
@@ -235,9 +235,9 @@ namespace WPELibrary
                             this.bStop.Enabled = true;
                             this.dgvRobotInstruction.Enabled = false;
                             this.dgvSendList.Enabled = false;
-                            this.tcRobotInstruction.Enabled = false;
-                            
-                            sr.Start(this.RobotName, this.dtRobotInstruction);
+                            this.tcRobotInstruction.Enabled = false;                       
+
+                            sr.StartRobot(this.RobotName, this.dtRobotInstruction);
                         }
                     }
                 }                
@@ -276,7 +276,7 @@ namespace WPELibrary
 
                 this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
                 this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
-                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();
+                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();                
             }
             catch (Exception ex)
             {
@@ -299,6 +299,8 @@ namespace WPELibrary
                 this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
                 this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
                 this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();
+                
+                this.txtExecute.AppendText((iIndex + 1).ToString() + ", ");
             }
             catch (Exception ex)
             {
@@ -312,7 +314,7 @@ namespace WPELibrary
 
         private void bStop_Click(object sender, EventArgs e)
         {
-            this.sr.Stop();
+            this.sr.StopRobot();
         }
 
         #endregion        
@@ -572,27 +574,15 @@ namespace WPELibrary
 
         #region//键盘指令 - 按键
 
-        private void txtKeyBoard_Key_KeyDown(object sender, KeyEventArgs e)
-        {
-            try
-            {
-                this.txtKeyBoard_KeyCode.Text = e.KeyCode.ToString();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
         private void bKeyBoard_Click(object sender, EventArgs e)
         {
             try
             {
-                string KeyCode = this.txtKeyBoard_KeyCode.Text;
-                int KeyType = this.cbKeyBoard_Type.SelectedIndex;
+                string KeyCode = this.txtKeyBoard_KeyCode.Text;              
                 int KeyTimes = ((int)this.nudKeyBoard_Times.Value);
                 int KeyInterval = ((int)this.nudKeyBoard_Interval.Value);
-                string sContent = KeyType + "|" + KeyCode;
+                Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Press;
+                string sContent = kbType + "|" + KeyCode;
 
                 if (KeyTimes > 1)
                 {
@@ -605,6 +595,114 @@ namespace WPELibrary
                 {
                     this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, KeyInterval.ToString());
                     this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtKeyBoard_Key_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+
+                this.txtKeyBoard_KeyCode.Text = e.KeyCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//键盘指令 - 按键组合
+
+        private void bKeyboard_combination_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Combine;
+                string sContent = kbType + "|" + this.txtKeyboard_combination.Text;
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtKeyboard_combination_KeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+
+                bIsModifierKeys = true;
+                string sKeyCode = string.Empty;
+                Keys modifiers = Control.ModifierKeys;
+
+                if ((modifiers & Keys.Control) == Keys.Control && (modifiers & Keys.Shift) == Keys.Shift && (modifiers & Keys.Alt) == Keys.Alt)
+                {
+                    sKeyCode = Keys.ControlKey.ToString() + " + " + Keys.Menu.ToString() + " + " + Keys.ShiftKey.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Control) == Keys.Control && (modifiers & Keys.Shift) == Keys.Shift)
+                {
+                    sKeyCode = Keys.ControlKey.ToString() + " + " + Keys.ShiftKey.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Control) == Keys.Control && (modifiers & Keys.Alt) == Keys.Alt)
+                {
+                    sKeyCode = Keys.ControlKey.ToString() + " + " + Keys.Menu.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Shift) == Keys.Shift && (modifiers & Keys.Alt) == Keys.Alt)
+                {
+                    sKeyCode = Keys.ShiftKey.ToString() + " + " + Keys.Menu.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Control) == Keys.Control)
+                {
+                    sKeyCode = Keys.ControlKey.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Shift) == Keys.Shift)
+                {
+                    sKeyCode = Keys.ShiftKey.ToString() + " + ";
+                }
+                else if ((modifiers & Keys.Alt) == Keys.Alt)
+                {
+                    sKeyCode = Keys.Menu.ToString() + " + ";
+                }
+
+                if (e.KeyCode != Keys.Control &&
+                e.KeyCode != Keys.ControlKey &&
+                e.KeyCode != Keys.Shift &&
+                e.KeyCode != Keys.ShiftKey &&
+                e.KeyCode != Keys.Menu &&
+                e.KeyCode != Keys.Alt)
+                {
+                    sKeyCode += e.KeyCode.ToString();
+                    bIsModifierKeys = false;
+                }
+                
+                this.txtKeyboard_combination.Text = sKeyCode;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void txtKeyboard_combination_KeyUp(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (bIsModifierKeys)
+                {
+                    this.txtKeyboard_combination.Clear();                    
                 }
             }
             catch (Exception ex)

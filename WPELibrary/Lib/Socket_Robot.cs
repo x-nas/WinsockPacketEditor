@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Data;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Forms;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace WPELibrary.Lib
 {
@@ -14,6 +16,7 @@ namespace WPELibrary.Lib
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
 
+        private User32.SendKeyboardMouse SendKeyMouse = new User32.SendKeyboardMouse();
         private DataTable RobotInstruction = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
 
@@ -34,7 +37,7 @@ namespace WPELibrary.Lib
 
         #region//开始
 
-        public void Start(string RobotName, DataTable dtRobotInstruction)
+        public void StartRobot(string RobotName, DataTable dtRobotInstruction)
         {
             try
             {
@@ -45,6 +48,9 @@ namespace WPELibrary.Lib
                         this.RobotName = RobotName;
                         this.RobotInstruction = dtRobotInstruction;
                         this.Worker.RunWorkerAsync();
+
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
+                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                     }
                 }
             }
@@ -58,7 +64,7 @@ namespace WPELibrary.Lib
 
         #region//停止
 
-        public void Stop()
+        public void StopRobot()
         {
             try
             {
@@ -163,6 +169,59 @@ namespace WPELibrary.Lib
                                 {
                                     i = iLoopStart;
                                 }
+
+                                break;
+
+                            case Socket_Cache.Robot.InstructionType.KeyBoard:
+
+                                if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                                {
+                                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.GetKeyBoardType_ByString(sContent.Split('|')[0].ToString());
+                                    string KeyCode = sContent.Split('|')[1];
+
+                                    Keys kCode = Keys.None;
+
+                                    switch (kbType)
+                                    {
+                                        case Socket_Cache.Robot.KeyBoardType.Press:
+
+                                            if (Enum.TryParse(KeyCode, true, out kCode))
+                                            {
+                                                SendKeyMouse.SendMessagePress(((byte)kCode));
+                                            }
+
+                                            break;
+
+                                        case Socket_Cache.Robot.KeyBoardType.Combine:
+
+                                            if (KeyCode.IndexOf("+") > 0)
+                                            {
+                                                KeyCode = KeyCode.Replace(" ", "");
+
+                                                string[] slKeyCode = KeyCode.Split('+');                                                
+
+                                                byte[] bKeyCode = new byte[slKeyCode.Length];
+
+                                                for (int j = 0; j < slKeyCode.Length; j++)
+                                                {
+                                                    string sKey = slKeyCode[j].ToString();
+
+                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sKey);
+
+                                                    if (Enum.TryParse(sKey, true, out kCode))
+                                                    {                                                        
+                                                        bKeyCode[j] = (byte)kCode;
+
+                                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ((int)kCode).ToString("X2"));
+                                                    }
+                                                }
+
+                                                SendKeyMouse.SendCombineKey(bKeyCode);
+                                            }
+
+                                            break;
+                                    }                                    
+                                }                           
 
                                 break;
                         }                        

@@ -17,6 +17,7 @@ namespace WPELibrary
         private string FilterProgressionPosition = string.Empty;
         private string FilterSearch = string.Empty;
         private string FilterModify = string.Empty;
+        private bool IsExecute = false;
         private bool FilterAppointHeader = false;
         private bool FilterAppointSocket = false;
         private bool FilterAppointLength = false;
@@ -75,6 +76,7 @@ namespace WPELibrary
                 this.FilterLengthContent = Socket_Cache.FilterList.lstFilter[FilterIndex].LengthContent;
                 this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
                 this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
+                this.IsExecute = Socket_Cache.FilterList.lstFilter[FilterIndex].IsExecute;
                 this.RID = Socket_Cache.FilterList.lstFilter[FilterIndex].RID;
                 this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
                 this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
@@ -111,12 +113,8 @@ namespace WPELibrary
 
                     case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
                         this.rbFilterAction_NoModify_NoDisplay.Checked = true;
-                        break;
-
-                    case Socket_Cache.Filter.FilterAction.Execute:
-                        this.rbFilterAction_Execute.Checked = true;
-                        break;
-                }
+                        break;                    
+                }            
 
                 switch (FilterStartFrom)
                 {
@@ -129,6 +127,9 @@ namespace WPELibrary
                         break;
                 }
                 this.FilterModifyFromChange();
+
+                this.cbFilterAction_Execute.Checked = IsExecute;
+                this.FilterAction_ExecuteChange();
 
                 this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
                 this.txtFilter_HeaderContent.Text = FilterHeaderContent;
@@ -419,9 +420,7 @@ namespace WPELibrary
                     cbbFilterAction_Execute.ValueMember = "RID";
 
                     this.cbbFilterAction_Execute.SelectedValue = this.RID;
-                }                
-
-                this.FilterAction_ExecuteChange();
+                }
             }
             catch (Exception ex)
             {
@@ -433,16 +432,16 @@ namespace WPELibrary
 
         #region//机器人信息
 
-        private void rbFilterAction_Execute_CheckedChanged(object sender, EventArgs e)
+        private void cbFilterAction_Execute_CheckedChanged(object sender, EventArgs e)
         {
             this.FilterAction_ExecuteChange();
-        }
+        }      
 
         private void FilterAction_ExecuteChange()
         {
             try
             {
-                if (rbFilterAction_Execute.Checked)
+                if (cbFilterAction_Execute.Checked)
                 {
                     this.cbbFilterAction_Execute.Enabled = true;
                 }
@@ -757,6 +756,7 @@ namespace WPELibrary
                 string sProgression_New = string.Empty;
                 string sSearch_New = string.Empty;
                 string sModify_New = string.Empty;
+                bool bIsExecute;
                 bool bAppointHeader, bAppointSocket, bAppointLength;
 
                 Socket_Cache.Filter.FilterMode FilterMode_New;
@@ -765,6 +765,7 @@ namespace WPELibrary
                 Socket_Cache.Filter.FilterFunction FilterFunction_New;
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
 
+                bIsExecute = this.cbFilterAction_Execute.Checked;
                 bAppointHeader = this.cbFilter_AppointHeader.Checked;
                 bAppointSocket = this.cbFilter_AppointSocket.Checked;
                 bAppointLength = this.cbFilter_AppointLength.Checked;
@@ -802,20 +803,19 @@ namespace WPELibrary
                 else if (rbFilterAction_NoModify_NoDisplay.Checked)
                 {
                     FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
-                }
-                else if (rbFilterAction_Execute.Checked)
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.Execute;
-
-                    if (cbbFilterAction_Execute.SelectedValue != null)
-                    {
-                        RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
-                    }
-                }
+                }                
                 else
                 {
                     FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
                 }
+
+                if (cbFilterAction_Execute.Checked)
+                {
+                    if (cbbFilterAction_Execute.SelectedValue != null)
+                    {
+                        RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                    }
+                }                
 
                 FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
                 FilterFunction_New.SendTo = this.cbFilterFunction_SendTo.Checked;
@@ -951,6 +951,7 @@ namespace WPELibrary
                     dLengthContent_New, 
                     FilterMode_New, 
                     FilterAction_New,
+                    bIsExecute,
                     RID_New,
                     FilterFunction_New, 
                     FilterStartFrom_New,
@@ -1111,6 +1112,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

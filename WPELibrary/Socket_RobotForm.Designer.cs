@@ -107,10 +107,8 @@
             this.nudKeyBoard_Interval = new System.Windows.Forms.NumericUpDown();
             this.lKeyBoard_Interval = new System.Windows.Forms.Label();
             this.lKeyBoard_Times = new System.Windows.Forms.Label();
-            this.lKeyBoard_Type = new System.Windows.Forms.Label();
             this.lKeyBoard_KeyCode = new System.Windows.Forms.Label();
             this.txtKeyBoard_KeyCode = new System.Windows.Forms.TextBox();
-            this.cbKeyBoard_Type = new System.Windows.Forms.ComboBox();
             this.nudKeyBoard_Times = new System.Windows.Forms.NumericUpDown();
             this.bKeyBoard = new System.Windows.Forms.Button();
             this.tpInstruction_Mouse = new System.Windows.Forms.TabPage();
@@ -122,6 +120,12 @@
             this.bExecute = new System.Windows.Forms.Button();
             this.bClose = new System.Windows.Forms.Button();
             this.bSave = new System.Windows.Forms.Button();
+            this.gbExecute = new System.Windows.Forms.GroupBox();
+            this.txtExecute = new System.Windows.Forms.TextBox();
+            this.tlpKeyboard_combination = new System.Windows.Forms.TableLayoutPanel();
+            this.lKeyboard_combination = new System.Windows.Forms.Label();
+            this.txtKeyboard_combination = new System.Windows.Forms.TextBox();
+            this.bKeyboard_combination = new System.Windows.Forms.Button();
             this.tlpRobotForm.SuspendLayout();
             this.ssRobotInstruction.SuspendLayout();
             this.tlpListInfo.SuspendLayout();
@@ -150,6 +154,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSendIndex)).BeginInit();
             this.tpInstruction_keyboard.SuspendLayout();
             this.tlpInstruction_keyboard.SuspendLayout();
+            this.gbKeyboard_combination.SuspendLayout();
             this.gbKeyboard.SuspendLayout();
             this.tlpKeyboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Interval)).BeginInit();
@@ -157,15 +162,18 @@
             this.tpInstruction_Mouse.SuspendLayout();
             this.tlpInstruction_Mouse.SuspendLayout();
             this.tlpButton.SuspendLayout();
+            this.gbExecute.SuspendLayout();
+            this.tlpKeyboard_combination.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpRobotForm
             // 
             resources.ApplyResources(this.tlpRobotForm, "tlpRobotForm");
-            this.tlpRobotForm.Controls.Add(this.ssRobotInstruction, 0, 3);
+            this.tlpRobotForm.Controls.Add(this.ssRobotInstruction, 0, 4);
             this.tlpRobotForm.Controls.Add(this.tlpListInfo, 0, 0);
-            this.tlpRobotForm.Controls.Add(this.tcRobotInstruction, 0, 1);
-            this.tlpRobotForm.Controls.Add(this.tlpButton, 0, 2);
+            this.tlpRobotForm.Controls.Add(this.tcRobotInstruction, 0, 2);
+            this.tlpRobotForm.Controls.Add(this.tlpButton, 0, 3);
+            this.tlpRobotForm.Controls.Add(this.gbExecute, 0, 1);
             this.tlpRobotForm.Name = "tlpRobotForm";
             // 
             // ssRobotInstruction
@@ -725,6 +733,7 @@
             // 
             // gbKeyboard_combination
             // 
+            this.gbKeyboard_combination.Controls.Add(this.tlpKeyboard_combination);
             resources.ApplyResources(this.gbKeyboard_combination, "gbKeyboard_combination");
             this.gbKeyboard_combination.Name = "gbKeyboard_combination";
             this.gbKeyboard_combination.TabStop = false;
@@ -742,10 +751,8 @@
             this.tlpKeyboard.Controls.Add(this.nudKeyBoard_Interval, 3, 1);
             this.tlpKeyboard.Controls.Add(this.lKeyBoard_Interval, 2, 1);
             this.tlpKeyboard.Controls.Add(this.lKeyBoard_Times, 0, 1);
-            this.tlpKeyboard.Controls.Add(this.lKeyBoard_Type, 2, 0);
             this.tlpKeyboard.Controls.Add(this.lKeyBoard_KeyCode, 0, 0);
             this.tlpKeyboard.Controls.Add(this.txtKeyBoard_KeyCode, 1, 0);
-            this.tlpKeyboard.Controls.Add(this.cbKeyBoard_Type, 3, 0);
             this.tlpKeyboard.Controls.Add(this.nudKeyBoard_Times, 1, 1);
             this.tlpKeyboard.Controls.Add(this.bKeyBoard, 5, 1);
             this.tlpKeyboard.Name = "tlpKeyboard";
@@ -775,11 +782,6 @@
             resources.ApplyResources(this.lKeyBoard_Times, "lKeyBoard_Times");
             this.lKeyBoard_Times.Name = "lKeyBoard_Times";
             // 
-            // lKeyBoard_Type
-            // 
-            resources.ApplyResources(this.lKeyBoard_Type, "lKeyBoard_Type");
-            this.lKeyBoard_Type.Name = "lKeyBoard_Type";
-            // 
             // lKeyBoard_KeyCode
             // 
             resources.ApplyResources(this.lKeyBoard_KeyCode, "lKeyBoard_KeyCode");
@@ -787,20 +789,11 @@
             // 
             // txtKeyBoard_KeyCode
             // 
+            this.txtKeyBoard_KeyCode.BackColor = System.Drawing.SystemColors.Window;
             resources.ApplyResources(this.txtKeyBoard_KeyCode, "txtKeyBoard_KeyCode");
             this.txtKeyBoard_KeyCode.Name = "txtKeyBoard_KeyCode";
+            this.txtKeyBoard_KeyCode.ReadOnly = true;
             this.txtKeyBoard_KeyCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyBoard_Key_KeyDown);
-            // 
-            // cbKeyBoard_Type
-            // 
-            resources.ApplyResources(this.cbKeyBoard_Type, "cbKeyBoard_Type");
-            this.cbKeyBoard_Type.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbKeyBoard_Type.FormattingEnabled = true;
-            this.cbKeyBoard_Type.Items.AddRange(new object[] {
-            resources.GetString("cbKeyBoard_Type.Items"),
-            resources.GetString("cbKeyBoard_Type.Items1"),
-            resources.GetString("cbKeyBoard_Type.Items2")});
-            this.cbKeyBoard_Type.Name = "cbKeyBoard_Type";
             // 
             // nudKeyBoard_Times
             // 
@@ -892,6 +885,51 @@
             this.bSave.UseVisualStyleBackColor = true;
             this.bSave.Click += new System.EventHandler(this.bSave_Click);
             // 
+            // gbExecute
+            // 
+            this.gbExecute.Controls.Add(this.txtExecute);
+            resources.ApplyResources(this.gbExecute, "gbExecute");
+            this.gbExecute.Name = "gbExecute";
+            this.gbExecute.TabStop = false;
+            // 
+            // txtExecute
+            // 
+            this.txtExecute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.txtExecute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtExecute, "txtExecute");
+            this.txtExecute.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.txtExecute.Name = "txtExecute";
+            this.txtExecute.ReadOnly = true;
+            // 
+            // tlpKeyboard_combination
+            // 
+            resources.ApplyResources(this.tlpKeyboard_combination, "tlpKeyboard_combination");
+            this.tlpKeyboard_combination.Controls.Add(this.lKeyboard_combination, 0, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.txtKeyboard_combination, 1, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.bKeyboard_combination, 3, 0);
+            this.tlpKeyboard_combination.Name = "tlpKeyboard_combination";
+            // 
+            // lKeyboard_combination
+            // 
+            resources.ApplyResources(this.lKeyboard_combination, "lKeyboard_combination");
+            this.lKeyboard_combination.Name = "lKeyboard_combination";
+            // 
+            // txtKeyboard_combination
+            // 
+            this.txtKeyboard_combination.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtKeyboard_combination, "txtKeyboard_combination");
+            this.txtKeyboard_combination.Name = "txtKeyboard_combination";
+            this.txtKeyboard_combination.ReadOnly = true;
+            this.txtKeyboard_combination.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyDown);
+            this.txtKeyboard_combination.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyUp);
+            // 
+            // bKeyboard_combination
+            // 
+            resources.ApplyResources(this.bKeyboard_combination, "bKeyboard_combination");
+            this.bKeyboard_combination.Name = "bKeyboard_combination";
+            this.bKeyboard_combination.UseVisualStyleBackColor = true;
+            this.bKeyboard_combination.Click += new System.EventHandler(this.bKeyboard_combination_Click);
+            // 
             // Socket_RobotForm
             // 
             resources.ApplyResources(this, "$this");
@@ -933,6 +971,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudSendIndex)).EndInit();
             this.tpInstruction_keyboard.ResumeLayout(false);
             this.tlpInstruction_keyboard.ResumeLayout(false);
+            this.gbKeyboard_combination.ResumeLayout(false);
             this.gbKeyboard.ResumeLayout(false);
             this.tlpKeyboard.ResumeLayout(false);
             this.tlpKeyboard.PerformLayout();
@@ -941,6 +980,10 @@
             this.tpInstruction_Mouse.ResumeLayout(false);
             this.tlpInstruction_Mouse.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
+            this.gbExecute.ResumeLayout(false);
+            this.gbExecute.PerformLayout();
+            this.tlpKeyboard_combination.ResumeLayout(false);
+            this.tlpKeyboard_combination.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1024,13 +1067,17 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TableLayoutPanel tlpKeyboard;
         private System.Windows.Forms.Label lKeyBoard_Times;
-        private System.Windows.Forms.Label lKeyBoard_Type;
         private System.Windows.Forms.Label lKeyBoard_KeyCode;
         private System.Windows.Forms.TextBox txtKeyBoard_KeyCode;
-        private System.Windows.Forms.ComboBox cbKeyBoard_Type;
         private System.Windows.Forms.NumericUpDown nudKeyBoard_Times;
         private System.Windows.Forms.Button bKeyBoard;
         private System.Windows.Forms.NumericUpDown nudKeyBoard_Interval;
         private System.Windows.Forms.Label lKeyBoard_Interval;
+        private System.Windows.Forms.GroupBox gbExecute;
+        private System.Windows.Forms.TextBox txtExecute;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
+        private System.Windows.Forms.Label lKeyboard_combination;
+        private System.Windows.Forms.TextBox txtKeyboard_combination;
+        private System.Windows.Forms.Button bKeyboard_combination;
     }
 }
