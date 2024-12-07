@@ -1372,23 +1372,15 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsRobotList_Copy":
-
-                                iIndex = Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
-
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Copy, iRIndex);
                                 break;
 
                             case "cmsRobotList_Export":
-
-                                string sRName = this.dgvRobotList.CurrentRow.Cells["cRName"].Value.ToString();
-                                Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, iRIndex);
-                                iIndex = iRIndex;
-
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Export, iRIndex);
                                 break;
 
                             case "cmsRobotList_Delete":
-
-                                Socket_Cache.Robot.DeleteRobot_ByRobotIndex_Dialog(iRIndex);
-
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Delete, iRIndex);
                                 break;
                         }
 

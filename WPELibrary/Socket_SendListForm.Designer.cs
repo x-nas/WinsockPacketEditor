@@ -31,10 +31,10 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_SendListForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketSendList = new System.Windows.Forms.StatusStrip();
             this.tlLoop_Send = new System.Windows.Forms.ToolStripStatusLabel();
@@ -46,13 +46,6 @@ namespace WPELibrary
             this.tlSendList_Fail = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlSendList_Fail_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvSendList = new System.Windows.Forms.DataGridView();
-            this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsSendList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsSendList_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,6 +73,13 @@ namespace WPELibrary
             this.bSendListStop = new System.Windows.Forms.Button();
             this.bSendList = new System.Windows.Forms.Button();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
+            this.cCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpSendList.SuspendLayout();
             this.ssSocketSendList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).BeginInit();
@@ -124,8 +124,8 @@ namespace WPELibrary
             // 
             // tlLoop_Send
             // 
-            this.tlLoop_Send.Name = "tlLoop_Send";
             resources.ApplyResources(this.tlLoop_Send, "tlLoop_Send");
+            this.tlLoop_Send.Name = "tlLoop_Send";
             // 
             // tlLoop_Send_CNT
             // 
@@ -134,14 +134,14 @@ namespace WPELibrary
             // 
             // tlSplit
             // 
+            resources.ApplyResources(this.tlSplit, "tlSplit");
             this.tlSplit.ForeColor = System.Drawing.Color.DarkGray;
             this.tlSplit.Name = "tlSplit";
-            resources.ApplyResources(this.tlSplit, "tlSplit");
             // 
             // tlSendList_Success
             // 
-            this.tlSendList_Success.Name = "tlSendList_Success";
             resources.ApplyResources(this.tlSendList_Success, "tlSendList_Success");
+            this.tlSendList_Success.Name = "tlSendList_Success";
             // 
             // tlSendList_Success_CNT
             // 
@@ -151,14 +151,14 @@ namespace WPELibrary
             // 
             // toolStripStatusLabel3
             // 
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // tlSendList_Fail
             // 
-            this.tlSendList_Fail.Name = "tlSendList_Fail";
             resources.ApplyResources(this.tlSendList_Fail, "tlSendList_Fail");
+            this.tlSendList_Fail.Name = "tlSendList_Fail";
             // 
             // tlSendList_Fail_CNT
             // 
@@ -168,6 +168,7 @@ namespace WPELibrary
             // 
             // dgvSendList
             // 
+            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.AllowUserToAddRows = false;
             this.dgvSendList.AllowUserToDeleteRows = false;
             this.dgvSendList.AllowUserToResizeRows = false;
@@ -182,7 +183,6 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSendList.ContextMenuStrip = this.cmsSendList;
-            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.MultiSelect = false;
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
@@ -193,70 +193,9 @@ namespace WPELibrary
             this.dgvSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSendList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSendList_CellFormatting);
             // 
-            // cCheck
-            // 
-            this.cCheck.FalseValue = "0";
-            resources.ApplyResources(this.cCheck, "cCheck");
-            this.cCheck.IndeterminateValue = "0";
-            this.cCheck.Name = "cCheck";
-            this.cCheck.TrueValue = "1";
-            // 
-            // cID
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cID.DefaultCellStyle = dataGridViewCellStyle1;
-            resources.ApplyResources(this.cID, "cID");
-            this.cID.Name = "cID";
-            this.cID.ReadOnly = true;
-            this.cID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cNote
-            // 
-            this.cNote.DataPropertyName = "Remark";
-            resources.ApplyResources(this.cNote, "cNote");
-            this.cNote.Name = "cNote";
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPTo
-            // 
-            this.cIPTo.DataPropertyName = "ToAddress";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.cIPTo, "cIPTo");
-            this.cIPTo.Name = "cIPTo";
-            this.cIPTo.ReadOnly = true;
-            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "Len";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle4;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cData
-            // 
-            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cData.DataPropertyName = "Data";
-            resources.ApplyResources(this.cData, "cData");
-            this.cData.Name = "cData";
-            this.cData.ReadOnly = true;
-            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
             // cmsSendList
             // 
+            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.cmsSendList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsSendList_Delete,
@@ -267,46 +206,45 @@ namespace WPELibrary
             this.toolStripSeparator3,
             this.cmsSendList_Load});
             this.cmsSendList.Name = "cmsBatchSend";
-            resources.ApplyResources(this.cmsSendList, "cmsSendList");
             this.cmsSendList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsSendList_ItemClicked);
             // 
             // cmsSendList_Delete
             // 
-            this.cmsSendList_Delete.Image = global::WPELibrary.Properties.Resources.ListDel;
             resources.ApplyResources(this.cmsSendList_Delete, "cmsSendList_Delete");
+            this.cmsSendList_Delete.Image = global::WPELibrary.Properties.Resources.ListDel;
             this.cmsSendList_Delete.Name = "cmsSendList_Delete";
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
             // 
             // cmsSendList_CleanUp
             // 
-            this.cmsSendList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
             resources.ApplyResources(this.cmsSendList_CleanUp, "cmsSendList_CleanUp");
+            this.cmsSendList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
             this.cmsSendList_CleanUp.Name = "cmsSendList_CleanUp";
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
             // 
             // cmsSendList_Save
             // 
-            this.cmsSendList_Save.Image = global::WPELibrary.Properties.Resources.saveas;
             resources.ApplyResources(this.cmsSendList_Save, "cmsSendList_Save");
+            this.cmsSendList_Save.Image = global::WPELibrary.Properties.Resources.saveas;
             this.cmsSendList_Save.Name = "cmsSendList_Save";
             // 
             // toolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
             // 
             // cmsSendList_Load
             // 
-            this.cmsSendList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
             resources.ApplyResources(this.cmsSendList_Load, "cmsSendList_Load");
+            this.cmsSendList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
             this.cmsSendList_Load.Name = "cmsSendList_Load";
             // 
             // tlpParameter
@@ -321,8 +259,8 @@ namespace WPELibrary
             // 
             // gbSendListForm4
             // 
-            this.gbSendListForm4.Controls.Add(this.tlpSendListForm4);
             resources.ApplyResources(this.gbSendListForm4, "gbSendListForm4");
+            this.gbSendListForm4.Controls.Add(this.tlpSendListForm4);
             this.gbSendListForm4.Name = "gbSendListForm4";
             this.gbSendListForm4.TabStop = false;
             // 
@@ -360,8 +298,8 @@ namespace WPELibrary
             // 
             // gbSendListForm3
             // 
-            this.gbSendListForm3.Controls.Add(this.tlpSendListForm3);
             resources.ApplyResources(this.gbSendListForm3, "gbSendListForm3");
+            this.gbSendListForm3.Controls.Add(this.tlpSendListForm3);
             this.gbSendListForm3.Name = "gbSendListForm3";
             this.gbSendListForm3.TabStop = false;
             // 
@@ -399,8 +337,8 @@ namespace WPELibrary
             // 
             // gbSendListForm2
             // 
-            this.gbSendListForm2.Controls.Add(this.tlpSendListForm2);
             resources.ApplyResources(this.gbSendListForm2, "gbSendListForm2");
+            this.gbSendListForm2.Controls.Add(this.tlpSendListForm2);
             this.gbSendListForm2.Name = "gbSendListForm2";
             this.gbSendListForm2.TabStop = false;
             // 
@@ -439,8 +377,8 @@ namespace WPELibrary
             // 
             // gbSendListForm1
             // 
-            this.gbSendListForm1.Controls.Add(this.cbSelectAll);
             resources.ApplyResources(this.gbSendListForm1, "gbSendListForm1");
+            this.gbSendListForm1.Controls.Add(this.cbSelectAll);
             this.gbSendListForm1.Name = "gbSendListForm1";
             this.gbSendListForm1.TabStop = false;
             // 
@@ -477,6 +415,68 @@ namespace WPELibrary
             this.bgwSendList.WorkerSupportsCancellation = true;
             this.bgwSendList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendList_DoWork);
             this.bgwSendList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendList_RunWorkerCompleted);
+            // 
+            // cCheck
+            // 
+            this.cCheck.FalseValue = "0";
+            resources.ApplyResources(this.cCheck, "cCheck");
+            this.cCheck.IndeterminateValue = "0";
+            this.cCheck.Name = "cCheck";
+            this.cCheck.TrueValue = "1";
+            // 
+            // cID
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cID.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.cID, "cID");
+            this.cID.Name = "cID";
+            this.cID.ReadOnly = true;
+            this.cID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cNote
+            // 
+            this.cNote.DataPropertyName = "Remark";
+            resources.ApplyResources(this.cNote, "cNote");
+            this.cNote.Name = "cNote";
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPTo
+            // 
+            this.cIPTo.DataPropertyName = "ToAddress";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle7;
+            resources.ApplyResources(this.cIPTo, "cIPTo");
+            this.cIPTo.Name = "cIPTo";
+            this.cIPTo.ReadOnly = true;
+            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "Len";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cData
+            // 
+            this.cData.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cData.DataPropertyName = "Data";
+            resources.ApplyResources(this.cData, "cData");
+            this.cData.Name = "cData";
+            this.cData.ReadOnly = true;
+            this.cData.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Socket_SendListForm
             // 

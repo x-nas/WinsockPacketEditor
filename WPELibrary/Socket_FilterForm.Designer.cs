@@ -84,6 +84,7 @@ namespace WPELibrary
             this.rbFilterAction_Replace = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_NoModify_Display = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_NoModify_NoDisplay = new System.Windows.Forms.RadioButton();
+            this.cbFilterAction_Execute = new System.Windows.Forms.CheckBox();
             this.gbFilterFunction = new System.Windows.Forms.GroupBox();
             this.tlpFilterFunction = new System.Windows.Forms.TableLayoutPanel();
             this.cbFilterFunction_RecvFrom = new System.Windows.Forms.CheckBox();
@@ -111,7 +112,6 @@ namespace WPELibrary
             this.tlpFilterModifyFrom = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterModifyFrom_Position = new System.Windows.Forms.RadioButton();
             this.rbFilterModifyFrom_Head = new System.Windows.Forms.RadioButton();
-            this.cbFilterAction_Execute = new System.Windows.Forms.CheckBox();
             this.cbbFilterAction_Execute = new System.Windows.Forms.ComboBox();
             this.tlpFilterForm.SuspendLayout();
             this.tlpFilterButton.SuspendLayout();
@@ -576,6 +576,13 @@ namespace WPELibrary
             this.rbFilterAction_NoModify_NoDisplay.Name = "rbFilterAction_NoModify_NoDisplay";
             this.rbFilterAction_NoModify_NoDisplay.UseVisualStyleBackColor = true;
             // 
+            // cbFilterAction_Execute
+            // 
+            resources.ApplyResources(this.cbFilterAction_Execute, "cbFilterAction_Execute");
+            this.cbFilterAction_Execute.Name = "cbFilterAction_Execute";
+            this.cbFilterAction_Execute.UseVisualStyleBackColor = true;
+            this.cbFilterAction_Execute.CheckedChanged += new System.EventHandler(this.cbFilterAction_Execute_CheckedChanged);
+            // 
             // gbFilterFunction
             // 
             this.gbFilterFunction.Controls.Add(this.tlpFilterFunction);
@@ -787,13 +794,6 @@ namespace WPELibrary
             this.rbFilterModifyFrom_Head.UseVisualStyleBackColor = true;
             this.rbFilterModifyFrom_Head.CheckedChanged += new System.EventHandler(this.rbFilterModifyFrom_CheckedChanged);
             // 
-            // cbFilterAction_Execute
-            // 
-            resources.ApplyResources(this.cbFilterAction_Execute, "cbFilterAction_Execute");
-            this.cbFilterAction_Execute.Name = "cbFilterAction_Execute";
-            this.cbFilterAction_Execute.UseVisualStyleBackColor = true;
-            this.cbFilterAction_Execute.CheckedChanged += new System.EventHandler(this.cbFilterAction_Execute_CheckedChanged);
-            // 
             // cbbFilterAction_Execute
             // 
             resources.ApplyResources(this.cbbFilterAction_Execute, "cbbFilterAction_Execute");
@@ -920,7 +920,7 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Progression_Enable;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Progression_Disable;
-        private System.Windows.Forms.ComboBox cbbFilterAction_Execute;
         private System.Windows.Forms.CheckBox cbFilterAction_Execute;
+        private System.Windows.Forms.ComboBox cbbFilterAction_Execute;
     }
 }

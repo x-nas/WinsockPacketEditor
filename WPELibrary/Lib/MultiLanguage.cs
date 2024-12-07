@@ -116,8 +116,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_104 = { "循环指令设置不正确!", "The loop instruction setting is incorrect!" };
         public static string[] MutiLan_105 = { "键盘", "Keyboard" };
         public static string[] MutiLan_106 = { "按键 {0}", "Press {0}" };
-        //public static string[] MutiLan_107 = { "组合按键 {0}", "Combine Press {0}" };
-        //public static string[] MutiLan_108 = { "弹起", "Key Up" };
+        public static string[] MutiLan_107 = { "鼠标", "Mouse" };
+        public static string[] MutiLan_108 = { "移动到 ( {0} )", "Move To ( {0} )" };
         public static string[] MutiLan_109 = { "启动机器人 [{0}]", "Start Robot [{0}]" };
         public static string[] MutiLan_110 = { "机器人 [{0}] 已停止!", "Robot [{0}] has stopped!" };
         public static string[] MutiLan_111 = { "机器人 [{0}] 发生错误: {1}", "Robot [{0}] error occurred: {1}" };
@@ -125,7 +125,21 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_113 = { "封包 - [序号 {0}]", "Packet - [ID {0}]" };
         public static string[] MutiLan_114 = { ", 使用套接字: {0}", ", Use Socket: {0}" };
         public static string[] MutiLan_115 = { "{0} 毫秒", "{0} ms" };
-        public static string[] MutiLan_116 = { "循环 {0} 次", "Loop {0} Times" };        
+        public static string[] MutiLan_116 = { "循环 {0} 次", "Loop {0} Times" };
+        public static string[] MutiLan_117 = { "左键单击", "Left Click" };
+        public static string[] MutiLan_118 = { "右键单击", "Right Click" };
+        public static string[] MutiLan_119 = { "左键双击", "Left Double Click" };
+        public static string[] MutiLan_120 = { "右键双击", "Right Double Click" };
+        public static string[] MutiLan_121 = { "向上滚动 {0}", "Wheel Up {0}" };
+        public static string[] MutiLan_122 = { "向下滚动 {0}", "Wheel Down {0}" };
+        public static string[] MutiLan_123 = { "机器人指令 {0} 错误! [{1}]", "Robot Inst {0} error! [{1}]" };
+        public static string[] MutiLan_124 = { "按下 {0}", "Key Down {0}" };
+        public static string[] MutiLan_125 = { "弹起 {0}", "Key Up {0}" };
+        public static string[] MutiLan_126 = { "左键按下", "Left Down" };
+        public static string[] MutiLan_127 = { "左键弹起", "Left Up" };
+        public static string[] MutiLan_128 = { "右键按下", "Right Down" };
+        public static string[] MutiLan_129 = { "右键弹起", "Right Up" };
+        public static string[] MutiLan_130 = { "按键组合 {0}", "Key Combine {0}" };
 
         #endregion
 

@@ -157,17 +157,83 @@
   <data name="pbSocketType.Location" type="System.Drawing.Point, System.Drawing">
     <value>580, 0</value>
   </data>
-  <data name="cmsHexBox_SendList.Text" xml:space="preserve">
-    <value>Add To Send List</value>
+  <data name="tsPacketData_Cut.Text" xml:space="preserve">
+    <value>Cut</value>
   </data>
-  <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
-    <value>Add To Filter List</value>
+  <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
   </data>
-  <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
+  <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
+    <value>Copy Hex</value>
+  </data>
+  <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
+    <value>Paste Hex</value>
+  </data>
+  <data name="tsPacketData_Find.Text" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="tsPacketData_FindNext.Text" xml:space="preserve">
+    <value>Find Next</value>
+  </data>
+  <data name="tscbPerLine.Items" xml:space="preserve">
+    <value>Adaptive</value>
+  </data>
+  <data name="tscbPerLine.Items1" xml:space="preserve">
+    <value>Fixed Length</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="hbPacketData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
     <value>Select All</value>
   </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>176, 82</value>
+  </data>
+  <data name="cmsHexBox_SendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="cmsHexBox_SendList.Text" xml:space="preserve">
+    <value>Add To Send List</value>
+  </data>
+  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
+  </data>
+  <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
+    <value>Add To Filter List</value>
+  </data>
+  <data name="cmsHexBox_Split2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>175, 22</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
+    <value>Select All</value>
   </data>
   <data name="tlSendTimes.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 17</value>

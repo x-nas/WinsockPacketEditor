@@ -198,22 +198,22 @@
     <value>Delete</value>
   </data>
   <data name="tpAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>826, 180</value>
+    <value>876, 180</value>
   </data>
   <data name="tpAdvanced.Text" xml:space="preserve">
     <value>[The first row 001 corresponds to the second row 000]</value>
   </data>
   <data name="tlpFilterAdvanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>820, 174</value>
+    <value>870, 174</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromPosition.Size" type="System.Drawing.Size, System.Drawing">
-    <value>820, 30</value>
+    <value>870, 30</value>
   </data>
   <data name="dgvFilterAdvanced_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>820, 108</value>
+    <value>870, 108</value>
   </data>
   <data name="dgvFilterAdvanced_Modify_FromHead.Size" type="System.Drawing.Size, System.Drawing">
-    <value>820, 30</value>
+    <value>870, 30</value>
   </data>
   <data name="gbProgression.Location" type="System.Drawing.Point, System.Drawing">
     <value>665, 125</value>
@@ -242,18 +242,11 @@
   <data name="gbFilterAppoint.Text" xml:space="preserve">
     <value>[ Appoint Type ]</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpFilterAppoint.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
   <data name="tlpFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
     <value>253, 63</value>
   </data>
   <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>78, 35</value>
-  </data>
-  <data name="nudFilter_LengthContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
   </data>
   <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 23</value>
@@ -270,9 +263,6 @@
   <data name="nudFilter_SocketContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>78, 6</value>
   </data>
-  <data name="nudFilter_SocketContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
-  </data>
   <data name="gbFilterAction.Size" type="System.Drawing.Size, System.Drawing">
     <value>259, 125</value>
   </data>
@@ -282,11 +272,8 @@
   <data name="tlpFilterAction.Size" type="System.Drawing.Size, System.Drawing">
     <value>253, 103</value>
   </data>
-  <data name="rbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 27</value>
-  </data>
-  <data name="rbFilterAction_Execute.Text" xml:space="preserve">
-    <value>Execute</value>
+  <data name="rbFilterAction_Intercept.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 29</value>
   </data>
   <data name="rbFilterAction_Intercept.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 21</value>
@@ -295,34 +282,43 @@
     <value>Intercept</value>
   </data>
   <data name="rbFilterAction_Replace.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
+    <value>78, 22</value>
   </data>
   <data name="rbFilterAction_Replace.Text" xml:space="preserve">
     <value>Replace</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+    <value>微软雅黑, 7.5pt</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Location" type="System.Drawing.Point, System.Drawing">
     <value>90, 5</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 21</value>
+    <value>157, 20</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Text" xml:space="preserve">
-    <value>No Modify - Disp</value>
+    <value>No Modify - Display</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+    <value>微软雅黑, 7.5pt</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 30</value>
+    <value>90, 29</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Text" xml:space="preserve">
-    <value>No Modify - No Disp</value>
+    <value>No Modify - No Display</value>
+  </data>
+  <data name="cbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 72</value>
+  </data>
+  <data name="cbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 25</value>
+  </data>
+  <data name="cbFilterAction_Execute.Text" xml:space="preserve">
+    <value>Execute</value>
   </data>
   <data name="gbFilterFunction.Location" type="System.Drawing.Point, System.Drawing">
     <value>665, 0</value>
@@ -487,11 +483,12 @@
     <value>Beginning of the packet</value>
   </data>
   <data name="cbbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 56</value>
+    <value>90, 72</value>
   </data>
   <data name="cbbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 25</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cbbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
   </data>

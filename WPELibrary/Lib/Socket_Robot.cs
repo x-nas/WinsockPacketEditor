@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace WPELibrary.Lib
 {
@@ -20,6 +20,8 @@ namespace WPELibrary.Lib
         private DataTable RobotInstruction = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
 
+        #region//初始化
+
         public Socket_Robot()
         {  
             this.Worker.WorkerSupportsCancellation = true;
@@ -33,9 +35,11 @@ namespace WPELibrary.Lib
 
             this.Worker.RunWorkerCompleted -= Robot_RunCompleted;
             this.Worker.RunWorkerCompleted += Robot_RunCompleted;
-        }        
+        }
 
-        #region//开始
+        #endregion
+
+        #region//启动机器人
 
         public void StartRobot(string RobotName, DataTable dtRobotInstruction)
         {
@@ -47,10 +51,21 @@ namespace WPELibrary.Lib
                     {
                         this.RobotName = RobotName;
                         this.RobotInstruction = dtRobotInstruction;
-                        this.Worker.RunWorkerAsync();
 
-                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
-                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.RobotInstruction, true);
+
+                        if (iReturn > -1)
+                        {
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_123), iReturn + 1, this.RobotName);
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+                        else
+                        {
+                            this.Worker.RunWorkerAsync();
+
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }                        
                     }
                 }
             }
@@ -62,7 +77,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//停止
+        #region//停止机器人
 
         public void StopRobot()
         {
@@ -192,36 +207,126 @@ namespace WPELibrary.Lib
 
                                             break;
 
+                                        case Socket_Cache.Robot.KeyBoardType.Down:
+
+                                            if (Enum.TryParse(KeyCode, true, out kCode))
+                                            {
+                                                SendKeyMouse.SendMessageDown(((byte)kCode));
+                                            }
+
+                                            break;
+
+                                        case Socket_Cache.Robot.KeyBoardType.Up:
+
+                                            if (Enum.TryParse(KeyCode, true, out kCode))
+                                            {
+                                                SendKeyMouse.SendMessageUp(((byte)kCode));
+                                            }
+
+                                            break;
+
                                         case Socket_Cache.Robot.KeyBoardType.Combine:
 
                                             if (KeyCode.IndexOf("+") > 0)
                                             {
-                                                KeyCode = KeyCode.Replace(" ", "");
-
-                                                string[] slKeyCode = KeyCode.Split('+');                                                
-
+                                                string[] slKeyCode = KeyCode.Split('+');
                                                 byte[] bKeyCode = new byte[slKeyCode.Length];
 
                                                 for (int j = 0; j < slKeyCode.Length; j++)
                                                 {
-                                                    string sKey = slKeyCode[j].ToString();
-
-                                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sKey);
+                                                    string sKey = slKeyCode[j].ToString().Trim();                                                    
 
                                                     if (Enum.TryParse(sKey, true, out kCode))
                                                     {                                                        
-                                                        bKeyCode[j] = (byte)kCode;
-
-                                                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ((int)kCode).ToString("X2"));
+                                                        bKeyCode[j] = (byte)kCode;                                                        
                                                     }
                                                 }
 
                                                 SendKeyMouse.SendCombineKey(bKeyCode);
                                             }
 
-                                            break;
+                                            break;                                   
                                     }                                    
                                 }                           
+
+                                break;
+
+                            case Socket_Cache.Robot.InstructionType.Mouse:
+
+                                if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                                {
+                                    Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.GetMouseType_ByString(sContent.Split('|')[0].ToString());
+                                    string MouseCode = sContent.Split('|')[1];
+
+                                    int iMouseCode = 0;
+                                    switch (mType)
+                                    {
+                                        case Socket_Cache.Robot.MouseType.LeftClick:
+                                            SendKeyMouse.MouseLeftClick();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.RightClick:
+                                            SendKeyMouse.MouseRightClick();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.LeftDBClick:
+                                            SendKeyMouse.MouseLeftDBClick();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.RightDBClick:
+                                            SendKeyMouse.MouseRightDBClick();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.LeftDown:
+                                            SendKeyMouse.MouseLeftDown();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.LeftUp:
+                                            SendKeyMouse.MouseLeftUp();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.RightDown:
+                                            SendKeyMouse.MouseRightDown();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.RightUp:
+                                            SendKeyMouse.MouseRightUp();
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.WheelUp:
+
+                                            if (int.TryParse(MouseCode, out iMouseCode))
+                                            {
+                                                SendKeyMouse.MouseWheel(iMouseCode);
+                                            }
+                                            
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.WheelDown:
+
+                                            if (int.TryParse(MouseCode, out iMouseCode))
+                                            {
+                                                SendKeyMouse.MouseWheel(-iMouseCode);
+                                            }
+
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.Move:
+
+                                            if (MouseCode.IndexOf(",") > 0)
+                                            {
+                                                string sMoveX = MouseCode.Split(',')[0].Trim();
+                                                string sMoveY = MouseCode.Split(',')[1].Trim();
+
+                                                if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
+                                                {
+                                                    SendKeyMouse.MouseMove(new Point(iX, iY));
+                                                }                                              
+                                            }                                         
+
+                                            break;
+                                    }
+                                }
 
                                 break;
                         }                        

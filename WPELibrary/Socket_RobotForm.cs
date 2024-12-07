@@ -59,6 +59,9 @@ namespace WPELibrary
                 this.txtRobotName.Text = this.RobotName;
                 this.dtRobotInstruction = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RInstruction.Copy();
 
+                this.cbbKeyBoard_KeyType.SelectedIndex = 0;
+                this.cbbMouse.SelectedIndex = 0;
+                this.cbbMouseWheel_Direction.SelectedIndex = 0;
                 this.InitRobot();                               
             }
             catch (Exception ex)
@@ -191,6 +194,19 @@ namespace WPELibrary
                     return;
                 }
 
+                if (this.dtRobotInstruction.Rows.Count > 0)
+                {
+                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
+
+                    if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
+                    {
+                        this.dgvRobotInstruction.CurrentCell = dgvRobotInstruction.Rows[iReturn].Cells[0];
+                        this.dgvRobotInstruction.FirstDisplayedScrollingRowIndex = iReturn;
+
+                        return;
+                    }
+                }
+
                 Socket_Cache.Robot.UpdateRobot_ByRobotIndex(this.RobotIndex, RName_New, this.dtRobotInstruction);
 
                 this.Close();
@@ -220,25 +236,25 @@ namespace WPELibrary
             {
                 if (this.dtRobotInstruction.Rows.Count > 0)
                 {
-                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction);
+                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
 
                     if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
                     {
                         this.dgvRobotInstruction.CurrentCell = dgvRobotInstruction.Rows[iReturn].Cells[0];
                         this.dgvRobotInstruction.FirstDisplayedScrollingRowIndex = iReturn;
-                    }
-                    else
-                    {
-                        if (!this.sr.Worker.IsBusy)
-                        {
-                            this.bExecute.Enabled = false;
-                            this.bStop.Enabled = true;
-                            this.dgvRobotInstruction.Enabled = false;
-                            this.dgvSendList.Enabled = false;
-                            this.tcRobotInstruction.Enabled = false;                       
 
-                            sr.StartRobot(this.RobotName, this.dtRobotInstruction);
-                        }
+                        return;
+                    }
+
+                    if (!this.sr.Worker.IsBusy)
+                    {
+                        this.bExecute.Enabled = false;
+                        this.bStop.Enabled = true;
+                        this.dgvRobotInstruction.Enabled = false;
+                        this.dgvSendList.Enabled = false;
+                        this.tcRobotInstruction.Enabled = false;
+
+                        sr.StartRobot(this.RobotName, this.dtRobotInstruction);
                     }
                 }                
             }
@@ -578,24 +594,45 @@ namespace WPELibrary
         {
             try
             {
-                string KeyCode = this.txtKeyBoard_KeyCode.Text;              
-                int KeyTimes = ((int)this.nudKeyBoard_Times.Value);
-                int KeyInterval = ((int)this.nudKeyBoard_Interval.Value);
-                Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Press;
-                string sContent = kbType + "|" + KeyCode;
+                string KeyCode = this.txtKeyBoard_KeyCode.Text.Trim();
 
-                if (KeyTimes > 1)
+                if (!string.IsNullOrEmpty(KeyCode))
                 {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, KeyTimes.ToString());
-                }
+                    int KeyTimes = ((int)this.nudKeyBoard_Times.Value);
+                    int KeyInterval = ((int)this.nudKeyBoard_Interval.Value);
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                    Socket_Cache.Robot.KeyBoardType kbType = new Socket_Cache.Robot.KeyBoardType();
 
-                if (KeyTimes > 1)
-                {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, KeyInterval.ToString());
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
-                }
+                    switch (this.cbbKeyBoard_KeyType.SelectedIndex)
+                    {
+                        case 0:
+                            kbType = Socket_Cache.Robot.KeyBoardType.Press;
+                            break;
+
+                        case 1:
+                            kbType = Socket_Cache.Robot.KeyBoardType.Down;
+                            break;
+
+                        case 2:
+                            kbType = Socket_Cache.Robot.KeyBoardType.Up;
+                            break;
+                    }
+
+                    string sContent = kbType + "|" + KeyCode;
+
+                    if (KeyTimes > 1 && kbType == Socket_Cache.Robot.KeyBoardType.Press)
+                    {
+                        this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, KeyTimes.ToString());
+                    }
+
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+
+                    if (KeyTimes > 1 && kbType == Socket_Cache.Robot.KeyBoardType.Press)
+                    {
+                        this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, KeyInterval.ToString());
+                        this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
+                    }
+                }                
             }
             catch (Exception ex)
             {
@@ -626,10 +663,15 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Combine;
-                string sContent = kbType + "|" + this.txtKeyboard_combination.Text;
+                string KeyCode = this.txtKeyboard_combination.Text.Trim();                
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                if (!string.IsNullOrEmpty(KeyCode))
+                {
+                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Combine;
+                    string sContent = kbType + "|" + KeyCode;
+
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                }                
             }
             catch (Exception ex)
             {
@@ -711,6 +753,139 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//鼠标指令 - 按键
+
+        private void bMouse_Click(object sender, EventArgs e)
+        {
+            try
+            {  
+                int MouseTimes = ((int)this.nudMouse_Times.Value);
+                int MouseInterval = ((int)this.nudMouse_Interval.Value);
+
+                Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
+                switch (this.cbbMouse.SelectedIndex)
+                { 
+                    case 0:
+                        mType = Socket_Cache.Robot.MouseType.LeftClick;
+                        break;
+
+                    case 1:
+                        mType = Socket_Cache.Robot.MouseType.RightClick;
+                        break;
+
+                    case 2:
+                        mType = Socket_Cache.Robot.MouseType.LeftDBClick;
+                        break;
+
+                    case 3:
+                        mType = Socket_Cache.Robot.MouseType.RightDBClick;
+                        break;
+
+                    case 4:
+                        mType = Socket_Cache.Robot.MouseType.LeftDown;
+                        break;
+
+                    case 5:
+                        mType = Socket_Cache.Robot.MouseType.LeftUp;
+                        break;
+
+                    case 6:
+                        mType = Socket_Cache.Robot.MouseType.RightDown;
+                        break;
+
+                    case 7:
+                        mType = Socket_Cache.Robot.MouseType.RightUp;
+                        break;
+                }
+                
+                string sContent = mType + "|" + string.Empty;
+
+                if (MouseTimes > 1 && 
+                    (mType == Socket_Cache.Robot.MouseType.LeftClick || 
+                    mType == Socket_Cache.Robot.MouseType.RightClick ||
+                    mType == Socket_Cache.Robot.MouseType.LeftDBClick ||
+                    mType == Socket_Cache.Robot.MouseType.RightDBClick)
+                    )
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, MouseTimes.ToString());
+                }
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+
+                if (MouseTimes > 1 &&
+                    (mType == Socket_Cache.Robot.MouseType.LeftClick ||
+                    mType == Socket_Cache.Robot.MouseType.RightClick ||
+                    mType == Socket_Cache.Robot.MouseType.LeftDBClick ||
+                    mType == Socket_Cache.Robot.MouseType.RightDBClick)
+                    )
+                {
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, MouseInterval.ToString());
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//鼠标指令 - 滚轮
+
+        private void bMouseWheel_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int MouseWheel_Distance = ((int)this.nudMouseWheel_Distance.Value);             
+
+                Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
+                switch (this.cbbMouseWheel_Direction.SelectedIndex)
+                {
+                    case 0:
+                        mType = Socket_Cache.Robot.MouseType.WheelUp;
+                        break;
+
+                    case 1:
+                        mType = Socket_Cache.Robot.MouseType.WheelDown;
+                        break;              
+                }
+
+                string sContent = mType + "|" + MouseWheel_Distance;
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//鼠标指令 - 移动
+
+        private void bMouseMove_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int MouseMove_X = ((int)this.nudMouseMove_X.Value);
+                int MouseMove_Y = ((int)this.nudMouseMove_Y.Value);
+
+                Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.MouseType.Move;
+
+                string sContent = mType + "|" + MouseMove_X + ", " + MouseMove_Y;
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion      
     }
 }

@@ -2547,8 +2547,22 @@ namespace WPELibrary.Lib
                 Press,
                 Down,
                 Up,
-                Combine,
-                String,
+                Combine,              
+            }
+
+            public enum MouseType
+            {
+                LeftClick,
+                RightClick,
+                LeftDBClick,
+                RightDBClick,
+                LeftDown,
+                LeftUp,
+                RightDown,
+                RightUp,
+                WheelUp,
+                WheelDown,
+                Move,
             }
 
             public enum InstructionType
@@ -2557,7 +2571,8 @@ namespace WPELibrary.Lib
                 Delay,
                 LoopStart,
                 LoopEnd,
-                KeyBoard,                
+                KeyBoard,
+                Mouse,
             }
 
             #endregion
@@ -2732,6 +2747,10 @@ namespace WPELibrary.Lib
                         case Socket_Cache.Robot.InstructionType.KeyBoard:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_105);
                             break;
+
+                        case Socket_Cache.Robot.InstructionType.Mouse:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_107);
+                            break;
                     }
                 }
                 catch (Exception ex)
@@ -2772,6 +2791,10 @@ namespace WPELibrary.Lib
 
                         case Socket_Cache.Robot.InstructionType.KeyBoard:
                             cReturn = Color.LightSeaGreen;
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.Mouse:
+                            cReturn = Color.LightSkyBlue;
                             break;
                     }
                 }
@@ -2841,7 +2864,81 @@ namespace WPELibrary.Lib
                                 Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.GetKeyBoardType_ByString(sContent.Split('|')[0].ToString());
                                 string KeyCode = sContent.Split('|')[1];
 
-                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_106), KeyCode);
+                                switch (kbType)
+                                {
+                                    case Socket_Cache.Robot.KeyBoardType.Press:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_106), KeyCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.KeyBoardType.Down:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_124), KeyCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.KeyBoardType.Up:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_125), KeyCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.KeyBoardType.Combine:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_130), KeyCode);
+                                        break;
+                                }                                
+                            }
+
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.Mouse:
+
+                            if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                            {
+                                Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.GetMouseType_ByString(sContent.Split('|')[0].ToString());
+                                string MouseCode = sContent.Split('|')[1];
+
+                                switch (mType)
+                                {
+                                    case Socket_Cache.Robot.MouseType.LeftClick:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_117);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.RightClick:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_118);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.LeftDBClick:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_119);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.RightDBClick:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_120);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.LeftDown:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_126);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.LeftUp:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_127);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.RightDown:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_128);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.RightUp:
+                                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_129);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.WheelUp:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_121), MouseCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.WheelDown:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_122), MouseCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.Move:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_108), MouseCode);
+                                        break;
+                                }                                
                             }
 
                             break;
@@ -2893,6 +2990,26 @@ namespace WPELibrary.Lib
                 }
 
                 return kbType;
+            }
+
+            #endregion            
+
+            #region//获取鼠标按键类型
+
+            public static Socket_Cache.Robot.MouseType GetMouseType_ByString(string MouseType)
+            {
+                Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
+
+                try
+                {
+                    mType = (Socket_Cache.Robot.MouseType)Enum.Parse(typeof(Socket_Cache.Robot.MouseType), MouseType);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return mType;
             }
 
             #endregion            
@@ -2980,7 +3097,7 @@ namespace WPELibrary.Lib
 
             #region//检查指令集
 
-            public static int CheckRobotInstruction(DataTable dtRInstruction)
+            public static int CheckRobotInstruction(DataTable dtRInstruction, bool bFromSystem)
             {
                 int iReturn = -1;
 
@@ -2988,8 +3105,7 @@ namespace WPELibrary.Lib
                 {
                     if (dtRInstruction != null && dtRInstruction.Rows.Count > 0)
                     {
-                        List<int> listSend = new List<int>();
-                        List<int> listDelay = new List<int>();
+                        List<int> listSend = new List<int>();                 
                         List<int> listLoopStart = new List<int>();
                         List<int> listLoopEnd = new List<int>();
 
@@ -3001,11 +3117,7 @@ namespace WPELibrary.Lib
                             {
                                 case Socket_Cache.Robot.InstructionType.Send:
                                     listSend.Add(i);
-                                    break;
-
-                                case Socket_Cache.Robot.InstructionType.Delay:
-                                    listDelay.Add(i);
-                                    break;
+                                    break;                      
 
                                 case Socket_Cache.Robot.InstructionType.LoopStart:
                                     listLoopStart.Add(i);
@@ -3030,7 +3142,12 @@ namespace WPELibrary.Lib
                                 if (iSendPacketID < 1 || iSendPacketID > Socket_Cache.SendList.dtSendList.Rows.Count)
                                 {
                                     string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iSendIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_103));
-                                    Socket_Operation.ShowMessageBox(sError);
+
+                                    if (!bFromSystem)
+                                    {
+                                        Socket_Operation.ShowMessageBox(sError);
+                                    }                                    
+                                    
                                     return iSendIndex;
                                 }
                             }
@@ -3053,7 +3170,12 @@ namespace WPELibrary.Lib
                             }
 
                             string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iErrorIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
-                            Socket_Operation.ShowMessageBox(sError);
+
+                            if (!bFromSystem)
+                            {
+                                Socket_Operation.ShowMessageBox(sError);
+                            }                            
+                            
                             return iErrorIndex;
                         }
 
@@ -3065,7 +3187,12 @@ namespace WPELibrary.Lib
                             if (iLoopStartIndex >= iLoopEndIndex)
                             {
                                 string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iLoopEndIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_104));
-                                Socket_Operation.ShowMessageBox(sError);
+
+                                if (!bFromSystem)
+                                {
+                                    Socket_Operation.ShowMessageBox(sError);
+                                }                                
+
                                 return iLoopEndIndex;
                             }
                         }
@@ -3154,6 +3281,45 @@ namespace WPELibrary.Lib
             }
 
             #endregion            
+
+            #region//机器人列表的列表操作
+
+            public static int UpdateRobotList_ByListAction(Socket_Cache.ListAction listAction, int iRIndex)
+            {
+                int iReturn = -1;
+
+                try
+                {
+                    int iRobotListCount = Socket_Cache.RobotList.lstRobot.Count;
+                    Socket_RobotInfo sri = Socket_Cache.RobotList.lstRobot[iRIndex];
+
+                    switch (listAction)
+                    {
+                        case Socket_Cache.ListAction.Copy:
+                            Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
+                            iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
+                            break;
+
+                        case Socket_Cache.ListAction.Export:
+                            string sRName = Socket_Cache.RobotList.lstRobot[iRIndex].RName;
+                            Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, iRIndex);
+                            iReturn = iRIndex;
+                            break;
+
+                        case Socket_Cache.ListAction.Delete:
+                            Socket_Cache.Robot.DeleteRobot_ByRobotIndex_Dialog(iRIndex);                            
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
+            #endregion                        
 
             #region//加载机器人列表（对话框）
 

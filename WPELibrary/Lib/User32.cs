@@ -14,6 +14,9 @@ namespace WPELibrary.Lib
 
         public class WindowsConstant
         {
+            //系统消息
+            public const int WM_PASTE = 0x0302;
+
             //按键状态
             public const int KEYEVENTF_KEYDOWN = 0x0000; //键被按下
             public const int KEYEVENTF_EXTENDEDKEY = 0x0001; //是扩展键
@@ -22,6 +25,8 @@ namespace WPELibrary.Lib
             public const int GWL_EXSTYLE = -20;
             public const int WS_DISABLED = 0X8000000;
             public const int WM_SETFOCUS = 0X0007;
+            public const int WM_SETTEXT = 0X000C;
+            public const int WM_COPYDATA = 0X004A;
 
             //鼠标消息
             public const int WM_MOUSEMOVE = 0x200;
@@ -320,6 +325,15 @@ namespace WPELibrary.Lib
             public const int HARDWARE = 2;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct COPYDATASTRUCT
+        {
+            public IntPtr dwData;
+            public int cbData;
+            [MarshalAs(UnmanagedType.LPStr)]
+            public string lpData;
+        }
+
         #endregion
 
         #region//用到的Window API
@@ -349,6 +363,9 @@ namespace WPELibrary.Lib
 
             [DllImport("user32.dll")]
             internal static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+            [DllImport("User32.dll", EntryPoint = "FindWindowEx")]
+            internal static extern IntPtr FindWindowEx(IntPtr hwndParent, IntPtr hwndChildAfter, string lpClassName, string lpWindowName);
 
             [DllImport("user32.dll")]
             public static extern bool SetProcessDPIAware();
@@ -548,7 +565,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion
+        #endregion        
 
         #region//鼠标结构体的dwFlags设置为MOUSEEVENTF_ABSOLUTE,将dx与dy移动量变成屏幕坐标，以像素为单位
 
@@ -874,15 +891,7 @@ namespace WPELibrary.Lib
                         SendMessageUp(bKeys[i]);
                     }
                 }
-            }
-
-            private IntPtr MakeLParam(bool pressed, int vkCode)
-            {
-                int lowOrder = (vkCode & 0x00FFFF);
-                int highOrder = (pressed ? 0x0001 : 0x0000) << 30; // 0 for key down, 1 for key up
-
-                return (IntPtr)((highOrder << 16) | lowOrder);
-            }
+            }            
 
             #endregion
 
@@ -892,7 +901,7 @@ namespace WPELibrary.Lib
             /// 虚拟鼠标滚轮滚动
             /// </summary>
             /// <param name="delta">正数表示向上滚动，负数表示向下滚动</param>
-            public void MouseWhell(int delta)
+            public void MouseWheel(int delta)
             {
                 Input[] input = new Input[1];
                 input[0].type = InputType.MOUSE;
@@ -1032,15 +1041,25 @@ namespace WPELibrary.Lib
                 }
             }
 
+            public void MouseLeftClick()
+            {
+                MouseLeftDown();
+                MouseLeftUp();            
+            }
+
+            public void MouseRightClick()
+            {
+                MouseRightDown();
+                MouseRightUp();              
+            }
+
             /// <summary>
             /// 虚拟双击鼠标左键
             /// </summary>
             public void MouseLeftDBClick()
             {
-                MouseLeftDown();
-                MouseLeftUp();
-                MouseLeftDown();
-                MouseLeftUp();
+                MouseLeftClick();
+                MouseLeftClick();
             }
 
             /// <summary>
@@ -1048,10 +1067,8 @@ namespace WPELibrary.Lib
             /// </summary>
             public void MouseRightDBClick()
             {
-                MouseRightDown();
-                MouseRightUp();
-                MouseRightDown();
-                MouseRightUp();
+                MouseRightClick();
+                MouseRightClick();
             }
 
             #endregion
