@@ -151,9 +151,7 @@ namespace WPELibrary.Lib
                                     else
                                     {
                                         this.Send_Failure++;
-                                    }
-
-                                    this.Total_Instruction++;
+                                    }                                  
                                 }
 
                                 break;
@@ -162,9 +160,7 @@ namespace WPELibrary.Lib
 
                                 if (int.TryParse(sContent, out int iDelay))
                                 {
-                                    Thread.Sleep(iDelay);
-
-                                    this.Total_Instruction++;
+                                    Thread.Sleep(iDelay);                                
                                 }
 
                                 break;
@@ -329,7 +325,12 @@ namespace WPELibrary.Lib
                                 }
 
                                 break;
-                        }                        
+                        }
+
+                        if (instructionType != Socket_Cache.Robot.InstructionType.LoopStart && instructionType != Socket_Cache.Robot.InstructionType.LoopEnd)
+                        {
+                            this.Total_Instruction++;
+                        }
                     }
                 }
             }

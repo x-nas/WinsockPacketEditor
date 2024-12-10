@@ -1971,22 +1971,16 @@ namespace WPELibrary.Lib
 
                                             break;
 
-                                        case Filter.FilterAction.Intercept:
-                                                                                        
+                                        case Filter.FilterAction.Intercept:                                                                                        
                                             bBreak = true;
-
                                             break;
 
                                         case Filter.FilterAction.NoModify_Display:
-
                                             bBreak = true;
-
                                             break;
 
                                         case Filter.FilterAction.NoModify_NoDisplay:
-
                                             bBreak = true;
-
                                             break;                                        
                                     }
                                 }
@@ -2048,7 +2042,7 @@ namespace WPELibrary.Lib
                                 {
                                     bDoFilter = false;
                                 }
-                            }
+                            }                            
 
                             if (bDoFilter)
                             {
