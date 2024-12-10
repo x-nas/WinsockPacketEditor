@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using WindowsInput.Native;
 
 namespace WPELibrary.Lib
 {
@@ -15,10 +16,10 @@ namespace WPELibrary.Lib
         public int Send_Failure = 0;
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
-
-        private User32.SendKeyboardMouse SendKeyMouse = new User32.SendKeyboardMouse();
+        
         private DataTable RobotInstruction = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
+        private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();
 
         #region//初始化
 
@@ -190,7 +191,8 @@ namespace WPELibrary.Lib
                                     Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.GetKeyBoardType_ByString(sContent.Split('|')[0].ToString());
                                     string KeyCode = sContent.Split('|')[1];
 
-                                    Keys kCode = Keys.None;
+                                    Keys kCode;
+                                    VirtualKeyCode vkCode;                                    
 
                                     switch (kbType)
                                     {
@@ -198,8 +200,11 @@ namespace WPELibrary.Lib
 
                                             if (Enum.TryParse(KeyCode, true, out kCode))
                                             {
-                                                SendKeyMouse.SendMessagePress(((byte)kCode));
-                                            }
+                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                {
+                                                    sim.Keyboard.KeyPress(vkCode);
+                                                }
+                                            }                                            
 
                                             break;
 
@@ -207,7 +212,10 @@ namespace WPELibrary.Lib
 
                                             if (Enum.TryParse(KeyCode, true, out kCode))
                                             {
-                                                SendKeyMouse.SendMessageDown(((byte)kCode));
+                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                {
+                                                    sim.Keyboard.KeyDown(vkCode);
+                                                }
                                             }
 
                                             break;
@@ -216,7 +224,10 @@ namespace WPELibrary.Lib
 
                                             if (Enum.TryParse(KeyCode, true, out kCode))
                                             {
-                                                SendKeyMouse.SendMessageUp(((byte)kCode));
+                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                {
+                                                    sim.Keyboard.KeyUp(vkCode);
+                                                }
                                             }
 
                                             break;
@@ -225,23 +236,42 @@ namespace WPELibrary.Lib
 
                                             if (KeyCode.IndexOf("+") > 0)
                                             {
-                                                string[] slKeyCode = KeyCode.Split('+');
-                                                byte[] bKeyCode = new byte[slKeyCode.Length];
+                                                string[] slKeyCode = KeyCode.Split('+');                                                
 
-                                                for (int j = 0; j < slKeyCode.Length; j++)
+                                                List<VirtualKeyCode> ControlKey = new List<VirtualKeyCode>();
+                                                List<VirtualKeyCode> NormalKey = new List<VirtualKeyCode>();                                               
+
+                                                foreach (string sKey in slKeyCode)
                                                 {
-                                                    string sKey = slKeyCode[j].ToString().Trim();                                                    
-
                                                     if (Enum.TryParse(sKey, true, out kCode))
-                                                    {                                                        
-                                                        bKeyCode[j] = (byte)kCode;                                                        
+                                                    {
+                                                        if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                        {
+                                                            if (vkCode == VirtualKeyCode.CONTROL || vkCode == VirtualKeyCode.MENU || vkCode == VirtualKeyCode.SHIFT)
+                                                            {
+                                                                ControlKey.Add(vkCode);
+                                                            }
+                                                            else
+                                                            {
+                                                                NormalKey.Add(vkCode);
+                                                            }
+                                                        }
                                                     }
                                                 }
 
-                                                SendKeyMouse.SendCombineKey(bKeyCode);
+                                                sim.Keyboard.ModifiedKeyStroke(ControlKey, NormalKey);
                                             }
 
-                                            break;                                   
+                                            break;
+
+                                        case Socket_Cache.Robot.KeyBoardType.Text:
+
+                                            if (!string.IsNullOrEmpty(KeyCode))
+                                            {
+                                                sim.Keyboard.TextEntry(KeyCode);
+                                            }
+
+                                            break;
                                     }                                    
                                 }                           
 
@@ -258,42 +288,42 @@ namespace WPELibrary.Lib
                                     switch (mType)
                                     {
                                         case Socket_Cache.Robot.MouseType.LeftClick:
-                                            SendKeyMouse.MouseLeftClick();
+                                            sim.Mouse.LeftButtonClick();                                           
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.RightClick:
-                                            SendKeyMouse.MouseRightClick();
+                                            sim.Mouse.RightButtonClick();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.LeftDBClick:
-                                            SendKeyMouse.MouseLeftDBClick();
+                                            sim.Mouse.LeftButtonDoubleClick();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.RightDBClick:
-                                            SendKeyMouse.MouseRightDBClick();
+                                            sim.Mouse.RightButtonDoubleClick();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.LeftDown:
-                                            SendKeyMouse.MouseLeftDown();
+                                            sim.Mouse.LeftButtonDown();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.LeftUp:
-                                            SendKeyMouse.MouseLeftUp();
+                                            sim.Mouse.LeftButtonUp();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.RightDown:
-                                            SendKeyMouse.MouseRightDown();
+                                            sim.Mouse.RightButtonDown();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.RightUp:
-                                            SendKeyMouse.MouseRightUp();
+                                            sim.Mouse.RightButtonUp();
                                             break;
 
                                         case Socket_Cache.Robot.MouseType.WheelUp:
 
                                             if (int.TryParse(MouseCode, out iMouseCode))
                                             {
-                                                SendKeyMouse.MouseWheel(iMouseCode);
+                                                sim.Mouse.VerticalScroll(iMouseCode);                                                
                                             }
                                             
                                             break;
@@ -302,12 +332,12 @@ namespace WPELibrary.Lib
 
                                             if (int.TryParse(MouseCode, out iMouseCode))
                                             {
-                                                SendKeyMouse.MouseWheel(-iMouseCode);
+                                                sim.Mouse.VerticalScroll(-iMouseCode);
                                             }
 
                                             break;
 
-                                        case Socket_Cache.Robot.MouseType.Move:
+                                        case Socket_Cache.Robot.MouseType.MoveTo:
 
                                             if (MouseCode.IndexOf(",") > 0)
                                             {
@@ -316,9 +346,24 @@ namespace WPELibrary.Lib
 
                                                 if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
                                                 {
-                                                    SendKeyMouse.MouseMove(new Point(iX, iY));
+                                                    sim.Mouse.MoveMouseTo(iX, iY);
                                                 }                                              
                                             }                                         
+
+                                            break;
+
+                                        case Socket_Cache.Robot.MouseType.MoveBy:
+
+                                            if (MouseCode.IndexOf(",") > 0)
+                                            {
+                                                string sMoveX = MouseCode.Split(',')[0].Trim();
+                                                string sMoveY = MouseCode.Split(',')[1].Trim();
+
+                                                if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
+                                                {
+                                                    sim.Mouse.MoveMouseBy(iX, iY);
+                                                }
+                                            }
 
                                             break;
                                     }

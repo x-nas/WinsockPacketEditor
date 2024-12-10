@@ -8,13 +8,13 @@ using WPELibrary.Lib;
 namespace WPELibrary
 {
     public partial class Socket_RobotForm : Form
-    {
-        bool bIsModifierKeys = true;
+    {  
+        private bool bIsModifierKeys = true;
         private int RobotIndex = -1;
         private string RobotName = string.Empty;
         
-        DataTable dtRobotInstruction = new DataTable();
-        Socket_Robot sr = new Socket_Robot();
+        private DataTable dtRobotInstruction = new DataTable();
+        private readonly Socket_Robot sr = new Socket_Robot();        
 
         #region//窗体加载
 
@@ -755,6 +755,30 @@ namespace WPELibrary
 
         #endregion
 
+        #region//键盘指令 - 文本
+
+        private void bKeyboard_Text_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string KeyCode = this.txtKeyboard_Text.Text.Trim();
+
+                if (!string.IsNullOrEmpty(KeyCode))
+                {
+                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Text;
+                    string sContent = kbType + "|" + KeyCode;
+
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//鼠标指令 - 按键
 
         private void bMouse_Click(object sender, EventArgs e)
@@ -874,7 +898,15 @@ namespace WPELibrary
                 int MouseMove_X = ((int)this.nudMouseMove_X.Value);
                 int MouseMove_Y = ((int)this.nudMouseMove_Y.Value);
 
-                Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.MouseType.Move;
+                Socket_Cache.Robot.MouseType mType =new Socket_Cache.Robot.MouseType();
+                if (this.rbMoveTo.Checked)
+                {
+                    mType = Socket_Cache.Robot.MouseType.MoveTo;
+                }
+                else
+                {
+                    mType = Socket_Cache.Robot.MouseType.MoveBy;
+                }                
 
                 string sContent = mType + "|" + MouseMove_X + ", " + MouseMove_Y;
 
@@ -886,6 +918,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion      
+        #endregion        
     }
 }

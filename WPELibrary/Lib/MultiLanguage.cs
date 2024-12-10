@@ -140,6 +140,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_128 = { "右键按下", "Right Down" };
         public static string[] MutiLan_129 = { "右键弹起", "Right Up" };
         public static string[] MutiLan_130 = { "按键组合 {0}", "Key Combine {0}" };
+        public static string[] MutiLan_131 = { "文本 {0}", "Text {0}" };
+        public static string[] MutiLan_132 = { "相对移动 ( {0} )", "Move By ( {0} )" };
 
         #endregion
 

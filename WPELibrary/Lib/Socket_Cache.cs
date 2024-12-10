@@ -2541,7 +2541,8 @@ namespace WPELibrary.Lib
                 Press,
                 Down,
                 Up,
-                Combine,              
+                Combine,
+                Text,
             }
 
             public enum MouseType
@@ -2556,7 +2557,8 @@ namespace WPELibrary.Lib
                 RightUp,
                 WheelUp,
                 WheelDown,
-                Move,
+                MoveTo,
+                MoveBy,
             }
 
             public enum InstructionType
@@ -2875,6 +2877,10 @@ namespace WPELibrary.Lib
                                     case Socket_Cache.Robot.KeyBoardType.Combine:
                                         sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_130), KeyCode);
                                         break;
+
+                                    case Socket_Cache.Robot.KeyBoardType.Text:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_131), KeyCode);
+                                        break;
                                 }                                
                             }
 
@@ -2929,8 +2935,12 @@ namespace WPELibrary.Lib
                                         sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_122), MouseCode);
                                         break;
 
-                                    case Socket_Cache.Robot.MouseType.Move:
+                                    case Socket_Cache.Robot.MouseType.MoveTo:
                                         sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_108), MouseCode);
+                                        break;
+
+                                    case Socket_Cache.Robot.MouseType.MoveBy:
+                                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_132), MouseCode);
                                         break;
                                 }                                
                             }

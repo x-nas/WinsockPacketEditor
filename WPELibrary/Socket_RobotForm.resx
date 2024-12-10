@@ -1410,171 +1410,6 @@
   <data name="tlpInstruction_keyboard.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tlpKeyboard_combination.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lKeyboard_combination.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lKeyboard_combination.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="lKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
-  </data>
-  <data name="lKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="lKeyboard_combination.Text" xml:space="preserve">
-    <value>组合按键:</value>
-  </data>
-  <data name="lKeyboard_combination.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lKeyboard_combination.Name" xml:space="preserve">
-    <value>lKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;lKeyboard_combination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lKeyboard_combination.Parent" xml:space="preserve">
-    <value>tlpKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;lKeyboard_combination.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="txtKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 3</value>
-  </data>
-  <data name="txtKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 23</value>
-  </data>
-  <data name="txtKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="txtKeyboard_combination.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtKeyboard_combination.Name" xml:space="preserve">
-    <value>txtKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;txtKeyboard_combination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtKeyboard_combination.Parent" xml:space="preserve">
-    <value>tlpKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;txtKeyboard_combination.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bKeyboard_combination.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>444, 1</value>
-  </data>
-  <data name="bKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="bKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 27</value>
-  </data>
-  <data name="bKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="bKeyboard_combination.Text" xml:space="preserve">
-    <value>插 入</value>
-  </data>
-  <data name="&gt;&gt;bKeyboard_combination.Name" xml:space="preserve">
-    <value>bKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;bKeyboard_combination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bKeyboard_combination.Parent" xml:space="preserve">
-    <value>tlpKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;bKeyboard_combination.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpKeyboard_combination.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>523, 89</value>
-  </data>
-  <data name="tlpKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tlpKeyboard_combination.Name" xml:space="preserve">
-    <value>tlpKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;tlpKeyboard_combination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpKeyboard_combination.Parent" xml:space="preserve">
-    <value>gbKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;tlpKeyboard_combination.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpKeyboard_combination.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lKeyboard_combination" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtKeyboard_combination" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bKeyboard_combination" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,20,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="gbKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>538, 3</value>
-  </data>
-  <data name="gbKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="gbKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>529, 111</value>
-  </data>
-  <data name="gbKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="gbKeyboard_combination.Text" xml:space="preserve">
-    <value>[ 键盘组合按键 ]</value>
-  </data>
-  <data name="&gt;&gt;gbKeyboard_combination.Name" xml:space="preserve">
-    <value>gbKeyboard_combination</value>
-  </data>
-  <data name="&gt;&gt;gbKeyboard_combination.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbKeyboard_combination.Parent" xml:space="preserve">
-    <value>tlpInstruction_keyboard</value>
-  </data>
-  <data name="&gt;&gt;gbKeyboard_combination.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="tlpKeyboard.ColumnCount" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
@@ -1936,7 +1771,331 @@
     <value>tlpInstruction_keyboard</value>
   </data>
   <data name="&gt;&gt;gbKeyboard.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpKeyBoardCombine.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="txtKeyboard_Text.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtKeyboard_Text.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="txtKeyboard_Text.Size" type="System.Drawing.Size, System.Drawing">
+    <value>417, 23</value>
+  </data>
+  <data name="txtKeyboard_Text.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_Text.Name" xml:space="preserve">
+    <value>txtKeyboard_Text</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_Text.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_Text.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_Text.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bKeyboard_Text.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bKeyboard_Text.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bKeyboard_Text.Location" type="System.Drawing.Point, System.Drawing">
+    <value>444, 1</value>
+  </data>
+  <data name="bKeyboard_Text.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bKeyboard_Text.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bKeyboard_Text.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="bKeyboard_Text.Text" xml:space="preserve">
+    <value>插 入</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_Text.Name" xml:space="preserve">
+    <value>bKeyboard_Text</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_Text.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_Text.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_Text.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>523, 32</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>gbKeyboard_Text</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtKeyboard_Text" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bKeyboard_Text" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20,Absolute,80,Absolute,20" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbKeyboard_Text.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbKeyboard_Text.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 60</value>
+  </data>
+  <data name="gbKeyboard_Text.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbKeyboard_Text.Size" type="System.Drawing.Size, System.Drawing">
+    <value>529, 54</value>
+  </data>
+  <data name="gbKeyboard_Text.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="gbKeyboard_Text.Text" xml:space="preserve">
+    <value>[ 文本 ]</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_Text.Name" xml:space="preserve">
+    <value>gbKeyboard_Text</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_Text.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_Text.Parent" xml:space="preserve">
+    <value>tlpKeyBoardCombine</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_Text.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpKeyboard_combination.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lKeyboard_combination.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lKeyboard_combination.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="lKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="lKeyboard_combination.Text" xml:space="preserve">
+    <value>组合按键:</value>
+  </data>
+  <data name="lKeyboard_combination.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lKeyboard_combination.Name" xml:space="preserve">
+    <value>lKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;lKeyboard_combination.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lKeyboard_combination.Parent" xml:space="preserve">
+    <value>tlpKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;lKeyboard_combination.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 3</value>
+  </data>
+  <data name="txtKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>352, 23</value>
+  </data>
+  <data name="txtKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="txtKeyboard_combination.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_combination.Name" xml:space="preserve">
+    <value>txtKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_combination.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_combination.Parent" xml:space="preserve">
+    <value>tlpKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;txtKeyboard_combination.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="bKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bKeyboard_combination.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>444, 1</value>
+  </data>
+  <data name="bKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 27</value>
+  </data>
+  <data name="bKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="bKeyboard_combination.Text" xml:space="preserve">
+    <value>插 入</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_combination.Name" xml:space="preserve">
+    <value>bKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_combination.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_combination.Parent" xml:space="preserve">
+    <value>tlpKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;bKeyboard_combination.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpKeyboard_combination.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>523, 32</value>
+  </data>
+  <data name="tlpKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyboard_combination.Name" xml:space="preserve">
+    <value>tlpKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyboard_combination.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyboard_combination.Parent" xml:space="preserve">
+    <value>gbKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyboard_combination.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpKeyboard_combination.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lKeyboard_combination" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtKeyboard_combination" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bKeyboard_combination" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,20,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbKeyboard_combination.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbKeyboard_combination.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>529, 54</value>
+  </data>
+  <data name="gbKeyboard_combination.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="gbKeyboard_combination.Text" xml:space="preserve">
+    <value>[ 键盘组合按键 ]</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_combination.Name" xml:space="preserve">
+    <value>gbKeyboard_combination</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_combination.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_combination.Parent" xml:space="preserve">
+    <value>tlpKeyBoardCombine</value>
+  </data>
+  <data name="&gt;&gt;gbKeyboard_combination.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpKeyBoardCombine.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpKeyBoardCombine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>535, 0</value>
+  </data>
+  <data name="tlpKeyBoardCombine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpKeyBoardCombine.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpKeyBoardCombine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>535, 114</value>
+  </data>
+  <data name="tlpKeyBoardCombine.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyBoardCombine.Name" xml:space="preserve">
+    <value>tlpKeyBoardCombine</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyBoardCombine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyBoardCombine.Parent" xml:space="preserve">
+    <value>tlpInstruction_keyboard</value>
+  </data>
+  <data name="&gt;&gt;tlpKeyBoardCombine.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpKeyBoardCombine.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbKeyboard_Text" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbKeyboard_combination" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpInstruction_keyboard.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1969,7 +2128,7 @@
     <value>0</value>
   </data>
   <data name="tlpInstruction_keyboard.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbKeyboard_combination" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbKeyboard" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,114" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbKeyboard" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpKeyBoardCombine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,114" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpInstruction_keyboard.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -2235,11 +2394,44 @@
   <data name="tlpMouseMove.ColumnCount" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
+  <data name="rbMoveBy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbMoveBy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbMoveBy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="rbMoveBy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>71, 3</value>
+  </data>
+  <data name="rbMoveBy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="rbMoveBy.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="rbMoveBy.Text" xml:space="preserve">
+    <value>相对移动</value>
+  </data>
+  <data name="&gt;&gt;rbMoveBy.Name" xml:space="preserve">
+    <value>rbMoveBy</value>
+  </data>
+  <data name="&gt;&gt;rbMoveBy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbMoveBy.Parent" xml:space="preserve">
+    <value>tlpMouseMove</value>
+  </data>
+  <data name="&gt;&gt;rbMoveBy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="nudMouseMove_Y.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="nudMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>228, 3</value>
+    <value>203, 33</value>
   </data>
   <data name="nudMouseMove_Y.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 23</value>
@@ -2260,7 +2452,7 @@
     <value>tlpMouseMove</value>
   </data>
   <data name="&gt;&gt;nudMouseMove_Y.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lMouseMove_Y.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2272,7 +2464,7 @@
     <value>NoControl</value>
   </data>
   <data name="lMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>176, 3</value>
+    <value>151, 33</value>
   </data>
   <data name="lMouseMove_Y.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2287,7 +2479,7 @@
     <value>Y 坐标:</value>
   </data>
   <data name="lMouseMove_Y.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+    <value>MiddleRight</value>
   </data>
   <data name="&gt;&gt;lMouseMove_Y.Name" xml:space="preserve">
     <value>lMouseMove_Y</value>
@@ -2299,7 +2491,7 @@
     <value>tlpMouseMove</value>
   </data>
   <data name="&gt;&gt;lMouseMove_Y.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="bMouseMove.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2308,7 +2500,7 @@
     <value>NoControl</value>
   </data>
   <data name="bMouseMove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>326, 1</value>
+    <value>301, 31</value>
   </data>
   <data name="bMouseMove.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
@@ -2332,13 +2524,13 @@
     <value>tlpMouseMove</value>
   </data>
   <data name="&gt;&gt;bMouseMove.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="nudMouseMove_X.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="nudMouseMove_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>96, 3</value>
+    <value>71, 33</value>
   </data>
   <data name="nudMouseMove_X.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 23</value>
@@ -2359,7 +2551,7 @@
     <value>tlpMouseMove</value>
   </data>
   <data name="&gt;&gt;nudMouseMove_X.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="lMouseMove_X.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2371,22 +2563,22 @@
     <value>NoControl</value>
   </data>
   <data name="lMouseMove_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+    <value>3, 33</value>
   </data>
   <data name="lMouseMove_X.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lMouseMove_X.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 25</value>
+    <value>62, 25</value>
   </data>
   <data name="lMouseMove_X.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="lMouseMove_X.Text" xml:space="preserve">
-    <value>移动到 X 坐标:</value>
+    <value>X 坐标:</value>
   </data>
   <data name="lMouseMove_X.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+    <value>MiddleRight</value>
   </data>
   <data name="&gt;&gt;lMouseMove_X.Name" xml:space="preserve">
     <value>lMouseMove_X</value>
@@ -2398,7 +2590,37 @@
     <value>tlpMouseMove</value>
   </data>
   <data name="&gt;&gt;lMouseMove_X.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
+  </data>
+  <data name="rbMoveTo.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbMoveTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbMoveTo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="rbMoveTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 24</value>
+  </data>
+  <data name="rbMoveTo.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="rbMoveTo.Text" xml:space="preserve">
+    <value>移动到</value>
+  </data>
+  <data name="&gt;&gt;rbMoveTo.Name" xml:space="preserve">
+    <value>rbMoveTo</value>
+  </data>
+  <data name="&gt;&gt;rbMoveTo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbMoveTo.Parent" xml:space="preserve">
+    <value>tlpMouseMove</value>
+  </data>
+  <data name="&gt;&gt;rbMoveTo.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
   <data name="tlpMouseMove.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2431,7 +2653,7 @@
     <value>0</value>
   </data>
   <data name="tlpMouseMove.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudMouseMove_Y" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lMouseMove_Y" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bMouseMove" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="nudMouseMove_X" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lMouseMove_X" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,AutoSize,0,Absolute,80,Absolute,20,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rbMoveBy" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudMouseMove_Y" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lMouseMove_Y" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bMouseMove" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="nudMouseMove_X" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lMouseMove_X" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbMoveTo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,AutoSize,0,Absolute,80,Absolute,20,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="Absolute,30,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbMouseMove.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

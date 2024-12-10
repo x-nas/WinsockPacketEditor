@@ -102,11 +102,6 @@
             this.nudDelay = new System.Windows.Forms.NumericUpDown();
             this.tpInstruction_keyboard = new System.Windows.Forms.TabPage();
             this.tlpInstruction_keyboard = new System.Windows.Forms.TableLayoutPanel();
-            this.gbKeyboard_combination = new System.Windows.Forms.GroupBox();
-            this.tlpKeyboard_combination = new System.Windows.Forms.TableLayoutPanel();
-            this.lKeyboard_combination = new System.Windows.Forms.Label();
-            this.txtKeyboard_combination = new System.Windows.Forms.TextBox();
-            this.bKeyboard_combination = new System.Windows.Forms.Button();
             this.gbKeyboard = new System.Windows.Forms.GroupBox();
             this.tlpKeyboard = new System.Windows.Forms.TableLayoutPanel();
             this.cbbKeyBoard_KeyType = new System.Windows.Forms.ComboBox();
@@ -118,6 +113,16 @@
             this.txtKeyBoard_KeyCode = new System.Windows.Forms.TextBox();
             this.nudKeyBoard_Times = new System.Windows.Forms.NumericUpDown();
             this.bKeyBoard = new System.Windows.Forms.Button();
+            this.tlpKeyBoardCombine = new System.Windows.Forms.TableLayoutPanel();
+            this.gbKeyboard_Text = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.txtKeyboard_Text = new System.Windows.Forms.TextBox();
+            this.bKeyboard_Text = new System.Windows.Forms.Button();
+            this.gbKeyboard_combination = new System.Windows.Forms.GroupBox();
+            this.tlpKeyboard_combination = new System.Windows.Forms.TableLayoutPanel();
+            this.lKeyboard_combination = new System.Windows.Forms.Label();
+            this.txtKeyboard_combination = new System.Windows.Forms.TextBox();
+            this.bKeyboard_combination = new System.Windows.Forms.Button();
             this.tpInstruction_Mouse = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Mouse = new System.Windows.Forms.TableLayoutPanel();
             this.gbMouseWheel = new System.Windows.Forms.GroupBox();
@@ -129,11 +134,13 @@
             this.cbbMouseWheel_Direction = new System.Windows.Forms.ComboBox();
             this.gbMouseMove = new System.Windows.Forms.GroupBox();
             this.tlpMouseMove = new System.Windows.Forms.TableLayoutPanel();
+            this.rbMoveBy = new System.Windows.Forms.RadioButton();
             this.nudMouseMove_Y = new System.Windows.Forms.NumericUpDown();
             this.lMouseMove_Y = new System.Windows.Forms.Label();
             this.bMouseMove = new System.Windows.Forms.Button();
             this.nudMouseMove_X = new System.Windows.Forms.NumericUpDown();
             this.lMouseMove_X = new System.Windows.Forms.Label();
+            this.rbMoveTo = new System.Windows.Forms.RadioButton();
             this.gbMouse = new System.Windows.Forms.GroupBox();
             this.tlpMouse = new System.Windows.Forms.TableLayoutPanel();
             this.nudMouse_Interval = new System.Windows.Forms.NumericUpDown();
@@ -179,12 +186,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).BeginInit();
             this.tpInstruction_keyboard.SuspendLayout();
             this.tlpInstruction_keyboard.SuspendLayout();
-            this.gbKeyboard_combination.SuspendLayout();
-            this.tlpKeyboard_combination.SuspendLayout();
             this.gbKeyboard.SuspendLayout();
             this.tlpKeyboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).BeginInit();
+            this.tlpKeyBoardCombine.SuspendLayout();
+            this.gbKeyboard_Text.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.gbKeyboard_combination.SuspendLayout();
+            this.tlpKeyboard_combination.SuspendLayout();
             this.tpInstruction_Mouse.SuspendLayout();
             this.tlpInstruction_Mouse.SuspendLayout();
             this.gbMouseWheel.SuspendLayout();
@@ -777,45 +787,9 @@
             // tlpInstruction_keyboard
             // 
             resources.ApplyResources(this.tlpInstruction_keyboard, "tlpInstruction_keyboard");
-            this.tlpInstruction_keyboard.Controls.Add(this.gbKeyboard_combination, 1, 0);
             this.tlpInstruction_keyboard.Controls.Add(this.gbKeyboard, 0, 0);
+            this.tlpInstruction_keyboard.Controls.Add(this.tlpKeyBoardCombine, 1, 0);
             this.tlpInstruction_keyboard.Name = "tlpInstruction_keyboard";
-            // 
-            // gbKeyboard_combination
-            // 
-            this.gbKeyboard_combination.Controls.Add(this.tlpKeyboard_combination);
-            resources.ApplyResources(this.gbKeyboard_combination, "gbKeyboard_combination");
-            this.gbKeyboard_combination.Name = "gbKeyboard_combination";
-            this.gbKeyboard_combination.TabStop = false;
-            // 
-            // tlpKeyboard_combination
-            // 
-            resources.ApplyResources(this.tlpKeyboard_combination, "tlpKeyboard_combination");
-            this.tlpKeyboard_combination.Controls.Add(this.lKeyboard_combination, 0, 0);
-            this.tlpKeyboard_combination.Controls.Add(this.txtKeyboard_combination, 1, 0);
-            this.tlpKeyboard_combination.Controls.Add(this.bKeyboard_combination, 3, 0);
-            this.tlpKeyboard_combination.Name = "tlpKeyboard_combination";
-            // 
-            // lKeyboard_combination
-            // 
-            resources.ApplyResources(this.lKeyboard_combination, "lKeyboard_combination");
-            this.lKeyboard_combination.Name = "lKeyboard_combination";
-            // 
-            // txtKeyboard_combination
-            // 
-            this.txtKeyboard_combination.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtKeyboard_combination, "txtKeyboard_combination");
-            this.txtKeyboard_combination.Name = "txtKeyboard_combination";
-            this.txtKeyboard_combination.ReadOnly = true;
-            this.txtKeyboard_combination.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyDown);
-            this.txtKeyboard_combination.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyUp);
-            // 
-            // bKeyboard_combination
-            // 
-            resources.ApplyResources(this.bKeyboard_combination, "bKeyboard_combination");
-            this.bKeyboard_combination.Name = "bKeyboard_combination";
-            this.bKeyboard_combination.UseVisualStyleBackColor = true;
-            this.bKeyboard_combination.Click += new System.EventHandler(this.bKeyboard_combination_Click);
             // 
             // gbKeyboard
             // 
@@ -919,6 +893,76 @@
             this.bKeyBoard.UseVisualStyleBackColor = true;
             this.bKeyBoard.Click += new System.EventHandler(this.bKeyBoard_Click);
             // 
+            // tlpKeyBoardCombine
+            // 
+            resources.ApplyResources(this.tlpKeyBoardCombine, "tlpKeyBoardCombine");
+            this.tlpKeyBoardCombine.Controls.Add(this.gbKeyboard_Text, 0, 1);
+            this.tlpKeyBoardCombine.Controls.Add(this.gbKeyboard_combination, 0, 0);
+            this.tlpKeyBoardCombine.Name = "tlpKeyBoardCombine";
+            // 
+            // gbKeyboard_Text
+            // 
+            this.gbKeyboard_Text.Controls.Add(this.tableLayoutPanel1);
+            resources.ApplyResources(this.gbKeyboard_Text, "gbKeyboard_Text");
+            this.gbKeyboard_Text.Name = "gbKeyboard_Text";
+            this.gbKeyboard_Text.TabStop = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.txtKeyboard_Text, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.bKeyboard_Text, 2, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // txtKeyboard_Text
+            // 
+            this.txtKeyboard_Text.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtKeyboard_Text, "txtKeyboard_Text");
+            this.txtKeyboard_Text.Name = "txtKeyboard_Text";
+            // 
+            // bKeyboard_Text
+            // 
+            resources.ApplyResources(this.bKeyboard_Text, "bKeyboard_Text");
+            this.bKeyboard_Text.Name = "bKeyboard_Text";
+            this.bKeyboard_Text.UseVisualStyleBackColor = true;
+            this.bKeyboard_Text.Click += new System.EventHandler(this.bKeyboard_Text_Click);
+            // 
+            // gbKeyboard_combination
+            // 
+            this.gbKeyboard_combination.Controls.Add(this.tlpKeyboard_combination);
+            resources.ApplyResources(this.gbKeyboard_combination, "gbKeyboard_combination");
+            this.gbKeyboard_combination.Name = "gbKeyboard_combination";
+            this.gbKeyboard_combination.TabStop = false;
+            // 
+            // tlpKeyboard_combination
+            // 
+            resources.ApplyResources(this.tlpKeyboard_combination, "tlpKeyboard_combination");
+            this.tlpKeyboard_combination.Controls.Add(this.lKeyboard_combination, 0, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.txtKeyboard_combination, 1, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.bKeyboard_combination, 3, 0);
+            this.tlpKeyboard_combination.Name = "tlpKeyboard_combination";
+            // 
+            // lKeyboard_combination
+            // 
+            resources.ApplyResources(this.lKeyboard_combination, "lKeyboard_combination");
+            this.lKeyboard_combination.Name = "lKeyboard_combination";
+            // 
+            // txtKeyboard_combination
+            // 
+            this.txtKeyboard_combination.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtKeyboard_combination, "txtKeyboard_combination");
+            this.txtKeyboard_combination.Name = "txtKeyboard_combination";
+            this.txtKeyboard_combination.ReadOnly = true;
+            this.txtKeyboard_combination.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyDown);
+            this.txtKeyboard_combination.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyUp);
+            // 
+            // bKeyboard_combination
+            // 
+            resources.ApplyResources(this.bKeyboard_combination, "bKeyboard_combination");
+            this.bKeyboard_combination.Name = "bKeyboard_combination";
+            this.bKeyboard_combination.UseVisualStyleBackColor = true;
+            this.bKeyboard_combination.Click += new System.EventHandler(this.bKeyboard_combination_Click);
+            // 
             // tpInstruction_Mouse
             // 
             this.tpInstruction_Mouse.BackColor = System.Drawing.SystemColors.Control;
@@ -1008,12 +1052,20 @@
             // tlpMouseMove
             // 
             resources.ApplyResources(this.tlpMouseMove, "tlpMouseMove");
-            this.tlpMouseMove.Controls.Add(this.nudMouseMove_Y, 3, 0);
-            this.tlpMouseMove.Controls.Add(this.lMouseMove_Y, 2, 0);
-            this.tlpMouseMove.Controls.Add(this.bMouseMove, 5, 0);
-            this.tlpMouseMove.Controls.Add(this.nudMouseMove_X, 1, 0);
-            this.tlpMouseMove.Controls.Add(this.lMouseMove_X, 0, 0);
+            this.tlpMouseMove.Controls.Add(this.rbMoveBy, 1, 0);
+            this.tlpMouseMove.Controls.Add(this.nudMouseMove_Y, 3, 1);
+            this.tlpMouseMove.Controls.Add(this.lMouseMove_Y, 2, 1);
+            this.tlpMouseMove.Controls.Add(this.bMouseMove, 5, 1);
+            this.tlpMouseMove.Controls.Add(this.nudMouseMove_X, 1, 1);
+            this.tlpMouseMove.Controls.Add(this.lMouseMove_X, 0, 1);
+            this.tlpMouseMove.Controls.Add(this.rbMoveTo, 0, 0);
             this.tlpMouseMove.Name = "tlpMouseMove";
+            // 
+            // rbMoveBy
+            // 
+            resources.ApplyResources(this.rbMoveBy, "rbMoveBy");
+            this.rbMoveBy.Name = "rbMoveBy";
+            this.rbMoveBy.UseVisualStyleBackColor = true;
             // 
             // nudMouseMove_Y
             // 
@@ -1051,6 +1103,14 @@
             // 
             resources.ApplyResources(this.lMouseMove_X, "lMouseMove_X");
             this.lMouseMove_X.Name = "lMouseMove_X";
+            // 
+            // rbMoveTo
+            // 
+            resources.ApplyResources(this.rbMoveTo, "rbMoveTo");
+            this.rbMoveTo.Checked = true;
+            this.rbMoveTo.Name = "rbMoveTo";
+            this.rbMoveTo.TabStop = true;
+            this.rbMoveTo.UseVisualStyleBackColor = true;
             // 
             // gbMouse
             // 
@@ -1239,14 +1299,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).EndInit();
             this.tpInstruction_keyboard.ResumeLayout(false);
             this.tlpInstruction_keyboard.ResumeLayout(false);
-            this.gbKeyboard_combination.ResumeLayout(false);
-            this.tlpKeyboard_combination.ResumeLayout(false);
-            this.tlpKeyboard_combination.PerformLayout();
             this.gbKeyboard.ResumeLayout(false);
             this.tlpKeyboard.ResumeLayout(false);
             this.tlpKeyboard.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).EndInit();
+            this.tlpKeyBoardCombine.ResumeLayout(false);
+            this.gbKeyboard_Text.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.gbKeyboard_combination.ResumeLayout(false);
+            this.tlpKeyboard_combination.ResumeLayout(false);
+            this.tlpKeyboard_combination.PerformLayout();
             this.tpInstruction_Mouse.ResumeLayout(false);
             this.tlpInstruction_Mouse.ResumeLayout(false);
             this.gbMouseWheel.ResumeLayout(false);
@@ -1339,11 +1403,6 @@
         private System.Windows.Forms.Label lKeyBoard_Interval;
         private System.Windows.Forms.GroupBox gbExecute;
         private System.Windows.Forms.TextBox txtExecute;
-        private System.Windows.Forms.GroupBox gbKeyboard_combination;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
-        private System.Windows.Forms.TextBox txtKeyboard_combination;
-        private System.Windows.Forms.Button bKeyboard_combination;
-        private System.Windows.Forms.Label lKeyboard_combination;
         private System.Windows.Forms.TableLayoutPanel tlpMouse;
         private System.Windows.Forms.NumericUpDown nudMouse_Interval;
         private System.Windows.Forms.Label lMouse_Interval;
@@ -1385,5 +1444,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyBoardCombine;
+        private System.Windows.Forms.GroupBox gbKeyboard_combination;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
+        private System.Windows.Forms.Label lKeyboard_combination;
+        private System.Windows.Forms.TextBox txtKeyboard_combination;
+        private System.Windows.Forms.Button bKeyboard_combination;
+        private System.Windows.Forms.GroupBox gbKeyboard_Text;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TextBox txtKeyboard_Text;
+        private System.Windows.Forms.Button bKeyboard_Text;
+        private System.Windows.Forms.RadioButton rbMoveBy;
+        private System.Windows.Forms.RadioButton rbMoveTo;
     }
 }

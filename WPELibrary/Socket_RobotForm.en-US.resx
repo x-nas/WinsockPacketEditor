@@ -320,24 +320,6 @@
   <data name="tpInstruction_keyboard.Text" xml:space="preserve">
     <value>[ Keyboard Inst ]</value>
   </data>
-  <data name="gbKeyboard_combination.Text" xml:space="preserve">
-    <value>[ Keyboard Combination ]</value>
-  </data>
-  <data name="lKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 23</value>
-  </data>
-  <data name="lKeyboard_combination.Text" xml:space="preserve">
-    <value>Combination Key:</value>
-  </data>
-  <data name="txtKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>119, 3</value>
-  </data>
-  <data name="txtKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 23</value>
-  </data>
-  <data name="bKeyboard_combination.Text" xml:space="preserve">
-    <value>Insert</value>
-  </data>
   <data name="gbKeyboard.Text" xml:space="preserve">
     <value>[ Keyboard ]</value>
   </data>
@@ -374,9 +356,6 @@
   <data name="lKeyBoard_Interval.Text" xml:space="preserve">
     <value>Interval (ms):</value>
   </data>
-  <data name="lKeyBoard_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
-  </data>
   <data name="lKeyBoard_Times.Size" type="System.Drawing.Size, System.Drawing">
     <value>45, 23</value>
   </data>
@@ -405,6 +384,30 @@
     <value>361, 30</value>
   </data>
   <data name="bKeyBoard.Text" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="gbKeyboard_Text.Text" xml:space="preserve">
+    <value>[ Text ]</value>
+  </data>
+  <data name="bKeyboard_Text.Text" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="gbKeyboard_combination.Text" xml:space="preserve">
+    <value>[ Keyboard Combination ]</value>
+  </data>
+  <data name="lKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 23</value>
+  </data>
+  <data name="lKeyboard_combination.Text" xml:space="preserve">
+    <value>Combination Key:</value>
+  </data>
+  <data name="txtKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>119, 3</value>
+  </data>
+  <data name="txtKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 23</value>
+  </data>
+  <data name="bKeyboard_combination.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
   <data name="tpInstruction_Mouse.Text" xml:space="preserve">
@@ -440,11 +443,17 @@
   <data name="gbMouseMove.Text" xml:space="preserve">
     <value>[ Mouse Move ]</value>
   </data>
+  <data name="rbMoveBy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>83, 3</value>
+  </data>
+  <data name="rbMoveBy.Text" xml:space="preserve">
+    <value>MoveBy</value>
+  </data>
   <data name="nudMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>235, 3</value>
+    <value>229, 33</value>
   </data>
   <data name="lMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>169, 3</value>
+    <value>163, 33</value>
   </data>
   <data name="lMouseMove_Y.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 25</value>
@@ -453,19 +462,25 @@
     <value>Y-Coord:</value>
   </data>
   <data name="bMouseMove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>333, 1</value>
+    <value>327, 31</value>
   </data>
   <data name="bMouseMove.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
   <data name="nudMouseMove_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>89, 3</value>
+    <value>83, 33</value>
   </data>
   <data name="lMouseMove_X.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 25</value>
+    <value>74, 25</value>
   </data>
   <data name="lMouseMove_X.Text" xml:space="preserve">
-    <value>To X-Coord:</value>
+    <value>X-Coord:</value>
+  </data>
+  <data name="rbMoveTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="rbMoveTo.Text" xml:space="preserve">
+    <value>MoveTo</value>
   </data>
   <data name="gbMouse.Text" xml:space="preserve">
     <value>[ Mouse Key ]</value>
