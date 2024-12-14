@@ -36,10 +36,10 @@ namespace WPELibrary.Lib
             Export,
             Delete,
             CleanUp,
-        }
+        }        
 
-        #endregion
-
+        #endregion        
+        
         public static IntPtr MainHandle = IntPtr.Zero;
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
@@ -3216,6 +3216,22 @@ namespace WPELibrary.Lib
 
             #region//执行机器人
 
+            public static void DoRobot_ByIndex(int RobotListIndex)
+            {
+                try
+                {
+                    if (RobotListIndex > -1 && RobotListIndex < Socket_Cache.RobotList.lstRobot.Count)
+                    {
+                        Guid RID = Socket_Cache.RobotList.lstRobot[RobotListIndex].RID;
+                        Socket_Cache.Robot.DoRobot(RID);
+                    }                   
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
             public static void DoRobot(Guid RID)
             {
                 try
@@ -3284,7 +3300,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion            
+            #endregion                        
 
             #region//机器人列表的列表操作
 
@@ -3299,6 +3315,42 @@ namespace WPELibrary.Lib
 
                     switch (listAction)
                     {
+                        case Socket_Cache.ListAction.Top:
+                            if (iRIndex > 0)
+                            {
+                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Insert(0, sri);
+                                iReturn = 0;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Up:
+                            if (iRIndex > 0)
+                            {
+                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Insert(iRIndex - 1, sri);
+                                iReturn = iRIndex - 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Down:
+                            if (iRIndex < iRobotListCount - 1)
+                            {
+                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Insert(iRIndex + 1, sri);
+                                iReturn = iRIndex + 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Bottom:
+                            if (iRIndex < iRobotListCount - 1)
+                            {
+                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Add(sri);
+                                iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
+                            }
+                            break;
+
                         case Socket_Cache.ListAction.Copy:
                             Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
                             iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;

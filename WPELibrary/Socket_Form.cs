@@ -15,16 +15,13 @@ namespace WPELibrary
 {
     public partial class Socket_Form : Form
     {
-        private WinSockHook ws = new WinSockHook();
-
         private int Select_Index = -1;
         private int Search_Index = -1;
         private bool bWakeUp = true;
-
         private Color col_Del = Color.Red;
         private Color col_Add = Color.Green;
-
-        private ToolTip tt = new ToolTip();        
+        private ToolTip tt = new ToolTip();
+        private WinSockHook ws = new WinSockHook();
 
         #region//加载窗体
 
@@ -33,7 +30,7 @@ namespace WPELibrary
             try
             {
                 MultiLanguage.SetDefaultLanguage(sLanguage);
-                InitializeComponent();
+                InitializeComponent();                
 
                 this.InitSocketForm();
                 this.InitSocketDGV();                
@@ -41,7 +38,7 @@ namespace WPELibrary
                 
                 this.LoadConfigs_Parameter();
                 Socket_Operation.LoadSystemList();
-
+                Socket_Operation.RegisterHotKey();
             }
             catch (Exception ex)
             {
@@ -109,13 +106,82 @@ namespace WPELibrary
                 ws.ExitHook();
 
                 this.SaveConfigs_Parameter();
-                Socket_Operation.SaveSystemList();                
+                Socket_Operation.SaveSystemList();
+                Socket_Operation.UnregisterHotKey();
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        protected override void WndProc(ref Message m)
+        {
+            try
+            {
+                if (m.Msg == User32.WM_HOTKEY)
+                {
+                    int HOTKEY_ID = m.WParam.ToInt32();
+
+                    switch (HOTKEY_ID)
+                    {
+                        case 9001:
+                            Socket_Cache.Robot.DoRobot_ByIndex(0);
+                            break;
+
+                        case 9002:
+                            Socket_Cache.Robot.DoRobot_ByIndex(1);
+                            break;
+
+                        case 9003:
+                            Socket_Cache.Robot.DoRobot_ByIndex(2);
+                            break;
+
+                        case 9004:
+                            Socket_Cache.Robot.DoRobot_ByIndex(3);
+                            break;
+
+                        case 9005:
+                            Socket_Cache.Robot.DoRobot_ByIndex(4);
+                            break;
+
+                        case 9006:
+                            Socket_Cache.Robot.DoRobot_ByIndex(5);
+                            break;
+
+                        case 9007:
+                            Socket_Cache.Robot.DoRobot_ByIndex(6);
+                            break;
+
+                        case 9008:
+                            Socket_Cache.Robot.DoRobot_ByIndex(7);
+                            break;
+
+                        case 9009:
+                            Socket_Cache.Robot.DoRobot_ByIndex(8);
+                            break;
+
+                        case 9010:
+                            Socket_Cache.Robot.DoRobot_ByIndex(9);
+                            break;
+
+                        case 9011:
+                            Socket_Cache.Robot.DoRobot_ByIndex(10);
+                            break;
+
+                        case 9012:
+                            Socket_Cache.Robot.DoRobot_ByIndex(11);
+                            break;
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            base.WndProc(ref m);            
+        }        
 
         #endregion
 
@@ -125,6 +191,7 @@ namespace WPELibrary
         {
             try
             {
+                Socket_Cache.MainHandle = this.Handle;
                 this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
                 tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
@@ -1219,11 +1286,12 @@ namespace WPELibrary
 
                     case "cmsSocketList_SendList":
 
-                        if (Select_Index > -1)
-                        {
-                            Socket_Cache.SendList.AddToSendList_BytIndex(Select_Index);
-                            Socket_Operation.ShowSendListForm();
+                        foreach (DataGridViewRow row in dgvSocketList.SelectedRows)
+                        {  
+                            Socket_Cache.SendList.AddToSendList_BytIndex(row.Index);
                         }
+
+                        Socket_Operation.ShowSendListForm();
 
                         break;
 
@@ -1371,6 +1439,22 @@ namespace WPELibrary
                     {
                         switch (sItemText)
                         {
+                            case "cmsRobotList_Top":
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Top, iRIndex);
+                                break;
+
+                            case "cmsRobotList_Up":
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Up, iRIndex);
+                                break;
+
+                            case "cmsRobotList_Down":
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Down, iRIndex);
+                                break;
+
+                            case "cmsRobotList_Bottom":
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Bottom, iRIndex);
+                                break;
+
                             case "cmsRobotList_Copy":
                                 iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Copy, iRIndex);
                                 break;
@@ -2108,8 +2192,10 @@ namespace WPELibrary
                                             string s33 = slFilter[33].ToString();//未知 1
 
                                             string sIsEnable = bool.FalseString;
-                                            string sFNum = string.Empty;
+                                            string sFID = Guid.NewGuid().ToString();
                                             string sFName = s13;
+                                            string sIsExecute = bool.FalseString;
+                                            string sRID = Guid.Empty.ToString();
                                             string sFAppointHeader = Socket_Operation.GetBoolFromChineseString(s4).ToString();
                                             string sFHeaderContent = s5;
                                             string sFAppointSocket = Socket_Operation.GetBoolFromChineseString(s2).ToString();
@@ -2199,7 +2285,7 @@ namespace WPELibrary
                                             XElement xeFilter =
                                                 new XElement("Filter",
                                                 new XElement("IsEnable", sIsEnable),
-                                                new XElement("Num", sFNum),
+                                                new XElement("ID", sFID),
                                                 new XElement("Name", sFName),
                                                 new XElement("AppointHeader", sFAppointHeader),
                                                 new XElement("HeaderContent", sFHeaderContent),
@@ -2209,6 +2295,8 @@ namespace WPELibrary
                                                 new XElement("LengthContent", sFLengthContent),
                                                 new XElement("Mode", sFMode),
                                                 new XElement("Action", sFAction),
+                                                new XElement("IsExecute", sIsExecute),
+                                                new XElement("RobotID", sRID),
                                                 new XElement("Function", sFFunction),
                                                 new XElement("StartFrom", sFStartFrom),
                                                 new XElement("ProgressionStep", sFProgressionStep),
@@ -2290,6 +2378,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
     }
 }

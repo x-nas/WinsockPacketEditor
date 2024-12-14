@@ -698,6 +698,30 @@
   <data name="cbSocketList_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
   </data>
+  <data name="tcSocketInfo_HotKey.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 24</value>
+  </data>
+  <data name="tcSocketInfo_HotKey.Size" type="System.Drawing.Size, System.Drawing">
+    <value>770, 94</value>
+  </data>
+  <data name="tcSocketInfo_HotKey.Text" xml:space="preserve">
+    <value>[ HotKey ]</value>
+  </data>
+  <data name="tlpHotKeySet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>770, 94</value>
+  </data>
+  <data name="lHotKey_RobotList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>149, 15</value>
+  </data>
+  <data name="lHotKey_RobotList.Text" xml:space="preserve">
+    <value>Execute Robot List 1 ~ 12:</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>158, 3</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 15</value>
+  </data>
   <data name="tcSocketInfo_SystemSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
@@ -1375,25 +1399,58 @@
     <value>189, 213</value>
   </data>
   <data name="cmsRobotList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 70</value>
+    <value>147, 176</value>
   </data>
   <data name="dgvRobotList.Size" type="System.Drawing.Size, System.Drawing">
     <value>183, 178</value>
   </data>
+  <data name="cmsRobotList_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsRobotList_Top.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="cmsRobotList_Split1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsRobotList_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsRobotList_Up.Text" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="cmsRobotList_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsRobotList_Down.Text" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="cmsRobotList_Split2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsRobotList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsRobotList_Bottom.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="cmsRobotList_Split3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
   <data name="cmsRobotList_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="cmsRobotList_Copy.Text" xml:space="preserve">
     <value>Copy</value>
   </data>
   <data name="cmsRobotList_Export.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="cmsRobotList_Export.Text" xml:space="preserve">
     <value>Export</value>
   </data>
   <data name="cmsRobotList_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 22</value>
+    <value>146, 22</value>
   </data>
   <data name="cmsRobotList_Delete.Text" xml:space="preserve">
     <value>Delete</value>

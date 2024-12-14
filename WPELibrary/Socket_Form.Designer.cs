@@ -161,6 +161,10 @@ namespace WPELibrary
             this.nudSocketList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
             this.cbSocketList_AutoClear = new System.Windows.Forms.CheckBox();
             this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
+            this.tcSocketInfo_HotKey = new System.Windows.Forms.TabPage();
+            this.tlpHotKeySet = new System.Windows.Forms.TableLayoutPanel();
+            this.lHotKey_RobotList = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.gbSystemSet_FilterSet = new System.Windows.Forms.GroupBox();
@@ -303,6 +307,13 @@ namespace WPELibrary
             this.cImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.cRName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsRobotList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsRobotList_Top = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsRobotList_Split1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsRobotList_Up = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsRobotList_Down = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsRobotList_Split2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsRobotList_Bottom = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsRobotList_Split3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsRobotList_Copy = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRobotList_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRobotList_Delete = new System.Windows.Forms.ToolStripMenuItem();
@@ -368,6 +379,8 @@ namespace WPELibrary
             this.gbListSet_SocketList.SuspendLayout();
             this.tlpListSet_SocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).BeginInit();
+            this.tcSocketInfo_HotKey.SuspendLayout();
+            this.tlpHotKeySet.SuspendLayout();
             this.tcSocketInfo_SystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
             this.gbSystemSet_FilterSet.SuspendLayout();
@@ -684,7 +697,6 @@ namespace WPELibrary
             this.cLen,
             this.cData});
             this.dgvSocketList.ContextMenuStrip = this.cmsSocketList;
-            this.dgvSocketList.MultiSelect = false;
             this.dgvSocketList.Name = "dgvSocketList";
             this.dgvSocketList.RowHeadersVisible = false;
             this.dgvSocketList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -975,6 +987,7 @@ namespace WPELibrary
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_FilterSet);
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_HookSet);
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_ListSet);
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_HotKey);
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_SystemSet);
             this.tcSocketInfo.Name = "tcSocketInfo";
             this.tcSocketInfo.SelectedIndex = 0;
@@ -1308,6 +1321,30 @@ namespace WPELibrary
             resources.ApplyResources(this.cbSocketList_AutoRoll, "cbSocketList_AutoRoll");
             this.cbSocketList_AutoRoll.Name = "cbSocketList_AutoRoll";
             this.cbSocketList_AutoRoll.UseVisualStyleBackColor = true;
+            // 
+            // tcSocketInfo_HotKey
+            // 
+            resources.ApplyResources(this.tcSocketInfo_HotKey, "tcSocketInfo_HotKey");
+            this.tcSocketInfo_HotKey.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_HotKey.Controls.Add(this.tlpHotKeySet);
+            this.tcSocketInfo_HotKey.Name = "tcSocketInfo_HotKey";
+            // 
+            // tlpHotKeySet
+            // 
+            resources.ApplyResources(this.tlpHotKeySet, "tlpHotKeySet");
+            this.tlpHotKeySet.Controls.Add(this.lHotKey_RobotList, 0, 0);
+            this.tlpHotKeySet.Controls.Add(this.label1, 1, 0);
+            this.tlpHotKeySet.Name = "tlpHotKeySet";
+            // 
+            // lHotKey_RobotList
+            // 
+            resources.ApplyResources(this.lHotKey_RobotList, "lHotKey_RobotList");
+            this.lHotKey_RobotList.Name = "lHotKey_RobotList";
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
             // 
             // tcSocketInfo_SystemSet
             // 
@@ -2435,6 +2472,7 @@ namespace WPELibrary
             // 
             // cImg
             // 
+            this.cImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             resources.ApplyResources(this.cImg, "cImg");
             this.cImg.Image = global::WPELibrary.Properties.Resources.computer;
             this.cImg.Name = "cImg";
@@ -2453,11 +2491,57 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.cmsRobotList, "cmsRobotList");
             this.cmsRobotList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsRobotList_Top,
+            this.cmsRobotList_Split1,
+            this.cmsRobotList_Up,
+            this.cmsRobotList_Down,
+            this.cmsRobotList_Split2,
+            this.cmsRobotList_Bottom,
+            this.cmsRobotList_Split3,
             this.cmsRobotList_Copy,
             this.cmsRobotList_Export,
             this.cmsRobotList_Delete});
             this.cmsRobotList.Name = "cmsRobotList";
             this.cmsRobotList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsRobotList_ItemClicked);
+            // 
+            // cmsRobotList_Top
+            // 
+            resources.ApplyResources(this.cmsRobotList_Top, "cmsRobotList_Top");
+            this.cmsRobotList_Top.Image = global::WPELibrary.Properties.Resources.go_top;
+            this.cmsRobotList_Top.Name = "cmsRobotList_Top";
+            // 
+            // cmsRobotList_Split1
+            // 
+            resources.ApplyResources(this.cmsRobotList_Split1, "cmsRobotList_Split1");
+            this.cmsRobotList_Split1.Name = "cmsRobotList_Split1";
+            // 
+            // cmsRobotList_Up
+            // 
+            resources.ApplyResources(this.cmsRobotList_Up, "cmsRobotList_Up");
+            this.cmsRobotList_Up.Image = global::WPELibrary.Properties.Resources.Up;
+            this.cmsRobotList_Up.Name = "cmsRobotList_Up";
+            // 
+            // cmsRobotList_Down
+            // 
+            resources.ApplyResources(this.cmsRobotList_Down, "cmsRobotList_Down");
+            this.cmsRobotList_Down.Image = global::WPELibrary.Properties.Resources.Down;
+            this.cmsRobotList_Down.Name = "cmsRobotList_Down";
+            // 
+            // cmsRobotList_Split2
+            // 
+            resources.ApplyResources(this.cmsRobotList_Split2, "cmsRobotList_Split2");
+            this.cmsRobotList_Split2.Name = "cmsRobotList_Split2";
+            // 
+            // cmsRobotList_Bottom
+            // 
+            resources.ApplyResources(this.cmsRobotList_Bottom, "cmsRobotList_Bottom");
+            this.cmsRobotList_Bottom.Image = global::WPELibrary.Properties.Resources.go_bottom;
+            this.cmsRobotList_Bottom.Name = "cmsRobotList_Bottom";
+            // 
+            // cmsRobotList_Split3
+            // 
+            resources.ApplyResources(this.cmsRobotList_Split3, "cmsRobotList_Split3");
+            this.cmsRobotList_Split3.Name = "cmsRobotList_Split3";
             // 
             // cmsRobotList_Copy
             // 
@@ -2755,6 +2839,9 @@ namespace WPELibrary
             this.tlpListSet_SocketList.ResumeLayout(false);
             this.tlpListSet_SocketList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSocketList_AutoClearValue)).EndInit();
+            this.tcSocketInfo_HotKey.ResumeLayout(false);
+            this.tlpHotKeySet.ResumeLayout(false);
+            this.tlpHotKeySet.PerformLayout();
             this.tcSocketInfo_SystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
             this.gbSystemSet_FilterSet.ResumeLayout(false);
@@ -3112,9 +3199,20 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_SendList;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_FilterList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.DataGridViewImageColumn cImg;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRName;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Copy;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Export;
+        private System.Windows.Forms.TabPage tcSocketInfo_HotKey;
+        private System.Windows.Forms.TableLayoutPanel tlpHotKeySet;
+        private System.Windows.Forms.Label lHotKey_RobotList;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Top;
+        private System.Windows.Forms.ToolStripSeparator cmsRobotList_Split1;
+        private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Up;
+        private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Down;
+        private System.Windows.Forms.ToolStripSeparator cmsRobotList_Split2;
+        private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Bottom;
+        private System.Windows.Forms.ToolStripSeparator cmsRobotList_Split3;
+        private System.Windows.Forms.DataGridViewImageColumn cImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRName;
     }
 }

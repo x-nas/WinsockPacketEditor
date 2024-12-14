@@ -555,8 +555,7 @@ namespace WPELibrary.Lib
                     sReturn = pProcess.MainModule.ModuleName;
                 }
                 else
-                {
-                    Socket_Cache.MainHandle = pProcess.MainWindowHandle;
+                {  
                     sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
                 }
             }
@@ -579,25 +578,31 @@ namespace WPELibrary.Lib
             try
             {
                 Socket_Cache.Support_WS1 = false;
-                Socket_Cache.Support_WS2 = false;
+                Socket_Cache.Support_WS2 = false;                
 
-                ProcessModuleCollection modules = Process.GetCurrentProcess().Modules;
-
-                foreach (ProcessModule module in modules)
+                foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
                 {
                     string sModuleName = module.ModuleName;
 
                     if (sModuleName.Equals(WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Socket_Cache.Support_WS1 = true;
-                        sReturn += " 1.1";
+                        Socket_Cache.Support_WS1 = true;                        
                     }
 
                     if (sModuleName.Equals(WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         Socket_Cache.Support_WS2 = true;
-                        sReturn += " 2.0";
                     }
+                }
+
+                if (Socket_Cache.Support_WS1)
+                {
+                    sReturn += " 1.1";
+                }
+
+                if (Socket_Cache.Support_WS2)
+                {
+                    sReturn += " 2.0";
                 }
             }
             catch (Exception ex)
@@ -1002,7 +1007,7 @@ namespace WPELibrary.Lib
         #region//是否显示封包（过滤条件）        
 
         public static bool ISShowSocketPacket_ByFilter(Socket_PacketInfo spi)
-        {
+        {  
             try
             {
                 //套接字
@@ -1017,11 +1022,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_BySocket(spi.PacketSocket))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!ISFilter_BySocket(spi.PacketSocket))
                         {
                             return false;
                         }
@@ -1040,11 +1041,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!(ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo)))
                         {
                             return false;
                         }
@@ -1063,11 +1060,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!(ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo)))
                         {
                             return false;
                         }
@@ -1086,11 +1079,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_ByHead(spi.PacketBuffer))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!ISFilter_ByHead(spi.PacketBuffer))
                         {
                             return false;
                         }
@@ -1109,11 +1098,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_ByPacket(spi.PacketBuffer))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!ISFilter_ByPacket(spi.PacketBuffer))
                         {
                             return false;
                         }
@@ -1132,16 +1117,12 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        if (ISFilter_BySize(spi.PacketLen))
-                        {
-                            return true;
-                        }
-                        else
+                        if (!ISFilter_BySize(spi.PacketLen))
                         {
                             return false;
                         }
                     }
-                }
+                }               
             }
             catch (Exception ex)
             {
@@ -1476,7 +1457,60 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//注册操作系统快捷键       
+
+        public static void RegisterHotKey()
+        {
+            try
+            {
+                if (Socket_Cache.MainHandle != IntPtr.Zero)
+                {
+                    int KeyControl = (int)User32.KeyModifiers.MOD_CONTROL;
+                    int KeyAlt = (int)User32.KeyModifiers.MOD_ALT;
+                    int iKeyCode = (int)Keys.F1;
+
+                    for (int i = 9001;i < 9013;i ++)
+                    { 
+                        bool bOK = User32.RegisterHotKey(Socket_Cache.MainHandle, i, KeyControl | KeyAlt, iKeyCode);
+
+                        if (!bOK)
+                        {
+                            Keys HotKey = (Keys)iKeyCode;
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), HotKey.ToString());
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+
+                        iKeyCode++;
+                    }                  
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void UnregisterHotKey()
+        {
+            try
+            {
+                if (Socket_Cache.MainHandle != IntPtr.Zero)
+                {
+                    for (int i = 9001; i < 9013; i++)
+                    {
+                        User32.UnregisterHotKey(Socket_Cache.MainHandle, i);                       
+                    }                    
+                }                    
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//保存系统列表数据
 

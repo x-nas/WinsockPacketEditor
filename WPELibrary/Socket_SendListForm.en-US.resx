@@ -118,6 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 17</value>
+  </data>
+  <data name="tlLoop_Send.Text" xml:space="preserve">
+    <value>Total Send:</value>
+  </data>
+  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
+  </data>
+  <data name="tlSendList_Success.Text" xml:space="preserve">
+    <value>Success:</value>
+  </data>
+  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 17</value>
+  </data>
+  <data name="tlSendList_Fail.Text" xml:space="preserve">
+    <value>Fail:</value>
+  </data>
   <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>961, 22</value>
   </data>
@@ -138,36 +156,6 @@
   </data>
   <data name="cData.HeaderText" xml:space="preserve">
     <value>Data</value>
-  </data>
-  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 110</value>
-  </data>
-  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>961, 226</value>
-  </data>
-  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>967, 50</value>
-  </data>
-  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>967, 304</value>
-  </data>
-  <data name="tlLoop_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 17</value>
-  </data>
-  <data name="tlLoop_Send.Text" xml:space="preserve">
-    <value>Total Send:</value>
-  </data>
-  <data name="tlSendList_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
-  </data>
-  <data name="tlSendList_Success.Text" xml:space="preserve">
-    <value>Success:</value>
-  </data>
-  <data name="tlSendList_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 17</value>
-  </data>
-  <data name="tlSendList_Fail.Text" xml:space="preserve">
-    <value>Fail:</value>
   </data>
   <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
     <value>170, 22</value>
@@ -202,14 +190,11 @@
   <data name="cmsSendList_Load.Text" xml:space="preserve">
     <value>Load Send List</value>
   </data>
-  <data name="gbSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>573, 0</value>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 110</value>
   </data>
-  <data name="gbSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 50</value>
-  </data>
-  <data name="tlpSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 31</value>
+  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>961, 226</value>
   </data>
   <data name="nudLoop_Int.Location" type="System.Drawing.Point, System.Drawing">
     <value>92, 4</value>
@@ -223,14 +208,14 @@
   <data name="lLoop_Int.Text" xml:space="preserve">
     <value>Interval：</value>
   </data>
-  <data name="gbSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 0</value>
-  </data>
-  <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 50</value>
-  </data>
-  <data name="tlpSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlpSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
     <value>178, 31</value>
+  </data>
+  <data name="gbSendListForm4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>573, 0</value>
+  </data>
+  <data name="gbSendListForm4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 50</value>
   </data>
   <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
     <value>92, 4</value>
@@ -244,14 +229,14 @@
   <data name="lLoop_CNT.Text" xml:space="preserve">
     <value>Loop：</value>
   </data>
-  <data name="gbSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>155, 0</value>
+  <data name="tlpSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 31</value>
   </data>
-  <data name="gbSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>222, 50</value>
+  <data name="gbSendListForm3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>383, 0</value>
   </data>
-  <data name="tlpSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>216, 31</value>
+  <data name="gbSendListForm3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>184, 50</value>
   </data>
   <data name="nudSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>132, 4</value>
@@ -265,8 +250,14 @@
   <data name="cbUseSocket.Text" xml:space="preserve">
     <value>Use Socket：</value>
   </data>
-  <data name="gbSendListForm1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 50</value>
+  <data name="tlpSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 31</value>
+  </data>
+  <data name="gbSendListForm2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>155, 0</value>
+  </data>
+  <data name="gbSendListForm2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 50</value>
   </data>
   <data name="cbSelectAll.Size" type="System.Drawing.Size, System.Drawing">
     <value>134, 28</value>
@@ -274,11 +265,8 @@
   <data name="cbSelectAll.Text" xml:space="preserve">
     <value>Select All / None</value>
   </data>
-  <data name="tlpSendListForm5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>763, 3</value>
-  </data>
-  <data name="tlpSendListForm5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>201, 44</value>
+  <data name="gbSendListForm1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 50</value>
   </data>
   <data name="bSendListStop.Location" type="System.Drawing.Point, System.Drawing">
     <value>108, 6</value>
@@ -294,6 +282,18 @@
   </data>
   <data name="bSendList.Text" xml:space="preserve">
     <value>Send (&amp;F)</value>
+  </data>
+  <data name="tlpSendListForm5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>763, 3</value>
+  </data>
+  <data name="tlpSendListForm5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>201, 44</value>
+  </data>
+  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 50</value>
+  </data>
+  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>967, 304</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>967, 304</value>
