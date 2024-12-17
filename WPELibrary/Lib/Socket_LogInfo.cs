@@ -4,18 +4,6 @@ namespace WPELibrary.Lib
 {
     public class Socket_LogInfo
     {
-        #region//序号
-
-        protected int logindex;
-
-        public int LogIndex
-        {
-            get { return logindex; }
-            set { logindex = value; }
-        }
-
-        #endregion
-
         #region//时间戳
 
         protected string logtime;

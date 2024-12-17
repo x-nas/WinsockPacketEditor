@@ -68,7 +68,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         private void niWPE_Click(object sender, EventArgs e)
         {
@@ -912,6 +912,11 @@ namespace WPELibrary
                     e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
+                else if (e.ColumnIndex == dgvSocketList.Columns["cPacketID"].Index)
+                {
+                    e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
             }
             catch (Exception ex)
             {
@@ -958,6 +963,22 @@ namespace WPELibrary
                     {
                         Socket_Cache.LogList.lstRecLog.Add(sli);
                     }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvLogList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == dgvLogList.Columns["cLogID"].Index)
+                {
+                    e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
                 }
             }
             catch (Exception ex)
@@ -2378,6 +2399,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

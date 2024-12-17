@@ -9,8 +9,7 @@ namespace WPELibrary
 {
     public partial class Socket_SendForm : Form
     {
-        private int Select_Index = 0;
-        
+        private int Select_Index = 0;        
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
@@ -26,7 +25,7 @@ namespace WPELibrary
                 InitializeComponent();
 
                 this.Select_Index = iSelectIndex;
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex.ToString());
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), iSelectIndex + 1);
 
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
@@ -461,8 +460,7 @@ namespace WPELibrary
             {
                 string sItemText = e.ClickedItem.Name;
                 this.cmsHexBox.Close();
-
-                int iPacketIndex = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketIndex;
+              
                 Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;
 
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;                

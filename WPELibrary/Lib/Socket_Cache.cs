@@ -368,8 +368,7 @@ namespace WPELibrary.Lib
                         {                            
                             int iPacketLen = spi.PacketLen;
                             byte[] bBuffer = spi.PacketBuffer;
-
-                            spi.PacketIndex = lstRecPacket.Count + 1;
+                            
                             spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
 
                             Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
@@ -503,8 +502,7 @@ namespace WPELibrary.Lib
                                 {
                                     string sColValue = "";
 
-                                    string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");
-                                    string sIndex = spi.PacketIndex.ToString();
+                                    string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");                                   
                                     string sType = spi.PacketType.ToString();
                                     string sSocket = spi.PacketSocket.ToString();
                                     string sFrom = spi.PacketFrom;
@@ -513,7 +511,7 @@ namespace WPELibrary.Lib
                                     byte[] bBuff = spi.PacketBuffer;
                                     string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
 
-                                    sColValue += sTime + "\t" + sIndex + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
+                                    sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                                     sw.WriteLine(sColValue);
 
                                     iSuccess++;
@@ -605,7 +603,6 @@ namespace WPELibrary.Lib
                 {
                     if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sli))
                     {
-                        sli.LogIndex = lstRecLog.Count + 1;
                         RecSocketLog?.Invoke(sli);
                     }              
                 }
@@ -764,7 +761,7 @@ namespace WPELibrary.Lib
                     if (SocketList.lstRecPacket.Count > 0 && iSLIndex >= 0)
                     {
                         Guid FID = Guid.NewGuid();
-                        int iIndex = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketIndex;
+                        int iIndex = iSLIndex + 1;
                         string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
                         Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketType;
 
