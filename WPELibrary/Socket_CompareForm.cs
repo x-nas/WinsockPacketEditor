@@ -10,6 +10,8 @@ namespace WPELibrary
     {
         private int Select_Index = -1;
 
+        #region//窗体加载
+
         public Socket_CompareForm(int SelectIndex)
         {
             InitializeComponent();
@@ -21,12 +23,16 @@ namespace WPELibrary
             }
         }
 
+        #endregion
+
         #region//初始化
 
         private void InitForm()
         {
             try
             {
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_136), Select_Index + 1);
+
                 byte[] bRawBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].RawBuffer;
                 byte[] bModifiedBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
 

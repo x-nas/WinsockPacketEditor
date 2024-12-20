@@ -1285,19 +1285,28 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//获取对应名称的树节点索引值
+        #region//获取对应名称的树节点
 
-        public static int GetRootNodeIndexByName(TreeNodeCollection nodes, string nodeName)
+        public static TreeNode FindNodeByName(TreeNodeCollection nodes, string Name)
         {
-            int iReturn = -1;
-
             try
             {
-                for (int i = 0; i < nodes.Count; i++)
+                if (nodes == null)
                 {
-                    if (nodes[i].Text == nodeName)
+                    return null;
+                }
+
+                foreach (TreeNode node in nodes)
+                {
+                    if (node.Text == Name)
                     {
-                        return i;
+                        return node;
+                    }
+
+                    TreeNode foundNode = FindNodeByName(node.Nodes, Name);
+                    if (foundNode != null)
+                    {
+                        return foundNode;
                     }
                 }
             }
@@ -1306,7 +1315,7 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return iReturn;
+            return null;
         }
 
         #endregion

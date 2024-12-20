@@ -126,7 +126,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.Domain, spi.Port, DataType);
+                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.TargetAddress, spi.Port, DataType);
 
                     switch (DataType)
                     { 

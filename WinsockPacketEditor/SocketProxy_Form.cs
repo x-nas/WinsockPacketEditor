@@ -39,7 +39,7 @@ namespace WinsockPacketEditor
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
                 Socket_Cache.LogList.RecProxyLog += new Socket_Cache.LogList.ProxyLogReceived(Event_RecProxyLog);
 
-                tvProxyList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyList, true, null);
+                tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
                 Socket_Cache.SocketProxyList.RecProxyData += new Socket_Cache.SocketProxyList.ProxyDataReceived(Event_RecProxyData);
 
                 tvClientList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvClientList, true, null);
@@ -71,7 +71,7 @@ namespace WinsockPacketEditor
 
                 sServerInfo = sServerInfo.Trim().TrimEnd(',');
 
-                this.tsslServerInfo.Text = "代理服务器IP地址：[ " + sServerInfo + " ]";
+                this.tsslServerInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_137), sServerInfo);
             }
             catch (Exception ex)
             {
@@ -111,56 +111,53 @@ namespace WinsockPacketEditor
             {
                 if (!IsDisposed)
                 {
-                    tvProxyList.BeginInvoke(new MethodInvoker(delegate
+                    tvProxyData.BeginInvoke(new MethodInvoker(delegate
                     {
-                        int iIndex = Socket_Operation.GetRootNodeIndexByName(this.tvProxyList.Nodes, spd.Domain);
+                        TreeNode RootNode = Socket_Operation.FindNodeByName(this.tvProxyData.Nodes, spd.Domain);
 
-                        if (iIndex == -1)
+                        if (RootNode == null)
                         {
-                            TreeNode RootNode = this.tvProxyList.Nodes.Add(spd.Domain);
+                            RootNode = this.tvProxyData.Nodes.Add(spd.Domain);
                             RootNode.ImageIndex = 0;
                             RootNode.SelectedImageIndex = 0;
 
-                            TreeNode RequestNode = RootNode.Nodes.Add("< 请求包 >");
+                            TreeNode RequestNode = RootNode.Nodes.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138));
                             RequestNode.ImageIndex = 2;
                             RequestNode.SelectedImageIndex = 2;
 
-                            TreeNode ResponseNode = RootNode.Nodes.Add("< 响应包 >");
+                            TreeNode ResponseNode = RootNode.Nodes.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139));
                             ResponseNode.ImageIndex = 3;
                             ResponseNode.SelectedImageIndex = 3;
-
-                            iIndex = RootNode.Index;
                         }
 
-                        if (iIndex > -1)
+                        RootNode.ForeColor = Color.Black;
+
+                        TreeNode ChildNode = new TreeNode();
+                        switch (spd.DataType)
                         {
-                            TreeNode RootNode = new TreeNode();
-                            switch (spd.DataType)
-                            {
-                                case Socket_Cache.SocketProxy.DataType.Request:
-                                    RootNode = this.tvProxyList.Nodes[iIndex].Nodes[0];
-                                    break;
+                            case Socket_Cache.SocketProxy.DataType.Request:
+                                ChildNode = RootNode.Nodes[0];
+                                break;
 
-                                case Socket_Cache.SocketProxy.DataType.Response:
-                                    RootNode = this.tvProxyList.Nodes[iIndex].Nodes[1];
-                                    break;
+                            case Socket_Cache.SocketProxy.DataType.Response:
+                                ChildNode = RootNode.Nodes[1];
+                                break;
+                        }
+                        string sNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
+                        TreeNode DataNode = ChildNode.Nodes.Add(sNodeName);
+                        DataNode.Tag = spd.Buffer;
+                        DataNode.ImageIndex = 1;
+                        DataNode.SelectedImageIndex = 1;
+
+                        foreach (TreeNode node in this.tvProxyData.Nodes)
+                        {
+                            if (node == RootNode)
+                            {
+                                node.BackColor = Color.LightYellow;
                             }
-
-                            TreeNode DataNode = RootNode.Nodes.Add("< " + spd.Buffer.Length + " 字节 >");
-                            DataNode.Tag = spd.Buffer;
-                            DataNode.ImageIndex = 1;
-                            DataNode.SelectedImageIndex = 1;
-
-                            for (int i = 0; i < this.tvProxyList.Nodes.Count; i++) 
+                            else
                             {
-                                if (i == iIndex)
-                                {
-                                    this.tvProxyList.Nodes[i].BackColor = Color.LightYellow;
-                                }
-                                else
-                                {
-                                    this.tvProxyList.Nodes[i].BackColor = Color.White;
-                                }
+                                node.BackColor = Color.White;
                             }
                         }
                     }));
@@ -181,27 +178,36 @@ namespace WinsockPacketEditor
                     tvClientList.BeginInvoke(new MethodInvoker(delegate
                     {
                         string sRootName = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
-                        string sChildName = spi.ClientSocket.RemoteEndPoint.ToString();
-                        int iIndex = Socket_Operation.GetRootNodeIndexByName(this.tvClientList.Nodes, sRootName);
+                        string sChildName = spi.ClientAddress;
 
-                        if (iIndex == -1)
+                        TreeNode RootNode = Socket_Operation.FindNodeByName(this.tvClientList.Nodes, sRootName);                        
+
+                        if (RootNode == null)
                         {
-                            TreeNode RootNode = this.tvClientList.Nodes.Add(sRootName);
-                            iIndex = RootNode.Index;
+                            RootNode = this.tvClientList.Nodes.Add(sRootName);                        
                         }
 
-                        if (iIndex > -1)
-                        {
-                            int iChildIndex = Socket_Operation.GetRootNodeIndexByName(this.tvClientList.Nodes[iIndex].Nodes, sChildName);
+                        TreeNode ChildNode = Socket_Operation.FindNodeByName(RootNode.Nodes, sChildName);
 
-                            if (iChildIndex == -1)
+                        if (ChildNode == null)
+                        {
+                            ChildNode = RootNode.Nodes.Add(sChildName);                            
+                        }                    
+
+                        ChildNode.ImageIndex = 5;
+                        ChildNode.SelectedImageIndex = 5;
+
+                        foreach (TreeNode node in this.tvClientList.Nodes) 
+                        {
+                            if (node == RootNode)
                             {
-                                TreeNode ChildNode = this.tvClientList.Nodes[iIndex].Nodes.Add(sChildName);
-                                
-                                iChildIndex = ChildNode.Index;
+                                node.BackColor = Color.LightYellow;
+                            }
+                            else
+                            {
+                                node.BackColor = Color.White;
                             }
                         }
-                    
                     }));
                 }
             }
@@ -338,6 +344,7 @@ namespace WinsockPacketEditor
             try
             {               
                 this.CleanUp_ProxyList();
+                this.CleanUp_ClientList();
                 this.CleanUp_LogList();
                 this.CleanUp_HexBox();
             }
@@ -351,7 +358,19 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.tvProxyList.Nodes.Clear();
+                this.tvProxyData.Nodes.Clear();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_ClientList()
+        {
+            try
+            {
+                this.tvClientList.Nodes.Clear();
             }
             catch (Exception ex)
             {
@@ -436,7 +455,7 @@ namespace WinsockPacketEditor
             }
             else
             {
-                Socket_Operation.ShowMessageBox("代理参数设置错误！");
+                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_141));
             }
         }
 
@@ -456,7 +475,7 @@ namespace WinsockPacketEditor
                     AcceptClients();
                 }
 
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "开始 Socket 代理!");
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
             }
             catch (Exception ex)
             {
@@ -474,6 +493,11 @@ namespace WinsockPacketEditor
 
             try
             {
+                if (!this.cbSOCKS5.Checked)
+                {
+                    return false;
+                }
+
                 if (this.cbProxySet_Auth.Checked)
                 {
                     string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
@@ -481,7 +505,7 @@ namespace WinsockPacketEditor
 
                     if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
                     {
-                        bReturn = false;
+                        return false;
                     }
                 }
             }
@@ -512,7 +536,7 @@ namespace WinsockPacketEditor
             {
                 Socket_Cache.SocketProxy.bIsListening = false;            
 
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "停止 Socket 代理!");
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_143));
             }
             catch (Exception ex)
             {
@@ -567,13 +591,11 @@ namespace WinsockPacketEditor
             {
                 Socket_ProxyInfo spi = new Socket_ProxyInfo
                 {
-                    ClientSocket = clientSocket,                 
+                    ClientSocket = clientSocket,                    
                     ClientBuffer = new byte[clientSocket.ReceiveBufferSize],
                     TargetBuffer = new byte[clientSocket.ReceiveBufferSize],
                     ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Handshake
-                };
-
-                Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                };                
 
                 spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);                             
             }
@@ -589,10 +611,10 @@ namespace WinsockPacketEditor
 
         private void ReadCallback(IAsyncResult ar)
         {
+            Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
+
             try
             {
-                Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
-
                 if (Socket_Cache.SocketProxy.bIsListening && spi.ClientSocket != null)
                 {
                     int bytesRead = spi.ClientSocket.EndReceive(ar);
@@ -624,14 +646,17 @@ namespace WinsockPacketEditor
                         spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);
                     }
                     else
-                    {                        
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientSocket.ToString() + " 已断开连接！");
+                    {
+                        this.UpdateClientSocket_Closed(spi);
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.ClientAddress);
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
                 }
             }
             catch (Exception ex)
-            {                
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            {
+                this.UpdateClientSocket_Closed(spi);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientAddress + " " + ex.Message);
             }
         }
 
@@ -649,18 +674,19 @@ namespace WinsockPacketEditor
                 spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bVERSION;
 
                 int iMETHODS_COUNT = bClientData[1];
-                byte[] bMETHODS = new byte[iMETHODS_COUNT];
+                byte[] bMETHODS = new byte[iMETHODS_COUNT];                
 
-                string sLog = "客户端支持 " + spi.ProxyType + " 代理, 认证方式: ";
-
+                string sAuth = string.Empty;
                 for (int i = 0; i < iMETHODS_COUNT; i++)
                 {
                     bMETHODS[i] = bClientData[2 + i];
 
-                    sLog += (Socket_Cache.SocketProxy.AuthType)bMETHODS[i] + ", ";
+                    sAuth += (Socket_Cache.SocketProxy.AuthType)bMETHODS[i] + ", ";
                 }
 
-                sLog = sLog.Trim().TrimEnd(',');
+                sAuth = sAuth.Trim().TrimEnd(',');
+
+                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ProxyType, sAuth);
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);                
 
                 byte[] bAuthRequest;
@@ -669,14 +695,14 @@ namespace WinsockPacketEditor
                     bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.PassWord) };
                     spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.AuthUserName;
 
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "代理服务器：需要身份验证！");
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146));
                 }
                 else
                 {
                     bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.None) };
                     spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
 
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "代理服务器：不需要身份验证！");
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147));
                 }
 
                 spi.ClientSocket.Send(bAuthRequest);
@@ -710,7 +736,7 @@ namespace WinsockPacketEditor
                     string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
                     string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
 
-                    string sLog = string.Format("客户端身份认证信息：{0}, {1}", sUserName, sPassWord);
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_148), sUserName, sPassWord);
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
 
                     string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
@@ -729,12 +755,12 @@ namespace WinsockPacketEditor
                     if (bAuthOK)
                     {
                         bAuth = new byte[] { 0x01, 0x00 };
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "客户端身份验证通过！");
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_149));
                     }
                     else
                     {
                         bAuth = new byte[] { 0x01, 0x01 };
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "客户端身份验证失败！");
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150));
                     }
 
                     spi.ClientSocket.Send(bAuth);
@@ -778,7 +804,7 @@ namespace WinsockPacketEditor
                         Buffer.BlockCopy(bADDRESS, 4, bIPV4_Port, 0, bIPV4_Port.Length);
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV4_Port);
 
-                        sDomain = "socket://" + ip + ": " + port;
+                        sDomain = ip.ToString();
 
                         break;
 
@@ -792,9 +818,7 @@ namespace WinsockPacketEditor
 
                         byte[] bDomain_Port = new byte[2];
                         Buffer.BlockCopy(bADDRESS, 1 + Length, bDomain_Port, 0, bDomain_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bDomain_Port);
-
-                        sDomain = "socket://" + sDomain + ": " + port;
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bDomain_Port);                       
 
                         break;
 
@@ -808,14 +832,13 @@ namespace WinsockPacketEditor
                         Buffer.BlockCopy(bADDRESS, 16, bIPV6_Port, 0, bIPV6_Port.Length);
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV6_Port);
 
-                        sDomain = "socket://" + ip + ": " + port;
+                        sDomain = ip.ToString();
 
                         break;
                 }
 
                 spi.IPAddress = ip;
-                spi.Port = port;
-                spi.Domain = sDomain;
+                spi.Port = port;           
 
                 byte[] serverPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.Port);
 
@@ -827,11 +850,16 @@ namespace WinsockPacketEditor
                     try
                     {
                         spi.TargetSocket.Connect(targetEP);
-
                         spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
                         spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
 
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetSocket.RemoteEndPoint.ToString() + " 连接成功！");
+                        sDomain = string.Format("{0}: {1}", sDomain, port);
+                        spi.ClientAddress = string.Format("{0} [{1}]", sDomain, ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port.ToString());
+                        spi.TargetAddress = string.Format("socket://{0}", sDomain);
+
+                        Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), spi.TargetAddress);
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
                     catch (SocketException ex)
                     {
@@ -839,10 +867,9 @@ namespace WinsockPacketEditor
                     }
                 }
                 else
-                {
-                    //不支持的命令
-                    spi.ClientSocket.Send(new byte[] { 0x05, 0x07, 0, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "不支持的连接命令！");
+                {                    
+                    spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x07, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152));
                 }
 
                 spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
@@ -864,9 +891,10 @@ namespace WinsockPacketEditor
                 if (spi.TargetSocket != null)
                 {
                     spi.TargetSocket.Send(spi.ClientData, SocketFlags.None);
-
                     Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, Socket_Cache.SocketProxy.DataType.Request);
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "请求数据: " + spi.ClientData.Length + " 字节");
+
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), spi.ClientSocket.RemoteEndPoint.ToString(), spi.ClientData.Length);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                 }                
             }
             catch (Exception ex)
@@ -881,38 +909,101 @@ namespace WinsockPacketEditor
 
         private void ResponseCallback(IAsyncResult ar)
         {
-            Socket_ProxyInfo spti = (Socket_ProxyInfo)ar.AsyncState;
+            Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
 
             try
             {
-                if (spti.TargetSocket != null)
+                if (spi.TargetSocket != null)
                 {
-                    int bytesRead = spti.TargetSocket.EndReceive(ar);
+                    int bytesRead = spi.TargetSocket.EndReceive(ar);
 
                     if (bytesRead > 0)
                     {
-                        spti.TargetData = new byte[bytesRead];
-                        Buffer.BlockCopy(spti.TargetBuffer, 0, spti.TargetData, 0, bytesRead);
+                        spi.TargetData = new byte[bytesRead];
+                        Buffer.BlockCopy(spi.TargetBuffer, 0, spi.TargetData, 0, bytesRead);
 
-                        if (spti.ClientSocket != null)
+                        if (spi.ClientSocket != null)
                         {
-                            spti.ClientSocket.Send(spti.TargetData, SocketFlags.None);
+                            spi.ClientSocket.Send(spi.TargetData, SocketFlags.None);
+                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, Socket_Cache.SocketProxy.DataType.Response);
 
-                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spti, Socket_Cache.SocketProxy.DataType.Response);
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "响应数据: " + bytesRead + " 字节");
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), spi.TargetSocket.RemoteEndPoint.ToString(), spi.TargetData.Length);
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                         }
 
-                        spti.TargetSocket.BeginReceive(spti.TargetBuffer, 0, spti.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spti);
+                        spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                    }
+                    else
+                    {
+                        this.UpdateTargetSocket_Closed(spi);
+
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.TargetAddress);
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spti.TargetSocket.RemoteEndPoint.ToString() + " - " + ex.Message);
+                this.UpdateTargetSocket_Closed(spi);                
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " " + ex.Message);
             }
         }
 
         #endregion
-        
+
+        #region//更新已关闭的客户端链接
+
+        public void UpdateClientSocket_Closed(Socket_ProxyInfo spi)
+        {
+            try
+            {  
+                TreeNode ClientNode = Socket_Operation.FindNodeByName(this.tvClientList.Nodes, spi.ClientAddress);
+
+                if (ClientNode != null) 
+                {
+                    if (!IsDisposed)
+                    {
+                        tvClientList.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            ClientNode.ImageIndex = 6;
+                            ClientNode.StateImageIndex = 6;
+                        }));
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//更新已关闭的远端链接
+
+        public void UpdateTargetSocket_Closed(Socket_ProxyInfo spi)
+        {
+            try
+            {  
+                TreeNode ClientNode = Socket_Operation.FindNodeByName(this.tvProxyData.Nodes, spi.TargetAddress);
+
+                if (ClientNode != null)
+                {
+                    if (!IsDisposed)
+                    {
+                        tvProxyData.BeginInvoke(new MethodInvoker(delegate
+                        {
+                            ClientNode.ForeColor = Color.Maroon;
+                        }));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

@@ -121,7 +121,7 @@
   <data name="ssSocketList.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cIndex.HeaderText" xml:space="preserve">
+  <data name="cPacketID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="cPacketType.HeaderText" xml:space="preserve">
@@ -146,7 +146,7 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 226</value>
+    <value>175, 256</value>
   </data>
   <data name="ssProcessInfo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
@@ -311,64 +311,73 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="cmsSocketList_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
   <data name="cmsSocketList_tss1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="cmsSocketList_SendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_SendList.Text" xml:space="preserve">
     <value>AddTo Send List</value>
   </data>
   <data name="cmsSocketList_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_FilterList.Text" xml:space="preserve">
     <value>AddTo Filter List</value>
   </data>
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>171, 6</value>
+  </data>
+  <data name="cmsSocketList_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 24</value>
+  </data>
+  <data name="cmsSocketList_ShowModified.Text" xml:space="preserve">
+    <value>Show Data Modify</value>
+  </data>
+  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 6</value>
   </data>
   <data name="cmsSocketList_UseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_UseSocket.Text" xml:space="preserve">
     <value>Use Socket</value>
   </data>
   <data name="tss4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="cmsSocketList_ShowSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_ShowSendList.Text" xml:space="preserve">
     <value>Show Send List</value>
   </data>
   <data name="tss5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="cmsSocketList_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_ToExcel.Text" xml:space="preserve">
     <value>Save To Excel</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>161, 6</value>
+    <value>171, 6</value>
   </data>
   <data name="cmsSocketList_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_Comparison_A.Text" xml:space="preserve">
     <value>Add To Text A</value>
   </data>
   <data name="cmsSocketList_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 24</value>
+    <value>174, 24</value>
   </data>
   <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
     <value>Add To Text B</value>
@@ -1253,11 +1262,11 @@
   <data name="tpSystemLog.Text" xml:space="preserve">
     <value>[ System Log ]</value>
   </data>
-  <data name="cLogIndex.HeaderText" xml:space="preserve">
+  <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="cLogTime.HeaderText" xml:space="preserve">
-    <value>Log Time</value>
+    <value>Time</value>
   </data>
   <data name="cFuncName.HeaderText" xml:space="preserve">
     <value>Module</value>

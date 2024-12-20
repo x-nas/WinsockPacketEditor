@@ -28,8 +28,8 @@
     <PublisherName>X-NAS</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>49</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -158,6 +158,9 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SocketProxy_Form.en-US.resx">
+      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="SocketProxy_Form.resx">
       <DependentUpon>SocketProxy_Form.cs</DependentUpon>
     </EmbeddedResource>
@@ -196,14 +199,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon\WPE64.ico" />
+    <None Include="Resources\copy.png" />
+    <None Include="Resources\cut.png" />
     <Content Include="Resources\enUS.png" />
     <Content Include="Resources\help.png" />
     <Content Include="Resources\Language.png" />
     <Content Include="Resources\loading.gif" />
+    <None Include="Resources\paste.png" />
     <Content Include="Resources\Request.png" />
     <Content Include="Resources\Response.png" />
     <Content Include="Resources\Search.png" />
     <Content Include="Resources\searchbox_button.png" />
+    <None Include="Resources\SelectAll.png" />
     <Content Include="Resources\Socket.png" />
     <Content Include="Resources\unknown.png" />
     <Content Include="Resources\zhCN.png" />

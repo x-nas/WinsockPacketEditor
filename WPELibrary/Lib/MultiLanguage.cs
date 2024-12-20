@@ -145,6 +145,25 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_133 = { "快捷键: Ctrl + Alt + {0} 注册失败!", "HotKey: Ctrl + Alt + {0} registration failed!" };
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
+        public static string[] MutiLan_136 = { "数据修改 - [{0}]", "Data Modify - [{0}]" };
+        public static string[] MutiLan_137 = { "代理服务器IP地址: [ {0} ]", "Proxy server IP address: [ {0} ]" };
+        public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
+        public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };
+        public static string[] MutiLan_140 = { "< {0} 字节 >", "< {0} Bytes >" };
+        public static string[] MutiLan_141 = { "代理设置错误!", "Proxy setting error!" };
+        public static string[] MutiLan_142 = { "开始 SOCKS 代理!", "Start SOCKS proxy!" };
+        public static string[] MutiLan_143 = { "停止 SOCKS 代理!", "Stop SOCKS proxy!" };
+        public static string[] MutiLan_144 = { "{0} 已断开连接!", "{0} Disconnected!" };
+        public static string[] MutiLan_145 = { "客户端代理模式: {0}, 认证模式: {1}", "Client proxy: {0}, authentication: {1}" };
+        public static string[] MutiLan_146 = { "代理服务器设置：需要身份验证!", "Proxy server settings: Authentication required!" };
+        public static string[] MutiLan_147 = { "代理服务器设置：不需要身份验证!", "Proxy server settings: No authentication required!" };
+        public static string[] MutiLan_148 = { "客户端身份认证信息：{0}, {1}", "Client authentication information: {0}, {1}" };
+        public static string[] MutiLan_149 = { "客户端身份验证通过!", "Client authentication passed!" };
+        public static string[] MutiLan_150 = { "客户端身份验证失败!", "Client authentication failed!" };
+        public static string[] MutiLan_151 = { "{0} 连接成功!", "{0} Connection successful!" };
+        public static string[] MutiLan_152 = { "不支持的命令!", "Unsupported command!" };
+        public static string[] MutiLan_153 = { "{0} 请求数据: {1} 字节", "{0} Request: {1} bytes" };
+        public static string[] MutiLan_154 = { "{0} 响应数据: {1} 字节", "{0} Response: {1} bytes" };
 
         #endregion
 

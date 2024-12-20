@@ -30,111 +30,37 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_CompareForm));
             this.tlpSocketCompare = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
-            this.lRawData = new System.Windows.Forms.Label();
-            this.lModifiedData = new System.Windows.Forms.Label();
             this.rtbCompare = new System.Windows.Forms.RichTextBox();
-            this.hbRawData = new Be.Windows.Forms.HexBox();
+            this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.hbModifiedData = new Be.Windows.Forms.HexBox();
+            this.lModifiedData = new System.Windows.Forms.Label();
+            this.lRawData = new System.Windows.Forms.Label();
+            this.hbRawData = new Be.Windows.Forms.HexBox();
             this.tlpSocketCompare.SuspendLayout();
             this.tlpPacketData.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSocketCompare
             // 
-            this.tlpSocketCompare.ColumnCount = 1;
-            this.tlpSocketCompare.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            resources.ApplyResources(this.tlpSocketCompare, "tlpSocketCompare");
             this.tlpSocketCompare.Controls.Add(this.rtbCompare, 0, 1);
             this.tlpSocketCompare.Controls.Add(this.tlpPacketData, 0, 0);
-            this.tlpSocketCompare.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSocketCompare.Location = new System.Drawing.Point(0, 0);
-            this.tlpSocketCompare.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSocketCompare.Name = "tlpSocketCompare";
-            this.tlpSocketCompare.RowCount = 2;
-            this.tlpSocketCompare.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tlpSocketCompare.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tlpSocketCompare.Size = new System.Drawing.Size(1184, 611);
-            this.tlpSocketCompare.TabIndex = 0;
+            // 
+            // rtbCompare
+            // 
+            resources.ApplyResources(this.rtbCompare, "rtbCompare");
+            this.rtbCompare.Name = "rtbCompare";
+            this.rtbCompare.ReadOnly = true;
             // 
             // tlpPacketData
             // 
-            this.tlpPacketData.ColumnCount = 2;
-            this.tlpPacketData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPacketData.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            resources.ApplyResources(this.tlpPacketData, "tlpPacketData");
             this.tlpPacketData.Controls.Add(this.hbModifiedData, 1, 1);
             this.tlpPacketData.Controls.Add(this.lModifiedData, 1, 0);
             this.tlpPacketData.Controls.Add(this.lRawData, 0, 0);
             this.tlpPacketData.Controls.Add(this.hbRawData, 0, 1);
-            this.tlpPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpPacketData.Location = new System.Drawing.Point(0, 0);
-            this.tlpPacketData.Margin = new System.Windows.Forms.Padding(0);
             this.tlpPacketData.Name = "tlpPacketData";
-            this.tlpPacketData.RowCount = 2;
-            this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tlpPacketData.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpPacketData.Size = new System.Drawing.Size(1184, 366);
-            this.tlpPacketData.TabIndex = 0;
-            // 
-            // lRawData
-            // 
-            this.lRawData.AutoSize = true;
-            this.lRawData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lRawData.Location = new System.Drawing.Point(3, 3);
-            this.lRawData.Margin = new System.Windows.Forms.Padding(3);
-            this.lRawData.Name = "lRawData";
-            this.lRawData.Size = new System.Drawing.Size(586, 24);
-            this.lRawData.TabIndex = 0;
-            this.lRawData.Text = "原始数据";
-            this.lRawData.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lModifiedData
-            // 
-            this.lModifiedData.AutoSize = true;
-            this.lModifiedData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lModifiedData.Location = new System.Drawing.Point(595, 3);
-            this.lModifiedData.Margin = new System.Windows.Forms.Padding(3);
-            this.lModifiedData.Name = "lModifiedData";
-            this.lModifiedData.Size = new System.Drawing.Size(586, 24);
-            this.lModifiedData.TabIndex = 1;
-            this.lModifiedData.Text = "修改后数据";
-            this.lModifiedData.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // rtbCompare
-            // 
-            this.rtbCompare.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbCompare.Location = new System.Drawing.Point(3, 366);
-            this.rtbCompare.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
-            this.rtbCompare.Name = "rtbCompare";
-            this.rtbCompare.ReadOnly = true;
-            this.rtbCompare.Size = new System.Drawing.Size(1178, 242);
-            this.rtbCompare.TabIndex = 4;
-            this.rtbCompare.Text = "";
-            // 
-            // hbRawData
-            // 
-            // 
-            // 
-            // 
-            this.hbRawData.BuiltInContextMenu.CopyMenuItemImage = global::WPELibrary.Properties.Resources.copy;
-            this.hbRawData.BuiltInContextMenu.CopyMenuItemText = "复制";
-            this.hbRawData.BuiltInContextMenu.CutMenuItemImage = global::WPELibrary.Properties.Resources.cut;
-            this.hbRawData.BuiltInContextMenu.CutMenuItemText = "剪切";
-            this.hbRawData.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.paste;
-            this.hbRawData.BuiltInContextMenu.PasteMenuItemText = "粘贴";
-            this.hbRawData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
-            this.hbRawData.BuiltInContextMenu.SelectAllMenuItemText = "全选";
-            this.hbRawData.ColumnInfoVisible = true;
-            this.hbRawData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbRawData.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-            this.hbRawData.LineInfoVisible = true;
-            this.hbRawData.Location = new System.Drawing.Point(3, 33);
-            this.hbRawData.Name = "hbRawData";
-            this.hbRawData.ReadOnly = true;
-            this.hbRawData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbRawData.Size = new System.Drawing.Size(586, 330);
-            this.hbRawData.StringViewVisible = true;
-            this.hbRawData.TabIndex = 2;
-            this.hbRawData.VScrollBarVisible = true;
             // 
             // hbModifiedData
             // 
@@ -142,37 +68,61 @@
             // 
             // 
             this.hbModifiedData.BuiltInContextMenu.CopyMenuItemImage = global::WPELibrary.Properties.Resources.copy;
-            this.hbModifiedData.BuiltInContextMenu.CopyMenuItemText = "复制";
+            this.hbModifiedData.BuiltInContextMenu.CopyMenuItemText = resources.GetString("hbModifiedData.BuiltInContextMenu.CopyMenuItemText");
             this.hbModifiedData.BuiltInContextMenu.CutMenuItemImage = global::WPELibrary.Properties.Resources.cut;
-            this.hbModifiedData.BuiltInContextMenu.CutMenuItemText = "剪切";
+            this.hbModifiedData.BuiltInContextMenu.CutMenuItemText = resources.GetString("hbModifiedData.BuiltInContextMenu.CutMenuItemText");
             this.hbModifiedData.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.paste;
-            this.hbModifiedData.BuiltInContextMenu.PasteMenuItemText = "粘贴";
+            this.hbModifiedData.BuiltInContextMenu.PasteMenuItemText = resources.GetString("hbModifiedData.BuiltInContextMenu.PasteMenuItemText");
             this.hbModifiedData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
-            this.hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText = "全选";
+            this.hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbModifiedData.ColumnInfoVisible = true;
-            this.hbModifiedData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbModifiedData.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
+            resources.ApplyResources(this.hbModifiedData, "hbModifiedData");
             this.hbModifiedData.LineInfoVisible = true;
-            this.hbModifiedData.Location = new System.Drawing.Point(595, 33);
             this.hbModifiedData.Name = "hbModifiedData";
             this.hbModifiedData.ReadOnly = true;
             this.hbModifiedData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbModifiedData.Size = new System.Drawing.Size(586, 330);
             this.hbModifiedData.StringViewVisible = true;
-            this.hbModifiedData.TabIndex = 3;
             this.hbModifiedData.VScrollBarVisible = true;
+            // 
+            // lModifiedData
+            // 
+            resources.ApplyResources(this.lModifiedData, "lModifiedData");
+            this.lModifiedData.Name = "lModifiedData";
+            // 
+            // lRawData
+            // 
+            resources.ApplyResources(this.lRawData, "lRawData");
+            this.lRawData.Name = "lRawData";
+            // 
+            // hbRawData
+            // 
+            // 
+            // 
+            // 
+            this.hbRawData.BuiltInContextMenu.CopyMenuItemImage = global::WPELibrary.Properties.Resources.copy;
+            this.hbRawData.BuiltInContextMenu.CopyMenuItemText = resources.GetString("hbRawData.BuiltInContextMenu.CopyMenuItemText");
+            this.hbRawData.BuiltInContextMenu.CutMenuItemImage = global::WPELibrary.Properties.Resources.cut;
+            this.hbRawData.BuiltInContextMenu.CutMenuItemText = resources.GetString("hbRawData.BuiltInContextMenu.CutMenuItemText");
+            this.hbRawData.BuiltInContextMenu.PasteMenuItemImage = global::WPELibrary.Properties.Resources.paste;
+            this.hbRawData.BuiltInContextMenu.PasteMenuItemText = resources.GetString("hbRawData.BuiltInContextMenu.PasteMenuItemText");
+            this.hbRawData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
+            this.hbRawData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbRawData.BuiltInContextMenu.SelectAllMenuItemText");
+            this.hbRawData.ColumnInfoVisible = true;
+            resources.ApplyResources(this.hbRawData, "hbRawData");
+            this.hbRawData.LineInfoVisible = true;
+            this.hbRawData.Name = "hbRawData";
+            this.hbRawData.ReadOnly = true;
+            this.hbRawData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbRawData.StringViewVisible = true;
+            this.hbRawData.VScrollBarVisible = true;
             // 
             // Socket_CompareForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(1184, 611);
             this.Controls.Add(this.tlpSocketCompare);
             this.DoubleBuffered = true;
-            this.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Socket_CompareForm";
-            this.Text = "封包数据修改情况";
             this.tlpSocketCompare.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();
