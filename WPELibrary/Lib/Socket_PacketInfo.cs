@@ -64,7 +64,19 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//封包内容（字节）
+        #region//原始封包数据（字节）
+
+        protected byte[] rawbuffer;
+
+        public byte[] RawBuffer
+        {
+            get { return rawbuffer; }
+            set { rawbuffer = value; }
+        }
+
+        #endregion
+
+        #region//封包数据（字节）
 
         protected byte[] packetbuffer;
 
@@ -100,17 +112,31 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//过滤动作
+
+        protected Socket_Cache.Filter.FilterAction filteraction;
+
+        public Socket_Cache.Filter.FilterAction FilterAction
+        {
+            get { return filteraction; }
+            set { filteraction = value; }
+        }
+
+        #endregion
+
         #region//Socket_PacketInfo        
 
-        public Socket_PacketInfo(DateTime pTime, int pSocket, Socket_Cache.SocketPacket.PacketType pType, string pFrom, string pTo, byte[] pBuffer, int pLen)
+        public Socket_PacketInfo(DateTime pTime, int pSocket, Socket_Cache.SocketPacket.PacketType pType, string pFrom, string pTo, byte[] pRawBuffer, byte[] pBuffer, int pLen, Socket_Cache.Filter.FilterAction pAction)
         {  
             this.packettime = pTime;            
             this.packetsocket = pSocket;          
             this.packettype = pType;
             this.packetfrom = pFrom;
             this.packetto = pTo;
+            this.rawbuffer = pRawBuffer;
             this.packetbuffer = pBuffer;
-            this.packetlen = pLen;          
+            this.packetlen = pLen;
+            this.filteraction = pAction;
         }
 
         #endregion        

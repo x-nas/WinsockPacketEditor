@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection;
 
-namespace WinsockPacketEditor
+namespace WPELibrary.Lib.IconExtractor
 {
     public static class IconUtil
     {

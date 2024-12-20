@@ -36,10 +36,16 @@ namespace WPELibrary.Lib
             Export,
             Delete,
             CleanUp,
-        }        
+        }
 
-        #endregion        
-        
+        public enum LogType
+        {
+            Socket,
+            Proxy,
+        }
+
+        #endregion
+
         public static IntPtr MainHandle = IntPtr.Zero;
         public static long TotalPackets = 0;
         public static long Total_SendBytes = 0;
@@ -49,7 +55,188 @@ namespace WPELibrary.Lib
         public static bool Support_WS1, Support_WS2;
         public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
         public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-        public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;        
+        public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+
+        #region//Socket 代理
+
+        public static class SocketProxy
+        {
+            #region//定义结构
+
+            public enum ProxyType
+            {
+                None = 0,
+                Http = 1,
+                Socket5 = 5,
+                Socket6 = 6,
+            }
+
+            public enum ProxyStep : byte
+            {
+                Handshake = 0,
+                AuthUserName = 1,
+                Command = 2,
+                ForwardData = 3,
+            }
+
+            public enum AuthType : byte
+            {
+                None = 0,
+                GSSAPI = 1,
+                PassWord = 2,
+            }
+
+            public enum AddressType : byte
+            {
+                IPV4 = 1,
+                Domain = 3,
+                IPV6 = 4,
+            }
+
+            public enum CommandType : byte
+            {
+                Connect = 1,
+                Bind = 2,
+                UDP = 3,
+            }
+
+            public enum DataType : byte
+            {
+                Request = 0,
+                Response = 1,
+            }
+
+            #endregion
+            
+            public static bool bIsListening = false;
+            public static ushort Port = 8889;
+        }
+
+        #endregion               
+
+        #region//代理队列
+
+        public static class SocketProxyQueue
+        {
+            public static ConcurrentQueue<Socket_ProxyData> qSocket_ProxyData = new ConcurrentQueue<Socket_ProxyData>();
+
+            #region//代理数据入队列
+
+            public static void ProxyDataToQueue(Socket_ProxyInfo spi, Socket_Cache.SocketProxy.DataType DataType)
+            {
+                try
+                {
+                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.Domain, spi.Port, DataType);
+
+                    switch (DataType)
+                    { 
+                        case SocketProxy.DataType.Request:
+                            spd.Buffer = spi.ClientData;
+                            break;
+
+                        case SocketProxy.DataType.Response:
+                            spd.Buffer = spi.TargetData;
+                            break;
+                    }
+
+                    qSocket_ProxyData.Enqueue(spd);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//清除队列数据
+
+            public static void ResetProxyDataQueue()
+            {
+                try
+                {
+                    while (!qSocket_ProxyData.IsEmpty)
+                    {
+                        qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region//代理列表
+
+        public static class SocketProxyList
+        {
+            public static BindingList<Socket_ProxyInfo> lstSocketProxy = new BindingList<Socket_ProxyInfo>();
+            public delegate void SocketProxyReceived(Socket_ProxyInfo spi);
+            public static event SocketProxyReceived RecSocketProxy;
+
+            public static BindingList<Socket_ProxyData> lstProxyData = new BindingList<Socket_ProxyData>();
+            public delegate void ProxyDataReceived(Socket_ProxyData spd);
+            public static event ProxyDataReceived RecProxyData;
+
+            #region//代理入列表
+
+            public static void SocketProxyToList(Socket_ProxyInfo spi)
+            {
+                try
+                {
+                    lstSocketProxy.Add(spi);
+                    RecSocketProxy?.Invoke(spi);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion            
+
+            #region//代理数据入列表
+
+            public static void ProxyDataToList()
+            {
+                try
+                {
+                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
+                    {
+                        RecProxyData?.Invoke(spd);
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion            
+
+            #region//清除代理数据列表
+
+            public static void ResetProxyDataList()
+            {
+                try
+                {
+                    lstProxyData.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
 
         #region//封包
 
@@ -293,22 +480,31 @@ namespace WPELibrary.Lib
 
             #region//封包入队列            
 
-            public static void SocketPacket_ToQueue(int iSocket, byte[] bBuffByte, Socket_Cache.SocketPacket.PacketType ptPacketType, Socket_Cache.SocketPacket.sockaddr sAddr, int iResLen)
+            public static void SocketPacket_ToQueue(
+                int iSocket,
+                byte[] bRawBuff,
+                byte[] bBuffByte, 
+                Socket_Cache.SocketPacket.PacketType ptPacketType, 
+                Socket_Cache.SocketPacket.sockaddr sAddr,
+                Socket_Cache.Filter.FilterAction pAction)
             {
                 try
                 {
-                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
+                    if (!Socket_Cache.SpeedMode)
+                    {
+                        string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
-                    if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
-                    {  
-                        string sIPFrom = sPacketIP.Split('|')[0];
-                        string sIPTo = sPacketIP.Split('|')[1];                        
-                        DateTime dtTime = DateTime.Now;
+                        if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
+                        {
+                            string sIPFrom = sPacketIP.Split('|')[0];
+                            string sIPTo = sPacketIP.Split('|')[1];
+                            DateTime dtTime = DateTime.Now;
 
-                        Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bBuffByte, iResLen);
+                            Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
 
-                        qSocket_PacketInfo.Enqueue(spi);
-                    }
+                            qSocket_PacketInfo.Enqueue(spi);
+                        }
+                    }                   
                 }
                 catch (Exception ex)
                 {
@@ -543,15 +739,26 @@ namespace WPELibrary.Lib
         public static class LogQueue
         {
             public static ConcurrentQueue<Socket_LogInfo> qSocket_Log = new ConcurrentQueue<Socket_LogInfo>();
+            public static ConcurrentQueue<Socket_LogInfo> qProxy_Log = new ConcurrentQueue<Socket_LogInfo>();
 
             #region//日志入队列
 
-            public static void LogToQueue(string sFuncName, string sLogContent)
+            public static void LogToQueue(Socket_Cache.LogType logType, string sFuncName, string sLogContent)
             {
                 try
                 {
                     Socket_LogInfo sli = new Socket_LogInfo(sFuncName, sLogContent);
-                    qSocket_Log.Enqueue(sli);
+
+                    switch (logType)
+                    {
+                        case LogType.Socket:
+                            qSocket_Log.Enqueue(sli);
+                            break;
+
+                        case LogType.Proxy:
+                            qProxy_Log.Enqueue(sli);
+                            break;
+                    }
                 }
                 catch (Exception ex) 
                 {
@@ -563,13 +770,29 @@ namespace WPELibrary.Lib
 
             #region//清除队列数据
 
-            public static void ResetLogQueue()
+            public static void ResetLogQueue(Socket_Cache.LogType logType)
             {
                 try
                 {
-                    while (!qSocket_Log.IsEmpty)
+                    switch (logType)
                     {
-                        qSocket_Log.TryDequeue(out Socket_LogInfo sl);
+                        case LogType.Socket:
+
+                            while (!qSocket_Log.IsEmpty)
+                            {
+                                qSocket_Log.TryDequeue(out Socket_LogInfo sli);
+                            }
+
+                            break;
+
+                        case LogType.Proxy:
+
+                            while (!qProxy_Log.IsEmpty)
+                            {
+                                qProxy_Log.TryDequeue(out Socket_LogInfo sli);
+                            }
+
+                            break;
                     }
                 }
                 catch (Exception ex)
@@ -590,21 +813,66 @@ namespace WPELibrary.Lib
             public static bool AutoRoll;
             public static bool AutoClear;
             public static decimal AutoClear_Value;
-            public static BindingList<Socket_LogInfo> lstRecLog = new BindingList<Socket_LogInfo>();
+            public static BindingList<Socket_LogInfo> lstSocketLog = new BindingList<Socket_LogInfo>();
+            public static BindingList<Socket_LogInfo> lstProxyLog = new BindingList<Socket_LogInfo>();
 
             public delegate void SocketLogReceived(Socket_LogInfo sl);
+            public delegate void ProxyLogReceived(Socket_LogInfo sli);
+
             public static event SocketLogReceived RecSocketLog;
+            public static event ProxyLogReceived RecProxyLog;
 
             #region//日志入列表
 
-            public static void LogToList()
+            public static void LogToList(Socket_Cache.LogType logType)
             {
                 try
                 {
-                    if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sli))
+                    switch (logType)
                     {
-                        RecSocketLog?.Invoke(sli);
-                    }              
+                        case LogType.Socket:
+
+                            if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
+                            {
+                                RecSocketLog?.Invoke(sliSocket);
+                            }
+
+                            break;
+
+                        case LogType.Proxy:
+
+                            if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
+                            {
+                                RecProxyLog?.Invoke(sliProxy);
+                            }
+
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//清除列表数据
+
+            public static void ResetLogList(Socket_Cache.LogType logType)
+            {
+                try
+                {
+                    switch (logType)
+                    {
+                        case LogType.Socket:
+                            lstSocketLog.Clear();
+                            break;
+
+                        case LogType.Proxy:
+                            lstProxyLog.Clear();
+                            break;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -638,7 +906,7 @@ namespace WPELibrary.Lib
                         string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_78);
                         sw.WriteLine(sColTitle);
 
-                        foreach (Socket_LogInfo sl in Socket_Cache.LogList.lstRecLog)
+                        foreach (Socket_LogInfo sl in Socket_Cache.LogList.lstSocketLog)
                         {
                             try
                             {
@@ -1267,7 +1535,7 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否生效
 
-            public static bool CheckFilter_IsEffective(Int32 iSocket, IntPtr ipBuff, int iLen, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
+            public static bool CheckFilter_IsEffective(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
             {
                 bool bResult = true;
 
@@ -1287,7 +1555,7 @@ namespace WPELibrary.Lib
 
                             if (sfi.AppointLength)
                             {
-                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointLength(iLen, sfi.LengthContent))
+                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointLength(bBuffer.Length, sfi.LengthContent))
                                 {
                                     return false;
                                 }
@@ -1295,7 +1563,7 @@ namespace WPELibrary.Lib
 
                             if (sfi.AppointHeader)
                             {
-                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(ipBuff, iLen, sfi.HeaderContent))
+                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(bBuffer, sfi.HeaderContent))
                                 {
                                     return false;
                                 }
@@ -1423,7 +1691,7 @@ namespace WPELibrary.Lib
 
             #region//检查是否匹配指定包头
 
-            public static bool CheckPacket_IsMatch_AppointHeader(IntPtr ipBuff, int iLen, string sHeaderContent)
+            public static bool CheckPacket_IsMatch_AppointHeader(byte[] bBuffer, string sHeaderContent)
             {
                 bool bResult = false;
 
@@ -1434,9 +1702,10 @@ namespace WPELibrary.Lib
                         byte[] bHeaderContent = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sHeaderContent);
                         int iHeaderContent_Len = bHeaderContent.Length;
 
-                        if (iHeaderContent_Len > 0 && iHeaderContent_Len <= iLen)
+                        if (iHeaderContent_Len > 0 && iHeaderContent_Len <= bBuffer.Length)
                         {
-                            byte[] bPacketHeader = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iHeaderContent_Len);
+                            byte[] bPacketHeader = new byte[iHeaderContent_Len];
+                            Buffer.BlockCopy(bBuffer, 0, bPacketHeader, 0, iHeaderContent_Len);                            
                             string sPacketHeader = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bPacketHeader);
 
                             if (sHeaderContent.Equals(sPacketHeader))
@@ -1458,7 +1727,7 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否匹配成功（普通滤镜）
 
-            public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+            public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, byte[] bBuffer)
             {
                 bool bResult = true;
 
@@ -1475,9 +1744,9 @@ namespace WPELibrary.Lib
                                 int iIndex = int.Parse(sSearch.Split('-')[0]);
                                 string sValue = sSearch.Split('-')[1];
 
-                                if (iIndex >= 0 && iIndex < iLen)
+                                if (iIndex >= 0 && iIndex < bBuffer.Length)
                                 {
-                                    string sBuffValue = Marshal.ReadByte(ipBuff, iIndex).ToString("X2");
+                                    string sBuffValue = bBuffer[iIndex].ToString("X2");
 
                                     if (!sValue.Equals(sBuffValue))
                                     {
@@ -1507,7 +1776,7 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否匹配成功（高级滤镜）
 
-            public static List<int> CheckFilter_IsMatch_Adcanced(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+            public static List<int> CheckFilter_IsMatch_Adcanced(Socket_FilterInfo sfi, byte[] bBuffer)
             {
                 List<int> lReturn = new List<int>();
 
@@ -1515,8 +1784,6 @@ namespace WPELibrary.Lib
                 {
                     if (!string.IsNullOrEmpty(sfi.FSearch))
                     {
-                        byte[] bBUffer = Socket_Operation.GetBytes_FromIntPtr(ipBuff, iLen);
-
                         Dictionary<int, int> dSearchIndex = new Dictionary<int, int>();
                         Dictionary<int, byte> dSearchValue = new Dictionary<int, byte>();
 
@@ -1537,9 +1804,9 @@ namespace WPELibrary.Lib
 
                         byte bFirst_SearchValue = dSearchValue[0];
 
-                        for (int i = 0; i < iLen; i++)
+                        for (int i = 0; i < bBuffer.Length; i++)
                         {
-                            if (bBUffer[i] == bFirst_SearchValue)
+                            if (bBuffer[i] == bFirst_SearchValue)
                             {
                                 iMatchIndex = i;
 
@@ -1550,9 +1817,9 @@ namespace WPELibrary.Lib
 
                                     iBuffIndex = i + iIndex;
 
-                                    if (iBuffIndex >= 0 && iBuffIndex < iLen)
+                                    if (iBuffIndex >= 0 && iBuffIndex < bBuffer.Length)
                                     {
-                                        if (bBUffer[iBuffIndex] != bValue)
+                                        if (bBuffer[iBuffIndex] != bValue)
                                         {
                                             iMatchIndex = -1;
                                             break;
@@ -1595,7 +1862,7 @@ namespace WPELibrary.Lib
 
             #region//执行滤镜（普通滤镜）
 
-            public static bool DoFilter_Normal(Socket_FilterInfo sfi, IntPtr ipBuff, int iLen)
+            public static bool DoFilter_Normal(Socket_FilterInfo sfi, byte[] bBuffer)
             {
                 bool bReturn = true;
 
@@ -1622,10 +1889,10 @@ namespace WPELibrary.Lib
                                 int iIndex = int.Parse(sModify.Split('-')[0]);
                                 string sValue = sModify.Split('-')[1];
 
-                                if (iIndex >= 0 && iIndex < iLen)
+                                if (iIndex >= 0 && iIndex < bBuffer.Length)
                                 {
                                     byte bValue = Convert.ToByte(sValue, 16);
-                                    Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                    bBuffer[iIndex] = bValue;                                    
                                 }
                             }
                         }
@@ -1642,11 +1909,11 @@ namespace WPELibrary.Lib
                             {
                                 if (int.TryParse(sProgression, out int iIndex))
                                 {
-                                    if (iIndex >= 0 && iIndex < iLen)
+                                    if (iIndex >= 0 && iIndex < bBuffer.Length)
                                     {
-                                        byte bValue = Marshal.ReadByte(ipBuff, iIndex);
+                                        byte bValue = bBuffer[iIndex];
                                         bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
-                                        Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                        bBuffer[iIndex] = bValue;                                        
 
                                         sfi.IsProgressionDone = true;
                                     }
@@ -1668,7 +1935,7 @@ namespace WPELibrary.Lib
 
             #region//执行滤镜（高级滤镜）
 
-            public static bool DoFilter_Advanced(Socket_FilterInfo sfi, int iMatch, IntPtr ipBuff, int iLen)
+            public static bool DoFilter_Advanced(Socket_FilterInfo sfi, int iMatch, byte[] bBuffer)
             {
                 bool bReturn = true;
 
@@ -1703,10 +1970,10 @@ namespace WPELibrary.Lib
                                         iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
                                     }
 
-                                    if (iIndex >= 0 && iIndex < iLen)
+                                    if (iIndex >= 0 && iIndex < bBuffer.Length)
                                     {
                                         byte bValue = Convert.ToByte(sValue, 16);
-                                        Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                        bBuffer[iIndex] = bValue;                                        
                                     }
                                 }
                             }
@@ -1729,11 +1996,11 @@ namespace WPELibrary.Lib
                                         iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
                                     }
 
-                                    if (iIndex >= 0 && iIndex < iLen)
+                                    if (iIndex >= 0 && iIndex < bBuffer.Length)
                                     {
-                                        byte bValue = Marshal.ReadByte(ipBuff, iIndex);
+                                        byte bValue = bBuffer[iIndex];
                                         bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
-                                        Marshal.WriteByte(ipBuff, iIndex, bValue);
+                                        bBuffer[iIndex] = bValue;                                        
 
                                         sfi.IsProgressionDone = true;
                                     }
@@ -1922,7 +2189,7 @@ namespace WPELibrary.Lib
 
             #region//执行滤镜列表
 
-            public static Socket_Cache.Filter.FilterAction DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, IntPtr ipBuff, Int32 iLen)
+            public static Socket_Cache.Filter.FilterAction DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, byte[] bBuffer)
             {
                 bool bBreak = false;
                 string sFName = string.Empty;
@@ -1934,14 +2201,14 @@ namespace WPELibrary.Lib
                     {
                         sFName = sfi.FName;                        
 
-                        if (Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, ipBuff, iLen, ptType, sfi))
+                        if (Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bBuffer, ptType, sfi))
                         {
                             int iMatchCNT = 0;
                             bool bDoFilter = true;
 
                             if (sfi.FMode == Filter.FilterMode.Normal)
                             {
-                                if (Socket_Cache.Filter.CheckFilter_IsMatch_Normal(sfi, ipBuff, iLen))
+                                if (Socket_Cache.Filter.CheckFilter_IsMatch_Normal(sfi, bBuffer))
                                 {
                                     faReturn = sfi.FAction;
 
@@ -1951,7 +2218,7 @@ namespace WPELibrary.Lib
 
                                             sfi.IsProgressionDone = false;
 
-                                            bDoFilter = Socket_Cache.Filter.DoFilter_Normal(sfi, ipBuff, iLen);
+                                            bDoFilter = Socket_Cache.Filter.DoFilter_Normal(sfi, bBuffer);
 
                                             if (sfi.IsProgressionDone)
                                             {
@@ -1988,7 +2255,7 @@ namespace WPELibrary.Lib
                             }
                             else if (sfi.FMode == Filter.FilterMode.Advanced)
                             {
-                                List<int> MatchIndex = Socket_Cache.Filter.CheckFilter_IsMatch_Adcanced(sfi, ipBuff, iLen);
+                                List<int> MatchIndex = Socket_Cache.Filter.CheckFilter_IsMatch_Adcanced(sfi, bBuffer);
 
                                 if (MatchIndex.Count > 0)
                                 {
@@ -2002,7 +2269,7 @@ namespace WPELibrary.Lib
 
                                             foreach (int iIndex in MatchIndex)
                                             {
-                                                Socket_Cache.Filter.DoFilter_Advanced(sfi, iIndex, ipBuff, iLen);
+                                                Socket_Cache.Filter.DoFilter_Advanced(sfi, iIndex, bBuffer);
                                             }
 
                                             if (sfi.IsProgressionDone)
@@ -2056,11 +2323,11 @@ namespace WPELibrary.Lib
 
                                     if (iMatchCNT > 0)
                                     {
-                                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), iLen, iMatchCNT);
+                                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), bBuffer.Length, iMatchCNT);
                                     }
                                     else
                                     {
-                                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), iLen);
+                                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sFName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), bBuffer.Length);
                                     }
 
                                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -2076,7 +2343,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52), sFName, iLen, ex.Message);
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_52), sFName, bBuffer.Length, ex.Message);
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                 }
 
@@ -2111,7 +2378,11 @@ namespace WPELibrary.Lib
 
                             BytesLeft -= iBuffLen;
 
-                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, wsBuffer.buf, iBuffLen);
+                            byte[] bBuffer = new byte[iBuffLen];
+                            Marshal.Copy(wsBuffer.buf, bBuffer, 0, iBuffLen);
+                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, bBuffer);
+                            Marshal.Copy(bBuffer, 0, wsBuffer.buf, iBuffLen);
+
                             faReturn = FilterAction;
 
                             if (FilterAction != Filter.FilterAction.Replace && FilterAction != Filter.FilterAction.None)

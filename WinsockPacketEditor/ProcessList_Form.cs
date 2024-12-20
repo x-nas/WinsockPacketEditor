@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using System.Data;
 using System.IO;
 using System.Drawing;
-using WinsockPacketEditor.Lib;
 using WPELibrary.Lib;
 using System.Reflection;
 
@@ -54,60 +53,35 @@ namespace WinsockPacketEditor
                     bgwProcessList.RunWorkerAsync();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                //
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
         private void bgwProcessList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            try
-            {
-                e.Result = Process_Injector.GetProcess();
-            }
-            catch
-            {
-                //
-            }
+            e.Result = Socket_Operation.GetProcess();
         }
 
         private void bgwProcessList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             try
             {
-                if (this.dgvProcessList.InvokeRequired)
-                {
-                    this.dgvProcessList.Invoke(new Action(() =>
-                    {                       
-                        this.dgvProcessList.DataSource = e.Result;                        
+                this.dgvProcessList.DataSource = e.Result;
 
-                        this.bCreate.Enabled = true;
-                        this.bRefresh.Enabled = true;
-                        this.bSelected.Enabled = true;
-                        this.txtProcessSearch.Enabled = true;
+                this.bCreate.Enabled = true;
+                this.bRefresh.Enabled = true;
+                this.bSelected.Enabled = true;
+                this.txtProcessSearch.Enabled = true;
 
-                        this.pbLoading.Visible = false;
-                        this.dgvProcessList.Visible = true;
-                    }));
-                }
-                else
-                {
-                    this.dgvProcessList.DataSource = e.Result;
-
-                    this.bCreate.Enabled = true;
-                    this.bRefresh.Enabled = true;
-                    this.bSelected.Enabled = true;
-                    this.txtProcessSearch.Enabled = true;
-
-                    this.pbLoading.Visible = false;
-                    this.dgvProcessList.Visible = true;
-                }
+                this.pbLoading.Visible = false;
+                this.dgvProcessList.Visible = true;
             }
-            catch
+            catch (Exception ex)
             {
-                //
-            }
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }          
         }
 
         #endregion
@@ -241,11 +215,11 @@ namespace WinsockPacketEditor
 
                 if (String.IsNullOrEmpty(sSearchText))
                 {
-                    dgvProcessList.DataSource = Process_Injector.ProcessTable;
+                    dgvProcessList.DataSource = Socket_Operation.ProcessTable;
                 }
                 else
                 {                   
-                    DataView dvSearch = new DataView(Process_Injector.ProcessTable);
+                    DataView dvSearch = new DataView(Socket_Operation.ProcessTable);
                     dvSearch.RowFilter = "PName like '" + sSearchText + "%'";
                     dgvProcessList.DataSource = dvSearch.ToTable();
                 }

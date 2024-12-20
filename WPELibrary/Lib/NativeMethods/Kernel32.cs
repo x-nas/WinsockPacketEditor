@@ -3,10 +3,18 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 
-namespace WinsockPacketEditor
+namespace WPELibrary.Lib.NativeMethods
 {
-    internal static class NativeMethods
+    public static class Kernel32
     {
+        [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern int GetMappedFileName(IntPtr hProcess, IntPtr lpv, StringBuilder lpFilename, int nSize);
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWow64Process([In] IntPtr process, [Out] out bool wow64Process);
+
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
@@ -42,13 +50,9 @@ namespace WinsockPacketEditor
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern int QueryDosDevice(string lpDeviceName, StringBuilder lpTargetPath, int ucchMax);
-
-        [DllImport("psapi.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        [SuppressUnmanagedCodeSecurity]
-        public static extern int GetMappedFileName(IntPtr hProcess, IntPtr lpv, StringBuilder lpFilename, int nSize);
     }
 
     [UnmanagedFunctionPointer(CallingConvention.Winapi, SetLastError = true, CharSet = CharSet.Unicode)]
     [SuppressUnmanagedCodeSecurity]
-    internal delegate bool ENUMRESNAMEPROC(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam);
+    public delegate bool ENUMRESNAMEPROC(IntPtr hModule, IntPtr lpszType, IntPtr lpszName, IntPtr lParam);
 }

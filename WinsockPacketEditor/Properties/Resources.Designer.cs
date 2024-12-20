@@ -103,6 +103,16 @@ namespace WinsockPacketEditor.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Play16 {
+            get {
+                object obj = ResourceManager.GetObject("Play16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Search {
             get {
                 object obj = ResourceManager.GetObject("Search", resourceCulture);
@@ -116,6 +126,26 @@ namespace WinsockPacketEditor.Properties {
         internal static System.Drawing.Bitmap searchbox_button {
             get {
                 object obj = ResourceManager.GetObject("searchbox_button", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Stop16 {
+            get {
+                object obj = ResourceManager.GetObject("Stop16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap Trash_can16 {
+            get {
+                object obj = ResourceManager.GetObject("Trash-can16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -118,245 +118,238 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpInjectorForm.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tlpSystemMode.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="tlpProcessInject.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="lProcessName.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="tlpModeSelect.ColumnCount" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lProcessName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="bProcess_Start.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="lProcessName.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="bProcess_Start.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
   </data>
-  <data name="lProcessName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="bProcess_Start.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lProcessName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="bProcess_Start.Location" type="System.Drawing.Point, System.Drawing">
+    <value>154, 3</value>
   </data>
-  <data name="lProcessName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="bProcess_Start.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 46</value>
   </data>
-  <data name="lProcessName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
-  </data>
-  <data name="lProcessName.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="lProcessName.Text" xml:space="preserve">
-    <value>进程名称:</value>
-  </data>
-  <data name="lProcessName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Name" xml:space="preserve">
-    <value>lProcessName</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;lProcessName.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tbProcessID.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tbProcessID.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tbProcessID.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 3</value>
-  </data>
-  <data name="tbProcessID.Size" type="System.Drawing.Size, System.Drawing">
-    <value>217, 23</value>
-  </data>
-  <data name="tbProcessID.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.Name" xml:space="preserve">
-    <value>tbProcessID</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;tbProcessID.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bSelectProcess.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bSelectProcess.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bSelectProcess.Location" type="System.Drawing.Point, System.Drawing">
-    <value>290, 2</value>
-  </data>
-  <data name="bSelectProcess.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="bSelectProcess.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 25</value>
-  </data>
-  <data name="bSelectProcess.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Name" xml:space="preserve">
-    <value>bSelectProcess</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;bSelectProcess.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="bInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bInject.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="bInject.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bInject.Location" type="System.Drawing.Point, System.Drawing">
-    <value>340, 2</value>
-  </data>
-  <data name="bInject.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="bInject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>86, 25</value>
-  </data>
-  <data name="bInject.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="bInject.Text" xml:space="preserve">
-    <value>注 入 (&amp;P)</value>
-  </data>
-  <data name="&gt;&gt;bInject.Name" xml:space="preserve">
-    <value>bInject</value>
-  </data>
-  <data name="&gt;&gt;bInject.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bInject.Parent" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;bInject.ZOrder" xml:space="preserve">
+  <data name="bProcess_Start.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="tlpProcessInject.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="bProcess_Start.Text" xml:space="preserve">
+    <value>注 入 模 式</value>
   </data>
-  <data name="tlpProcessInject.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="&gt;&gt;bProcess_Start.Name" xml:space="preserve">
+    <value>bProcess_Start</value>
   </data>
-  <data name="tlpProcessInject.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 8</value>
+  <data name="&gt;&gt;bProcess_Start.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpProcessInject.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;bProcess_Start.Parent" xml:space="preserve">
+    <value>tlpModeSelect</value>
   </data>
-  <data name="tlpProcessInject.Size" type="System.Drawing.Size, System.Drawing">
-    <value>428, 29</value>
-  </data>
-  <data name="tlpProcessInject.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Name" xml:space="preserve">
-    <value>tlpProcessInject</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.Parent" xml:space="preserve">
-    <value>tlpInjectorForm</value>
-  </data>
-  <data name="&gt;&gt;tlpProcessInject.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;bProcess_Start.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpProcessInject.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lProcessName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tbProcessID" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSelectProcess" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bInject" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,50,Absolute,90" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="rtbLog.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="bProxy_Start.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rtbLog.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="bProxy_Start.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
   </data>
-  <data name="rtbLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 43</value>
+  <data name="bProxy_Start.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="rtbLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>428, 135</value>
+  <data name="bProxy_Start.Location" type="System.Drawing.Point, System.Drawing">
+    <value>19, 3</value>
   </data>
-  <data name="rtbLog.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
+  <data name="bProxy_Start.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 46</value>
   </data>
-  <data name="rtbLog.Text" xml:space="preserve">
-    <value />
+  <data name="bProxy_Start.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;rtbLog.Name" xml:space="preserve">
-    <value>rtbLog</value>
+  <data name="bProxy_Start.Text" xml:space="preserve">
+    <value>代 理 模 式</value>
   </data>
-  <data name="&gt;&gt;rtbLog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;bProxy_Start.Name" xml:space="preserve">
+    <value>bProxy_Start</value>
   </data>
-  <data name="&gt;&gt;rtbLog.Parent" xml:space="preserve">
-    <value>tlpInjectorForm</value>
+  <data name="&gt;&gt;bProxy_Start.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rtbLog.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;bProxy_Start.Parent" xml:space="preserve">
+    <value>tlpModeSelect</value>
+  </data>
+  <data name="&gt;&gt;bProxy_Start.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpInjectorForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpModeSelect.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpInjectorForm.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="tlpModeSelect.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 35</value>
   </data>
-  <data name="tlpInjectorForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tlpModeSelect.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="tlpInjectorForm.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="tlpModeSelect.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="tlpInjectorForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>434, 181</value>
+  <data name="tlpModeSelect.Size" type="System.Drawing.Size, System.Drawing">
+    <value>287, 52</value>
   </data>
-  <data name="tlpInjectorForm.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="tlpModeSelect.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
   </data>
-  <data name="&gt;&gt;tlpInjectorForm.Name" xml:space="preserve">
-    <value>tlpInjectorForm</value>
+  <data name="&gt;&gt;tlpModeSelect.Name" xml:space="preserve">
+    <value>tlpModeSelect</value>
   </data>
-  <data name="&gt;&gt;tlpInjectorForm.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlpModeSelect.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlpInjectorForm.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;tlpModeSelect.Parent" xml:space="preserve">
+    <value>tlpSystemMode</value>
   </data>
-  <data name="&gt;&gt;tlpInjectorForm.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tlpModeSelect.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpInjectorForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpProcessInject" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rtbLog" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,5,Absolute,35,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="tlpModeSelect.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bProcess_Start" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bProxy_Start" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,120,Absolute,15,Absolute,120,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
+  <metadata name="msSystem.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>139, 17</value>
+  </metadata>
+  <data name="tsmiChinese.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vQAADr0BR/uQrQAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
+        8SeIqzQ3af0IQi2CRTo5qOjrOZcUG0kbEzo8kN40z33PudwjPvt9BAdNyIoO37QieFXCiK5Ngh3sYqfg
+        h1Yur14oUT38U81CZ6sGSWujHyfBLnYKqVXUgtRsdBpVSNOAV7Hh2wY+rmYpsQm3QL/TJCen4FI9y4Dv
+        GHg9X0TvJIf2Zh1St+CWbQT7ZXSP83Bp4zhJHBxGcOnemoHBxQIwEPjuCTyfrtCuJKbkwV4o5ipSpBa+
+        SaUWHWqDjq+nGbxfz+FmeR0+9Zh77jsm7rY1quD/iRkl5p4+HhbooEw87JZx26gpqVu00T1axcvZElql
+        1GJ+oNTUQ49S8iGqpNT3t8t5tDeo3yXuW/TDJELxH/hAaZP7HQ1uyqRD4sUMySW1yKNqYt8nMF6syCZl
+        EsTZoQuSPdU41AUZXulpoq706BCaBmoINWkITRqbafkdm338AN2/DECo5xoaAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="tsmiChinese.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="tsmiChinese.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsmiChinese.Size" type="System.Drawing.Size, System.Drawing">
+    <value>186, 22</value>
+  </data>
+  <data name="tsmiChinese.Text" xml:space="preserve">
+    <value>中文</value>
+  </data>
+  <data name="tsmiEnglish.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        vgAADr4B6kKxwAAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
+        m4KCdtGsUYOZRZZp81/+qexsK8nLCjOSoO3MbErOpltXIe7i6X2+6VhpkNHFs/Od932eH+fsfO+nEB9H
+        97P3yLEHoEpboLZ3QFV2prWtHTn7+xH3XIdVlKfFNWvsZXzMSJYMsshUUTOAlFGFkc5ulF54B7WlDapi
+        LvQ3YHolwywZZJGpcu1+tPd9AM4exuyVM7jV9xmqvFfMjyTU9mewBopHvB7JpCRLBllkKlUuT7ipFTvq
+        Qog13QOO7sao6cfm82/l9XxYZn+5AMwae/TQy8yEZMkgSzP1T5ncrG9C/rFX6Ol+DdQewJTzEpyPLfn/
+        Api46cqAuWaNPXroZYZZMlSZ8Mhc7hjAvHKr5RV39eP48x9I+Boxc8qBj/FZjN/2ImxbocU1azO1Du2h
+        lxlms1nqu9eNjOrdSHpv4EudC7G79fjqdiHR4EHUOARrnU2La9bYo4deZpjNZilLnuIXFaav4QJRYR5C
+        crXW2hDZWKLFNWvs0ZOdyZayivOxmEJFKxEqXqWv4ZLCDJjr7N5iWUolHtxBtqbvN2DU68VkazNiDV4k
+        WxoxdsLQT2qtKcDYSUPX2KOHXmZ+5yhVJZtZKwi104TaaqLal8S3Zvl4hh3Do4kFH4+1GWMf4uKhlxmd
+        JWOepyeI2tCM1TUDeNLzBjh9ENNXL8LZFZGtFdRbLCJbjUpvt6Du0UNvr2SYJSPDmx+QymufMPlQBsTY
+        I5veXMKAmDrDLBmZAUmP9DBw7ghSl2Wkn8pIVyxhpMXrkQyzZJClRzrqf4FUzV6MdHTJQTKoD5R/O4QG
+        NYMsMueOzaH/eGwOAVPj+AlyomoNOtmMtQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="tsmiEnglish.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
+  <data name="tsmiEnglish.Size" type="System.Drawing.Size, System.Drawing">
+    <value>186, 22</value>
+  </data>
+  <data name="tsmiEnglish.Text" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="tsmiLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>141, 21</value>
+  </data>
+  <data name="tsmiLanguage.Text" xml:space="preserve">
+    <value> 语言 ( Language )</value>
+  </data>
+  <data name="tsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>119, 21</value>
+  </data>
+  <data name="tsmiAbout.Text" xml:space="preserve">
+    <value> 关于 ( About )</value>
+  </data>
+  <data name="msSystem.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="msSystem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>287, 25</value>
+  </data>
+  <data name="msSystem.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="msSystem.Text" xml:space="preserve">
+    <value>menuStrip1</value>
+  </data>
+  <data name="&gt;&gt;msSystem.Name" xml:space="preserve">
+    <value>msSystem</value>
+  </data>
+  <data name="&gt;&gt;msSystem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;msSystem.Parent" xml:space="preserve">
+    <value>tlpSystemMode</value>
+  </data>
+  <data name="&gt;&gt;msSystem.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpSystemMode.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSystemMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpSystemMode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSystemMode.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpSystemMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>287, 97</value>
+  </data>
+  <data name="tlpSystemMode.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemMode.Name" xml:space="preserve">
+    <value>tlpSystemMode</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemMode.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemMode.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemMode.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSystemMode.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpModeSelect" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="msSystem" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,Percent,100,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="bgwCheckURL.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -367,7 +360,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>434, 181</value>
+    <value>287, 97</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -6544,17 +6537,44 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 4, 3, 4</value>
-  </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>进程注入器</value>
+    <value>WPE x64</value>
+  </data>
+  <data name="&gt;&gt;tsmiLanguage.Name" xml:space="preserve">
+    <value>tsmiLanguage</value>
+  </data>
+  <data name="&gt;&gt;tsmiLanguage.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiChinese.Name" xml:space="preserve">
+    <value>tsmiChinese</value>
+  </data>
+  <data name="&gt;&gt;tsmiChinese.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiEnglish.Name" xml:space="preserve">
+    <value>tsmiEnglish</value>
+  </data>
+  <data name="&gt;&gt;tsmiEnglish.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiAbout.Name" xml:space="preserve">
+    <value>tsmiAbout</value>
+  </data>
+  <data name="&gt;&gt;tsmiAbout.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bgwCheckURL.Name" xml:space="preserve">
+    <value>bgwCheckURL</value>
+  </data>
+  <data name="&gt;&gt;bgwCheckURL.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Injector_Form</value>
+    <value>SystemMode_Form</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

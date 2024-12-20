@@ -70,16 +70,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lib\IconExtractor\IconExtractor.cs" />
+    <Compile Include="Lib\IconExtractor\IconUtil.cs" />
+    <Compile Include="Lib\NativeMethods\Kernel32.cs" />
+    <Compile Include="Lib\Socket_ProxyData.cs" />
+    <Compile Include="Lib\Socket_ProxyInfo.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />
     <Compile Include="Lib\Socket_Robot.cs" />
     <Compile Include="Lib\Socket_RobotInfo.cs" />
-    <Compile Include="Lib\User32.cs" />
-    <Compile Include="Lib\WS2_32.cs" />
-    <Compile Include="Lib\WSock32.cs" />
+    <Compile Include="Lib\NativeMethods\User32.cs" />
+    <Compile Include="Lib\NativeMethods\WS2_32.cs" />
+    <Compile Include="Lib\NativeMethods\WSock32.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Socket_CompareForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Socket_CompareForm.Designer.cs">
+      <DependentUpon>Socket_CompareForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_FilterForm.cs">
       <SubType>Form</SubType>
@@ -156,6 +167,7 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\Compare.png" />
     <None Include="Resources\off.png" />
     <None Include="Resources\on.png" />
     <None Include="Resources\ForwardArrow.png" />
@@ -221,6 +233,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Socket_CompareForm.resx">
+      <DependentUpon>Socket_CompareForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_FilterForm.en-US.resx">
       <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </EmbeddedResource>

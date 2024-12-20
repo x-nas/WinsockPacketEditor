@@ -36,14 +36,9 @@ namespace WinsockPacketEditor
             this.tbProcessID = new System.Windows.Forms.TextBox();
             this.bSelectProcess = new System.Windows.Forms.Button();
             this.bInject = new System.Windows.Forms.Button();
-            this.pbLanguage = new System.Windows.Forms.PictureBox();
-            this.pbAbout = new System.Windows.Forms.PictureBox();
             this.rtbLog = new System.Windows.Forms.RichTextBox();
-            this.bgwCheckURL = new System.ComponentModel.BackgroundWorker();
             this.tlpInjectorForm.SuspendLayout();
             this.tlpProcessInject.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).BeginInit();
             this.SuspendLayout();
             // 
             // tlpInjectorForm
@@ -60,8 +55,6 @@ namespace WinsockPacketEditor
             this.tlpProcessInject.Controls.Add(this.tbProcessID, 1, 0);
             this.tlpProcessInject.Controls.Add(this.bSelectProcess, 2, 0);
             this.tlpProcessInject.Controls.Add(this.bInject, 3, 0);
-            this.tlpProcessInject.Controls.Add(this.pbLanguage, 4, 0);
-            this.tlpProcessInject.Controls.Add(this.pbAbout, 5, 0);
             this.tlpProcessInject.Name = "tlpProcessInject";
             // 
             // lProcessName
@@ -91,22 +84,6 @@ namespace WinsockPacketEditor
             this.bInject.UseVisualStyleBackColor = true;
             this.bInject.Click += new System.EventHandler(this.bInject_Click);
             // 
-            // pbLanguage
-            // 
-            resources.ApplyResources(this.pbLanguage, "pbLanguage");
-            this.pbLanguage.Image = global::WinsockPacketEditor.Properties.Resources.Language;
-            this.pbLanguage.Name = "pbLanguage";
-            this.pbLanguage.TabStop = false;
-            this.pbLanguage.Click += new System.EventHandler(this.pbLanguage_Click);
-            // 
-            // pbAbout
-            // 
-            resources.ApplyResources(this.pbAbout, "pbAbout");
-            this.pbAbout.Image = global::WinsockPacketEditor.Properties.Resources.help;
-            this.pbAbout.Name = "pbAbout";
-            this.pbAbout.TabStop = false;
-            this.pbAbout.Click += new System.EventHandler(this.pbAbout_Click);
-            // 
             // rtbLog
             // 
             this.rtbLog.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
@@ -115,11 +92,6 @@ namespace WinsockPacketEditor
             this.rtbLog.Name = "rtbLog";
             this.rtbLog.ReadOnly = true;
             this.rtbLog.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbLog_LinkClicked);
-            // 
-            // bgwCheckURL
-            // 
-            this.bgwCheckURL.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckURL_DoWork);
-            this.bgwCheckURL.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCheckURL_RunWorkerCompleted);
             // 
             // Injector_Form
             // 
@@ -133,8 +105,6 @@ namespace WinsockPacketEditor
             this.tlpInjectorForm.ResumeLayout(false);
             this.tlpProcessInject.ResumeLayout(false);
             this.tlpProcessInject.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLanguage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbAbout)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -148,9 +118,6 @@ namespace WinsockPacketEditor
         private System.Windows.Forms.TextBox tbProcessID;
         private System.Windows.Forms.Button bSelectProcess;
         private System.Windows.Forms.Button bInject;
-        private System.Windows.Forms.PictureBox pbLanguage;
-        private System.Windows.Forms.PictureBox pbAbout;
-        private System.ComponentModel.BackgroundWorker bgwCheckURL;
     }
 }
 

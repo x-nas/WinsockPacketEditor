@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace WPELibrary.Lib
+namespace WPELibrary.Lib.NativeMethods
 {
     public static class User32
     {

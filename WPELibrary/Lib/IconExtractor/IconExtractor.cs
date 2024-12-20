@@ -5,8 +5,9 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using WPELibrary.Lib.NativeMethods;
 
-namespace WinsockPacketEditor
+namespace WPELibrary.Lib.IconExtractor
 {
     public class IconExtractor
     {
@@ -99,7 +100,7 @@ namespace WinsockPacketEditor
             IntPtr hModule = IntPtr.Zero;
             try
             {
-                hModule = NativeMethods.LoadLibraryEx(fileName, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
+                hModule = Kernel32.LoadLibraryEx(fileName, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
                 if (hModule == IntPtr.Zero)
                     throw new Win32Exception();
 
@@ -159,14 +160,14 @@ namespace WinsockPacketEditor
 
                     return true;
                 };
-                NativeMethods.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
+                Kernel32.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
 
                 iconData = tmpData.ToArray();
             }
             finally
             {
                 if (hModule != IntPtr.Zero)
-                    NativeMethods.FreeLibrary(hModule);
+                    Kernel32.FreeLibrary(hModule);
             }
         }
 
@@ -174,19 +175,19 @@ namespace WinsockPacketEditor
         {
             // Load the binary data from the specified resource.
 
-            IntPtr hResInfo = NativeMethods.FindResource(hModule, name, type);
+            IntPtr hResInfo = Kernel32.FindResource(hModule, name, type);
             if (hResInfo == IntPtr.Zero)
                 throw new Win32Exception();
 
-            IntPtr hResData = NativeMethods.LoadResource(hModule, hResInfo);
+            IntPtr hResData = Kernel32.LoadResource(hModule, hResInfo);
             if (hResData == IntPtr.Zero)
                 throw new Win32Exception();
 
-            IntPtr pResData = NativeMethods.LockResource(hResData);
+            IntPtr pResData = Kernel32.LockResource(hResData);
             if (pResData == IntPtr.Zero)
                 throw new Win32Exception();
 
-            uint size = NativeMethods.SizeofResource(hModule, hResInfo);
+            uint size = Kernel32.SizeofResource(hModule, hResInfo);
             if (size == 0)
                 throw new Win32Exception();
 
@@ -207,8 +208,8 @@ namespace WinsockPacketEditor
             string fileName;
             {
                 var buf = new StringBuilder(MAX_PATH);
-                int len = NativeMethods.GetMappedFileName(
-                    NativeMethods.GetCurrentProcess(), hModule, buf, buf.Capacity);
+                int len = Kernel32.GetMappedFileName(
+                    Kernel32.GetCurrentProcess(), hModule, buf, buf.Capacity);
                 if (len == 0)
                     throw new Win32Exception();
 
@@ -222,7 +223,7 @@ namespace WinsockPacketEditor
             {
                 var drive = c + ":";
                 var buf = new StringBuilder(MAX_PATH);
-                int len = NativeMethods.QueryDosDevice(drive, buf, buf.Capacity);
+                int len = Kernel32.QueryDosDevice(drive, buf, buf.Capacity);
                 if (len == 0)
                     continue;
 

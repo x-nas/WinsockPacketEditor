@@ -15,16 +15,240 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using System.Drawing;
+using WPELibrary.Lib.NativeMethods;
 using EasyHook;
 
 namespace WPELibrary.Lib
 {   
     public static class Socket_Operation
-    {        
+    {
+        public static Color col_Del = Color.Red;
+        public static Color col_Add = Color.Green;
         public static bool bDoLog = true;
         public static bool bDoLog_HookTime = true;
+        public static DataTable ProcessTable;
         public static DataTable dtSearchFrom = new DataTable();
         public static DataTable dtPacketFormat = new DataTable();
+
+        #region//判断是否为64位的进程
+
+        public static bool IsWin64Process(int ProcessID)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                Process pProcess = Process.GetProcessById(ProcessID);
+
+                if (pProcess != null)
+                {
+                    if ((Environment.OSVersion.Version.Major > 5) || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
+                    {
+                        bool retVal;
+                        Kernel32.IsWow64Process(pProcess.Handle, out retVal);
+                        bReturn = !retVal;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//程序集特性访问器
+
+        public static string AssemblyTitle
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
+                if (attributes.Length > 0)
+                {
+                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
+                    if (titleAttribute.Title != "")
+                    {
+                        return titleAttribute.Title;
+                    }
+                }
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+            }
+        }
+
+        public static string AssemblyVersion
+        {
+            get
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
+        public static string AssemblyDescription
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+            }
+        }
+
+        public static string AssemblyProduct
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyProductAttribute)attributes[0]).Product;
+            }
+        }
+
+        public static string AssemblyCopyright
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+            }
+        }
+
+        public static string AssemblyCompany
+        {
+            get
+            {
+                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length == 0)
+                {
+                    return "";
+                }
+                return ((AssemblyCompanyAttribute)attributes[0]).Company;
+            }
+        }
+
+        #endregion
+
+        #region//获取所有进程
+
+        public static DataTable GetProcess()
+        {
+            DataTable dtProcessList = new DataTable();
+            dtProcessList.Columns.Add("ICO", typeof(Image));
+            dtProcessList.Columns.Add("PName", typeof(string));
+            dtProcessList.Columns.Add("PID", typeof(int));
+
+            try
+            {
+                Process[] procesArr = Process.GetProcesses();
+                int pCNT = procesArr.Length;
+
+                foreach (Process p in procesArr)
+                {
+                    string sPName = p.ProcessName;
+                    int iPID = p.Id;
+                    Image iICO = IconFromFile(p);
+
+                    DataRow dr = dtProcessList.NewRow();
+                    dr["ICO"] = iICO;
+                    dr["PName"] = sPName;
+                    dr["PID"] = iPID;
+                    dtProcessList.Rows.Add(dr);
+                }
+
+                DataView dv = dtProcessList.DefaultView;
+                dv.Sort = "PName";
+                dtProcessList = dv.ToTable();
+
+                ProcessTable = dv.ToTable();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return dtProcessList;
+        }
+
+        #endregion
+
+        #region//获取进程的图标
+
+        private static Image IconFromFile(Process p)
+        {
+            string filePath = "";
+            Image image = null;
+
+            try
+            {
+                filePath = p.MainModule.FileName.Replace(".ni.dll", ".dll");
+            }
+            catch
+            {
+                filePath = "";
+            }
+
+            try
+            {
+                var extractor = new IconExtractor.IconExtractor(filePath);
+                var icon = extractor.GetIcon(0);
+
+                Icon[] splitIcons = IconExtractor.IconUtil.Split(icon);
+
+                Icon selectedIcon = null;
+
+                foreach (var item in splitIcons)
+                {
+                    if (selectedIcon == null)
+                    {
+                        selectedIcon = item;
+                    }
+                    else
+                    {
+                        if (IconExtractor.IconUtil.GetBitCount(item) > IconExtractor.IconUtil.GetBitCount(selectedIcon))
+                        {
+                            selectedIcon = item;
+                        }
+                        else if (IconExtractor.IconUtil.GetBitCount(item) == IconExtractor.IconUtil.GetBitCount(selectedIcon) && item.Width > selectedIcon.Width)
+                        {
+                            selectedIcon = item;
+                        }
+                    }
+                }
+
+                return selectedIcon.ToBitmap();
+            }
+            catch
+            {
+                //
+            }
+
+            try
+            {
+                image = Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
+            }
+            catch
+            {
+                image = new Icon(SystemIcons.Application, 256, 256).ToBitmap();
+            }
+
+            return image;
+        }
+
+        #endregion
 
         #region//数据格式转换
 
@@ -402,6 +626,29 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//byte[]转Int16大端
+
+        public static ushort ByteArrayToInt16BigEndian(byte[] bytes)
+        {
+            ushort uReturn = 0;
+
+            try
+            {
+                if (bytes != null && bytes.Length == 2)
+                {
+                    uReturn = (ushort)((bytes[0] << 8) | bytes[1]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return uReturn;
+        }
+
+        #endregion
+
         #endregion
 
         #region//统计封包数量
@@ -410,42 +657,45 @@ namespace WPELibrary.Lib
         {
             try
             {
-                Interlocked.Increment(ref Socket_Cache.TotalPackets);
-
-                switch (ptPacketType)
+                if (iPacketLen > 0)
                 {
-                    case Socket_Cache.SocketPacket.PacketType.Send:
-                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
-                        break;
+                    Interlocked.Increment(ref Socket_Cache.TotalPackets);
 
-                    case Socket_Cache.SocketPacket.PacketType.SendTo:
-                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
-                        break;
+                    switch (ptPacketType)
+                    {
+                        case Socket_Cache.SocketPacket.PacketType.Send:
+                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.Recv:
-                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
-                        break;
+                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
-                        break;
+                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
-                        break;
+                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                        Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
-                        break;
+                        case Socket_Cache.SocketPacket.PacketType.WSASend:
+                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
-                        break;
+                        case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            break;
 
-                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                        Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
-                        break;
-                }
+                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            break;
+                    }
+                }                
             }
             catch (Exception ex)
             {
@@ -613,27 +863,7 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion
-
-        #region//从内存复制指定长度的字节数组
-
-        public static byte[] GetBytes_FromIntPtr(IntPtr ipBuff, int iLen)
-        {
-            byte[] bBuffer = new byte[iLen];
-
-            try
-            {
-                Marshal.Copy(ipBuff, bBuffer, 0, iLen);
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bBuffer;
-        }
-
-        #endregion
+        #endregion        
 
         #region//设置指针地址位置的字节数据
 
@@ -652,6 +882,57 @@ namespace WPELibrary.Lib
             }
 
             return bResult;
+        }
+
+        #endregion
+
+        #region//处理 Hook 结果（异步）
+
+        public static void ProcessingHookResult(
+            Int32 socket,
+            byte[] bRawBuffer,
+            byte[] bBuffer, 
+            Int32 res, 
+            Socket_Cache.SocketPacket.PacketType ptType, 
+            Socket_Cache.Filter.FilterAction FilterAction, 
+            Socket_Cache.SocketPacket.sockaddr sockaddr)
+        {
+            try
+            {
+                Task.Run(() =>
+                {
+                    Socket_Operation.CountSocketInfo(ptType, res);
+
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    {
+                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                        {
+                            Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
+                        }
+                        else
+                        {
+                            if (res > 0)
+                            {
+                                if (res != bBuffer.Length)
+                                {
+                                    byte[] bRes = new byte[res];
+                                    Buffer.BlockCopy(bBuffer, 0, bRes, 0, res);
+
+                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bRes, ptType, sockaddr, FilterAction);
+                                }
+                                else
+                                {
+                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -1003,6 +1284,193 @@ namespace WPELibrary.Lib
         }
 
         #endregion        
+
+        #region//获取对应名称的树节点索引值
+
+        public static int GetRootNodeIndexByName(TreeNodeCollection nodes, string nodeName)
+        {
+            int iReturn = -1;
+
+            try
+            {
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    if (nodes[i].Text == nodeName)
+                    {
+                        return i;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//数据对比
+
+        public static void CompareData(RichTextBox rtbCompare, string sText_A, string sText_B)
+        {
+            try
+            {
+                rtbCompare.Clear();
+
+                if (sText_A == sText_B)
+                {
+                    Socket_Operation.AppendColoredText(rtbCompare, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
+                    return;
+                }
+
+                string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
+
+                int la = 0;
+                int lb = 0;
+
+                while (la < linesA.Length)
+                {
+                    if (lb >= linesB.Length)
+                    {
+                        Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
+                    }
+                    else if (linesA[la] == linesB[lb])
+                    {
+                        Socket_Operation.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
+                    }
+                    else
+                    {
+                        if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
+                        {
+                            Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                            Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+
+                            lb++;
+                        }
+                        else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                        {
+                            Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
+                            Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
+
+                            la++;
+                        }
+                        else
+                        {
+                            string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                            string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
+
+                            int wa = 0;
+                            int wb = 0;
+                            while (wa < wordsA.Length)
+                            {
+                                if (wb >= wordsB.Length)
+                                {
+                                    Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                }
+                                else if (wordsA[wa] == wordsB[wb])
+                                {
+                                    Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
+                                }
+                                else
+                                {
+                                    if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                    {
+                                        Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                        Socket_Operation.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
+
+                                        wb++;
+                                    }
+                                    else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                    {
+                                        Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                        Socket_Operation.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
+
+                                        wa++;
+                                    }
+                                    else
+                                    {
+                                        Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                        Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                    }
+                                }
+                                if (wa + 1 < wordsA.Length) Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+
+                                if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
+                                {
+                                    while (wb + 1 < wordsB.Length)
+                                    {
+                                        wb++;
+
+                                        Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                        Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                    }
+                                }
+
+                                wa++;
+                                wb++;
+                            }
+                        }
+                    }
+
+                    if (la + 1 < linesA.Length)
+                    {
+                        Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                    }
+
+                    if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                    {
+                        while (lb + 1 < linesB.Length)
+                        {
+                            lb++;
+
+                            Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                            Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                        }
+                    }
+
+                    la++;
+                    lb++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private static void AppendColoredText(RichTextBox box, string text, Color color)
+        {
+            try
+            {
+                box.SelectionStart = box.TextLength;
+                box.SelectionLength = text.Length;
+
+                if (color == col_Add)
+                {
+                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Underline);
+                }
+
+                if (color == col_Del)
+                {
+                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Strikeout);
+                }
+
+                box.SelectionColor = color;
+                box.AppendText(text);
+
+                box.SelectionFont = box.Font;
+                box.SelectionColor = box.ForeColor;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//是否显示封包（过滤条件）        
 
@@ -1383,6 +1851,26 @@ namespace WPELibrary.Lib
                 {
                     Socket_SendForm ssForm = new Socket_SendForm(iSLIndex);
                     ssForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示数据对比窗体
+
+        public static void ShowSocketCompareForm(int SelectIndex)
+        {
+            try
+            {
+                if (SelectIndex > -1)
+                {
+                    Socket_CompareForm compareForm = new Socket_CompareForm(SelectIndex);
+                    compareForm.ShowDialog();
                 }
             }
             catch (Exception ex)
@@ -1807,9 +2295,20 @@ namespace WPELibrary.Lib
             {
                 Task.Run(() =>
                 {
-                    Socket_Cache.LogQueue.LogToQueue(sFuncName, sLogContent);
+                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.LogType.Socket, sFuncName, sLogContent);
                 });
             }                     
+        }
+
+        public static void DoLog_Proxy(string sFuncName, string sLogContent)
+        {
+            if (bDoLog)
+            {
+                Task.Run(() =>
+                {
+                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.LogType.Proxy, sFuncName, sLogContent);
+                });
+            }
         }
 
         #endregion

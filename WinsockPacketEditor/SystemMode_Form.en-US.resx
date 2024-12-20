@@ -117,215 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpLanguage.CellBorderStyle" type="System.Windows.Forms.TableLayoutPanelCellBorderStyle, System.Windows.Forms">
-    <value>Single</value>
+  <data name="bProcess_Start.Text" xml:space="preserve">
+    <value>Injection Mode</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpLanguage.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="rb_enUS.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rb_enUS.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="bProxy_Start.Text" xml:space="preserve">
+    <value>Proxy Mode</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="rb_enUS.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 10.5pt</value>
+  <data name="tsmiLanguage.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 21</value>
   </data>
-  <data name="rb_enUS.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="tsmiLanguage.Text" xml:space="preserve">
+    <value>Language</value>
   </data>
-  <data name="rb_enUS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>48, 38</value>
+  <data name="tsmiChinese.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wAAADsABataJCQAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
+        8SeIqzQ3af0IQi2CRTo5qOjrOZcUG0kbEzo8kN40z33PudwjPvt9BAdNyIoO37QieFXCiK5Ngh3sYqfg
+        h1Yur14oUT38U81CZ6sGSWujHyfBLnYKqVXUgtRsdBpVSNOAV7Hh2wY+rmYpsQm3QL/TJCen4FI9y4Dv
+        GHg9X0TvJIf2Zh1St+CWbQT7ZXSP83Bp4zhJHBxGcOnemoHBxQIwEPjuCTyfrtCuJKbkwV4o5ipSpBa+
+        SaUWHWqDjq+nGbxfz+FmeR0+9Zh77jsm7rY1quD/iRkl5p4+HhbooEw87JZx26gpqVu00T1axcvZElql
+        1GJ+oNTUQ49S8iGqpNT3t8t5tDeo3yXuW/TDJELxH/hAaZP7HQ1uyqRD4sUMySW1yKNqYt8nMF6syCZl
+        EsTZoQuSPdU41AUZXulpoq706BCaBmoINWkITRqbafkdm338AN2/DECo5xoaAAAAAElFTkSuQmCC
+</value>
   </data>
-  <data name="rb_enUS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="tsmiEnglish.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wQAADsEBuJFr7QAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
+        m4KCdtGsUYOZRZZp81/+qexsK8nLCjOSoO3MbErOpltXIe7i6X2+6VhpkNHFs/Od932eH+fsfO+nEB9H
+        97P3yLEHoEpboLZ3QFV2prWtHTn7+xH3XIdVlKfFNWvsZXzMSJYMsshUUTOAlFGFkc5ulF54B7WlDapi
+        LvQ3YHolwywZZJGpcu1+tPd9AM4exuyVM7jV9xmqvFfMjyTU9mewBopHvB7JpCRLBllkKlUuT7ipFTvq
+        Qog13QOO7sao6cfm82/l9XxYZn+5AMwae/TQy8yEZMkgSzP1T5ncrG9C/rFX6Ol+DdQewJTzEpyPLfn/
+        Api46cqAuWaNPXroZYZZMlSZ8Mhc7hjAvHKr5RV39eP48x9I+Boxc8qBj/FZjN/2ImxbocU1azO1Du2h
+        lxlms1nqu9eNjOrdSHpv4EudC7G79fjqdiHR4EHUOARrnU2La9bYo4deZpjNZilLnuIXFaav4QJRYR5C
+        crXW2hDZWKLFNWvs0ZOdyZayivOxmEJFKxEqXqWv4ZLCDJjr7N5iWUolHtxBtqbvN2DU68VkazNiDV4k
+        WxoxdsLQT2qtKcDYSUPX2KOHXmZ+5yhVJZtZKwi104TaaqLal8S3Zvl4hh3Do4kFH4+1GWMf4uKhlxmd
+        JWOepyeI2tCM1TUDeNLzBjh9ENNXL8LZFZGtFdRbLCJbjUpvt6Du0UNvr2SYJSPDmx+QymufMPlQBsTY
+        I5veXMKAmDrDLBmZAUmP9DBw7ghSl2Wkn8pIVyxhpMXrkQyzZJClRzrqf4FUzV6MdHTJQTKoD5R/O4QG
+        NYMsMueOzaH/eGwOAVPj+AlyomoNOtmMtQAAAABJRU5ErkJggg==
+</value>
   </data>
-  <data name="rb_enUS.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="tsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 21</value>
   </data>
-  <data name="rb_enUS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 31</value>
-  </data>
-  <data name="rb_enUS.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="rb_enUS.Text" xml:space="preserve">
-    <value>English</value>
-  </data>
-  <data name="&gt;&gt;rb_enUS.Name" xml:space="preserve">
-    <value>rb_enUS</value>
-  </data>
-  <data name="&gt;&gt;rb_enUS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rb_enUS.Parent" xml:space="preserve">
-    <value>tlpLanguage</value>
-  </data>
-  <data name="&gt;&gt;rb_enUS.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="rb_zhCN.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="rb_zhCN.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rb_zhCN.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 10.5pt</value>
-  </data>
-  <data name="rb_zhCN.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="rb_zhCN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>48, 3</value>
-  </data>
-  <data name="rb_zhCN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="rb_zhCN.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="rb_zhCN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 30</value>
-  </data>
-  <data name="rb_zhCN.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="rb_zhCN.Text" xml:space="preserve">
-    <value>简体中文</value>
-  </data>
-  <data name="&gt;&gt;rb_zhCN.Name" xml:space="preserve">
-    <value>rb_zhCN</value>
-  </data>
-  <data name="&gt;&gt;rb_zhCN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;rb_zhCN.Parent" xml:space="preserve">
-    <value>tlpLanguage</value>
-  </data>
-  <data name="&gt;&gt;rb_zhCN.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="pb_zhCN.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pb_zhCN.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="pb_zhCN.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="pb_zhCN.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pb_zhCN.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pb_zhCN.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 30</value>
-  </data>
-  <data name="pb_zhCN.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>CenterImage</value>
-  </data>
-  <data name="pb_zhCN.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;pb_zhCN.Name" xml:space="preserve">
-    <value>pb_zhCN</value>
-  </data>
-  <data name="&gt;&gt;pb_zhCN.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pb_zhCN.Parent" xml:space="preserve">
-    <value>tlpLanguage</value>
-  </data>
-  <data name="&gt;&gt;pb_zhCN.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="pb_enUS.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pb_enUS.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="pb_enUS.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 38</value>
-  </data>
-  <data name="pb_enUS.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pb_enUS.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="pb_enUS.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 31</value>
-  </data>
-  <data name="pb_enUS.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
-    <value>CenterImage</value>
-  </data>
-  <data name="pb_enUS.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;pb_enUS.Name" xml:space="preserve">
-    <value>pb_enUS</value>
-  </data>
-  <data name="&gt;&gt;pb_enUS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pb_enUS.Parent" xml:space="preserve">
-    <value>tlpLanguage</value>
-  </data>
-  <data name="&gt;&gt;pb_enUS.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpLanguage.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpLanguage.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 12pt</value>
-  </data>
-  <data name="tlpLanguage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpLanguage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpLanguage.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpLanguage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 72</value>
-  </data>
-  <data name="tlpLanguage.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tlpLanguage.Name" xml:space="preserve">
-    <value>tlpLanguage</value>
-  </data>
-  <data name="&gt;&gt;tlpLanguage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpLanguage.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpLanguage.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpLanguage.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rb_enUS" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rb_zhCN" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pb_zhCN" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pb_enUS" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>220, 72</value>
+  <data name="tsmiAbout.Text" xml:space="preserve">
+    <value>About</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6498,20 +6336,5 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>选择语言</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>LanguageList_Form</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

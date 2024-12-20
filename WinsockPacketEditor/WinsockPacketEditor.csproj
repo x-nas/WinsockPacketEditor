@@ -85,6 +85,9 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
+    </Reference>
     <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
     </Reference>
@@ -102,22 +105,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IconExtractor\IconExtractor.cs" />
-    <Compile Include="IconExtractor\IconUtil.cs" />
-    <Compile Include="IconExtractor\NativeMethods.cs" />
     <Compile Include="Injector_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Injector_Form.Designer.cs">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="LanguageList_Form.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LanguageList_Form.Designer.cs">
-      <DependentUpon>LanguageList_Form.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Lib\Process_Injector.cs" />
     <Compile Include="ProcessList_Form.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -126,22 +119,33 @@
     </Compile>
     <Compile Include="Lib\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="SocketProxy_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SocketProxy_Form.Designer.cs">
+      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SystemMode_Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemMode_Form.Designer.cs">
+      <DependentUpon>SystemMode_Form.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Injector_Form.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LanguageList_Form.en-US.resx">
-      <DependentUpon>LanguageList_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LanguageList_Form.resx">
-      <DependentUpon>LanguageList_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessList_Form.en-US.resx">
       <DependentUpon>ProcessList_Form.cs</DependentUpon>
@@ -154,14 +158,18 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="SocketProxy_Form.resx">
+      <DependentUpon>SocketProxy_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemMode_Form.en-US.resx">
+      <DependentUpon>SystemMode_Form.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemMode_Form.resx">
+      <DependentUpon>SystemMode_Form.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -187,14 +195,21 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icon\enUS.png" />
-    <Content Include="Icon\loading.gif" />
     <Content Include="Icon\WPE64.ico" />
-    <None Include="Icon\Search.png" />
-    <None Include="Icon\searchbox_button.png" />
-    <Content Include="Icon\zhCN.png" />
-    <Content Include="Icon\help.png" />
-    <Content Include="Icon\Language.png" />
+    <Content Include="Resources\enUS.png" />
+    <Content Include="Resources\help.png" />
+    <Content Include="Resources\Language.png" />
+    <Content Include="Resources\loading.gif" />
+    <Content Include="Resources\Request.png" />
+    <Content Include="Resources\Response.png" />
+    <Content Include="Resources\Search.png" />
+    <Content Include="Resources\searchbox_button.png" />
+    <Content Include="Resources\Socket.png" />
+    <Content Include="Resources\unknown.png" />
+    <Content Include="Resources\zhCN.png" />
+    <None Include="Resources\Trash-can16.png" />
+    <None Include="Resources\Stop16.png" />
+    <None Include="Resources\Play16.png" />
     <Content Include="Icon\wpe.ico" />
   </ItemGroup>
   <ItemGroup>

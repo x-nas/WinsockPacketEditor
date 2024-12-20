@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using WPELibrary;
+using WPELibrary.Lib;
+using WPELibrary.Lib.NativeMethods;
 
 namespace WinsockPacketEditor
 {
@@ -8,10 +11,9 @@ namespace WinsockPacketEditor
         public static int PID = -1;
         public static string PNAME = string.Empty;
         public static string PATH = string.Empty;
+        public static string Mode = string.Empty;
 
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-
-        private static extern bool SetProcessDPIAware();
+        #region//主函数
 
         [STAThread]
 
@@ -21,7 +23,7 @@ namespace WinsockPacketEditor
             {
                 if (Environment.OSVersion.Version.Major >= 6)
                 {
-                    SetProcessDPIAware();
+                    User32.SetProcessDPIAware();
                 }
 
                 Application.EnableVisualStyles();
@@ -32,7 +34,22 @@ namespace WinsockPacketEditor
                 
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
-                    Application.Run(new Injector_Form());
+                    SystemMode_Form systemMode_Form = new SystemMode_Form();
+
+                    if (systemMode_Form.ShowDialog() == DialogResult.OK)
+                    {
+                        if (Mode.Equals("Proxy"))
+                        {
+                            Socket_Form socket_Form = new Socket_Form(Properties.Settings.Default.DefaultLanguage);
+                            socket_Form.Show();
+
+                            Application.Run(new SocketProxy_Form());
+                        }
+                        else
+                        {
+                            Application.Run(new Injector_Form());
+                        }
+                    }
                 }
                 else
                 {                    
@@ -60,5 +77,26 @@ namespace WinsockPacketEditor
                 string sError = ex.Message;
             }            
         }
+
+        #endregion
+
+        #region//保存默认语言
+
+        public static void SaveDefaultLanguage(string lang)
+        {
+            try
+            {
+                MultiLanguage.SetDefaultLanguage(lang);
+
+                Properties.Settings.Default.DefaultLanguage = lang;
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                string sError = ex.Message;
+            }
+        }
+
+        #endregion
     }
 }
