@@ -102,7 +102,7 @@ namespace WPELibrary.Lib
                 if (res > 0)
                 {
                     byte[] bRawBuffer = new byte[res];
-                    Marshal.Copy(buffer, bRawBuffer, 0, res);
+                    Marshal.Copy(ipBuffer, bRawBuffer, 0, res);
                     byte[] bBuffer = new byte[res];
                     Buffer.BlockCopy(bRawBuffer, 0, bBuffer, 0, res);
                     
@@ -187,7 +187,7 @@ namespace WPELibrary.Lib
                 if (res > 0)
                 {
                     byte[] bRawBuffer = new byte[res];
-                    Marshal.Copy(buffer, bRawBuffer, 0, res);
+                    Marshal.Copy(ipBuffer, bRawBuffer, 0, res);
                     byte[] bBuffer = new byte[res];
                     Buffer.BlockCopy(bRawBuffer, 0, bBuffer, 0, res);
              
