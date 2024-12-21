@@ -38,7 +38,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_26 = { "查找", "Search" };
         public static string[] MutiLan_27 = { "机器人 {0}", "Robot {0}" };
         public static string[] MutiLan_28 = { "数据加载出错!", "Data loading error!" };
-        public static string[] MutiLan_29 = { "两个文本相同", "The two texts are the same" };
+        public static string[] MutiLan_29 = { "两个数据相同!", "The two data are the same!" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "已发送: {0}  已接收: {1}", "Sent: {0} Bytes  Received: {1} Bytes" };
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
@@ -145,7 +145,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_133 = { "快捷键: Ctrl + Alt + {0} 注册失败!", "HotKey: Ctrl + Alt + {0} registration failed!" };
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
-        public static string[] MutiLan_136 = { "数据修改 - [{0}]", "Data Modify - [{0}]" };
+        public static string[] MutiLan_136 = { "查看数据修改 - 序号 [{0}]", "Show Data Modify - ID [{0}]" };
         public static string[] MutiLan_137 = { "代理服务器IP地址: [ {0} ]", "Proxy server IP address: [ {0} ]" };
         public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
         public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };
@@ -164,6 +164,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_152 = { "不支持的命令!", "Unsupported command!" };
         public static string[] MutiLan_153 = { "{0} 请求数据: {1} 字节", "{0} Request: {1} bytes" };
         public static string[] MutiLan_154 = { "{0} 响应数据: {1} 字节", "{0} Response: {1} bytes" };
+        public static string[] MutiLan_155 = { "正在进行数据比对，请稍候 . . .", "Data comparison is in progress, please wait . . ." };
 
         #endregion
 

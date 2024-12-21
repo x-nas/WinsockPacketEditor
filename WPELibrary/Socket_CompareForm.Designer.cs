@@ -30,28 +30,25 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_CompareForm));
             this.tlpSocketCompare = new System.Windows.Forms.TableLayoutPanel();
-            this.rtbCompare = new System.Windows.Forms.RichTextBox();
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.hbModifiedData = new Be.Windows.Forms.HexBox();
             this.lModifiedData = new System.Windows.Forms.Label();
             this.lRawData = new System.Windows.Forms.Label();
             this.hbRawData = new Be.Windows.Forms.HexBox();
+            this.bgwCompare = new System.ComponentModel.BackgroundWorker();
+            this.pCompare = new System.Windows.Forms.Panel();
+            this.rtbCompare = new System.Windows.Forms.RichTextBox();
             this.tlpSocketCompare.SuspendLayout();
             this.tlpPacketData.SuspendLayout();
+            this.pCompare.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSocketCompare
             // 
             resources.ApplyResources(this.tlpSocketCompare, "tlpSocketCompare");
-            this.tlpSocketCompare.Controls.Add(this.rtbCompare, 0, 1);
             this.tlpSocketCompare.Controls.Add(this.tlpPacketData, 0, 0);
+            this.tlpSocketCompare.Controls.Add(this.pCompare, 0, 1);
             this.tlpSocketCompare.Name = "tlpSocketCompare";
-            // 
-            // rtbCompare
-            // 
-            resources.ApplyResources(this.rtbCompare, "rtbCompare");
-            this.rtbCompare.Name = "rtbCompare";
-            this.rtbCompare.ReadOnly = true;
             // 
             // tlpPacketData
             // 
@@ -116,6 +113,26 @@
             this.hbRawData.StringViewVisible = true;
             this.hbRawData.VScrollBarVisible = true;
             // 
+            // bgwCompare
+            // 
+            this.bgwCompare.WorkerSupportsCancellation = true;
+            this.bgwCompare.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCompare_DoWork);
+            this.bgwCompare.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCompare_RunWorkerCompleted);
+            // 
+            // pCompare
+            // 
+            this.pCompare.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pCompare.Controls.Add(this.rtbCompare);
+            resources.ApplyResources(this.pCompare, "pCompare");
+            this.pCompare.Name = "pCompare";
+            // 
+            // rtbCompare
+            // 
+            this.rtbCompare.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            resources.ApplyResources(this.rtbCompare, "rtbCompare");
+            this.rtbCompare.Name = "rtbCompare";
+            this.rtbCompare.ReadOnly = true;
+            // 
             // Socket_CompareForm
             // 
             resources.ApplyResources(this, "$this");
@@ -123,9 +140,11 @@
             this.Controls.Add(this.tlpSocketCompare);
             this.DoubleBuffered = true;
             this.Name = "Socket_CompareForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Socket_CompareForm_FormClosing);
             this.tlpSocketCompare.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();
+            this.pCompare.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -136,8 +155,10 @@
         private System.Windows.Forms.TableLayoutPanel tlpPacketData;
         private System.Windows.Forms.Label lModifiedData;
         private System.Windows.Forms.Label lRawData;
-        private System.Windows.Forms.RichTextBox rtbCompare;
         private Be.Windows.Forms.HexBox hbRawData;
         private Be.Windows.Forms.HexBox hbModifiedData;
+        private System.ComponentModel.BackgroundWorker bgwCompare;
+        private System.Windows.Forms.Panel pCompare;
+        private System.Windows.Forms.RichTextBox rtbCompare;
     }
 }

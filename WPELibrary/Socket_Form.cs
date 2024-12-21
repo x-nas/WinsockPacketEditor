@@ -1728,11 +1728,35 @@ namespace WPELibrary
             {
                 Socket_Cache.RobotList.CleanUpRobotList_Dialog();
             }
-        }        
+        }
 
         #endregion
 
-        #region//文本对比
+        #region//文本对比（异步）
+
+        private void bgwCompare_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                e.Result = Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwCompare_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.rtbComparison_Result.Rtf = (string)e.Result;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void rtbComparison_A_TextChanged(object sender, EventArgs e)
         {
@@ -1762,7 +1786,19 @@ namespace WPELibrary
 
         private void bComparison_Click(object sender, EventArgs e)
         {
-            Socket_Operation.CompareData(this.rtbComparison_Result, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
+            try
+            {
+                this.rtbComparison_Result.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
+
+                if (!bgwCompare.IsBusy)
+                {
+                    bgwCompare.RunWorkerAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }        
 
         private void bComparison_Exchange_Click(object sender, EventArgs e)
@@ -2271,6 +2307,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
     }
 }
