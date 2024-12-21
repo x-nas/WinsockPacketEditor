@@ -1,9 +1,14 @@
-WinSock Packet Editor (WPE x64)
+欢迎来到 Winsock Packet Editor（WPE x64）
 
-WPE x64 是一款可以拦截并修改WinSock封包的windows软件，自适应支持32位及64位的目标程序，软件具有批量发送和高级滤镜等功能，开发中使用了C#的多线程和消息队列技术，测试拦截了1万+的封包不会卡死或退出，软件不定期会修复bug和更新功能，每次启动的时候支持在线自动更新，欢迎大家提出宝贵意见一起完善和改进，谢谢！
+WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出，软件不定期会修复 Bug 和更新功能，每次启动的时候支持在线自动更新.
 
-WPE x64 is a Windows software that can intercept and modify WinSock packets. It adaptively supports 32-bit and 64 bit target programs, and has functions such as batch sending and advanced filters. C #'s multithreading and message queue technology were used in development, and more than 10000 packets were intercepted without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it is launched. We welcome valuable feedback to improve and enhance together. 
-Thank you!
+WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
+
+Welcome to Winsock Packet Editor（WPE x64）
+
+WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it starts.
+
+WPE x64 supports direct injection into Windows processes to intercept Winsock packets, and can also intercept Winsock packets through SOCKS proxy mode.
 
 下载和安装
 
@@ -18,7 +23,4 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 https://www.wpe64.com
 
 
-![111](https://github.com/user-attachments/assets/e5a2edf3-dd5a-4abf-9676-6aa11f42ffbb)
-
-
-![222](https://github.com/user-attachments/assets/2125ca01-02d4-405e-9690-533c4e3871b2)
+![WPE64](https://github.com/user-attachments/assets/a43d5593-3b25-4c91-8a9b-c7d592912454)
