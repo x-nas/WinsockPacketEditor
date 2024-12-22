@@ -1325,9 +1325,12 @@ namespace WPELibrary
 
                     case "cmsSocketList_SendList":
 
-                        foreach (DataGridViewRow row in dgvSocketList.SelectedRows)
-                        {  
-                            Socket_Cache.SendList.AddToSendList_BytIndex(row.Index);
+                        for (int i = 0; i < dgvSocketList.Rows.Count; i++)
+                        {
+                            if (dgvSocketList.Rows[i].Selected)
+                            {
+                                Socket_Cache.SendList.AddToSendList_BytIndex(i);
+                            }
                         }
 
                         Socket_Operation.ShowSendListForm();
