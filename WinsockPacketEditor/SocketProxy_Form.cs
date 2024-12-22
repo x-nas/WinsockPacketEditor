@@ -779,6 +779,10 @@ namespace WinsockPacketEditor
 
         private void Command(Socket_ProxyInfo spi)
         {
+            string sDomain = string.Empty;
+            IPAddress ip = IPAddress.Any;
+            ushort port = 0;
+
             try
             {
                 Socket_Cache.SocketProxy.ProxyType ProxyType = (Socket_Cache.SocketProxy.ProxyType)spi.ClientData[0];
@@ -787,10 +791,6 @@ namespace WinsockPacketEditor
 
                 byte[] bADDRESS = new byte[spi.ClientData.Length - 4];
                 Buffer.BlockCopy(spi.ClientData, 4, bADDRESS, 0, bADDRESS.Length);
-
-                string sDomain = string.Empty;
-                IPAddress ip = IPAddress.Any;
-                ushort port = 0;
 
                 switch (AddressType)
                 {
@@ -802,7 +802,7 @@ namespace WinsockPacketEditor
 
                         byte[] bIPV4_Port = new byte[2];
                         Buffer.BlockCopy(bADDRESS, 4, bIPV4_Port, 0, bIPV4_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV4_Port);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV4_Port);                        
 
                         sDomain = ip.ToString();
 
@@ -814,11 +814,27 @@ namespace WinsockPacketEditor
                         byte[] bDomain = new byte[Length];
                         Buffer.BlockCopy(bADDRESS, 1, bDomain, 0, bDomain.Length);
                         sDomain = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bDomain);
-                        ip = Dns.GetHostEntry(sDomain).AddressList[0];
+
+                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sDomain);
+
+                        switch (atType)
+                        {
+                            case Socket_Cache.SocketProxy.AddressType.IPV4:
+                                ip = IPAddress.Parse(sDomain);
+                                break;
+
+                            case Socket_Cache.SocketProxy.AddressType.IPV6:
+                                ip = IPAddress.Parse(sDomain);
+                                break;
+
+                            case Socket_Cache.SocketProxy.AddressType.Domain:
+                                ip = Dns.GetHostEntry(sDomain).AddressList[0];
+                                break;
+                        }
 
                         byte[] bDomain_Port = new byte[2];
                         Buffer.BlockCopy(bADDRESS, 1 + Length, bDomain_Port, 0, bDomain_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bDomain_Port);                       
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bDomain_Port);                      
 
                         break;
 
@@ -875,8 +891,8 @@ namespace WinsockPacketEditor
                 spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
             }
             catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            {                
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name,  sDomain + ": " + port +" - " + ex.Message);
             }
         }
 

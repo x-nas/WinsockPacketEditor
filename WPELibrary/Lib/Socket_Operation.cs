@@ -651,6 +651,60 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//判断地址的类型
+
+        private static bool IsIPv4(string IPString)
+        {
+            return IPAddress.TryParse(IPString, out IPAddress ip);
+        }
+
+        private static bool IsIPv6(string IPString)
+        {
+            return IPAddress.TryParse(IPString, out IPAddress ip) && ip.AddressFamily == AddressFamily.InterNetworkV6;
+        }
+
+        private static bool IsDomain(string IPString)
+        {
+            try
+            {
+                IPHostEntry hostEntry = Dns.GetHostEntry(IPString);
+                return hostEntry.HostName == IPString;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static Socket_Cache.SocketProxy.AddressType GetAddressType_ByString(string IPString)
+        {
+            Socket_Cache.SocketProxy.AddressType atType = new Socket_Cache.SocketProxy.AddressType();
+
+            try
+            {
+                if (IsIPv4(IPString))
+                {
+                    atType = Socket_Cache.SocketProxy.AddressType.IPV4;
+                }
+                else if (IsIPv6(IPString))
+                {
+                    atType = Socket_Cache.SocketProxy.AddressType.IPV6;
+                }
+                else if (IsDomain(IPString))
+                {
+                    atType = Socket_Cache.SocketProxy.AddressType.Domain;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return atType;
+        }
+
+        #endregion
+
         #region//统计封包数量
 
         public static void CountSocketInfo(Socket_Cache.SocketPacket.PacketType ptPacketType, int iPacketLen)

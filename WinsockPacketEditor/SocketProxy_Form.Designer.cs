@@ -203,7 +203,7 @@
             0});
             this.nudProxySet_Port.Name = "nudProxySet_Port";
             this.nudProxySet_Port.Value = new decimal(new int[] {
-            8889,
+            8899,
             0,
             0,
             0});
