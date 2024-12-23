@@ -93,6 +93,13 @@ namespace WPELibrary.Lib
                 IPV6 = 4,
             }
 
+            public enum DomainType : byte
+            {
+                Socket = 0,
+                Http = 1,
+                Https = 2,
+            }
+
             public enum CommandType : byte
             {
                 Connect = 1,
@@ -126,18 +133,20 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.TargetAddress, spi.Port, DataType);
+                    byte[] Buffer = null;
 
                     switch (DataType)
                     { 
                         case SocketProxy.DataType.Request:
-                            spd.Buffer = spi.ClientData;
+                            Buffer = spi.ClientData;
                             break;
 
                         case SocketProxy.DataType.Response:
-                            spd.Buffer = spi.TargetData;
+                            Buffer = spi.TargetData;
                             break;
                     }
+
+                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.Port, spi.TargetAddress, spi.DomainType, Buffer, DataType);
 
                     qSocket_ProxyData.Enqueue(spd);
                 }

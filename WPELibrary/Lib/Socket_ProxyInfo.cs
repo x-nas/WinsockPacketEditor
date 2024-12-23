@@ -11,7 +11,9 @@ namespace WPELibrary.Lib
         
         public IPAddress IPAddress { get; set; }
 
-        public ushort Port { get; set; }        
+        public ushort Port { get; set; } 
+        
+        public Socket_Cache.SocketProxy.DomainType DomainType { get; set; }
 
         public Socket ClientSocket { get; set; }
 

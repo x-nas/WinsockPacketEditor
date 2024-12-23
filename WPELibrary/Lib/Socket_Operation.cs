@@ -1339,9 +1339,40 @@ namespace WPELibrary.Lib
 
         #endregion        
 
+        #region//获取域名类型
+
+        public static Socket_Cache.SocketProxy.DomainType GetDomainType_ByPort(ushort Port)
+        {
+            Socket_Cache.SocketProxy.DomainType dtReturn = new Socket_Cache.SocketProxy.DomainType();
+
+            try
+            {
+                if (Port == 80)
+                {
+                    dtReturn = Socket_Cache.SocketProxy.DomainType.Http;
+                }
+                else if (Port == 443)
+                {
+                    dtReturn = Socket_Cache.SocketProxy.DomainType.Https;
+                }
+                else
+                {
+                    dtReturn = Socket_Cache.SocketProxy.DomainType.Socket;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return dtReturn;
+        }
+
+        #endregion
+
         #region//获取对应名称的树节点
 
-        public static TreeNode FindNodeByName(TreeNodeCollection nodes, string Name)
+        public static TreeNode FindNode_ByName(TreeNodeCollection nodes, string Name)
         {
             try
             {
@@ -1357,7 +1388,7 @@ namespace WPELibrary.Lib
                         return node;
                     }
 
-                    TreeNode foundNode = FindNodeByName(node.Nodes, Name);
+                    TreeNode foundNode = FindNode_ByName(node.Nodes, Name);
                     if (foundNode != null)
                     {
                         return foundNode;
@@ -1370,6 +1401,84 @@ namespace WPELibrary.Lib
             }
 
             return null;
+        }
+
+        #endregion
+
+        #region//获取远端地址
+
+        public static string GetTargetAddress(string IP, ushort Port, Socket_ProxyInfo spi)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                switch (spi.DomainType)
+                {
+                    case Socket_Cache.SocketProxy.DomainType.Socket:
+                        sReturn = "socket://" + IP + ": " + Port;
+                        break;
+
+                    case Socket_Cache.SocketProxy.DomainType.Http:
+                        sReturn = "http://" + IP;
+                        break;
+
+                    case Socket_Cache.SocketProxy.DomainType.Https:
+                        sReturn = "https://" + IP;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//获取客户端地址
+
+        public static string GetClientAddress(string IP, ushort Port, Socket_ProxyInfo spi)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                int ClientPort = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port;
+                sReturn = IP + ": " + Port + " [" + ClientPort + "]";
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//更新树节点的背景颜色
+
+        public static void UpdateNodeColor(TreeNode node)
+        {
+            try
+            {
+                Task.Run(() =>
+                {
+                    if (node.BackColor != Color.LightYellow)
+                    {
+                        node.BackColor = Color.LightYellow;
+                        Thread.Sleep(1000);
+                        node.BackColor = Color.White;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion

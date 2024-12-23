@@ -109,24 +109,21 @@ namespace WPELibrary
             this.nudSendSocket_Socket = new System.Windows.Forms.NumericUpDown();
             this.gbSendType = new System.Windows.Forms.GroupBox();
             this.tlpSendType = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpSendType_Times = new System.Windows.Forms.TableLayoutPanel();
+            this.rbSendType_Times = new System.Windows.Forms.RadioButton();
+            this.rbSendType_Continuously = new System.Windows.Forms.RadioButton();
             this.lSendType_Times = new System.Windows.Forms.Label();
             this.lSendType_Int = new System.Windows.Forms.Label();
             this.nudSendType_Interval = new System.Windows.Forms.NumericUpDown();
             this.nudSendType_Times = new System.Windows.Forms.NumericUpDown();
-            this.pSendType = new System.Windows.Forms.Panel();
-            this.rbSendType_Continuously = new System.Windows.Forms.RadioButton();
-            this.rbSendType_Times = new System.Windows.Forms.RadioButton();
             this.gbSendStep = new System.Windows.Forms.GroupBox();
-            this.tlpSendStep = new System.Windows.Forms.TableLayoutPanel();
             this.tlpSendStepSet = new System.Windows.Forms.TableLayoutPanel();
+            this.cbSendStep = new System.Windows.Forms.CheckBox();
             this.lSendStep_Position = new System.Windows.Forms.Label();
             this.lSendStep_Len_Value = new System.Windows.Forms.Label();
             this.nudSendStep_Len = new System.Windows.Forms.NumericUpDown();
             this.lSendStep_Len = new System.Windows.Forms.Label();
             this.lSendStep_Position_Value = new System.Windows.Forms.Label();
             this.nudSendStep_Position = new System.Windows.Forms.NumericUpDown();
-            this.cbSendStep = new System.Windows.Forms.CheckBox();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new System.Windows.Forms.Button();
             this.bClose = new System.Windows.Forms.Button();
@@ -148,12 +145,9 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Socket)).BeginInit();
             this.gbSendType.SuspendLayout();
             this.tlpSendType.SuspendLayout();
-            this.tlpSendType_Times.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).BeginInit();
-            this.pSendType.SuspendLayout();
             this.gbSendStep.SuspendLayout();
-            this.tlpSendStep.SuspendLayout();
             this.tlpSendStepSet.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Position)).BeginInit();
@@ -241,6 +235,7 @@ namespace WPELibrary
             // tsPacketData
             // 
             this.tsPacketData.BackColor = System.Drawing.SystemColors.Control;
+            this.tsPacketData.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.tsPacketData.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsPacketData_Cut,
             this.toolStripSeparator10,
@@ -549,6 +544,7 @@ namespace WPELibrary
             // 
             // cmsHexBox
             // 
+            this.cmsHexBox.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsHexBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsHexBox_SendList,
             this.cmsHexBox_Split1,
@@ -595,6 +591,7 @@ namespace WPELibrary
             // ssSocketSend
             // 
             resources.ApplyResources(this.ssSocketSend, "ssSocketSend");
+            this.ssSocketSend.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.ssSocketSend.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tlSendTimes,
             this.tlSendTimes_Value,
@@ -630,7 +627,7 @@ namespace WPELibrary
             // tlSend_Success_Value
             // 
             resources.ApplyResources(this.tlSend_Success_Value, "tlSend_Success_Value");
-            this.tlSend_Success_Value.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.tlSend_Success_Value.ForeColor = System.Drawing.Color.Green;
             this.tlSend_Success_Value.Name = "tlSend_Success_Value";
             // 
             // toolStripStatusLabel3
@@ -647,7 +644,7 @@ namespace WPELibrary
             // tlSend_Fail_Value
             // 
             resources.ApplyResources(this.tlSend_Fail_Value, "tlSend_Fail_Value");
-            this.tlSend_Fail_Value.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.tlSend_Fail_Value.ForeColor = System.Drawing.Color.Red;
             this.tlSend_Fail_Value.Name = "tlSend_Fail_Value";
             // 
             // tlpParameter
@@ -729,18 +726,29 @@ namespace WPELibrary
             // tlpSendType
             // 
             resources.ApplyResources(this.tlpSendType, "tlpSendType");
-            this.tlpSendType.Controls.Add(this.tlpSendType_Times, 1, 0);
-            this.tlpSendType.Controls.Add(this.pSendType, 0, 0);
+            this.tlpSendType.Controls.Add(this.rbSendType_Times, 0, 0);
+            this.tlpSendType.Controls.Add(this.rbSendType_Continuously, 0, 1);
+            this.tlpSendType.Controls.Add(this.lSendType_Times, 2, 0);
+            this.tlpSendType.Controls.Add(this.lSendType_Int, 2, 1);
+            this.tlpSendType.Controls.Add(this.nudSendType_Interval, 1, 1);
+            this.tlpSendType.Controls.Add(this.nudSendType_Times, 1, 0);
             this.tlpSendType.Name = "tlpSendType";
             // 
-            // tlpSendType_Times
+            // rbSendType_Times
             // 
-            resources.ApplyResources(this.tlpSendType_Times, "tlpSendType_Times");
-            this.tlpSendType_Times.Controls.Add(this.lSendType_Times, 1, 0);
-            this.tlpSendType_Times.Controls.Add(this.lSendType_Int, 1, 1);
-            this.tlpSendType_Times.Controls.Add(this.nudSendType_Interval, 0, 1);
-            this.tlpSendType_Times.Controls.Add(this.nudSendType_Times, 0, 0);
-            this.tlpSendType_Times.Name = "tlpSendType_Times";
+            resources.ApplyResources(this.rbSendType_Times, "rbSendType_Times");
+            this.rbSendType_Times.Checked = true;
+            this.rbSendType_Times.Name = "rbSendType_Times";
+            this.rbSendType_Times.TabStop = true;
+            this.rbSendType_Times.UseVisualStyleBackColor = true;
+            this.rbSendType_Times.CheckedChanged += new System.EventHandler(this.rbSendType_Times_CheckedChanged);
+            // 
+            // rbSendType_Continuously
+            // 
+            resources.ApplyResources(this.rbSendType_Continuously, "rbSendType_Continuously");
+            this.rbSendType_Continuously.Name = "rbSendType_Continuously";
+            this.rbSendType_Continuously.UseVisualStyleBackColor = true;
+            this.rbSendType_Continuously.CheckedChanged += new System.EventHandler(this.rbSendType_Continuously_CheckedChanged);
             // 
             // lSendType_Times
             // 
@@ -792,53 +800,31 @@ namespace WPELibrary
             0,
             0});
             // 
-            // pSendType
-            // 
-            this.pSendType.Controls.Add(this.rbSendType_Continuously);
-            this.pSendType.Controls.Add(this.rbSendType_Times);
-            resources.ApplyResources(this.pSendType, "pSendType");
-            this.pSendType.Name = "pSendType";
-            // 
-            // rbSendType_Continuously
-            // 
-            resources.ApplyResources(this.rbSendType_Continuously, "rbSendType_Continuously");
-            this.rbSendType_Continuously.Name = "rbSendType_Continuously";
-            this.rbSendType_Continuously.UseVisualStyleBackColor = true;
-            this.rbSendType_Continuously.CheckedChanged += new System.EventHandler(this.rbSendType_Continuously_CheckedChanged);
-            // 
-            // rbSendType_Times
-            // 
-            resources.ApplyResources(this.rbSendType_Times, "rbSendType_Times");
-            this.rbSendType_Times.Checked = true;
-            this.rbSendType_Times.Name = "rbSendType_Times";
-            this.rbSendType_Times.TabStop = true;
-            this.rbSendType_Times.UseVisualStyleBackColor = true;
-            this.rbSendType_Times.CheckedChanged += new System.EventHandler(this.rbSendType_Times_CheckedChanged);
-            // 
             // gbSendStep
             // 
-            this.gbSendStep.Controls.Add(this.tlpSendStep);
+            this.gbSendStep.Controls.Add(this.tlpSendStepSet);
             resources.ApplyResources(this.gbSendStep, "gbSendStep");
             this.gbSendStep.Name = "gbSendStep";
             this.gbSendStep.TabStop = false;
             // 
-            // tlpSendStep
-            // 
-            resources.ApplyResources(this.tlpSendStep, "tlpSendStep");
-            this.tlpSendStep.Controls.Add(this.tlpSendStepSet, 1, 0);
-            this.tlpSendStep.Controls.Add(this.cbSendStep, 0, 0);
-            this.tlpSendStep.Name = "tlpSendStep";
-            // 
             // tlpSendStepSet
             // 
             resources.ApplyResources(this.tlpSendStepSet, "tlpSendStepSet");
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position, 0, 0);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len_Value, 2, 1);
-            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Len, 1, 1);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len, 0, 1);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position_Value, 2, 0);
-            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Position, 1, 0);
+            this.tlpSendStepSet.Controls.Add(this.cbSendStep, 0, 0);
+            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position, 1, 0);
+            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len_Value, 3, 1);
+            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Len, 2, 1);
+            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len, 1, 1);
+            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position_Value, 3, 0);
+            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Position, 2, 0);
             this.tlpSendStepSet.Name = "tlpSendStepSet";
+            // 
+            // cbSendStep
+            // 
+            resources.ApplyResources(this.cbSendStep, "cbSendStep");
+            this.cbSendStep.Name = "cbSendStep";
+            this.cbSendStep.UseVisualStyleBackColor = true;
+            this.cbSendStep.CheckedChanged += new System.EventHandler(this.cbSendStep_CheckedChanged);
             // 
             // lSendStep_Position
             // 
@@ -896,13 +882,6 @@ namespace WPELibrary
             0,
             0});
             this.nudSendStep_Position.ValueChanged += new System.EventHandler(this.nudStepIndex_ValueChanged);
-            // 
-            // cbSendStep
-            // 
-            resources.ApplyResources(this.cbSendStep, "cbSendStep");
-            this.cbSendStep.Name = "cbSendStep";
-            this.cbSendStep.UseVisualStyleBackColor = true;
-            this.cbSendStep.CheckedChanged += new System.EventHandler(this.cbSendStep_CheckedChanged);
             // 
             // tlpButtons
             // 
@@ -978,15 +957,10 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket_Socket)).EndInit();
             this.gbSendType.ResumeLayout(false);
             this.tlpSendType.ResumeLayout(false);
-            this.tlpSendType_Times.ResumeLayout(false);
-            this.tlpSendType_Times.PerformLayout();
+            this.tlpSendType.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Interval)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).EndInit();
-            this.pSendType.ResumeLayout(false);
-            this.pSendType.PerformLayout();
             this.gbSendStep.ResumeLayout(false);
-            this.tlpSendStep.ResumeLayout(false);
-            this.tlpSendStep.PerformLayout();
             this.tlpSendStepSet.ResumeLayout(false);
             this.tlpSendStepSet.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).EndInit();
@@ -1073,24 +1047,6 @@ namespace WPELibrary
         private System.Windows.Forms.Label lIPAddr;
         private System.Windows.Forms.Label lPacketTime;
         private System.Windows.Forms.TextBox txtPacketTime;
-        private System.Windows.Forms.TableLayoutPanel tlpSendStep;
-        private System.Windows.Forms.TableLayoutPanel tlpSendStepSet;
-        private System.Windows.Forms.Label lSendStep_Position;
-        private System.Windows.Forms.Label lSendStep_Len_Value;
-        private System.Windows.Forms.NumericUpDown nudSendStep_Len;
-        private System.Windows.Forms.Label lSendStep_Len;
-        private System.Windows.Forms.Label lSendStep_Position_Value;
-        private System.Windows.Forms.NumericUpDown nudSendStep_Position;
-        private System.Windows.Forms.TableLayoutPanel tlpSendType;
-        private System.Windows.Forms.Panel pSendType;
-        private System.Windows.Forms.RadioButton rbSendType_Times;
-        private System.Windows.Forms.TableLayoutPanel tlpSendType_Times;
-        private System.Windows.Forms.NumericUpDown nudSendType_Interval;
-        private System.Windows.Forms.NumericUpDown nudSendType_Times;
-        private System.Windows.Forms.Label lSendType_Int;
-        private System.Windows.Forms.RadioButton rbSendType_Continuously;
-        private System.Windows.Forms.Label lSendType_Times;
-        private System.Windows.Forms.CheckBox cbSendStep;
         private System.Windows.Forms.PictureBox pbSocketType;
         private System.Windows.Forms.GroupBox gbSendSocket;
         private System.Windows.Forms.TableLayoutPanel tlpSendSocket;
@@ -1100,5 +1056,20 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudSendSocket_Socket;
         private System.Windows.Forms.ToolStripSeparator cmsHexBox_Split2;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
+        private System.Windows.Forms.TableLayoutPanel tlpSendType;
+        private System.Windows.Forms.RadioButton rbSendType_Continuously;
+        private System.Windows.Forms.Label lSendType_Times;
+        private System.Windows.Forms.Label lSendType_Int;
+        private System.Windows.Forms.NumericUpDown nudSendType_Interval;
+        private System.Windows.Forms.NumericUpDown nudSendType_Times;
+        private System.Windows.Forms.TableLayoutPanel tlpSendStepSet;
+        private System.Windows.Forms.CheckBox cbSendStep;
+        private System.Windows.Forms.Label lSendStep_Position;
+        private System.Windows.Forms.Label lSendStep_Len_Value;
+        private System.Windows.Forms.NumericUpDown nudSendStep_Len;
+        private System.Windows.Forms.Label lSendStep_Len;
+        private System.Windows.Forms.Label lSendStep_Position_Value;
+        private System.Windows.Forms.NumericUpDown nudSendStep_Position;
+        private System.Windows.Forms.RadioButton rbSendType_Times;
     }
 }

@@ -208,10 +208,10 @@ namespace WPELibrary
 
                         this.bSendList.Enabled = false;
                         this.bSendListStop.Enabled = true;
-                        this.gbSendListForm1.Enabled = false;
-                        this.gbSendListForm2.Enabled = false;
-                        this.gbSendListForm3.Enabled = false;
-                        this.gbSendListForm4.Enabled = false;
+                        this.gbSelectALl.Enabled = false;
+                        this.gbUseSocket.Enabled = false;
+                        this.gbLoopTimes.Enabled = false;
+                        this.gbLoopInt.Enabled = false;
                     }
                     else
                     {
@@ -344,10 +344,10 @@ namespace WPELibrary
             {
                 this.bSendList.Enabled = true;
                 this.bSendListStop.Enabled = false;
-                this.gbSendListForm1.Enabled = true;
-                this.gbSendListForm2.Enabled = true;
-                this.gbSendListForm3.Enabled = true;
-                this.gbSendListForm4.Enabled = true;
+                this.gbSelectALl.Enabled = true;
+                this.gbUseSocket.Enabled = true;
+                this.gbLoopTimes.Enabled = true;
+                this.gbLoopInt.Enabled = true;
             }
             catch (Exception ex)
             {

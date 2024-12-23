@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Net;
@@ -111,15 +110,31 @@ namespace WinsockPacketEditor
             {
                 if (!IsDisposed)
                 {
-                    tvProxyData.BeginInvoke(new MethodInvoker(delegate
-                    {
-                        TreeNode RootNode = Socket_Operation.FindNodeByName(this.tvProxyData.Nodes, spd.Domain);
-
+                    tvProxyData.Invoke(new MethodInvoker(delegate
+                    {                        
+                        TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvProxyData.Nodes, spd.Domain);
                         if (RootNode == null)
                         {
                             RootNode = this.tvProxyData.Nodes.Add(spd.Domain);
-                            RootNode.ImageIndex = 0;
-                            RootNode.SelectedImageIndex = 0;
+
+                            int RootImgIndex = -1;
+                            switch (spd.DomainType)
+                            {
+                                case Socket_Cache.SocketProxy.DomainType.Socket:
+                                    RootImgIndex = 0;                              
+                                    break;
+
+                                case Socket_Cache.SocketProxy.DomainType.Http:
+                                    RootImgIndex = 7;                                
+                                    break;
+
+                                case Socket_Cache.SocketProxy.DomainType.Https:
+                                    RootImgIndex = 7;                                  
+                                    break;
+                            }
+
+                            RootNode.ImageIndex = RootImgIndex;
+                            RootNode.SelectedImageIndex = RootImgIndex;
 
                             TreeNode RequestNode = RootNode.Nodes.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138));
                             RequestNode.ImageIndex = 2;
@@ -128,9 +143,7 @@ namespace WinsockPacketEditor
                             TreeNode ResponseNode = RootNode.Nodes.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139));
                             ResponseNode.ImageIndex = 3;
                             ResponseNode.SelectedImageIndex = 3;
-                        }
-
-                        RootNode.ForeColor = Color.Black;
+                        }                        
 
                         TreeNode ChildNode = new TreeNode();
                         switch (spd.DataType)
@@ -143,23 +156,31 @@ namespace WinsockPacketEditor
                                 ChildNode = RootNode.Nodes[1];
                                 break;
                         }
-                        string sNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
-                        TreeNode DataNode = ChildNode.Nodes.Add(sNodeName);
-                        DataNode.Tag = spd.Buffer;
-                        DataNode.ImageIndex = 1;
-                        DataNode.SelectedImageIndex = 1;
 
-                        foreach (TreeNode node in this.tvProxyData.Nodes)
+                        Socket_Operation.UpdateNodeColor(RootNode);
+
+                        string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
+                        TreeNode DataNode = ChildNode.Nodes.Add(sDataNodeName);
+                        DataNode.Tag = spd.Buffer;
+
+                        int DataImgIndex = -1;
+                        switch (spd.DomainType)
                         {
-                            if (node == RootNode)
-                            {
-                                node.BackColor = Color.LightYellow;
-                            }
-                            else
-                            {
-                                node.BackColor = Color.White;
-                            }
+                            case Socket_Cache.SocketProxy.DomainType.Socket:                             
+                                DataImgIndex = 1;
+                                break;
+
+                            case Socket_Cache.SocketProxy.DomainType.Http:                             
+                                DataImgIndex = 8;
+                                break;
+
+                            case Socket_Cache.SocketProxy.DomainType.Https:                             
+                                DataImgIndex = 8;
+                                break;
                         }
+
+                        DataNode.ImageIndex = DataImgIndex;
+                        DataNode.SelectedImageIndex = DataImgIndex;                        
                     }));
                 }
             }
@@ -175,39 +196,27 @@ namespace WinsockPacketEditor
             {
                 if (!IsDisposed)
                 {
-                    tvClientList.BeginInvoke(new MethodInvoker(delegate
+                    tvClientList.Invoke(new MethodInvoker(delegate
                     {
                         string sRootName = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
                         string sChildName = spi.ClientAddress;
 
-                        TreeNode RootNode = Socket_Operation.FindNodeByName(this.tvClientList.Nodes, sRootName);                        
-
+                        TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvClientList.Nodes, sRootName);
                         if (RootNode == null)
                         {
                             RootNode = this.tvClientList.Nodes.Add(sRootName);                        
                         }
 
-                        TreeNode ChildNode = Socket_Operation.FindNodeByName(RootNode.Nodes, sChildName);
+                        Socket_Operation.UpdateNodeColor(RootNode);
 
+                        TreeNode ChildNode = Socket_Operation.FindNode_ByName(RootNode.Nodes, sChildName);
                         if (ChildNode == null)
                         {
                             ChildNode = RootNode.Nodes.Add(sChildName);                            
                         }                    
 
                         ChildNode.ImageIndex = 5;
-                        ChildNode.SelectedImageIndex = 5;
-
-                        foreach (TreeNode node in this.tvClientList.Nodes) 
-                        {
-                            if (node == RootNode)
-                            {
-                                node.BackColor = Color.LightYellow;
-                            }
-                            else
-                            {
-                                node.BackColor = Color.White;
-                            }
-                        }
+                        ChildNode.SelectedImageIndex = 5;                        
                     }));
                 }
             }
@@ -779,7 +788,7 @@ namespace WinsockPacketEditor
 
         private void Command(Socket_ProxyInfo spi)
         {
-            string sDomain = string.Empty;
+            string sIPString = string.Empty;
             IPAddress ip = IPAddress.Any;
             ushort port = 0;
 
@@ -792,69 +801,75 @@ namespace WinsockPacketEditor
                 byte[] bADDRESS = new byte[spi.ClientData.Length - 4];
                 Buffer.BlockCopy(spi.ClientData, 4, bADDRESS, 0, bADDRESS.Length);
 
+                byte[] bIP = null;
+                byte[] bPort = null;
+
                 switch (AddressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4:
 
-                        byte[] bIPV4 = new byte[4];
-                        Buffer.BlockCopy(bADDRESS, 0, bIPV4, 0, bIPV4.Length);
-                        ip = new IPAddress(bIPV4);
+                        bIP = new byte[4];
+                        Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
+                        ip = new IPAddress(bIP);
 
-                        byte[] bIPV4_Port = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 4, bIPV4_Port, 0, bIPV4_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV4_Port);                        
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bADDRESS, 4, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
 
-                        sDomain = ip.ToString();
+                        sIPString = ip.ToString();
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
 
                         byte Length = bADDRESS[0];
-                        byte[] bDomain = new byte[Length];
-                        Buffer.BlockCopy(bADDRESS, 1, bDomain, 0, bDomain.Length);
-                        sDomain = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bDomain);
+                        bIP = new byte[Length];
+                        Buffer.BlockCopy(bADDRESS, 1, bIP, 0, bIP.Length);
+                        sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
 
-                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sDomain);
+                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
 
                         switch (atType)
                         {
                             case Socket_Cache.SocketProxy.AddressType.IPV4:
-                                ip = IPAddress.Parse(sDomain);
+                                ip = IPAddress.Parse(sIPString);
                                 break;
 
                             case Socket_Cache.SocketProxy.AddressType.IPV6:
-                                ip = IPAddress.Parse(sDomain);
+                                ip = IPAddress.Parse(sIPString);
                                 break;
 
                             case Socket_Cache.SocketProxy.AddressType.Domain:
-                                ip = Dns.GetHostEntry(sDomain).AddressList[0];
+                                ip = Dns.GetHostEntry(sIPString).AddressList[0];
                                 break;
                         }
 
-                        byte[] bDomain_Port = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 1 + Length, bDomain_Port, 0, bDomain_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bDomain_Port);                      
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bADDRESS, 1 + Length, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
 
-                        byte[] bIPV6 = new byte[16];
-                        Buffer.BlockCopy(bADDRESS, 0, bIPV6, 0, bIPV6.Length);
-                        ip = new IPAddress(bIPV6);
+                        bIP = new byte[16];
+                        Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
+                        ip = new IPAddress(bIP);
 
-                        byte[] bIPV6_Port = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 16, bIPV6_Port, 0, bIPV6_Port.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bIPV6_Port);
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bADDRESS, 16, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
 
-                        sDomain = ip.ToString();
+                        sIPString = ip.ToString();
 
                         break;
                 }
 
                 spi.IPAddress = ip;
-                spi.Port = port;           
+                spi.Port = port;
+                spi.DomainType = Socket_Operation.GetDomainType_ByPort(port);
+                spi.ClientAddress = Socket_Operation.GetClientAddress(sIPString, port, spi);
+                spi.TargetAddress = Socket_Operation.GetTargetAddress(sIPString, port, spi);
 
                 byte[] serverPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.Port);
 
@@ -868,11 +883,7 @@ namespace WinsockPacketEditor
                         spi.TargetSocket.Connect(targetEP);
                         spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
                         spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
-
-                        sDomain = string.Format("{0}: {1}", sDomain, port);
-                        spi.ClientAddress = string.Format("{0} [{1}]", sDomain, ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port.ToString());
-                        spi.TargetAddress = string.Format("socket://{0}", sDomain);
-
+                        
                         Socket_Cache.SocketProxyList.SocketProxyToList(spi);
                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), spi.TargetAddress);
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
@@ -892,7 +903,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {                
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name,  sDomain + ": " + port +" - " + ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -951,8 +962,6 @@ namespace WinsockPacketEditor
                     }
                     else
                     {
-                        this.UpdateTargetSocket_Closed(spi);
-
                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.TargetAddress);
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
@@ -960,7 +969,6 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                this.UpdateTargetSocket_Closed(spi);                
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " " + ex.Message);
             }
         }
@@ -973,7 +981,7 @@ namespace WinsockPacketEditor
         {
             try
             {  
-                TreeNode ClientNode = Socket_Operation.FindNodeByName(this.tvClientList.Nodes, spi.ClientAddress);
+                TreeNode ClientNode = Socket_Operation.FindNode_ByName(this.tvClientList.Nodes, spi.ClientAddress);
 
                 if (ClientNode != null) 
                 {
@@ -993,33 +1001,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
-
-        #region//更新已关闭的远端链接
-
-        public void UpdateTargetSocket_Closed(Socket_ProxyInfo spi)
-        {
-            try
-            {  
-                TreeNode ClientNode = Socket_Operation.FindNodeByName(this.tvProxyData.Nodes, spi.TargetAddress);
-
-                if (ClientNode != null)
-                {
-                    if (!IsDisposed)
-                    {
-                        tvProxyData.BeginInvoke(new MethodInvoker(delegate
-                        {
-                            ClientNode.ForeColor = Color.Maroon;
-                        }));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
+      
     }
 }
