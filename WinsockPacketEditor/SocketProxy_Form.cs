@@ -19,10 +19,17 @@ namespace WinsockPacketEditor
 
         public SocketProxy_Form()
         {
-            InitializeComponent();
+            try
+            {
+                InitializeComponent();
 
-            this.InitForm();
-            this.InitSocketDGV();
+                this.InitForm();
+                this.InitSocketDGV();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion
@@ -62,6 +69,7 @@ namespace WinsockPacketEditor
                 var ipAddresses = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToArray();
 
                 this.Auth_CheckedChanged();
+                this.LogList_AutoClearChange();
 
                 foreach (var address in ipAddresses)
                 {
@@ -96,6 +104,34 @@ namespace WinsockPacketEditor
         }
 
         #endregion                
+
+        #region//列表设置
+
+        private void cbLogList_AutoClear_CheckedChanged(object sender, EventArgs e)
+        {
+            this.LogList_AutoClearChange();
+        }
+
+        private void LogList_AutoClearChange()
+        {
+            try
+            {
+                if (this.cbLogList_AutoClear.Checked)
+                {
+                    this.nudLogList_AutoClearValue.Enabled = true;
+                }
+                else
+                {
+                    this.nudLogList_AutoClearValue.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//显示代理列表（异步）
 
@@ -367,6 +403,8 @@ namespace WinsockPacketEditor
         {
             try
             {
+                Socket_Cache.SocketProxyQueue.ResetProxyDataQueue();
+                Socket_Cache.SocketProxyList.ResetProxyDataList();
                 this.tvProxyData.Nodes.Clear();
             }
             catch (Exception ex)
@@ -457,7 +495,6 @@ namespace WinsockPacketEditor
                 this.bStart.Enabled = false;
                 this.bStop.Enabled = true;
                 this.tpProxySet.Enabled = false;
-
                 Socket_Cache.SocketProxy.Port = ((ushort)this.nudProxySet_Port.Value);
 
                 this.StartListen();
@@ -600,13 +637,13 @@ namespace WinsockPacketEditor
             {
                 Socket_ProxyInfo spi = new Socket_ProxyInfo
                 {
-                    ClientSocket = clientSocket,                    
+                    ClientSocket = clientSocket,
                     ClientBuffer = new byte[clientSocket.ReceiveBufferSize],
                     TargetBuffer = new byte[clientSocket.ReceiveBufferSize],
                     ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Handshake
-                };                
+                };
 
-                spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);                             
+                spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);
             }
             catch (Exception ex)
             {
@@ -630,36 +667,49 @@ namespace WinsockPacketEditor
 
                     if (bytesRead > 0)
                     {
-                        spi.ClientData = new byte[bytesRead];
-                        Buffer.BlockCopy(spi.ClientBuffer, 0, spi.ClientData, 0, bytesRead);
+                        byte[] bRead = new byte[bytesRead];
+                        Buffer.BlockCopy(spi.ClientBuffer, 0, bRead, 0, bytesRead);
 
-                        switch (spi.ProxyStep)
+                        if (spi.ClientData == null)
                         {
-                            case Socket_Cache.SocketProxy.ProxyStep.Handshake:
-                                this.Handshake(spi);
-                                break;
-
-                            case Socket_Cache.SocketProxy.ProxyStep.AuthUserName:
-                                this.AuthUserName(spi);
-                                break;
-
-                            case Socket_Cache.SocketProxy.ProxyStep.Command:
-                                this.Command(spi);
-                                break;
-
-                            case Socket_Cache.SocketProxy.ProxyStep.ForwardData:
-                                this.ForwardData(spi);
-                                break;
+                            spi.ClientData = new byte[0];
                         }
+
+                        spi.ClientData = spi.ClientData.Concat(bRead).ToArray();
+
+                        bool bIsMatch = Socket_Operation.CheckDataIsMatchProxyStep(spi.ClientData, spi.ProxyStep);
+                        if (bIsMatch)
+                        {
+                            switch (spi.ProxyStep)
+                            {
+                                case Socket_Cache.SocketProxy.ProxyStep.Handshake:
+                                    this.Handshake(spi);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.AuthUserName:
+                                    this.AuthUserName(spi);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.Command:
+                                    this.Command(spi);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.ForwardData:
+                                    this.ForwardData(spi);
+                                    break;
+                            }
+
+                            spi.ClientData = new byte[0];
+                        }                        
 
                         spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);
                     }
                     else
-                    {
+                    {                        
                         this.UpdateClientSocket_Closed(spi);
                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.ClientAddress);
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
-                    }
+                    }                  
                 }
             }
             catch (Exception ex)
@@ -677,44 +727,44 @@ namespace WinsockPacketEditor
         {
             try
             {
+                string sLog = string.Empty;
                 byte[] bClientData = spi.ClientData;
+                spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bClientData[0];
 
-                byte bVERSION = bClientData[0];
-                spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bVERSION;
-
-                int iMETHODS_COUNT = bClientData[1];
-                byte[] bMETHODS = new byte[iMETHODS_COUNT];                
-
-                string sAuth = string.Empty;
-                for (int i = 0; i < iMETHODS_COUNT; i++)
+                if (spi.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
                 {
-                    bMETHODS[i] = bClientData[2 + i];
+                    int iMETHODS_COUNT = bClientData[1];
+                    byte[] bMETHODS = new byte[iMETHODS_COUNT];
 
-                    sAuth += (Socket_Cache.SocketProxy.AuthType)bMETHODS[i] + ", ";
-                }
+                    string sAuth = string.Empty;
+                    for (int i = 0; i < iMETHODS_COUNT; i++)
+                    {
+                        bMETHODS[i] = bClientData[2 + i];
 
-                sAuth = sAuth.Trim().TrimEnd(',');
+                        sAuth += (Socket_Cache.SocketProxy.AuthType)bMETHODS[i] + ", ";
+                    }
+                    sAuth = sAuth.Trim().TrimEnd(',');                    
+                    
+                    byte[] bAuthRequest;
+                    if (this.cbProxySet_Auth.Checked)
+                    {
+                        bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.PassWord) };
+                        spi.ClientSocket.Send(bAuthRequest);
+                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.AuthUserName;
 
-                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ProxyType, sAuth);
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);                
+                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ClientSocket.RemoteEndPoint, spi.ProxyType, sAuth, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146));                        
+                    }
+                    else
+                    {
+                        bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.None) };
+                        spi.ClientSocket.Send(bAuthRequest);
+                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
 
-                byte[] bAuthRequest;
-                if (this.cbProxySet_Auth.Checked)
-                {
-                    bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.PassWord) };
-                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.AuthUserName;
+                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ClientSocket.RemoteEndPoint, spi.ProxyType, sAuth, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147));
+                    }                    
 
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146));
-                }
-                else
-                {
-                    bAuthRequest = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)Socket_Cache.SocketProxy.AuthType.None) };
-                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
-
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147));
-                }
-
-                spi.ClientSocket.Send(bAuthRequest);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                }                
             }
             catch (Exception ex)
             {
@@ -745,7 +795,7 @@ namespace WinsockPacketEditor
                     string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
                     string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
 
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_148), sUserName, sPassWord);
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_148), spi.ClientSocket.RemoteEndPoint, sUserName, sPassWord);
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
 
                     string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
@@ -764,16 +814,18 @@ namespace WinsockPacketEditor
                     if (bAuthOK)
                     {
                         bAuth = new byte[] { 0x01, 0x00 };
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_149));
+                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_149), spi.ClientSocket.RemoteEndPoint);                        
                     }
                     else
                     {
                         bAuth = new byte[] { 0x01, 0x01 };
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150));
+                        sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150), spi.ClientSocket.RemoteEndPoint);                        
                     }
 
                     spi.ClientSocket.Send(bAuth);
                     spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
+
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                 }
             }
             catch (Exception ex)
@@ -788,118 +840,123 @@ namespace WinsockPacketEditor
 
         private void Command(Socket_ProxyInfo spi)
         {
-            string sIPString = string.Empty;
-            IPAddress ip = IPAddress.Any;
-            ushort port = 0;
-
             try
             {
+                string sIPString = string.Empty;
+                IPAddress ip = IPAddress.Any;
+                ushort port = 0;
+                byte[] serverPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.Port);
+
                 Socket_Cache.SocketProxy.ProxyType ProxyType = (Socket_Cache.SocketProxy.ProxyType)spi.ClientData[0];
                 Socket_Cache.SocketProxy.CommandType CommandType = (Socket_Cache.SocketProxy.CommandType)spi.ClientData[1];
                 Socket_Cache.SocketProxy.AddressType AddressType = (Socket_Cache.SocketProxy.AddressType)spi.ClientData[3];
 
-                byte[] bADDRESS = new byte[spi.ClientData.Length - 4];
-                Buffer.BlockCopy(spi.ClientData, 4, bADDRESS, 0, bADDRESS.Length);
-
-                byte[] bIP = null;
-                byte[] bPort = null;
-
-                switch (AddressType)
+                if (ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
                 {
-                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+                    if (CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
+                    {
+                        byte[] bADDRESS = new byte[spi.ClientData.Length - 4];
+                        Buffer.BlockCopy(spi.ClientData, 4, bADDRESS, 0, bADDRESS.Length);
 
-                        bIP = new byte[4];
-                        Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
-                        ip = new IPAddress(bIP);
+                        byte[] bIP = null;
+                        byte[] bPort = null;
 
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 4, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
-
-                        sIPString = ip.ToString();
-
-                        break;
-
-                    case Socket_Cache.SocketProxy.AddressType.Domain:
-
-                        byte Length = bADDRESS[0];
-                        bIP = new byte[Length];
-                        Buffer.BlockCopy(bADDRESS, 1, bIP, 0, bIP.Length);
-                        sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
-
-                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
-
-                        switch (atType)
+                        switch (AddressType)
                         {
                             case Socket_Cache.SocketProxy.AddressType.IPV4:
-                                ip = IPAddress.Parse(sIPString);
-                                break;
 
-                            case Socket_Cache.SocketProxy.AddressType.IPV6:
-                                ip = IPAddress.Parse(sIPString);
+                                bIP = new byte[4];
+                                Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
+                                ip = new IPAddress(bIP);
+
+                                bPort = new byte[2];
+                                Buffer.BlockCopy(bADDRESS, 4, bPort, 0, bPort.Length);
+                                port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                                sIPString = ip.ToString();
+
                                 break;
 
                             case Socket_Cache.SocketProxy.AddressType.Domain:
-                                ip = Dns.GetHostEntry(sIPString).AddressList[0];
+
+                                byte Length = bADDRESS[0];
+                                bIP = new byte[Length];
+                                Buffer.BlockCopy(bADDRESS, 1, bIP, 0, bIP.Length);
+                                sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
+
+                                Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
+
+                                switch (atType)
+                                {
+                                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+                                        ip = IPAddress.Parse(sIPString);
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                                        ip = IPAddress.Parse(sIPString);
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.AddressType.Domain:
+                                        ip = Dns.GetHostEntry(sIPString).AddressList[0];
+                                        break;
+                                }
+
+                                bPort = new byte[2];
+                                Buffer.BlockCopy(bADDRESS, 1 + Length, bPort, 0, bPort.Length);
+                                port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                                break;
+
+                            case Socket_Cache.SocketProxy.AddressType.IPV6:
+
+                                bIP = new byte[16];
+                                Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
+                                ip = new IPAddress(bIP);
+
+                                bPort = new byte[2];
+                                Buffer.BlockCopy(bADDRESS, 16, bPort, 0, bPort.Length);
+                                port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                                sIPString = ip.ToString();
+
                                 break;
                         }
 
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 1 + Length, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+                        spi.IPAddress = ip;
+                        spi.Port = port;
+                        spi.DomainType = Socket_Operation.GetDomainType_ByPort(port);
+                        spi.ClientAddress = Socket_Operation.GetClientAddress(sIPString, port, spi);
+                        spi.TargetAddress = Socket_Operation.GetTargetAddress(sIPString, port, spi);                        
 
-                        break;
+                        IPEndPoint targetEP = new IPEndPoint(ip, port);
+                        spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                        try
+                        {
+                            spi.TargetSocket.Connect(targetEP);
+                            spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                            spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
 
-                        bIP = new byte[16];
-                        Buffer.BlockCopy(bADDRESS, 0, bIP, 0, bIP.Length);
-                        ip = new IPAddress(bIP);
+                            Socket_Cache.SocketProxyList.SocketProxyToList(spi);
 
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bADDRESS, 16, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
 
-                        sIPString = ip.ToString();
-
-                        break;
-                }
-
-                spi.IPAddress = ip;
-                spi.Port = port;
-                spi.DomainType = Socket_Operation.GetDomainType_ByPort(port);
-                spi.ClientAddress = Socket_Operation.GetClientAddress(sIPString, port, spi);
-                spi.TargetAddress = Socket_Operation.GetTargetAddress(sIPString, port, spi);
-
-                byte[] serverPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.Port);
-
-                if (CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
-                {
-                    IPEndPoint targetEP = new IPEndPoint(ip, port);
-                    spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
-                    try
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), spi.TargetAddress);
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+                        catch (SocketException ex)
+                        {
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
+                        }
+                    }
+                    else
                     {
-                        spi.TargetSocket.Connect(targetEP);
-                        spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                        spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
-                        
-                        Socket_Cache.SocketProxyList.SocketProxyToList(spi);
-                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), spi.TargetAddress);
+                        spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x07, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
+
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spi.ClientSocket.RemoteEndPoint);
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
-                    catch (SocketException ex)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
                 }
-                else
-                {                    
-                    spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), 0x07, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, 0, 0, 0, 0, serverPort[1], serverPort[0] });
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152));
-                }
-
-                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
             }
             catch (Exception ex)
             {                
@@ -920,13 +977,13 @@ namespace WinsockPacketEditor
                     spi.TargetSocket.Send(spi.ClientData, SocketFlags.None);
                     Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, Socket_Cache.SocketProxy.DataType.Request);
 
-                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), spi.ClientSocket.RemoteEndPoint.ToString(), spi.ClientData.Length);
+                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), spi.ClientAddress, spi.ClientData.Length);
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                 }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientAddress + " - " + ex.Message);
             }
         }
 
@@ -954,7 +1011,7 @@ namespace WinsockPacketEditor
                             spi.ClientSocket.Send(spi.TargetData, SocketFlags.None);
                             Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, Socket_Cache.SocketProxy.DataType.Response);
 
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), spi.TargetSocket.RemoteEndPoint.ToString(), spi.TargetData.Length);
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), spi.TargetAddress, spi.TargetData.Length);
                             Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                         }
 
@@ -969,7 +1026,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " " + ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
             }
         }
 
@@ -1002,6 +1059,5 @@ namespace WinsockPacketEditor
         }
 
         #endregion        
-      
     }
 }

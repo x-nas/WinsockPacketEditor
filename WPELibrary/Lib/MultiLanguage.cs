@@ -153,17 +153,17 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_141 = { "代理设置错误!", "Proxy setting error!" };
         public static string[] MutiLan_142 = { "开始 SOCKS 代理!", "Start SOCKS proxy!" };
         public static string[] MutiLan_143 = { "停止 SOCKS 代理!", "Stop SOCKS proxy!" };
-        public static string[] MutiLan_144 = { "{0} 已断开连接!", "{0} Disconnected!" };
-        public static string[] MutiLan_145 = { "客户端代理模式: {0}, 认证模式: {1}", "Client proxy: {0}, authentication: {1}" };
-        public static string[] MutiLan_146 = { "代理服务器设置：需要身份验证!", "Proxy server settings: Authentication required!" };
-        public static string[] MutiLan_147 = { "代理服务器设置：不需要身份验证!", "Proxy server settings: No authentication required!" };
-        public static string[] MutiLan_148 = { "客户端身份认证信息：{0}, {1}", "Client authentication information: {0}, {1}" };
-        public static string[] MutiLan_149 = { "客户端身份验证通过!", "Client authentication passed!" };
-        public static string[] MutiLan_150 = { "客户端身份验证失败!", "Client authentication failed!" };
-        public static string[] MutiLan_151 = { "{0} 连接成功!", "{0} Connection successful!" };
-        public static string[] MutiLan_152 = { "不支持的命令!", "Unsupported command!" };
-        public static string[] MutiLan_153 = { "{0} 请求数据: {1} 字节", "{0} Request: {1} bytes" };
-        public static string[] MutiLan_154 = { "{0} 响应数据: {1} 字节", "{0} Response: {1} bytes" };
+        public static string[] MutiLan_144 = { "{0} - 已断开连接!", "{0} - Disconnected!" };
+        public static string[] MutiLan_145 = { "{0} - 代理模式: {1}, 认证模式: {2}, {3}", "{0} - Proxy: {1}, Authentication: {2}, {3}" };
+        public static string[] MutiLan_146 = { "代理服务器：需要身份验证!", "Proxy server: Authentication required!" };
+        public static string[] MutiLan_147 = { "代理服务器：不需要身份验证!", "Proxy server: No authentication required!" };
+        public static string[] MutiLan_148 = { "{0} - 身份认证信息：{1}, {2}", "{0} - Authentication: {1}, {2}" };
+        public static string[] MutiLan_149 = { "{0} - 身份验证通过!", "{0} - Authentication passed!" };
+        public static string[] MutiLan_150 = { "{0} - 身份验证失败!", "{0} - Authentication failed!" };
+        public static string[] MutiLan_151 = { "{0} - 连接成功!", "{0} - Connection successful!" };
+        public static string[] MutiLan_152 = { "{0} - 不支持的命令!", "{0} - Unsupported command!" };
+        public static string[] MutiLan_153 = { "{0} - 请求数据: {1} 字节", "{0} - Request: {1} bytes" };
+        public static string[] MutiLan_154 = { "{0} - 响应数据: {1} 字节", "{0} - Response: {1} bytes" };
         public static string[] MutiLan_155 = { "正在进行数据比对，请稍候 . . .", "Data comparison is in progress, please wait . . ." };
 
         #endregion

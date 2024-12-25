@@ -9,8 +9,7 @@ namespace WinsockPacketEditor
 {
     public partial class SystemMode_Form : Form
     {        
-        private string WebSiteURL = string.Empty;
-        private readonly ToolTip tt = new ToolTip();
+        private string WebSiteURL = string.Empty;        
 
         #region//窗体加载
 
@@ -155,9 +154,9 @@ namespace WinsockPacketEditor
                     bReturn = true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                bReturn = false;
             }
 
             return bReturn;

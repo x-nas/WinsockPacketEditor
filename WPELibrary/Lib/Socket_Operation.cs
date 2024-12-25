@@ -668,7 +668,7 @@ namespace WPELibrary.Lib
             try
             {
                 IPHostEntry hostEntry = Dns.GetHostEntry(IPString);
-                return hostEntry.HostName == IPString;
+                return true;
             }
             catch
             {
@@ -818,7 +818,110 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//判断接收的数据是否匹配代理步骤
+
+        public static bool CheckDataIsMatchProxyStep(byte[] bData, Socket_Cache.SocketProxy.ProxyStep proxyStep)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                byte VERSION = bData[0];
+
+                switch (proxyStep)
+                {
+                    case Socket_Cache.SocketProxy.ProxyStep.Handshake:
+
+                        if (VERSION == ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5))
+                        {
+                            if (bData.Length> 2)
+                            { 
+                                byte METHODS_COUNT = bData[1];
+
+                                if (bData.Length == METHODS_COUNT + 2)
+                                {
+                                    bReturn = true;
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.ProxyStep.AuthUserName:
+
+                        if (VERSION == 0x01)
+                        {
+                            if (bData.Length > 2)
+                            { 
+                                byte USERNAME_LENGTH = bData[1];
+
+                                if (bData.Length > USERNAME_LENGTH + 2)
+                                { 
+                                    byte PASSWORD_LENGTH = bData[USERNAME_LENGTH + 2];
+
+                                    if (bData.Length == USERNAME_LENGTH + PASSWORD_LENGTH + 3)
+                                    {
+                                        bReturn = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.ProxyStep.Command:
+
+                        if (VERSION == ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5))
+                        {
+                            if (bData.Length > 4)
+                            {
+                                byte ADDRESS_TYPE = bData[3];
+                                Socket_Cache.SocketProxy.AddressType AddressType = (Socket_Cache.SocketProxy.AddressType)ADDRESS_TYPE;
+
+                                int DST_ADDR = 0;
+                                switch (AddressType)
+                                {
+                                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+                                        DST_ADDR = 4;
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                                        DST_ADDR = 16;
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.AddressType.Domain:
+                                        byte DST_LENGTH = bData[4];
+                                        DST_ADDR = DST_LENGTH + 1;
+                                        break;
+                                }
+
+                                if (bData.Length == DST_ADDR + 6)
+                                {
+                                    bReturn = true;
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.ProxyStep.ForwardData:
+
+                        bReturn = true;
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
 
         #region//获取当前进程的格式化名称
 

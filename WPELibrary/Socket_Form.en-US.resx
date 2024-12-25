@@ -435,7 +435,7 @@
     <value>770, 94</value>
   </data>
   <data name="tcSocketInfo_FilterSet.Text" xml:space="preserve">
-    <value>[ Filter Setting ]</value>
+    <value>[ Filter Settings ]</value>
   </data>
   <data name="tlpFilterSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
@@ -552,7 +552,7 @@
     <value>770, 94</value>
   </data>
   <data name="tcSocketInfo_HookSet.Text" xml:space="preserve">
-    <value>[ Hook Setting ]</value>
+    <value>[ Hook Settings ]</value>
   </data>
   <data name="tlpHookSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
@@ -642,7 +642,7 @@
     <value>770, 94</value>
   </data>
   <data name="tcSocketInfo_ListSet.Text" xml:space="preserve">
-    <value>[ List Setting ]</value>
+    <value>[ List Settings ]</value>
   </data>
   <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
@@ -714,7 +714,7 @@
     <value>770, 94</value>
   </data>
   <data name="tcSocketInfo_HotKey.Text" xml:space="preserve">
-    <value>[ HotKey ]</value>
+    <value>[ Hot Keys ]</value>
   </data>
   <data name="tlpHotKeySet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
@@ -738,7 +738,7 @@
     <value>770, 94</value>
   </data>
   <data name="tcSocketInfo_SystemSet.Text" xml:space="preserve">
-    <value>[ System Setting ]</value>
+    <value>[ System Settings ]</value>
   </data>
   <data name="tlpSystemSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
