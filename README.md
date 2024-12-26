@@ -3,13 +3,14 @@
 
 # Winsock Packet Editor（WPE x64）
 
+<img src="https://img.shields.io/github/license/x-nas/WinsockPacketEditor" alt="License"></img>
 ![GitHub Repo stars](https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=dark)
 ![GitHub Repo forks](https://img.shields.io/github/forks/x-nas/WinsockPacketEditor?style=dark)
 [![star](https://gitee.com/x-nas/WinsockPacketEditor/badge/star.svg?theme=dark)](https://gitee.com/x-nas/WinsockPacketEditor/stargazers)
 [![fork](https://gitee.com/x-nas/WinsockPacketEditor/badge/fork.svg?theme=dark)](https://gitee.com/x-nas/WinsockPacketEditor/members)
 
-<a href="https://www.wpe64.com">官方网站</a>
-<a href="https://www.wpe64.com">Official website</a>
+&bull; <a href="https://www.wpe64.com">官方网站</a>
+&bull; <a href="https://www.wpe64.com">Official website</a>
 
 </div>
 
