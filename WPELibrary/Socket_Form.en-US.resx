@@ -743,8 +743,26 @@
   <data name="tlpSystemSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
   </data>
+  <data name="gbSystemSet_ShowMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>225, 91</value>
+  </data>
+  <data name="gbSystemSet_ShowMode.Text" xml:space="preserve">
+    <value>Display Mode</value>
+  </data>
+  <data name="tlpSystemSet_ShowMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpSystemSet_ShowMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>219, 71</value>
+  </data>
+  <data name="cbTopMost.Size" type="System.Drawing.Size, System.Drawing">
+    <value>213, 19</value>
+  </data>
+  <data name="cbTopMost.Text" xml:space="preserve">
+    <value>Keep TopMost</value>
+  </data>
   <data name="gbSystemSet_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>264, 91</value>
   </data>
   <data name="gbSystemSet_FilterSet.Text" xml:space="preserve">
     <value>Filter Execution</value>
@@ -753,25 +771,25 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSystemSet_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>258, 71</value>
   </data>
   <data name="rbFilterSet_Sequence.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 28</value>
   </data>
   <data name="rbFilterSet_Sequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 19</value>
+    <value>252, 19</value>
   </data>
   <data name="rbFilterSet_Sequence.Text" xml:space="preserve">
     <value>Execute in order</value>
   </data>
   <data name="rbFilterSet_Priority.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 19</value>
+    <value>252, 19</value>
   </data>
   <data name="rbFilterSet_Priority.Text" xml:space="preserve">
     <value>Priority principle</value>
   </data>
   <data name="gbSystemSet_WorkMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>263, 91</value>
   </data>
   <data name="gbSystemSet_WorkMode.Text" xml:space="preserve">
     <value>Working Mode</value>
@@ -780,10 +798,10 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSystemSet_WorkMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>257, 71</value>
   </data>
   <data name="cbWorkingMode_Speed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 19</value>
+    <value>251, 19</value>
   </data>
   <data name="cbWorkingMode_Speed.Text" xml:space="preserve">
     <value>Speed Mode</value>

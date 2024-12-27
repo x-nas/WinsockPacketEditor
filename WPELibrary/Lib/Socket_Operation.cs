@@ -713,40 +713,40 @@ namespace WPELibrary.Lib
             {
                 if (iPacketLen > 0)
                 {
-                    Interlocked.Increment(ref Socket_Cache.TotalPackets);
+                    Interlocked.Increment(ref Socket_Cache.SocketPacket.TotalPackets);
 
                     switch (ptPacketType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.Send:
-                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.SendTo:
-                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.Recv:
-                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.RecvFrom:
-                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
-                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            Interlocked.Add(ref Socket_Cache.Total_SendBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            Interlocked.Add(ref Socket_Cache.Total_RecvBytes, iPacketLen);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
                     }
                 }                
@@ -984,8 +984,8 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Cache.Support_WS1 = false;
-                Socket_Cache.Support_WS2 = false;                
+                Socket_Cache.SocketPacket.Support_WS1 = false;
+                Socket_Cache.SocketPacket.Support_WS2 = false;                
 
                 foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
                 {
@@ -993,21 +993,21 @@ namespace WPELibrary.Lib
 
                     if (sModuleName.Equals(WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Socket_Cache.Support_WS1 = true;                        
+                        Socket_Cache.SocketPacket.Support_WS1 = true;                        
                     }
 
                     if (sModuleName.Equals(WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Socket_Cache.Support_WS2 = true;
+                        Socket_Cache.SocketPacket.Support_WS2 = true;
                     }
                 }
 
-                if (Socket_Cache.Support_WS1)
+                if (Socket_Cache.SocketPacket.Support_WS1)
                 {
                     sReturn += " 1.1";
                 }
 
-                if (Socket_Cache.Support_WS2)
+                if (Socket_Cache.SocketPacket.Support_WS2)
                 {
                     sReturn += " 2.0";
                 }
@@ -1762,9 +1762,9 @@ namespace WPELibrary.Lib
             try
             {
                 //套接字
-                if (Socket_Cache.CheckSocket)
+                if (Socket_Cache.SocketPacket.CheckSocket)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_BySocket(spi.PacketSocket))
                         {
@@ -1781,9 +1781,9 @@ namespace WPELibrary.Lib
                 }
 
                 //IP地址
-                if (Socket_Cache.CheckIP)
+                if (Socket_Cache.SocketPacket.CheckIP)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_ByIP(spi.PacketFrom) || ISFilter_ByIP(spi.PacketTo))
                         {
@@ -1800,9 +1800,9 @@ namespace WPELibrary.Lib
                 }
 
                 //端口号
-                if (Socket_Cache.CheckPort)
+                if (Socket_Cache.SocketPacket.CheckPort)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_ByPort(spi.PacketFrom) || ISFilter_ByPort(spi.PacketTo))
                         {
@@ -1819,9 +1819,9 @@ namespace WPELibrary.Lib
                 }
 
                 //指定包头
-                if (Socket_Cache.CheckHead)
+                if (Socket_Cache.SocketPacket.CheckHead)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_ByHead(spi.PacketBuffer))
                         {
@@ -1838,9 +1838,9 @@ namespace WPELibrary.Lib
                 }
 
                 //封包内容
-                if (Socket_Cache.CheckData)
+                if (Socket_Cache.SocketPacket.CheckData)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_ByPacket(spi.PacketBuffer))
                         {
@@ -1857,9 +1857,9 @@ namespace WPELibrary.Lib
                 }
 
                 //封包大小
-                if (Socket_Cache.CheckSize)
+                if (Socket_Cache.SocketPacket.CheckSize)
                 {
-                    if (Socket_Cache.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow)
                     {
                         if (ISFilter_BySize(spi.PacketLen))
                         {
@@ -1891,9 +1891,9 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.CheckSocket_Value))
+                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckSocket_Value))
                 {
-                    string[] sSocketArr = Socket_Cache.CheckSocket_Value.Split(';');
+                    string[] sSocketArr = Socket_Cache.SocketPacket.CheckSocket_Value.Split(';');
 
                     foreach (string sSocket in sSocketArr)
                     {
@@ -1933,9 +1933,9 @@ namespace WPELibrary.Lib
                     string sIP = sPacketIP.Split(':')[0];
                     string sPort = sPacketIP.Split(':')[1];
                     
-                    if (!string.IsNullOrEmpty(Socket_Cache.CheckIP_Value))
+                    if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckIP_Value))
                     {
-                        string[] sIPArr = Socket_Cache.CheckIP_Value.Split(';');
+                        string[] sIPArr = Socket_Cache.SocketPacket.CheckIP_Value.Split(';');
 
                         foreach (string sCheckIP in sIPArr)
                         {
@@ -1973,9 +1973,9 @@ namespace WPELibrary.Lib
                     string sIP = sPacketPort.Split(':')[0];
                     string sPort = sPacketPort.Split(':')[1];
 
-                    if (!string.IsNullOrEmpty(Socket_Cache.CheckPort_Value))
+                    if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckPort_Value))
                     {
-                        string[] sPortArr = Socket_Cache.CheckPort_Value.Split(';');
+                        string[] sPortArr = Socket_Cache.SocketPacket.CheckPort_Value.Split(';');
 
                         foreach (string sCheckPort in sPortArr)
                         {
@@ -2008,11 +2008,11 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.CheckHead_Value))
+                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckHead_Value))
                 {
                     string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer).Replace(" ", "");
 
-                    string[] sHeadArr = Socket_Cache.CheckHead_Value.Replace(" ", "").Split(';');
+                    string[] sHeadArr = Socket_Cache.SocketPacket.CheckHead_Value.Replace(" ", "").Split(';');
 
                     foreach (string sCheckHead in sHeadArr)
                     {
@@ -2044,11 +2044,11 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.CheckData_Value))
+                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckData_Value))
                 {
                     string sPacket = BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer).Replace(" ", "");
 
-                    string[] sPacketArr = Socket_Cache.CheckData_Value.Replace(" ", "").Split(';');
+                    string[] sPacketArr = Socket_Cache.SocketPacket.CheckData_Value.Replace(" ", "").Split(';');
 
                     foreach (string sCheckPacket in sPacketArr)
                     {
@@ -2080,9 +2080,9 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.CheckLength_Value))
+                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckLength_Value))
                 {
-                    string[] sLengthArr = Socket_Cache.CheckLength_Value.Split(';');
+                    string[] sLengthArr = Socket_Cache.SocketPacket.CheckLength_Value.Split(';');
 
                     foreach (string sLength in sLengthArr)
                     {
@@ -2321,35 +2321,62 @@ namespace WPELibrary.Lib
 
         #region//保存系统设置
 
-        public static bool SaveConfigs()
+        public static bool SaveConfigs_SocketProxy()
         {
             bool bReturn = true;
 
             try
             {
-                Properties.Settings.Default.FilterConfig_CheckNotShow = Socket_Cache.CheckNotShow;
-                Properties.Settings.Default.FilterConfig_CheckSocket = Socket_Cache.CheckSocket;
-                Properties.Settings.Default.FilterConfig_CheckIP = Socket_Cache.CheckIP;
-                Properties.Settings.Default.FilterConfig_CheckPort = Socket_Cache.CheckPort;
-                Properties.Settings.Default.FilterConfig_CheckHead = Socket_Cache.CheckHead;
-                Properties.Settings.Default.FilterConfig_CheckData = Socket_Cache.CheckData;
-                Properties.Settings.Default.FilterConfig_CheckSize = Socket_Cache.CheckSize;
+                Properties.Settings.Default.ProxyConfig_EnableSOCKS5 = Socket_Cache.SocketProxy.Enable_SOCKS5;
+                Properties.Settings.Default.ProxyConfig_ProxyPort = Socket_Cache.SocketProxy.ProxyPort;
+                Properties.Settings.Default.ProxyConfig_EnableAuth = Socket_Cache.SocketProxy.Enable_Auth;
+                Properties.Settings.Default.ProxyConfig_Auth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
+                Properties.Settings.Default.ProxyConfig_Auth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
 
-                Properties.Settings.Default.FilterConfig_CheckSocket_Value = Socket_Cache.CheckSocket_Value;
-                Properties.Settings.Default.FilterConfig_CheckLength_Value = Socket_Cache.CheckLength_Value;
-                Properties.Settings.Default.FilterConfig_CheckIP_Value = Socket_Cache.CheckIP_Value;
-                Properties.Settings.Default.FilterConfig_CheckPort_Value = Socket_Cache.CheckPort_Value;
-                Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.CheckHead_Value;
-                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.CheckData_Value;                
+                Properties.Settings.Default.ProxyConfig_LogList_AutoRoll = Socket_Cache.LogList.Proxy_AutoRoll;
+                Properties.Settings.Default.ProxyConfig_LogList_AutoClear = Socket_Cache.LogList.Proxy_AutoClear;
+                Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
-                Properties.Settings.Default.HookConfig_HookSend = Socket_Cache.HookSend;
-                Properties.Settings.Default.HookConfig_HookSendTo = Socket_Cache.HookSendTo;
-                Properties.Settings.Default.HookConfig_HookRecv = Socket_Cache.HookRecv;
-                Properties.Settings.Default.HookConfig_HookRecvFrom = Socket_Cache.HookRecvFrom;
-                Properties.Settings.Default.HookConfig_HookWSASend = Socket_Cache.HookWSASend;
-                Properties.Settings.Default.HookConfig_HookWSASendTo = Socket_Cache.HookWSASendTo;
-                Properties.Settings.Default.HookConfig_HookWSARecv = Socket_Cache.HookWSARecv;
-                Properties.Settings.Default.HookConfig_HookWSARecvFrom = Socket_Cache.HookWSARecvFrom;
+                Properties.Settings.Default.Save();
+            }
+            catch (Exception ex)
+            {
+                bReturn = false;
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        public static bool SaveConfigs_SocketPacket()
+        {
+            bool bReturn = true;
+
+            try
+            {
+                Properties.Settings.Default.FilterConfig_CheckNotShow = Socket_Cache.SocketPacket.CheckNotShow;
+                Properties.Settings.Default.FilterConfig_CheckSocket = Socket_Cache.SocketPacket.CheckSocket;
+                Properties.Settings.Default.FilterConfig_CheckIP = Socket_Cache.SocketPacket.CheckIP;
+                Properties.Settings.Default.FilterConfig_CheckPort = Socket_Cache.SocketPacket.CheckPort;
+                Properties.Settings.Default.FilterConfig_CheckHead = Socket_Cache.SocketPacket.CheckHead;
+                Properties.Settings.Default.FilterConfig_CheckData = Socket_Cache.SocketPacket.CheckData;
+                Properties.Settings.Default.FilterConfig_CheckSize = Socket_Cache.SocketPacket.CheckSize;
+
+                Properties.Settings.Default.FilterConfig_CheckSocket_Value = Socket_Cache.SocketPacket.CheckSocket_Value;
+                Properties.Settings.Default.FilterConfig_CheckLength_Value = Socket_Cache.SocketPacket.CheckLength_Value;
+                Properties.Settings.Default.FilterConfig_CheckIP_Value = Socket_Cache.SocketPacket.CheckIP_Value;
+                Properties.Settings.Default.FilterConfig_CheckPort_Value = Socket_Cache.SocketPacket.CheckPort_Value;
+                Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.SocketPacket.CheckHead_Value;
+                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.SocketPacket.CheckData_Value;                
+
+                Properties.Settings.Default.HookConfig_HookSend = Socket_Cache.SocketPacket.HookSend;
+                Properties.Settings.Default.HookConfig_HookSendTo = Socket_Cache.SocketPacket.HookSendTo;
+                Properties.Settings.Default.HookConfig_HookRecv = Socket_Cache.SocketPacket.HookRecv;
+                Properties.Settings.Default.HookConfig_HookRecvFrom = Socket_Cache.SocketPacket.HookRecvFrom;
+                Properties.Settings.Default.HookConfig_HookWSASend = Socket_Cache.SocketPacket.HookWSASend;
+                Properties.Settings.Default.HookConfig_HookWSASendTo = Socket_Cache.SocketPacket.HookWSASendTo;
+                Properties.Settings.Default.HookConfig_HookWSARecv = Socket_Cache.SocketPacket.HookWSARecv;
+                Properties.Settings.Default.HookConfig_HookWSARecvFrom = Socket_Cache.SocketPacket.HookWSARecvFrom;
 
                 Properties.Settings.Default.ListConfig_SocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll;
                 Properties.Settings.Default.ListConfig_SocketList_AutoClear = Socket_Cache.SocketList.AutoClear;
@@ -2358,7 +2385,7 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ListConfig_LogList_AutoClear = Socket_Cache.LogList.AutoClear;
                 Properties.Settings.Default.ListConfig_LogList_AutoClear_Value = Socket_Cache.LogList.AutoClear_Value;                
 
-                Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SpeedMode;
+                Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SocketPacket.SpeedMode;
                 Properties.Settings.Default.SystemConfig_FilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
 
                 Properties.Settings.Default.Save();
@@ -2376,33 +2403,55 @@ namespace WPELibrary.Lib
 
         #region//加载系统设置
 
-        public static void LoadConfigs()
+        public static void LoadConfigs_SocketProxy()
         {
             try
             {
-                Socket_Cache.CheckNotShow = Properties.Settings.Default.FilterConfig_CheckNotShow;
-                Socket_Cache.CheckSocket = Properties.Settings.Default.FilterConfig_CheckSocket;
-                Socket_Cache.CheckIP = Properties.Settings.Default.FilterConfig_CheckIP;
-                Socket_Cache.CheckPort = Properties.Settings.Default.FilterConfig_CheckPort;
-                Socket_Cache.CheckHead = Properties.Settings.Default.FilterConfig_CheckHead;
-                Socket_Cache.CheckData = Properties.Settings.Default.FilterConfig_CheckData;
-                Socket_Cache.CheckSize = Properties.Settings.Default.FilterConfig_CheckSize;
+                Socket_Cache.SocketProxy.Enable_SOCKS5 = Properties.Settings.Default.ProxyConfig_EnableSOCKS5;
+                Socket_Cache.SocketProxy.ProxyPort = Properties.Settings.Default.ProxyConfig_ProxyPort;
+                Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;
+                Socket_Cache.SocketProxy.Auth_UserName = Properties.Settings.Default.ProxyConfig_Auth_UserName;
+                Socket_Cache.SocketProxy.Auth_PassWord = Properties.Settings.Default.ProxyConfig_Auth_PassWord;
 
-                Socket_Cache.CheckSocket_Value = Properties.Settings.Default.FilterConfig_CheckSocket_Value;
-                Socket_Cache.CheckLength_Value = Properties.Settings.Default.FilterConfig_CheckLength_Value;
-                Socket_Cache.CheckIP_Value = Properties.Settings.Default.FilterConfig_CheckIP_Value;
-                Socket_Cache.CheckPort_Value = Properties.Settings.Default.FilterConfig_CheckPort_Value;
-                Socket_Cache.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
-                Socket_Cache.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;             
+                Socket_Cache.LogList.Proxy_AutoRoll = Properties.Settings.Default.ProxyConfig_LogList_AutoRoll;
+                Socket_Cache.LogList.Proxy_AutoClear = Properties.Settings.Default.ProxyConfig_LogList_AutoClear;
+                Socket_Cache.LogList.Proxy_AutoClear_Value = Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value;
 
-                Socket_Cache.HookSend = Properties.Settings.Default.HookConfig_HookSend;
-                Socket_Cache.HookSendTo = Properties.Settings.Default.HookConfig_HookSendTo;
-                Socket_Cache.HookRecv = Properties.Settings.Default.HookConfig_HookRecv;
-                Socket_Cache.HookRecvFrom = Properties.Settings.Default.HookConfig_HookRecvFrom;
-                Socket_Cache.HookWSASend = Properties.Settings.Default.HookConfig_HookWSASend;
-                Socket_Cache.HookWSASendTo = Properties.Settings.Default.HookConfig_HookWSASendTo;
-                Socket_Cache.HookWSARecv = Properties.Settings.Default.HookConfig_HookWSARecv;
-                Socket_Cache.HookWSARecvFrom = Properties.Settings.Default.HookConfig_HookWSARecvFrom;            
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
+            }
+            catch (Exception ex)
+            {
+                DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void LoadConfigs_SocketPacket()
+        {
+            try
+            {
+                Socket_Cache.SocketPacket.CheckNotShow = Properties.Settings.Default.FilterConfig_CheckNotShow;
+                Socket_Cache.SocketPacket.CheckSocket = Properties.Settings.Default.FilterConfig_CheckSocket;
+                Socket_Cache.SocketPacket.CheckIP = Properties.Settings.Default.FilterConfig_CheckIP;
+                Socket_Cache.SocketPacket.CheckPort = Properties.Settings.Default.FilterConfig_CheckPort;
+                Socket_Cache.SocketPacket.CheckHead = Properties.Settings.Default.FilterConfig_CheckHead;
+                Socket_Cache.SocketPacket.CheckData = Properties.Settings.Default.FilterConfig_CheckData;
+                Socket_Cache.SocketPacket.CheckSize = Properties.Settings.Default.FilterConfig_CheckSize;
+
+                Socket_Cache.SocketPacket.CheckSocket_Value = Properties.Settings.Default.FilterConfig_CheckSocket_Value;
+                Socket_Cache.SocketPacket.CheckLength_Value = Properties.Settings.Default.FilterConfig_CheckLength_Value;
+                Socket_Cache.SocketPacket.CheckIP_Value = Properties.Settings.Default.FilterConfig_CheckIP_Value;
+                Socket_Cache.SocketPacket.CheckPort_Value = Properties.Settings.Default.FilterConfig_CheckPort_Value;
+                Socket_Cache.SocketPacket.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
+                Socket_Cache.SocketPacket.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;             
+
+                Socket_Cache.SocketPacket.HookSend = Properties.Settings.Default.HookConfig_HookSend;
+                Socket_Cache.SocketPacket.HookSendTo = Properties.Settings.Default.HookConfig_HookSendTo;
+                Socket_Cache.SocketPacket.HookRecv = Properties.Settings.Default.HookConfig_HookRecv;
+                Socket_Cache.SocketPacket.HookRecvFrom = Properties.Settings.Default.HookConfig_HookRecvFrom;
+                Socket_Cache.SocketPacket.HookWSASend = Properties.Settings.Default.HookConfig_HookWSASend;
+                Socket_Cache.SocketPacket.HookWSASendTo = Properties.Settings.Default.HookConfig_HookWSASendTo;
+                Socket_Cache.SocketPacket.HookWSARecv = Properties.Settings.Default.HookConfig_HookWSARecv;
+                Socket_Cache.SocketPacket.HookWSARecvFrom = Properties.Settings.Default.HookConfig_HookWSARecvFrom;            
 
                 Socket_Cache.SocketList.AutoRoll = Properties.Settings.Default.ListConfig_SocketList_AutoRoll;
                 Socket_Cache.SocketList.AutoClear = Properties.Settings.Default.ListConfig_SocketList_AutoClear;
@@ -2411,7 +2460,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.LogList.AutoClear = Properties.Settings.Default.ListConfig_LogList_AutoClear;
                 Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;                
 
-                Socket_Cache.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
+                Socket_Cache.SocketPacket.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
                 Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));

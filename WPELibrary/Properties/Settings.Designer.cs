@@ -370,5 +370,101 @@ namespace WPELibrary.Properties {
                 this["SystemConfig_FilterList_Execute"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ProxyConfig_EnableSOCKS5 {
+            get {
+                return ((bool)(this["ProxyConfig_EnableSOCKS5"]));
+            }
+            set {
+                this["ProxyConfig_EnableSOCKS5"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8889")]
+        public ushort ProxyConfig_ProxyPort {
+            get {
+                return ((ushort)(this["ProxyConfig_ProxyPort"]));
+            }
+            set {
+                this["ProxyConfig_ProxyPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_EnableAuth {
+            get {
+                return ((bool)(this["ProxyConfig_EnableAuth"]));
+            }
+            set {
+                this["ProxyConfig_EnableAuth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyConfig_Auth_UserName {
+            get {
+                return ((string)(this["ProxyConfig_Auth_UserName"]));
+            }
+            set {
+                this["ProxyConfig_Auth_UserName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyConfig_Auth_PassWord {
+            get {
+                return ((string)(this["ProxyConfig_Auth_PassWord"]));
+            }
+            set {
+                this["ProxyConfig_Auth_PassWord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_LogList_AutoRoll {
+            get {
+                return ((bool)(this["ProxyConfig_LogList_AutoRoll"]));
+            }
+            set {
+                this["ProxyConfig_LogList_AutoRoll"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_LogList_AutoClear {
+            get {
+                return ((bool)(this["ProxyConfig_LogList_AutoClear"]));
+            }
+            set {
+                this["ProxyConfig_LogList_AutoClear"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public decimal ProxyConfig_LogList_AutoClear_Value {
+            get {
+                return ((decimal)(this["ProxyConfig_LogList_AutoClear_Value"]));
+            }
+            set {
+                this["ProxyConfig_LogList_AutoClear_Value"] = value;
+            }
+        }
     }
 }

@@ -169,6 +169,9 @@ namespace WPELibrary
             this.label1 = new System.Windows.Forms.Label();
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSystemSet_ShowMode = new System.Windows.Forms.GroupBox();
+            this.tlpSystemSet_ShowMode = new System.Windows.Forms.TableLayoutPanel();
+            this.cbTopMost = new System.Windows.Forms.CheckBox();
             this.gbSystemSet_FilterSet = new System.Windows.Forms.GroupBox();
             this.tlpSystemSet_FilterSet = new System.Windows.Forms.TableLayoutPanel();
             this.rbFilterSet_Sequence = new System.Windows.Forms.RadioButton();
@@ -387,6 +390,8 @@ namespace WPELibrary
             this.tlpHotKeySet.SuspendLayout();
             this.tcSocketInfo_SystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
+            this.gbSystemSet_ShowMode.SuspendLayout();
+            this.tlpSystemSet_ShowMode.SuspendLayout();
             this.gbSystemSet_FilterSet.SuspendLayout();
             this.tlpSystemSet_FilterSet.SuspendLayout();
             this.gbSystemSet_WorkMode.SuspendLayout();
@@ -1372,9 +1377,30 @@ namespace WPELibrary
             // tlpSystemSet
             // 
             resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
-            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterSet, 1, 0);
-            this.tlpSystemSet.Controls.Add(this.gbSystemSet_WorkMode, 0, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_ShowMode, 0, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterSet, 2, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_WorkMode, 1, 0);
             this.tlpSystemSet.Name = "tlpSystemSet";
+            // 
+            // gbSystemSet_ShowMode
+            // 
+            resources.ApplyResources(this.gbSystemSet_ShowMode, "gbSystemSet_ShowMode");
+            this.gbSystemSet_ShowMode.Controls.Add(this.tlpSystemSet_ShowMode);
+            this.gbSystemSet_ShowMode.Name = "gbSystemSet_ShowMode";
+            this.gbSystemSet_ShowMode.TabStop = false;
+            // 
+            // tlpSystemSet_ShowMode
+            // 
+            resources.ApplyResources(this.tlpSystemSet_ShowMode, "tlpSystemSet_ShowMode");
+            this.tlpSystemSet_ShowMode.Controls.Add(this.cbTopMost, 0, 0);
+            this.tlpSystemSet_ShowMode.Name = "tlpSystemSet_ShowMode";
+            // 
+            // cbTopMost
+            // 
+            resources.ApplyResources(this.cbTopMost, "cbTopMost");
+            this.cbTopMost.Name = "cbTopMost";
+            this.cbTopMost.UseVisualStyleBackColor = true;
+            this.cbTopMost.CheckedChanged += new System.EventHandler(this.cbTopMost_CheckedChanged);
             // 
             // gbSystemSet_FilterSet
             // 
@@ -2875,6 +2901,9 @@ namespace WPELibrary
             this.tlpHotKeySet.PerformLayout();
             this.tcSocketInfo_SystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
+            this.gbSystemSet_ShowMode.ResumeLayout(false);
+            this.tlpSystemSet_ShowMode.ResumeLayout(false);
+            this.tlpSystemSet_ShowMode.PerformLayout();
             this.gbSystemSet_FilterSet.ResumeLayout(false);
             this.tlpSystemSet_FilterSet.ResumeLayout(false);
             this.tlpSystemSet_FilterSet.PerformLayout();
@@ -3249,5 +3278,8 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
         private System.ComponentModel.BackgroundWorker bgwCompare;
+        private System.Windows.Forms.GroupBox gbSystemSet_ShowMode;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet_ShowMode;
+        private System.Windows.Forms.CheckBox cbTopMost;
     }
 }

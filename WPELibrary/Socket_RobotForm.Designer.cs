@@ -417,6 +417,7 @@
             resources.ApplyResources(this.dgvRobotInstruction, "dgvRobotInstruction");
             this.dgvRobotInstruction.MultiSelect = false;
             this.dgvRobotInstruction.Name = "dgvRobotInstruction";
+            this.dgvRobotInstruction.ReadOnly = true;
             this.dgvRobotInstruction.RowHeadersVisible = false;
             this.dgvRobotInstruction.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.dgvRobotInstruction.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));

@@ -89,5 +89,29 @@
     <Setting Name="SystemConfig_FilterList_Execute" Type="System.String" Scope="User">
       <Value Profile="(Default)">Sequence</Value>
     </Setting>
+    <Setting Name="ProxyConfig_EnableSOCKS5" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_ProxyPort" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">8889</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_EnableAuth" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_Auth_UserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ProxyConfig_Auth_PassWord" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ProxyConfig_LogList_AutoRoll" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_LogList_AutoClear" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_LogList_AutoClear_Value" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">5000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

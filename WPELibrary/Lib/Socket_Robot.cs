@@ -108,9 +108,8 @@ namespace WPELibrary.Lib
                     this.Total_Instruction = 0;
                     this.Send_Success = 0;
                     this.Send_Failure = 0;
-
-                    int iLoopStart = 0;
-                    int iLoopCNT = 1;          
+                    Stack<int> sLoopStart = new Stack<int>();
+                    Dictionary<int, int> dLoopCNT = new Dictionary<int, int>();
 
                     for (int i = 0; i < this.RobotInstruction.Rows.Count; i++)
                     {
@@ -134,7 +133,7 @@ namespace WPELibrary.Lib
                                     int SendPacket_Index = 0;
                                     if (int.TryParse(sContent.Split('|')[0], out int iIndex))
                                     {
-                                        SendPacket_Index = iIndex;
+                                        SendPacket_Index = iIndex - 1;
                                     }
 
                                     int SendPacket_Socket = 0;
@@ -166,20 +165,46 @@ namespace WPELibrary.Lib
 
                                 break;
 
-                            case Socket_Cache.Robot.InstructionType.LoopStart:
+                            case Socket_Cache.Robot.InstructionType.LoopStart:                           
 
-                                iLoopStart = i;
-                                int.TryParse(sContent, out iLoopCNT);
+                                if (int.TryParse(sContent, out int Count))
+                                {
+                                    sLoopStart.Push(i);
+
+                                    if (dLoopCNT.ContainsKey(i))
+                                    {
+                                        dLoopCNT[i] = Count;
+                                    }
+                                    else
+                                    {
+                                        dLoopCNT.Add(i, Count);
+                                    }                                    
+                                }
 
                                 break;
 
                             case Socket_Cache.Robot.InstructionType.LoopEnd:
 
-                                iLoopCNT--;
-
-                                if (iLoopCNT > 0)
+                                if (sLoopStart.Count > 0)
                                 {
-                                    i = iLoopStart;
+                                    int iLoopStart = sLoopStart.Peek();
+
+                                    if (dLoopCNT.ContainsKey(iLoopStart))
+                                    {
+                                        int iLoopCNT = dLoopCNT[iLoopStart];
+
+                                        iLoopCNT--;
+
+                                        if (iLoopCNT > 0)
+                                        {
+                                            dLoopCNT[iLoopStart] = iLoopCNT;
+                                            i = iLoopStart;
+                                        }
+                                        else
+                                        {
+                                            sLoopStart.Pop();
+                                        }
+                                    }
                                 }
 
                                 break;

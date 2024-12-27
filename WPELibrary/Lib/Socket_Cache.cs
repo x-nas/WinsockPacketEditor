@@ -46,21 +46,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        public static IntPtr MainHandle = IntPtr.Zero;
-        public static long TotalPackets = 0;
-        public static long Total_SendBytes = 0;
-        public static long Total_RecvBytes = 0;        
-        public static bool SpeedMode;      
-        public static byte[] bByteBuff = new byte[0];
-        public static bool Support_WS1, Support_WS2;
-        public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
-        public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
-        public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+        public static string WPE = "Winsock Packet Editor x64";
+        public static IntPtr MainHandle = IntPtr.Zero;        
 
-        #region//Socket 代理
+        #region//代理
 
         public static class SocketProxy
         {
+            public static bool IsListening = false;
+            public static bool Enable_SOCKS5, Enable_Auth;
+            public static string Auth_UserName, Auth_PassWord;
+            public static ushort ProxyPort;
+
             #region//定义结构
 
             public enum ProxyType
@@ -113,10 +110,7 @@ namespace WPELibrary.Lib
                 Response = 1,
             }
 
-            #endregion
-            
-            public static bool bIsListening = false;
-            public static ushort Port = 8889;
+            #endregion           
         }
 
         #endregion               
@@ -252,7 +246,16 @@ namespace WPELibrary.Lib
         public static class SocketPacket
         {
             public static int PacketData_MaxLen = 60;
-
+            public static long TotalPackets = 0;
+            public static long Total_SendBytes = 0;
+            public static long Total_RecvBytes = 0;
+            public static bool SpeedMode;
+            public static byte[] bByteBuff = new byte[0];
+            public static bool Support_WS1, Support_WS2;
+            public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
+            public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
+            public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            
             #region//结构定义
 
             [StructLayout(LayoutKind.Explicit)]
@@ -499,7 +502,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (!Socket_Cache.SpeedMode)
+                    if (!Socket_Cache.SocketPacket.SpeedMode)
                     {
                         string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
@@ -819,9 +822,8 @@ namespace WPELibrary.Lib
 
         public static class LogList
         {
-            public static bool AutoRoll;
-            public static bool AutoClear;
-            public static decimal AutoClear_Value;
+            public static bool AutoRoll, Proxy_AutoRoll, AutoClear, Proxy_AutoClear;
+            public static decimal AutoClear_Value, Proxy_AutoClear_Value;
             public static BindingList<Socket_LogInfo> lstSocketLog = new BindingList<Socket_LogInfo>();
             public static BindingList<Socket_LogInfo> lstProxyLog = new BindingList<Socket_LogInfo>();
 
@@ -2326,7 +2328,7 @@ namespace WPELibrary.Lib
 
                                 Socket_Cache.Filter.FilterExecute_CNT++;
 
-                                if (!Socket_Cache.SpeedMode)
+                                if (!Socket_Cache.SocketPacket.SpeedMode)
                                 {
                                     string sLog = string.Empty;
 

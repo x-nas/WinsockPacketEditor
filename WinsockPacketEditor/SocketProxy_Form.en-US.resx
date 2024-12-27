@@ -130,10 +130,6 @@
   <data name="gbProxyType.Text" xml:space="preserve">
     <value>Proxy Type</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cbSOCKS5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="gbProxySet_Port.Text" xml:space="preserve">
     <value>Port</value>
   </data>
@@ -152,16 +148,13 @@
   <data name="lAuth_PassWord.Text" xml:space="preserve">
     <value>PW:</value>
   </data>
-  <data name="cbProxySet_Auth.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbProxySet_Auth.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 23</value>
   </data>
-  <data name="cbProxySet_Auth.Text" xml:space="preserve">
-    <value>Enable
-</value>
+  <data name="cbEnable_Auth.Text" xml:space="preserve">
+    <value>Enable</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lAuth_UserName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -202,8 +195,7 @@
     <value>Auto Roll</value>
   </data>
   <data name="bCleanUp.Text" xml:space="preserve">
-    <value>Clean
-Up
+    <value>Clear
 (&amp;C)</value>
   </data>
   <data name="bStop.Text" xml:space="preserve">
@@ -217,7 +209,7 @@ Up
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAATgBAQE4AQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAUABAQFAAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

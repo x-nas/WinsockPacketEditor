@@ -248,11 +248,20 @@ namespace WPELibrary
 
                     if (!this.sr.Worker.IsBusy)
                     {
+                        this.txtExecute.Clear();
                         this.bExecute.Enabled = false;
                         this.bStop.Enabled = true;
-                        this.dgvRobotInstruction.Enabled = false;
-                        this.dgvSendList.Enabled = false;
                         this.tcRobotInstruction.Enabled = false;
+
+                        if (this.dgvRobotInstruction.ContextMenuStrip != null)
+                        {
+                            this.dgvRobotInstruction.ContextMenuStrip.Enabled = false;
+                        }
+
+                        if (this.dgvSendList.ContextMenuStrip != null)
+                        {
+                            this.dgvSendList.ContextMenuStrip.Enabled = false;
+                        }
 
                         sr.StartRobot(this.RobotName, this.dtRobotInstruction);
                     }
@@ -286,9 +295,17 @@ namespace WPELibrary
 
                 this.bExecute.Enabled = true;
                 this.bStop.Enabled = false;
-                this.dgvRobotInstruction.Enabled = true;
-                this.dgvSendList.Enabled = true;
                 this.tcRobotInstruction.Enabled = true;
+
+                if (this.dgvRobotInstruction.ContextMenuStrip != null)
+                {
+                    this.dgvRobotInstruction.ContextMenuStrip.Enabled = true;
+                }
+
+                if (this.dgvSendList.ContextMenuStrip != null)
+                {
+                    this.dgvSendList.ContextMenuStrip.Enabled = true;
+                }
 
                 this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
                 this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
@@ -563,10 +580,10 @@ namespace WPELibrary
         {
             try
             {
-                int Loop = ((int)this.nudLoop.Value);
-                string sContent = Loop.ToString();
+                int LoopCNT = ((int)this.nudLoop.Value);
+                string sContent = LoopCNT.ToString();
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, sContent);                     
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, sContent);                
             }
             catch (Exception ex)
             {

@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketProxy_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tsslServerInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketProxy_Parameter = new System.Windows.Forms.TableLayoutPanel();
             this.tcSocketProxySet = new System.Windows.Forms.TabControl();
@@ -41,15 +41,15 @@
             this.tlpProxySet = new System.Windows.Forms.TableLayoutPanel();
             this.gbProxyType = new System.Windows.Forms.GroupBox();
             this.tlpProxyType = new System.Windows.Forms.TableLayoutPanel();
-            this.cbSOCKS5 = new System.Windows.Forms.CheckBox();
+            this.cbEnable_SOCKS5 = new System.Windows.Forms.CheckBox();
             this.gbProxySet_Port = new System.Windows.Forms.GroupBox();
             this.tlpProxySet_Port = new System.Windows.Forms.TableLayoutPanel();
-            this.nudProxySet_Port = new System.Windows.Forms.NumericUpDown();
+            this.nudProxyPort = new System.Windows.Forms.NumericUpDown();
             this.gbProxySet_Auth = new System.Windows.Forms.GroupBox();
             this.tlpProxySet_Auth = new System.Windows.Forms.TableLayoutPanel();
             this.txtAuth_PassWord = new System.Windows.Forms.TextBox();
             this.lAuth_PassWord = new System.Windows.Forms.Label();
-            this.cbProxySet_Auth = new System.Windows.Forms.CheckBox();
+            this.cbEnable_Auth = new System.Windows.Forms.CheckBox();
             this.lAuth_UserName = new System.Windows.Forms.Label();
             this.txtAuth_UserName = new System.Windows.Forms.TextBox();
             this.tpListSet = new System.Windows.Forms.TabPage();
@@ -95,7 +95,7 @@
             this.tlpProxyType.SuspendLayout();
             this.gbProxySet_Port.SuspendLayout();
             this.tlpProxySet_Port.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudProxySet_Port)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProxyPort)).BeginInit();
             this.gbProxySet_Auth.SuspendLayout();
             this.tlpProxySet_Auth.SuspendLayout();
             this.tpListSet.SuspendLayout();
@@ -164,16 +164,16 @@
             // tlpProxyType
             // 
             resources.ApplyResources(this.tlpProxyType, "tlpProxyType");
-            this.tlpProxyType.Controls.Add(this.cbSOCKS5, 0, 1);
+            this.tlpProxyType.Controls.Add(this.cbEnable_SOCKS5, 0, 1);
             this.tlpProxyType.Name = "tlpProxyType";
             // 
-            // cbSOCKS5
+            // cbEnable_SOCKS5
             // 
-            resources.ApplyResources(this.cbSOCKS5, "cbSOCKS5");
-            this.cbSOCKS5.Checked = true;
-            this.cbSOCKS5.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSOCKS5.Name = "cbSOCKS5";
-            this.cbSOCKS5.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.cbEnable_SOCKS5, "cbEnable_SOCKS5");
+            this.cbEnable_SOCKS5.Checked = true;
+            this.cbEnable_SOCKS5.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnable_SOCKS5.Name = "cbEnable_SOCKS5";
+            this.cbEnable_SOCKS5.UseVisualStyleBackColor = true;
             // 
             // gbProxySet_Port
             // 
@@ -185,24 +185,24 @@
             // tlpProxySet_Port
             // 
             resources.ApplyResources(this.tlpProxySet_Port, "tlpProxySet_Port");
-            this.tlpProxySet_Port.Controls.Add(this.nudProxySet_Port, 0, 1);
+            this.tlpProxySet_Port.Controls.Add(this.nudProxyPort, 0, 1);
             this.tlpProxySet_Port.Name = "tlpProxySet_Port";
             // 
-            // nudProxySet_Port
+            // nudProxyPort
             // 
-            resources.ApplyResources(this.nudProxySet_Port, "nudProxySet_Port");
-            this.nudProxySet_Port.Maximum = new decimal(new int[] {
+            resources.ApplyResources(this.nudProxyPort, "nudProxyPort");
+            this.nudProxyPort.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
-            this.nudProxySet_Port.Minimum = new decimal(new int[] {
+            this.nudProxyPort.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudProxySet_Port.Name = "nudProxySet_Port";
-            this.nudProxySet_Port.Value = new decimal(new int[] {
+            this.nudProxyPort.Name = "nudProxyPort";
+            this.nudProxyPort.Value = new decimal(new int[] {
             8899,
             0,
             0,
@@ -220,7 +220,7 @@
             resources.ApplyResources(this.tlpProxySet_Auth, "tlpProxySet_Auth");
             this.tlpProxySet_Auth.Controls.Add(this.txtAuth_PassWord, 4, 1);
             this.tlpProxySet_Auth.Controls.Add(this.lAuth_PassWord, 3, 1);
-            this.tlpProxySet_Auth.Controls.Add(this.cbProxySet_Auth, 0, 1);
+            this.tlpProxySet_Auth.Controls.Add(this.cbEnable_Auth, 0, 1);
             this.tlpProxySet_Auth.Controls.Add(this.lAuth_UserName, 1, 1);
             this.tlpProxySet_Auth.Controls.Add(this.txtAuth_UserName, 2, 1);
             this.tlpProxySet_Auth.Name = "tlpProxySet_Auth";
@@ -236,12 +236,12 @@
             resources.ApplyResources(this.lAuth_PassWord, "lAuth_PassWord");
             this.lAuth_PassWord.Name = "lAuth_PassWord";
             // 
-            // cbProxySet_Auth
+            // cbEnable_Auth
             // 
-            resources.ApplyResources(this.cbProxySet_Auth, "cbProxySet_Auth");
-            this.cbProxySet_Auth.Name = "cbProxySet_Auth";
-            this.cbProxySet_Auth.UseVisualStyleBackColor = true;
-            this.cbProxySet_Auth.CheckedChanged += new System.EventHandler(this.cbProxySet_Auth_CheckedChanged);
+            resources.ApplyResources(this.cbEnable_Auth, "cbEnable_Auth");
+            this.cbEnable_Auth.Name = "cbEnable_Auth";
+            this.cbEnable_Auth.UseVisualStyleBackColor = true;
+            this.cbEnable_Auth.CheckedChanged += new System.EventHandler(this.cbProxySet_Auth_CheckedChanged);
             // 
             // lAuth_UserName
             // 
@@ -460,14 +460,14 @@
             this.dgvLogList.AllowUserToResizeRows = false;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -485,8 +485,8 @@
             // 
             // cLogID
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle10;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -496,8 +496,8 @@
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle11;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -507,8 +507,8 @@
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle12;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -577,6 +577,7 @@
             this.Controls.Add(this.tlpSocketProxy);
             this.DoubleBuffered = true;
             this.Name = "SocketProxy_Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SocketProxy_Form_FormClosing);
             this.tlpSocketProxy_Parameter.ResumeLayout(false);
             this.tcSocketProxySet.ResumeLayout(false);
             this.tpProxySet.ResumeLayout(false);
@@ -586,7 +587,7 @@
             this.tlpProxyType.PerformLayout();
             this.gbProxySet_Port.ResumeLayout(false);
             this.tlpProxySet_Port.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudProxySet_Port)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProxyPort)).EndInit();
             this.gbProxySet_Auth.ResumeLayout(false);
             this.tlpProxySet_Auth.ResumeLayout(false);
             this.tlpProxySet_Auth.PerformLayout();
@@ -650,9 +651,9 @@
         private System.Windows.Forms.GroupBox gbProxySet_Port;
         private System.Windows.Forms.GroupBox gbProxySet_Auth;
         private System.Windows.Forms.TableLayoutPanel tlpProxySet_Port;
-        private System.Windows.Forms.NumericUpDown nudProxySet_Port;
+        private System.Windows.Forms.NumericUpDown nudProxyPort;
         private System.Windows.Forms.TableLayoutPanel tlpProxySet_Auth;
-        private System.Windows.Forms.CheckBox cbProxySet_Auth;
+        private System.Windows.Forms.CheckBox cbEnable_Auth;
         private System.Windows.Forms.TextBox txtAuth_PassWord;
         private System.Windows.Forms.Label lAuth_PassWord;
         private System.Windows.Forms.Label lAuth_UserName;
@@ -666,7 +667,7 @@
         private System.ComponentModel.BackgroundWorker bgwProxyList;
         private System.Windows.Forms.GroupBox gbProxyType;
         private System.Windows.Forms.TableLayoutPanel tlpProxyType;
-        private System.Windows.Forms.CheckBox cbSOCKS5;
+        private System.Windows.Forms.CheckBox cbEnable_SOCKS5;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogID;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;

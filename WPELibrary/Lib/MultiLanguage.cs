@@ -52,7 +52,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_40 = { "结束拦截!", "Stop Intercepting!" };
         public static string[] MutiLan_41 = { "已开启极速模式!", "Speed mode has been activated!" };
         public static string[] MutiLan_42 = { "粘贴的不是有效的十六进制数据!", "The pasted data is not valid hex data!" };
-        public static string[] MutiLan_43 = { "WPE64 - Winsock Packet Editor x64 - {0}", "WPE64 - Winsock Packet Editor x64 - {0}" };
+        //public static string[] MutiLan_43 = { "Winsock Packet Editor x64 - {0}", "Winsock Packet Editor x64 - {0}" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
