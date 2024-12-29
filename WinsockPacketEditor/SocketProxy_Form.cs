@@ -47,6 +47,11 @@ namespace WinsockPacketEditor
             try
             {
                 this.SaveConfigs_Parameter();
+
+                if (this.cbEnable_SystemProxy.Checked)
+                { 
+                    Socket_Operation.StopSystemProxy();
+                }
             }
             catch (Exception ex)
             {
@@ -180,6 +185,34 @@ namespace WinsockPacketEditor
         }
 
         #endregion        
+
+        #region//系统代理
+
+        private void cbEnable_SystemProxy_CheckedChanged(object sender, EventArgs e)
+        {
+            this.SystemProxy_CheckedChanged();
+        }
+
+        private void SystemProxy_CheckedChanged()
+        {
+            try
+            {
+                if (this.cbEnable_SystemProxy.Checked)
+                {
+                    Socket_Operation.StartSystemProxy();
+                }
+                else
+                {
+                    Socket_Operation.StopSystemProxy();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//列表设置
 
@@ -1134,5 +1167,6 @@ namespace WinsockPacketEditor
         }
 
         #endregion
+
     }
 }

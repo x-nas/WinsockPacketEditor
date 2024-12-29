@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using System.Drawing;
 using WPELibrary.Lib.NativeMethods;
 using EasyHook;
+using Microsoft.Win32;
 
 namespace WPELibrary.Lib
 {   
@@ -246,6 +247,62 @@ namespace WPELibrary.Lib
             }
 
             return image;
+        }
+
+        #endregion
+
+        #region//设置系统代理
+
+        public static bool StartSystemProxy()
+        {
+            bool bReturn = false;
+
+            try
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+
+                if (key != null)
+                {
+                    string sProxyServer = string.Format("socks5://127.0.0.1:{0}", Socket_Cache.SocketProxy.ProxyPort);
+
+                    key.SetValue("ProxyEnable", 1, RegistryValueKind.DWord);
+                    key.SetValue("ProxyServer", sProxyServer, RegistryValueKind.String);
+                    key.SetValue("ProxyOverride", string.Empty, RegistryValueKind.String);
+                    key.Close();
+
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        public static bool StopSystemProxy()
+        {
+            bool bReturn = false;
+
+            try
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", true);
+
+                if (key != null)
+                {
+                    key.SetValue("ProxyEnable", 0, RegistryValueKind.DWord);
+                    key.Close();
+
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
         }
 
         #endregion
