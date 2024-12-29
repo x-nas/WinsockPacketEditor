@@ -4,6 +4,7 @@
 # Winsock Packet Editor（WPE x64）
 
 <img src="https://img.shields.io/github/license/x-nas/WinsockPacketEditor" alt="License"></img>
+[![Visitors](https://visitor-badge.laobi.icu/badge?page_id=x-nas.WinsockPacketEditor&title=Visitors)](https://github.com/x-nas/WinsockPacketEditor)
 ![GitHub Repo stars](https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=dark)
 ![GitHub Repo forks](https://img.shields.io/github/forks/x-nas/WinsockPacketEditor?style=dark)
 [![star](https://gitee.com/x-nas/WinsockPacketEditor/badge/star.svg?theme=dark)](https://gitee.com/x-nas/WinsockPacketEditor/stargazers)
