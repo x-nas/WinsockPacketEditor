@@ -1,34 +1,8 @@
 ﻿
-using System.Net;
-
 namespace WPELibrary.Lib
 {
     public class Socket_ProxyData
     {
-        #region//IP地址
-
-        protected IPAddress ipaddress;
-
-        public IPAddress IPAddress
-        {
-            get { return ipaddress; }
-            set { ipaddress = value; }
-        }
-
-        #endregion        
-
-        #region//端口号
-
-        protected ushort port;
-
-        public ushort Port
-        {
-            get { return port; }
-            set { port = value; }
-        }
-
-        #endregion        
-
         #region//域名
 
         protected string domain;
@@ -79,10 +53,8 @@ namespace WPELibrary.Lib
 
         #region//Socket_ProxyData
 
-        public Socket_ProxyData(IPAddress IPAddress, ushort Port, string Domain, Socket_Cache.SocketProxy.DomainType DomainType, byte[] Buffer, Socket_Cache.SocketProxy.DataType DataType)
-        {
-            this.ipaddress = IPAddress;
-            this.port = Port;
+        public Socket_ProxyData(string Domain, Socket_Cache.SocketProxy.DomainType DomainType, byte[] Buffer, Socket_Cache.SocketProxy.DataType DataType)
+        {          
             this.domain = Domain;
             this.domaintype = DomainType;
             this.buffer = Buffer;

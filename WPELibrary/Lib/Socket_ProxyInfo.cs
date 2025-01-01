@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 
 namespace WPELibrary.Lib
 {
@@ -8,10 +7,10 @@ namespace WPELibrary.Lib
         public Socket_Cache.SocketProxy.ProxyType ProxyType { get; set; }
 
         public Socket_Cache.SocketProxy.ProxyStep ProxyStep { get; set; }
-        
-        public IPAddress IPAddress { get; set; }
 
-        public ushort Port { get; set; } 
+        public Socket_Cache.SocketProxy.CommandType CommandType { get; set; }
+
+        public Socket_Cache.SocketProxy.AddressType AddressType { get; set; }      
         
         public Socket_Cache.SocketProxy.DomainType DomainType { get; set; }
 
@@ -29,6 +28,6 @@ namespace WPELibrary.Lib
 
         public byte[] TargetBuffer { get; set; }
 
-        public byte[] TargetData { get; set; }        
+        public byte[] TargetData { get; set; }
     }
 }

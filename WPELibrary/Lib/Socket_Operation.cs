@@ -897,7 +897,7 @@ namespace WPELibrary.Lib
                             { 
                                 byte METHODS_COUNT = bData[1];
 
-                                if (bData.Length == METHODS_COUNT + 2)
+                                if (bData.Length >= METHODS_COUNT + 2)
                                 {
                                     bReturn = true;
                                 }
@@ -1272,6 +1272,188 @@ namespace WPELibrary.Lib
 
             return saReturn;
         }
+
+        #endregion
+
+        #region//获取IP地址信息
+
+        public static IPAddress[] GetLocalIPAddress()
+        {
+            return Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToArray();
+        }
+
+        public static string GetIP_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        { 
+            string sReturn = string.Empty;
+
+            try
+            {
+                byte[] bIP = null;
+                IPAddress IP = IPAddress.Any;
+
+                switch (addressType)
+                {
+                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+
+                        bIP = new byte[4];
+                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
+                        IP = new IPAddress(bIP);
+                        sReturn = IP.ToString();
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.Domain:
+
+                        byte Length = bData[0];
+                        bIP = new byte[Length];
+                        Buffer.BlockCopy(bData, 1, bIP, 0, bIP.Length);
+                        sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+
+                        bIP = new byte[16];
+                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
+                        IP = new IPAddress(bIP);
+                        sReturn = IP.ToString();
+
+                        break;
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
+
+        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        {
+            IPEndPoint epReturn = null;
+
+            try
+            {
+                byte[] bIP = null;
+                byte[] bPort = null;
+                ushort port = 0;
+                string sIPString = string.Empty;
+                IPAddress ip = IPAddress.Any;
+
+                switch (addressType)
+                {
+                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+
+                        bIP = new byte[4];
+                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
+                        ip = new IPAddress(bIP);
+
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bData, 4, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                        sIPString = ip.ToString();
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.Domain:
+
+                        byte Length = bData[0];
+                        bIP = new byte[Length];
+                        Buffer.BlockCopy(bData, 1, bIP, 0, bIP.Length);
+                        sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
+
+                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
+
+                        switch (atType)
+                        {
+                            case Socket_Cache.SocketProxy.AddressType.IPV4:
+                                ip = IPAddress.Parse(sIPString);
+                                break;
+
+                            case Socket_Cache.SocketProxy.AddressType.IPV6:
+                                ip = IPAddress.Parse(sIPString);
+                                break;
+
+                            case Socket_Cache.SocketProxy.AddressType.Domain:
+                                ip = Dns.GetHostEntry(sIPString).AddressList[0];
+                                break;
+                        }
+
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bData, 1 + Length, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+
+                        bIP = new byte[16];
+                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
+                        ip = new IPAddress(bIP);
+
+                        bPort = new byte[2];
+                        Buffer.BlockCopy(bData, 16, bPort, 0, bPort.Length);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+
+                        sIPString = ip.ToString();
+
+                        break;
+                }
+
+                epReturn = new IPEndPoint(ip, port);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return epReturn;
+        }
+
+        #endregion
+
+        #region//获取UDP数据包
+
+        public static byte[] GetUDPData_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                switch (addressType)
+                {
+                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+
+                        bReturn = new byte[bData.Length - 10];
+                        Buffer.BlockCopy(bData, 10, bReturn, 0, bReturn.Length);
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.Domain:
+
+                        byte LENGTH = bData[4];
+                        bReturn = new byte[bData.Length - (LENGTH + 7)];
+                        Buffer.BlockCopy(bData, LENGTH + 7, bReturn, 0, bReturn.Length);
+
+                        break;
+
+                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+
+                        bReturn = new byte[bData.Length - 22];
+                        Buffer.BlockCopy(bData, 22, bReturn, 0, bReturn.Length);
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }        
 
         #endregion
 

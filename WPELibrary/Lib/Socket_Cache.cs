@@ -13,6 +13,7 @@ using System.IO;
 using System.Drawing;
 using System.Text;
 using System.Linq;
+using System.Net;
 
 namespace WPELibrary.Lib
 {
@@ -53,6 +54,7 @@ namespace WPELibrary.Lib
 
         public static class SocketProxy
         {
+            public static IPAddress ProxyIP = IPAddress.Any;
             public static bool IsListening = false;
             public static bool Enable_SOCKS5, Enable_Auth;
             public static string Auth_UserName, Auth_PassWord;
@@ -80,7 +82,7 @@ namespace WPELibrary.Lib
             {
                 None = 0,
                 GSSAPI = 1,
-                PassWord = 2,
+                UserName = 2,
             }
 
             public enum AddressType : byte
@@ -104,6 +106,13 @@ namespace WPELibrary.Lib
                 UDP = 3,
             }
 
+            public enum CommandResponse : byte
+            {
+                Success = 0,
+                Fault = 1,
+                Unsupport =7,
+            }
+
             public enum DataType : byte
             {
                 Request = 0,
@@ -123,24 +132,11 @@ namespace WPELibrary.Lib
 
             #region//代理数据入队列
 
-            public static void ProxyDataToQueue(Socket_ProxyInfo spi, Socket_Cache.SocketProxy.DataType DataType)
+            public static void ProxyDataToQueue(Socket_ProxyInfo spi, byte[] bData, Socket_Cache.SocketProxy.DataType DataType)
             {
                 try
                 {
-                    byte[] Buffer = null;
-
-                    switch (DataType)
-                    { 
-                        case SocketProxy.DataType.Request:
-                            Buffer = spi.ClientData;
-                            break;
-
-                        case SocketProxy.DataType.Response:
-                            Buffer = spi.TargetData;
-                            break;
-                    }
-
-                    Socket_ProxyData spd = new Socket_ProxyData(spi.IPAddress, spi.Port, spi.TargetAddress, spi.DomainType, Buffer, DataType);
+                    Socket_ProxyData spd = new Socket_ProxyData(spi.TargetAddress, spi.DomainType, bData, DataType);
 
                     qSocket_ProxyData.Enqueue(spd);
                 }
