@@ -19,6 +19,9 @@ namespace WPELibrary.Lib
 {
     public static class Socket_Cache
     {
+        public static string WPE = "Winsock Packet Editor x64";
+        public static IntPtr MainHandle = IntPtr.Zero;
+
         #region//结构定义
 
         public enum PWType
@@ -45,10 +48,7 @@ namespace WPELibrary.Lib
             Proxy,
         }
 
-        #endregion
-
-        public static string WPE = "Winsock Packet Editor x64";
-        public static IntPtr MainHandle = IntPtr.Zero;        
+        #endregion                
 
         #region//代理
 
@@ -142,7 +142,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -161,7 +161,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -193,7 +193,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -212,7 +212,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 
@@ -228,7 +228,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 

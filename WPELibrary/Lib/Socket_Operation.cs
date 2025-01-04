@@ -19,6 +19,7 @@ using System.Drawing;
 using WPELibrary.Lib.NativeMethods;
 using EasyHook;
 using Microsoft.Win32;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WPELibrary.Lib
 {   
@@ -1453,7 +1454,27 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
-        }        
+        }
+
+        #endregion
+
+        #region//获取返回给客户端的数据（SOCKS5，IPV4）
+
+        public static byte[] GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse CommandResponse, byte[] bServerIP, byte[] bServerPort)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                bReturn = new byte[] { (byte)Socket_Cache.SocketProxy.ProxyType.Socket5, (byte)CommandResponse, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, bServerIP[0], bServerIP[1], bServerIP[2], bServerIP[3], bServerPort[1], bServerPort[0] };
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
 
         #endregion
 
@@ -1990,6 +2011,98 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//发送 TCP 代理数据
+
+        public static int SendTCPData(Socket socket, byte[] bData)
+        {
+            int iReturn = 0;
+
+            try
+            {
+                if (socket != null) 
+                {
+                    iReturn = socket.Send(bData, SocketFlags.None);
+                }                
+            }
+            catch
+            {
+                //
+            }
+
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//接收 TCP 代理数据
+
+        public static int ReceiveTCPData(Socket socket, IAsyncResult ar)
+        {
+            int iReturn = 0;
+
+            try
+            {
+                if (socket != null)
+                {
+                    iReturn = socket.EndReceive(ar);
+                }
+            }
+            catch
+            {
+                //
+            }
+
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//发送 UDP 中继数据
+
+        public static int SendUDPData(UdpClient ClientUDP, byte[] bData, IPEndPoint ep)
+        {
+            int iReturn = 0;
+
+            try
+            {
+                if (ClientUDP != null)
+                {
+                    iReturn = ClientUDP.Send(bData, bData.Length, ep);
+                }
+            }
+            catch
+            {
+                //
+            }
+
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//接收 UDP 中继数据
+
+        public static byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                if (ClientUDP != null)
+                {
+                    bReturn = ClientUDP.EndReceive(ar, ref ep);
+                }
+            }
+            catch
+            {
+                //
+            }
+
+            return bReturn;
         }
 
         #endregion

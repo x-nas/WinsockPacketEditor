@@ -7,17 +7,12 @@ using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 using Be.Windows.Forms;
-using System.Collections.Generic;
 
 namespace WinsockPacketEditor
 {
     public partial class SocketProxy_Form : Form
     {
         private static Socket SocketServer;
-        private static UdpClient UDPListener;
-
-        private static Dictionary<IPEndPoint, IPEndPoint> UDPMapping = new Dictionary<IPEndPoint, IPEndPoint>();
-        private static Dictionary<IPEndPoint, string> UDPMapping_DNS = new Dictionary<IPEndPoint, string>();
 
         #region//窗体加载
 
@@ -343,30 +338,33 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (!IsDisposed)
+                if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                 {
-                    tvClientList.Invoke(new MethodInvoker(delegate
+                    if (!IsDisposed)
                     {
-                        string sRootName = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
-                        string sChildName = spi.ClientAddress;
-
-                        TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvClientList.Nodes, sRootName);
-                        if (RootNode == null)
+                        tvClientList.Invoke(new MethodInvoker(delegate
                         {
-                            RootNode = this.tvClientList.Nodes.Add(sRootName);                        
-                        }
+                            string sRootName = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                            string sChildName = spi.ClientAddress;
 
-                        Socket_Operation.UpdateNodeColor(RootNode);
+                            TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvClientList.Nodes, sRootName);
+                            if (RootNode == null)
+                            {
+                                RootNode = this.tvClientList.Nodes.Add(sRootName);
+                            }
 
-                        TreeNode ChildNode = Socket_Operation.FindNode_ByName(RootNode.Nodes, sChildName);
-                        if (ChildNode == null)
-                        {
-                            ChildNode = RootNode.Nodes.Add(sChildName);                            
-                        }                    
+                            Socket_Operation.UpdateNodeColor(RootNode);
 
-                        ChildNode.ImageIndex = 5;
-                        ChildNode.SelectedImageIndex = 5;                        
-                    }));
+                            TreeNode ChildNode = Socket_Operation.FindNode_ByName(RootNode.Nodes, sChildName);
+                            if (ChildNode == null)
+                            {
+                                ChildNode = RootNode.Nodes.Add(sChildName);
+                            }
+
+                            ChildNode.ImageIndex = 5;
+                            ChildNode.SelectedImageIndex = 5;
+                        }));
+                    }
                 }
             }
             catch (Exception ex)
@@ -485,6 +483,14 @@ namespace WinsockPacketEditor
                         DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
                         hbData.ByteProvider = dbp;
                     }
+                    else
+                    {
+                        hbData.ByteProvider = null;
+                    }
+                }
+                else
+                {
+                    hbData.ByteProvider = null;
                 }
             }
             catch (Exception ex)
@@ -599,6 +605,45 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//清理UDP端口（异步）
+
+        private void tCheckUDP_Tick(object sender, EventArgs e)
+        {
+            if (!this.bgwCheckUDP.IsBusy)
+            {
+                this.bgwCheckUDP.RunWorkerAsync();
+            }
+        }
+
+        private void bgwCheckUDP_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                DateTime dtNow = DateTime.Now;
+
+                foreach (Socket_ProxyInfo spi in Socket_Cache.SocketProxyList.lstSocketProxy)
+                {
+                    if (spi != null)
+                    {
+                        if (spi.ClientUDP != null && spi.ClientUDP_Time != null)
+                        {
+                            TimeSpan timeSpan = dtNow - spi.ClientUDP_Time;
+                            if (timeSpan.TotalSeconds > 60)
+                            {
+                                spi.CloseUDPClient();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//开始代理
 
         private void bStart_Click(object sender, EventArgs e)
@@ -639,13 +684,7 @@ namespace WinsockPacketEditor
                     SocketServer.Bind(ep);
                     SocketServer.Listen(int.MaxValue);
                     AcceptClients();                    
-                }
-
-                if (UDPListener == null)
-                {
-                    UDPListener = new UdpClient(Socket_Cache.SocketProxy.ProxyPort);
-                    UDPListener.BeginReceive(new AsyncCallback(AcceptUdpCallback), null);
-                }
+                }              
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
             }
@@ -798,9 +837,9 @@ namespace WinsockPacketEditor
 
             try
             {
-                if (Socket_Cache.SocketProxy.IsListening && spi.ClientSocket != null)
-                {
-                    int bytesRead = spi.ClientSocket.EndReceive(ar);
+                if (Socket_Cache.SocketProxy.IsListening)
+                {                    
+                    int bytesRead = Socket_Operation.ReceiveTCPData(spi.ClientSocket, ar);
 
                     if (bytesRead > 0)
                     {
@@ -839,17 +878,18 @@ namespace WinsockPacketEditor
                         spi.ClientSocket.BeginReceive(spi.ClientBuffer, 0, spi.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spi);
                     }
                     else
-                    {                        
+                    {
                         this.UpdateClientSocket_Closed(spi);
-                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.ClientSocket.RemoteEndPoint);
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
-                    }                  
+                        spi.CloseTCPClient();
+                    }
                 }
             }
             catch (Exception ex)
             {
-                this.UpdateClientSocket_Closed(spi);
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientSocket.RemoteEndPoint + " - " + ex.Message);
+
+                this.UpdateClientSocket_Closed(spi);
+                spi.CloseTCPClient();
             }
         }
 
@@ -894,8 +934,8 @@ namespace WinsockPacketEditor
 
                     if (bSupportAuthType)
                     {
-                        byte[] bAuth = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)atServer) };
-                        spi.ClientSocket.Send(bAuth);
+                        byte[] bAuth = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)atServer) };                        
+                        Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
 
                         if (atServer == Socket_Cache.SocketProxy.AuthType.UserName)
                         {
@@ -982,8 +1022,8 @@ namespace WinsockPacketEditor
                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), spi.ClientSocket.RemoteEndPoint);
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
-
-                    spi.ClientSocket.Send(bAuth);
+                    
+                    Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
                     spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;                   
                 }
             }
@@ -1014,51 +1054,135 @@ namespace WinsockPacketEditor
                     string sIPString = Socket_Operation.GetIP_ByAddressType(spi.AddressType, bADDRESS);
                     ushort uPort = ((ushort)targetEP.Port);
 
+                    spi.TargetEndPoint = targetEP;
                     spi.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
                     spi.ClientAddress = Socket_Operation.GetClientAddress(sIPString, uPort, spi);
                     spi.TargetAddress = Socket_Operation.GetTargetAddress(sIPString, uPort, spi);
 
                     try
                     {
-                        Socket_Cache.SocketProxy.CommandResponse commandResponse = new Socket_Cache.SocketProxy.CommandResponse();
-
-                        if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
-                        {
-                            try
-                            {
-                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                spi.TargetSocket.Connect(targetEP);
-                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-
-                                commandResponse = Socket_Cache.SocketProxy.CommandResponse.Success;
-                            }
-                            catch (SocketException)
-                            {
-                                commandResponse = Socket_Cache.SocketProxy.CommandResponse.Fault;
-                            }                            
-                        }
-                        else if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.UDP)
-                        {
-                            commandResponse = Socket_Cache.SocketProxy.CommandResponse.Success;
-                        }
-                        else
-                        {
-                            commandResponse = Socket_Cache.SocketProxy.CommandResponse.Unsupport;
-
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spi.ClientSocket.RemoteEndPoint, spi.CommandType);
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
-                        }
-
                         byte[] bServerIP = Socket_Cache.SocketProxy.ProxyIP.GetAddressBytes();
                         byte[] bServerPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
 
-                        spi.ClientSocket.Send(new byte[] { ((byte)spi.ProxyType), (byte)commandResponse, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, bServerIP[0], bServerIP[1], bServerIP[2], bServerIP[3], bServerPort[1], bServerPort[0] });
-
-                        if (commandResponse == Socket_Cache.SocketProxy.CommandResponse.Success)
+                        switch (spi.CommandType)
                         {
-                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                            Socket_Cache.SocketProxyList.SocketProxyToList(spi);
-                        }                        
+                            case Socket_Cache.SocketProxy.CommandType.Connect:
+
+                                #region//代理 TCP
+
+                                switch (spi.DomainType)
+                                {
+                                    case Socket_Cache.SocketProxy.DomainType.Http:
+
+                                        #region//HTTP 协议
+
+                                        try
+                                        {
+                                            spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                            spi.TargetSocket.Connect(targetEP);
+                                            spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+
+                                            Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                                        }
+                                        catch (SocketException)
+                                        {  
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                        }
+
+                                        #endregion
+
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.DomainType.Https:
+
+                                        #region//HTTPS 协议
+
+                                        try
+                                        {
+                                            spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                            spi.TargetSocket.Connect(targetEP);
+                                            spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;                                            
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+
+                                            Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                                        }
+                                        catch (SocketException)
+                                        {  
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                        }
+
+                                        #endregion
+
+                                        break;
+
+                                    case Socket_Cache.SocketProxy.DomainType.Socket:
+
+                                        #region//Socket 协议
+
+                                        try
+                                        {
+                                            spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                            spi.TargetSocket.Connect(targetEP);
+                                            spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;                                            
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+
+                                            Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                                        }
+                                        catch (SocketException)
+                                        {  
+                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                        }
+
+                                        #endregion
+
+                                        break;
+                                }
+
+                                #endregion
+
+                                break;
+
+                            case Socket_Cache.SocketProxy.CommandType.UDP:
+
+                                #region//UDP 中继
+
+                                try
+                                {
+                                    spi.ClientUDP = new UdpClient(0);
+                                    spi.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spi);
+                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+
+                                    bServerPort = BitConverter.GetBytes(((IPEndPoint)spi.ClientUDP.Client.LocalEndPoint).Port);                                    
+                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+
+                                    Socket_Cache.SocketProxyList.SocketProxyToList(spi);
+                                }
+                                catch (SocketException)
+                                {  
+                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                }
+
+                                #endregion
+
+                                break;
+
+                            default:
+
+                                #region//不支持的命令
+                                                                
+                                Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Unsupport, bServerIP, bServerPort));
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spi.ClientSocket.RemoteEndPoint, spi.CommandType);
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+
+                                #endregion
+
+                                break;
+                        }
                     }
                     catch (SocketException ex)
                     {
@@ -1082,10 +1206,42 @@ namespace WinsockPacketEditor
             {
                 if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                 {
-                    spi.TargetSocket.Send(bData, SocketFlags.None);
-                }               
+                    switch (spi.DomainType)
+                    {
+                        case Socket_Cache.SocketProxy.DomainType.Http:
 
-                Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                            #region//HTTP
+
+                            Socket_Operation.SendTCPData(spi.TargetSocket, bData);
+                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+
+                            #endregion
+
+                            break;
+
+                        case Socket_Cache.SocketProxy.DomainType.Https:
+
+                            #region//HTTPS
+
+                            Socket_Operation.SendTCPData(spi.TargetSocket, bData);
+                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+
+                            #endregion
+
+                            break;
+
+                        case Socket_Cache.SocketProxy.DomainType.Socket:
+
+                            #region//Socket
+
+                            Socket_Operation.SendTCPData(spi.TargetSocket, bData);                            
+                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+
+                            #endregion
+
+                            break;
+                    }                    
+                }
             }
             catch (Exception ex)
             {
@@ -1103,37 +1259,30 @@ namespace WinsockPacketEditor
 
             try
             {
-                if (spi.TargetSocket != null)
+                int bytesRead = spi.TargetSocket.EndReceive(ar);             
+
+                if (bytesRead > 0)
                 {
-                    int bytesRead = spi.TargetSocket.EndReceive(ar);
+                    spi.TargetData = new byte[bytesRead];
+                    Buffer.BlockCopy(spi.TargetBuffer, 0, spi.TargetData, 0, bytesRead);
 
-                    if (bytesRead > 0)
+                    if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        spi.TargetData = new byte[bytesRead];
-                        Buffer.BlockCopy(spi.TargetBuffer, 0, spi.TargetData, 0, bytesRead);
-
-                        if (spi.ClientSocket != null)
-                        {
-                            if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
-                            {
-                                spi.ClientSocket.Send(spi.TargetData, SocketFlags.None);                                
-                            }
-
-                            Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
-                        }
-
-                        spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                        Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
                     }
-                    else
-                    {
-                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), spi.TargetAddress);
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
-                    }
+
+                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                }
+                else
+                {
+                    spi.CloseTCPTarget();
                 }
             }
-            catch (Exception ex)
+            catch (SocketException se)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + se.ErrorCode);
+                spi.CloseTCPTarget();
             }
         }
 
@@ -1143,39 +1292,16 @@ namespace WinsockPacketEditor
 
         private void AcceptUdpCallback(IAsyncResult ar)
         {
+            Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
+
             try
             {
-                string sDNS_Head = string.Empty;
-                ushort TargetPort = 0;
                 IPEndPoint remoteEndPoint = null;
-                byte[] bData = UDPListener.EndReceive(ar, ref remoteEndPoint);
+                byte[] bData = Socket_Operation.ReceiveUDPData(spi.ClientUDP, ar, ref remoteEndPoint);
 
-                if (bData.Length > 0)
+                if (bData != null) 
                 {
-                    IPEndPoint targetResponseEndPoint = null;
-                    TargetPort = ((ushort)remoteEndPoint.Port);
-
-                    if (TargetPort == 53)
-                    {
-                        sDNS_Head = Convert.ToInt32(bData[0]).ToString() + "." + Convert.ToInt32(bData[1]).ToString();
-                        targetResponseEndPoint = UDPMapping_DNS.FirstOrDefault(kvp => kvp.Value.Equals(sDNS_Head)).Key;
-                        UDPMapping_DNS.Remove(targetResponseEndPoint);
-                    }
-                    else
-                    {
-                        targetResponseEndPoint = UDPMapping.FirstOrDefault(kvp => kvp.Value.Equals(remoteEndPoint)).Key;
-                    }
-
-                    if (targetResponseEndPoint != null)
-                    {
-                        byte[] bIP = targetResponseEndPoint.Address.GetAddressBytes();
-                        byte[] bPort = BitConverter.GetBytes(targetResponseEndPoint.Port);
-                        byte[] bResponseData = new byte[] { 0x00, 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, bIP[0], bIP[1], bIP[2], bIP[3], bPort[1], bPort[0] };
-                        bResponseData = bResponseData.Concat(bData).ToArray();
-
-                        UDPListener.Send(bResponseData, bResponseData.Length, targetResponseEndPoint);
-                    }
-                    else
+                    if (bData.Length > 0)
                     {
                         if (bData[0].Equals(0) && bData[1].Equals(0) && bData[2].Equals(0))
                         {
@@ -1183,45 +1309,44 @@ namespace WinsockPacketEditor
 
                             if (addressType == Socket_Cache.SocketProxy.AddressType.IPV4 || addressType == Socket_Cache.SocketProxy.AddressType.IPV6 || addressType == Socket_Cache.SocketProxy.AddressType.Domain)
                             {
+                                spi.ClientUDP_EndPoint = remoteEndPoint;
+
                                 byte[] bADDRESS = new byte[bData.Length - 4];
                                 Buffer.BlockCopy(bData, 4, bADDRESS, 0, bADDRESS.Length);
                                 IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
-                                
-                                TargetPort = ((ushort)targetEndPoint.Port);
+
                                 byte[] bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
 
-                                if (bUDP_Data != null)
+                                if (bUDP_Data.Length > 0)
                                 {
-                                    if (TargetPort == 53)
-                                    {
-                                        sDNS_Head = Convert.ToInt32(bUDP_Data[0]).ToString() + "." + Convert.ToInt32(bUDP_Data[1]).ToString();
-                                        if (!UDPMapping_DNS.ContainsKey(remoteEndPoint))
-                                        {
-                                            UDPMapping_DNS.Add(remoteEndPoint, sDNS_Head);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        if (!UDPMapping.ContainsKey(remoteEndPoint))
-                                        {
-                                            UDPMapping.Add(remoteEndPoint, targetEndPoint);
-                                        }
-                                    }
-
-                                    UDPListener.Send(bUDP_Data, bUDP_Data.Length, targetEndPoint);
+                                    Socket_Operation.SendUDPData(spi.ClientUDP, bUDP_Data, targetEndPoint);
+                                    spi.ClientUDP_Time = DateTime.Now;
                                 }
                             }
                         }
-                    }
+                        else
+                        {
+                            byte[] bIP = spi.ClientUDP_EndPoint.Address.GetAddressBytes();
+                            byte[] bPort = BitConverter.GetBytes(spi.ClientUDP_EndPoint.Port);
+                            byte[] bResponseData = new byte[] { 0x00, 0x00, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, bIP[0], bIP[1], bIP[2], bIP[3], bPort[1], bPort[0] };
+                            bResponseData = bResponseData.Concat(bData).ToArray();
 
-                    UDPListener.BeginReceive(new AsyncCallback(AcceptUdpCallback), null);
+                            if (bResponseData.Length > 0)
+                            {
+                                Socket_Operation.SendUDPData(spi.ClientUDP, bResponseData, spi.ClientUDP_EndPoint);
+                                spi.ClientUDP_Time = DateTime.Now;
+                            }
+                        }
+
+                        spi.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spi);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
+            }
+        }        
 
         #endregion
 
@@ -1240,7 +1365,7 @@ namespace WinsockPacketEditor
                         tvClientList.BeginInvoke(new MethodInvoker(delegate
                         {
                             ClientNode.ImageIndex = 6;
-                            ClientNode.StateImageIndex = 6;
+                            ClientNode.SelectedImageIndex = 6;
                         }));
                     }                    
                 }
