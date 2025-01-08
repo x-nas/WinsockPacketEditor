@@ -59,6 +59,9 @@ namespace WPELibrary.Lib
             public static bool Enable_SOCKS5, Enable_Auth;
             public static string Auth_UserName, Auth_PassWord;
             public static ushort ProxyPort;
+            public static int UDPCloseTime = 60;
+            public static long Total_Request = 0;
+            public static long Total_Response = 0;
 
             #region//定义结构
 
@@ -128,7 +131,24 @@ namespace WPELibrary.Lib
 
         public static class SocketProxyQueue
         {
+            public static ConcurrentQueue<Socket_ProxyInfo> qSocket_ProxyInfo = new ConcurrentQueue<Socket_ProxyInfo>();
             public static ConcurrentQueue<Socket_ProxyData> qSocket_ProxyData = new ConcurrentQueue<Socket_ProxyData>();
+
+            #region//代理入队列
+
+            public static void ProxyInfoToQueue(Socket_ProxyInfo spi)
+            {
+                try
+                {
+                    qSocket_ProxyInfo.Enqueue(spi);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
 
             #region//代理数据入队列
 
@@ -149,6 +169,21 @@ namespace WPELibrary.Lib
             #endregion
 
             #region//清除队列数据
+
+            public static void ResetProxyInfoQueue()
+            {
+                try
+                {
+                    while (!qSocket_ProxyInfo.IsEmpty)
+                    {
+                        qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
 
             public static void ResetProxyDataQueue()
             {
@@ -174,9 +209,9 @@ namespace WPELibrary.Lib
 
         public static class SocketProxyList
         {
-            public static BindingList<Socket_ProxyInfo> lstSocketProxy = new BindingList<Socket_ProxyInfo>();
-            public delegate void SocketProxyReceived(Socket_ProxyInfo spi);
-            public static event SocketProxyReceived RecSocketProxy;
+            public static BindingList<Socket_ProxyInfo> lstProxyInfo = new BindingList<Socket_ProxyInfo>();
+            public delegate void ProxyInfoReceived(Socket_ProxyInfo spi);
+            public static event ProxyInfoReceived RecProxyInfo;
 
             public static BindingList<Socket_ProxyData> lstProxyData = new BindingList<Socket_ProxyData>();
             public delegate void ProxyDataReceived(Socket_ProxyData spd);
@@ -184,12 +219,15 @@ namespace WPELibrary.Lib
 
             #region//代理入列表
 
-            public static void SocketProxyToList(Socket_ProxyInfo spi)
+            public static void ProxyInfoToList()
             {
                 try
                 {
-                    lstSocketProxy.Add(spi);
-                    RecSocketProxy?.Invoke(spi);
+                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi))
+                    {
+                        lstProxyInfo.Add(spi);
+                        RecProxyInfo?.Invoke(spi);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -207,6 +245,17 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
                     {
+                        switch (spd.DataType)
+                        { 
+                            case SocketProxy.DataType.Request:
+                                Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
+                                break;
+
+                            case SocketProxy.DataType.Response:
+                                Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
+                                break;
+                        }
+
                         RecProxyData?.Invoke(spd);
                     }                    
                 }
@@ -218,7 +267,19 @@ namespace WPELibrary.Lib
 
             #endregion            
 
-            #region//清除代理数据列表
+            #region//清除列表数据
+
+            public static void ResetProxyInfoList()
+            {
+                try
+                {
+                    lstProxyInfo.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
 
             public static void ResetProxyDataList()
             {
@@ -251,56 +312,31 @@ namespace WPELibrary.Lib
             public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
             public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
-            
+
             #region//结构定义
 
-            [StructLayout(LayoutKind.Explicit)]
+            [StructLayout(LayoutKind.Sequential)]
 
-            public struct in_addr
-            {
-                [FieldOffset(0)]
-                public S_un _S_un;
-
-                [StructLayout(LayoutKind.Explicit)]
-
-                public struct S_un
-                {
-                    [FieldOffset(0)]
-                    public S_un_b S_un_b;
-
-                    [FieldOffset(0)]
-                    public S_un_w S_un_w;
-
-                    [FieldOffset(0)]
-                    public uint S_addr;
-                }
-
-                [StructLayout(LayoutKind.Sequential)]
-
-                public struct S_un_b
-                {
-                    public byte s_b1;
-                    public byte s_b2;
-                    public byte s_b3;
-                    public byte s_b4;
-                }
-
-                [StructLayout(LayoutKind.Sequential)]
-
-                public struct S_un_w
-                {
-                    public ushort s_w1;
-                    public ushort s_w2;
-                }
-            }            
-
-            public struct sockaddr
+            public struct SockAddr
             {
                 public short sin_family;
                 public ushort sin_port;
-                public in_addr sin_addr;
-                [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-                public byte[] sin_zero;
+                public uint sin_addr;
+                private Int64 Zero;
+
+                public void MarshalFromNative(IntPtr native)
+                {
+                    Marshal.PtrToStructure(native, this);
+
+                    sin_port = (ushort)(((sin_port & 0xFF) << 8) | ((sin_port >> 8) & 0xFF));
+                }
+
+                public void MarshalToNative(IntPtr native)
+                {
+                    sin_port = (ushort)(((sin_port & 0xFF) << 8) | ((sin_port >> 8) & 0xFF));
+
+                    Marshal.StructureToPtr(this, native, true);
+                }
             }
 
             [StructLayout(LayoutKind.Sequential)]
@@ -315,8 +351,8 @@ namespace WPELibrary.Lib
 
             public struct OVERLAPPED
             {
-                public IntPtr InternalLow;
-                public IntPtr InternalHigh;
+                public UIntPtr InternalLow;
+                public UIntPtr InternalHigh;
                 public int OffsetLow;
                 public int OffsetHigh;
                 public IntPtr EventHandle;
@@ -493,7 +529,7 @@ namespace WPELibrary.Lib
                 byte[] bRawBuff,
                 byte[] bBuffByte, 
                 Socket_Cache.SocketPacket.PacketType ptPacketType, 
-                Socket_Cache.SocketPacket.sockaddr sAddr,
+                Socket_Cache.SocketPacket.SockAddr sAddr,
                 Socket_Cache.Filter.FilterAction pAction)
             {
                 try
@@ -2357,7 +2393,7 @@ namespace WPELibrary.Lib
                 return faReturn;
             }
 
-            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, IntPtr lpBuffers, int dwBufferCount, int BytesCNT)
+            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, int dwBufferCount, int BytesCNT)
             {
                 Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.None;
 
@@ -2369,26 +2405,22 @@ namespace WPELibrary.Lib
                     {
                         if (BytesLeft > 0)
                         {
-                            IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, Marshal.SizeOf(typeof(Socket_Cache.SocketPacket.WSABUF)) * i);
-                            Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
-
                             int iBuffLen = 0;
 
-                            if (wsBuffer.len >= BytesLeft)
+                            if (lpBuffers.len >= BytesLeft)
                             {
                                 iBuffLen = BytesLeft;
                             }
                             else
                             {
-                                iBuffLen = wsBuffer.len;
+                                iBuffLen = lpBuffers.len;
                             }
 
                             BytesLeft -= iBuffLen;
 
-                            byte[] bBuffer = new byte[iBuffLen];
-                            Marshal.Copy(wsBuffer.buf, bBuffer, 0, iBuffLen);
+                            byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffers.buf, iBuffLen);                          
                             Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, bBuffer);
-                            Marshal.Copy(bBuffer, 0, wsBuffer.buf, iBuffLen);
+                            Marshal.Copy(bBuffer, 0, lpBuffers.buf, iBuffLen);
 
                             faReturn = FilterAction;
 

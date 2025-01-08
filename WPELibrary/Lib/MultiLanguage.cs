@@ -40,7 +40,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_28 = { "数据加载出错!", "Data loading error!" };
         public static string[] MutiLan_29 = { "两个数据相同!", "The two data are the same!" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
-        public static string[] MutiLan_31 = { "已发送: {0}  已接收: {1}", "Sent: {0} Bytes  Received: {1} Bytes" };
+        public static string[] MutiLan_31 = { "已发送: {0}  已接收: {1}", "Sent: {0} Received: {1}" };
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
@@ -52,7 +52,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_40 = { "结束拦截!", "Stop Intercepting!" };
         public static string[] MutiLan_41 = { "已开启极速模式!", "Speed mode has been activated!" };
         public static string[] MutiLan_42 = { "粘贴的不是有效的十六进制数据!", "The pasted data is not valid hex data!" };
-        //public static string[] MutiLan_43 = { "Winsock Packet Editor x64 - {0}", "Winsock Packet Editor x64 - {0}" };
+        public static string[] MutiLan_43 = { "已请求: {0}  已响应: {1}", "Request: {0} Response: {1}" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };

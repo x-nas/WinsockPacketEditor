@@ -19,7 +19,6 @@ using System.Drawing;
 using WPELibrary.Lib.NativeMethods;
 using EasyHook;
 using Microsoft.Win32;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WPELibrary.Lib
 {   
@@ -248,6 +247,27 @@ namespace WPELibrary.Lib
             }
 
             return image;
+        }
+
+        #endregion
+
+        #region//获取内存的数据
+
+        public static byte[] GetBytesFromIntPtr(IntPtr ipBuffer, int Length)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                bReturn = new byte[Length];
+                Marshal.Copy(ipBuffer, bReturn, 0, Length);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
         }
 
         #endregion
@@ -1110,7 +1130,7 @@ namespace WPELibrary.Lib
             Int32 res, 
             Socket_Cache.SocketPacket.PacketType ptType, 
             Socket_Cache.Filter.FilterAction FilterAction, 
-            Socket_Cache.SocketPacket.sockaddr sockaddr)
+            Socket_Cache.SocketPacket.SockAddr sockaddr)
         {
             try
             {
@@ -1152,9 +1172,9 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取sockaddr对应的IP地址和端口
+        #region//获取 SockAddr 对应的 IP 地址和端口
 
-        public static string GetIPString_BySocketAddr(int pSocket, Socket_Cache.SocketPacket.sockaddr pAddr, Socket_Cache.SocketPacket.PacketType pType)
+        public static string GetIPString_BySocketAddr(int pSocket, Socket_Cache.SocketPacket.SockAddr pAddr, Socket_Cache.SocketPacket.PacketType pType)
         {
             string sReturn = "";
 
@@ -1187,7 +1207,7 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        public static string GetIP_ByAddr(Socket_Cache.SocketPacket.sockaddr saAddr)
+        public static string GetIP_ByAddr(Socket_Cache.SocketPacket.SockAddr saAddr)
         {
             string sReturn = "";
 
@@ -1212,7 +1232,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                Socket_Cache.SocketPacket.sockaddr saAddr = new Socket_Cache.SocketPacket.sockaddr();
+                Socket_Cache.SocketPacket.SockAddr saAddr = new Socket_Cache.SocketPacket.SockAddr();
                 int iAddrLen = Marshal.SizeOf(saAddr);
 
                 switch (IPType)
@@ -1242,11 +1262,11 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取IP地址和端口对应的sockaddr
+        #region//获取 IP 地址和端口对应的 SockAddr
 
-        public static Socket_Cache.SocketPacket.sockaddr GetSocketAddr_ByIPString(string IPString)
+        public static Socket_Cache.SocketPacket.SockAddr GetSocketAddr_ByIPString(string IPString)
         {
-            Socket_Cache.SocketPacket.sockaddr saReturn = new Socket_Cache.SocketPacket.sockaddr();
+            Socket_Cache.SocketPacket.SockAddr saReturn = new Socket_Cache.SocketPacket.SockAddr();
 
             try
             {
@@ -1258,12 +1278,12 @@ namespace WPELibrary.Lib
                     saReturn.sin_family = ((short)AddressFamily.InterNetwork);
                     saReturn.sin_port = WS2_32.htons(ushort.Parse(sPort));
 
-                    Socket_Cache.SocketPacket.in_addr ia = new Socket_Cache.SocketPacket.in_addr();
-                    IPAddress ipAddress = IPAddress.Parse(sIP);
-                    ia._S_un.S_addr = ((uint)ipAddress.GetHashCode());
+                    byte[] ipBytes = IPAddress.Parse(sIP).GetAddressBytes();
 
-                    saReturn.sin_addr = ia;
-                    saReturn.sin_zero = new byte[8];
+                    if (ipBytes.Length == 4)
+                    {
+                        saReturn.sin_addr = (uint)(ipBytes[0] << 24 | ipBytes[1] << 16 | ipBytes[2] << 8 | ipBytes[3]);
+                    }                   
                 }
             }
             catch (Exception ex)
@@ -1516,7 +1536,7 @@ namespace WPELibrary.Lib
 
         #region//获取WSABUF数组的字节数组        
 
-        public static byte[] GetByteFromWSABUF(IntPtr lpBuffers, Int32 dwBufferCount, int BytesCNT)
+        public static byte[] GetByteFromWSABUF(Socket_Cache.SocketPacket.WSABUF lpBuffers, Int32 dwBufferCount, int BytesCNT)
         {
             byte[] bReturn = new byte[0];
 
@@ -1528,26 +1548,23 @@ namespace WPELibrary.Lib
                 {
                     if (BytesLeft > 0)
                     {
-                        IntPtr lpNewBuffer = IntPtr.Add(lpBuffers, Marshal.SizeOf(typeof(Socket_Cache.SocketPacket.WSABUF)) * i);
-                        Socket_Cache.SocketPacket.WSABUF wsBuffer = Marshal.PtrToStructure<Socket_Cache.SocketPacket.WSABUF>(lpNewBuffer);
-
                         int iBuffLen = 0;
 
-                        if (wsBuffer.len >= BytesLeft)
+                        if (lpBuffers.len >= BytesLeft)
                         {
                             iBuffLen = BytesLeft;
                         }
                         else
                         {
-                            iBuffLen = wsBuffer.len;
+                            iBuffLen = lpBuffers.len;
                         }
 
                         BytesLeft -= iBuffLen;
 
                         byte[] bBuff = new byte[iBuffLen];
-                        Marshal.Copy(wsBuffer.buf, bBuff, 0, iBuffLen);
+                        Marshal.Copy(lpBuffers.buf, bBuff, 0, iBuffLen);
 
-                        bReturn = bReturn.Concat(bBuff).ToArray();                        
+                        bReturn = bReturn.Concat(bBuff).ToArray();
                     }
                 }
             }
@@ -2094,7 +2111,7 @@ namespace WPELibrary.Lib
             {
                 if (ClientUDP != null)
                 {
-                    bReturn = ClientUDP.EndReceive(ar, ref ep);
+                    bReturn = ClientUDP.EndReceive(ar, ref ep);                    
                 }
             }
             catch
@@ -3012,6 +3029,7 @@ namespace WPELibrary.Lib
 
                     int res = -1;
                     string sIPString = string.Empty;
+                    SocketFlags lpFlags = SocketFlags.None;
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
                     {
@@ -3024,18 +3042,12 @@ namespace WPELibrary.Lib
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {
-                        res = WS2_32.send(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                        res = WS2_32.send(iSocket, ipSend, bSendBuffer.Length, ref lpFlags);
                     }
                     else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                    {
-                        Socket_Cache.SocketPacket.sockaddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-
-                        int iSizeAddr = Marshal.SizeOf(saAddr);
-                        IntPtr ipAddr = Marshal.AllocHGlobal(iSizeAddr);
-
-                        Marshal.StructureToPtr<Socket_Cache.SocketPacket.sockaddr>(saAddr, ipAddr, true);
-
-                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, SocketFlags.None, ipAddr, iSizeAddr);
+                    {                        
+                        Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, ref lpFlags, ref saAddr, Marshal.SizeOf(saAddr));
                     }
 
                     if (res > 0)
