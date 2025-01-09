@@ -21,7 +21,7 @@ WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适
 
 WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通过 SOCKS 代理模式来拦截 Winsock 封包.
 
-本软件使用了微软的VS2022集成开发环境，.NET Framework 4.8开发框架，以及ClickOnce部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
+本软件使用了微软的 VS2022 集成开发环境，.NET Framework 4.8 开发框架，以及 ClickOnce 部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
 
 ## Introduction
 
@@ -37,7 +37,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] 代理模式下支持多种主流代理协议和 SSL 安全协议，并具有端口映射和断点调试等功能.
 - [x] 具备自动化的可编程机器人功能，可在满足触发条件的情况下执行预定义的指令集.
 - [x] 消息队列缓存模式，所有的封包依次排队进入 MQ 队列，无需等待缓存结束后再显示封包.
-- [x] 您可以自定义需要拦截的封包类型，已包含 WinSock 1.0 和 2.0 的 API.
+- [x] 您可以自定义需要拦截的封包类型，已包含 WinSock 1.1 和 2.0 的 APIs.
 - [x] 注入器和封包编辑器相对独立，可一次注入多个软件后，分别获取不同程序的网络封包.
 - [x] 您可以通过选择一个尚未运行的程序注入后，从启动阶段即开始获取程序的所有封包数据.
 - [x] 直观的封包对比功能，支持多种数据格式之间快速切换.
@@ -63,7 +63,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] In proxy mode, it supports multiple mainstream proxy protocols and SSL security protocols, and has functions such as port mapping and breakpoint debugging.
 - [x] Equipped with automated programmable robot functionality, capable of executing pre-defined instruction sets under triggering conditions.
 - [x] Message queue caching mode, where all packets are queued in sequence to enter the MQ queue and processed according to the first in, first out rule, without waiting for the cache to finish before displaying the packets.
-- [x] You can customize the packet types that need to be intercepted, which already include APIs for WinSock 1.0 and 2.0.
+- [x] You can customize the packet types that need to be intercepted, which already include APIs for WinSock 1.1 and 2.0.
 - [x] The injector and packet editor are relatively independent, and can inject multiple software at once to obtain network packets from different programs separately.
 - [x] You can inject a program that has not yet been run and start obtaining all packet data of the program from the startup phase.
 - [x] Intuitive packet comparison function, supporting quick switching between multiple data formats.
