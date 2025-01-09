@@ -355,7 +355,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (spi != null && spi.ClientSocket != null && !string.IsNullOrEmpty(spi.ClientAddress))
+                if (spi != null)
                 {
                     if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
@@ -363,25 +363,29 @@ namespace WinsockPacketEditor
                         {
                             tvProxyInfo.Invoke(new MethodInvoker(delegate
                             {
-                                string sRootName = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
-                                string sChildName = spi.ClientAddress;
+                                string sRootName = this.GetClientName(spi);
 
-                                TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvProxyInfo.Nodes, sRootName);
-                                if (RootNode == null)
+                                if (!string.IsNullOrEmpty(sRootName))
                                 {
-                                    RootNode = this.tvProxyInfo.Nodes.Add(sRootName);
-                                }
+                                    string sChildName = spi.ClientAddress;
 
-                                Socket_Operation.UpdateNodeColor(RootNode);
+                                    TreeNode RootNode = Socket_Operation.FindNode_ByName(this.tvProxyInfo.Nodes, sRootName);
+                                    if (RootNode == null)
+                                    {
+                                        RootNode = this.tvProxyInfo.Nodes.Add(sRootName);
+                                    }
 
-                                TreeNode ChildNode = Socket_Operation.FindNode_ByName(RootNode.Nodes, sChildName);
-                                if (ChildNode == null)
-                                {
-                                    ChildNode = RootNode.Nodes.Add(sChildName);
-                                }
+                                    Socket_Operation.UpdateNodeColor(RootNode);
 
-                                ChildNode.ImageIndex = 5;
-                                ChildNode.SelectedImageIndex = 5;
+                                    TreeNode ChildNode = Socket_Operation.FindNode_ByName(RootNode.Nodes, sChildName);
+                                    if (ChildNode == null)
+                                    {
+                                        ChildNode = RootNode.Nodes.Add(sChildName);
+                                    }
+
+                                    ChildNode.ImageIndex = 5;
+                                    ChildNode.SelectedImageIndex = 5;
+                                }                                
                             }));
                         }
                     }
@@ -391,6 +395,25 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        private string GetClientName(Socket_ProxyInfo spi)
+        { 
+            string sReturn = string.Empty;
+
+            try
+            {
+                if (spi != null && spi.ClientSocket != null && !string.IsNullOrEmpty(spi.ClientAddress))
+                {
+                    sReturn = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }
 
         #endregion
@@ -649,20 +672,17 @@ namespace WinsockPacketEditor
             {
                 DateTime dtNow = DateTime.Now;
 
-                foreach (Socket_ProxyInfo spi in Socket_Cache.SocketProxyList.lstProxyInfo)
+                for (int i = 0;i < Socket_Cache.SocketProxyList.lstProxyInfo.Count;i ++)
                 {
-                    if (spi != null)
+                    if (Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientUDP != null && Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientUDP_Time != null)
                     {
-                        if (spi.ClientUDP != null && spi.ClientUDP_Time != null)
+                        TimeSpan timeSpan = dtNow - Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientUDP_Time;
+                        if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
                         {
-                            TimeSpan timeSpan = dtNow - spi.ClientUDP_Time;
-                            if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
-                            {
-                                spi.CloseUDPClient();
-                            }
+                            Socket_Cache.SocketProxyList.lstProxyInfo[i].CloseUDPClient();
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
