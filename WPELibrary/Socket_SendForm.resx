@@ -462,98 +462,125 @@
   <metadata name="tsPacketData.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>373, 17</value>
   </metadata>
+  <data name="tsPacketData_Cut.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
   <data name="tsPacketData_Cut.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="tsPacketData_Cut.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 23</value>
+    <value>23, 22</value>
   </data>
   <data name="tsPacketData_Cut.Text" xml:space="preserve">
     <value>剪切</value>
   </data>
   <data name="toolStripSeparator10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
+  </data>
+  <data name="tsPacketData_Copy_Copy.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 30</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
+  <data name="tsPacketData_Copy_CopyHex.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
   <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 30</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
     <value>复制 Hex</value>
+  </data>
+  <data name="tsPacketData_Copy.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_Copy.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="tsPacketData_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 23</value>
+    <value>32, 22</value>
   </data>
   <data name="tsPacketData_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
   <data name="toolStripSeparator11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
+  </data>
+  <data name="tsPacketData_Paste_Paste.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 30</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
     <value>粘贴</value>
   </data>
+  <data name="tsPacketData_Paste_PasteHex.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
   <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>134, 30</value>
+    <value>180, 22</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
     <value>粘贴 Hex</value>
+  </data>
+  <data name="tsPacketData_Paste.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_Paste.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="tsPacketData_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>40, 23</value>
+    <value>32, 22</value>
   </data>
   <data name="tsPacketData_Paste.Text" xml:space="preserve">
     <value>粘贴</value>
   </data>
   <data name="toolStripSeparator12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
+  </data>
+  <data name="tsPacketData_Find.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_Find.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="tsPacketData_Find.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 23</value>
+    <value>23, 22</value>
   </data>
   <data name="tsPacketData_Find.Text" xml:space="preserve">
     <value>查找</value>
   </data>
   <data name="toolStripSeparator13.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
+  </data>
+  <data name="tsPacketData_FindNext.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="tsPacketData_FindNext.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <data name="tsPacketData_FindNext.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 23</value>
+    <value>23, 22</value>
   </data>
   <data name="tsPacketData_FindNext.Text" xml:space="preserve">
     <value>查找下一个</value>
   </data>
   <data name="toolStripSeparator14.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
   </data>
   <data name="tscbEncoding.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
   </data>
   <data name="tscbEncoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 26</value>
+    <value>200, 25</value>
   </data>
   <data name="toolStripSeparator15.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 26</value>
+    <value>6, 25</value>
   </data>
   <data name="tscbPerLine.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -565,7 +592,7 @@
     <value>固定排列</value>
   </data>
   <data name="tscbPerLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>150, 26</value>
+    <value>150, 25</value>
   </data>
   <data name="tsPacketData.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -577,7 +604,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tsPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>718, 26</value>
+    <value>718, 25</value>
   </data>
   <data name="tsPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>79</value>

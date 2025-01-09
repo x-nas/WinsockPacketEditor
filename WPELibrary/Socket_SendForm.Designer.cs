@@ -280,15 +280,15 @@ namespace WPELibrary
             // tsPacketData_Copy_Copy
             // 
             this.tsPacketData_Copy_Copy.Image = global::WPELibrary.Properties.Resources.copy;
-            this.tsPacketData_Copy_Copy.Name = "tsPacketData_Copy_Copy";
             resources.ApplyResources(this.tsPacketData_Copy_Copy, "tsPacketData_Copy_Copy");
+            this.tsPacketData_Copy_Copy.Name = "tsPacketData_Copy_Copy";
             this.tsPacketData_Copy_Copy.Click += new System.EventHandler(this.tsPacketData_Copy_Copy_Click);
             // 
             // tsPacketData_Copy_CopyHex
             // 
             this.tsPacketData_Copy_CopyHex.Image = global::WPELibrary.Properties.Resources.copy;
-            this.tsPacketData_Copy_CopyHex.Name = "tsPacketData_Copy_CopyHex";
             resources.ApplyResources(this.tsPacketData_Copy_CopyHex, "tsPacketData_Copy_CopyHex");
+            this.tsPacketData_Copy_CopyHex.Name = "tsPacketData_Copy_CopyHex";
             this.tsPacketData_Copy_CopyHex.Click += new System.EventHandler(this.tsPacketData_Copy_CopyHex_Click);
             // 
             // toolStripSeparator11
@@ -310,15 +310,15 @@ namespace WPELibrary
             // tsPacketData_Paste_Paste
             // 
             this.tsPacketData_Paste_Paste.Image = global::WPELibrary.Properties.Resources.paste;
-            this.tsPacketData_Paste_Paste.Name = "tsPacketData_Paste_Paste";
             resources.ApplyResources(this.tsPacketData_Paste_Paste, "tsPacketData_Paste_Paste");
+            this.tsPacketData_Paste_Paste.Name = "tsPacketData_Paste_Paste";
             this.tsPacketData_Paste_Paste.Click += new System.EventHandler(this.tsPacketData_Paste_Paste_Click);
             // 
             // tsPacketData_Paste_PasteHex
             // 
             this.tsPacketData_Paste_PasteHex.Image = global::WPELibrary.Properties.Resources.paste;
-            this.tsPacketData_Paste_PasteHex.Name = "tsPacketData_Paste_PasteHex";
             resources.ApplyResources(this.tsPacketData_Paste_PasteHex, "tsPacketData_Paste_PasteHex");
+            this.tsPacketData_Paste_PasteHex.Name = "tsPacketData_Paste_PasteHex";
             this.tsPacketData_Paste_PasteHex.Click += new System.EventHandler(this.tsPacketData_Paste_PasteHex_Click);
             // 
             // toolStripSeparator12

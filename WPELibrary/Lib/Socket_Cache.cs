@@ -3983,7 +3983,7 @@ namespace WPELibrary.Lib
 
             #region//发送
 
-            public static bool DoSendList_ByIndex(int iSocket, int iIndex)
+            public static bool DoSendList_ByIndex(int Socket, int iIndex)
             {
                 bool bResult = false;
 
@@ -3998,12 +3998,12 @@ namespace WPELibrary.Lib
                             IntPtr ipSend = Marshal.AllocHGlobal(bBuffer.Length);
                             Marshal.Copy(bBuffer, 0, ipSend, bBuffer.Length);
 
-                            if (iSocket == 0)
+                            if (Socket == 0)
                             {
-                                iSocket = (int)dtSendList.Rows[iIndex]["Socket"];
+                                Socket = (int)dtSendList.Rows[iIndex]["Socket"];
                             }
 
-                            bResult = WinSockHook.SendPacket(iSocket, ipSend, bBuffer.Length);                          
+                            bResult = WinSockHook.SendPacket(Socket, ipSend, bBuffer.Length);                          
                         }
                     }                    
                 }

@@ -767,7 +767,7 @@
             // 
             resources.ApplyResources(this.nudDelay, "nudDelay");
             this.nudDelay.Maximum = new decimal(new int[] {
-            99999,
+            99999999,
             0,
             0,
             0});

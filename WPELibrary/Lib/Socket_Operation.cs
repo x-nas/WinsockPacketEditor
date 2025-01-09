@@ -1276,7 +1276,7 @@ namespace WPELibrary.Lib
 
                     saReturn.sin_family = ((short)AddressFamily.InterNetwork);
                     saReturn.sin_port = (ushort)IPAddress.HostToNetworkOrder((short)iPort);
-                    saReturn.sin_addr = (uint)ipAddress.Address;                       
+                    saReturn.sin_addr = (uint)ipAddress.Address;
                 }
             }
             catch (Exception ex)
@@ -3009,20 +3009,19 @@ namespace WPELibrary.Lib
 
         #region//发送封包
 
-        public static bool SendPacket(int iSocket, Socket_Cache.SocketPacket.PacketType stType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
+        public static bool SendPacket(int Socket, Socket_Cache.SocketPacket.PacketType stType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
         {
             bool bReturn = false;
 
             try
             {
-                if (iSocket > 0 && bSendBuffer.Length > 0)
+                if (Socket > 0 && bSendBuffer.Length > 0)
                 {
                     IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
                     Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
 
                     int res = -1;
-                    string sIPString = string.Empty;
-                    SocketFlags lpFlags = SocketFlags.None;
+                    string sIPString = string.Empty;                 
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
                     {
@@ -3035,18 +3034,20 @@ namespace WPELibrary.Lib
 
                     if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {
-                        res = WS2_32.send(iSocket, ipSend, bSendBuffer.Length, lpFlags);
+                        res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
                     }
                     else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {                        
                         Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                        res = WS2_32.sendto(iSocket, ipSend, bSendBuffer.Length, lpFlags, ref saAddr, Marshal.SizeOf(saAddr));                        
+                        res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));                        
                     }
 
                     if (res > 0)
                     {
                         bReturn = true;
                     }
+
+                    Marshal.FreeHGlobal(ipSend);
                 }
             }
             catch (Exception ex)
