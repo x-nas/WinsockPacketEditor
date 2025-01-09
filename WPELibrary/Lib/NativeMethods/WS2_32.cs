@@ -52,7 +52,11 @@ namespace WPELibrary.Lib.NativeMethods
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
 
-        public static extern int getsockname(int s, ref Socket_Cache.SocketPacket.SockAddr Address, ref int namelen);
+        public static extern int getsockname(
+            [In] int Socket, 
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr Address, 
+            [In, Out] ref int namelen
+            );
 
         #endregion
 
@@ -60,7 +64,11 @@ namespace WPELibrary.Lib.NativeMethods
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
 
-        public static extern int getpeername(int s, ref Socket_Cache.SocketPacket.SockAddr Address, ref int namelen);
+        public static extern int getpeername(
+            [In] int Socket, 
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr Address, 
+            [In, Out] ref int namelen
+            );
 
         #endregion
 
@@ -103,7 +111,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [In] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags
+            [In] SocketFlags flags
             );
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
@@ -111,7 +119,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [In] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags
+            [In] SocketFlags flags
             );
 
         #endregion
@@ -123,7 +131,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket, 
             [Out] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags
+            [In] SocketFlags flags
             );
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
@@ -131,7 +139,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [Out] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags
+            [In] SocketFlags flags
             );
 
         #endregion
@@ -143,7 +151,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [In] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen
             );
@@ -154,7 +162,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [In] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen
             );
@@ -168,7 +176,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket, 
             [Out] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen
             );
@@ -179,7 +187,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Socket,
             [Out] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen
             );
@@ -194,7 +202,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
             [In] IntPtr lpCompletionRoutine
             );
@@ -205,7 +213,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
             [In] IntPtr lpCompletionRoutine
             );
@@ -247,7 +255,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr lpTo,
             [In] IntPtr lpToLen,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
@@ -261,7 +269,7 @@ namespace WPELibrary.Lib.NativeMethods
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr lpTo,
             [In] IntPtr lpToLen,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,

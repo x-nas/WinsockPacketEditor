@@ -53,7 +53,7 @@ namespace WPELibrary.Lib
             [In] Int32 Socket,
             [In] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags)
+            [In] SocketFlags flags)
         {
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Send;
             Int32 res = 0;
@@ -73,7 +73,7 @@ namespace WPELibrary.Lib
                     else
                     {
                         Marshal.Copy(bBuffer, 0, buffer, length);
-                        res = WS2_32.send(Socket, buffer, length, ref flags);
+                        res = WS2_32.send(Socket, buffer, length, flags);
 
                         if (res > 0)
                         {
@@ -103,10 +103,10 @@ namespace WPELibrary.Lib
             [In] Int32 Socket,
             [Out] IntPtr buffer,
             [In] Int32 length,
-            [In] ref SocketFlags flags)
+            [In] SocketFlags flags)
         {
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Recv;
-            int res = WS2_32.recv(Socket, buffer, length, ref flags);
+            int res = WS2_32.recv(Socket, buffer, length, flags);
 
             try
             {
@@ -144,7 +144,7 @@ namespace WPELibrary.Lib
             [In] Int32 Socket,
             [In] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen)
         {
@@ -166,7 +166,7 @@ namespace WPELibrary.Lib
                     else
                     {
                         Marshal.Copy(bBuffer, 0, ipBuffer, length);
-                        res = WS2_32.sendto(Socket, ipBuffer, length, ref lpFlags, ref To, ToLen);
+                        res = WS2_32.sendto(Socket, ipBuffer, length, lpFlags, ref To, ToLen);
 
                         if (res > 0)
                         {
@@ -196,12 +196,12 @@ namespace WPELibrary.Lib
             [In] Int32 Socket,
             [Out] IntPtr ipBuffer,
             [In] Int32 length,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen)
         {            
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.RecvFrom;
-            Int32 res = WS2_32.recvfrom(Socket, ipBuffer, length, ref lpFlags, ref From, FromLen);
+            Int32 res = WS2_32.recvfrom(Socket, ipBuffer, length, lpFlags, ref From, FromLen);
 
             try
             {
@@ -240,7 +240,7 @@ namespace WPELibrary.Lib
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
             [In] IntPtr lpCompletionRoutine)
         {
@@ -263,7 +263,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        res = WS2_32.WSASend(Socket, ref lpBuffers, dwBufferCount, lpNumberOfBytesSend, ref lpFlags, ref lpOverlapped, lpCompletionRoutine);
+                        res = WS2_32.WSASend(Socket, ref lpBuffers, dwBufferCount, lpNumberOfBytesSend, lpFlags, ref lpOverlapped, lpCompletionRoutine);
 
                         if (res == SocketError.Success)
                         {
@@ -343,7 +343,7 @@ namespace WPELibrary.Lib
             [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
             [In] Int32 dwBufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] ref SocketFlags lpFlags,
+            [In] SocketFlags lpFlags,
             [In] ref Socket_Cache.SocketPacket.SockAddr lpTo,
             [In] IntPtr lpToLen,
             [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
@@ -368,7 +368,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        res = WS2_32.WSASendTo(Socket, ref lpBuffers, dwBufferCount, lpNumberOfBytesSend, ref lpFlags, ref lpTo, lpToLen, ref lpOverlapped, lpCompletionRoutine);
+                        res = WS2_32.WSASendTo(Socket, ref lpBuffers, dwBufferCount, lpNumberOfBytesSend, lpFlags, ref lpTo, lpToLen, ref lpOverlapped, lpCompletionRoutine);
 
                         if (res == SocketError.Success)
                         {
@@ -598,7 +598,7 @@ namespace WPELibrary.Lib
             try
             {
                 SocketFlags flags = SocketFlags.None;
-                int res = WS2_32.send(socket, buffer, length, ref flags);
+                int res = WS2_32.send(socket, buffer, length, flags);
 
                 if (res > 0)
                 {
