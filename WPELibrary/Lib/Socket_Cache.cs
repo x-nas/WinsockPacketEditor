@@ -534,21 +534,17 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (!Socket_Cache.SocketPacket.SpeedMode)
+                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
+
+                    if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
                     {
-                        string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
+                        string sIPFrom = sPacketIP.Split('|')[0];
+                        string sIPTo = sPacketIP.Split('|')[1];
+                        DateTime dtTime = DateTime.Now;
 
-                        if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
-                        {
-                            string sIPFrom = sPacketIP.Split('|')[0];
-                            string sIPTo = sPacketIP.Split('|')[1];
-                            DateTime dtTime = DateTime.Now;
-
-                            Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
-
-                            qSocket_PacketInfo.Enqueue(spi);
-                        }
-                    }                   
+                        Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
+                        qSocket_PacketInfo.Enqueue(spi);
+                    }
                 }
                 catch (Exception ex)
                 {

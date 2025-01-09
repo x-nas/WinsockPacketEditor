@@ -1138,30 +1138,23 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.CountSocketInfo(ptType, res);
 
-                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                    if (!Socket_Cache.SocketPacket.SpeedMode)
                     {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                        if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
                         {
-                            Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
-                        }
-                        else
-                        {
-                            if (res > 0)
+                            if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                             {
-                                if (res != bBuffer.Length)
-                                {
-                                    byte[] bRes = new byte[res];
-                                    Buffer.BlockCopy(bBuffer, 0, bRes, 0, res);
-
-                                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bRes, ptType, sockaddr, FilterAction);
-                                }
-                                else
+                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
+                            }
+                            else
+                            {
+                                if (res > 0)
                                 {
                                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
                                 }
                             }
                         }
-                    }
+                    }                    
                 });
             }
             catch (Exception ex)

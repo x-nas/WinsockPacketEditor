@@ -656,7 +656,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//清理UDP端口（异步）
+        #region//清理 UDP 端口（异步）
 
         private void tCheckUDP_Tick(object sender, EventArgs e)
         {
@@ -1329,9 +1329,9 @@ namespace WinsockPacketEditor
                     spi.CloseTCPTarget();
                 }
             }
-            catch (SocketException se)
+            catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + se.ErrorCode);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
                 spi.CloseTCPTarget();
             }
         }
