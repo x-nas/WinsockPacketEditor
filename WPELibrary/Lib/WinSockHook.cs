@@ -587,32 +587,6 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion
-
-        #region//发送封包
-
-        public static bool SendPacket(int socket, IntPtr buffer, int length)
-        {  
-            bool bReturn = false;
-
-            try
-            {
-                SocketFlags flags = SocketFlags.None;
-                int res = WS2_32.send(socket, buffer, length, flags);
-
-                if (res > 0)
-                {
-                    bReturn = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;            
-        }
-
-        #endregion
+        #endregion        
     }
 }

@@ -3023,23 +3023,38 @@ namespace WPELibrary.Lib
                     int res = -1;
                     string sIPString = string.Empty;                 
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
+                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || 
+                        stType == Socket_Cache.SocketPacket.PacketType.SendTo || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASend || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
                     {
                         sIPString = sIPTo;
                     }
-                    else if (stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSARecv || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                    else if (stType == Socket_Cache.SocketPacket.PacketType.Recv || 
+                        stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {
                         sIPString = sIPFrom;
                     }
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || stType == Socket_Cache.SocketPacket.PacketType.Recv || stType == Socket_Cache.SocketPacket.PacketType.WSASend || stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || 
+                        stType == Socket_Cache.SocketPacket.PacketType.Recv || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASend || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {
                         res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
                     }
-                    else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                    {                        
-                        Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                        res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));                        
+                    else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || 
+                        stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                    {
+                        if (!string.IsNullOrEmpty(sIPString))
+                        {
+                            Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                            res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                        }                                                
                     }
 
                     if (res > 0)

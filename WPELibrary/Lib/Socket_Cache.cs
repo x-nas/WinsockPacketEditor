@@ -3995,15 +3995,12 @@ namespace WPELibrary.Lib
 
                         if (bBuffer.Length > 0)
                         {
-                            IntPtr ipSend = Marshal.AllocHGlobal(bBuffer.Length);
-                            Marshal.Copy(bBuffer, 0, ipSend, bBuffer.Length);
-
                             if (Socket == 0)
                             {
                                 Socket = (int)dtSendList.Rows[iIndex]["Socket"];
                             }
 
-                            bResult = WinSockHook.SendPacket(Socket, ipSend, bBuffer.Length);                          
+                            Socket_Operation.SendPacket(Socket, SocketPacket.PacketType.Send, string.Empty, string.Empty, bBuffer);
                         }
                     }                    
                 }
