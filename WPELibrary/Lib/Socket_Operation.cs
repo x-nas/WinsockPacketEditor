@@ -1764,36 +1764,44 @@ namespace WPELibrary.Lib
 
         #region//获取对应名称的树节点
 
-        public static TreeNode FindNode_ByName(TreeNodeCollection nodes, string Name)
+        public static async Task<TreeNode> FindNodeAsync(TreeView treeView, string nodeName)
         {
+            return await Task.Run(() =>
+            {
+                return FindNode(treeView.Nodes, nodeName);
+            });
+        }
+
+        private static TreeNode FindNode(TreeNodeCollection nodes, string nodeName)
+        {
+            TreeNode tnReturn = null;
+
             try
             {
-                if (nodes == null)
-                {
-                    return null;
-                }
-
                 foreach (TreeNode node in nodes)
                 {
-                    if (node.Text == Name)
+                    if (node.Text == nodeName)
                     {
-                        return node;
+                        tnReturn = node;
+                        break;
                     }
 
-                    TreeNode foundNode = FindNode_ByName(node.Nodes, Name);
+                    TreeNode foundNode = FindNode(node.Nodes, nodeName);
+
                     if (foundNode != null)
                     {
-                        return foundNode;
+                        tnReturn = foundNode;
+                        break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-
-            return null;
-        }
+            
+            return tnReturn;
+        }        
 
         #endregion
 
@@ -1849,31 +1857,7 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion
-
-        #region//更新树节点的背景颜色
-
-        public static void UpdateNodeColor(TreeNode node)
-        {
-            try
-            {
-                Task.Run(() =>
-                {
-                    if (node.BackColor != Color.LightYellow)
-                    {
-                        node.BackColor = Color.LightYellow;
-                        Thread.Sleep(1000);
-                        node.BackColor = Color.White;
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//数据对比
 

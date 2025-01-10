@@ -92,9 +92,9 @@
             this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
             this.bgwProxyData = new System.ComponentModel.BackgroundWorker();
-            this.tCheckUDP = new System.Windows.Forms.Timer(this.components);
-            this.bgwCheckUDP = new System.ComponentModel.BackgroundWorker();
+            this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
             this.bgwProxyInfo = new System.ComponentModel.BackgroundWorker();
+            this.bgwCheckProxyState = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -615,20 +615,20 @@
             this.bgwProxyData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyData_DoWork);
             this.bgwProxyData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyData_RunWorkerCompleted);
             // 
-            // tCheckUDP
+            // tCheckProxyState
             // 
-            this.tCheckUDP.Enabled = true;
-            this.tCheckUDP.Interval = 10000;
-            this.tCheckUDP.Tick += new System.EventHandler(this.tCheckUDP_Tick);
-            // 
-            // bgwCheckUDP
-            // 
-            this.bgwCheckUDP.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckUDP_DoWork);
+            this.tCheckProxyState.Enabled = true;
+            this.tCheckProxyState.Interval = 10000;
+            this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
             // 
             // bgwProxyInfo
             // 
             this.bgwProxyInfo.WorkerSupportsCancellation = true;
             this.bgwProxyInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyInfo_DoWork);
+            // 
+            // bgwCheckProxyState
+            // 
+            this.bgwCheckProxyState.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckProxyState_DoWork);
             // 
             // SocketProxy_Form
             // 
@@ -738,10 +738,10 @@
         private System.Windows.Forms.GroupBox gbSystemProxy;
         private System.Windows.Forms.TableLayoutPanel tlpSystemProxy;
         private System.Windows.Forms.CheckBox cbEnable_SystemProxy;
-        private System.Windows.Forms.Timer tCheckUDP;
-        private System.ComponentModel.BackgroundWorker bgwCheckUDP;
+        private System.Windows.Forms.Timer tCheckProxyState;
         private System.Windows.Forms.ToolStripStatusLabel tsslSplit1;
         private System.Windows.Forms.ToolStripStatusLabel tsslTotalBytes;
         private System.ComponentModel.BackgroundWorker bgwProxyInfo;
+        private System.ComponentModel.BackgroundWorker bgwCheckProxyState;
     }
 }
