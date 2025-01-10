@@ -629,6 +629,25 @@ namespace WPELibrary.Lib
             return bReturn;            
         }
 
+        public static bool IsValidFilterString(string value)
+        {
+            bool bReturn = true;
+
+            try
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    bReturn = Socket_Operation.IsHexString(value);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
         #endregion
 
         #region//获取中文字符串对应的bool类型

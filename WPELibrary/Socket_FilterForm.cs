@@ -727,6 +727,100 @@ namespace WPELibrary
 
         #endregion
 
+        #region//滤镜设置合法性检测
+
+        public bool CheckFilterIsValid()
+        {
+            bool bReturn = true;
+
+            try
+            {
+                string sCheckValue = string.Empty;
+
+                //滤镜名称
+                sCheckValue = this.txtFilterName.Text.Trim();
+                if (string.IsNullOrEmpty(sCheckValue))
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
+                    return false;
+                }
+
+                //普通滤镜
+                for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
+                {
+                    if (dgvFilterNormal.Rows[0].Cells[i].Value != null)
+                    {
+                        sCheckValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
+                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                            return false;
+                        }
+                    }
+
+                    if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
+                    {
+                        sCheckValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
+                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                            return false;
+                        }
+                    }
+                }
+
+                //高级滤镜（搜索）
+                for (int i = 0; i < this.dgvFilterAdvanced_Search.Columns.Count; i++)
+                {
+                    if (dgvFilterAdvanced_Search.Rows[0].Cells[i].Value != null)
+                    {
+                        sCheckValue = dgvFilterAdvanced_Search.Rows[0].Cells[i].Value.ToString().Trim();
+                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                            return false;
+                        }
+                    }
+                }
+
+                //高级滤镜（修改 - 从头开始）
+                for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
+                {
+                    if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
+                    {
+                        sCheckValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
+                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                            return false;
+                        }
+                    }
+                }
+
+                //高级滤镜（修改 - 自发现有连锁的位置）
+                for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
+                {
+                    if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
+                    {
+                        sCheckValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
+                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
         #region//关闭按钮
 
         private void bFilterButton_Close_Click(object sender, EventArgs e)
@@ -742,225 +836,222 @@ namespace WPELibrary
         {
             try
             {
-                string sFName_New = this.txtFilterName.Text.Trim();
-                if (string.IsNullOrEmpty(sFName_New))
+                if (this.CheckFilterIsValid())
                 {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
-                    return;
-                }
+                    string sFName_New = this.txtFilterName.Text.Trim();
+                    string sHeaderContent_New = string.Empty;
+                    decimal dSocketContent_New = 0;
+                    decimal dLengthContent_New = 0;
+                    decimal dProgressionStep_New = 0;
+                    string sProgression_New = string.Empty;
+                    string sSearch_New = string.Empty;
+                    string sModify_New = string.Empty;
+                    bool bIsExecute;
+                    bool bAppointHeader, bAppointSocket, bAppointLength;
 
-                string sHeaderContent_New = string.Empty;
-                decimal dSocketContent_New = 0;
-                decimal dLengthContent_New = 0;
-                decimal dProgressionStep_New = 0;
-                string sProgression_New = string.Empty;
-                string sSearch_New = string.Empty;
-                string sModify_New = string.Empty;
-                bool bIsExecute;
-                bool bAppointHeader, bAppointSocket, bAppointLength;
+                    Socket_Cache.Filter.FilterMode FilterMode_New;
+                    Socket_Cache.Filter.FilterAction FilterAction_New;
+                    Guid RID_New = Guid.Empty;
+                    Socket_Cache.Filter.FilterFunction FilterFunction_New;
+                    Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
 
-                Socket_Cache.Filter.FilterMode FilterMode_New;
-                Socket_Cache.Filter.FilterAction FilterAction_New;
-                Guid RID_New = Guid.Empty;
-                Socket_Cache.Filter.FilterFunction FilterFunction_New;
-                Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
+                    bIsExecute = this.cbFilterAction_Execute.Checked;
+                    bAppointHeader = this.cbFilter_AppointHeader.Checked;
+                    bAppointSocket = this.cbFilter_AppointSocket.Checked;
+                    bAppointLength = this.cbFilter_AppointLength.Checked;
 
-                bIsExecute = this.cbFilterAction_Execute.Checked;
-                bAppointHeader = this.cbFilter_AppointHeader.Checked;
-                bAppointSocket = this.cbFilter_AppointSocket.Checked;
-                bAppointLength = this.cbFilter_AppointLength.Checked;
+                    sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
+                    dSocketContent_New = this.nudFilter_SocketContent.Value;
+                    dLengthContent_New = this.nudFilter_LengthContent.Value;
+                    dProgressionStep_New = this.nudProgressionStep.Value;
 
-                sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
-                dSocketContent_New = this.nudFilter_SocketContent.Value;
-                dLengthContent_New = this.nudFilter_LengthContent.Value;
-                dProgressionStep_New = this.nudProgressionStep.Value;
-
-                if (rbFilterMode_Normal.Checked)
-                {
-                    FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
-                }
-                else if (rbFilterMode_Advanced.Checked)
-                {
-                    FilterMode_New = Socket_Cache.Filter.FilterMode.Advanced;
-                }
-                else
-                {
-                    FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
-                }
-
-                if (rbFilterAction_Replace.Checked)
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.Replace;
-                }
-                else if (rbFilterAction_Intercept.Checked)
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.Intercept;
-                }
-                else if (rbFilterAction_NoModify_Display.Checked)
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
-                }
-                else if (rbFilterAction_NoModify_NoDisplay.Checked)
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
-                }                
-                else
-                {
-                    FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
-                }
-
-                if (cbFilterAction_Execute.Checked)
-                {
-                    if (cbbFilterAction_Execute.SelectedValue != null)
+                    if (rbFilterMode_Normal.Checked)
                     {
-                        RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                        FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
                     }
+                    else if (rbFilterMode_Advanced.Checked)
+                    {
+                        FilterMode_New = Socket_Cache.Filter.FilterMode.Advanced;
+                    }
+                    else
+                    {
+                        FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
+                    }
+
+                    if (rbFilterAction_Replace.Checked)
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.Replace;
+                    }
+                    else if (rbFilterAction_Intercept.Checked)
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.Intercept;
+                    }
+                    else if (rbFilterAction_NoModify_Display.Checked)
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                    }
+                    else if (rbFilterAction_NoModify_NoDisplay.Checked)
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                    }
+                    else
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                    }
+
+                    if (cbFilterAction_Execute.Checked)
+                    {
+                        if (cbbFilterAction_Execute.SelectedValue != null)
+                        {
+                            RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                        }
+                    }
+
+                    FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
+                    FilterFunction_New.SendTo = this.cbFilterFunction_SendTo.Checked;
+                    FilterFunction_New.Recv = this.cbFilterFunction_Recv.Checked;
+                    FilterFunction_New.RecvFrom = this.cbFilterFunction_RecvFrom.Checked;
+                    FilterFunction_New.WSASend = this.cbFilterFunction_WSASend.Checked;
+                    FilterFunction_New.WSASendTo = this.cbFilterFunction_WSASendTo.Checked;
+                    FilterFunction_New.WSARecv = this.cbFilterFunction_WSARecv.Checked;
+                    FilterFunction_New.WSARecvFrom = this.cbFilterFunction_WSARecvFrom.Checked;
+
+                    if (rbFilterModifyFrom_Head.Checked)
+                    {
+                        FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Head;
+                    }
+                    else
+                    {
+                        FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Position;
+                    }
+
+                    switch (FilterMode_New)
+                    {
+                        case Socket_Cache.Filter.FilterMode.Normal:
+
+                            for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
+                            {
+                                if (dgvFilterNormal.Rows[1].Cells[i].Style.BackColor == Color.DarkRed)
+                                {
+                                    sProgression_New += i.ToString() + ",";
+                                }
+
+                                if (dgvFilterNormal.Rows[0].Cells[i].Value != null)
+                                {
+                                    string sSearchValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
+
+                                    if (!String.IsNullOrEmpty(sSearchValue))
+                                    {
+                                        sSearch_New += i.ToString() + "-" + sSearchValue + ",";
+                                    }
+                                }
+
+                                if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
+                                {
+                                    string sModifyValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
+
+                                    if (!String.IsNullOrEmpty(sModifyValue))
+                                    {
+                                        sModify_New += i.ToString() + "-" + sModifyValue + ",";
+                                    }
+                                }
+                            }
+
+                            break;
+
+                        case Socket_Cache.Filter.FilterMode.Advanced:
+
+                            for (int i = 0; i < this.dgvFilterAdvanced_Search.Columns.Count; i++)
+                            {
+                                string sValue = string.Empty;
+
+                                if (dgvFilterAdvanced_Search.Rows[0].Cells[i].Value != null)
+                                {
+                                    sValue = dgvFilterAdvanced_Search.Rows[0].Cells[i].Value.ToString().Trim();
+                                }
+
+                                if (!String.IsNullOrEmpty(sValue))
+                                {
+                                    sSearch_New += i.ToString() + "-" + sValue + ",";
+                                }
+                            }
+
+                            switch (FilterStartFrom_New)
+                            {
+                                case Socket_Cache.Filter.FilterStartFrom.Head:
+
+                                    for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
+                                    {
+                                        if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
+                                        {
+                                            sProgression_New += i.ToString() + ",";
+                                        }
+
+                                        if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
+                                        {
+                                            string sValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
+
+                                            if (!String.IsNullOrEmpty(sValue))
+                                            {
+                                                sModify_New += i.ToString() + "-" + sValue + ",";
+                                            }
+                                        }
+                                    }
+
+                                    break;
+
+                                case Socket_Cache.Filter.FilterStartFrom.Position:
+
+                                    for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
+                                    {
+                                        if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
+                                        {
+                                            sProgression_New += i.ToString() + ",";
+                                        }
+
+                                        if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
+                                        {
+                                            string sValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
+
+                                            if (!String.IsNullOrEmpty(sValue))
+                                            {
+                                                sModify_New += i.ToString() + "-" + sValue + ",";
+                                            }
+                                        }
+                                    }
+
+                                    break;
+                            }
+
+                            break;
+                    }
+
+                    sProgression_New = sProgression_New.TrimEnd(',');
+                    sSearch_New = sSearch_New.TrimEnd(',');
+                    sModify_New = sModify_New.TrimEnd(',');
+
+                    Socket_Cache.Filter.UpdateFilter_ByFilterIndex(
+                        this.FilterIndex,
+                        sFName_New,
+                        bAppointHeader,
+                        sHeaderContent_New,
+                        bAppointSocket,
+                        dSocketContent_New,
+                        bAppointLength,
+                        dLengthContent_New,
+                        FilterMode_New,
+                        FilterAction_New,
+                        bIsExecute,
+                        RID_New,
+                        FilterFunction_New,
+                        FilterStartFrom_New,
+                        dProgressionStep_New,
+                        sProgression_New,
+                        sSearch_New,
+                        sModify_New);
+
+                    this.Close();
                 }                
-
-                FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
-                FilterFunction_New.SendTo = this.cbFilterFunction_SendTo.Checked;
-                FilterFunction_New.Recv = this.cbFilterFunction_Recv.Checked;
-                FilterFunction_New.RecvFrom = this.cbFilterFunction_RecvFrom.Checked;
-                FilterFunction_New.WSASend = this.cbFilterFunction_WSASend.Checked;
-                FilterFunction_New.WSASendTo = this.cbFilterFunction_WSASendTo.Checked;
-                FilterFunction_New.WSARecv = this.cbFilterFunction_WSARecv.Checked;
-                FilterFunction_New.WSARecvFrom = this.cbFilterFunction_WSARecvFrom.Checked;
-
-                if (rbFilterModifyFrom_Head.Checked)
-                {
-                    FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Head;
-                }
-                else
-                {
-                    FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Position;
-                }
-
-                switch (FilterMode_New)
-                {
-                    case Socket_Cache.Filter.FilterMode.Normal:
-
-                        for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
-                        {
-                            if (dgvFilterNormal.Rows[1].Cells[i].Style.BackColor == Color.DarkRed)
-                            {
-                                sProgression_New += i.ToString() + ",";
-                            }
-
-                            if (dgvFilterNormal.Rows[0].Cells[i].Value != null)
-                            {
-                                string sSearchValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
-
-                                if (!String.IsNullOrEmpty(sSearchValue))
-                                {
-                                    sSearch_New += i.ToString() + "-" + sSearchValue + ",";
-                                }
-                            }
-
-                            if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
-                            {
-                                string sModifyValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
-
-                                if (!String.IsNullOrEmpty(sModifyValue))
-                                {
-                                    sModify_New += i.ToString() + "-" + sModifyValue + ",";
-                                }
-                            }
-                        }                    
-
-                        break;
-
-                    case Socket_Cache.Filter.FilterMode.Advanced:
-
-                        for (int i = 0; i < this.dgvFilterAdvanced_Search.Columns.Count; i++)
-                        {
-                            string sValue = string.Empty;
-
-                            if (dgvFilterAdvanced_Search.Rows[0].Cells[i].Value != null)
-                            {
-                                sValue = dgvFilterAdvanced_Search.Rows[0].Cells[i].Value.ToString().Trim();
-                            }
-
-                            if (!String.IsNullOrEmpty(sValue))
-                            {
-                                sSearch_New += i.ToString() + "-" + sValue + ",";
-                            }
-                        }
-
-                        switch (FilterStartFrom_New)
-                        { 
-                            case Socket_Cache.Filter.FilterStartFrom.Head:
-
-                                for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
-                                {
-                                    if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
-                                    {
-                                        sProgression_New += i.ToString() + ",";
-                                    }
-
-                                    if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
-                                    {
-                                        string sValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
-
-                                        if (!String.IsNullOrEmpty(sValue))
-                                        {
-                                            sModify_New += i.ToString() + "-" + sValue + ",";
-                                        }
-                                    }
-                                }
-
-                                break;
-
-                            case Socket_Cache.Filter.FilterStartFrom.Position:
-
-                                for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
-                                {
-                                    if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Style.BackColor == Color.DarkRed)
-                                    {
-                                        sProgression_New += i.ToString() + ",";
-                                    }
-
-                                    if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
-                                    {
-                                        string sValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
-
-                                        if (!String.IsNullOrEmpty(sValue))
-                                        {
-                                            sModify_New += i.ToString() + "-" + sValue + ",";
-                                        }
-                                    }
-                                }
-
-                                break;
-                        }
-
-                        break;
-                }
-
-                sProgression_New = sProgression_New.TrimEnd(',');
-                sSearch_New = sSearch_New.TrimEnd(',');
-                sModify_New = sModify_New.TrimEnd(',');
-
-                Socket_Cache.Filter.UpdateFilter_ByFilterIndex(
-                    this.FilterIndex, 
-                    sFName_New, 
-                    bAppointHeader, 
-                    sHeaderContent_New, 
-                    bAppointSocket, 
-                    dSocketContent_New, 
-                    bAppointLength, 
-                    dLengthContent_New, 
-                    FilterMode_New, 
-                    FilterAction_New,
-                    bIsExecute,
-                    RID_New,
-                    FilterFunction_New, 
-                    FilterStartFrom_New,
-                    dProgressionStep_New,
-                    sProgression_New,
-                    sSearch_New, 
-                    sModify_New);                
-
-                this.Close();
             }
             catch (Exception ex)
             {
