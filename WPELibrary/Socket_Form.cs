@@ -1145,7 +1145,13 @@ namespace WPELibrary
         {
             try
             {
-                e.Result = hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
+                if (!IsDisposed)
+                {
+                    hbPacketData.Invoke(new MethodInvoker(delegate
+                    {
+                        e.Result = this.hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
+                    }));
+                }
             }
             catch (Exception ex)
             {
@@ -1157,13 +1163,16 @@ namespace WPELibrary
         {
             try
             {
-                long res = (long)e.Result;
-
-                if (res == -1)
+                if (e.Result != null)
                 {
-                    Search_Index += 1;
-                    this.SearchSocketListNext();
-                }
+                    long res = (long)e.Result;
+
+                    if (res == -1)
+                    {
+                        Search_Index += 1;
+                        this.SearchSocketListNext();
+                    }
+                }                
             }
             catch (Exception ex)
             {

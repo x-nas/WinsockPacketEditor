@@ -258,7 +258,7 @@ namespace WinsockPacketEditor
                     this.tpProxySet.Enabled = false;
 
                     this.SaveConfigs_Parameter();
-                    this.StartListen();
+                    this.StartListen();                    
                 }
                 else
                 {
@@ -282,7 +282,7 @@ namespace WinsockPacketEditor
                     SocketServer.Bind(ep);
                     SocketServer.Listen(int.MaxValue);
                     await AcceptClients();                    
-                }              
+                }
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
             }
