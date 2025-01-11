@@ -56,7 +56,7 @@ namespace WPELibrary.Lib
             [In] SocketFlags flags)
         {
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Send;
-            Int32 res = 0;
+            Int32 res = 0;            
 
             try
             {
@@ -72,20 +72,20 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        Marshal.Copy(bBuffer, 0, buffer, length);
-                        res = WS2_32.send(Socket, buffer, length, flags);
+                        IntPtr ipBuffer = Marshal.AllocHGlobal(bBuffer.Length);
+                        Marshal.Copy(bBuffer, 0, ipBuffer, bBuffer.Length);
 
-                        if (res > 0)
+                        res = WS2_32.send(Socket, ipBuffer, bBuffer.Length, flags);
+                        Marshal.FreeHGlobal(ipBuffer);
+
+                        if (res > 0 && res < length)
                         {
-                            if (res != length)
-                            {
-                                bBuffer = Socket_Operation.GetBytesFromIntPtr(buffer, res);
-                            }
-                        }
+                            Buffer.BlockCopy(bBuffer, 0, bBuffer, 0, res);
+                        }                        
                     }
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -168,12 +168,9 @@ namespace WPELibrary.Lib
                         Marshal.Copy(bBuffer, 0, ipBuffer, length);
                         res = WS2_32.sendto(Socket, ipBuffer, length, lpFlags, ref To, ToLen);
 
-                        if (res > 0)
+                        if (res > 0 && res < length)
                         {
-                            if (res != length)
-                            {
-                                bBuffer = Socket_Operation.GetBytesFromIntPtr(ipBuffer, res);
-                            }
+                            Buffer.BlockCopy(bBuffer, 0, bBuffer, 0, res);
                         }
                     }
 
