@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketProxy_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tsslServerInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketProxy_Parameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbSystemProxy = new System.Windows.Forms.GroupBox();
@@ -89,12 +89,8 @@
             this.tpClientList = new System.Windows.Forms.TabPage();
             this.tvProxyInfo = new System.Windows.Forms.TreeView();
             this.tlpSocketProxy = new System.Windows.Forms.TableLayoutPanel();
-            this.bgwLogList = new System.ComponentModel.BackgroundWorker();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
-            this.bgwProxyData = new System.ComponentModel.BackgroundWorker();
             this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
-            this.bgwProxyInfo = new System.ComponentModel.BackgroundWorker();
-            this.bgwCheckProxyState = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -503,14 +499,14 @@
             this.dgvLogList.AllowUserToResizeRows = false;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -529,8 +525,8 @@
             // 
             // cLogID
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle18;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -540,8 +536,8 @@
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle19;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -551,8 +547,8 @@
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle20;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -597,38 +593,15 @@
             this.tlpSocketProxy.Controls.Add(this.ssSocketProxy, 0, 2);
             this.tlpSocketProxy.Name = "tlpSocketProxy";
             // 
-            // bgwLogList
-            // 
-            this.bgwLogList.WorkerSupportsCancellation = true;
-            this.bgwLogList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwLogList_DoWork);
-            this.bgwLogList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwLogList_RunWorkerCompleted);
-            // 
             // tSocketProxy
             // 
-            this.tSocketProxy.Enabled = true;
-            this.tSocketProxy.Interval = 10;
+            this.tSocketProxy.Interval = 50;
             this.tSocketProxy.Tick += new System.EventHandler(this.tSocketProxy_Tick);
-            // 
-            // bgwProxyData
-            // 
-            this.bgwProxyData.WorkerSupportsCancellation = true;
-            this.bgwProxyData.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyData_DoWork);
-            this.bgwProxyData.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProxyData_RunWorkerCompleted);
             // 
             // tCheckProxyState
             // 
-            this.tCheckProxyState.Enabled = true;
             this.tCheckProxyState.Interval = 10000;
             this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
-            // 
-            // bgwProxyInfo
-            // 
-            this.bgwProxyInfo.WorkerSupportsCancellation = true;
-            this.bgwProxyInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProxyInfo_DoWork);
-            // 
-            // bgwCheckProxyState
-            // 
-            this.bgwCheckProxyState.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckProxyState_DoWork);
             // 
             // SocketProxy_Form
             // 
@@ -693,7 +666,6 @@
         private System.Windows.Forms.TabPage tpData;
         private System.Windows.Forms.TableLayoutPanel tlpSocketProxy_Data;
         private System.Windows.Forms.TableLayoutPanel tlpSocketProxy;
-        private System.ComponentModel.BackgroundWorker bgwLogList;
         private System.Windows.Forms.Timer tSocketProxy;
         private Be.Windows.Forms.HexBox hbData;
         private System.Windows.Forms.TabControl tcSocketProxySet;
@@ -727,7 +699,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tpClientList;
         private System.Windows.Forms.TreeView tvProxyInfo;
-        private System.ComponentModel.BackgroundWorker bgwProxyData;
         private System.Windows.Forms.GroupBox gbProxyType;
         private System.Windows.Forms.TableLayoutPanel tlpProxyType;
         private System.Windows.Forms.CheckBox cbEnable_SOCKS5;
@@ -741,7 +712,5 @@
         private System.Windows.Forms.Timer tCheckProxyState;
         private System.Windows.Forms.ToolStripStatusLabel tsslSplit1;
         private System.Windows.Forms.ToolStripStatusLabel tsslTotalBytes;
-        private System.ComponentModel.BackgroundWorker bgwProxyInfo;
-        private System.ComponentModel.BackgroundWorker bgwCheckProxyState;
     }
 }
