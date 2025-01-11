@@ -294,6 +294,8 @@ namespace WPELibrary.Lib
                         key.Close();
 
                         bReturn = true;
+
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_148));
                     }
                 }
                 catch (Exception ex)
@@ -321,6 +323,8 @@ namespace WPELibrary.Lib
                         key.Close();
 
                         bReturn = true;
+
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_149));
                     }
                 }
                 catch (Exception ex)

@@ -157,8 +157,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_145 = { "不支持的 SOCKS 协议版本: {0}", "Unsupported SOCKS protocol version: {0}" };
         public static string[] MutiLan_146 = { "{0} 不支持认证方式: {1}", "{0} does not support the authentication: {1}" };
         public static string[] MutiLan_147 = { "{0} 认证失败!", "{0} authentication failed!" };
-        //public static string[] MutiLan_148 = { "{0} - 身份认证信息：{1}, {2}", "{0} - Authentication: {1}, {2}" };
-        //public static string[] MutiLan_149 = { "{0} - 身份验证通过!", "{0} - Authentication passed!" };
+        public static string[] MutiLan_148 = { "启用系统代理", "Enable system proxy" };
+        public static string[] MutiLan_149 = { "关闭系统代理", "Disable system proxy" };
         //public static string[] MutiLan_150 = { "{0} - 身份验证失败!", "{0} - Authentication failed!" };
         //public static string[] MutiLan_151 = { "{0} - 连接成功 [{1}]", "{0} - Connection successful [{1}]" };
         public static string[] MutiLan_152 = { "{0} - 不支持的命令: {1}", "{0} - Unsupported command: {1}" };
