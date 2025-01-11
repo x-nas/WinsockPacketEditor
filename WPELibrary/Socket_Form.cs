@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Reflection;
 using WPELibrary.Lib;
 using EasyHook;
@@ -202,7 +201,10 @@ namespace WPELibrary
                 Socket_Cache.MainHandle = this.Handle;
                 string sProcessName = Socket_Operation.GetProcessName();
                 this.tsslProcessName.Text = sProcessName;
-                this.niWPE.Text = Socket_Cache.WPE + "\r\n" + sProcessName;                
+                this.niWPE.Text = Socket_Cache.WPE + "\r\n" + sProcessName;
+                
+                this.tSocketInfo.Enabled = true;
+                this.tSocketList.Enabled = true;
                 
                 this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();             
                 this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
@@ -211,9 +213,6 @@ namespace WPELibrary
                 this.bStopHook.Enabled = false;
                 this.cmsIcon_StartHook.Enabled = true;
                 this.cmsIcon_StopHook.Enabled = false;
-                this.tSocketInfo.Enabled = true;
-                this.tSocketList.Enabled = true;
-
                 this.cbbExtraction.SelectedIndex = 0;                
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);

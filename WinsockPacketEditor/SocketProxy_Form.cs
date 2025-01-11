@@ -95,6 +95,9 @@ namespace WinsockPacketEditor
                 string sServerInfo = string.Empty;
                 IPAddress[] ipAddresses = await Socket_Operation.GetLocalIPAddress();
 
+                this.tSocketProxy.Enabled = true;
+                this.tCheckProxyState.Enabled = true;
+
                 this.Auth_CheckedChanged();
                 this.LogList_AutoClearChange();
 
@@ -260,9 +263,7 @@ namespace WinsockPacketEditor
 
                     this.bStart.Enabled = false;
                     this.bStop.Enabled = true;
-                    this.tpProxySet.Enabled = false;
-                    this.tSocketProxy.Enabled = true;
-                    this.tCheckProxyState.Enabled = true;
+                    this.tpProxySet.Enabled = false;                    
 
                     this.SaveConfigs_Parameter();
 
@@ -384,9 +385,7 @@ namespace WinsockPacketEditor
 
                 this.bStart.Enabled = true;
                 this.bStop.Enabled = false;
-                this.tpProxySet.Enabled = true;
-                this.tSocketProxy.Enabled = false;
-                this.tCheckProxyState.Enabled = false;
+                this.tpProxySet.Enabled = true;          
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_143));
             }
