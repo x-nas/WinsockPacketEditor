@@ -407,7 +407,7 @@ namespace WPELibrary
 
         #region//保存按钮
 
-        private void bSave_Click(object sender, EventArgs e)
+        private async void bSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -417,7 +417,7 @@ namespace WPELibrary
 
                     byte[] bNewBuff = dbp.Bytes.ToArray();
                     int iNewLen = bNewBuff.Length;
-                    string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bNewBuff, Socket_Cache.SocketPacket.PacketData_MaxLen);
+                    string sNewPacketData_Hex = await Socket_Operation.GetPacketData_Hex(bNewBuff, Socket_Cache.SocketPacket.PacketData_MaxLen);
 
                     Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
                     Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
@@ -454,7 +454,7 @@ namespace WPELibrary
 
         #region//右键菜单
 
-        private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private async void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
             {
@@ -466,7 +466,7 @@ namespace WPELibrary
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;                
                 byte[] bBuffer = dbp.Bytes.ToArray();                
 
-                string sHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                string sHex = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                 switch (sItemText)
                 {                    
@@ -570,7 +570,7 @@ namespace WPELibrary
             }
         }
 
-        private void HexBox_LinePositionChanged()
+        private async void HexBox_LinePositionChanged()
         {
             try
             {
@@ -620,16 +620,16 @@ namespace WPELibrary
                         }
 
                         sBits_Value = bitInfo.ToString();
-                        sChar_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Char, buffer64);
-                        sByte_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Byte, buffer64);
-                        sShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Short, buffer64);
-                        sUShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UShort, buffer64);
-                        sInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int32, buffer64);
-                        sUInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt32, buffer64);
-                        sInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int64, buffer64);
-                        sUInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt64, buffer64);
-                        sFloat_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Float, buffer64);
-                        sDouble_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Double, buffer64);
+                        sChar_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Char, buffer64);
+                        sByte_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Byte, buffer64);
+                        sShort_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Short, buffer64);
+                        sUShort_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UShort, buffer64);
+                        sInt32_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int32, buffer64);
+                        sUInt32_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt32, buffer64);
+                        sInt64_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int64, buffer64);
+                        sUInt64_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt64, buffer64);
+                        sFloat_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Float, buffer64);
+                        sDouble_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Double, buffer64);
                     }
                 }
 

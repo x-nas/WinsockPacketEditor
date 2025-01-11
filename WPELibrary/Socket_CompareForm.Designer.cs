@@ -35,7 +35,6 @@
             this.lModifiedData = new System.Windows.Forms.Label();
             this.lRawData = new System.Windows.Forms.Label();
             this.hbRawData = new Be.Windows.Forms.HexBox();
-            this.bgwCompare = new System.ComponentModel.BackgroundWorker();
             this.pCompare = new System.Windows.Forms.Panel();
             this.rtbCompare = new System.Windows.Forms.RichTextBox();
             this.tlpSocketCompare.SuspendLayout();
@@ -113,12 +112,6 @@
             this.hbRawData.StringViewVisible = true;
             this.hbRawData.VScrollBarVisible = true;
             // 
-            // bgwCompare
-            // 
-            this.bgwCompare.WorkerSupportsCancellation = true;
-            this.bgwCompare.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCompare_DoWork);
-            this.bgwCompare.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCompare_RunWorkerCompleted);
-            // 
             // pCompare
             // 
             this.pCompare.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -140,7 +133,6 @@
             this.Controls.Add(this.tlpSocketCompare);
             this.DoubleBuffered = true;
             this.Name = "Socket_CompareForm";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Socket_CompareForm_FormClosing);
             this.tlpSocketCompare.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();
@@ -157,7 +149,6 @@
         private System.Windows.Forms.Label lRawData;
         private Be.Windows.Forms.HexBox hbRawData;
         private Be.Windows.Forms.HexBox hbModifiedData;
-        private System.ComponentModel.BackgroundWorker bgwCompare;
         private System.Windows.Forms.Panel pCompare;
         private System.Windows.Forms.RichTextBox rtbCompare;
     }

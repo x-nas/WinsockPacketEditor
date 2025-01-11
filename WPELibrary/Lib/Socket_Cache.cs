@@ -128,9 +128,9 @@ namespace WPELibrary.Lib
 
             #region//接收客户端请求
 
-            public static Task HandleClient(Socket clientSocket)
+            public static async Task HandleClient(Socket clientSocket)
             {
-                return Task.Run(() =>
+                await Task.Run(() =>
                 {
                     try
                     {
@@ -160,7 +160,7 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.SocketProxy.IsListening)
                     {
-                        int bytesRead = Socket_Operation.ReceiveTCPData(spi.ClientSocket, ar);
+                        int bytesRead = await Socket_Operation.ReceiveTCPData(spi.ClientSocket, ar);
 
                         if (bytesRead > 0)
                         {
@@ -172,7 +172,9 @@ namespace WPELibrary.Lib
                             byte[] bData = new byte[spi.ClientData.Length];
                             Buffer.BlockCopy(spi.ClientData, 0, bData, 0, spi.ClientData.Length);
 
-                            if (Socket_Operation.CheckDataIsMatchProxyStep(bData, spi.ProxyStep))
+                            bool bIsMatch = await Socket_Operation.CheckDataIsMatchProxyStep(bData, spi.ProxyStep);
+
+                            if (bIsMatch)
                             {
                                 switch (spi.ProxyStep)
                                 {
@@ -215,376 +217,366 @@ namespace WPELibrary.Lib
 
             #region//握手过程
 
-            private static Task Handshake(Socket_ProxyInfo spi, byte[] bData)
+            private static async Task Handshake(Socket_ProxyInfo spi, byte[] bData)
             {
-                return Task.Run(() =>
+                try
                 {
-                    try
+                    spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bData[0];
+
+                    if (spi.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
                     {
-                        spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bData[0];
+                        bool bSupportAuthType = false;
+                        Socket_Cache.SocketProxy.AuthType atServer = new Socket_Cache.SocketProxy.AuthType();
+                        Socket_Cache.SocketProxy.AuthType atClient = new Socket_Cache.SocketProxy.AuthType();
 
-                        if (spi.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
+                        if (Socket_Cache.SocketProxy.Enable_Auth)
                         {
-                            bool bSupportAuthType = false;
-                            Socket_Cache.SocketProxy.AuthType atServer = new Socket_Cache.SocketProxy.AuthType();
-                            Socket_Cache.SocketProxy.AuthType atClient = new Socket_Cache.SocketProxy.AuthType();
+                            atServer = Socket_Cache.SocketProxy.AuthType.UserName;
+                        }
+                        else
+                        {
+                            atServer = Socket_Cache.SocketProxy.AuthType.None;
+                        }
 
-                            if (Socket_Cache.SocketProxy.Enable_Auth)
+                        int iMETHODS_COUNT = bData[1];
+                        byte[] bMETHODS = new byte[iMETHODS_COUNT];
+
+                        for (int i = 0; i < iMETHODS_COUNT; i++)
+                        {
+                            bMETHODS[i] = bData[2 + i];
+                            atClient = (Socket_Cache.SocketProxy.AuthType)bMETHODS[i];
+
+                            if (atServer == atClient)
                             {
-                                atServer = Socket_Cache.SocketProxy.AuthType.UserName;
+                                bSupportAuthType = true;
                             }
-                            else
+                        }
+
+                        if (bSupportAuthType)
+                        {
+                            byte[] bAuth = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)atServer) };
+                            await Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
+
+                            if (atServer == Socket_Cache.SocketProxy.AuthType.UserName)
                             {
-                                atServer = Socket_Cache.SocketProxy.AuthType.None;
-                            }
+                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.AuthUserName;
 
-                            int iMETHODS_COUNT = bData[1];
-                            byte[] bMETHODS = new byte[iMETHODS_COUNT];
-
-                            for (int i = 0; i < iMETHODS_COUNT; i++)
-                            {
-                                bMETHODS[i] = bData[2 + i];
-                                atClient = (Socket_Cache.SocketProxy.AuthType)bMETHODS[i];
-
-                                if (atServer == atClient)
+                                if (bData.Length > iMETHODS_COUNT + 2)
                                 {
-                                    bSupportAuthType = true;
-                                }
-                            }
+                                    byte[] bAuthDate = new byte[bData.Length - (iMETHODS_COUNT + 2)];
+                                    Buffer.BlockCopy(bData, iMETHODS_COUNT + 2, bAuthDate, 0, bAuthDate.Length);
 
-                            if (bSupportAuthType)
-                            {
-                                byte[] bAuth = new byte[] { ((byte)Socket_Cache.SocketProxy.ProxyType.Socket5), ((byte)atServer) };
-                                Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
-
-                                if (atServer == Socket_Cache.SocketProxy.AuthType.UserName)
-                                {
-                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.AuthUserName;
-
-                                    if (bData.Length > iMETHODS_COUNT + 2)
+                                    bool bIsMatch = await Socket_Operation.CheckDataIsMatchProxyStep(bAuthDate, Socket_Cache.SocketProxy.ProxyStep.AuthUserName);
+                                    if (bIsMatch)
                                     {
-                                        byte[] bAuthDate = new byte[bData.Length - (iMETHODS_COUNT + 2)];
-                                        Buffer.BlockCopy(bData, iMETHODS_COUNT + 2, bAuthDate, 0, bAuthDate.Length);
-
-                                        if (Socket_Operation.CheckDataIsMatchProxyStep(bAuthDate, Socket_Cache.SocketProxy.ProxyStep.AuthUserName))
-                                        {
-                                            Socket_Cache.SocketProxy.AuthUserName(spi, bAuthDate);
-                                        }
+                                        await Socket_Cache.SocketProxy.AuthUserName(spi, bAuthDate);
                                     }
                                 }
-                                else
-                                {
-                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
-                                }
                             }
                             else
                             {
-                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146), spi.ClientSocket.RemoteEndPoint, atServer);
-                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                             }
                         }
                         else
                         {
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ProxyType);
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146), spi.ClientSocket.RemoteEndPoint, atServer);
                             Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_145), spi.ProxyType);
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                     }
-                });                
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
 
             #region//验证账号密码
 
-            private static Task AuthUserName(Socket_ProxyInfo spi, byte[] bData)
+            private static async Task AuthUserName(Socket_ProxyInfo spi, byte[] bData)
             {
-                return Task.Run(() =>
+                try
                 {
-                    try
-                    {
-                        byte VERSION = bData[0];
+                    byte VERSION = bData[0];
 
-                        if (VERSION == 0x01)
+                    if (VERSION == 0x01)
+                    {
+                        int USERNAME_LENGTH = bData[1];
+                        byte[] USERNAME = new byte[USERNAME_LENGTH];
+                        Buffer.BlockCopy(bData, 2, USERNAME, 0, USERNAME_LENGTH);
+
+                        int PASSWORD_LENGTH = bData[2 + USERNAME_LENGTH];
+                        byte[] PASSWORD = new byte[PASSWORD_LENGTH];
+                        Buffer.BlockCopy(bData, 3 + USERNAME_LENGTH, PASSWORD, 0, PASSWORD_LENGTH);
+
+                        string sUserName = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
+                        string sPassWord = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
+                        string sAuth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
+                        string sAuth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
+
+                        bool bAuthOK = true;
+                        if (!string.IsNullOrEmpty(sAuth_UserName) && !string.IsNullOrEmpty(sAuth_PassWord))
                         {
-                            int USERNAME_LENGTH = bData[1];
-                            byte[] USERNAME = new byte[USERNAME_LENGTH];
-                            Buffer.BlockCopy(bData, 2, USERNAME, 0, USERNAME_LENGTH);
-
-                            int PASSWORD_LENGTH = bData[2 + USERNAME_LENGTH];
-                            byte[] PASSWORD = new byte[PASSWORD_LENGTH];
-                            Buffer.BlockCopy(bData, 3 + USERNAME_LENGTH, PASSWORD, 0, PASSWORD_LENGTH);
-
-                            string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
-                            string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
-                            string sAuth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
-                            string sAuth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
-
-                            bool bAuthOK = true;
-                            if (!string.IsNullOrEmpty(sAuth_UserName) && !string.IsNullOrEmpty(sAuth_PassWord))
+                            if (!sAuth_UserName.Equals(sUserName) || !sAuth_PassWord.Equals(sPassWord))
                             {
-                                if (!sAuth_UserName.Equals(sUserName) || !sAuth_PassWord.Equals(sPassWord))
-                                {
-                                    bAuthOK = false;
-                                }
+                                bAuthOK = false;
                             }
-
-                            byte[] bAuth;
-                            if (bAuthOK)
-                            {
-                                bAuth = new byte[] { 0x01, 0x00 };
-                            }
-                            else
-                            {
-                                bAuth = new byte[] { 0x01, 0x01 };
-
-                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), spi.ClientSocket.RemoteEndPoint);
-                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
-                            }
-
-                            Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
-                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                         }
+
+                        byte[] bAuth;
+                        if (bAuthOK)
+                        {
+                            bAuth = new byte[] { 0x01, 0x00 };
+                        }
+                        else
+                        {
+                            bAuth = new byte[] { 0x01, 0x01 };
+
+                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), spi.ClientSocket.RemoteEndPoint);
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+
+                        await Socket_Operation.SendTCPData(spi.ClientSocket, bAuth);
+                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                     }
-                    catch (Exception ex)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                });                
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
 
             #region//执行命令
 
-            private static Task Command(Socket_ProxyInfo spi, byte[] bData)
+            private static async Task Command(Socket_ProxyInfo spi, byte[] bData)
             {
-                return Task.Run(() =>
+                try
                 {
-                    try
+                    spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bData[0];
+                    spi.CommandType = (Socket_Cache.SocketProxy.CommandType)bData[1];
+                    spi.AddressType = (Socket_Cache.SocketProxy.AddressType)bData[3];
+
+                    if (spi.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
                     {
-                        spi.ProxyType = (Socket_Cache.SocketProxy.ProxyType)bData[0];
-                        spi.CommandType = (Socket_Cache.SocketProxy.CommandType)bData[1];
-                        spi.AddressType = (Socket_Cache.SocketProxy.AddressType)bData[3];
+                        byte[] bADDRESS = new byte[bData.Length - 4];
+                        Buffer.BlockCopy(bData, 4, bADDRESS, 0, bADDRESS.Length);
 
-                        if (spi.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
+                        IPEndPoint targetEP = await Socket_Operation.GetIPEndPoint_ByAddressType(spi.AddressType, bADDRESS);
+                        string sIPString = await Socket_Operation.GetIP_ByAddressType(spi.AddressType, bADDRESS);
+                        ushort uPort = ((ushort)targetEP.Port);
+
+                        spi.TargetEndPoint = targetEP;
+                        spi.DomainType = await Socket_Operation.GetDomainType_ByPort(uPort);
+                        spi.ClientAddress = await Socket_Operation.GetClientAddress(sIPString, uPort, spi);
+                        spi.TargetAddress = await Socket_Operation.GetTargetAddress(sIPString, uPort, spi);
+
+                        try
                         {
-                            byte[] bADDRESS = new byte[bData.Length - 4];
-                            Buffer.BlockCopy(bData, 4, bADDRESS, 0, bADDRESS.Length);
+                            byte[] bServerIP = Socket_Cache.SocketProxy.ProxyIP.GetAddressBytes();
+                            byte[] bServerPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
 
-                            IPEndPoint targetEP = Socket_Operation.GetIPEndPoint_ByAddressType(spi.AddressType, bADDRESS);
-                            string sIPString = Socket_Operation.GetIP_ByAddressType(spi.AddressType, bADDRESS);
-                            ushort uPort = ((ushort)targetEP.Port);
-
-                            spi.TargetEndPoint = targetEP;
-                            spi.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
-                            spi.ClientAddress = Socket_Operation.GetClientAddress(sIPString, uPort, spi);
-                            spi.TargetAddress = Socket_Operation.GetTargetAddress(sIPString, uPort, spi);
-
-                            try
+                            switch (spi.CommandType)
                             {
-                                byte[] bServerIP = Socket_Cache.SocketProxy.ProxyIP.GetAddressBytes();
-                                byte[] bServerPort = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
+                                case Socket_Cache.SocketProxy.CommandType.Connect:
 
-                                switch (spi.CommandType)
-                                {
-                                    case Socket_Cache.SocketProxy.CommandType.Connect:
+                                    #region//代理 TCP
 
-                                        #region//代理 TCP
+                                    switch (spi.DomainType)
+                                    {
+                                        case Socket_Cache.SocketProxy.DomainType.Http:
 
-                                        switch (spi.DomainType)
-                                        {
-                                            case Socket_Cache.SocketProxy.DomainType.Http:
+                                            #region//HTTP 协议
 
-                                                #region//HTTP 协议
+                                            try
+                                            {
+                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                                spi.TargetSocket.Connect(targetEP);
+                                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
 
-                                                try
-                                                {
-                                                    spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                                    spi.TargetSocket.Connect(targetEP);
-                                                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+                                                await Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                            }
+                                            catch (SocketException)
+                                            {
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                            }
 
-                                                    Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
-                                                }
-                                                catch (SocketException)
-                                                {
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
-                                                }
+                                            #endregion
 
-                                                #endregion
+                                            break;
 
-                                                break;
+                                        case Socket_Cache.SocketProxy.DomainType.Https:
 
-                                            case Socket_Cache.SocketProxy.DomainType.Https:
+                                            #region//HTTPS 协议
 
-                                                #region//HTTPS 协议
+                                            try
+                                            {
+                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                                spi.TargetSocket.Connect(targetEP);
+                                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
 
-                                                try
-                                                {
-                                                    spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                                    spi.TargetSocket.Connect(targetEP);
-                                                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+                                                await Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                            }
+                                            catch (SocketException)
+                                            {
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                            }
 
-                                                    Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
-                                                }
-                                                catch (SocketException)
-                                                {
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
-                                                }
+                                            #endregion
 
-                                                #endregion
+                                            break;
 
-                                                break;
+                                        case Socket_Cache.SocketProxy.DomainType.Socket:
 
-                                            case Socket_Cache.SocketProxy.DomainType.Socket:
+                                            #region//Socket 协议
 
-                                                #region//Socket 协议
+                                            try
+                                            {
+                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                                                spi.TargetSocket.Connect(targetEP);
+                                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
 
-                                                try
-                                                {
-                                                    spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                                    spi.TargetSocket.Connect(targetEP);
-                                                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+                                                await Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                            }
+                                            catch (SocketException)
+                                            {
+                                                await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                            }
 
-                                                    Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
-                                                }
-                                                catch (SocketException)
-                                                {
-                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
-                                                }
+                                            #endregion
 
-                                                #endregion
+                                            break;
+                                    }
 
-                                                break;
-                                        }
+                                    #endregion
 
-                                        #endregion
+                                    break;
 
-                                        break;
+                                case Socket_Cache.SocketProxy.CommandType.UDP:
 
-                                    case Socket_Cache.SocketProxy.CommandType.UDP:
+                                    #region//UDP 中继
 
-                                        #region//UDP 中继
+                                    try
+                                    {
+                                        IPEndPoint epUDPClient = new IPEndPoint(Socket_Cache.SocketProxy.ProxyIP, 0);
+                                        spi.ClientUDP = new UdpClient(epUDPClient);
+                                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                        spi.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spi);
 
-                                        try
-                                        {
-                                            IPEndPoint epUDPClient = new IPEndPoint(Socket_Cache.SocketProxy.ProxyIP, 0);
-                                            spi.ClientUDP = new UdpClient(epUDPClient);
-                                            spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                            spi.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spi);
+                                        IPAddress[] iPAddrs = await Socket_Operation.GetLocalIPAddress();
+                                        bServerIP = iPAddrs[0].GetAddressBytes();
+                                        bServerPort = BitConverter.GetBytes(((IPEndPoint)spi.ClientUDP.Client.LocalEndPoint).Port);
+                                        await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
 
-                                            bServerIP = Socket_Operation.GetLocalIPAddress()[0].GetAddressBytes();
-                                            bServerPort = BitConverter.GetBytes(((IPEndPoint)spi.ClientUDP.Client.LocalEndPoint).Port);
-                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerIP, bServerPort));
+                                        await Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                    }
+                                    catch (SocketException)
+                                    {
+                                        await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
+                                    }
 
-                                            Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
-                                        }
-                                        catch (SocketException)
-                                        {
-                                            Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerIP, bServerPort));
-                                        }
+                                    #endregion
 
-                                        #endregion
+                                    break;
 
-                                        break;
+                                default:
 
-                                    default:
+                                    #region//不支持的命令
 
-                                        #region//不支持的命令
+                                    await Socket_Operation.SendTCPData(spi.ClientSocket, await Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Unsupport, bServerIP, bServerPort));
 
-                                        Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Unsupport, bServerIP, bServerPort));
+                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spi.ClientSocket.RemoteEndPoint, spi.CommandType);
+                                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
 
-                                        string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spi.ClientSocket.RemoteEndPoint, spi.CommandType);
-                                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                                    #endregion
 
-                                        #endregion
-
-                                        break;
-                                }
-                            }
-                            catch (SocketException ex)
-                            {
-                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
+                                    break;
                             }
                         }
+                        catch (SocketException ex)
+                        {
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.TargetAddress + " - " + ex.Message);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
-                });                
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
 
             #region//请求数据（TCP）       
 
-            private static Task ForwardData(Socket_ProxyInfo spi, byte[] bData)
+            private static async Task ForwardData(Socket_ProxyInfo spi, byte[] bData)
             {
-                return Task.Run(() =>
+                try
                 {
-                    try
+                    if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
+                        switch (spi.DomainType)
                         {
-                            switch (spi.DomainType)
-                            {
-                                case Socket_Cache.SocketProxy.DomainType.Http:
+                            case Socket_Cache.SocketProxy.DomainType.Http:
 
-                                    #region//HTTP
+                                #region//HTTP
 
-                                    Socket_Operation.SendTCPData(spi.TargetSocket, bData);
-                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                                await Socket_Operation.SendTCPData(spi.TargetSocket, bData);
+                                await Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
 
-                                    #endregion
+                                #endregion
 
-                                    break;
+                                break;
 
-                                case Socket_Cache.SocketProxy.DomainType.Https:
+                            case Socket_Cache.SocketProxy.DomainType.Https:
 
-                                    #region//HTTPS
+                                #region//HTTPS
 
-                                    Socket_Operation.SendTCPData(spi.TargetSocket, bData);
-                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                                await Socket_Operation.SendTCPData(spi.TargetSocket, bData);
+                                await Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
 
-                                    #endregion
+                                #endregion
 
-                                    break;
+                                break;
 
-                                case Socket_Cache.SocketProxy.DomainType.Socket:
+                            case Socket_Cache.SocketProxy.DomainType.Socket:
 
-                                    #region//Socket
+                                #region//Socket
 
-                                    Socket_Operation.SendTCPData(spi.TargetSocket, bData);
-                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                                await Socket_Operation.SendTCPData(spi.TargetSocket, bData);
+                                await Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
 
-                                    #endregion
+                                #endregion
 
-                                    break;
-                            }
+                                break;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientAddress + " - " + ex.Message);
-                    }
-                });                
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spi.ClientAddress + " - " + ex.Message);
+                }
             }
 
             #endregion
 
             #region//响应数据（TCP）
 
-            private static void ResponseCallback(IAsyncResult ar)
+            private static async void ResponseCallback(IAsyncResult ar)
             {
                 Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
 
@@ -599,10 +591,10 @@ namespace WPELibrary.Lib
 
                         if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
-                            Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
+                            await Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
                         }
 
-                        Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+                        await Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
                         spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
                     }
                     else
@@ -621,7 +613,7 @@ namespace WPELibrary.Lib
 
             #region//数据转发（UDP）
 
-            private static void AcceptUdpCallback(IAsyncResult ar)
+            private static async void AcceptUdpCallback(IAsyncResult ar)
             {
                 Socket_ProxyInfo spi = (Socket_ProxyInfo)ar.AsyncState;
 
@@ -644,15 +636,15 @@ namespace WPELibrary.Lib
 
                                     byte[] bADDRESS = new byte[bData.Length - 4];
                                     Buffer.BlockCopy(bData, 4, bADDRESS, 0, bADDRESS.Length);
-                                    IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
+                                    IPEndPoint targetEndPoint = await Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
 
-                                    byte[] bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
+                                    byte[] bUDP_Data = await Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
 
                                     if (bUDP_Data.Length > 0)
                                     {
                                         spi.ClientUDP_Time = DateTime.Now;
                                         Socket_Cache.SocketProxy.Total_Request += bUDP_Data.Length;
-                                        Socket_Operation.SendUDPData(spi.ClientUDP, bUDP_Data, targetEndPoint);
+                                        await Socket_Operation.SendUDPData(spi.ClientUDP, bUDP_Data, targetEndPoint);
                                     }
                                 }
                             }
@@ -667,7 +659,7 @@ namespace WPELibrary.Lib
                                 {
                                     spi.ClientUDP_Time = DateTime.Now;
                                     Socket_Cache.SocketProxy.Total_Response += bResponseData.Length;
-                                    Socket_Operation.SendUDPData(spi.ClientUDP, bResponseData, spi.ClientUDP_EndPoint);
+                                    await Socket_Operation.SendUDPData(spi.ClientUDP, bResponseData, spi.ClientUDP_EndPoint);
                                 }
                             }
                         }
@@ -685,23 +677,26 @@ namespace WPELibrary.Lib
 
             #region//获取客户端的名称
 
-            public static Task<string> GetClientName(Socket_ProxyInfo spi)
+            public static async Task<string> GetClientName(Socket_ProxyInfo spi)
             {
                 string sReturn = string.Empty;
 
-                try
+                await Task.Run(() =>
                 {
-                    if (spi != null && spi.ClientSocket != null && !string.IsNullOrEmpty(spi.ClientAddress))
+                    try
                     {
-                        sReturn = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                        if (spi != null && spi.ClientSocket != null && !string.IsNullOrEmpty(spi.ClientAddress))
+                        {
+                            sReturn = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
 
-                return Task.FromResult(sReturn);
+                return sReturn;
             }
 
             #endregion
@@ -718,34 +713,39 @@ namespace WPELibrary.Lib
 
             #region//代理入队列
 
-            public static void ProxyInfoToQueue(Socket_ProxyInfo spi)
+            public static async Task ProxyInfoToQueue(Socket_ProxyInfo spi)
             {
-                try
+                await Task.Run(() =>
                 {
-                    qSocket_ProxyInfo.Enqueue(spi);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    try
+                    {
+                        qSocket_ProxyInfo.Enqueue(spi);
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion
 
             #region//代理数据入队列
 
-            public static void ProxyDataToQueue(Socket_ProxyInfo spi, byte[] bData, Socket_Cache.SocketProxy.DataType DataType)
+            public static async Task ProxyDataToQueue(Socket_ProxyInfo spi, byte[] bData, Socket_Cache.SocketProxy.DataType DataType)
             {
-                try
+                await Task.Run(() =>
                 {
-                    Socket_ProxyData spd = new Socket_ProxyData(spi.TargetAddress, spi.DomainType, bData, DataType);
-
-                    qSocket_ProxyData.Enqueue(spd);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    try
+                    {
+                        Socket_ProxyData spd = new Socket_ProxyData(spi.TargetAddress, spi.DomainType, bData, DataType);
+                        qSocket_ProxyData.Enqueue(spd);
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion
@@ -801,50 +801,56 @@ namespace WPELibrary.Lib
 
             #region//代理入列表
 
-            public static void ProxyInfoToList()
+            public static async Task ProxyInfoToList()
             {
-                try
+                await Task.Run(() =>
                 {
-                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi))
+                    try
                     {
-                        lstProxyInfo.Add(spi);
-                        RecProxyInfo?.Invoke(spi);
+                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi))
+                        {
+                            lstProxyInfo.Add(spi);
+                            RecProxyInfo?.Invoke(spi);
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion            
 
             #region//代理数据入列表
 
-            public static void ProxyDataToList()
+            public static async Task ProxyDataToList()
             {
-                try
+                await Task.Run(() =>
                 {
-                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
+                    try
                     {
-                        switch (spd.DataType)
-                        { 
-                            case SocketProxy.DataType.Request:
-                                Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
-                                break;
+                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
+                        {
+                            switch (spd.DataType)
+                            {
+                                case SocketProxy.DataType.Request:
+                                    Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
+                                    break;
 
-                            case SocketProxy.DataType.Response:
-                                Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
-                                break;
+                                case SocketProxy.DataType.Response:
+                                    Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
+                                    break;
+                            }
+
+                            RecProxyData?.Invoke(spd);
                         }
-
-                        RecProxyData?.Invoke(spd);
-                    }                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion            
@@ -1106,7 +1112,7 @@ namespace WPELibrary.Lib
 
             #region//封包入队列            
 
-            public static void SocketPacket_ToQueue(
+            public static async Task SocketPacket_ToQueue(
                 int iSocket,
                 byte[] bRawBuff,
                 byte[] bBuffByte, 
@@ -1116,7 +1122,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);                    
+                    string sPacketIP = await Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);                    
 
                     if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
                     {
@@ -1176,18 +1182,19 @@ namespace WPELibrary.Lib
 
             #region//封包入列表
 
-            public static void SocketToList(int iMax_DataLen)
+            public static async Task SocketToList(int iMax_DataLen)
             {
                 try
                 {
                     if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi))
                     {
-                        if (Socket_Operation.ISShowSocketPacket_ByFilter(spi))
+                        bool bIsShow = await Socket_Operation.IsShowSocketPacket_ByFilter(spi);
+                        if (bIsShow)
                         {                            
                             int iPacketLen = spi.PacketLen;
                             byte[] bBuffer = spi.PacketBuffer;
                             
-                            spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
+                            spi.PacketData = await Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
 
                             Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
 
@@ -1244,7 +1251,7 @@ namespace WPELibrary.Lib
 
             #region//搜索封包列表
 
-            public static int FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
+            public static async Task<int> FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
             {
                 int iResult = -1;
 
@@ -1261,7 +1268,7 @@ namespace WPELibrary.Lib
                             for (int i = FromIndex; i < iListCNT; i++)
                             {
                                 byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
-                                sSearch = Socket_Operation.BytesToString(efFormat, bSearch);
+                                sSearch = await Socket_Operation.BytesToString(efFormat, bSearch);
 
                                 if (!MatchCase)
                                 {
@@ -1290,7 +1297,7 @@ namespace WPELibrary.Lib
 
             #region//保存封包列表为Excel
 
-            public static void SaveSocketListToExcel()
+            public static async void SaveSocketListToExcel()
             {
                 int iSuccess = 0;
 
@@ -1327,7 +1334,7 @@ namespace WPELibrary.Lib
                                     string sTo = spi.PacketTo;
                                     string sLen = spi.PacketLen.ToString();
                                     byte[] bBuff = spi.PacketBuffer;
-                                    string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
+                                    string sData = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
 
                                     sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                                     sw.WriteLine(sColValue);
@@ -1365,27 +1372,30 @@ namespace WPELibrary.Lib
 
             #region//日志入队列
 
-            public static void LogToQueue(Socket_Cache.LogType logType, string sFuncName, string sLogContent)
+            public static async Task LogToQueue(Socket_Cache.LogType logType, string sFuncName, string sLogContent)
             {
-                try
+                await Task.Run(() =>
                 {
-                    Socket_LogInfo sli = new Socket_LogInfo(sFuncName, sLogContent);
-
-                    switch (logType)
+                    try
                     {
-                        case LogType.Socket:
-                            qSocket_Log.Enqueue(sli);
-                            break;
+                        Socket_LogInfo sli = new Socket_LogInfo(sFuncName, sLogContent);
 
-                        case LogType.Proxy:
-                            qProxy_Log.Enqueue(sli);
-                            break;
+                        switch (logType)
+                        {
+                            case LogType.Socket:
+                                qSocket_Log.Enqueue(sli);
+                                break;
+
+                            case LogType.Proxy:
+                                qProxy_Log.Enqueue(sli);
+                                break;
+                        }
                     }
-                }
-                catch (Exception ex) 
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }            
 
             #endregion
@@ -1445,35 +1455,38 @@ namespace WPELibrary.Lib
 
             #region//日志入列表
 
-            public static void LogToList(Socket_Cache.LogType logType)
+            public static async Task LogToList(Socket_Cache.LogType logType)
             {
-                try
+                await Task.Run(() =>
                 {
-                    switch (logType)
+                    try
                     {
-                        case LogType.Socket:
+                        switch (logType)
+                        {
+                            case LogType.Socket:
 
-                            if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
-                            {
-                                RecSocketLog?.Invoke(sliSocket);
-                            }
+                                if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
+                                {
+                                    RecSocketLog?.Invoke(sliSocket);
+                                }
 
-                            break;
+                                break;
 
-                        case LogType.Proxy:
+                            case LogType.Proxy:
 
-                            if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
-                            {
-                                RecProxyLog?.Invoke(sliProxy);
-                            }
+                                if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
+                                {
+                                    RecProxyLog?.Invoke(sliProxy);
+                                }
 
-                            break;
+                                break;
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion
@@ -2156,7 +2169,7 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否生效
 
-            public static bool CheckFilter_IsEffective(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
+            public static async Task<bool> CheckFilter_IsEffective(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
             {
                 bool bResult = true;
 
@@ -2184,7 +2197,8 @@ namespace WPELibrary.Lib
 
                             if (sfi.AppointHeader)
                             {
-                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(bBuffer, sfi.HeaderContent))
+                                bool bAppointHeader = await Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(bBuffer, sfi.HeaderContent);
+                                if (!bAppointHeader)
                                 {
                                     return false;
                                 }
@@ -2312,7 +2326,7 @@ namespace WPELibrary.Lib
 
             #region//检查是否匹配指定包头
 
-            public static bool CheckPacket_IsMatch_AppointHeader(byte[] bBuffer, string sHeaderContent)
+            public static async Task<bool> CheckPacket_IsMatch_AppointHeader(byte[] bBuffer, string sHeaderContent)
             {
                 bool bResult = false;
 
@@ -2327,7 +2341,7 @@ namespace WPELibrary.Lib
                         {
                             byte[] bPacketHeader = new byte[iHeaderContent_Len];
                             Buffer.BlockCopy(bBuffer, 0, bPacketHeader, 0, iHeaderContent_Len);                            
-                            string sPacketHeader = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bPacketHeader);
+                            string sPacketHeader = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bPacketHeader);
 
                             if (sHeaderContent.Equals(sPacketHeader))
                             {
@@ -2810,7 +2824,7 @@ namespace WPELibrary.Lib
 
             #region//执行滤镜列表
 
-            public static Socket_Cache.Filter.FilterAction DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, byte[] bBuffer)
+            public static async Task<Socket_Cache.Filter.FilterAction> DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, byte[] bBuffer)
             {
                 bool bBreak = false;
                 string sFName = string.Empty;
@@ -2820,9 +2834,10 @@ namespace WPELibrary.Lib
                 {
                     foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
                     {
-                        sFName = sfi.FName;                        
+                        sFName = sfi.FName;
+                        bool bIsEffective = await Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bBuffer, ptType, sfi);
 
-                        if (Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bBuffer, ptType, sfi))
+                        if (bIsEffective)
                         {
                             int iMatchCNT = 0;
                             bool bDoFilter = true;
@@ -2971,7 +2986,7 @@ namespace WPELibrary.Lib
                 return faReturn;
             }
 
-            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, int dwBufferCount, int BytesCNT)
+            public static async Task<Socket_Cache.Filter.FilterAction> DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, int dwBufferCount, int BytesCNT)
             {
                 Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.None;
 
@@ -2997,7 +3012,7 @@ namespace WPELibrary.Lib
                             BytesLeft -= iBuffLen;
 
                             byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffers.buf, iBuffLen);                          
-                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, bBuffer);
+                            Socket_Cache.Filter.FilterAction FilterAction = await Socket_Cache.FilterList.DoFilterList(ptType, iSocket, bBuffer);
                             Marshal.Copy(bBuffer, 0, lpBuffers.buf, iBuffLen);
 
                             faReturn = FilterAction;
@@ -4598,7 +4613,7 @@ namespace WPELibrary.Lib
 
             #region//添加
 
-            public static void AddToSendList_BytIndex(int iSIndex)
+            public static async void AddToSendList_BytIndex(int iSIndex)
             {
                 try
                 {
@@ -4608,7 +4623,7 @@ namespace WPELibrary.Lib
                         int iSocket = SocketList.lstRecPacket[iSIndex].PacketSocket;
                         string sToAddress = SocketList.lstRecPacket[iSIndex].PacketTo;
                         byte[] bBuffer = SocketList.lstRecPacket[iSIndex].PacketBuffer;
-                        string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                        string sData = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                         AddToSendList(sRemark, iSocket, sToAddress, sData,bBuffer);
                     }
@@ -4750,7 +4765,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveSendList_ToXDocument(string FilePath, int SendPacketIndex)
+            private static async void SaveSendList_ToXDocument(string FilePath, int SendPacketIndex)
             {
                 try
                 {
@@ -4779,7 +4794,7 @@ namespace WPELibrary.Lib
                             string sSocket = Socket_Cache.SendList.dtSendList.Rows[i]["Socket"].ToString().Trim();
                             string sToAddress = Socket_Cache.SendList.dtSendList.Rows[i]["ToAddress"].ToString().Trim();                            
                             byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSendList.Rows[i]["Bytes"];
-                            string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                            string sData = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                             XElement xeRobot =
                                 new XElement("Send",

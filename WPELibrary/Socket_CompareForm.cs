@@ -29,7 +29,7 @@ namespace WPELibrary
 
         #region//初始化
 
-        private void InitForm()
+        private async void InitForm()
         {
             try
             {
@@ -40,10 +40,9 @@ namespace WPELibrary
 
                 this.rtbCompare.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
 
-                if (!bgwCompare.IsBusy)
-                {
-                    bgwCompare.RunWorkerAsync();
-                }
+                string sRawData = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bRawBuffer);
+                string sModifiedData = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bModifiedBuffer);
+                this.rtbCompare.Rtf = await Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
 
                 this.lRawData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_134), bRawBuffer.Length);
                 this.lModifiedData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_135), bModifiedBuffer.Length);
@@ -56,54 +55,11 @@ namespace WPELibrary
                 if (bModifiedBuffer.Length > 0)
                 {
                     hbModifiedData.ByteProvider = new DynamicByteProvider(bModifiedBuffer);
-                }                
+                }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//显示数据比对结果（异步）
-
-        private void bgwCompare_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                string sRawData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bRawBuffer);
-                string sModifiedData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bModifiedBuffer);
-
-                e.Result = Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        private void bgwCompare_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                this.rtbCompare.Rtf = (string)e.Result;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//关闭窗体
-
-        private void Socket_CompareForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (bgwCompare.IsBusy)
-            {
-                bgwCompare.CancelAsync();
             }
         }
 
