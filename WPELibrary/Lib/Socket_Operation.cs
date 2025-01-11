@@ -1295,7 +1295,7 @@ namespace WPELibrary.Lib
 
                     saReturn.sin_family = ((short)AddressFamily.InterNetwork);
                     saReturn.sin_port = (ushort)IPAddress.HostToNetworkOrder((short)iPort);
-                    saReturn.sin_addr = (uint)ipAddress.Address;
+                    saReturn.sin_addr = (uint)ipAddress.GetHashCode();
                 }
             }
             catch (Exception ex)
