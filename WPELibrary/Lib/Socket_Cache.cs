@@ -160,10 +160,15 @@ namespace WPELibrary.Lib
 
                         if (bytesRead > 0)
                         {
-                            byte[] bRead = new byte[bytesRead];
-                            Buffer.BlockCopy(spi.ClientBuffer, 0, bRead, 0, bytesRead);
-
-                            spi.ClientData = spi.ClientData.Concat(bRead).ToArray();
+                            using (MemoryStream ms = new MemoryStream())
+                            {
+                                if (spi.ClientData.Length > 0)
+                                {
+                                    ms.Write(spi.ClientData, 0, spi.ClientData.Length);
+                                }
+                                ms.Write(spi.ClientBuffer, 0, bytesRead);
+                                spi.ClientData = ms.ToArray();
+                            }
 
                             byte[] bData = new byte[spi.ClientData.Length];
                             Buffer.BlockCopy(spi.ClientData, 0, bData, 0, spi.ClientData.Length);

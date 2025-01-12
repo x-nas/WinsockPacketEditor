@@ -334,19 +334,17 @@ namespace WinsockPacketEditor
             {
                 if (!this.cbEnable_SOCKS5.Checked)
                 {
-                    bReturn = false;
+                    return false;
                 }
-                else
-                {
-                    if (this.cbEnable_Auth.Checked)
-                    {
-                        string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
-                        string sAuth_PassWord = this.txtAuth_PassWord.Text.Trim();
 
-                        if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
-                        {
-                            bReturn = false;
-                        }
+                if (this.cbEnable_Auth.Checked)
+                {
+                    string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
+                    string sAuth_PassWord = this.txtAuth_PassWord.Text.Trim();
+
+                    if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
+                    {
+                        return false;
                     }
                 }
             }
@@ -402,21 +400,15 @@ namespace WinsockPacketEditor
                 {
                     Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
 
-                    if (!dgvLogList.IsDisposed)
+                    if (this.cbLogList_AutoRoll.Checked)
                     {
-                        dgvLogList.Invoke(new MethodInvoker(delegate
+                        if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
                         {
-                            if (this.cbLogList_AutoRoll.Checked)
-                            {
-                                if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
-                                {
-                                    dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
-                                }
-                            }
-
-                            this.AutoCleanUp_LogList();
-                        }));
+                            dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
+                        }
                     }
+
+                    this.AutoCleanUp_LogList();
                 }
 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
@@ -542,7 +534,7 @@ namespace WinsockPacketEditor
 
         #region//清理 TCP 和 UDP 端口（异步）
 
-        private void CheckProxyState()
+        private async void CheckProxyState()
         {
             try
             {
@@ -553,7 +545,7 @@ namespace WinsockPacketEditor
                     //清理 TCP 端口
                     if (Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientSocket == null)
                     {
-                        TreeNode ClientNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientAddress);
+                        TreeNode ClientNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientAddress);
 
                         if (ClientNode != null)
                         {
@@ -587,47 +579,13 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//显示代理列表（异步）
+        #region//显示代理列表（异步）        
 
-        private TreeNode AddProxyData(TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
-        {
-            TreeNode tnReturn = null;
-
-            try
-            {
-                if (!IsDisposed)
-                {
-                    tvProxyData.Invoke(new MethodInvoker(delegate
-                    {
-                        tnReturn = Nodes.Add(NodeName);
-
-                        if (ImgIndex > -1)
-                        {
-                            tnReturn.ImageIndex = ImgIndex;
-                            tnReturn.SelectedImageIndex = ImgIndex;
-                        }
-
-                        if (bData != null && bData.Length > 0)
-                        {
-                            tnReturn.Tag = bData;
-                        }
-
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return tnReturn;
-        }
-
-        private void Event_RecProxyData(Socket_ProxyData spd)
+        private async void Event_RecProxyData(Socket_ProxyData spd)
         {
             try
             {
-                if (!IsDisposed)
+                if (!tvProxyData.IsDisposed)
                 {
                     int RootImgIndex = -1;
                     int RequestImgIndex = -1;
@@ -658,12 +616,12 @@ namespace WinsockPacketEditor
                             break;
                     }
 
-                    TreeNode RootNode = Socket_Operation.FindNodeAsync(this.tvProxyData, spd.Domain);
+                    TreeNode RootNode = await Socket_Operation.FindNodeAsync(this.tvProxyData, spd.Domain);
                     if (RootNode == null)
                     {
-                        RootNode = this.AddProxyData(this.tvProxyData.Nodes, spd.Domain, RootImgIndex, null);
-                        this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138), RequestImgIndex, null);
-                        this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
+                        RootNode = await Socket_Operation.AddTreeNode(this.tvProxyData, this.tvProxyData.Nodes, spd.Domain, RootImgIndex, null);
+                        await Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138), RequestImgIndex, null);
+                        await Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
                     }
 
                     TreeNode DataNode = new TreeNode();
@@ -679,7 +637,7 @@ namespace WinsockPacketEditor
                     }
 
                     string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
-                    this.AddProxyData(DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
+                    await Socket_Operation.AddTreeNode(this.tvProxyData, DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
                 }
             }
             catch (Exception ex)
@@ -692,63 +650,38 @@ namespace WinsockPacketEditor
 
         #region//显示客户端列表（异步）
 
-        private TreeNode AddProxyInfo(TreeNodeCollection Nodes, string NodeName, int ImgIndex)
-        {
-            TreeNode tnReturn = null;
-
-            try
-            {
-                if (!IsDisposed)
-                {
-                    tvProxyInfo.Invoke(new MethodInvoker(delegate
-                    {
-                        tnReturn = Nodes.Add(NodeName);
-
-                        if (ImgIndex > -1)
-                        {
-                            tnReturn.ImageIndex = ImgIndex;
-                            tnReturn.SelectedImageIndex = ImgIndex;
-                        }
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return tnReturn;
-        }
-
-        private void Event_RecProxyInfo(Socket_ProxyInfo spi)
+        private async void Event_RecProxyInfo(Socket_ProxyInfo spi)
         {
             try
             {
-                if (spi != null)
+                if (!tvProxyInfo.IsDisposed)
                 {
-                    if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
+                    if (spi != null)
                     {
-                        int iRootImgIndex = -1;
-                        int iChildImgIndex = 5;
-                        string sRootName = Socket_Cache.SocketProxy.GetClientName(spi);
-                        string sChildName = spi.ClientAddress;
-
-                        if (!string.IsNullOrEmpty(sRootName))
+                        if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
-                            TreeNode RootNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, sRootName);
-                            if (RootNode == null)
-                            {
-                                RootNode = this.AddProxyInfo(this.tvProxyInfo.Nodes, sRootName, iRootImgIndex);
-                            }
+                            int iRootImgIndex = -1;
+                            int iChildImgIndex = 5;
+                            string sRootName = Socket_Cache.SocketProxy.GetClientName(spi);
+                            string sChildName = spi.ClientAddress;
 
-                            TreeNode ChildNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, sChildName);
-                            if (ChildNode == null)
+                            if (!string.IsNullOrEmpty(sRootName))
                             {
-                                ChildNode = this.AddProxyInfo(RootNode.Nodes, sChildName, iChildImgIndex);
+                                TreeNode RootNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, sRootName);
+                                if (RootNode == null)
+                                {
+                                    RootNode = await Socket_Operation.AddTreeNode(this.tvProxyInfo, this.tvProxyInfo.Nodes, sRootName, iRootImgIndex, null);
+                                }
+
+                                TreeNode ChildNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, sChildName);
+                                if (ChildNode == null)
+                                {
+                                    ChildNode = await Socket_Operation.AddTreeNode(this.tvProxyInfo, RootNode.Nodes, sChildName, iChildImgIndex, null);
+                                }
                             }
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -764,7 +697,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (!IsDisposed)
+                if (!dgvLogList.IsDisposed)
                 {
                     dgvLogList.Invoke(new MethodInvoker(delegate
                     {
@@ -796,52 +729,33 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示代理数据（异步）
+        #region//显示选中的代理数据
 
         private void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
                 byte[] bBuffer = null;
-
                 if (e.Node.Tag != null)
                 {
                     bBuffer = e.Node.Tag as byte[];                  
                 }
 
-                this.ShowSelectProxyData(bBuffer);                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void ShowSelectProxyData(byte[] bBuffer)
-        {
-            try
-            {
-                if (!IsDisposed)
+                if (bBuffer != null)
                 {
-                    hbData.Invoke(new MethodInvoker(delegate
-                    {
-                        if (bBuffer != null)
-                        {
-                            DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
-                            this.hbData.ByteProvider = dbp;
-                        }
-                        else
-                        {
-                            this.hbData.ByteProvider = null;
-                        }
-                    }));
+                    DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
+                    this.hbData.ByteProvider = dbp;
+                }
+                else
+                {
+                    this.hbData.ByteProvider = null;
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion        
     }

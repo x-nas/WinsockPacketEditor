@@ -1748,12 +1748,12 @@ namespace WPELibrary.Lib
 
         #region//获取对应名称的树节点
 
-        public static TreeNode FindNodeAsync(TreeView treeView, string nodeName)
+        public static async Task<TreeNode> FindNodeAsync(TreeView treeView, string nodeName)
         {
-            return FindNode(treeView.Nodes, nodeName);
+            return await Socket_Operation.FindNode(treeView.Nodes, nodeName);
         }
 
-        private static TreeNode FindNode(TreeNodeCollection nodes, string nodeName)
+        private static async Task<TreeNode> FindNode(TreeNodeCollection nodes, string nodeName)
         {
             TreeNode tnReturn = null;
 
@@ -1767,7 +1767,7 @@ namespace WPELibrary.Lib
                         break;
                     }
 
-                    TreeNode foundNode = FindNode(node.Nodes, nodeName);
+                    TreeNode foundNode = await FindNode(node.Nodes, nodeName);
 
                     if (foundNode != null)
                     {
@@ -1782,7 +1782,47 @@ namespace WPELibrary.Lib
             }
             
             return tnReturn;
-        }        
+        }
+
+        #endregion
+
+        #region//添加树节点
+
+        public static async Task<TreeNode> AddTreeNode(TreeView treeView, TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
+        {
+            TreeNode tnReturn = null;
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    if (!treeView.IsDisposed)
+                    {
+                        treeView.Invoke(new MethodInvoker(delegate
+                        {
+                            tnReturn = Nodes.Add(NodeName);
+
+                            if (ImgIndex > -1)
+                            {
+                                tnReturn.ImageIndex = ImgIndex;
+                                tnReturn.SelectedImageIndex = ImgIndex;
+                            }
+
+                            if (bData != null && bData.Length > 0)
+                            {
+                                tnReturn.Tag = bData;
+                            }
+                        }));
+                    }
+                });                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return tnReturn;
+        }
 
         #endregion
 
