@@ -481,7 +481,7 @@
     <value>None</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
     <value>复制</value>
@@ -490,7 +490,7 @@
     <value>None</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
     <value>复制 Hex</value>
@@ -514,7 +514,7 @@
     <value>None</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
     <value>粘贴</value>
@@ -523,7 +523,7 @@
     <value>None</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>126, 22</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
     <value>粘贴 Hex</value>

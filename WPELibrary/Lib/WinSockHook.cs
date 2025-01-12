@@ -64,7 +64,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(buffer, length);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(buffer, length);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -114,7 +114,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(buffer, res);                    
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(buffer, res);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -157,7 +157,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(ipBuffer, length);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(ipBuffer, length);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -206,7 +206,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(ipBuffer, res);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(ipBuffer, res);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -251,7 +251,7 @@ namespace WPELibrary.Lib
                 if (BytesSend > 0)
                 {
                     byte[] bRawBuffer = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSend);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesSend).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesSend);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -308,7 +308,7 @@ namespace WPELibrary.Lib
                     if (BytesRecvd > 0)
                     {
                         byte[] bRawBuffer = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
-                        Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesRecvd).Result;
+                        Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesRecvd);
 
                         if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                         {
@@ -356,7 +356,7 @@ namespace WPELibrary.Lib
                 if (BytesSend > 0)
                 {
                     byte[] bRawBuffer = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesSend);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesSend).Result;
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesSend);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -415,7 +415,7 @@ namespace WPELibrary.Lib
                     if (BytesRecvd > 0)
                     {
                         byte[] bRawBuffer = Socket_Operation.GetByteFromWSABUF(lpBuffers, dwBufferCount, BytesRecvd);
-                        Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesRecvd).Result;
+                        Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoWSAFilterList(ptType, Socket, lpBuffers, dwBufferCount, BytesRecvd);
 
                         if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                         {
@@ -537,7 +537,7 @@ namespace WPELibrary.Lib
                 if (lhRecvFrom != null)
                 {
                     lhRecvFrom.Dispose();
-                }          
+                }
 
                 if (lhWSASend != null)
                 {
@@ -564,7 +564,7 @@ namespace WPELibrary.Lib
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
+            }
         }
 
         #endregion

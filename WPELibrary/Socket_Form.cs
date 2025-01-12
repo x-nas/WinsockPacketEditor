@@ -10,7 +10,6 @@ using System.IO;
 using System.Xml.Linq;
 using System.Text;
 using WPELibrary.Lib.NativeMethods;
-using System.Threading.Tasks;
 
 namespace WPELibrary
 {
@@ -29,15 +28,8 @@ namespace WPELibrary
             try
             {
                 MultiLanguage.SetDefaultLanguage(sLanguage);
-                InitializeComponent();                
-
-                this.InitSocketForm();
-                this.InitSocketDGV();                
-                this.InitHexBox_XOR();
-                
-                this.LoadConfigs_Parameter();
-                Socket_Operation.LoadSystemList();
-                Socket_Operation.RegisterHotKey();
+                InitializeComponent();
+                this.InitSocketDGV();
             }
             catch (Exception ex)
             {
@@ -48,6 +40,16 @@ namespace WPELibrary
         #endregion
 
         #region//窗体事件
+
+        private void Socket_Form_Load(object sender, EventArgs e)
+        {
+            this.InitSocketForm();
+            this.InitHexBox_XOR();
+
+            this.LoadConfigs_Parameter();
+            Socket_Operation.LoadSystemList();
+            Socket_Operation.RegisterHotKey();
+        }
 
         private void DLL_Form_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -112,7 +114,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         protected override void WndProc(ref Message m)
         {
@@ -121,57 +123,7 @@ namespace WPELibrary
                 if (m.Msg == User32.WM_HOTKEY)
                 {
                     int HOTKEY_ID = m.WParam.ToInt32();
-
-                    switch (HOTKEY_ID)
-                    {
-                        case 9001:
-                            Socket_Cache.Robot.DoRobot_ByIndex(0);
-                            break;
-
-                        case 9002:
-                            Socket_Cache.Robot.DoRobot_ByIndex(1);
-                            break;
-
-                        case 9003:
-                            Socket_Cache.Robot.DoRobot_ByIndex(2);
-                            break;
-
-                        case 9004:
-                            Socket_Cache.Robot.DoRobot_ByIndex(3);
-                            break;
-
-                        case 9005:
-                            Socket_Cache.Robot.DoRobot_ByIndex(4);
-                            break;
-
-                        case 9006:
-                            Socket_Cache.Robot.DoRobot_ByIndex(5);
-                            break;
-
-                        case 9007:
-                            Socket_Cache.Robot.DoRobot_ByIndex(6);
-                            break;
-
-                        case 9008:
-                            Socket_Cache.Robot.DoRobot_ByIndex(7);
-                            break;
-
-                        case 9009:
-                            Socket_Cache.Robot.DoRobot_ByIndex(8);
-                            break;
-
-                        case 9010:
-                            Socket_Cache.Robot.DoRobot_ByIndex(9);
-                            break;
-
-                        case 9011:
-                            Socket_Cache.Robot.DoRobot_ByIndex(10);
-                            break;
-
-                        case 9012:
-                            Socket_Cache.Robot.DoRobot_ByIndex(11);
-                            break;
-                    }                    
+                    Socket_Cache.Robot.DoRobot_ByHotKey(HOTKEY_ID);                                        
                 }
             }
             catch (Exception ex)
@@ -180,11 +132,11 @@ namespace WPELibrary
             }
 
             base.WndProc(ref m);            
-        }        
+        }
 
         #endregion
 
-        #region//初始化      
+        #region//初始化
 
         private void InitSocketForm()
         {
@@ -204,9 +156,8 @@ namespace WPELibrary
                 this.niWPE.Text = Socket_Cache.WPE + "\r\n" + sProcessName;
                 
                 this.tSocketInfo.Enabled = true;
-                this.tSocketList.Enabled = true;
-                
-                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();             
+                this.tSocketList.Enabled = true;                
+                        
                 this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
 
                 this.bStartHook.Enabled = true;
@@ -252,10 +203,12 @@ namespace WPELibrary
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
+                Socket_Cache.FilterList.RecSocketFilter += new Socket_Cache.FilterList.SocketFilterReceived(Event_RecSocketFilter);
 
                 dgvRobotList.AutoGenerateColumns = false;
                 dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
                 dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
+                Socket_Cache.RobotList.RecSocketRobot += new Socket_Cache.RobotList.SocketRobotReceived(Event_RecSocketRobot);
 
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstSocketLog;
@@ -807,84 +760,78 @@ namespace WPELibrary
 
         private void tSocketInfo_Tick(object sender, EventArgs e)
         {
-            Task.Run(() =>
+            try
             {
-                try
-                {
-                    this.tlTotal_CNT.Text = Socket_Cache.SocketPacket.TotalPackets.ToString();
-                    this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
-                    this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
-                    this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
-                    this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
-                    this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
-                    this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
-                    this.tlSendTo_CNT.Text = Socket_Cache.SocketQueue.SendTo_CNT.ToString();
-                    this.tlRecvFrom_CNT.Text = Socket_Cache.SocketQueue.RecvFrom_CNT.ToString();
-                    this.tlWSASend_CNT.Text = Socket_Cache.SocketQueue.WSASend_CNT.ToString();
-                    this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
-                    this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
-                    this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });
+                this.tlTotal_CNT.Text = Socket_Cache.SocketPacket.TotalPackets.ToString();
+                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
+                this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
+                this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
+                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
+                this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
+                this.tlSendTo_CNT.Text = Socket_Cache.SocketQueue.SendTo_CNT.ToString();
+                this.tlRecvFrom_CNT.Text = Socket_Cache.SocketQueue.RecvFrom_CNT.ToString();
+                this.tlWSASend_CNT.Text = Socket_Cache.SocketQueue.WSASend_CNT.ToString();
+                this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
+                this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
+                this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void tSocketList_Tick(object sender, EventArgs e)
         {
-            Task.Run(async () => 
+            try
             {
-                try
+                if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                 {
-                    if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
+                    Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
+
+                    if (!IsDisposed)
                     {
-                        await Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
-
-                        if (!IsDisposed)
+                        dgvSocketList.Invoke(new MethodInvoker(delegate
                         {
-                            dgvSocketList.Invoke(new MethodInvoker(delegate
+                            if (this.cbSocketList_AutoRoll.Checked)
                             {
-                                if (this.cbSocketList_AutoRoll.Checked)
+                                if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
                                 {
-                                    if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
-                                    {
-                                        dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
-                                    }
+                                    dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
                                 }
+                            }
 
-                                this.AutoCleanUp_SocketList();
-                            }));
-                        }
-                    }
-
-                    if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
-                    {
-                        await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
-
-                        if (!IsDisposed)
-                        {
-                            dgvLogList.Invoke(new MethodInvoker(delegate
-                            {
-                                if (this.cbLogList_AutoRoll.Checked)
-                                {
-                                    if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
-                                    {
-                                        dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
-                                    }
-                                }
-
-                                this.AutoCleanUp_LogList();
-                            }));
-                        }
+                            this.AutoCleanUp_SocketList();
+                        }));
                     }
                 }
-                catch (Exception ex)
+
+                if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
+
+                    if (!IsDisposed)
+                    {
+                        dgvLogList.Invoke(new MethodInvoker(delegate
+                        {
+                            if (this.cbLogList_AutoRoll.Checked)
+                            {
+                                if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
+                                {
+                                    dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
+                                }
+                            }
+
+                            this.AutoCleanUp_LogList();
+                        }));
+                    }
                 }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion        
@@ -915,7 +862,7 @@ namespace WPELibrary
             {
                 if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;                    
                     e.Value = Socket_Cache.SocketPacket.GetImg_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
@@ -992,6 +939,50 @@ namespace WPELibrary
 
         #endregion
 
+        #region//显示滤镜列表（异步）
+
+        private void Event_RecSocketFilter(Socket_FilterInfo sfi)
+        {
+            try
+            {
+                if (!IsDisposed)
+                {
+                    dgvFilterList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.FilterList.lstFilter.Add(sfi);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示机器人列表（异步）
+
+        private void Event_RecSocketRobot(Socket_RobotInfo sri)
+        {
+            try
+            {
+                if (!IsDisposed)
+                {
+                    dgvRobotList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.RobotList.lstRobot.Add(sri);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//搜索封包内容（异步）
 
         private void bSearch_Click(object sender, EventArgs e)
@@ -1012,35 +1003,32 @@ namespace WPELibrary
 
         private void HexBox_FindNext()
         {
-            Task.Run(() =>
+            try
             {
-                try
+                if (Socket_Cache.SocketList.FindOptions.IsValid)
                 {
-                    if (Socket_Cache.SocketList.FindOptions.IsValid)
+                    if (!IsDisposed)
                     {
-                        if (!IsDisposed)
+                        hbPacketData.Invoke(new MethodInvoker(delegate
                         {
-                            hbPacketData.Invoke(new MethodInvoker(delegate
-                            {
-                                long res = this.hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
+                            long res = this.hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
 
-                                if (res == -1)
-                                {
-                                    Search_Index += 1;
-                                    this.SearchSocketListNext();
-                                }
-                            }));
-                        }
+                            if (res == -1)
+                            {
+                                Search_Index += 1;
+                                this.SearchSocketListNext();
+                            }
+                        }));
                     }
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
-        private async void SearchSocketListNext()
+        private void SearchSocketListNext()
         {
             try
             {
@@ -1065,7 +1053,7 @@ namespace WPELibrary
                             case FindType.Hex:
                                 efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
                                 byte[] bSearch_Hex = Socket_Cache.SocketList.FindOptions.Hex;
-                                sSearch_Text = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
+                                sSearch_Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bSearch_Hex);
                                 break;
                         }
 
@@ -1076,7 +1064,7 @@ namespace WPELibrary
                             this.hbPacketData.SelectionStart = 0;
                         }
 
-                        int iIndex = await Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
+                        int iIndex = Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -1272,7 +1260,7 @@ namespace WPELibrary
 
         #region//封包列表菜单
 
-        private async void cmsSocketList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void cmsSocketList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             string sItemText = e.ClickedItem.Name;
             this.cmsSocketList.Close();
@@ -1350,7 +1338,7 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            string sPacketHex = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
                             this.rtbComparison_A.Text = sPacketHex;
                         }
 
@@ -1360,7 +1348,7 @@ namespace WPELibrary
 
                         if (Select_Index > -1)
                         {
-                            string sPacketHex = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
                             this.rtbComparison_B.Text = sPacketHex;
                         }
 
@@ -1732,19 +1720,16 @@ namespace WPELibrary
 
         private void bComparison_Click(object sender, EventArgs e)
         {
-            Task.Run(async () =>
+            try
             {
-                try
-                {
-                    this.rtbComparison_Result.Clear();
-                    this.rtbComparison_Result.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
-                    this.rtbComparison_Result.Rtf = await Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });                        
+                this.rtbComparison_Result.Clear();
+                this.rtbComparison_Result.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
+                this.rtbComparison_Result.Rtf = Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }        
 
         private void bComparison_Exchange_Click(object sender, EventArgs e)
@@ -1772,32 +1757,32 @@ namespace WPELibrary
 
         #region//编码转换
 
-        private async void bPacketInfo_Encoding_Click(object sender, EventArgs e)
+        private void bPacketInfo_Encoding_Click(object sender, EventArgs e)
         {
             try
             {
                 string sEncodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sEncodingText));
-                string sANSI_GBK = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.GBK, sEncodingText));
+                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sEncodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.GBK, sEncodingText));
 
-                string sUTF7 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
-                string sANSI_UTF7 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
+                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
 
-                string sUTF8 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
-                string sANSI_UTF8 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
+                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
 
-                string sUTF16 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
-                string sANSI_UTF16 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
+                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
 
-                string sUTF32 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
-                string sANSI_UTF32 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
+                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
 
-                string sUnicode = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
-                string sANSI_Unicode = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
+                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
 
                 string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
-                string sANSI_Base64 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sBase64));
+                string sANSI_Base64 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sBase64));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
@@ -1820,32 +1805,32 @@ namespace WPELibrary
             }
         }
 
-        private async void bPacketInfo_Decoding_Click(object sender, EventArgs e)
+        private void bPacketInfo_Decoding_Click(object sender, EventArgs e)
         {
             try
             {
                 string sDecodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_GBK = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.GBK, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.GBK, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF7 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF7 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF8 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF8 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF16 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF16 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF32 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF32 = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
-                string sUnicode = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_Unicode = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
 
                 string sBase64 = Socket_Operation.Base64_Decoding(sDecodingText);
-                string sANSI_Base64 = Socket_Operation.Base64_Decoding(await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText)));
+                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText)));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;

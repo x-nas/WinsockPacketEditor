@@ -1121,7 +1121,7 @@ namespace WPELibrary
                     case "cmsDGV_Paste":
 
                         string sClipboardText = Clipboard.GetText().Trim();
-                        PastePacketData(dgv, sClipboardText);
+                        this.PastePacketData(dgv, sClipboardText);
 
                         break;
 
@@ -1135,7 +1135,7 @@ namespace WPELibrary
 
                         if (dgv.Name.Equals("dgvFilterAdvanced_Search"))
                         {
-                            Socket_Operation.ShowMessageBox("搜索位置不可设置递进！");
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
                             break;
                         }
 
@@ -1145,7 +1145,7 @@ namespace WPELibrary
 
                             if (iRowIndex == 0)
                             {
-                                Socket_Operation.ShowMessageBox("搜索位置不可设置递进！");
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_73));
                                 break;
                             }
                         }

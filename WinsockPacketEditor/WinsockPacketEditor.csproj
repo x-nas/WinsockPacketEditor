@@ -144,9 +144,11 @@
     </Compile>
     <EmbeddedResource Include="Injector_Form.en-US.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Injector_Form.resx">
       <DependentUpon>Injector_Form.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ProcessList_Form.en-US.resx">
       <DependentUpon>ProcessList_Form.cs</DependentUpon>

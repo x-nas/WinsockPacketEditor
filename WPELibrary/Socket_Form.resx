@@ -6231,18 +6231,6 @@
   <data name="tsslSplit1.Text" xml:space="preserve">
     <value>|</value>
   </data>
-  <data name="tsslProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 18</value>
-  </data>
-  <data name="tsslProcessInfo.Text" xml:space="preserve">
-    <value>ProcessInfo</value>
-  </data>
-  <data name="tsslSplit2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 18</value>
-  </data>
-  <data name="tsslSplit2.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
   <data name="tsslWinSock.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 18</value>
   </data>
@@ -19503,18 +19491,6 @@
     <value>tsslSplit1</value>
   </data>
   <data name="&gt;&gt;tsslSplit1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslProcessInfo.Name" xml:space="preserve">
-    <value>tsslProcessInfo</value>
-  </data>
-  <data name="&gt;&gt;tsslProcessInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tsslSplit2.Name" xml:space="preserve">
-    <value>tsslSplit2</value>
-  </data>
-  <data name="&gt;&gt;tsslSplit2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsslWinSock.Name" xml:space="preserve">

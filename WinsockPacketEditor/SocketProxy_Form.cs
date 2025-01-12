@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 using Be.Windows.Forms;
-using System.Threading.Tasks;
 
 namespace WinsockPacketEditor
 {
@@ -20,7 +19,7 @@ namespace WinsockPacketEditor
             try
             {
                 InitializeComponent();
-                this.Init();
+                this.InitSocketDGV();
             }
             catch (Exception ex)
             {
@@ -32,20 +31,26 @@ namespace WinsockPacketEditor
 
         #region//窗体事件
 
+        private void SocketProxy_Form_Load(object sender, EventArgs e)
+        {
+            this.InitForm();
+            this.LoadConfigs_Parameter();
+        }
+
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.ExitMainForm();
         }
 
-        private async void ExitMainForm()
+        private void ExitMainForm()
         {
             try
             {
-                await this.SaveConfigs_Parameter();
+                this.SaveConfigs_Parameter();
 
                 if (this.cbEnable_SystemProxy.Checked)
                 { 
-                    await Socket_Operation.StopSystemProxy();
+                    Socket_Operation.StopSystemProxy();
                 }
             }
             catch (Exception ex)
@@ -54,26 +59,43 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
+
+        #region//初始化数据表
+
+        private void InitSocketDGV()
+        {
+            try
+            {
+                dgvLogList.AutoGenerateColumns = false;
+                dgvLogList.DataSource = Socket_Cache.LogList.lstProxyLog;
+                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
+                Socket_Cache.LogList.RecProxyLog += new Socket_Cache.LogList.ProxyLogReceived(Event_RecProxyLog);
+
+                tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
+                Socket_Cache.SocketProxyList.RecProxyData += new Socket_Cache.SocketProxyList.ProxyDataReceived(Event_RecProxyData);
+
+                tvProxyInfo.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyInfo, true, null);
+                Socket_Cache.SocketProxyList.RecProxyInfo += new Socket_Cache.SocketProxyList.ProxyInfoReceived(Event_RecProxyInfo);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//初始化界面
 
-        private async void Init()
-        {
-            this.InitSocketDGV();
-
-            await this.InitForm();            
-            await this.LoadConfigs_Parameter();
-        }
-
-        private async Task InitForm()
+        private void InitForm()
         {
             try
             {
                 this.Text = Socket_Cache.WPE + " - " + Socket_Operation.AssemblyVersion;
 
                 string sServerInfo = string.Empty;
-                IPAddress[] ipAddresses = await Socket_Operation.GetLocalIPAddress();
+                IPAddress[] ipAddresses = Socket_Operation.GetLocalIPAddress();
 
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
@@ -114,40 +136,15 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion                
-
-        #region//初始化数据表
-
-        private void InitSocketDGV()
-        {
-            try
-            {
-                dgvLogList.AutoGenerateColumns = false;
-                dgvLogList.DataSource = Socket_Cache.LogList.lstProxyLog;
-                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
-                Socket_Cache.LogList.RecProxyLog += new Socket_Cache.LogList.ProxyLogReceived(Event_RecProxyLog);
-
-                tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
-                Socket_Cache.SocketProxyList.RecProxyData += new Socket_Cache.SocketProxyList.ProxyDataReceived(Event_RecProxyData);
-
-                tvProxyInfo.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyInfo, true, null);
-                Socket_Cache.SocketProxyList.RecProxyInfo += new Socket_Cache.SocketProxyList.ProxyInfoReceived(Event_RecProxyInfo);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion                        
 
         #region//加载系统参数
 
-        private async Task LoadConfigs_Parameter()
+        private void LoadConfigs_Parameter()
         {
             try
             {
-                await Socket_Operation.LoadConfigs_SocketProxy();
+                Socket_Operation.LoadConfigs_SocketProxy();
 
                 this.cbEnable_SOCKS5.Checked = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 this.nudProxyPort.Value = Socket_Cache.SocketProxy.ProxyPort;
@@ -169,7 +166,7 @@ namespace WinsockPacketEditor
 
         #region//保存系统参数
 
-        private async Task SaveConfigs_Parameter()
+        private void SaveConfigs_Parameter()
         {
             try
             {
@@ -183,7 +180,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                await Socket_Operation.SaveConfigs_SocketProxy();
+                Socket_Operation.SaveConfigs_SocketProxy();
             }
             catch (Exception ex)
             {
@@ -195,22 +192,22 @@ namespace WinsockPacketEditor
 
         #region//系统代理
 
-        private async void cbEnable_SystemProxy_CheckedChanged(object sender, EventArgs e)
+        private void cbEnable_SystemProxy_CheckedChanged(object sender, EventArgs e)
         {
-            await this.SystemProxy_CheckedChanged();
+            this.SystemProxy_CheckedChanged();
         }
 
-        private async Task SystemProxy_CheckedChanged()
+        private void SystemProxy_CheckedChanged()
         {
             try
             {
                 if (this.cbEnable_SystemProxy.Checked)
                 {
-                    await Socket_Operation.StartSystemProxy();
+                    Socket_Operation.StartSystemProxy();
                 }
                 else
                 {
-                    await Socket_Operation.StopSystemProxy();
+                    Socket_Operation.StopSystemProxy();
                 }
             }
             catch (Exception ex)
@@ -251,12 +248,11 @@ namespace WinsockPacketEditor
 
         #region//开始代理
 
-        private async void bStart_Click(object sender, EventArgs e)
+        private void bStart_Click(object sender, EventArgs e)
         {
             try
             {
-                bool bCheckOK = await this.CheckProxySet();
-                if (bCheckOK)
+                if (this.CheckProxySet())
                 {
                     Socket_Cache.SocketProxy.IsListening = true;
                     Socket_Cache.SocketProxy.ProxyIP = IPAddress.Any;
@@ -265,7 +261,7 @@ namespace WinsockPacketEditor
                     this.bStop.Enabled = true;
                     this.tpProxySet.Enabled = false;
 
-                    await this.SaveConfigs_Parameter();
+                    this.SaveConfigs_Parameter();
 
                     if (SocketServer == null)
                     {
@@ -304,7 +300,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        private async void AcceptCallback(IAsyncResult ar)
+        private void AcceptCallback(IAsyncResult ar)
         {
             try
             {
@@ -314,7 +310,7 @@ namespace WinsockPacketEditor
 
                     if (clientSocket != null)
                     {
-                        await Socket_Cache.SocketProxy.HandleClient(clientSocket);
+                        Socket_Cache.SocketProxy.HandleClient(clientSocket);
                     }
 
                     AcceptClients();
@@ -330,37 +326,34 @@ namespace WinsockPacketEditor
 
         #region//设置有效性检测
 
-        private async Task<bool> CheckProxySet()
+        private bool CheckProxySet()
         {
             bool bReturn = true;
 
-            await Task.Run(() =>
+            try
             {
-                try
+                if (!this.cbEnable_SOCKS5.Checked)
                 {
-                    if (!this.cbEnable_SOCKS5.Checked)
+                    bReturn = false;
+                }
+                else
+                {
+                    if (this.cbEnable_Auth.Checked)
                     {
-                        bReturn = false;
-                    }
-                    else
-                    {
-                        if (this.cbEnable_Auth.Checked)
-                        {
-                            string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
-                            string sAuth_PassWord = this.txtAuth_PassWord.Text.Trim();
+                        string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
+                        string sAuth_PassWord = this.txtAuth_PassWord.Text.Trim();
 
-                            if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
-                            {
-                                bReturn = false;
-                            }
+                        if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
+                        {
+                            bReturn = false;
                         }
-                    }                    
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
 
             return bReturn;
         }
@@ -391,23 +384,23 @@ namespace WinsockPacketEditor
 
         #region//计时器
 
-        private async void tSocketProxy_Tick(object sender, EventArgs e)
+        private void tSocketProxy_Tick(object sender, EventArgs e)
         {
             try
             {
                 if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.Count > 0)
                 {
-                    await Socket_Cache.SocketProxyList.ProxyInfoToList();
+                    Socket_Cache.SocketProxyList.ProxyInfoToList();
                 }
 
                 if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count > 0)
                 {
-                    await Socket_Cache.SocketProxyList.ProxyDataToList();
+                    Socket_Cache.SocketProxyList.ProxyDataToList();
                 }
 
                 if (Socket_Cache.LogQueue.qProxy_Log.Count > 0)
                 {
-                    await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
+                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
 
                     if (!dgvLogList.IsDisposed)
                     {
@@ -434,9 +427,9 @@ namespace WinsockPacketEditor
             }
         }
 
-        private async void tCheckProxyState_Tick(object sender, EventArgs e)
+        private void tCheckProxyState_Tick(object sender, EventArgs e)
         {
-            await this.CheckProxyState();
+            this.CheckProxyState();
         }
 
         #endregion
@@ -549,7 +542,7 @@ namespace WinsockPacketEditor
 
         #region//清理 TCP 和 UDP 端口（异步）
 
-        private async Task CheckProxyState()
+        private void CheckProxyState()
         {
             try
             {
@@ -560,7 +553,7 @@ namespace WinsockPacketEditor
                     //清理 TCP 端口
                     if (Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientSocket == null)
                     {
-                        TreeNode ClientNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientAddress);
+                        TreeNode ClientNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientAddress);
 
                         if (ClientNode != null)
                         {
@@ -596,44 +589,41 @@ namespace WinsockPacketEditor
 
         #region//显示代理列表（异步）
 
-        private async Task<TreeNode> AddProxyData(TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
+        private TreeNode AddProxyData(TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
         {
             TreeNode tnReturn = null;
 
-            await Task.Run(() =>
+            try
             {
-                try
+                if (!IsDisposed)
                 {
-                    if (!IsDisposed)
+                    tvProxyData.Invoke(new MethodInvoker(delegate
                     {
-                        tvProxyData.Invoke(new MethodInvoker(delegate
+                        tnReturn = Nodes.Add(NodeName);
+
+                        if (ImgIndex > -1)
                         {
-                            tnReturn = Nodes.Add(NodeName);
+                            tnReturn.ImageIndex = ImgIndex;
+                            tnReturn.SelectedImageIndex = ImgIndex;
+                        }
 
-                            if (ImgIndex > -1)
-                            {
-                                tnReturn.ImageIndex = ImgIndex;
-                                tnReturn.SelectedImageIndex = ImgIndex;
-                            }
+                        if (bData != null && bData.Length > 0)
+                        {
+                            tnReturn.Tag = bData;
+                        }
 
-                            if (bData != null && bData.Length > 0)
-                            {
-                                tnReturn.Tag = bData;
-                            }
-
-                        }));
-                    }
+                    }));
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
 
             return tnReturn;
         }
 
-        private async void Event_RecProxyData(Socket_ProxyData spd)
+        private void Event_RecProxyData(Socket_ProxyData spd)
         {
             try
             {
@@ -668,12 +658,12 @@ namespace WinsockPacketEditor
                             break;
                     }
 
-                    TreeNode RootNode = await Socket_Operation.FindNodeAsync(this.tvProxyData, spd.Domain);
+                    TreeNode RootNode = Socket_Operation.FindNodeAsync(this.tvProxyData, spd.Domain);
                     if (RootNode == null)
                     {
-                        RootNode = await this.AddProxyData(this.tvProxyData.Nodes, spd.Domain, RootImgIndex, null);
-                        await this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138), RequestImgIndex, null);
-                        await this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
+                        RootNode = this.AddProxyData(this.tvProxyData.Nodes, spd.Domain, RootImgIndex, null);
+                        this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_138), RequestImgIndex, null);
+                        this.AddProxyData(RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
                     }
 
                     TreeNode DataNode = new TreeNode();
@@ -689,7 +679,7 @@ namespace WinsockPacketEditor
                     }
 
                     string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
-                    await this.AddProxyData(DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
+                    this.AddProxyData(DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
                 }
             }
             catch (Exception ex)
@@ -702,38 +692,35 @@ namespace WinsockPacketEditor
 
         #region//显示客户端列表（异步）
 
-        private async Task<TreeNode> AddProxyInfo(TreeNodeCollection Nodes, string NodeName, int ImgIndex)
+        private TreeNode AddProxyInfo(TreeNodeCollection Nodes, string NodeName, int ImgIndex)
         {
             TreeNode tnReturn = null;
 
-            await Task.Run(() =>
+            try
             {
-                try
+                if (!IsDisposed)
                 {
-                    if (!IsDisposed)
+                    tvProxyInfo.Invoke(new MethodInvoker(delegate
                     {
-                        tvProxyInfo.Invoke(new MethodInvoker(delegate
-                        {
-                            tnReturn = Nodes.Add(NodeName);
+                        tnReturn = Nodes.Add(NodeName);
 
-                            if (ImgIndex > -1)
-                            {
-                                tnReturn.ImageIndex = ImgIndex;
-                                tnReturn.SelectedImageIndex = ImgIndex;
-                            }
-                        }));
-                    }
+                        if (ImgIndex > -1)
+                        {
+                            tnReturn.ImageIndex = ImgIndex;
+                            tnReturn.SelectedImageIndex = ImgIndex;
+                        }
+                    }));
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
 
             return tnReturn;
         }
 
-        private async void Event_RecProxyInfo(Socket_ProxyInfo spi)
+        private void Event_RecProxyInfo(Socket_ProxyInfo spi)
         {
             try
             {
@@ -743,21 +730,21 @@ namespace WinsockPacketEditor
                     {
                         int iRootImgIndex = -1;
                         int iChildImgIndex = 5;
-                        string sRootName = await Socket_Cache.SocketProxy.GetClientName(spi);
+                        string sRootName = Socket_Cache.SocketProxy.GetClientName(spi);
                         string sChildName = spi.ClientAddress;
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
-                            TreeNode RootNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, sRootName);
+                            TreeNode RootNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, sRootName);
                             if (RootNode == null)
                             {
-                                RootNode = await this.AddProxyInfo(this.tvProxyInfo.Nodes, sRootName, iRootImgIndex);
+                                RootNode = this.AddProxyInfo(this.tvProxyInfo.Nodes, sRootName, iRootImgIndex);
                             }
 
-                            TreeNode ChildNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, sChildName);
+                            TreeNode ChildNode = Socket_Operation.FindNodeAsync(this.tvProxyInfo, sChildName);
                             if (ChildNode == null)
                             {
-                                ChildNode = await this.AddProxyInfo(RootNode.Nodes, sChildName, iChildImgIndex);
+                                ChildNode = this.AddProxyInfo(RootNode.Nodes, sChildName, iChildImgIndex);
                             }
                         }
                     }
@@ -773,25 +760,22 @@ namespace WinsockPacketEditor
 
         #region//显示日志列表（异步）        
 
-        private async void Event_RecProxyLog(Socket_LogInfo sli)
+        private void Event_RecProxyLog(Socket_LogInfo sli)
         {
-            await Task.Run(() =>
+            try
             {
-                try
+                if (!IsDisposed)
                 {
-                    if (!IsDisposed)
+                    dgvLogList.Invoke(new MethodInvoker(delegate
                     {
-                        dgvLogList.Invoke(new MethodInvoker(delegate
-                        {
-                            Socket_Cache.LogList.lstProxyLog.Add(sli);
-                        }));
-                    }
+                        Socket_Cache.LogList.lstProxyLog.Add(sli);
+                    }));
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void dgvLogList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -814,7 +798,7 @@ namespace WinsockPacketEditor
 
         #region//显示代理数据（异步）
 
-        private async void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
+        private void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
         {
             try
             {
@@ -825,7 +809,7 @@ namespace WinsockPacketEditor
                     bBuffer = e.Node.Tag as byte[];                  
                 }
 
-                await this.ShowSelectProxyData(bBuffer);                
+                this.ShowSelectProxyData(bBuffer);                
             }
             catch (Exception ex)
             {
@@ -833,33 +817,30 @@ namespace WinsockPacketEditor
             }
         }
 
-        private async Task ShowSelectProxyData(byte[] bBuffer)
+        private void ShowSelectProxyData(byte[] bBuffer)
         {
-            await Task.Run(() =>
+            try
             {
-                try
+                if (!IsDisposed)
                 {
-                    if (!IsDisposed)
+                    hbData.Invoke(new MethodInvoker(delegate
                     {
-                        hbData.Invoke(new MethodInvoker(delegate
+                        if (bBuffer != null)
                         {
-                            if (bBuffer != null)
-                            {
-                                DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
-                                this.hbData.ByteProvider = dbp;
-                            }
-                            else
-                            {
-                                this.hbData.ByteProvider = null;
-                            }
-                        }));
-                    }                    
+                            DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
+                            this.hbData.ByteProvider = dbp;
+                        }
+                        else
+                        {
+                            this.hbData.ByteProvider = null;
+                        }
+                    }));
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });            
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion        

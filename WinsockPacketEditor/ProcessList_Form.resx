@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="bgwProcessList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tlpProcessInfo.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
@@ -6678,12 +6675,6 @@
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>进程列表</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Name" xml:space="preserve">
-    <value>bgwProcessList</value>
-  </data>
-  <data name="&gt;&gt;bgwProcessList.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cICO.Name" xml:space="preserve">
     <value>cICO</value>

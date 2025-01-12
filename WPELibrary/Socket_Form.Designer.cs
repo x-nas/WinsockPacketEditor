@@ -331,8 +331,6 @@ namespace WPELibrary
             this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
             this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslProcessInfo = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
@@ -2658,8 +2656,6 @@ namespace WPELibrary
             this.ssProcessInfo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslProcessName,
             this.tsslSplit1,
-            this.tsslProcessInfo,
-            this.tsslSplit2,
             this.tsslWinSock,
             this.tsslSplit3,
             this.tsslTotalBytes});
@@ -2675,17 +2671,6 @@ namespace WPELibrary
             this.tsslSplit1.ForeColor = System.Drawing.Color.DarkGray;
             this.tsslSplit1.Name = "tsslSplit1";
             resources.ApplyResources(this.tsslSplit1, "tsslSplit1");
-            // 
-            // tsslProcessInfo
-            // 
-            this.tsslProcessInfo.Name = "tsslProcessInfo";
-            resources.ApplyResources(this.tsslProcessInfo, "tsslProcessInfo");
-            // 
-            // tsslSplit2
-            // 
-            this.tsslSplit2.ForeColor = System.Drawing.Color.DarkGray;
-            this.tsslSplit2.Name = "tsslSplit2";
-            resources.ApplyResources(this.tsslSplit2, "tsslSplit2");
             // 
             // tsslWinSock
             // 
@@ -2821,6 +2806,7 @@ namespace WPELibrary
             this.DoubleBuffered = true;
             this.Name = "Socket_Form";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.DLL_Form_FormClosed);
+            this.Load += new System.EventHandler(this.Socket_Form_Load);
             this.Resize += new System.EventHandler(this.Socket_Form_Resize);
             this.tlpSocketForm.ResumeLayout(false);
             this.tlpSocketForm.PerformLayout();
@@ -2996,8 +2982,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripStatusLabel tlWSARecvFrom_CNT;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn1;
         private System.Windows.Forms.ToolStripStatusLabel tsslTotalBytes;
-        private System.Windows.Forms.ToolStripStatusLabel tsslProcessInfo;
-        private System.Windows.Forms.ToolStripStatusLabel tsslSplit2;
         private System.Windows.Forms.ToolStripStatusLabel tsslWinSock;
         private System.Windows.Forms.ToolStripStatusLabel tsslSplit3;
         private System.Windows.Forms.NotifyIcon niWPE;

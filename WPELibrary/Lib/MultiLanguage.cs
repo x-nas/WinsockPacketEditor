@@ -82,7 +82,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_70 = { "发送列表文件", "Send List File" };
         public static string[] MutiLan_71 = { "加载机器人列表成功! [未加密]", "Load robot list successful! [Unencrypted]" };
         public static string[] MutiLan_72 = { "加载机器人列表成功! [已加密]", "Load robot list successful! [Encrypted]" };
-        public static string[] MutiLan_73 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
+        public static string[] MutiLan_73 = { "搜索位置不可设置递进!", "The search location cannot be set in a progressive manner!" };
         public static string[] MutiLan_74 = { "机器人数据文件", "Robot data file" };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };

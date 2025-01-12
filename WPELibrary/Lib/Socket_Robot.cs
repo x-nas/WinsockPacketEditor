@@ -66,7 +66,7 @@ namespace WPELibrary.Lib
 
                             string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
                             Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
-                        }                        
+                        }
                     }
                 }
             }

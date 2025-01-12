@@ -24,15 +24,7 @@ namespace WPELibrary
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);                
                 InitializeComponent();
 
-                this.Select_Index = iSelectIndex;
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), iSelectIndex + 1);
-
-                this.bSend.Enabled = true;
-                this.bSendStop.Enabled = false;
-
-                this.InitHexBox();
-                this.InitSendInfo();
-                this.InitSendParameters();
+                this.Select_Index = iSelectIndex;                
             }
             catch (Exception ex)
             {
@@ -43,6 +35,18 @@ namespace WPELibrary
         #endregion
 
         #region//初始化
+
+        private void Socket_SendForm_Load(object sender, EventArgs e)
+        {
+            this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), this.Select_Index + 1);
+
+            this.bSend.Enabled = true;
+            this.bSendStop.Enabled = false;
+
+            this.InitHexBox();
+            this.InitSendInfo();
+            this.InitSendParameters();
+        }
 
         private void InitSendInfo()
         {
@@ -407,7 +411,7 @@ namespace WPELibrary
 
         #region//保存按钮
 
-        private async void bSave_Click(object sender, EventArgs e)
+        private void bSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -417,7 +421,7 @@ namespace WPELibrary
 
                     byte[] bNewBuff = dbp.Bytes.ToArray();
                     int iNewLen = bNewBuff.Length;
-                    string sNewPacketData_Hex = await Socket_Operation.GetPacketData_Hex(bNewBuff, Socket_Cache.SocketPacket.PacketData_MaxLen);
+                    string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bNewBuff, Socket_Cache.SocketPacket.PacketData_MaxLen);
 
                     Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
                     Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
@@ -454,7 +458,7 @@ namespace WPELibrary
 
         #region//右键菜单
 
-        private async void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
             {
@@ -466,7 +470,7 @@ namespace WPELibrary
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;                
                 byte[] bBuffer = dbp.Bytes.ToArray();                
 
-                string sHex = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                string sHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
                 switch (sItemText)
                 {                    
@@ -570,7 +574,7 @@ namespace WPELibrary
             }
         }
 
-        private async void HexBox_LinePositionChanged()
+        private void HexBox_LinePositionChanged()
         {
             try
             {
@@ -620,16 +624,16 @@ namespace WPELibrary
                         }
 
                         sBits_Value = bitInfo.ToString();
-                        sChar_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Char, buffer64);
-                        sByte_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Byte, buffer64);
-                        sShort_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Short, buffer64);
-                        sUShort_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UShort, buffer64);
-                        sInt32_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int32, buffer64);
-                        sUInt32_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt32, buffer64);
-                        sInt64_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int64, buffer64);
-                        sUInt64_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt64, buffer64);
-                        sFloat_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Float, buffer64);
-                        sDouble_Value = await Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Double, buffer64);
+                        sChar_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Char, buffer64);
+                        sByte_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Byte, buffer64);
+                        sShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Short, buffer64);
+                        sUShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UShort, buffer64);
+                        sInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int32, buffer64);
+                        sUInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt32, buffer64);
+                        sInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int64, buffer64);
+                        sUInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt64, buffer64);
+                        sFloat_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Float, buffer64);
+                        sDouble_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Double, buffer64);
                     }
                 }
 
@@ -852,6 +856,6 @@ namespace WPELibrary
 
         #endregion
 
-        #endregion
+        #endregion        
     }
 }

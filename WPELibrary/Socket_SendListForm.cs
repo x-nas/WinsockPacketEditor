@@ -21,14 +21,14 @@ namespace WPELibrary
             this.InitSendListDGV();
         }
 
+        #endregion
+
+        #region//窗体事件
+
         private void SocketSendList_Form_Load(object sender, EventArgs e)
         {
             this.InitSendListForm();            
         }
-
-        #endregion
-
-        #region//关闭窗体后
 
         private void SocketSendList_Form_FormClosed(object sender, FormClosedEventArgs e)
         {

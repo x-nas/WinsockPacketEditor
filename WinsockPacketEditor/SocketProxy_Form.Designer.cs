@@ -611,6 +611,7 @@
             this.DoubleBuffered = true;
             this.Name = "SocketProxy_Form";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SocketProxy_Form_FormClosing);
+            this.Load += new System.EventHandler(this.SocketProxy_Form_Load);
             this.tlpSocketProxy_Parameter.ResumeLayout(false);
             this.gbSystemProxy.ResumeLayout(false);
             this.tlpSystemProxy.ResumeLayout(false);

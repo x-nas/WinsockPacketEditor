@@ -46,29 +46,9 @@ namespace WinsockPacketEditor
                 this.txtProcessSearch.Enabled = false;
 
                 this.pbLoading.Visible = true;
-                this.dgvProcessList.Visible = false;             
+                this.dgvProcessList.Visible = false;
 
-                if (!bgwProcessList.IsBusy)
-                {
-                    bgwProcessList.RunWorkerAsync();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwProcessList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            e.Result = Socket_Operation.GetProcess();
-        }
-
-        private void bgwProcessList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                this.dgvProcessList.DataSource = e.Result;
+                this.dgvProcessList.DataSource = Socket_Operation.GetProcess();
 
                 this.bCreate.Enabled = true;
                 this.bRefresh.Enabled = true;
@@ -76,12 +56,12 @@ namespace WinsockPacketEditor
                 this.txtProcessSearch.Enabled = true;
 
                 this.pbLoading.Visible = false;
-                this.dgvProcessList.Visible = true;
+                this.dgvProcessList.Visible = true;             
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
+            }
         }
 
         #endregion
@@ -218,16 +198,16 @@ namespace WinsockPacketEditor
                     dgvProcessList.DataSource = Socket_Operation.ProcessTable;
                 }
                 else
-                {                   
+                {
                     DataView dvSearch = new DataView(Socket_Operation.ProcessTable);
                     dvSearch.RowFilter = "PName like '" + sSearchText + "%'";
                     dgvProcessList.DataSource = dvSearch.ToTable();
                 }
             }
             catch
-            { 
+            {
                 //
-            }
+            }                    
         }
 
         #endregion

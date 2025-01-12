@@ -31,7 +31,6 @@ namespace WinsockPacketEditor
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessList_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.bgwProcessList = new System.ComponentModel.BackgroundWorker();
             this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.dgvProcessList = new System.Windows.Forms.DataGridView();
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
@@ -52,11 +51,6 @@ namespace WinsockPacketEditor
             ((System.ComponentModel.ISupportInitialize)(this.pbProcessSearch)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLoading)).BeginInit();
             this.SuspendLayout();
-            // 
-            // bgwProcessList
-            // 
-            this.bgwProcessList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcessList_DoWork);
-            this.bgwProcessList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcessList_RunWorkerCompleted);
             // 
             // tlpProcessInfo
             // 
@@ -203,7 +197,6 @@ namespace WinsockPacketEditor
         }
 
         #endregion
-        private System.ComponentModel.BackgroundWorker bgwProcessList;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfo;
         private System.Windows.Forms.DataGridView dgvProcessList;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfoButton;
