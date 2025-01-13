@@ -3908,88 +3908,7 @@ namespace WPELibrary.Lib
                 return mType;
             }
 
-            #endregion            
-
-            #region//指令集的列表操作
-
-            public static int UpdateInstruction_ByListAction(Socket_Cache.ListAction listAction, int RobotIndex, int InstructionIndex)
-            {
-                int iReturn = -1;
-
-                try
-                {
-                    if (RobotIndex > -1 && RobotIndex < Socket_Cache.RobotList.lstRobot.Count)
-                    {
-                        DataTable dtRInstruction = Socket_Cache.RobotList.lstRobot[RobotIndex].RInstruction;
-                        int iInstructionCount = dtRInstruction.Rows.Count;
-
-                        DataRow dr = dtRInstruction.NewRow();
-                        dr.ItemArray = dtRInstruction.Rows[InstructionIndex].ItemArray;
-
-                        switch (listAction)
-                        {
-                            case Socket_Cache.ListAction.Top:
-
-                                if (InstructionIndex > 0)
-                                {
-                                    dtRInstruction.Rows.RemoveAt(InstructionIndex);
-                                    dtRInstruction.Rows.InsertAt(dr, 0);
-                                    iReturn = 0;
-                                }
-
-                                break;
-
-                            case Socket_Cache.ListAction.Up:
-
-                                if (InstructionIndex > 0)
-                                {
-                                    dtRInstruction.Rows.RemoveAt(InstructionIndex);
-                                    dtRInstruction.Rows.InsertAt(dr, InstructionIndex - 1);
-                                    iReturn = InstructionIndex - 1;
-                                }
-
-                                break;
-
-                            case Socket_Cache.ListAction.Down:
-
-                                if (InstructionIndex < iInstructionCount - 1)
-                                {
-                                    dtRInstruction.Rows.RemoveAt(InstructionIndex);
-                                    dtRInstruction.Rows.InsertAt(dr, InstructionIndex + 1);
-                                    iReturn = InstructionIndex + 1;
-                                }
-
-                                break;
-
-                            case Socket_Cache.ListAction.Bottom:
-
-                                if (InstructionIndex < iInstructionCount - 1)
-                                {
-                                    dtRInstruction.Rows.RemoveAt(InstructionIndex);
-                                    dtRInstruction.Rows.Add(dr);
-                                    iReturn = dtRInstruction.Rows.Count - 1;
-                                }
-
-                                break;
-
-                            case Socket_Cache.ListAction.Delete:
-
-                                dtRInstruction.Rows.RemoveAt(InstructionIndex);
-                                iReturn = dtRInstruction.Rows.Count - 1;
-
-                                break;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return iReturn;
-            }
-
-            #endregion
+            #endregion                        
 
             #region//检查指令集
 
@@ -4108,7 +4027,7 @@ namespace WPELibrary.Lib
 
             #region//执行机器人
 
-            public static void DoRobot_ByIndex(int RobotListIndex)
+            private static void DoRobot_ByIndex(int RobotListIndex)
             {
                 try
                 {

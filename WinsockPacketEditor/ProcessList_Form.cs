@@ -92,7 +92,7 @@ namespace WinsockPacketEditor
 
         #region//刷新进程列表
 
-        private void bRefresh_Click(object sender, EventArgs e)
+        private async void bRefresh_Click(object sender, EventArgs e)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace WinsockPacketEditor
                 dgvProcessList.DataSource = dtClear;
 
                 this.txtProcessSearch.Text = string.Empty;
-                this.ShowProcessList();
+                await this.ShowProcessList();
             }
             catch
             {
