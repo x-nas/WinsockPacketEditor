@@ -558,81 +558,111 @@
     <value>770, 94</value>
   </data>
   <data name="gbHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>533, 91</value>
   </data>
   <data name="tlpHookSet_WinsockWSA.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
   <data name="tlpHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>527, 71</value>
   </data>
-  <data name="cbHookWSARecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 38</value>
+  <data name="cbHookWS2_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>134, 38</value>
   </data>
-  <data name="cbHookWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+  <data name="cbHookWS2_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 30</value>
   </data>
-  <data name="cbHookWSARecvFrom.Text" xml:space="preserve">
-    <value>WSARecvFrom</value>
+  <data name="cbHookWS2_RecvFrom.Text" xml:space="preserve">
+    <value>RecvFrom 2.0</value>
   </data>
-  <data name="cbHookWSARecv.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWS2_Recv.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 38</value>
   </data>
-  <data name="cbHookWSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+  <data name="cbHookWS2_Recv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 30</value>
   </data>
-  <data name="cbHookWSARecv.Text" xml:space="preserve">
+  <data name="cbHookWS2_Recv.Text" xml:space="preserve">
+    <value>Recv 2.0</value>
+  </data>
+  <data name="cbHookWS2_SendTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 29</value>
+  </data>
+  <data name="cbHookWS2_SendTo.Text" xml:space="preserve">
+    <value>SendTo 2.0</value>
+  </data>
+  <data name="cbHookWS2_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 29</value>
+  </data>
+  <data name="cbHookWS2_Send.Text" xml:space="preserve">
+    <value>Send 2.0</value>
+  </data>
+  <data name="cbHookWSA_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>396, 38</value>
+  </data>
+  <data name="cbHookWSA_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 30</value>
+  </data>
+  <data name="cbHookWSA_RecvFrom.Text" xml:space="preserve">
+    <value>WSARecvFrom</value>
+  </data>
+  <data name="cbHookWSA_Recv.Location" type="System.Drawing.Point, System.Drawing">
+    <value>265, 38</value>
+  </data>
+  <data name="cbHookWSA_Recv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 30</value>
+  </data>
+  <data name="cbHookWSA_Recv.Text" xml:space="preserve">
     <value>WSARecv</value>
   </data>
-  <data name="cbHookWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 29</value>
+  <data name="cbHookWSA_SendTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>128, 29</value>
   </data>
-  <data name="cbHookWSASendTo.Text" xml:space="preserve">
+  <data name="cbHookWSA_SendTo.Text" xml:space="preserve">
     <value>WSASendTo</value>
   </data>
-  <data name="cbHookWSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 29</value>
+  <data name="cbHookWSA_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 29</value>
   </data>
-  <data name="cbHookWSASend.Text" xml:space="preserve">
+  <data name="cbHookWSA_Send.Text" xml:space="preserve">
     <value>WSASend</value>
   </data>
   <data name="gbHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>379, 91</value>
+    <value>225, 91</value>
   </data>
   <data name="tlpHookSet_Winsock.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
   <data name="tlpHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
+    <value>219, 71</value>
   </data>
-  <data name="cbHookRecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>189, 38</value>
+  <data name="cbHookWS1_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>112, 38</value>
   </data>
-  <data name="cbHookRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 30</value>
+  <data name="cbHookWS1_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 30</value>
   </data>
-  <data name="cbHookRecvFrom.Text" xml:space="preserve">
+  <data name="cbHookWS1_RecvFrom.Text" xml:space="preserve">
     <value>RecvFrom</value>
   </data>
-  <data name="cbHookRecv.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbHookWS1_Recv.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 38</value>
   </data>
-  <data name="cbHookRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 30</value>
+  <data name="cbHookWS1_Recv.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 30</value>
   </data>
-  <data name="cbHookRecv.Text" xml:space="preserve">
+  <data name="cbHookWS1_Recv.Text" xml:space="preserve">
     <value>Recv</value>
   </data>
-  <data name="cbHookSendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 29</value>
+  <data name="cbHookWS1_SendTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 29</value>
   </data>
-  <data name="cbHookSendTo.Text" xml:space="preserve">
+  <data name="cbHookWS1_SendTo.Text" xml:space="preserve">
     <value>SendTo</value>
   </data>
-  <data name="cbHookSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 29</value>
+  <data name="cbHookWS1_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>103, 29</value>
   </data>
-  <data name="cbHookSend.Text" xml:space="preserve">
+  <data name="cbHookWS1_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
   <data name="tcSocketInfo_ListSet.Location" type="System.Drawing.Point, System.Drawing">
@@ -1498,12 +1528,6 @@
     <value>85, 18</value>
   </data>
   <data name="tsslSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 18</value>
-  </data>
-  <data name="tsslProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 18</value>
-  </data>
-  <data name="tsslSplit2.Size" type="System.Drawing.Size, System.Drawing">
     <value>10, 18</value>
   </data>
   <data name="tsslWinSock.Size" type="System.Drawing.Size, System.Drawing">

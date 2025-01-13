@@ -856,19 +856,35 @@ namespace WPELibrary.Lib
 
                     switch (ptPacketType)
                     {
-                        case Socket_Cache.SocketPacket.PacketType.Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
@@ -1204,11 +1220,21 @@ namespace WPELibrary.Lib
 
                 sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);                
 
-                if (pType == Socket_Cache.SocketPacket.PacketType.Send || pType == Socket_Cache.SocketPacket.PacketType.Recv || pType == Socket_Cache.SocketPacket.PacketType.WSASend || pType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                if (pType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS1_Recv ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WSASend || 
+                    pType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                 {
                     sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
                 }
-                else if (pType == Socket_Cache.SocketPacket.PacketType.SendTo || pType == Socket_Cache.SocketPacket.PacketType.RecvFrom || pType == Socket_Cache.SocketPacket.PacketType.WSASendTo || pType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
+                else if (pType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WSASendTo || 
+                    pType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                 {
                     sIP_To = Socket_Operation.GetIP_BySockAddr(pAddr);
                 }
@@ -2825,14 +2851,18 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.SocketPacket.CheckHead_Value;
                 Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.SocketPacket.CheckData_Value;
 
-                Properties.Settings.Default.HookConfig_HookSend = Socket_Cache.SocketPacket.HookSend;
-                Properties.Settings.Default.HookConfig_HookSendTo = Socket_Cache.SocketPacket.HookSendTo;
-                Properties.Settings.Default.HookConfig_HookRecv = Socket_Cache.SocketPacket.HookRecv;
-                Properties.Settings.Default.HookConfig_HookRecvFrom = Socket_Cache.SocketPacket.HookRecvFrom;
-                Properties.Settings.Default.HookConfig_HookWSASend = Socket_Cache.SocketPacket.HookWSASend;
-                Properties.Settings.Default.HookConfig_HookWSASendTo = Socket_Cache.SocketPacket.HookWSASendTo;
-                Properties.Settings.Default.HookConfig_HookWSARecv = Socket_Cache.SocketPacket.HookWSARecv;
-                Properties.Settings.Default.HookConfig_HookWSARecvFrom = Socket_Cache.SocketPacket.HookWSARecvFrom;
+                Properties.Settings.Default.HookConfig_HookWS1_Send = Socket_Cache.SocketPacket.HookWS1_Send;
+                Properties.Settings.Default.HookConfig_HookWS1_SendTo = Socket_Cache.SocketPacket.HookWS1_SendTo;
+                Properties.Settings.Default.HookConfig_HookWS1_Recv = Socket_Cache.SocketPacket.HookWS1_Recv;
+                Properties.Settings.Default.HookConfig_HookWS1_RecvFrom = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
+                Properties.Settings.Default.HookConfig_HookWS2_Send = Socket_Cache.SocketPacket.HookWS2_Send;
+                Properties.Settings.Default.HookConfig_HookWS2_SendTo = Socket_Cache.SocketPacket.HookWS2_SendTo;
+                Properties.Settings.Default.HookConfig_HookWS2_Recv = Socket_Cache.SocketPacket.HookWS2_Recv;
+                Properties.Settings.Default.HookConfig_HookWS2_RecvFrom = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
+                Properties.Settings.Default.HookConfig_HookWSA_Send = Socket_Cache.SocketPacket.HookWSA_Send;
+                Properties.Settings.Default.HookConfig_HookWSA_SendTo = Socket_Cache.SocketPacket.HookWSA_SendTo;
+                Properties.Settings.Default.HookConfig_HookWSA_Recv = Socket_Cache.SocketPacket.HookWSA_Recv;
+                Properties.Settings.Default.HookConfig_HookWSA_RecvFrom = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
 
                 Properties.Settings.Default.ListConfig_SocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll;
                 Properties.Settings.Default.ListConfig_SocketList_AutoClear = Socket_Cache.SocketList.AutoClear;
@@ -2900,14 +2930,18 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketPacket.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
                 Socket_Cache.SocketPacket.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;             
 
-                Socket_Cache.SocketPacket.HookSend = Properties.Settings.Default.HookConfig_HookSend;
-                Socket_Cache.SocketPacket.HookSendTo = Properties.Settings.Default.HookConfig_HookSendTo;
-                Socket_Cache.SocketPacket.HookRecv = Properties.Settings.Default.HookConfig_HookRecv;
-                Socket_Cache.SocketPacket.HookRecvFrom = Properties.Settings.Default.HookConfig_HookRecvFrom;
-                Socket_Cache.SocketPacket.HookWSASend = Properties.Settings.Default.HookConfig_HookWSASend;
-                Socket_Cache.SocketPacket.HookWSASendTo = Properties.Settings.Default.HookConfig_HookWSASendTo;
-                Socket_Cache.SocketPacket.HookWSARecv = Properties.Settings.Default.HookConfig_HookWSARecv;
-                Socket_Cache.SocketPacket.HookWSARecvFrom = Properties.Settings.Default.HookConfig_HookWSARecvFrom;            
+                Socket_Cache.SocketPacket.HookWS1_Send = Properties.Settings.Default.HookConfig_HookWS1_Send;
+                Socket_Cache.SocketPacket.HookWS1_SendTo = Properties.Settings.Default.HookConfig_HookWS1_SendTo;
+                Socket_Cache.SocketPacket.HookWS1_Recv = Properties.Settings.Default.HookConfig_HookWS1_Recv;
+                Socket_Cache.SocketPacket.HookWS1_RecvFrom = Properties.Settings.Default.HookConfig_HookWS1_RecvFrom;
+                Socket_Cache.SocketPacket.HookWS2_Send = Properties.Settings.Default.HookConfig_HookWS2_Send;
+                Socket_Cache.SocketPacket.HookWS2_SendTo = Properties.Settings.Default.HookConfig_HookWS2_SendTo;
+                Socket_Cache.SocketPacket.HookWS2_Recv = Properties.Settings.Default.HookConfig_HookWS2_Recv;
+                Socket_Cache.SocketPacket.HookWS2_RecvFrom = Properties.Settings.Default.HookConfig_HookWS2_RecvFrom;
+                Socket_Cache.SocketPacket.HookWSA_Send = Properties.Settings.Default.HookConfig_HookWSA_Send;
+                Socket_Cache.SocketPacket.HookWSA_SendTo = Properties.Settings.Default.HookConfig_HookWSA_SendTo;
+                Socket_Cache.SocketPacket.HookWSA_Recv = Properties.Settings.Default.HookConfig_HookWSA_Recv;
+                Socket_Cache.SocketPacket.HookWSA_RecvFrom = Properties.Settings.Default.HookConfig_HookWSA_RecvFrom;            
 
                 Socket_Cache.SocketList.AutoRoll = Properties.Settings.Default.ListConfig_SocketList_AutoRoll;
                 Socket_Cache.SocketList.AutoClear = Properties.Settings.Default.ListConfig_SocketList_AutoClear;
@@ -3117,38 +3151,60 @@ namespace WPELibrary.Lib
                     int res = -1;
                     string sIPString = string.Empty;                 
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || 
-                        stType == Socket_Cache.SocketPacket.PacketType.SendTo || 
+                    if (stType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSASend || 
                         stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
                     {
                         sIPString = sIPTo;
                     }
-                    else if (stType == Socket_Cache.SocketPacket.PacketType.Recv || 
-                        stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || 
+                    else if (
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_Recv ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSARecv || 
                         stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {
                         sIPString = sIPFrom;
                     }
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.Send || 
-                        stType == Socket_Cache.SocketPacket.PacketType.Recv || 
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASend || 
+                    if (stType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||                        
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_Recv)
+                    {
+                        res = WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                    }
+                    else if (
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASend ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
                     {
                         res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
                     }
-                    else if (stType == Socket_Cache.SocketPacket.PacketType.SendTo || 
-                        stType == Socket_Cache.SocketPacket.PacketType.RecvFrom || 
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo || 
+                    else if (
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom)
+                    {
+                        if (!string.IsNullOrEmpty(sIPString))
+                        {
+                            Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                            res = WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                        }
+                    }
+                    else if (
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {
                         if (!string.IsNullOrEmpty(sIPString))
                         {
                             Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
                             res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
-                        }                                                
+                        }
                     }
 
                     if (res > 0)

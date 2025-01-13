@@ -232,14 +232,18 @@ namespace WPELibrary
             {
                 Socket_Operation.LoadConfigs_SocketPacket();
 
-                cbHookSend.Checked = Socket_Cache.SocketPacket.HookSend;
-                cbHookSendTo.Checked = Socket_Cache.SocketPacket.HookSendTo;
-                cbHookRecv.Checked = Socket_Cache.SocketPacket.HookRecv;
-                cbHookRecvFrom.Checked = Socket_Cache.SocketPacket.HookRecvFrom;
-                cbHookWSASend.Checked = Socket_Cache.SocketPacket.HookWSASend;
-                cbHookWSASendTo.Checked = Socket_Cache.SocketPacket.HookWSASendTo;
-                cbHookWSARecv.Checked = Socket_Cache.SocketPacket.HookWSARecv;
-                cbHookWSARecvFrom.Checked = Socket_Cache.SocketPacket.HookWSARecvFrom;
+                cbHookWS1_Send.Checked = Socket_Cache.SocketPacket.HookWS1_Send;
+                cbHookWS1_SendTo.Checked = Socket_Cache.SocketPacket.HookWS1_SendTo;
+                cbHookWS1_Recv.Checked = Socket_Cache.SocketPacket.HookWS1_Recv;
+                cbHookWS1_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
+                cbHookWS2_Send.Checked = Socket_Cache.SocketPacket.HookWS2_Send;
+                cbHookWS2_SendTo.Checked = Socket_Cache.SocketPacket.HookWS2_SendTo;
+                cbHookWS2_Recv.Checked = Socket_Cache.SocketPacket.HookWS2_Recv;
+                cbHookWS2_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
+                cbHookWSA_Send.Checked = Socket_Cache.SocketPacket.HookWSA_Send;
+                cbHookWSA_SendTo.Checked = Socket_Cache.SocketPacket.HookWSA_SendTo;
+                cbHookWSA_Recv.Checked = Socket_Cache.SocketPacket.HookWSA_Recv;
+                cbHookWSA_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
 
                 if (Socket_Cache.SocketPacket.CheckNotShow)
                 {
@@ -300,15 +304,19 @@ namespace WPELibrary
         private void SaveConfigs_Parameter()
         {
             try
-            {  
-                Socket_Cache.SocketPacket.HookSend = cbHookSend.Checked;
-                Socket_Cache.SocketPacket.HookSendTo = cbHookSendTo.Checked;
-                Socket_Cache.SocketPacket.HookRecv = cbHookRecv.Checked;
-                Socket_Cache.SocketPacket.HookRecvFrom = cbHookRecvFrom.Checked;
-                Socket_Cache.SocketPacket.HookWSASend = cbHookWSASend.Checked;
-                Socket_Cache.SocketPacket.HookWSASendTo = cbHookWSASendTo.Checked;
-                Socket_Cache.SocketPacket.HookWSARecv = cbHookWSARecv.Checked;
-                Socket_Cache.SocketPacket.HookWSARecvFrom = cbHookWSARecvFrom.Checked;
+            {
+                Socket_Cache.SocketPacket.HookWS1_Send = cbHookWS1_Send.Checked;
+                Socket_Cache.SocketPacket.HookWS1_SendTo = cbHookWS1_SendTo.Checked;
+                Socket_Cache.SocketPacket.HookWS1_Recv = cbHookWS1_Recv.Checked;
+                Socket_Cache.SocketPacket.HookWS1_RecvFrom = cbHookWS1_RecvFrom.Checked;
+                Socket_Cache.SocketPacket.HookWS2_Send = cbHookWS2_Send.Checked;
+                Socket_Cache.SocketPacket.HookWS2_SendTo = cbHookWS2_SendTo.Checked;
+                Socket_Cache.SocketPacket.HookWS2_Recv = cbHookWS2_Recv.Checked;
+                Socket_Cache.SocketPacket.HookWS2_RecvFrom = cbHookWS2_RecvFrom.Checked;
+                Socket_Cache.SocketPacket.HookWSA_Send = cbHookWSA_Send.Checked;
+                Socket_Cache.SocketPacket.HookWSA_SendTo = cbHookWSA_SendTo.Checked;
+                Socket_Cache.SocketPacket.HookWSA_Recv = cbHookWSA_Recv.Checked;
+                Socket_Cache.SocketPacket.HookWSA_RecvFrom = cbHookWSA_RecvFrom.Checked;
                 
                 Socket_Cache.SocketPacket.CheckNotShow = rbFilter_NotShow.Checked;
                 Socket_Cache.SocketPacket.CheckSocket = cbCheckSocket.Checked;

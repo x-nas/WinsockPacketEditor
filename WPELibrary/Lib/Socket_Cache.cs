@@ -890,7 +890,9 @@ namespace WPELibrary.Lib
             public static bool SpeedMode;
             public static byte[] bByteBuff = new byte[0];
             public static bool Support_WS1, Support_WS2;
-            public static bool HookSend, HookSendTo, HookRecv, HookRecvFrom, HookWSASend, HookWSASendTo, HookWSARecv, HookWSARecvFrom;
+            public static bool HookWS1_Send, HookWS1_SendTo, HookWS1_Recv, HookWS1_RecvFrom;
+            public static bool HookWS2_Send, HookWS2_SendTo, HookWS2_Recv, HookWS2_RecvFrom;
+            public static bool HookWSA_Send, HookWSA_SendTo, HookWSA_Recv, HookWSA_RecvFrom;
             public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
 
@@ -941,10 +943,14 @@ namespace WPELibrary.Lib
 
             public enum PacketType
             {
-                Send,
-                SendTo,
-                Recv,
-                RecvFrom,                
+                WS1_Send,
+                WS2_Send,
+                WS1_SendTo,
+                WS2_SendTo,
+                WS1_Recv,
+                WS2_Recv,
+                WS1_RecvFrom,
+                WS2_RecvFrom,
                 WSASend,
                 WSASendTo,
                 WSARecv,
@@ -995,20 +1001,36 @@ namespace WPELibrary.Lib
                 {
                     switch (socketType)
                     {
-                        case Socket_Cache.SocketPacket.PacketType.Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_156);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_157);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_158);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_159);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
@@ -1048,16 +1070,28 @@ namespace WPELibrary.Lib
                 {
                     switch (socketType)
                     {
-                        case Socket_Cache.SocketPacket.PacketType.Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                             imgReturn = Properties.Resources.sent;
                             break;
-                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                            imgReturn = Properties.Resources.sent;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                             imgReturn = Properties.Resources.received;
                             break;
-                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            imgReturn = Properties.Resources.received;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
                             imgReturn = Properties.Resources.sent;
                             break;
-                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            imgReturn = Properties.Resources.sent;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            imgReturn = Properties.Resources.received;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
                             imgReturn = Properties.Resources.received;
                             break;
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
@@ -1195,19 +1229,35 @@ namespace WPELibrary.Lib
 
                                 switch (ptType)
                                 {
-                                    case Socket_Cache.SocketPacket.PacketType.Send:
+                                    case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                                         SocketQueue.Send_CNT++;
                                         break;
 
-                                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                                    case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                                        SocketQueue.Send_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
                                         SocketQueue.SendTo_CNT++;
                                         break;
 
-                                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                                    case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                                        SocketQueue.SendTo_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                                         SocketQueue.Recv_CNT++;
                                         break;
 
-                                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                                    case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                                        SocketQueue.Recv_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                                        SocketQueue.RecvFrom_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
                                         SocketQueue.RecvFrom_CNT++;
                                         break;
 
@@ -2080,19 +2130,35 @@ namespace WPELibrary.Lib
                 {
                     switch (ptType)
                     {
-                        case Socket_Cache.SocketPacket.PacketType.Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                             ffReturn.Send = true;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                            ffReturn.Send = true;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
                             ffReturn.SendTo = true;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            ffReturn.SendTo = true;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                             ffReturn.Recv = true;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            ffReturn.Recv = true;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            ffReturn.RecvFrom = true;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
                             ffReturn.RecvFrom = true;
                             break;
 
@@ -2209,19 +2275,35 @@ namespace WPELibrary.Lib
                 {
                     switch (ptType)
                     {
-                        case Socket_Cache.SocketPacket.PacketType.Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                             bReturn = ffFunction.Send;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                            bReturn = ffFunction.Send;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
                             bReturn = ffFunction.SendTo;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            bReturn = ffFunction.SendTo;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                             bReturn = ffFunction.Recv;
                             break;
 
-                        case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            bReturn = ffFunction.Recv;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            bReturn = ffFunction.RecvFrom;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
                             bReturn = ffFunction.RecvFrom;
                             break;
 
@@ -4581,7 +4663,7 @@ namespace WPELibrary.Lib
                                 Socket = (int)dtSendList.Rows[iIndex]["Socket"];
                             }
 
-                            Socket_Operation.SendPacket(Socket, SocketPacket.PacketType.Send, string.Empty, string.Empty, bBuffer);
+                            Socket_Operation.SendPacket(Socket, SocketPacket.PacketType.WS2_Send, string.Empty, string.Empty, bBuffer);
                         }
                     }                    
                 }

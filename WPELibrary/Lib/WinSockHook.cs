@@ -9,10 +9,10 @@ using WPELibrary.Lib.NativeMethods;
 namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
-    {        
-        private LocalHook lhSend, lhSendTo, lhRecv, lhRecvFrom, lhWSASend, lhWSASendTo, lhWSARecv, lhWSARecvFrom;
-
-        #region//WinSockHook
+    {
+        private LocalHook lhWS1_Send, lhWS1_SendTo, lhWS1_Recv, lhWS1_RecvFrom;
+        private LocalHook lhWS2_Send, lhWS2_SendTo, lhWS2_Recv, lhWS2_RecvFrom;
+        private LocalHook lhWSA_Send, lhWSA_SendTo, lhWSA_Recv, lhWSA_RecvFrom;
 
         #region//EasyHook
 
@@ -47,16 +47,421 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Send Hook
+        #region//开始拦截
 
-        public static unsafe Int32 Send_Hook(
+        public void StartHook()
+        {
+            try
+            {
+                if (Socket_Cache.SocketPacket.Support_WS1)
+                {
+                    #region//Winsock 1.1 Start Hook
+
+                    if (Socket_Cache.SocketPacket.HookWS1_Send)
+                    {
+                        lhWS1_Send = LocalHook.Create(LocalHook.GetProcAddress(WSock32.ModuleName, "send"), new WSock32.DSend(WS1_SendHook), this);
+                        lhWS1_Send.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS1_SendTo)
+                    {
+                        lhWS1_SendTo = LocalHook.Create(LocalHook.GetProcAddress(WSock32.ModuleName, "sendto"), new WSock32.DSendTo(WS1_SendToHook), this);
+                        lhWS1_SendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS1_Recv)
+                    {
+                        lhWS1_Recv = LocalHook.Create(LocalHook.GetProcAddress(WSock32.ModuleName, "recv"), new WSock32.Drecv(WS1_RecvHook), this);
+                        lhWS1_Recv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS1_RecvFrom)
+                    {
+                        lhWS1_RecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WSock32.ModuleName, "recvfrom"), new WSock32.DRecvFrom(WS1_RecvFromHook), this);
+                        lhWS1_RecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    #endregion
+                }
+
+                if (Socket_Cache.SocketPacket.Support_WS2)
+                {
+                    #region//Winsock 2.0 Start Hook
+
+                    if (Socket_Cache.SocketPacket.HookWS2_Send)
+                    {
+                        lhWS2_Send = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "send"), new WS2_32.DSend(WS2_SendHook), this);
+                        lhWS2_Send.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS2_SendTo)
+                    {
+                        lhWS2_SendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "sendto"), new WS2_32.DSendTo(WS2_SendToHook), this);
+                        lhWS2_SendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS2_Recv)
+                    {
+                        lhWS2_Recv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recv"), new WS2_32.Drecv(WS2_RecvHook), this);
+                        lhWS2_Recv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWS2_RecvFrom)
+                    {
+                        lhWS2_RecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recvfrom"), new WS2_32.DRecvFrom(WS2_RecvFromHook), this);
+                        lhWS2_RecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWSA_Send)
+                    {
+                        lhWSA_Send = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASend"), new WS2_32.DWSASend(WSASend_Hook), this);
+                        lhWSA_Send.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWSA_SendTo)
+                    {
+                        lhWSA_SendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASendTo"), new WS2_32.DWSASendTo(WSASendTo_Hook), this);
+                        lhWSA_SendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWSA_Recv)
+                    {
+                        lhWSA_Recv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecv"), new WS2_32.DWSARecv(WSARecv_Hook), this);
+                        lhWSA_Recv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    if (Socket_Cache.SocketPacket.HookWSA_RecvFrom)
+                    {
+                        lhWSA_RecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecvFrom"), new WS2_32.DWSARecvFrom(WSARecvFrom_Hook), this);
+                        lhWSA_RecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    #endregion
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
+
+        #region//停止拦截
+
+        public void StopHook()
+        {
+            try
+            {
+                if (Socket_Cache.SocketPacket.Support_WS1)
+                {
+                    #region//Winsock 1.1 Stop Hook
+
+                    if (lhWS1_Send != null)
+                    {
+                        lhWS1_Send.Dispose();
+                    }
+
+                    if (lhWS1_SendTo != null)
+                    {
+                        lhWS1_SendTo.Dispose();
+                    }
+
+                    if (lhWS1_Recv != null)
+                    {
+                        lhWS1_Recv.Dispose();
+                    }
+
+                    if (lhWS1_RecvFrom != null)
+                    {
+                        lhWS1_RecvFrom.Dispose();
+                    }
+
+                    #endregion
+                }
+
+                if (Socket_Cache.SocketPacket.Support_WS2)
+                {
+                    #region//Winsock 2.0 Stop Hook
+
+                    if (lhWS2_Send != null)
+                    {
+                        lhWS2_Send.Dispose();
+                    }
+
+                    if (lhWS2_SendTo != null)
+                    {
+                        lhWS2_SendTo.Dispose();
+                    }
+
+                    if (lhWS2_Recv != null)
+                    {
+                        lhWS2_Recv.Dispose();
+                    }
+
+                    if (lhWS2_RecvFrom != null)
+                    {
+                        lhWS2_RecvFrom.Dispose();
+                    }
+
+                    if (lhWSA_Send != null)
+                    {
+                        lhWSA_Send.Dispose();
+                    }
+
+                    if (lhWSA_SendTo != null)
+                    {
+                        lhWSA_SendTo.Dispose();
+                    }
+
+                    if (lhWSA_Recv != null)
+                    {
+                        lhWSA_Recv.Dispose();
+                    }
+
+                    if (lhWSA_RecvFrom != null)
+                    {
+                        lhWSA_RecvFrom.Dispose();
+                    }
+
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//退出
+
+        public void ExitHook()
+        {
+            try
+            {
+                this.StopHook();
+                LocalHook.Release();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
+
+        #region//WinSock 1.1 Hook
+
+        #region//WS1_SendHook
+
+        public static unsafe Int32 WS1_SendHook(
             [In] Int32 Socket,
             [In] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags)
         {
-            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Send;
-            Int32 res = 0;            
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_Send;
+            Int32 res = 0;
+
+            try
+            {
+                if (Length > 0)
+                {
+                    byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
+                    byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
+
+                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = 0;
+                    }
+                    else
+                    {
+                        IntPtr lpCache = Marshal.AllocHGlobal(bBuffer.Length);
+                        Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
+
+                        res = WSock32.send(Socket, lpCache, bBuffer.Length, Flags);
+                        Marshal.FreeHGlobal(lpCache);
+
+                        if (res > 0 && res < Length)
+                        {
+                            Buffer.BlockCopy(bBuffer, 0, bBuffer, 0, res);
+                        }
+                    }
+
+                    Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return res;
+        }
+
+        #endregion
+
+        #region//WS1_RecvHook
+
+        public static unsafe Int32 WS1_RecvHook(
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_Recv;
+
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            int res = WSock32.recv(Socket, lpCache, Length, Flags);
+
+            try
+            {
+                if (res > 0)
+                {
+                    byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
+                    byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
+
+                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = 0;
+                    }
+                    else
+                    {
+                        Marshal.Copy(bBuffer, 0, lpBuffer, res);
+                    }
+
+                    Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            Marshal.FreeHGlobal(lpCache);
+
+            return res;
+        }
+
+        #endregion        
+
+        #region//WS1_SendToHook
+
+        public static unsafe Int32 WS1_SendToHook(
+            [In] Int32 Socket,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.SockAddr To,
+            [In] Int32 ToLen)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_SendTo;
+            Int32 res = 0;
+
+            try
+            {
+                if (Length > 0)
+                {
+                    byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
+                    byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
+
+                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = 0;
+                    }
+                    else
+                    {
+                        IntPtr lpCache = Marshal.AllocHGlobal(bBuffer.Length);
+                        Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
+
+                        res = WSock32.sendto(Socket, lpCache, bBuffer.Length, Flags, ref To, ToLen);
+                        Marshal.FreeHGlobal(lpCache);
+
+                        if (res > 0 && res < Length)
+                        {
+                            Buffer.BlockCopy(bBuffer, 0, bBuffer, 0, res);
+                        }
+                    }
+
+                    Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, To);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return res;
+        }
+
+        #endregion
+
+        #region//WS1_RecvFromHook
+
+        public static unsafe Int32 WS1_RecvFromHook(
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
+            [In, Out, Optional] IntPtr FromLen)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom;
+
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            Int32 res = WSock32.recvfrom(Socket, lpCache, Length, Flags, ref From, FromLen);
+
+            try
+            {
+                if (res > 0)
+                {
+                    byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
+                    byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, Socket, bBuffer);
+
+                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = 0;
+                    }
+                    else
+                    {
+                        Marshal.Copy(bBuffer, 0, lpBuffer, res);
+                    }
+
+                    Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, From);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            Marshal.FreeHGlobal(lpCache);
+
+            return res;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region//WinSock 2.0 Hook
+
+        #region//WS2_SendHook
+
+        public static unsafe Int32 WS2_SendHook(
+            [In] Int32 Socket,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS2_Send;
+            Int32 res = 0;
 
             try
             {
@@ -81,7 +486,7 @@ namespace WPELibrary.Lib
                         if (res > 0 && res < Length)
                         {
                             Buffer.BlockCopy(bBuffer, 0, bBuffer, 0, res);
-                        }                        
+                        }
                     }
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
@@ -97,15 +502,15 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Recv Hook
+        #region//WS2_RecvHook
 
-        public static unsafe Int32 Recv_Hook(
+        public static unsafe Int32 WS2_RecvHook(
             [In] Int32 Socket,
             [Out] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags)
         {
-            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.Recv;
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS2_Recv;
 
             IntPtr lpCache = Marshal.AllocHGlobal(Length);
             int res = WS2_32.recv(Socket, lpCache, Length, Flags);
@@ -120,15 +525,15 @@ namespace WPELibrary.Lib
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
-                        res = 0;                        
+                        res = 0;
                     }
                     else
                     {
-                        Marshal.Copy(bBuffer, 0, lpBuffer, res);                        
+                        Marshal.Copy(bBuffer, 0, lpBuffer, res);
                     }
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -142,9 +547,9 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//SendTo Hook
+        #region//WS2_SendToHook
 
-        public static unsafe Int32 SendTo_Hook(
+        public static unsafe Int32 WS2_SendToHook(
             [In] Int32 Socket,
             [In] IntPtr lpBuffer,
             [In] Int32 Length,
@@ -152,8 +557,8 @@ namespace WPELibrary.Lib
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen)
         {
-            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.SendTo;
-            Int32 res = 0;            
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS2_SendTo;
+            Int32 res = 0;
 
             try
             {
@@ -182,7 +587,7 @@ namespace WPELibrary.Lib
                     }
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, To);
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -194,17 +599,17 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//RecvFrom Hook
+        #region//WS2_RecvFromHook
 
-        public static unsafe Int32 RecvFrom_Hook(
+        public static unsafe Int32 WS2_RecvFromHook(
             [In] Int32 Socket,
             [Out] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen)
-        {            
-            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.RecvFrom;
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom;
 
             IntPtr lpCache = Marshal.AllocHGlobal(Length);
             Int32 res = WS2_32.recvfrom(Socket, lpCache, Length, Flags, ref From, FromLen);
@@ -227,7 +632,7 @@ namespace WPELibrary.Lib
                     }
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, From);
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -241,7 +646,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//WSASend Hook
+        #region//WSASend_Hook
 
         public static unsafe SocketError WSASend_Hook(
             [In] Int32 Socket,
@@ -284,7 +689,7 @@ namespace WPELibrary.Lib
                             }
                         }
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -296,7 +701,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//WSARecv Hook
+        #region//WSARecv_Hook
 
         public static unsafe SocketError WSARecv_Hook(
             [In] Int32 Socket,
@@ -314,7 +719,7 @@ namespace WPELibrary.Lib
             {
                 if (res == SocketError.Success)
                 {
-                    int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);                    
+                    int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
 
                     if (BytesRecvd > 0)
                     {
@@ -331,7 +736,7 @@ namespace WPELibrary.Lib
                             byte[] bBuffer = Socket_Operation.GetByteFromWSABUF(WSABuffer, BufferCount, BytesRecvd);
                             Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, BytesRecvd, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
                         }
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
@@ -344,7 +749,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//WSASendTo Hook        
+        #region//WSASendTo_Hook  
 
         public static unsafe SocketError WSASendTo_Hook(
             [In] Int32 Socket,
@@ -358,7 +763,7 @@ namespace WPELibrary.Lib
             [In] IntPtr lpCompletionRoutine)
         {
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WSASendTo;
-            SocketError res = SocketError.Success;            
+            SocketError res = SocketError.Success;
 
             try
             {
@@ -389,7 +794,7 @@ namespace WPELibrary.Lib
                             }
                         }
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -401,7 +806,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//WSARecvFrom Hook
+        #region//WSARecvFrom_Hook
 
         public static unsafe SocketError WSARecvFrom_Hook(
             [In] Int32 Socket,
@@ -416,7 +821,7 @@ namespace WPELibrary.Lib
         {
             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WSARecvFrom;
             SocketError res = WS2_32.WSARecvFrom(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesRecvd, ref Flags, ref From, lpFromlen, ref Overlapped, lpCompletionRoutine);
-            
+
             try
             {
                 if (res == SocketError.Success)
@@ -452,149 +857,5 @@ namespace WPELibrary.Lib
         #endregion
 
         #endregion
-
-        #region//开始拦截
-
-        public void StartHook()
-        {
-            try
-            {
-                if (Socket_Cache.SocketPacket.Support_WS2)
-                {
-                    #region//Winsock 2.0 Hook
-
-                    if (Socket_Cache.SocketPacket.HookSend)
-                    {
-                        lhSend = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "send"), new WS2_32.DSend(Send_Hook), this);
-                        lhSend.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookSendTo)
-                    {
-                        lhSendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "sendto"), new WS2_32.DSendTo(SendTo_Hook), this);
-                        lhSendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookRecv)
-                    {
-                        lhRecv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recv"), new WS2_32.Drecv(Recv_Hook), this);
-                        lhRecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookRecvFrom)
-                    {
-                        lhRecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "recvfrom"), new WS2_32.DRecvFrom(RecvFrom_Hook), this);
-                        lhRecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookWSASend)
-                    {
-                        lhWSASend = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASend"), new WS2_32.DWSASend(WSASend_Hook), this);
-                        lhWSASend.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookWSASendTo)
-                    {
-                        lhWSASendTo = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSASendTo"), new WS2_32.DWSASendTo(WSASendTo_Hook), this);
-                        lhWSASendTo.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookWSARecv)
-                    {
-                        lhWSARecv = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecv"), new WS2_32.DWSARecv(WSARecv_Hook), this);
-                        lhWSARecv.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    if (Socket_Cache.SocketPacket.HookWSARecvFrom)
-                    {
-                        lhWSARecvFrom = LocalHook.Create(LocalHook.GetProcAddress(WS2_32.ModuleName, "WSARecvFrom"), new WS2_32.DWSARecvFrom(WSARecvFrom_Hook), this);
-                        lhWSARecvFrom.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
-                    }
-
-                    #endregion
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
-
-        #endregion
-
-        #region//停止拦截
-
-        public void StopHook()
-        {
-            try
-            {
-                #region//Winsock 2.0 Stop Hook
-
-                if (lhSend != null)
-                {
-                    lhSend.Dispose();
-                }
-
-                if (lhSendTo != null)
-                {
-                    lhSendTo.Dispose();
-                }
-
-                if (lhRecv != null)
-                {
-                    lhRecv.Dispose();
-                }
-
-                if (lhRecvFrom != null)
-                {
-                    lhRecvFrom.Dispose();
-                }
-
-                if (lhWSASend != null)
-                {
-                    lhWSASend.Dispose();
-                }
-
-                if (lhWSASendTo != null)
-                {
-                    lhWSASendTo.Dispose();
-                }
-
-                if (lhWSARecv != null)
-                {
-                    lhWSARecv.Dispose();
-                }
-
-                if (lhWSARecvFrom != null)
-                {
-                    lhWSARecvFrom.Dispose();
-                }
-
-                #endregion
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//退出
-
-        public void ExitHook()
-        {
-            try
-            {
-                this.StopHook();
-                LocalHook.Release();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion        
     }
 }

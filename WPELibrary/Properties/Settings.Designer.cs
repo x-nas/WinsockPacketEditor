@@ -182,96 +182,96 @@ namespace WPELibrary.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookSend {
+        public bool HookConfig_HookWS1_Send {
             get {
-                return ((bool)(this["HookConfig_HookSend"]));
+                return ((bool)(this["HookConfig_HookWS1_Send"]));
             }
             set {
-                this["HookConfig_HookSend"] = value;
+                this["HookConfig_HookWS1_Send"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookSendTo {
+        public bool HookConfig_HookWS1_SendTo {
             get {
-                return ((bool)(this["HookConfig_HookSendTo"]));
+                return ((bool)(this["HookConfig_HookWS1_SendTo"]));
             }
             set {
-                this["HookConfig_HookSendTo"] = value;
+                this["HookConfig_HookWS1_SendTo"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookRecv {
+        public bool HookConfig_HookWS1_Recv {
             get {
-                return ((bool)(this["HookConfig_HookRecv"]));
+                return ((bool)(this["HookConfig_HookWS1_Recv"]));
             }
             set {
-                this["HookConfig_HookRecv"] = value;
+                this["HookConfig_HookWS1_Recv"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookRecvFrom {
+        public bool HookConfig_HookWS1_RecvFrom {
             get {
-                return ((bool)(this["HookConfig_HookRecvFrom"]));
+                return ((bool)(this["HookConfig_HookWS1_RecvFrom"]));
             }
             set {
-                this["HookConfig_HookRecvFrom"] = value;
+                this["HookConfig_HookWS1_RecvFrom"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookWSASend {
+        public bool HookConfig_HookWSA_Send {
             get {
-                return ((bool)(this["HookConfig_HookWSASend"]));
+                return ((bool)(this["HookConfig_HookWSA_Send"]));
             }
             set {
-                this["HookConfig_HookWSASend"] = value;
+                this["HookConfig_HookWSA_Send"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookWSASendTo {
+        public bool HookConfig_HookWSA_SendTo {
             get {
-                return ((bool)(this["HookConfig_HookWSASendTo"]));
+                return ((bool)(this["HookConfig_HookWSA_SendTo"]));
             }
             set {
-                this["HookConfig_HookWSASendTo"] = value;
+                this["HookConfig_HookWSA_SendTo"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookWSARecv {
+        public bool HookConfig_HookWSA_Recv {
             get {
-                return ((bool)(this["HookConfig_HookWSARecv"]));
+                return ((bool)(this["HookConfig_HookWSA_Recv"]));
             }
             set {
-                this["HookConfig_HookWSARecv"] = value;
+                this["HookConfig_HookWSA_Recv"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HookConfig_HookWSARecvFrom {
+        public bool HookConfig_HookWSA_RecvFrom {
             get {
-                return ((bool)(this["HookConfig_HookWSARecvFrom"]));
+                return ((bool)(this["HookConfig_HookWSA_RecvFrom"]));
             }
             set {
-                this["HookConfig_HookWSARecvFrom"] = value;
+                this["HookConfig_HookWSA_RecvFrom"] = value;
             }
         }
         
@@ -464,6 +464,54 @@ namespace WPELibrary.Properties {
             }
             set {
                 this["ProxyConfig_LogList_AutoClear_Value"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HookConfig_HookWS2_Send {
+            get {
+                return ((bool)(this["HookConfig_HookWS2_Send"]));
+            }
+            set {
+                this["HookConfig_HookWS2_Send"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HookConfig_HookWS2_SendTo {
+            get {
+                return ((bool)(this["HookConfig_HookWS2_SendTo"]));
+            }
+            set {
+                this["HookConfig_HookWS2_SendTo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HookConfig_HookWS2_Recv {
+            get {
+                return ((bool)(this["HookConfig_HookWS2_Recv"]));
+            }
+            set {
+                this["HookConfig_HookWS2_Recv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HookConfig_HookWS2_RecvFrom {
+            get {
+                return ((bool)(this["HookConfig_HookWS2_RecvFrom"]));
+            }
+            set {
+                this["HookConfig_HookWS2_RecvFrom"] = value;
             }
         }
     }

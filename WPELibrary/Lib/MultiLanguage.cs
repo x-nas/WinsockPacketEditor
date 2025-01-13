@@ -165,6 +165,10 @@ namespace WPELibrary.Lib
         //public static string[] MutiLan_153 = { "{0} - 请求数据: {1} 字节", "{0} - Request: {1} bytes" };
         //public static string[] MutiLan_154 = { "{0} - 响应数据: {1} 字节", "{0} - Response: {1} bytes" };
         public static string[] MutiLan_155 = { "正在进行数据比对，请稍候 . . .", "Data comparison is in progress, please wait . . ." };
+        public static string[] MutiLan_156 = { "发送 2.0", "Send 2.0" };
+        public static string[] MutiLan_157 = { "接收 2.0", "Recv 2.0" };
+        public static string[] MutiLan_158 = { "发送到 2.0", "SendTo 2.0" };
+        public static string[] MutiLan_159 = { "接收自 2.0", "RecvFrom 2.0" };
 
         #endregion
 
