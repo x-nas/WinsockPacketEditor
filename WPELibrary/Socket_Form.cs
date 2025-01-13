@@ -10,6 +10,7 @@ using System.IO;
 using System.Xml.Linq;
 using System.Text;
 using WPELibrary.Lib.NativeMethods;
+using System.Threading.Tasks;
 
 namespace WPELibrary
 {
@@ -630,7 +631,7 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbSocketList_AutoClear.Checked)
+                if (this.cbSocketList_AutoClear.Checked && !this.dgvSocketList.IsDisposed)
                 {
                     decimal dClearCount = this.nudSocketList_AutoClearValue.Value;
 
@@ -654,7 +655,7 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbLogList_AutoClear.Checked)
+                if (this.cbLogList_AutoClear.Checked && !this.dgvLogList.IsDisposed)
                 {
                     decimal dClearCount = this.nudLogList_AutoClearValue.Value;
 
@@ -782,50 +783,38 @@ namespace WPELibrary
             }
         }
 
-        private void tSocketList_Tick(object sender, EventArgs e)
+        private async void tSocketList_Tick(object sender, EventArgs e)
         {
             try
             {
                 if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                 {
-                    Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
+                    await Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
 
-                    if (!IsDisposed)
+                    if (this.cbSocketList_AutoRoll.Checked && !this.dgvSocketList.IsDisposed)
                     {
-                        dgvSocketList.Invoke(new MethodInvoker(delegate
+                        if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
                         {
-                            if (this.cbSocketList_AutoRoll.Checked)
-                            {
-                                if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
-                                {
-                                    dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
-                                }
-                            }
-
-                            this.AutoCleanUp_SocketList();
-                        }));
+                            dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
+                        }
                     }
+
+                    this.AutoCleanUp_SocketList();
                 }
 
                 if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
-                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
+                    await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
 
-                    if (!IsDisposed)
+                    if (this.cbLogList_AutoRoll.Checked && !this.dgvLogList.IsDisposed)
                     {
-                        dgvLogList.Invoke(new MethodInvoker(delegate
+                        if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
                         {
-                            if (this.cbLogList_AutoRoll.Checked)
-                            {
-                                if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
-                                {
-                                    dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
-                                }
-                            }
-
-                            this.AutoCleanUp_LogList();
-                        }));
+                            dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
+                        }
                     }
+
+                    this.AutoCleanUp_LogList();
                 }
             }
             catch (Exception ex)
@@ -842,7 +831,7 @@ namespace WPELibrary
         {
             try
             {
-                if (!IsDisposed)
+                if (!this.dgvSocketList.IsDisposed)
                 {
                     this.dgvSocketList.Invoke(new MethodInvoker(delegate
                     {
@@ -907,9 +896,9 @@ namespace WPELibrary
         {
             try
             {
-                if (!IsDisposed)
+                if (!this.dgvLogList.IsDisposed)
                 {
-                    dgvLogList.Invoke(new MethodInvoker(delegate
+                    this.dgvLogList.Invoke(new MethodInvoker(delegate
                     {
                         Socket_Cache.LogList.lstSocketLog.Add(sli);
                     }));
@@ -945,9 +934,9 @@ namespace WPELibrary
         {
             try
             {
-                if (!IsDisposed)
+                if (!this.dgvFilterList.IsDisposed)
                 {
-                    dgvFilterList.Invoke(new MethodInvoker(delegate
+                    this.dgvFilterList.Invoke(new MethodInvoker(delegate
                     {
                         Socket_Cache.FilterList.lstFilter.Add(sfi);
                     }));
@@ -967,9 +956,9 @@ namespace WPELibrary
         {
             try
             {
-                if (!IsDisposed)
+                if (!this.dgvRobotList.IsDisposed)
                 {
-                    dgvRobotList.Invoke(new MethodInvoker(delegate
+                    this.dgvRobotList.Invoke(new MethodInvoker(delegate
                     {
                         Socket_Cache.RobotList.lstRobot.Add(sri);
                     }));
@@ -985,20 +974,20 @@ namespace WPELibrary
 
         #region//搜索封包内容（异步）
 
-        private void bSearch_Click(object sender, EventArgs e)
+        private async void bSearch_Click(object sender, EventArgs e)
         {
-            this.ShowFindForm();
+            Socket_Operation.ShowFindForm();
 
             if (Socket_Cache.SocketList.DoSearch)
             {
                 this.bSearchNext.Focus();
-                this.SearchSocketListNext();
+                await this.SearchSocketListNext();
             }
         }
 
-        private void bSearchNext_Click(object sender, EventArgs e)
+        private async void bSearchNext_Click(object sender, EventArgs e)
         {
-            this.SearchSocketListNext();
+            await this.SearchSocketListNext();
         }
 
         private void HexBox_FindNext()
@@ -1009,14 +998,14 @@ namespace WPELibrary
                 {
                     if (!IsDisposed)
                     {
-                        hbPacketData.Invoke(new MethodInvoker(delegate
+                        hbPacketData.Invoke(new MethodInvoker(async delegate
                         {
                             long res = this.hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
 
                             if (res == -1)
                             {
                                 Search_Index += 1;
-                                this.SearchSocketListNext();
+                                await this.SearchSocketListNext();
                             }
                         }));
                     }
@@ -1028,7 +1017,7 @@ namespace WPELibrary
             }
         }
 
-        private void SearchSocketListNext()
+        private async Task SearchSocketListNext()
         {
             try
             {
@@ -1064,7 +1053,7 @@ namespace WPELibrary
                             this.hbPacketData.SelectionStart = 0;
                         }
 
-                        int iIndex = Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
+                        int iIndex = await Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -1084,20 +1073,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void ShowFindForm()
-        {
-            try
-            {
-                Socket_FindForm sffFindForm = new Socket_FindForm();
-                sffFindForm.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         #endregion
 
@@ -1117,8 +1093,15 @@ namespace WPELibrary
                     {
                         byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
-                        hbPacketData.ByteProvider = dbp;
+                        if (bSelected != null)
+                        {
+                            DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
+                            hbPacketData.ByteProvider = dbp;
+                        }
+                        else
+                        {
+                            hbPacketData.ByteProvider = null;
+                        }                        
                     }
                 }
             }
@@ -1718,13 +1701,13 @@ namespace WPELibrary
             }
         }
 
-        private void bComparison_Click(object sender, EventArgs e)
+        private async void bComparison_Click(object sender, EventArgs e)
         {
             try
             {
                 this.rtbComparison_Result.Clear();
                 this.rtbComparison_Result.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
-                this.rtbComparison_Result.Rtf = Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
+                this.rtbComparison_Result.Rtf = await Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
             }
             catch (Exception ex)
             {

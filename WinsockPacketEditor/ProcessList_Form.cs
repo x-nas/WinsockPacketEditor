@@ -5,6 +5,7 @@ using System.IO;
 using System.Drawing;
 using WPELibrary.Lib;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace WinsockPacketEditor
 {
@@ -15,28 +16,25 @@ namespace WinsockPacketEditor
         public ProcessList_Form()
         {           
             InitializeComponent();
-
-            try
-            {
-                dgvProcessList.AutoGenerateColumns = false;
-                dgvProcessList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProcessList, true, null);
-            }
-            catch(Exception ex)
-            {
-                string sError =ex.Message;
-            }
+            this.InitDGV();            
         }
 
-        private void ProcessList_Form_Load(object sender, EventArgs e)
+        private void InitDGV()
         {
-            this.ShowProcessList();
+            dgvProcessList.AutoGenerateColumns = false;
+            dgvProcessList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvProcessList, true, null);
+        }
+
+        private async void ProcessList_Form_Load(object sender, EventArgs e)
+        {
+            await this.ShowProcessList();
         }
 
         #endregion      
 
         #region//显示所有进程（异步）
 
-        private void ShowProcessList()
+        private async Task ShowProcessList()
         {
             try
             {
@@ -48,7 +46,7 @@ namespace WinsockPacketEditor
                 this.pbLoading.Visible = true;
                 this.dgvProcessList.Visible = false;
 
-                this.dgvProcessList.DataSource = Socket_Operation.GetProcess();
+                this.dgvProcessList.DataSource = await Socket_Operation.GetProcess();
 
                 this.bCreate.Enabled = true;
                 this.bRefresh.Enabled = true;

@@ -143,9 +143,40 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//检测网站可访问性
+
+        public static async Task<bool> CheckWebSite(string sURL)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
+
+                    using (HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse())
+                    {
+                        if (resp.StatusCode == HttpStatusCode.OK)
+                        {
+                            bReturn = true;
+                        }
+                    }
+                });                
+            }
+            catch
+            {
+                bReturn = false;
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
         #region//获取所有进程
 
-        public static DataTable GetProcess()
+        public static async Task<DataTable> GetProcess()
         {
             DataTable dtProcessList = new DataTable();
             dtProcessList.Columns.Add("ICO", typeof(Image));
@@ -154,27 +185,30 @@ namespace WPELibrary.Lib
 
             try
             {
-                Process[] procesArr = Process.GetProcesses();
-                int pCNT = procesArr.Length;
-
-                foreach (Process p in procesArr)
+                await Task.Run(() =>
                 {
-                    string sPName = p.ProcessName;
-                    int iPID = p.Id;
-                    Image iICO = IconFromFile(p);
+                    Process[] procesArr = Process.GetProcesses();
+                    int pCNT = procesArr.Length;
 
-                    DataRow dr = dtProcessList.NewRow();
-                    dr["ICO"] = iICO;
-                    dr["PName"] = sPName;
-                    dr["PID"] = iPID;
-                    dtProcessList.Rows.Add(dr);
-                }
+                    foreach (Process p in procesArr)
+                    {
+                        string sPName = p.ProcessName;
+                        int iPID = p.Id;
+                        Image iICO = IconFromFile(p);
 
-                DataView dv = dtProcessList.DefaultView;
-                dv.Sort = "PName";
-                dtProcessList = dv.ToTable();
+                        DataRow dr = dtProcessList.NewRow();
+                        dr["ICO"] = iICO;
+                        dr["PName"] = sPName;
+                        dr["PID"] = iPID;
+                        dtProcessList.Rows.Add(dr);
+                    }
 
-                ProcessTable = dv.ToTable();
+                    DataView dv = dtProcessList.DefaultView;
+                    dv.Sort = "PName";
+                    dtProcessList = dv.ToTable();
+
+                    ProcessTable = dv.ToTable();
+                });                
             }
             catch (Exception ex)
             {
@@ -1882,133 +1916,136 @@ namespace WPELibrary.Lib
 
         #region//数据对比
 
-        public static string CompareData(Font font, string sText_A, string sText_B)
+        public static async Task<string> CompareData(Font font, string sText_A, string sText_B)
         {
             string sReturn = string.Empty;
 
             try
             {
-                RichTextBox rtbCompare = new RichTextBox();
-                rtbCompare.Font = font;
-
-                if (sText_A == sText_B)
+                await Task.Run(() =>
                 {
-                    Socket_Operation.AppendColoredText(rtbCompare, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
-                }
-                else
-                {
-                    string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
-                    string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
+                    RichTextBox rtbCompare = new RichTextBox();
+                    rtbCompare.Font = font;
 
-                    int la = 0;
-                    int lb = 0;
-
-                    while (la < linesA.Length)
+                    if (sText_A == sText_B)
                     {
-                        if (lb >= linesB.Length)
-                        {
-                            Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
-                        }
-                        else if (linesA[la] == linesB[lb])
-                        {
-                            Socket_Operation.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
-                        }
-                        else
-                        {
-                            if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
-                            {
-                                Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
-                                Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+                        Socket_Operation.AppendColoredText(rtbCompare, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
+                    }
+                    else
+                    {
+                        string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                        string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
 
-                                lb++;
-                            }
-                            else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                        int la = 0;
+                        int lb = 0;
+
+                        while (la < linesA.Length)
+                        {
+                            if (lb >= linesB.Length)
                             {
                                 Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
-                                Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
-
-                                la++;
+                            }
+                            else if (linesA[la] == linesB[lb])
+                            {
+                                Socket_Operation.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
                             }
                             else
                             {
-                                string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
-                                string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
-
-                                int wa = 0;
-                                int wb = 0;
-                                while (wa < wordsA.Length)
+                                if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
                                 {
-                                    if (wb >= wordsB.Length)
-                                    {
-                                        Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                    }
-                                    else if (wordsA[wa] == wordsB[wb])
-                                    {
-                                        Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
-                                    }
-                                    else
-                                    {
-                                        if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
-                                        {
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
-                                            Socket_Operation.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
+                                    Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                                    Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
 
-                                            wb++;
-                                        }
-                                        else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                    lb++;
+                                }
+                                else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                                {
+                                    Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
+                                    Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
+
+                                    la++;
+                                }
+                                else
+                                {
+                                    string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                                    string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
+
+                                    int wa = 0;
+                                    int wb = 0;
+                                    while (wa < wordsA.Length)
+                                    {
+                                        if (wb >= wordsB.Length)
                                         {
                                             Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                            Socket_Operation.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
-
-                                            wa++;
+                                        }
+                                        else if (wordsA[wa] == wordsB[wb])
+                                        {
+                                            Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
                                         }
                                         else
                                         {
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
-                                        }
-                                    }
-                                    if (wa + 1 < wordsA.Length) Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                            if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                            {
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                Socket_Operation.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
 
-                                    if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
-                                    {
-                                        while (wb + 1 < wordsB.Length)
+                                                wb++;
+                                            }
+                                            else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                            {
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                                Socket_Operation.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
+
+                                                wa++;
+                                            }
+                                            else
+                                            {
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                            }
+                                        }
+                                        if (wa + 1 < wordsA.Length) Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+
+                                        if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
                                         {
-                                            wb++;
+                                            while (wb + 1 < wordsB.Length)
+                                            {
+                                                wb++;
 
-                                            Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                            }
                                         }
-                                    }
 
-                                    wa++;
-                                    wb++;
+                                        wa++;
+                                        wb++;
+                                    }
                                 }
                             }
-                        }
 
-                        if (la + 1 < linesA.Length)
-                        {
-                            Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                        }
-
-                        if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
-                        {
-                            while (lb + 1 < linesB.Length)
+                            if (la + 1 < linesA.Length)
                             {
-                                lb++;
-
                                 Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                                Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
                             }
+
+                            if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                            {
+                                while (lb + 1 < linesB.Length)
+                                {
+                                    lb++;
+
+                                    Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                    Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                                }
+                            }
+
+                            la++;
+                            lb++;
                         }
-
-                        la++;
-                        lb++;
                     }
-                }
 
-                sReturn = rtbCompare.Rtf;
+                    sReturn = rtbCompare.Rtf;
+                });                
             }
             catch (Exception ex)
             {
@@ -2582,6 +2619,23 @@ namespace WPELibrary.Lib
                     Socket_SendListForm sslForm = new Socket_SendListForm();
                     sslForm.Show();
                 }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示查找窗体
+
+        public static void ShowFindForm()
+        {
+            try
+            {
+                Socket_FindForm sffFindForm = new Socket_FindForm();
+                sffFindForm.ShowDialog();
             }
             catch (Exception ex)
             {

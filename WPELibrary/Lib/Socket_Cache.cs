@@ -15,6 +15,7 @@ using System.Text;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace WPELibrary.Lib
 {
@@ -793,15 +794,18 @@ namespace WPELibrary.Lib
 
             #region//代理入列表
 
-            public static void ProxyInfoToList()
+            public static async Task ProxyInfoToList()
             {
                 try
                 {
-                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi))
+                    await Task.Run(() =>
                     {
-                        lstProxyInfo.Add(spi);
-                        RecProxyInfo?.Invoke(spi);
-                    }
+                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.TryDequeue(out Socket_ProxyInfo spi))
+                        {
+                            lstProxyInfo.Add(spi);
+                            RecProxyInfo?.Invoke(spi);
+                        }
+                    });                    
                 }
                 catch (Exception ex)
                 {
@@ -813,25 +817,28 @@ namespace WPELibrary.Lib
 
             #region//代理数据入列表
 
-            public static void ProxyDataToList()
+            public static async Task ProxyDataToList()
             {
                 try
                 {
-                    if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
+                    await Task.Run(() =>
                     {
-                        switch (spd.DataType)
+                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
                         {
-                            case SocketProxy.DataType.Request:
-                                Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
-                                break;
+                            switch (spd.DataType)
+                            {
+                                case SocketProxy.DataType.Request:
+                                    Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
+                                    break;
 
-                            case SocketProxy.DataType.Response:
-                                Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
-                                break;
+                                case SocketProxy.DataType.Response:
+                                    Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
+                                    break;
+                            }
+
+                            RecProxyData?.Invoke(spd);
                         }
-
-                        RecProxyData?.Invoke(spd);
-                    }
+                    });                    
                 }
                 catch (Exception ex)
                 {
@@ -1168,64 +1175,67 @@ namespace WPELibrary.Lib
 
             #region//封包入列表
 
-            public static void SocketToList(int iMax_DataLen)
+            public static async Task SocketToList(int iMax_DataLen)
             {
                 try
                 {
-                    if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi))
+                    await Task.Run(() =>
                     {
-                        bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spi);
-                        if (bIsShow)
-                        {                            
-                            int iPacketLen = spi.PacketLen;
-                            byte[] bBuffer = spi.PacketBuffer;
-                            
-                            spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
-
-                            Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
-
-                            switch (ptType)
-                            {
-                                case Socket_Cache.SocketPacket.PacketType.Send:                                    
-                                    SocketQueue.Send_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.SendTo:                                    
-                                    SocketQueue.SendTo_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.Recv:                                    
-                                    SocketQueue.Recv_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.RecvFrom:                                    
-                                    SocketQueue.RecvFrom_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.WSASend:                                    
-                                    SocketQueue.WSASend_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.WSASendTo:                                    
-                                    SocketQueue.WSASendTo_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.WSARecv:                                    
-                                    SocketQueue.WSARecv_CNT++;
-                                    break;
-
-                                case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:                                    
-                                    SocketQueue.WSARecvFrom_CNT++;
-                                    break;
-                            }
-
-                            RecSocketPacket?.Invoke(spi);
-                        }
-                        else
+                        if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi))
                         {
-                            SocketQueue.FilterSocketList_CNT++;
+                            bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spi);
+                            if (bIsShow)
+                            {
+                                int iPacketLen = spi.PacketLen;
+                                byte[] bBuffer = spi.PacketBuffer;
+
+                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
+
+                                Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
+
+                                switch (ptType)
+                                {
+                                    case Socket_Cache.SocketPacket.PacketType.Send:
+                                        SocketQueue.Send_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.SendTo:
+                                        SocketQueue.SendTo_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.Recv:
+                                        SocketQueue.Recv_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.RecvFrom:
+                                        SocketQueue.RecvFrom_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                                        SocketQueue.WSASend_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                                        SocketQueue.WSASendTo_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                                        SocketQueue.WSARecv_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                                        SocketQueue.WSARecvFrom_CNT++;
+                                        break;
+                                }
+
+                                RecSocketPacket?.Invoke(spi);
+                            }
+                            else
+                            {
+                                SocketQueue.FilterSocketList_CNT++;
+                            }
                         }
-                    }
+                    });                    
                 }
                 catch (Exception ex)
                 {
@@ -1237,39 +1247,42 @@ namespace WPELibrary.Lib
 
             #region//搜索封包列表
 
-            public static int FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
+            public static async Task<int> FindSocketList(Socket_Cache.SocketPacket.EncodingFormat efFormat, int FromIndex, string SearchData, bool MatchCase)
             {
                 int iResult = -1;
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(SearchData))
+                    await Task.Run(() =>
                     {
-                        int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
-
-                        if (iListCNT > 0 && FromIndex < iListCNT)
+                        if (!string.IsNullOrEmpty(SearchData))
                         {
-                            string sSearch = "";
+                            int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
 
-                            for (int i = FromIndex; i < iListCNT; i++)
+                            if (iListCNT > 0 && FromIndex < iListCNT)
                             {
-                                byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
-                                sSearch = Socket_Operation.BytesToString(efFormat, bSearch);
+                                string sSearch = "";
 
-                                if (!MatchCase)
+                                for (int i = FromIndex; i < iListCNT; i++)
                                 {
-                                    sSearch = sSearch.ToLower();
-                                    SearchData = SearchData.ToLower();
-                                }
+                                    byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
+                                    sSearch = Socket_Operation.BytesToString(efFormat, bSearch);
 
-                                if (sSearch.IndexOf(SearchData) >= 0)
-                                {
-                                    iResult = i;
-                                    break;
+                                    if (!MatchCase)
+                                    {
+                                        sSearch = sSearch.ToLower();
+                                        SearchData = SearchData.ToLower();
+                                    }
+
+                                    if (sSearch.IndexOf(SearchData) >= 0)
+                                    {
+                                        iResult = i;
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }
+                    });                    
                 }
                 catch (Exception ex)
                 {
@@ -1438,30 +1451,33 @@ namespace WPELibrary.Lib
 
             #region//日志入列表
 
-            public static void LogToList(Socket_Cache.LogType logType)
+            public static async Task LogToList(Socket_Cache.LogType logType)
             {
                 try
                 {
-                    switch (logType)
+                    await Task.Run(() =>
                     {
-                        case LogType.Socket:
+                        switch (logType)
+                        {
+                            case LogType.Socket:
 
-                            if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
-                            {
-                                RecSocketLog?.Invoke(sliSocket);
-                            }
+                                if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
+                                {
+                                    RecSocketLog?.Invoke(sliSocket);
+                                }
 
-                            break;
+                                break;
 
-                        case LogType.Proxy:
+                            case LogType.Proxy:
 
-                            if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
-                            {
-                                RecProxyLog?.Invoke(sliProxy);
-                            }
+                                if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
+                                {
+                                    RecProxyLog?.Invoke(sliProxy);
+                                }
 
-                            break;
-                    }
+                                break;
+                        }
+                    });                    
                 }
                 catch (Exception ex)
                 {

@@ -109,17 +109,17 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern Int32 send(
             [In] Int32 Socket,
-            [In] IntPtr buffer,
-            [In] Int32 length,
-            [In] SocketFlags flags
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags
             );
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
         public unsafe delegate Int32 DSend(
             [In] Int32 Socket,
-            [In] IntPtr buffer,
-            [In] Int32 length,
-            [In] SocketFlags flags
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags
             );
 
         #endregion
@@ -128,18 +128,18 @@ namespace WPELibrary.Lib.NativeMethods
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern Int32 recv(
-            [In] Int32 Socket, 
-            [Out] IntPtr buffer,
-            [In] Int32 length,
-            [In] SocketFlags flags
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags
             );
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
         public unsafe delegate Int32 Drecv(
             [In] Int32 Socket,
-            [Out] IntPtr buffer,
-            [In] Int32 length,
-            [In] SocketFlags flags
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags
             );
 
         #endregion
@@ -149,9 +149,9 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern Int32 sendto(
             [In] Int32 Socket,
-            [In] IntPtr ipBuffer,
-            [In] Int32 length,
-            [In] SocketFlags lpFlags,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen
             );
@@ -160,9 +160,9 @@ namespace WPELibrary.Lib.NativeMethods
 
         public unsafe delegate Int32 DSendTo(
             [In] Int32 Socket,
-            [In] IntPtr ipBuffer,
-            [In] Int32 length,
-            [In] SocketFlags lpFlags,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen
             );
@@ -173,10 +173,10 @@ namespace WPELibrary.Lib.NativeMethods
 
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern Int32 recvfrom(
-            [In] Int32 Socket, 
-            [Out] IntPtr ipBuffer,
-            [In] Int32 length,
-            [In] SocketFlags lpFlags,
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen
             );
@@ -185,9 +185,9 @@ namespace WPELibrary.Lib.NativeMethods
 
         public unsafe delegate Int32 DRecvFrom(
             [In] Int32 Socket,
-            [Out] IntPtr ipBuffer,
-            [In] Int32 length,
-            [In] SocketFlags lpFlags,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen
             );
@@ -199,22 +199,22 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("ws2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern SocketError WSASend(
             [In] Int32 Socket,
-            [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
         [UnmanagedFunctionPointer(CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
         public unsafe delegate SocketError DWSASend(
             [In] Int32 Socket,
-            [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
@@ -225,11 +225,11 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern SocketError WSARecv(
             [In] Int32 Socket,
-            [In, Out] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In, Out] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesRecvd,
-            [In, Out] ref SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In, Out] ref SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
@@ -237,11 +237,11 @@ namespace WPELibrary.Lib.NativeMethods
 
         public unsafe delegate SocketError DWSARecv(
             [In] Int32 Socket,
-            [In, Out] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In, Out] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesRecvd,
-            [In, Out] ref SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In, Out] ref SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
@@ -252,13 +252,13 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("ws2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern SocketError WSASendTo(
             [In] Int32 Socket,
-            [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.SockAddr lpTo,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] IntPtr lpToLen,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
@@ -266,13 +266,13 @@ namespace WPELibrary.Lib.NativeMethods
 
         public unsafe delegate SocketError DWSASendTo(
             [In] Int32 Socket,
-            [In] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesSend,
-            [In] SocketFlags lpFlags,
-            [In] ref Socket_Cache.SocketPacket.SockAddr lpTo,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] IntPtr lpToLen,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
 
@@ -283,13 +283,13 @@ namespace WPELibrary.Lib.NativeMethods
         [DllImport("WS2_32.dll", CharSet = CharSet.Unicode, SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         public unsafe static extern SocketError WSARecvFrom(
             [In] Int32 Socket,
-            [In, Out] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In, Out] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesRecvd,
-            [In, Out] ref SocketFlags lpFlags,
-            [In, Out] ref Socket_Cache.SocketPacket.SockAddr lpFrom,
+            [In, Out] ref SocketFlags Flags,
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out] IntPtr lpFromlen,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
             );
        
@@ -297,13 +297,13 @@ namespace WPELibrary.Lib.NativeMethods
 
         public unsafe delegate SocketError DWSARecvFrom(
             [In] Int32 Socket,
-            [In, Out] ref Socket_Cache.SocketPacket.WSABUF lpBuffers,
-            [In] Int32 dwBufferCount,
+            [In, Out] ref Socket_Cache.SocketPacket.WSABUF WSABuffer,
+            [In] Int32 BufferCount,
             [Out] IntPtr lpNumberOfBytesRecvd,
-            [In, Out] ref SocketFlags lpFlags,
-            [In, Out] ref Socket_Cache.SocketPacket.SockAddr lpFrom,
+            [In, Out] ref SocketFlags Flags,
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out] IntPtr lpFromlen,
-            [In] ref Socket_Cache.SocketPacket.OVERLAPPED lpOverlapped,
+            [In] ref Socket_Cache.SocketPacket.OVERLAPPED Overlapped,
             [In] IntPtr lpCompletionRoutine
            );
 

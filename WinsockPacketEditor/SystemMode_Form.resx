@@ -226,12 +226,12 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bProcess_Start" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bProxy_Start" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,120,Absolute,15,Absolute,120,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="msSystem.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>139, 17</value>
+    <value>17, 17</value>
   </metadata>
   <data name="tsmiChinese.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
+        vAAADrwBlbxySQAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
         8SeIqzQ3af0IQi2CRTo5qOjrOZcUG0kbEzo8kN40z33PudwjPvt9BAdNyIoO37QieFXCiK5Ngh3sYqfg
         h1Yur14oUT38U81CZ6sGSWujHyfBLnYKqVXUgtRsdBpVSNOAV7Hh2wY+rmYpsQm3QL/TJCen4FI9y4Dv
         GHg9X0TvJIf2Zh1St+CWbQT7ZXSP83Bp4zhJHBxGcOnemoHBxQIwEPjuCTyfrtCuJKbkwV4o5ipSpBa+
@@ -247,7 +247,7 @@
     <value>None</value>
   </data>
   <data name="tsmiChinese.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 22</value>
+    <value>123, 22</value>
   </data>
   <data name="tsmiChinese.Text" xml:space="preserve">
     <value>中文</value>
@@ -255,7 +255,7 @@
   <data name="tsmiEnglish.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
+        vQAADr0BR/uQrQAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
         m4KCdtGsUYOZRZZp81/+qexsK8nLCjOSoO3MbErOpltXIe7i6X2+6VhpkNHFs/Od932eH+fsfO+nEB9H
         97P3yLEHoEpboLZ3QFV2prWtHTn7+xH3XIdVlKfFNWvsZXzMSJYMsshUUTOAlFGFkc5ulF54B7WlDapi
         LvQ3YHolwywZZJGpcu1+tPd9AM4exuyVM7jV9xmqvFfMjyTU9mewBopHvB7JpCRLBllkKlUuT7ipFTvq
@@ -273,7 +273,7 @@
     <value>None</value>
   </data>
   <data name="tsmiEnglish.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 22</value>
+    <value>123, 22</value>
   </data>
   <data name="tsmiEnglish.Text" xml:space="preserve">
     <value>English</value>
@@ -347,9 +347,6 @@
   <data name="tlpSystemMode.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpModeSelect" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="msSystem" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,Percent,100,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <metadata name="bgwCheckURL.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -6566,12 +6563,6 @@
   </data>
   <data name="&gt;&gt;tsmiAbout.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bgwCheckURL.Name" xml:space="preserve">
-    <value>bgwCheckURL</value>
-  </data>
-  <data name="&gt;&gt;bgwCheckURL.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>SystemMode_Form</value>

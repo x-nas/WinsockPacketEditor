@@ -29,7 +29,7 @@ namespace WPELibrary
 
         #region//初始化
 
-        private void InitForm()
+        private async void InitForm()
         {
             try
             {
@@ -42,7 +42,7 @@ namespace WPELibrary
 
                 string sRawData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bRawBuffer);
                 string sModifiedData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bModifiedBuffer);
-                this.rtbCompare.Rtf = Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
+                this.rtbCompare.Rtf = await Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
 
                 this.lRawData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_134), bRawBuffer.Length);
                 this.lModifiedData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_135), bModifiedBuffer.Length);

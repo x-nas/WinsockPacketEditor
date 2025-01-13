@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
@@ -16,23 +15,23 @@ namespace WinsockPacketEditor
         public SystemMode_Form()
         {
             MultiLanguage.SetDefaultLanguage(Properties.Settings.Default.DefaultLanguage);
-
-            InitializeComponent();            
-
-            this.InitToolTip();
+            InitializeComponent();
         }
 
-        private void InitToolTip()
+        private async void SystemMode_Form_Load(object sender, EventArgs e)
         {
             try
             {
-                if (!bgwCheckURL.IsBusy)
-                {
-                    bgwCheckURL.RunWorkerAsync();
-                }
+                bool bWPE64_URL = await Socket_Operation.CheckWebSite(Properties.Settings.Default.WPE64_URL);
 
-                //tt.SetToolTip(pbAbout, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_3));
-                //tt.SetToolTip(pbLanguage, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_4));
+                if (bWPE64_URL)
+                {
+                    this.WebSiteURL = Properties.Settings.Default.WPE64_URL;
+                }
+                else
+                {
+                    this.WebSiteURL = Properties.Settings.Default.WPE64_IP;
+                }
             }
             catch (Exception ex)
             {
@@ -104,64 +103,5 @@ namespace WinsockPacketEditor
         }
 
         #endregion
-
-        #region//检测网站可访问性（异步）
-
-        private void bgwCheckURL_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        {
-            try
-            {
-                e.Result = this.CheckWebSiteIsOK(Properties.Settings.Default.WPE64_URL);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwCheckURL_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        {
-            try
-            {
-                bool bWPE64_URL = (bool)e.Result;
-
-                if (bWPE64_URL)
-                {
-                    this.WebSiteURL = Properties.Settings.Default.WPE64_URL;
-                }
-                else
-                {
-                    this.WebSiteURL = Properties.Settings.Default.WPE64_IP;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private bool CheckWebSiteIsOK(string sURL)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
-                HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse();
-
-                if (resp.StatusCode == HttpStatusCode.OK)
-                {
-                    bReturn = true;
-                }
-            }
-            catch
-            {
-                bReturn = false;
-            }
-
-            return bReturn;
-        }
-
-        #endregion        
     }
 }

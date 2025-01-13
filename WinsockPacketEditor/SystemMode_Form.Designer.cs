@@ -38,7 +38,6 @@
             this.tsmiChinese = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEnglish = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.bgwCheckURL = new System.ComponentModel.BackgroundWorker();
             this.tlpSystemMode.SuspendLayout();
             this.tlpModeSelect.SuspendLayout();
             this.msSystem.SuspendLayout();
@@ -108,11 +107,6 @@
             resources.ApplyResources(this.tsmiAbout, "tsmiAbout");
             this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
-            // bgwCheckURL
-            // 
-            this.bgwCheckURL.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwCheckURL_DoWork);
-            this.bgwCheckURL.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwCheckURL_RunWorkerCompleted);
-            // 
             // SystemMode_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -124,6 +118,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SystemMode_Form";
+            this.Load += new System.EventHandler(this.SystemMode_Form_Load);
             this.tlpSystemMode.ResumeLayout(false);
             this.tlpSystemMode.PerformLayout();
             this.tlpModeSelect.ResumeLayout(false);
@@ -136,7 +131,6 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tlpSystemMode;
-        private System.ComponentModel.BackgroundWorker bgwCheckURL;
         private System.Windows.Forms.MenuStrip msSystem;
         private System.Windows.Forms.ToolStripMenuItem tsmiLanguage;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbout;

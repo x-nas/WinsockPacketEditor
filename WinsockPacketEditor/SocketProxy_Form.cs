@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 using Be.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace WinsockPacketEditor
 {
@@ -382,25 +383,25 @@ namespace WinsockPacketEditor
 
         #region//计时器
 
-        private void tSocketProxy_Tick(object sender, EventArgs e)
+        private async void tSocketProxy_Tick(object sender, EventArgs e)
         {
             try
             {
                 if (Socket_Cache.SocketProxyQueue.qSocket_ProxyInfo.Count > 0)
                 {
-                    Socket_Cache.SocketProxyList.ProxyInfoToList();
+                    await Socket_Cache.SocketProxyList.ProxyInfoToList();
                 }
 
                 if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count > 0)
                 {
-                    Socket_Cache.SocketProxyList.ProxyDataToList();
+                    await Socket_Cache.SocketProxyList.ProxyDataToList();
                 }
 
                 if (Socket_Cache.LogQueue.qProxy_Log.Count > 0)
                 {
-                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
+                    await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
 
-                    if (this.cbLogList_AutoRoll.Checked)
+                    if (this.cbLogList_AutoRoll.Checked && !this.dgvLogList.IsDisposed)
                     {
                         if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
                         {
@@ -419,9 +420,9 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void tCheckProxyState_Tick(object sender, EventArgs e)
+        private async void tCheckProxyState_Tick(object sender, EventArgs e)
         {
-            this.CheckProxyState();
+            await this.CheckProxyState();
         }
 
         #endregion
@@ -534,7 +535,7 @@ namespace WinsockPacketEditor
 
         #region//清理 TCP 和 UDP 端口（异步）
 
-        private async void CheckProxyState()
+        private async Task CheckProxyState()
         {
             try
             {
