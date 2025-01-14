@@ -133,6 +133,7 @@
             this.Controls.Add(this.tlpSocketCompare);
             this.DoubleBuffered = true;
             this.Name = "Socket_CompareForm";
+            this.Load += new System.EventHandler(this.Socket_CompareForm_Load);
             this.tlpSocketCompare.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();
