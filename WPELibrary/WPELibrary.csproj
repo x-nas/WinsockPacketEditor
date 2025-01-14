@@ -73,6 +73,7 @@
     <Compile Include="Lib\IconExtractor\IconExtractor.cs" />
     <Compile Include="Lib\IconExtractor\IconUtil.cs" />
     <Compile Include="Lib\NativeMethods\Kernel32.cs" />
+    <Compile Include="Lib\NativeMethods\Mswsock.cs" />
     <Compile Include="Lib\Socket_ProxyData.cs" />
     <Compile Include="Lib\Socket_ProxyInfo.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />

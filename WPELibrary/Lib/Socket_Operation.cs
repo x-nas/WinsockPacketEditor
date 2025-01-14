@@ -900,6 +900,10 @@ namespace WPELibrary.Lib
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            break;
+
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
@@ -1144,6 +1148,11 @@ namespace WPELibrary.Lib
                     {
                         Socket_Cache.SocketPacket.Support_WS2 = true;
                     }
+
+                    if (sModuleName.Equals(Mswsock.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        Socket_Cache.SocketPacket.Support_MsWS = true;
+                    }
                 }
 
                 if (Socket_Cache.SocketPacket.Support_WS1)
@@ -1154,6 +1163,11 @@ namespace WPELibrary.Lib
                 if (Socket_Cache.SocketPacket.Support_WS2)
                 {
                     sReturn += " 2.0";
+                }
+
+                if (Socket_Cache.SocketPacket.Support_MsWS)
+                {
+                    sReturn += " Microsoft";
                 }
             }
             catch (Exception ex)
@@ -1225,7 +1239,8 @@ namespace WPELibrary.Lib
                     pType == Socket_Cache.SocketPacket.PacketType.WS1_Recv ||
                     pType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
                     pType == Socket_Cache.SocketPacket.PacketType.WSASend || 
-                    pType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                    pType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
+                    pType == Socket_Cache.SocketPacket.PacketType.WSARecvEx)
                 {
                     sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
                 }
@@ -3165,7 +3180,8 @@ namespace WPELibrary.Lib
                         stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
                         stType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom ||
                         stType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv || 
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvEx ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
                     {
                         sIPString = sIPFrom;
@@ -3180,7 +3196,8 @@ namespace WPELibrary.Lib
                         stType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
                         stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
                         stType == Socket_Cache.SocketPacket.PacketType.WSASend ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv)
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
+                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvEx)
                     {
                         res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
                     }

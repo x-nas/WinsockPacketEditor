@@ -13,6 +13,7 @@ namespace WPELibrary.Lib
         private LocalHook lhWS1_Send, lhWS1_SendTo, lhWS1_Recv, lhWS1_RecvFrom;
         private LocalHook lhWS2_Send, lhWS2_SendTo, lhWS2_Recv, lhWS2_RecvFrom;
         private LocalHook lhWSA_Send, lhWSA_SendTo, lhWSA_Recv, lhWSA_RecvFrom;
+        private LocalHook lhWSA_RecvEx;
 
         #region//EasyHook
 
@@ -137,7 +138,20 @@ namespace WPELibrary.Lib
                     }
 
                     #endregion
-                }                
+                }
+
+                if (Socket_Cache.SocketPacket.Support_MsWS)
+                {
+                    #region//Winsock Microsoft Start Hook
+
+                    if (Socket_Cache.SocketPacket.HookWSA_Recv)
+                    {
+                        lhWSA_RecvEx = LocalHook.Create(LocalHook.GetProcAddress(Mswsock.ModuleName, "WSARecvEx"), new Mswsock.DWSARecvEx(Mswsock.WSARecvExHook), this);
+                        lhWSA_RecvEx.ThreadACL.SetExclusiveACL(new Int32[] { 0 });
+                    }
+
+                    #endregion
+                }
             }
             catch (Exception ex)
             {
@@ -222,6 +236,18 @@ namespace WPELibrary.Lib
                     if (lhWSA_RecvFrom != null)
                     {
                         lhWSA_RecvFrom.Dispose();
+                    }
+
+                    #endregion
+                }
+
+                if (Socket_Cache.SocketPacket.Support_MsWS)
+                {
+                    #region//Winsock Microsoft Stop Hook
+
+                    if (lhWSA_RecvEx != null)
+                    {
+                        lhWSA_RecvEx.Dispose();
                     }
 
                     #endregion
@@ -335,6 +361,10 @@ namespace WPELibrary.Lib
 
                     case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
                         res = WS2_32.recv(Socket, lpCache, Length, Flags);
+                        break;
+
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                        res = Mswsock.WSARecvEx(Socket, lpCache, Length, Flags);                        
                         break;
                 }
 

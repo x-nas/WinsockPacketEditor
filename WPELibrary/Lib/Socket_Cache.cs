@@ -889,7 +889,7 @@ namespace WPELibrary.Lib
             public static long Total_RecvBytes = 0;
             public static bool SpeedMode;
             public static byte[] bByteBuff = new byte[0];
-            public static bool Support_WS1, Support_WS2;
+            public static bool Support_WS1, Support_WS2, Support_MsWS;
             public static bool HookWS1_Send, HookWS1_SendTo, HookWS1_Recv, HookWS1_RecvFrom;
             public static bool HookWS2_Send, HookWS2_SendTo, HookWS2_Recv, HookWS2_RecvFrom;
             public static bool HookWSA_Send, HookWSA_SendTo, HookWSA_Recv, HookWSA_RecvFrom;
@@ -954,6 +954,7 @@ namespace WPELibrary.Lib
                 WSASend,
                 WSASendTo,
                 WSARecv,
+                WSARecvEx,
                 WSARecvFrom,
             }
 
@@ -1041,6 +1042,10 @@ namespace WPELibrary.Lib
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
                             break;
 
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
+                            break;
+
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
                             break;
@@ -1098,6 +1103,9 @@ namespace WPELibrary.Lib
                             imgReturn = Properties.Resources.sent;
                             break;
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                            imgReturn = Properties.Resources.received;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
                             imgReturn = Properties.Resources.received;
                             break;
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
@@ -1270,6 +1278,10 @@ namespace WPELibrary.Lib
                                         break;
 
                                     case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                                        SocketQueue.WSARecv_CNT++;
+                                        break;
+
+                                    case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
                                         SocketQueue.WSARecv_CNT++;
                                         break;
 
@@ -2174,6 +2186,10 @@ namespace WPELibrary.Lib
                             ffReturn.WSARecv = true;
                             break;
 
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                            ffReturn.WSARecv = true;
+                            break;
+
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
                             ffReturn.WSARecvFrom = true;
                             break;
@@ -2316,6 +2332,10 @@ namespace WPELibrary.Lib
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                            bReturn = ffFunction.WSARecv;
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
                             bReturn = ffFunction.WSARecv;
                             break;
 
