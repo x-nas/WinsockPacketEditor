@@ -63,10 +63,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_51 = { "[{0}] {1} | [{2}] 封包长度: {3}", "[{0}] {1} | [{2}] Packet Length: {3}" };
         public static string[] MutiLan_52 = { "{0} | 封包长度: {1} | {2}", "{0} | Packet Length: {1} | {2}" };
         public static string[] MutiLan_53 = { "匹配滤镜出错: ", "Matching filter error: " };
-        public static string[] MutiLan_54 = { "发送", "Send" };
-        public static string[] MutiLan_55 = { "接收", "Recv" };
-        public static string[] MutiLan_56 = { "发送到", "SendTo" };
-        public static string[] MutiLan_57 = { "接收自", "RecvFrom" };
+        public static string[] MutiLan_54 = { "发送 1.1", "Send 1.1" };
+        public static string[] MutiLan_55 = { "接收 1.1", "Recv 1.1" };
+        public static string[] MutiLan_56 = { "发送到 1.1", "SendTo 1.1" };
+        public static string[] MutiLan_57 = { "接收自 1.1", "RecvFrom 1.1" };
         public static string[] MutiLan_58 = { "WSA发送", "WSASend" };
         public static string[] MutiLan_59 = { "WSA接收", "WSARecv" };
         public static string[] MutiLan_60 = { "WSA发送到", "WSASendTo" };
@@ -165,10 +165,10 @@ namespace WPELibrary.Lib
         //public static string[] MutiLan_153 = { "{0} - 请求数据: {1} 字节", "{0} - Request: {1} bytes" };
         //public static string[] MutiLan_154 = { "{0} - 响应数据: {1} 字节", "{0} - Response: {1} bytes" };
         public static string[] MutiLan_155 = { "正在进行数据比对，请稍候 . . .", "Data comparison is in progress, please wait . . ." };
-        public static string[] MutiLan_156 = { "发送 2.0", "Send 2.0" };
-        public static string[] MutiLan_157 = { "接收 2.0", "Recv 2.0" };
-        public static string[] MutiLan_158 = { "发送到 2.0", "SendTo 2.0" };
-        public static string[] MutiLan_159 = { "接收自 2.0", "RecvFrom 2.0" };
+        public static string[] MutiLan_156 = { "发送", "Send" };
+        public static string[] MutiLan_157 = { "接收", "Recv" };
+        public static string[] MutiLan_158 = { "发送到", "SendTo" };
+        public static string[] MutiLan_159 = { "接收自", "RecvFrom" };
 
         #endregion
 
