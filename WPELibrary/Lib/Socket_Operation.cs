@@ -3155,86 +3155,88 @@ namespace WPELibrary.Lib
         public static bool SendPacket(int Socket, Socket_Cache.SocketPacket.PacketType stType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
         {
             bool bReturn = false;
+            IntPtr ipSend = IntPtr.Zero;
 
             try
             {
                 if (Socket > 0 && bSendBuffer.Length > 0)
                 {
-                    IntPtr ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
+                    ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
                     Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
 
                     int res = -1;
-                    string sIPString = string.Empty;                 
+                    string sIPString = string.Empty;
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASend || 
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo)
+                    switch (stType)
                     {
-                        sIPString = sIPTo;
-                    }
-                    else if (
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_Recv ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvEx ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                    {
-                        sIPString = sIPFrom;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                            sIPString = sIPTo;
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                            sIPString = sIPFrom;
+                            break;
                     }
 
-                    if (stType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||                        
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_Recv)
+                    switch (stType)
                     {
-                        res = WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
-                    }
-                    else if (
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASend ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvEx)
-                    {
-                        res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
-                    }
-                    else if (
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom)
-                    {
-                        if (!string.IsNullOrEmpty(sIPString))
-                        {
-                            Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                            res = WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
-                        }
-                    }
-                    else if (
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSASendTo ||
-                        stType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                    {
-                        if (!string.IsNullOrEmpty(sIPString))
-                        {
-                            Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
-                            res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
-                        }
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                            res = WSock32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WSASend:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                            res = WS2_32.send(Socket, ipSend, bSendBuffer.Length, SocketFlags.None);
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            if (!string.IsNullOrEmpty(sIPString))
+                            {
+                                Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                res = WSock32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                            }
+                            break;
+                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                            if (!string.IsNullOrEmpty(sIPString))
+                            {
+                                Socket_Cache.SocketPacket.SockAddr saAddr = Socket_Operation.GetSocketAddr_ByIPString(sIPString);
+                                res = WS2_32.sendto(Socket, ipSend, bSendBuffer.Length, SocketFlags.None, ref saAddr, Marshal.SizeOf(saAddr));
+                            }
+                            break;
                     }
 
                     if (res > 0)
                     {
                         bReturn = true;
                     }
-
-                    Marshal.FreeHGlobal(ipSend);
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                if (ipSend != IntPtr.Zero)
+                {
+                    Marshal.FreeHGlobal(ipSend);
+                }
             }
 
             return bReturn;

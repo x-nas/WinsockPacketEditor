@@ -34,6 +34,7 @@ namespace WPELibrary
         {
             try
             {
+                this.StopSendList();
                 Socket_Cache.SendList.bShow_SendListForm = true;
             }
             catch (Exception ex)
@@ -90,6 +91,12 @@ namespace WPELibrary
                 if (e.ColumnIndex == dgvSendList.Columns["cID"].Index)
                 {                    
                     e.Value = (e.RowIndex + 1).ToString();                    
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvSendList.Columns["cType"].Index)
+                {
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSendList.Rows[e.RowIndex].Cells["cType"].Value;
+                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
             }
@@ -201,17 +208,17 @@ namespace WPELibrary
                         this.tlSendList_Success_CNT.Text = Socket_Cache.SendList.SendList_Success_CNT.ToString();
                         this.tlSendList_Fail_CNT.Text = Socket_Cache.SendList.SendList_Fail_CNT.ToString();
 
-                        if (!bgwSendList.IsBusy)
+                        if (!this.bgwSendList.IsBusy)
                         {
-                            bgwSendList.RunWorkerAsync();
-                        }
+                            this.bSendList.Enabled = false;
+                            this.bSendListStop.Enabled = true;
+                            this.gbSelectALl.Enabled = false;
+                            this.gbUseSocket.Enabled = false;
+                            this.gbLoopTimes.Enabled = false;
+                            this.gbLoopInt.Enabled = false;
 
-                        this.bSendList.Enabled = false;
-                        this.bSendListStop.Enabled = true;
-                        this.gbSelectALl.Enabled = false;
-                        this.gbUseSocket.Enabled = false;
-                        this.gbLoopTimes.Enabled = false;
-                        this.gbLoopInt.Enabled = false;
+                            this.bgwSendList.RunWorkerAsync();
+                        }
                     }
                     else
                     {
@@ -232,20 +239,31 @@ namespace WPELibrary
         #endregion
 
         #region//停止按钮
+
         private void bSendStop_Click(object sender, EventArgs e)
+        {
+            this.StopSendList();
+        }
+
+        private void StopSendList()
         {
             try
             {
-                bgwSendList.CancelAsync();
+                if (this.bgwSendList.IsBusy)
+                { 
+                    this.bgwSendList.CancelAsync();
+                }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }         
+            }
         }
+
         #endregion        
 
         #region//全选/取消
+
         private void cbSelectAll_CheckedChanged(object sender, EventArgs e)
         {
             try
@@ -267,9 +285,10 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
         #endregion        
 
-        #region//发送封包列表（异步）
+        #region//发送封包列表（异步）        
 
         private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
@@ -320,22 +339,23 @@ namespace WPELibrary
                                 }
                             }
                         }
-                    }
 
-                    if (this.nudLoop_CNT.Value > 1)
-                    {
-                        this.nudLoop_CNT.Value -= 1;
-                    }                    
-
-                    this.tlLoop_Send_CNT.Text = Socket_Cache.SendList.Loop_Send_CNT.ToString();
-                    this.tlSendList_Success_CNT.Text = Socket_Cache.SendList.SendList_Success_CNT.ToString();
-                    this.tlSendList_Fail_CNT.Text = Socket_Cache.SendList.SendList_Fail_CNT.ToString();
+                        this.bgwSendList.ReportProgress(i);
+                    }                
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
+        }
+
+        private void bgwSendList_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            this.nudLoop_CNT.Value = Socket_Cache.SendList.Loop_CNT - e.ProgressPercentage;
+            this.tlLoop_Send_CNT.Text = Socket_Cache.SendList.Loop_Send_CNT.ToString();
+            this.tlSendList_Success_CNT.Text = Socket_Cache.SendList.SendList_Success_CNT.ToString();
+            this.tlSendList_Fail_CNT.Text = Socket_Cache.SendList.SendList_Fail_CNT.ToString();
         }
 
         private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)

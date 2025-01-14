@@ -265,20 +265,20 @@ namespace WPELibrary
             {
                 if (this.CheckSendPacket())
                 {
-                    this.bSend.Enabled = false;
-                    this.bSendStop.Enabled = true;
-
-                    this.gbSendSocket.Enabled = false;
-                    this.gbSendStep.Enabled = false;
-                    this.gbSendType.Enabled = false;
-
-                    this.Send_CNT = 0;
-                    this.Send_Success = 0;
-                    this.Send_Fail = 0;
-
                     if (!bgwSendPacket.IsBusy)
                     {
-                        bgwSendPacket.RunWorkerAsync();
+                        this.bSend.Enabled = false;
+                        this.bSendStop.Enabled = true;
+
+                        this.gbSendSocket.Enabled = false;
+                        this.gbSendStep.Enabled = false;
+                        this.gbSendType.Enabled = false;
+
+                        this.Send_CNT = 0;
+                        this.Send_Success = 0;
+                        this.Send_Fail = 0;
+
+                        this.bgwSendPacket.RunWorkerAsync();
                     }
                 }
             }
@@ -479,7 +479,7 @@ namespace WPELibrary
                         int iSocket = (int)this.nudSendSocket_Socket.Value;
                         string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
 
-                        Socket_Cache.SendList.AddToSendList(string.Empty, iSocket, sIPTo, sHex, bBuffer);
+                        Socket_Cache.SendList.AddToSendList(string.Empty, iSocket, ptType, sIPTo, sHex, bBuffer);
                         Socket_Operation.ShowSendListForm();                       
 
                         break;

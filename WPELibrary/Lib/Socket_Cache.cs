@@ -992,6 +992,26 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//获取封包类型
+
+            public static Socket_Cache.SocketPacket.PacketType GetPacketType_ByString(string PacketType)
+            {
+                Socket_Cache.SocketPacket.PacketType ptReturn = new Socket_Cache.SocketPacket.PacketType();
+
+                try
+                {
+                    ptReturn = (Socket_Cache.SocketPacket.PacketType)Enum.Parse(typeof(Socket_Cache.SocketPacket.PacketType), PacketType);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return ptReturn;
+            }
+
+            #endregion            
+
             #region//获取封包类型对应的名称
 
             public static string GetName_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
@@ -1063,7 +1083,7 @@ namespace WPELibrary.Lib
                 return sReturn;
             }
 
-            #endregion
+            #endregion            
 
             #region//获取封包类型对应的图标
 
@@ -4650,6 +4670,7 @@ namespace WPELibrary.Lib
                     {
                         dtSendList.Columns.Add("Remark", typeof(string));
                         dtSendList.Columns.Add("Socket", typeof(int));
+                        dtSendList.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
                         dtSendList.Columns.Add("ToAddress", typeof(string));
                         dtSendList.Columns.Add("Len", typeof(int));
                         dtSendList.Columns.Add("Data", typeof(string));
@@ -4674,6 +4695,8 @@ namespace WPELibrary.Lib
                 {
                     if (iIndex > -1 && iIndex < dtSendList.Rows.Count)
                     {
+                        Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dtSendList.Rows[iIndex]["Type"];
+                        string sIPTo = dtSendList.Rows[iIndex]["ToAddress"].ToString().Trim();
                         byte[] bBuffer = (byte[])dtSendList.Rows[iIndex]["Bytes"];
 
                         if (bBuffer.Length > 0)
@@ -4683,7 +4706,7 @@ namespace WPELibrary.Lib
                                 Socket = (int)dtSendList.Rows[iIndex]["Socket"];
                             }
 
-                            Socket_Operation.SendPacket(Socket, SocketPacket.PacketType.WS2_Send, string.Empty, string.Empty, bBuffer);
+                            bResult = Socket_Operation.SendPacket(Socket, ptType, string.Empty, sIPTo, bBuffer);                            
                         }
                     }                    
                 }
@@ -4707,11 +4730,12 @@ namespace WPELibrary.Lib
                     {
                         string sRemark = string.Empty;
                         int iSocket = SocketList.lstRecPacket[iSIndex].PacketSocket;
+                        Socket_Cache.SocketPacket.PacketType ptType = SocketList.lstRecPacket[iSIndex].PacketType;
                         string sToAddress = SocketList.lstRecPacket[iSIndex].PacketTo;
                         byte[] bBuffer = SocketList.lstRecPacket[iSIndex].PacketBuffer;
                         string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
 
-                        AddToSendList(sRemark, iSocket, sToAddress, sData,bBuffer);
+                        AddToSendList(sRemark, iSocket, ptType, sToAddress, sData,bBuffer);
                     }
                 }
                 catch (Exception ex)
@@ -4720,7 +4744,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddToSendList(string sRemark, int iSocket, string sToAddress, string sData, byte[] bBuffer)
+            public static void AddToSendList(string sRemark, int iSocket, Socket_Cache.SocketPacket.PacketType ptType, string sToAddress, string sData, byte[] bBuffer)
             {
                 try
                 {
@@ -4730,6 +4754,7 @@ namespace WPELibrary.Lib
              
                     dr["Remark"] = sRemark;
                     dr["Socket"] = iSocket;
+                    dr["Type"] = ptType;
                     dr["ToAddress"] = sToAddress;
                     dr["Len"] = bBuffer.Length;
                     dr["Data"] = sData;
@@ -4878,6 +4903,8 @@ namespace WPELibrary.Lib
                         {  
                             string sRemark = Socket_Cache.SendList.dtSendList.Rows[i]["Remark"].ToString().Trim();
                             string sSocket = Socket_Cache.SendList.dtSendList.Rows[i]["Socket"].ToString().Trim();
+                            Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)Socket_Cache.SendList.dtSendList.Rows[i]["Type"];
+                            string sPacketType = Socket_Cache.SocketPacket.GetName_ByPacketType((Socket_Cache.SocketPacket.PacketType)Socket_Cache.SendList.dtSendList.Rows[i]["Type"]);
                             string sToAddress = Socket_Cache.SendList.dtSendList.Rows[i]["ToAddress"].ToString().Trim();                            
                             byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSendList.Rows[i]["Bytes"];
                             string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
@@ -4886,6 +4913,7 @@ namespace WPELibrary.Lib
                                 new XElement("Send",
                                 new XElement("Remark", sRemark),
                                 new XElement("Socket", sSocket),
+                                new XElement("Type", ptType),
                                 new XElement("ToAddress", sToAddress),                                
                                 new XElement("Data", sData)
                                 );                          
@@ -5008,6 +5036,12 @@ namespace WPELibrary.Lib
                             iSSocket = int.Parse(xeSend.Element("Socket").Value);
                         }
 
+                        Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
+                        if (xeSend.Element("Type") != null)
+                        {
+                            ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeSend.Element("Type").Value);
+                        }
+
                         string sSToAddress = string.Empty;
                         if (xeSend.Element("ToAddress") != null)
                         {
@@ -5021,7 +5055,7 @@ namespace WPELibrary.Lib
                         }
 
                         byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sSData);
-                        Socket_Cache.SendList.AddToSendList(sSRemark, iSSocket, sSToAddress, sSData, bBuffer);
+                        Socket_Cache.SendList.AddToSendList(sSRemark, iSSocket, ptType, sSToAddress, sSData, bBuffer);
                     }
                 }
                 catch (Exception ex)
