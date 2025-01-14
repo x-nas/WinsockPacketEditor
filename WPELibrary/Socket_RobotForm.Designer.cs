@@ -30,13 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_RobotForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpRobotForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssRobotInstruction = new System.Windows.Forms.StatusStrip();
             this.ssRobotInstruction_Total = new System.Windows.Forms.ToolStripStatusLabel();
@@ -50,11 +51,6 @@
             this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbSendList = new System.Windows.Forms.GroupBox();
             this.dgvSendList = new System.Windows.Forms.DataGridView();
-            this.cSendList_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpRobotInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbRobotName = new System.Windows.Forms.GroupBox();
             this.txtRobotName = new System.Windows.Forms.TextBox();
@@ -157,6 +153,12 @@
             this.bSave = new System.Windows.Forms.Button();
             this.gbExecute = new System.Windows.Forms.GroupBox();
             this.txtExecute = new System.Windows.Forms.TextBox();
+            this.cSendList_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpRobotForm.SuspendLayout();
             this.ssRobotInstruction.SuspendLayout();
             this.tlpListInfo.SuspendLayout();
@@ -307,6 +309,7 @@
             this.cSendList_ID,
             this.cNote,
             this.cSocket,
+            this.cType,
             this.cIPTo,
             this.cLen});
             resources.ApplyResources(this.dgvSendList, "dgvSendList");
@@ -320,59 +323,6 @@
             this.dgvSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSendList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSendList_CellFormatting);
             this.dgvSendList.SelectionChanged += new System.EventHandler(this.dgvSendList_SelectionChanged);
-            // 
-            // cSendList_ID
-            // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSendList_ID.DefaultCellStyle = dataGridViewCellStyle1;
-            resources.ApplyResources(this.cSendList_ID, "cSendList_ID");
-            this.cSendList_ID.Name = "cSendList_ID";
-            this.cSendList_ID.ReadOnly = true;
-            this.cSendList_ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSendList_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cNote
-            // 
-            this.cNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cNote.DataPropertyName = "Remark";
-            resources.ApplyResources(this.cNote, "cNote");
-            this.cNote.Name = "cNote";
-            this.cNote.ReadOnly = true;
-            this.cNote.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cNote.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPTo
-            // 
-            this.cIPTo.DataPropertyName = "ToAddress";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.cIPTo, "cIPTo");
-            this.cIPTo.Name = "cIPTo";
-            this.cIPTo.ReadOnly = true;
-            this.cIPTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "Len";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle4;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tlpRobotInfo
             // 
@@ -430,9 +380,9 @@
             // 
             // cRobotInstruction_ID
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle9;
             resources.ApplyResources(this.cRobotInstruction_ID, "cRobotInstruction_ID");
             this.cRobotInstruction_ID.Name = "cRobotInstruction_ID";
             this.cRobotInstruction_ID.ReadOnly = true;
@@ -442,9 +392,9 @@
             // cRobotInstruction_Type
             // 
             this.cRobotInstruction_Type.DataPropertyName = "Type";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle10;
             resources.ApplyResources(this.cRobotInstruction_Type, "cRobotInstruction_Type");
             this.cRobotInstruction_Type.Name = "cRobotInstruction_Type";
             this.cRobotInstruction_Type.ReadOnly = true;
@@ -455,9 +405,9 @@
             // 
             this.cRobotInstruction_Content.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cRobotInstruction_Content.DataPropertyName = "Content";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle11;
             resources.ApplyResources(this.cRobotInstruction_Content, "cRobotInstruction_Content");
             this.cRobotInstruction_Content.Name = "cRobotInstruction_Content";
             this.cRobotInstruction_Content.ReadOnly = true;
@@ -1258,6 +1208,71 @@
             this.txtExecute.Name = "txtExecute";
             this.txtExecute.ReadOnly = true;
             // 
+            // cSendList_ID
+            // 
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSendList_ID.DefaultCellStyle = dataGridViewCellStyle12;
+            resources.ApplyResources(this.cSendList_ID, "cSendList_ID");
+            this.cSendList_ID.Name = "cSendList_ID";
+            this.cSendList_ID.ReadOnly = true;
+            this.cSendList_ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cSendList_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cNote
+            // 
+            this.cNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cNote.DataPropertyName = "Remark";
+            resources.ApplyResources(this.cNote, "cNote");
+            this.cNote.Name = "cNote";
+            this.cNote.ReadOnly = true;
+            this.cNote.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cNote.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle13;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cType
+            // 
+            this.cType.DataPropertyName = "Type";
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle14;
+            resources.ApplyResources(this.cType, "cType");
+            this.cType.Name = "cType";
+            this.cType.ReadOnly = true;
+            this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPTo
+            // 
+            this.cIPTo.DataPropertyName = "ToAddress";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle15;
+            resources.ApplyResources(this.cIPTo, "cIPTo");
+            this.cIPTo.Name = "cIPTo";
+            this.cIPTo.ReadOnly = true;
+            this.cIPTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "Len";
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle16;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // Socket_RobotForm
             // 
             resources.ApplyResources(this, "$this");
@@ -1265,6 +1280,7 @@
             this.Controls.Add(this.tlpRobotForm);
             this.DoubleBuffered = true;
             this.Name = "Socket_RobotForm";
+            this.Load += new System.EventHandler(this.Socket_RobotForm_Load);
             this.tlpRobotForm.ResumeLayout(false);
             this.tlpRobotForm.PerformLayout();
             this.ssRobotInstruction.ResumeLayout(false);
@@ -1440,11 +1456,6 @@
         private System.Windows.Forms.NumericUpDown nudDelay;
         private System.Windows.Forms.ComboBox cbbKeyBoard_KeyType;
         private System.Windows.Forms.Label lKeyBoard_KeyType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSendList_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cNote;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
         private System.Windows.Forms.TableLayoutPanel tlpKeyBoardCombine;
         private System.Windows.Forms.GroupBox gbKeyboard_combination;
         private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
@@ -1457,5 +1468,11 @@
         private System.Windows.Forms.Button bKeyboard_Text;
         private System.Windows.Forms.RadioButton rbMoveBy;
         private System.Windows.Forms.RadioButton rbMoveTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSendList_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cNote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
     }
 }

@@ -23,20 +23,9 @@ namespace WPELibrary
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
-                InitializeComponent();                
+                InitializeComponent();
 
-                if (RIndex > -1)
-                {
-                    this.RobotIndex = RIndex;
-
-                    this.InitFrom();
-                    this.InitDGV();                    
-                }
-                else
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
-                    this.Close();
-                }
+                this.RobotIndex = RIndex;                
             }
             catch (Exception ex)
             {
@@ -47,6 +36,20 @@ namespace WPELibrary
         #endregion
 
         #region//初始化
+
+        private void Socket_RobotForm_Load(object sender, EventArgs e)
+        {
+            if (this.RobotIndex > -1)
+            {
+                this.InitFrom();
+                this.InitDGV();
+            }
+            else
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
+                this.Close();
+            }
+        }
 
         private void InitFrom()
         {
@@ -142,6 +145,12 @@ namespace WPELibrary
                 if (e.ColumnIndex == dgvSendList.Columns["cSendList_ID"].Index)
                 {
                     e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvSendList.Columns["cType"].Index)
+                {
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSendList.Rows[e.RowIndex].Cells["cType"].Value;
+                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
             }
@@ -501,8 +510,8 @@ namespace WPELibrary
             {
                 DataRow dr = this.dtRobotInstruction.NewRow();
                 dr[0] = instructionType;
-                dr[1] = sContent;
-                
+                dr[1] = sContent;                
+
                 if (this.dgvRobotInstruction.CurrentCell != null)
                 {
                     int iIndex = this.dgvRobotInstruction.CurrentCell.RowIndex + 1;
@@ -511,7 +520,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    this.dtRobotInstruction.Rows.Add(dr);                    
+                    this.dtRobotInstruction.Rows.Add(dr);                   
                 }
             }
             catch (Exception ex)
