@@ -157,8 +157,9 @@ namespace WPELibrary
                 this.niWPE.Text = Socket_Cache.WPE + "\r\n" + sProcessName;
                 
                 this.tSocketInfo.Enabled = true;
-                this.tSocketList.Enabled = true;                
-                        
+                this.tSocketList.Enabled = true;
+                
+                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();                        
                 this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
 
                 this.bStartHook.Enabled = true;

@@ -145,6 +145,9 @@
   <data name="cProcessName.MinimumWidth" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
+  <data name="cProcessName.Width" type="System.Int32, mscorlib">
+    <value>180</value>
+  </data>
   <metadata name="cProcessID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -155,7 +158,13 @@
     <value>6</value>
   </data>
   <data name="cProcessID.Width" type="System.Int32, mscorlib">
-    <value>120</value>
+    <value>80</value>
+  </data>
+  <metadata name="cPath.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cPath.HeaderText" xml:space="preserve">
+    <value>路径</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="dgvProcessList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -172,7 +181,7 @@
     <value>51</value>
   </data>
   <data name="dgvProcessList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>400, 127</value>
+    <value>780, 127</value>
   </data>
   <data name="dgvProcessList.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
@@ -190,28 +199,28 @@
     <value>0</value>
   </data>
   <data name="tlpProcessInfoButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>7</value>
   </data>
-  <data name="bSelected.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Right</value>
+  <data name="bSelected.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="bSelected.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="bSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>300, 4</value>
+    <value>465, 4</value>
   </data>
   <data name="bSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
   <data name="bSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
+    <value>94, 32</value>
   </data>
   <data name="bSelected.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
   </data>
   <data name="bSelected.Text" xml:space="preserve">
-    <value>确定</value>
+    <value>确 定</value>
   </data>
   <data name="&gt;&gt;bSelected.Name" xml:space="preserve">
     <value>bSelected</value>
@@ -225,26 +234,26 @@
   <data name="&gt;&gt;bSelected.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="bRefresh.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
+  <data name="bRefresh.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="bRefresh.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="bRefresh.Location" type="System.Drawing.Point, System.Drawing">
-    <value>132, 4</value>
+    <value>345, 4</value>
   </data>
   <data name="bRefresh.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
   <data name="bRefresh.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
+    <value>94, 32</value>
   </data>
   <data name="bRefresh.TabIndex" type="System.Int32, mscorlib">
     <value>20</value>
   </data>
   <data name="bRefresh.Text" xml:space="preserve">
-    <value>刷新</value>
+    <value>刷 新</value>
   </data>
   <data name="&gt;&gt;bRefresh.Name" xml:space="preserve">
     <value>bRefresh</value>
@@ -258,20 +267,20 @@
   <data name="&gt;&gt;bRefresh.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="bCreate.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom</value>
+  <data name="bCreate.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
   <data name="bCreate.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="bCreate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 4</value>
+    <value>225, 4</value>
   </data>
   <data name="bCreate.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 4, 3, 4</value>
   </data>
   <data name="bCreate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 32</value>
+    <value>94, 32</value>
   </data>
   <data name="bCreate.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -304,7 +313,7 @@
     <value>1</value>
   </data>
   <data name="tlpProcessInfoButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 40</value>
+    <value>784, 40</value>
   </data>
   <data name="tlpProcessInfoButton.TabIndex" type="System.Int32, mscorlib">
     <value>21</value>
@@ -322,7 +331,7 @@
     <value>1</value>
   </data>
   <data name="tlpProcessInfoButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40,Absolute,14" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSelected" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bRefresh" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bCreate" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,100,Absolute,20,Absolute,100,Absolute,20,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpProcessInfoSearch.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
@@ -334,10 +343,10 @@
     <value>Segoe UI, 10.5pt</value>
   </data>
   <data name="txtProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>57, 3</value>
+    <value>125, 3</value>
   </data>
   <data name="txtProcessSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>248, 26</value>
+    <value>494, 26</value>
   </data>
   <data name="txtProcessSearch.TabIndex" type="System.Int32, mscorlib">
     <value>23</value>
@@ -364,7 +373,7 @@
     <value>NoControl</value>
   </data>
   <data name="pbProcessSearch.Location" type="System.Drawing.Point, System.Drawing">
-    <value>310, 2</value>
+    <value>624, 2</value>
   </data>
   <data name="pbProcessSearch.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -403,7 +412,7 @@
     <value>1</value>
   </data>
   <data name="tlpProcessInfoSearch.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 30</value>
+    <value>784, 30</value>
   </data>
   <data name="tlpProcessInfoSearch.TabIndex" type="System.Int32, mscorlib">
     <value>22</value>
@@ -421,7 +430,7 @@
     <value>2</value>
   </data>
   <data name="tlpProcessInfoSearch.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,15,Percent,70,Absolute,40,Percent,15" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtProcessSearch" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pbProcessSearch" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,500,Absolute,40,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="pbLoading.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -433,7 +442,7 @@
     <value>0, 0, 0, 200</value>
   </data>
   <data name="pbLoading.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 50</value>
+    <value>784, 50</value>
   </data>
   <data name="pbLoading.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
     <value>Zoom</value>
@@ -463,7 +472,7 @@
     <value>8</value>
   </data>
   <data name="tlpProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
+    <value>784, 471</value>
   </data>
   <data name="tlpProcessInfo.TabIndex" type="System.Int32, mscorlib">
     <value>17</value>
@@ -490,7 +499,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>404, 471</value>
+    <value>784, 471</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -6692,6 +6701,12 @@
     <value>cProcessID</value>
   </data>
   <data name="&gt;&gt;cProcessID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cPath.Name" xml:space="preserve">
+    <value>cPath</value>
+  </data>
+  <data name="&gt;&gt;cPath.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

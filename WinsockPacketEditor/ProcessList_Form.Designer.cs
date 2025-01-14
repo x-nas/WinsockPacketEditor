@@ -31,11 +31,15 @@ namespace WinsockPacketEditor
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProcessList_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.dgvProcessList = new System.Windows.Forms.DataGridView();
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cProcessName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cProcessID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpProcessInfoButton = new System.Windows.Forms.TableLayoutPanel();
             this.bSelected = new System.Windows.Forms.Button();
             this.bRefresh = new System.Windows.Forms.Button();
@@ -83,7 +87,8 @@ namespace WinsockPacketEditor
             this.dgvProcessList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cICO,
             this.cProcessName,
-            this.cProcessID});
+            this.cProcessID,
+            this.cPath});
             this.dgvProcessList.EnableHeadersVisualStyles = false;
             this.dgvProcessList.MultiSelect = false;
             this.dgvProcessList.Name = "dgvProcessList";
@@ -105,25 +110,47 @@ namespace WinsockPacketEditor
             // 
             // cProcessName
             // 
-            this.cProcessName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cProcessName.DataPropertyName = "PName";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProcessName.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.cProcessName, "cProcessName");
             this.cProcessName.Name = "cProcessName";
             this.cProcessName.ReadOnly = true;
+            this.cProcessName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProcessName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cProcessID
             // 
             this.cProcessID.DataPropertyName = "PID";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProcessID.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.cProcessID, "cProcessID");
             this.cProcessID.Name = "cProcessID";
             this.cProcessID.ReadOnly = true;
+            this.cProcessID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cProcessID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cPath
+            // 
+            this.cPath.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cPath.DataPropertyName = "PPath";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPath.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cPath, "cPath");
+            this.cPath.Name = "cPath";
+            this.cPath.ReadOnly = true;
+            this.cPath.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // tlpProcessInfoButton
             // 
             resources.ApplyResources(this.tlpProcessInfoButton, "tlpProcessInfoButton");
-            this.tlpProcessInfoButton.Controls.Add(this.bSelected, 2, 0);
-            this.tlpProcessInfoButton.Controls.Add(this.bRefresh, 1, 0);
-            this.tlpProcessInfoButton.Controls.Add(this.bCreate, 0, 0);
+            this.tlpProcessInfoButton.Controls.Add(this.bSelected, 5, 0);
+            this.tlpProcessInfoButton.Controls.Add(this.bRefresh, 3, 0);
+            this.tlpProcessInfoButton.Controls.Add(this.bCreate, 1, 0);
             this.tlpProcessInfoButton.Name = "tlpProcessInfoButton";
             // 
             // bSelected
@@ -210,5 +237,6 @@ namespace WinsockPacketEditor
         private System.Windows.Forms.DataGridViewImageColumn cICO;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProcessID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPath;
     }
 }

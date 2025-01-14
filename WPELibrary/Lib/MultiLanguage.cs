@@ -153,7 +153,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_141 = { "代理设置错误!", "Proxy setting error!" };
         public static string[] MutiLan_142 = { "开始 SOCKS5 代理!", "Start SOCKS5 proxy!" };
         public static string[] MutiLan_143 = { "停止 SOCKS5 代理!", "Stop SOCKS5 proxy!" };
-        //public static string[] MutiLan_144 = { "{0} - 已断开连接!", "{0} - Disconnected!" };
+        public static string[] MutiLan_144 = { "{0} 句柄 {1}", "{0} Handle {1}" };
         public static string[] MutiLan_145 = { "不支持的 SOCKS 协议版本: {0}", "Unsupported SOCKS protocol version: {0}" };
         public static string[] MutiLan_146 = { "{0} 不支持认证方式: {1}", "{0} does not support the authentication: {1}" };
         public static string[] MutiLan_147 = { "{0} 认证失败!", "{0} authentication failed!" };

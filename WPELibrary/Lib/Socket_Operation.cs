@@ -182,6 +182,7 @@ namespace WPELibrary.Lib
             dtProcessList.Columns.Add("ICO", typeof(Image));
             dtProcessList.Columns.Add("PName", typeof(string));
             dtProcessList.Columns.Add("PID", typeof(int));
+            dtProcessList.Columns.Add("PPath", typeof(string));
 
             try
             {
@@ -193,6 +194,7 @@ namespace WPELibrary.Lib
                     foreach (Process p in procesArr)
                     {
                         string sPName = p.ProcessName;
+                        string sPPath = Socket_Operation.GetProcessPath(p);                        
                         int iPID = p.Id;
                         Image iICO = IconFromFile(p);
 
@@ -200,6 +202,7 @@ namespace WPELibrary.Lib
                         dr["ICO"] = iICO;
                         dr["PName"] = sPName;
                         dr["PID"] = iPID;
+                        dr["PPath"] = sPPath;
                         dtProcessList.Rows.Add(dr);
                     }
 
@@ -1103,7 +1106,23 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取当前进程的信息
+        #region//获取进程的信息
+
+        public static string GetProcessPath(Process process)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                sReturn = process.MainModule.FileName;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }
 
         public static string GetProcessInfo()
         {
@@ -1112,7 +1131,15 @@ namespace WPELibrary.Lib
             try
             {
                 Process pProcess = Process.GetCurrentProcess();
-                sReturn = pProcess.MainModule.FileName;
+
+                if (!string.IsNullOrEmpty(pProcess.MainWindowTitle) && pProcess.MainWindowHandle != IntPtr.Zero)
+                {
+                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                }
+                else
+                {
+                    sReturn = pProcess.MainModule.ModuleName;
+                }
             }
             catch (Exception ex)
             {

@@ -121,7 +121,10 @@
     <value>Process</value>
   </data>
   <data name="cProcessID.HeaderText" xml:space="preserve">
-    <value>Process ID</value>
+    <value>ID</value>
+  </data>
+  <data name="cPath.HeaderText" xml:space="preserve">
+    <value>Path</value>
   </data>
   <data name="bSelected.Text" xml:space="preserve">
     <value>OK</value>
