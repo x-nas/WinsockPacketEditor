@@ -1,11 +1,10 @@
-﻿
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System;
 
 namespace WPELibrary.Lib.NativeMethods
 {
-    internal class WSock32
+    public static class WSock32
     {
         public static string ModuleName = "WSOCK32.dll";
 
@@ -27,6 +26,16 @@ namespace WPELibrary.Lib.NativeMethods
             [In] SocketFlags Flags
             );
 
+        public static unsafe Int32 SendHook(
+            [In] Int32 Socket,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_Send;
+            return WinSockHook.Send_Hook(ptType, Socket, lpBuffer, Length, Flags);
+        }
+
         #endregion
 
         #region//Recv
@@ -46,6 +55,16 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 Length,
             [In] SocketFlags Flags
             );
+
+        public static unsafe Int32 RecvHook(
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_Recv;
+            return WinSockHook.Recv_Hook(ptType, Socket, lpBuffer, Length, Flags);
+        }
 
         #endregion
 
@@ -72,6 +91,18 @@ namespace WPELibrary.Lib.NativeMethods
             [In] Int32 ToLen
             );
 
+        public static unsafe Int32 SendToHook(
+            [In] Int32 Socket,
+            [In] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
+            [In] ref Socket_Cache.SocketPacket.SockAddr To,
+            [In] Int32 ToLen)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_SendTo;
+            return WinSockHook.SendTo_Hook(ptType, Socket, lpBuffer, Length, Flags, ref To, ToLen);
+        }
+
         #endregion
 
         #region//RecvFrom
@@ -96,6 +127,18 @@ namespace WPELibrary.Lib.NativeMethods
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen
             );
+
+        public static unsafe Int32 RecvFromHook(
+            [In] Int32 Socket,
+            [Out] IntPtr lpBuffer,
+            [In] Int32 Length,
+            [In] SocketFlags Flags,
+            [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
+            [In, Out, Optional] IntPtr FromLen)
+        {
+            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom;
+            return WinSockHook.RecvFrom_Hook(ptType, Socket, lpBuffer, Length, Flags, ref From, FromLen);
+        }
 
         #endregion
     }
