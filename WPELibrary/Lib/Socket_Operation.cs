@@ -1132,14 +1132,30 @@ namespace WPELibrary.Lib
             {
                 Process pProcess = Process.GetCurrentProcess();
 
-                if (!string.IsNullOrEmpty(pProcess.MainWindowTitle) && pProcess.MainWindowHandle != IntPtr.Zero)
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, pProcess.MainWindowHandle.ToString());
+
+                if (pProcess.MainWindowHandle != IntPtr.Zero)
                 {
-                    sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                    if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
+                    {
+                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainModule.ModuleName, pProcess.MainWindowHandle.ToString());
+                    }
+                    else
+                    {
+                        sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                    }
                 }
                 else
                 {
-                    sReturn = pProcess.MainModule.ModuleName;
-                }
+                    if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
+                    {
+                        sReturn = pProcess.MainModule.ModuleName;
+                    }
+                    else
+                    {
+                        sReturn = pProcess.MainWindowTitle;
+                    }                    
+                }               
             }
             catch (Exception ex)
             {
@@ -2834,16 +2850,19 @@ namespace WPELibrary.Lib
 
         public static void LoadSystemList()
         {
-            try
+            Task.Run(() =>
             {
-                Socket_Cache.SendList.LoadSendList(Socket_Cache.SendList.FilePath, false);
-                Socket_Cache.FilterList.LoadFilterList(Socket_Cache.FilterList.FilePath, false);
-                Socket_Cache.RobotList.LoadRobotList(Socket_Cache.RobotList.FilePath, false);                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+                try
+                {
+                    Socket_Cache.SendList.LoadSendList(Socket_Cache.SendList.FilePath, false);
+                    Socket_Cache.FilterList.LoadFilterList(Socket_Cache.FilterList.FilePath, false);
+                    Socket_Cache.RobotList.LoadRobotList(Socket_Cache.RobotList.FilePath, false);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });            
         }
 
         #endregion

@@ -286,8 +286,9 @@ namespace WPELibrary.Lib
             [In] IntPtr lpBuffer,
             [In] Int32 Length,
             [In] SocketFlags Flags)
-        {  
-            Int32 res = 0;            
+        {
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            Int32 res = 0;
 
             try
             {
@@ -302,12 +303,11 @@ namespace WPELibrary.Lib
                         res = 0;
                     }
                     else
-                    {
-                        IntPtr lpCache = Marshal.AllocHGlobal(bBuffer.Length);
+                    {                        
                         Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
 
                         switch (ptType)
-                        { 
+                        {
                             case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                                 res = WSock32.send(Socket, lpCache, bBuffer.Length, Flags);
                                 break;
@@ -315,9 +315,7 @@ namespace WPELibrary.Lib
                             case Socket_Cache.SocketPacket.PacketType.WS2_Send:
                                 res = WS2_32.send(Socket, lpCache, bBuffer.Length, Flags);
                                 break;
-                        }
-                        
-                        Marshal.FreeHGlobal(lpCache);
+                        }                        
 
                         if (res > 0 && res < Length)
                         {
@@ -331,6 +329,10 @@ namespace WPELibrary.Lib
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(lpCache);
             }
 
             return res;
@@ -347,12 +349,11 @@ namespace WPELibrary.Lib
             [In] Int32 Length,
             [In] SocketFlags Flags)
         {
-            Int32 res = 0;            
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            Int32 res = 0;
 
             try
             {
-                IntPtr lpCache = Marshal.AllocHGlobal(Length);
-
                 switch (ptType)
                 {
                     case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
@@ -364,7 +365,7 @@ namespace WPELibrary.Lib
                         break;
 
                     case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                        res = Mswsock.WSARecvEx(Socket, lpCache, Length, Flags);                        
+                        res = Mswsock.WSARecvEx(Socket, lpCache, Length, Flags);
                         break;
                 }
 
@@ -385,13 +386,15 @@ namespace WPELibrary.Lib
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
                 }
-
-                Marshal.FreeHGlobal(lpCache);
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(lpCache);
+            }
 
             return res;
         }
@@ -409,6 +412,7 @@ namespace WPELibrary.Lib
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen)
         {
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
             Int32 res = 0;
 
             try
@@ -425,7 +429,6 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        IntPtr lpCache = Marshal.AllocHGlobal(bBuffer.Length);
                         Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
 
                         switch (ptType)
@@ -438,8 +441,6 @@ namespace WPELibrary.Lib
                                 res = WS2_32.sendto(Socket, lpCache, bBuffer.Length, Flags, ref To, ToLen);
                                 break;
                         }
-                        
-                        Marshal.FreeHGlobal(lpCache);
 
                         if (res > 0 && res < Length)
                         {
@@ -453,6 +454,10 @@ namespace WPELibrary.Lib
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(lpCache);
             }
 
             return res;
@@ -471,12 +476,11 @@ namespace WPELibrary.Lib
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen)
         {
+            IntPtr lpCache = Marshal.AllocHGlobal(Length);
             Int32 res = 0;
 
             try
             {
-                IntPtr lpCache = Marshal.AllocHGlobal(Length);
-
                 switch (ptType)
                 {
                     case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
@@ -505,13 +509,15 @@ namespace WPELibrary.Lib
 
                     Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bBuffer, res, ptType, FilterAction, From);
                 }
-
-                Marshal.FreeHGlobal(lpCache);
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(lpCache);
+            }
 
             return res;
         }
