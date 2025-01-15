@@ -166,7 +166,9 @@ namespace WPELibrary
                 this.bStopHook.Enabled = false;
                 this.cmsIcon_StartHook.Enabled = true;
                 this.cmsIcon_StopHook.Enabled = false;
-                this.cbbExtraction.SelectedIndex = 0;                
+                this.cbbExtraction.SelectedIndex = 0;
+
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
 
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
