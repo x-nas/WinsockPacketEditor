@@ -31,20 +31,20 @@ namespace WPELibrary
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle27 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle28 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle29 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle30 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle31 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle32 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle33 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle34 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle35 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle36 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlTotal = new System.Windows.Forms.ToolStripStatusLabel();
@@ -334,6 +334,8 @@ namespace WPELibrary
             this.tsRobotList_CleanUp = new System.Windows.Forms.ToolStripButton();
             this.ssProcessInfo = new System.Windows.Forms.StatusStrip();
             this.tsslProcessName = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslProcessInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -356,8 +358,6 @@ namespace WPELibrary
             this.sfdExtraction = new System.Windows.Forms.SaveFileDialog();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.tsslSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslProcessInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -686,13 +686,13 @@ namespace WPELibrary
             this.dgvSocketList.AllowUserToResizeColumns = false;
             this.dgvSocketList.AllowUserToResizeRows = false;
             this.dgvSocketList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            this.dgvSocketList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle27.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle27.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle27.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle27.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle27.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            this.dgvSocketList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle27;
             this.dgvSocketList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvSocketList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cTypeImg,
@@ -717,10 +717,10 @@ namespace WPELibrary
             // 
             // cTypeImg
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.NullValue = null;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle28.NullValue = null;
+            dataGridViewCellStyle28.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle28;
             resources.ApplyResources(this.cTypeImg, "cTypeImg");
             this.cTypeImg.Image = global::WPELibrary.Properties.Resources.Info16;
             this.cTypeImg.Name = "cTypeImg";
@@ -729,8 +729,8 @@ namespace WPELibrary
             // 
             // cPacketID
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cPacketID.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cPacketID.DefaultCellStyle = dataGridViewCellStyle29;
             resources.ApplyResources(this.cPacketID, "cPacketID");
             this.cPacketID.Name = "cPacketID";
             this.cPacketID.ReadOnly = true;
@@ -739,8 +739,8 @@ namespace WPELibrary
             // cPacketType
             // 
             this.cPacketType.DataPropertyName = "PacketType";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cPacketType.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cPacketType.DefaultCellStyle = dataGridViewCellStyle30;
             resources.ApplyResources(this.cPacketType, "cPacketType");
             this.cPacketType.Name = "cPacketType";
             this.cPacketType.ReadOnly = true;
@@ -749,8 +749,8 @@ namespace WPELibrary
             // cSocket
             // 
             this.cSocket.DataPropertyName = "PacketSocket";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle31.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle31;
             resources.ApplyResources(this.cSocket, "cSocket");
             this.cSocket.Name = "cSocket";
             this.cSocket.ReadOnly = true;
@@ -759,8 +759,8 @@ namespace WPELibrary
             // cFrom
             // 
             this.cFrom.DataPropertyName = "PacketFrom";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cFrom.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle32.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cFrom.DefaultCellStyle = dataGridViewCellStyle32;
             resources.ApplyResources(this.cFrom, "cFrom");
             this.cFrom.Name = "cFrom";
             this.cFrom.ReadOnly = true;
@@ -769,8 +769,8 @@ namespace WPELibrary
             // cTo
             // 
             this.cTo.DataPropertyName = "PacketTo";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cTo.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle33.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cTo.DefaultCellStyle = dataGridViewCellStyle33;
             resources.ApplyResources(this.cTo, "cTo");
             this.cTo.Name = "cTo";
             this.cTo.ReadOnly = true;
@@ -779,8 +779,8 @@ namespace WPELibrary
             // cLen
             // 
             this.cLen.DataPropertyName = "PacketLen";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle34.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle34;
             resources.ApplyResources(this.cLen, "cLen");
             this.cLen.Name = "cLen";
             this.cLen.ReadOnly = true;
@@ -2201,14 +2201,14 @@ namespace WPELibrary
             this.dgvLogList.AllowUserToResizeRows = false;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -2228,8 +2228,8 @@ namespace WPELibrary
             // 
             // cLogID
             // 
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle35;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -2237,8 +2237,8 @@ namespace WPELibrary
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle36.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle36;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -2246,8 +2246,8 @@ namespace WPELibrary
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle37.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle37;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -2338,10 +2338,10 @@ namespace WPELibrary
             // cIsCheck
             // 
             this.cIsCheck.DataPropertyName = "IsEnable";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.NullValue = false;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = false;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle1;
             this.cIsCheck.FalseValue = "false";
             resources.ApplyResources(this.cIsCheck, "cIsCheck");
             this.cIsCheck.Name = "cIsCheck";
@@ -2710,6 +2710,17 @@ namespace WPELibrary
             this.tsslProcessName.Name = "tsslProcessName";
             resources.ApplyResources(this.tsslProcessName, "tsslProcessName");
             // 
+            // tsslSplit2
+            // 
+            this.tsslSplit2.ForeColor = System.Drawing.Color.DarkGray;
+            this.tsslSplit2.Name = "tsslSplit2";
+            resources.ApplyResources(this.tsslSplit2, "tsslSplit2");
+            // 
+            // tsslProcessInfo
+            // 
+            this.tsslProcessInfo.Name = "tsslProcessInfo";
+            resources.ApplyResources(this.tsslProcessInfo, "tsslProcessInfo");
+            // 
             // tsslSplit1
             // 
             this.tsslSplit1.ForeColor = System.Drawing.Color.DarkGray;
@@ -2823,10 +2834,10 @@ namespace WPELibrary
             // 
             // dataGridViewImageColumn1
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.NullValue = null;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle38.NullValue = null;
+            dataGridViewCellStyle38.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle38;
             resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
             this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
             this.dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
@@ -2841,17 +2852,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn2.Name = "dataGridViewImageColumn2";
             this.dataGridViewImageColumn2.ReadOnly = true;
             this.dataGridViewImageColumn2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // tsslSplit2
-            // 
-            this.tsslSplit2.ForeColor = System.Drawing.Color.DarkGray;
-            this.tsslSplit2.Name = "tsslSplit2";
-            resources.ApplyResources(this.tsslSplit2, "tsslSplit2");
-            // 
-            // tsslProcessInfo
-            // 
-            this.tsslProcessInfo.Name = "tsslProcessInfo";
-            resources.ApplyResources(this.tsslProcessInfo, "tsslProcessInfo");
             // 
             // Socket_Form
             // 

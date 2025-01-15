@@ -1376,16 +1376,15 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//保存封包列表为Excel
+            #region//保存封包列表为Excel（对话框）
 
-            public static void SaveSocketListToExcel()
+            public static async void SaveSocketList_Dialog()
             {
-                int iSuccess = 0;
-
                 try
                 {
                     if (Socket_Cache.SocketList.lstRecPacket.Count > 0)
                     {
+                        int SaveCount = Socket_Cache.SocketList.lstRecPacket.Count;
                         SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
                         sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
                         sfdSaveToExcel.FilterIndex = 0;
@@ -1396,42 +1395,20 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
                         {
-                            Stream myStream = sfdSaveToExcel.OpenFile();
-                            StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
+                            string FilePath = sfdSaveToExcel.FileName;
 
-                            string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
-                            sw.WriteLine(sColTitle);
-
-                            foreach (Socket_PacketInfo spi in Socket_Cache.SocketList.lstRecPacket)
+                            if (!string.IsNullOrEmpty(FilePath))
                             {
-                                try
-                                {
-                                    string sColValue = "";
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_151), SaveCount);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
 
-                                    string sTime = spi.PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");                                   
-                                    string sType = spi.PacketType.ToString();
-                                    string sSocket = spi.PacketSocket.ToString();
-                                    string sFrom = spi.PacketFrom;
-                                    string sTo = spi.PacketTo;
-                                    string sLen = spi.PacketLen.ToString();
-                                    byte[] bBuff = spi.PacketBuffer;
-                                    string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
+                                await SaveSocketListToExcel(FilePath, SaveCount);
 
-                                    sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
-                                    sw.WriteLine(sColValue);
-
-                                    iSuccess++;
-                                }
-                                catch (Exception ex)
-                                {
-                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                                }
+                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150), FilePath);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                             }
-
-                            sw.Close();
-                            myStream.Close();
                         }
-                    }
+                    }               
                 }
                 catch (Exception ex)
                 {
@@ -1439,7 +1416,64 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
+            private static async Task<int> SaveSocketListToExcel(string FilePath, int SaveCount)
+            {
+                int iSuccess = 0;
+
+                try
+                {
+                    await Task.Run(() =>
+                    {
+                        Stream myStream = File.OpenWrite(FilePath);
+                        StreamWriter sw = new StreamWriter(myStream, Encoding.Default);
+
+                        string sColTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_77);
+                        sw.WriteLine(sColTitle);
+
+                        if (SaveCount > Socket_Cache.SocketList.lstRecPacket.Count)
+                        {
+                            SaveCount = Socket_Cache.SocketList.lstRecPacket.Count;
+                        }
+
+                        for (int i = 0; i < SaveCount; i++)
+                        {
+                            try
+                            {
+                                string sColValue = "";
+
+                                string sTime = Socket_Cache.SocketList.lstRecPacket[i].PacketTime.ToString("yyyy-MM-dd HH:mm:ss:fffffff");
+                                string sType = Socket_Cache.SocketList.lstRecPacket[i].PacketType.ToString();
+                                string sSocket = Socket_Cache.SocketList.lstRecPacket[i].PacketSocket.ToString();
+                                string sFrom = Socket_Cache.SocketList.lstRecPacket[i].PacketFrom;
+                                string sTo = Socket_Cache.SocketList.lstRecPacket[i].PacketTo;
+                                string sLen = Socket_Cache.SocketList.lstRecPacket[i].PacketLen.ToString();
+                                byte[] bBuff = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
+                                string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuff);
+
+                                sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
+                                sw.WriteLine(sColValue);
+
+                                iSuccess++;
+                            }
+                            catch (Exception ex)
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                            }
+                        }
+
+                        sw.Close();
+                        myStream.Close();
+                    });                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iSuccess;
+            }
+
+            #endregion            
         }
 
         #endregion

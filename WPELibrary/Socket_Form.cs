@@ -1082,9 +1082,9 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
-        #endregion
+        #endregion        
 
         #region//显示封包数据        
 
@@ -1321,7 +1321,7 @@ namespace WPELibrary
 
                         if (dgvSocketList.Rows.Count > 0)
                         {
-                            Socket_Cache.SocketList.SaveSocketListToExcel();
+                            Socket_Cache.SocketList.SaveSocketList_Dialog();
                         }
 
                         break;

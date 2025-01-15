@@ -86,7 +86,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_74 = { "机器人数据文件", "Robot data file" };
         public static string[] MutiLan_75 = { "滤镜数据文件", "Filter data file" };
         public static string[] MutiLan_76 = { "保存为Excel文件", "Save as Excel file" };
-        public static string[] MutiLan_77 = { "序号\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "ID\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
+        public static string[] MutiLan_77 = { "时间戳\t类别\t套接字\t源地址\t目的地址\t长度\t数据\t", "Time stamp\tCategory\tSocket\tFrom Address\tTo Address\tLength\tData\t" };
         public static string[] MutiLan_78 = { "记录时间\t模块\t日志内容\t", "Log Time\tModule Name\tLog content\t" };
         public static string[] MutiLan_79 = { "提示", "Prompt" };
         public static string[] MutiLan_80 = { "加载滤镜列表成功! [未加密]", "Load filter list successful! [Unencrypted]" };
@@ -159,8 +159,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_147 = { "{0} 认证失败!", "{0} authentication failed!" };
         public static string[] MutiLan_148 = { "启用系统代理", "Enable system proxy" };
         public static string[] MutiLan_149 = { "关闭系统代理", "Disable system proxy" };
-        //public static string[] MutiLan_150 = { "{0} - 身份验证失败!", "{0} - Authentication failed!" };
-        //public static string[] MutiLan_151 = { "{0} - 连接成功 [{1}]", "{0} - Connection successful [{1}]" };
+        public static string[] MutiLan_150 = { "封包列表保存完毕 {0}", "The Socket List saved {0}" };
+        public static string[] MutiLan_151 = { "正在保存封包列表，共计 {0} 条数据", "Saving socket list, with a total of {0} packets data" };
         public static string[] MutiLan_152 = { "{0} - 不支持的命令: {1}", "{0} - Unsupported command: {1}" };
         //public static string[] MutiLan_153 = { "{0} - 请求数据: {1} 字节", "{0} - Request: {1} bytes" };
         //public static string[] MutiLan_154 = { "{0} - 响应数据: {1} 字节", "{0} - Response: {1} bytes" };
