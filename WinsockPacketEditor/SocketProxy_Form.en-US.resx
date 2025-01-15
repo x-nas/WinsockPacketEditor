@@ -124,6 +124,9 @@
   <data name="tsslServerInfo.Text" xml:space="preserve">
     <value>ProxyServerInfo</value>
   </data>
+  <data name="gbSystemProxy.Text" xml:space="preserve">
+    <value>[ Sys Proxy ]</value>
+  </data>
   <data name="cbEnable_SystemProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>11, 27</value>
   </data>
@@ -133,14 +136,17 @@
   <data name="cbEnable_SystemProxy.Text" xml:space="preserve">
     <value>Enable</value>
   </data>
-  <data name="gbSystemProxy.Text" xml:space="preserve">
-    <value>[ Sys Proxy ]</value>
+  <data name="tpProxySet.Text" xml:space="preserve">
+    <value>[ Proxy Settings ]</value>
   </data>
   <data name="gbProxyType.Text" xml:space="preserve">
     <value>Proxy Type</value>
   </data>
   <data name="gbProxySet_Port.Text" xml:space="preserve">
     <value>Port</value>
+  </data>
+  <data name="gbProxySet_Auth.Text" xml:space="preserve">
+    <value>Authentication </value>
   </data>
   <data name="txtAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
     <value>291, 8</value>
@@ -176,11 +182,29 @@
   <data name="txtAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
     <value>105, 8</value>
   </data>
-  <data name="gbProxySet_Auth.Text" xml:space="preserve">
-    <value>Authentication </value>
+  <data name="tpListSet.Text" xml:space="preserve">
+    <value>[ List Settings ]</value>
   </data>
-  <data name="tpProxySet.Text" xml:space="preserve">
-    <value>[ Proxy Settings ]</value>
+  <data name="gbClientList.Text" xml:space="preserve">
+    <value>Client List</value>
+  </data>
+  <data name="cbDeleteClosed.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 21</value>
+  </data>
+  <data name="cbDeleteClosed.Text" xml:space="preserve">
+    <value>Clear Closed</value>
+  </data>
+  <data name="gbProxyList.Text" xml:space="preserve">
+    <value>Proxy List</value>
+  </data>
+  <data name="cbNoCache.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 21</value>
+  </data>
+  <data name="cbNoCache.Text" xml:space="preserve">
+    <value>No Cache</value>
+  </data>
+  <data name="gbListSet_LogList.Text" xml:space="preserve">
+    <value>Log List</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>183, 3</value>
@@ -200,12 +224,6 @@
   <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
   </data>
-  <data name="gbListSet_LogList.Text" xml:space="preserve">
-    <value>Log List</value>
-  </data>
-  <data name="tpListSet.Text" xml:space="preserve">
-    <value>[ List Settings ]</value>
-  </data>
   <data name="bCleanUp.Text" xml:space="preserve">
     <value>Clear
 (&amp;C)</value>
@@ -221,7 +239,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAVABAQFQAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAVgBAQFYAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -302,6 +320,9 @@
   <data name="tpProxyList.Text" xml:space="preserve">
     <value>[ Proxy List ]</value>
   </data>
+  <data name="tpData.Text" xml:space="preserve">
+    <value>[ Proxy Data ]</value>
+  </data>
   <data name="hbData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
     <value>Copy</value>
   </data>
@@ -314,8 +335,8 @@
   <data name="hbData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
     <value>Select All</value>
   </data>
-  <data name="tpData.Text" xml:space="preserve">
-    <value>[ Proxy Data ]</value>
+  <data name="tpLog.Text" xml:space="preserve">
+    <value>[ Proxy Log ]</value>
   </data>
   <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
@@ -328,9 +349,6 @@
   </data>
   <data name="cLogContent.HeaderText" xml:space="preserve">
     <value>Content</value>
-  </data>
-  <data name="tpLog.Text" xml:space="preserve">
-    <value>[ Proxy Log ]</value>
   </data>
   <data name="tpClientList.Text" xml:space="preserve">
     <value>[ Client List ]</value>

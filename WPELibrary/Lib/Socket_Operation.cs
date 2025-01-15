@@ -1132,8 +1132,6 @@ namespace WPELibrary.Lib
             {
                 Process pProcess = Process.GetCurrentProcess();
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, pProcess.MainWindowHandle.ToString());
-
                 if (pProcess.MainWindowHandle != IntPtr.Zero)
                 {
                     if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
@@ -2879,6 +2877,9 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_Auth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
                 Properties.Settings.Default.ProxyConfig_Auth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
 
+                Properties.Settings.Default.ProxyConfig_ProxyList_NoCache = Socket_Cache.SocketProxyList.NoCache;
+                Properties.Settings.Default.ProxyConfig_ClientList_DelClosed = Socket_Cache.SocketProxyList.DelClosed;
+
                 Properties.Settings.Default.ProxyConfig_LogList_AutoRoll = Socket_Cache.LogList.Proxy_AutoRoll;
                 Properties.Settings.Default.ProxyConfig_LogList_AutoClear = Socket_Cache.LogList.Proxy_AutoClear;
                 Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
@@ -2959,6 +2960,9 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;
                 Socket_Cache.SocketProxy.Auth_UserName = Properties.Settings.Default.ProxyConfig_Auth_UserName;
                 Socket_Cache.SocketProxy.Auth_PassWord = Properties.Settings.Default.ProxyConfig_Auth_PassWord;
+
+                Socket_Cache.SocketProxyList.NoCache = Properties.Settings.Default.ProxyConfig_ProxyList_NoCache;
+                Socket_Cache.SocketProxyList.DelClosed = Properties.Settings.Default.ProxyConfig_ClientList_DelClosed;
 
                 Socket_Cache.LogList.Proxy_AutoRoll = Properties.Settings.Default.ProxyConfig_LogList_AutoRoll;
                 Socket_Cache.LogList.Proxy_AutoClear = Properties.Settings.Default.ProxyConfig_LogList_AutoClear;

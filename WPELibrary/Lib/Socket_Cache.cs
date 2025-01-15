@@ -62,7 +62,7 @@ namespace WPELibrary.Lib
         {
             public static IPAddress ProxyIP = IPAddress.Any;
             public static bool IsListening = false;
-            public static bool Enable_SOCKS5, Enable_Auth;
+            public static bool Enable_SOCKS5, Enable_Auth;            
             public static string Auth_UserName, Auth_PassWord;
             public static ushort ProxyPort;
             public static int UDPCloseTime = 60;
@@ -788,6 +788,8 @@ namespace WPELibrary.Lib
 
         public static class SocketProxyList
         {
+            public static bool NoCache, DelClosed;
+
             public static BindingList<Socket_ProxyInfo> lstProxyInfo = new BindingList<Socket_ProxyInfo>();
             public delegate void ProxyInfoReceived(Socket_ProxyInfo spi);
             public static event ProxyInfoReceived RecProxyInfo;

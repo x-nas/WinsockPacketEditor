@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketProxy_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tsslServerInfo = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketProxy_Parameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbSystemProxy = new System.Windows.Forms.GroupBox();
@@ -57,6 +57,12 @@
             this.txtAuth_UserName = new System.Windows.Forms.TextBox();
             this.tpListSet = new System.Windows.Forms.TabPage();
             this.tlpListSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbClientList = new System.Windows.Forms.GroupBox();
+            this.tlpClientList = new System.Windows.Forms.TableLayoutPanel();
+            this.cbDeleteClosed = new System.Windows.Forms.CheckBox();
+            this.gbProxyList = new System.Windows.Forms.GroupBox();
+            this.tlpProxyList = new System.Windows.Forms.TableLayoutPanel();
+            this.cbNoCache = new System.Windows.Forms.CheckBox();
             this.gbListSet_LogList = new System.Windows.Forms.GroupBox();
             this.tlpListSet_LogList = new System.Windows.Forms.TableLayoutPanel();
             this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
@@ -70,11 +76,11 @@
             this.tvProxyData = new System.Windows.Forms.TreeView();
             this.ilSocketProxy = new System.Windows.Forms.ImageList(this.components);
             this.tpProxyList = new System.Windows.Forms.TabPage();
-            this.tcSocketProxy = new System.Windows.Forms.TabControl();
+            this.tcProxyInfo = new System.Windows.Forms.TabControl();
             this.ssSocketProxy = new System.Windows.Forms.StatusStrip();
             this.tsslSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tcSocketProxy_Data = new System.Windows.Forms.TabControl();
+            this.tcProxyData = new System.Windows.Forms.TabControl();
             this.tpData = new System.Windows.Forms.TabPage();
             this.hbData = new Be.Windows.Forms.HexBox();
             this.tlpSocketProxy_Data = new System.Windows.Forms.TableLayoutPanel();
@@ -85,7 +91,7 @@
             this.cLogTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLogContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tcClientInfo = new System.Windows.Forms.TabControl();
             this.tpClientList = new System.Windows.Forms.TabPage();
             this.tvProxyInfo = new System.Windows.Forms.TreeView();
             this.tlpSocketProxy = new System.Windows.Forms.TableLayoutPanel();
@@ -106,29 +112,33 @@
             this.tlpProxySet_Auth.SuspendLayout();
             this.tpListSet.SuspendLayout();
             this.tlpListSet.SuspendLayout();
+            this.gbClientList.SuspendLayout();
+            this.tlpClientList.SuspendLayout();
+            this.gbProxyList.SuspendLayout();
+            this.tlpProxyList.SuspendLayout();
             this.gbListSet_LogList.SuspendLayout();
             this.tlpListSet_LogList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
             this.tlpButton.SuspendLayout();
             this.tlpButton_Start.SuspendLayout();
             this.tpProxyList.SuspendLayout();
-            this.tcSocketProxy.SuspendLayout();
+            this.tcProxyInfo.SuspendLayout();
             this.ssSocketProxy.SuspendLayout();
-            this.tcSocketProxy_Data.SuspendLayout();
+            this.tcProxyData.SuspendLayout();
             this.tpData.SuspendLayout();
             this.tlpSocketProxy_Data.SuspendLayout();
             this.tcSocketProxy_Log.SuspendLayout();
             this.tpLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
-            this.tabControl1.SuspendLayout();
+            this.tcClientInfo.SuspendLayout();
             this.tpClientList.SuspendLayout();
             this.tlpSocketProxy.SuspendLayout();
             this.SuspendLayout();
             // 
             // tsslServerInfo
             // 
-            this.tsslServerInfo.Name = "tsslServerInfo";
             resources.ApplyResources(this.tsslServerInfo, "tsslServerInfo");
+            this.tsslServerInfo.Name = "tsslServerInfo";
             // 
             // tlpSocketProxy_Parameter
             // 
@@ -140,8 +150,8 @@
             // 
             // gbSystemProxy
             // 
-            this.gbSystemProxy.Controls.Add(this.tlpSystemProxy);
             resources.ApplyResources(this.gbSystemProxy, "gbSystemProxy");
+            this.gbSystemProxy.Controls.Add(this.tlpSystemProxy);
             this.gbSystemProxy.Name = "gbSystemProxy";
             this.gbSystemProxy.TabStop = false;
             // 
@@ -160,17 +170,17 @@
             // 
             // tcSocketProxySet
             // 
+            resources.ApplyResources(this.tcSocketProxySet, "tcSocketProxySet");
             this.tcSocketProxySet.Controls.Add(this.tpProxySet);
             this.tcSocketProxySet.Controls.Add(this.tpListSet);
-            resources.ApplyResources(this.tcSocketProxySet, "tcSocketProxySet");
             this.tcSocketProxySet.Name = "tcSocketProxySet";
             this.tcSocketProxySet.SelectedIndex = 0;
             // 
             // tpProxySet
             // 
+            resources.ApplyResources(this.tpProxySet, "tpProxySet");
             this.tpProxySet.BackColor = System.Drawing.SystemColors.Control;
             this.tpProxySet.Controls.Add(this.tlpProxySet);
-            resources.ApplyResources(this.tpProxySet, "tpProxySet");
             this.tpProxySet.Name = "tpProxySet";
             // 
             // tlpProxySet
@@ -183,8 +193,8 @@
             // 
             // gbProxyType
             // 
-            this.gbProxyType.Controls.Add(this.tlpProxyType);
             resources.ApplyResources(this.gbProxyType, "gbProxyType");
+            this.gbProxyType.Controls.Add(this.tlpProxyType);
             this.gbProxyType.Name = "gbProxyType";
             this.gbProxyType.TabStop = false;
             // 
@@ -204,8 +214,8 @@
             // 
             // gbProxySet_Port
             // 
-            this.gbProxySet_Port.Controls.Add(this.tlpProxySet_Port);
             resources.ApplyResources(this.gbProxySet_Port, "gbProxySet_Port");
+            this.gbProxySet_Port.Controls.Add(this.tlpProxySet_Port);
             this.gbProxySet_Port.Name = "gbProxySet_Port";
             this.gbProxySet_Port.TabStop = false;
             // 
@@ -237,8 +247,8 @@
             // 
             // gbProxySet_Auth
             // 
-            this.gbProxySet_Auth.Controls.Add(this.tlpProxySet_Auth);
             resources.ApplyResources(this.gbProxySet_Auth, "gbProxySet_Auth");
+            this.gbProxySet_Auth.Controls.Add(this.tlpProxySet_Auth);
             this.gbProxySet_Auth.Name = "gbProxySet_Auth";
             this.gbProxySet_Auth.TabStop = false;
             // 
@@ -254,8 +264,8 @@
             // 
             // txtAuth_PassWord
             // 
-            this.txtAuth_PassWord.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtAuth_PassWord, "txtAuth_PassWord");
+            this.txtAuth_PassWord.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAuth_PassWord.Name = "txtAuth_PassWord";
             // 
             // lAuth_PassWord
@@ -277,27 +287,67 @@
             // 
             // txtAuth_UserName
             // 
-            this.txtAuth_UserName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtAuth_UserName, "txtAuth_UserName");
+            this.txtAuth_UserName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtAuth_UserName.Name = "txtAuth_UserName";
             // 
             // tpListSet
             // 
+            resources.ApplyResources(this.tpListSet, "tpListSet");
             this.tpListSet.BackColor = System.Drawing.SystemColors.Control;
             this.tpListSet.Controls.Add(this.tlpListSet);
-            resources.ApplyResources(this.tpListSet, "tpListSet");
             this.tpListSet.Name = "tpListSet";
             // 
             // tlpListSet
             // 
             resources.ApplyResources(this.tlpListSet, "tlpListSet");
-            this.tlpListSet.Controls.Add(this.gbListSet_LogList, 0, 0);
+            this.tlpListSet.Controls.Add(this.gbClientList, 1, 0);
+            this.tlpListSet.Controls.Add(this.gbProxyList, 0, 0);
+            this.tlpListSet.Controls.Add(this.gbListSet_LogList, 2, 0);
             this.tlpListSet.Name = "tlpListSet";
+            // 
+            // gbClientList
+            // 
+            resources.ApplyResources(this.gbClientList, "gbClientList");
+            this.gbClientList.Controls.Add(this.tlpClientList);
+            this.gbClientList.Name = "gbClientList";
+            this.gbClientList.TabStop = false;
+            // 
+            // tlpClientList
+            // 
+            resources.ApplyResources(this.tlpClientList, "tlpClientList");
+            this.tlpClientList.Controls.Add(this.cbDeleteClosed, 0, 0);
+            this.tlpClientList.Name = "tlpClientList";
+            // 
+            // cbDeleteClosed
+            // 
+            resources.ApplyResources(this.cbDeleteClosed, "cbDeleteClosed");
+            this.cbDeleteClosed.Name = "cbDeleteClosed";
+            this.cbDeleteClosed.UseVisualStyleBackColor = true;
+            // 
+            // gbProxyList
+            // 
+            resources.ApplyResources(this.gbProxyList, "gbProxyList");
+            this.gbProxyList.Controls.Add(this.tlpProxyList);
+            this.gbProxyList.Name = "gbProxyList";
+            this.gbProxyList.TabStop = false;
+            // 
+            // tlpProxyList
+            // 
+            resources.ApplyResources(this.tlpProxyList, "tlpProxyList");
+            this.tlpProxyList.Controls.Add(this.cbNoCache, 0, 0);
+            this.tlpProxyList.Name = "tlpProxyList";
+            // 
+            // cbNoCache
+            // 
+            resources.ApplyResources(this.cbNoCache, "cbNoCache");
+            this.cbNoCache.Name = "cbNoCache";
+            this.cbNoCache.UseVisualStyleBackColor = true;
             // 
             // gbListSet_LogList
             // 
-            this.gbListSet_LogList.Controls.Add(this.tlpListSet_LogList);
             resources.ApplyResources(this.gbListSet_LogList, "gbListSet_LogList");
+            this.gbListSet_LogList.Controls.Add(this.tlpListSet_LogList);
             this.gbListSet_LogList.Name = "gbListSet_LogList";
             this.gbListSet_LogList.TabStop = false;
             // 
@@ -399,17 +449,17 @@
             // 
             // tpProxyList
             // 
-            this.tpProxyList.Controls.Add(this.tvProxyData);
             resources.ApplyResources(this.tpProxyList, "tpProxyList");
+            this.tpProxyList.Controls.Add(this.tvProxyData);
             this.tpProxyList.Name = "tpProxyList";
             this.tpProxyList.UseVisualStyleBackColor = true;
             // 
-            // tcSocketProxy
+            // tcProxyInfo
             // 
-            this.tcSocketProxy.Controls.Add(this.tpProxyList);
-            resources.ApplyResources(this.tcSocketProxy, "tcSocketProxy");
-            this.tcSocketProxy.Name = "tcSocketProxy";
-            this.tcSocketProxy.SelectedIndex = 0;
+            resources.ApplyResources(this.tcProxyInfo, "tcProxyInfo");
+            this.tcProxyInfo.Controls.Add(this.tpProxyList);
+            this.tcProxyInfo.Name = "tcProxyInfo";
+            this.tcProxyInfo.SelectedIndex = 0;
             // 
             // ssSocketProxy
             // 
@@ -422,31 +472,32 @@
             // 
             // tsslSplit1
             // 
+            resources.ApplyResources(this.tsslSplit1, "tsslSplit1");
             this.tsslSplit1.ForeColor = System.Drawing.Color.DarkGray;
             this.tsslSplit1.Name = "tsslSplit1";
-            resources.ApplyResources(this.tsslSplit1, "tsslSplit1");
             // 
             // tsslTotalBytes
             // 
-            this.tsslTotalBytes.Name = "tsslTotalBytes";
             resources.ApplyResources(this.tsslTotalBytes, "tsslTotalBytes");
+            this.tsslTotalBytes.Name = "tsslTotalBytes";
             // 
-            // tcSocketProxy_Data
+            // tcProxyData
             // 
-            this.tcSocketProxy_Data.Controls.Add(this.tpData);
-            resources.ApplyResources(this.tcSocketProxy_Data, "tcSocketProxy_Data");
-            this.tcSocketProxy_Data.Name = "tcSocketProxy_Data";
-            this.tcSocketProxy_Data.SelectedIndex = 0;
+            resources.ApplyResources(this.tcProxyData, "tcProxyData");
+            this.tcProxyData.Controls.Add(this.tpData);
+            this.tcProxyData.Name = "tcProxyData";
+            this.tcProxyData.SelectedIndex = 0;
             // 
             // tpData
             // 
-            this.tpData.Controls.Add(this.hbData);
             resources.ApplyResources(this.tpData, "tpData");
+            this.tpData.Controls.Add(this.hbData);
             this.tpData.Name = "tpData";
             this.tpData.UseVisualStyleBackColor = true;
             // 
             // hbData
             // 
+            resources.ApplyResources(this.hbData, "hbData");
             this.hbData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
             // 
@@ -460,7 +511,6 @@
             this.hbData.BuiltInContextMenu.SelectAllMenuItemImage = global::WinsockPacketEditor.Properties.Resources.SelectAll;
             this.hbData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbData.ColumnInfoVisible = true;
-            resources.ApplyResources(this.hbData, "hbData");
             this.hbData.LineInfoVisible = true;
             this.hbData.Name = "hbData";
             this.hbData.ReadOnly = true;
@@ -472,48 +522,48 @@
             // 
             resources.ApplyResources(this.tlpSocketProxy_Data, "tlpSocketProxy_Data");
             this.tlpSocketProxy_Data.Controls.Add(this.tcSocketProxy_Log, 1, 1);
-            this.tlpSocketProxy_Data.Controls.Add(this.tcSocketProxy_Data, 1, 0);
-            this.tlpSocketProxy_Data.Controls.Add(this.tcSocketProxy, 0, 0);
-            this.tlpSocketProxy_Data.Controls.Add(this.tabControl1, 0, 1);
+            this.tlpSocketProxy_Data.Controls.Add(this.tcProxyData, 1, 0);
+            this.tlpSocketProxy_Data.Controls.Add(this.tcProxyInfo, 0, 0);
+            this.tlpSocketProxy_Data.Controls.Add(this.tcClientInfo, 0, 1);
             this.tlpSocketProxy_Data.Name = "tlpSocketProxy_Data";
             // 
             // tcSocketProxy_Log
             // 
-            this.tcSocketProxy_Log.Controls.Add(this.tpLog);
             resources.ApplyResources(this.tcSocketProxy_Log, "tcSocketProxy_Log");
+            this.tcSocketProxy_Log.Controls.Add(this.tpLog);
             this.tcSocketProxy_Log.Name = "tcSocketProxy_Log";
             this.tcSocketProxy_Log.SelectedIndex = 0;
             // 
             // tpLog
             // 
-            this.tpLog.Controls.Add(this.dgvLogList);
             resources.ApplyResources(this.tpLog, "tpLog");
+            this.tpLog.Controls.Add(this.dgvLogList);
             this.tpLog.Name = "tpLog";
             this.tpLog.UseVisualStyleBackColor = true;
             // 
             // dgvLogList
             // 
+            resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.AllowUserToAddRows = false;
             this.dgvLogList.AllowUserToDeleteRows = false;
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
             this.cLogTime,
             this.cFuncName,
             this.cLogContent});
-            resources.ApplyResources(this.dgvLogList, "dgvLogList");
             this.dgvLogList.MultiSelect = false;
             this.dgvLogList.Name = "dgvLogList";
             this.dgvLogList.ReadOnly = true;
@@ -525,8 +575,8 @@
             // 
             // cLogID
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -536,8 +586,8 @@
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -547,8 +597,8 @@
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -565,18 +615,18 @@
             this.cLogContent.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cLogContent.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // tabControl1
+            // tcClientInfo
             // 
-            this.tabControl1.Controls.Add(this.tpClientList);
-            resources.ApplyResources(this.tabControl1, "tabControl1");
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
+            resources.ApplyResources(this.tcClientInfo, "tcClientInfo");
+            this.tcClientInfo.Controls.Add(this.tpClientList);
+            this.tcClientInfo.Name = "tcClientInfo";
+            this.tcClientInfo.SelectedIndex = 0;
             // 
             // tpClientList
             // 
+            resources.ApplyResources(this.tpClientList, "tpClientList");
             this.tpClientList.BackColor = System.Drawing.SystemColors.Control;
             this.tpClientList.Controls.Add(this.tvProxyInfo);
-            resources.ApplyResources(this.tpClientList, "tpClientList");
             this.tpClientList.Name = "tpClientList";
             // 
             // tvProxyInfo
@@ -630,6 +680,12 @@
             this.tlpProxySet_Auth.PerformLayout();
             this.tpListSet.ResumeLayout(false);
             this.tlpListSet.ResumeLayout(false);
+            this.gbClientList.ResumeLayout(false);
+            this.tlpClientList.ResumeLayout(false);
+            this.tlpClientList.PerformLayout();
+            this.gbProxyList.ResumeLayout(false);
+            this.tlpProxyList.ResumeLayout(false);
+            this.tlpProxyList.PerformLayout();
             this.gbListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.PerformLayout();
@@ -637,16 +693,16 @@
             this.tlpButton.ResumeLayout(false);
             this.tlpButton_Start.ResumeLayout(false);
             this.tpProxyList.ResumeLayout(false);
-            this.tcSocketProxy.ResumeLayout(false);
+            this.tcProxyInfo.ResumeLayout(false);
             this.ssSocketProxy.ResumeLayout(false);
             this.ssSocketProxy.PerformLayout();
-            this.tcSocketProxy_Data.ResumeLayout(false);
+            this.tcProxyData.ResumeLayout(false);
             this.tpData.ResumeLayout(false);
             this.tlpSocketProxy_Data.ResumeLayout(false);
             this.tcSocketProxy_Log.ResumeLayout(false);
             this.tpLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
-            this.tabControl1.ResumeLayout(false);
+            this.tcClientInfo.ResumeLayout(false);
             this.tpClientList.ResumeLayout(false);
             this.tlpSocketProxy.ResumeLayout(false);
             this.tlpSocketProxy.PerformLayout();
@@ -661,9 +717,9 @@
         private System.Windows.Forms.TreeView tvProxyData;
         private System.Windows.Forms.ImageList ilSocketProxy;
         private System.Windows.Forms.TabPage tpProxyList;
-        private System.Windows.Forms.TabControl tcSocketProxy;
+        private System.Windows.Forms.TabControl tcProxyInfo;
         private System.Windows.Forms.StatusStrip ssSocketProxy;
-        private System.Windows.Forms.TabControl tcSocketProxy_Data;
+        private System.Windows.Forms.TabControl tcProxyData;
         private System.Windows.Forms.TabPage tpData;
         private System.Windows.Forms.TableLayoutPanel tlpSocketProxy_Data;
         private System.Windows.Forms.TableLayoutPanel tlpSocketProxy;
@@ -697,7 +753,7 @@
         private System.Windows.Forms.TabControl tcSocketProxy_Log;
         private System.Windows.Forms.TabPage tpLog;
         private System.Windows.Forms.DataGridView dgvLogList;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl tcClientInfo;
         private System.Windows.Forms.TabPage tpClientList;
         private System.Windows.Forms.TreeView tvProxyInfo;
         private System.Windows.Forms.GroupBox gbProxyType;
@@ -713,5 +769,11 @@
         private System.Windows.Forms.Timer tCheckProxyState;
         private System.Windows.Forms.ToolStripStatusLabel tsslSplit1;
         private System.Windows.Forms.ToolStripStatusLabel tsslTotalBytes;
+        private System.Windows.Forms.GroupBox gbProxyList;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyList;
+        private System.Windows.Forms.GroupBox gbClientList;
+        private System.Windows.Forms.TableLayoutPanel tlpClientList;
+        private System.Windows.Forms.CheckBox cbDeleteClosed;
+        private System.Windows.Forms.CheckBox cbNoCache;
     }
 }

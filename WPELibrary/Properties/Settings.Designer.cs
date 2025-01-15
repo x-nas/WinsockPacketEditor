@@ -514,5 +514,29 @@ namespace WPELibrary.Properties {
                 this["HookConfig_HookWS2_RecvFrom"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_ProxyList_NoCache {
+            get {
+                return ((bool)(this["ProxyConfig_ProxyList_NoCache"]));
+            }
+            set {
+                this["ProxyConfig_ProxyList_NoCache"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_ClientList_DelClosed {
+            get {
+                return ((bool)(this["ProxyConfig_ClientList_DelClosed"]));
+            }
+            set {
+                this["ProxyConfig_ClientList_DelClosed"] = value;
+            }
+        }
     }
 }

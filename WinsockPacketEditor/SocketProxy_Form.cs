@@ -153,6 +153,9 @@ namespace WinsockPacketEditor
                 this.txtAuth_UserName.Text = Socket_Cache.SocketProxy.Auth_UserName;
                 this.txtAuth_PassWord.Text = Socket_Cache.SocketProxy.Auth_PassWord;
 
+                this.cbNoCache.Checked = Socket_Cache.SocketProxyList.NoCache;
+                this.cbDeleteClosed.Checked = Socket_Cache.SocketProxyList.DelClosed;
+
                 this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Proxy_AutoRoll;
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Proxy_AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
@@ -176,6 +179,9 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.Enable_Auth = this.cbEnable_Auth.Checked;
                 Socket_Cache.SocketProxy.Auth_UserName = this.txtAuth_UserName.Text.Trim();
                 Socket_Cache.SocketProxy.Auth_PassWord = this.txtAuth_PassWord.Text.Trim();
+
+                Socket_Cache.SocketProxyList.NoCache = this.cbNoCache.Checked;
+                Socket_Cache.SocketProxyList.DelClosed = this.cbDeleteClosed.Checked;
 
                 Socket_Cache.LogList.Proxy_AutoRoll = this.cbLogList_AutoRoll.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
@@ -543,7 +549,7 @@ namespace WinsockPacketEditor
 
                 for (int i = 0; i < Socket_Cache.SocketProxyList.lstProxyInfo.Count; i++)
                 {
-                    //清理 TCP 端口
+                    //清理已关闭的客户端链接（TCP）
                     if (Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientSocket == null)
                     {
                         TreeNode ClientNode = await Socket_Operation.FindNodeAsync(this.tvProxyInfo, Socket_Cache.SocketProxyList.lstProxyInfo[i].ClientAddress);
@@ -554,8 +560,15 @@ namespace WinsockPacketEditor
                             {
                                 tvProxyInfo.BeginInvoke(new MethodInvoker(delegate
                                 {
-                                    ClientNode.ImageIndex = 6;
-                                    ClientNode.SelectedImageIndex = 6;
+                                    if (Socket_Cache.SocketProxyList.DelClosed)
+                                    {
+                                        ClientNode.Remove();
+                                    }
+                                    else
+                                    {
+                                        ClientNode.ImageIndex = 6;
+                                        ClientNode.SelectedImageIndex = 6;
+                                    }                                    
                                 }));
                             }
                         }
@@ -625,20 +638,23 @@ namespace WinsockPacketEditor
                         await Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
                     }
 
-                    TreeNode DataNode = new TreeNode();
-                    switch (spd.DataType)
+                    if (!Socket_Cache.SocketProxyList.NoCache)
                     {
-                        case Socket_Cache.SocketProxy.DataType.Request:
-                            DataNode = RootNode.Nodes[0];
-                            break;
+                        TreeNode DataNode = new TreeNode();
+                        switch (spd.DataType)
+                        {
+                            case Socket_Cache.SocketProxy.DataType.Request:
+                                DataNode = RootNode.Nodes[0];
+                                break;
 
-                        case Socket_Cache.SocketProxy.DataType.Response:
-                            DataNode = RootNode.Nodes[1];
-                            break;
-                    }
+                            case Socket_Cache.SocketProxy.DataType.Response:
+                                DataNode = RootNode.Nodes[1];
+                                break;
+                        }
 
-                    string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
-                    await Socket_Operation.AddTreeNode(this.tvProxyData, DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
+                        string sDataNodeName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_140), spd.Buffer.Length);
+                        await Socket_Operation.AddTreeNode(this.tvProxyData, DataNode.Nodes, sDataNodeName, DataImgIndex, spd.Buffer);
+                    }                    
                 }
             }
             catch (Exception ex)
