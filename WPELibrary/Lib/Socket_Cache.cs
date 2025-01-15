@@ -28,8 +28,12 @@ namespace WPELibrary.Lib
 
         public enum PWType
         {
-            Import,
-            Export,
+            FilterList_Import,
+            FilterList_Export,
+            RobotList_Import,
+            RobotList_Export,
+            SendList_Import,
+            SendList_Export,
         }
 
         public enum ListAction
@@ -3203,7 +3207,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -3211,6 +3215,9 @@ namespace WPELibrary.Lib
                             if (!string.IsNullOrEmpty(FilePath))
                             {
                                 SaveFilterList(FilePath, FilterIndex, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), FilePath);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                             }                            
                         }
                     }
@@ -3366,7 +3373,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -4458,7 +4465,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.RobotList_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -4573,7 +4580,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.RobotList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -4581,6 +4588,9 @@ namespace WPELibrary.Lib
                             if (!string.IsNullOrEmpty(FilePath))
                             {
                                 SaveRobotList(FilePath, RobotIndex, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), FilePath);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                             }
                         }
                     }
@@ -4602,7 +4612,7 @@ namespace WPELibrary.Lib
                         string sPassword = Socket_Cache.RobotList.AESKey;
 
                         if (!string.IsNullOrEmpty(sPassword))
-                        {
+                        {                            
                             Socket_Operation.EncryptXMLFile(FilePath, sPassword);
                         }
                     }
@@ -4870,7 +4880,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -4878,6 +4888,9 @@ namespace WPELibrary.Lib
                             if (!string.IsNullOrEmpty(FilePath))
                             {
                                 SaveSendList(FilePath, SendPacketIndex, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_160), FilePath);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                             }
                         }
                     }
@@ -5007,7 +5020,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Import);
                                 pwForm.ShowDialog();
                             }
 

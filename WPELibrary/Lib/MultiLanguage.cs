@@ -162,13 +162,14 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_150 = { "封包列表保存完毕 {0}", "The Socket List saved {0}" };
         public static string[] MutiLan_151 = { "正在保存封包列表，共计 {0} 条数据", "Saving socket list, with a total of {0} packets data" };
         public static string[] MutiLan_152 = { "{0} - 不支持的命令: {1}", "{0} - Unsupported command: {1}" };
-        //public static string[] MutiLan_153 = { "{0} - 请求数据: {1} 字节", "{0} - Request: {1} bytes" };
-        //public static string[] MutiLan_154 = { "{0} - 响应数据: {1} 字节", "{0} - Response: {1} bytes" };
+        public static string[] MutiLan_153 = { "滤镜列表保存完毕 {0}", "The Filter List saved {0}" };
+        public static string[] MutiLan_154 = { "机器人列表保存完毕 {0}", "The Robot List saved {0}" };
         public static string[] MutiLan_155 = { "正在进行数据比对，请稍候 . . .", "Data comparison is in progress, please wait . . ." };
         public static string[] MutiLan_156 = { "发送", "Send" };
         public static string[] MutiLan_157 = { "接收", "Recv" };
         public static string[] MutiLan_158 = { "发送到", "SendTo" };
         public static string[] MutiLan_159 = { "接收自", "RecvFrom" };
+        public static string[] MutiLan_160 = { "发送列表保存完毕 {0}", "The Send List saved {0}" };
 
         #endregion
 

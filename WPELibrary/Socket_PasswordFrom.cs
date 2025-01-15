@@ -8,7 +8,7 @@ namespace WPELibrary
     public partial class Socket_PasswordFrom : Form
     {
         private string SocketList_Password = string.Empty;
-        Socket_Cache.PWType PWType;
+        private readonly Socket_Cache.PWType PWType;
 
         #region//初始化
 
@@ -30,12 +30,16 @@ namespace WPELibrary
 
                 switch (PWType)
                 {
-                    case Socket_Cache.PWType.Import:
+                    case Socket_Cache.PWType.FilterList_Import:
+                    case Socket_Cache.PWType.RobotList_Import:
+                    case Socket_Cache.PWType.SendList_Import:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_90);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_91);
                         break;
 
-                    case Socket_Cache.PWType.Export:
+                    case Socket_Cache.PWType.FilterList_Export:
+                    case Socket_Cache.PWType.RobotList_Export:
+                    case Socket_Cache.PWType.SendList_Export:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
                         break;
@@ -52,7 +56,23 @@ namespace WPELibrary
 
         private void Socket_PasswordFrom_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Socket_Cache.FilterList.AESKey = SocketList_Password;
+            switch (PWType)
+            {
+                case Socket_Cache.PWType.FilterList_Import:
+                case Socket_Cache.PWType.FilterList_Export:
+                    Socket_Cache.FilterList.AESKey = SocketList_Password;
+                    break;
+
+                case Socket_Cache.PWType.RobotList_Import:
+                case Socket_Cache.PWType.RobotList_Export:
+                    Socket_Cache.RobotList.AESKey = SocketList_Password;
+                    break;
+
+                case Socket_Cache.PWType.SendList_Import:
+                case Socket_Cache.PWType.SendList_Export:
+                    Socket_Cache.SendList.AESKey = SocketList_Password;
+                    break;
+            }
         }
 
         #endregion
