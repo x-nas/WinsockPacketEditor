@@ -117,818 +117,1806 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&gt;&gt;gbProxyType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tcSocketProxySet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="tlProxyTotal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
   </data>
-  <data name="&gt;&gt;ssSocketProxy.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tvProxyInfo.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tcProxyInfo.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Data</value>
-  </data>
-  <data name="tpData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>748, 356</value>
-  </data>
-  <data name="bStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 50</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="bStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tpClientList.Text" xml:space="preserve">
-    <value>[ 客户端列表 ]</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxySet.Name" xml:space="preserve">
-    <value>tcSocketProxySet</value>
-  </data>
-  <data name="tlpSystemProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 75</value>
-  </data>
-  <data name="&gt;&gt;nudProxyPort.Parent" xml:space="preserve">
-    <value>tlpProxySet_Port</value>
+  <data name="tlProxyTotal.Text" xml:space="preserve">
+    <value>代理总数:</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpClientList.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="lAuth_UserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tlpListSet_LogList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tcProxyInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;gbProxyList.Name" xml:space="preserve">
-    <value>gbProxyList</value>
-  </data>
-  <data name="cbEnable_Auth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cFuncName.HeaderText" xml:space="preserve">
-    <value>模块</value>
-  </data>
-  <data name="nudProxyPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;lAuth_UserName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tcSocketProxy_Log.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
-  </data>
-  <data name="tlpListSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbClientList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbProxyList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Port.Name" xml:space="preserve">
-    <value>gbProxySet_Port</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyList.Parent" xml:space="preserve">
-    <value>gbProxyList</value>
-  </data>
-  <data name="&gt;&gt;hbData.Name" xml:space="preserve">
-    <value>hbData</value>
-  </data>
-  <data name="tsslSplit1.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="&gt;&gt;lAuth_PassWord.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbLogList_AutoClear.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="cbEnable_SystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="ssSocketProxy.Text" xml:space="preserve">
-    <value>statusStrip1</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;cLogContent.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpSocketProxy_Data.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="gbProxySet_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Auth.Parent" xml:space="preserve">
-    <value>gbProxySet_Auth</value>
-  </data>
-  <data name="cbEnable_Auth.Text" xml:space="preserve">
-    <value>启用</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Auth.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;txtAuth_UserName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxySet_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="cbEnable_SystemProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 21</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSystemProxy" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcSocketProxySet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,190" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;bCleanUp.Parent" xml:space="preserve">
-    <value>tlpButton</value>
-  </data>
-  <data name="tlpProxySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tcSocketProxySet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_Auth.Parent" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
-  </data>
-  <data name="cbEnable_SOCKS5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 9</value>
-  </data>
-  <data name="tsslTotalBytes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
-  </data>
-  <data name="cbEnable_SystemProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="lAuth_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;txtAuth_PassWord.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpProxyType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbProxySet_Auth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="bCleanUp.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;cbNoCache.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tlpProxyType.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpProxySet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyType" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbProxySet_Port" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbProxySet_Auth" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,120,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="txtAuth_UserName.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>306, 64</value>
-  </data>
-  <data name="bStart.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tlpButton_Start.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tsslSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="&gt;&gt;tpListSet.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>51, 23</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SystemProxy.Name" xml:space="preserve">
-    <value>cbEnable_SystemProxy</value>
-  </data>
-  <data name="&gt;&gt;gbListSet_LogList.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpProxySet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>774, 61</value>
-  </data>
-  <data name="gbProxyList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyType.Parent" xml:space="preserve">
-    <value>gbProxyType</value>
-  </data>
-  <data name="&gt;&gt;ilSocketProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tpProxySet.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tcProxyInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>322, 386</value>
-  </data>
-  <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tpProxySet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="cbDeleteClosed.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;gbSystemProxy.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Parameter</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemProxy.Parent" xml:space="preserve">
-    <value>gbSystemProxy</value>
-  </data>
-  <data name="&gt;&gt;gbProxyList.Parent" xml:space="preserve">
-    <value>tlpListSet</value>
-  </data>
-  <data name="tlpProxySet_Auth.ColumnCount" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_Auth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bStop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;txtAuth_UserName.Parent" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
-  </data>
-  <data name="tvProxyInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Auth.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;cbNoCache.Name" xml:space="preserve">
-    <value>cbNoCache</value>
-  </data>
-  <data name="&gt;&gt;lAuth_PassWord.Name" xml:space="preserve">
-    <value>lAuth_PassWord</value>
-  </data>
-  <data name="gbProxyList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 64</value>
-  </data>
-  <data name="&gt;&gt;tvProxyData.Parent" xml:space="preserve">
-    <value>tpProxyList</value>
-  </data>
-  <data name="gbProxyType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="cFuncName.Width" type="System.Int32, mscorlib">
-    <value>150</value>
-  </data>
-  <data name="gbSystemProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>797, 3</value>
-  </data>
-  <data name="&gt;&gt;hbData.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tvProxyData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
-    <value>165, 3</value>
-  </data>
-  <data name="txtAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>113, 8</value>
-  </data>
-  <data name="gbProxySet_Auth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoRoll.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tvProxyInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SOCKS5.Name" xml:space="preserve">
-    <value>cbEnable_SOCKS5</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxySet.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="gbProxySet_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="gbListSet_LogList.Text" xml:space="preserve">
-    <value>日志列表</value>
-  </data>
-  <data name="hbData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpClientList.Parent" xml:space="preserve">
-    <value>gbClientList</value>
-  </data>
-  <data name="tlpProxyType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Parameter.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxyType.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;bStop.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tpListSet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoRoll.Parent" xml:space="preserve">
-    <value>tlpListSet_LogList</value>
-  </data>
-  <data name="hbData.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;nudProxyPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tpLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>748, 220</value>
-  </data>
-  <data name="tlpSystemProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbEnable_SystemProxy" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpSocketProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpProxyList.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpButton_Start.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpClientList.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpSystemProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpProxyList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>222, 42</value>
-  </data>
-  <data name="&gt;&gt;gbListSet_LogList.Parent" xml:space="preserve">
-    <value>tlpListSet</value>
-  </data>
-  <data name="tvProxyInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>308, 208</value>
-  </data>
-  <data name="tlpProxyType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 39</value>
-  </data>
-  <data name="tlpProxyList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.Name" xml:space="preserve">
-    <value>dgvLogList</value>
-  </data>
-  <data name="bStart.Text" xml:space="preserve">
-    <value> 开 始 (&amp;K)</value>
-  </data>
-  <data name="tpClientList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>314, 214</value>
-  </data>
-  <data name="&gt;&gt;gbProxyType.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet_LogList.Parent" xml:space="preserve">
-    <value>gbListSet_LogList</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Data.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpProxySet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>780, 67</value>
-  </data>
-  <data name="&gt;&gt;nudLogList_AutoClearValue.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet_LogList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bStop.Parent" xml:space="preserve">
-    <value>tlpButton_Start</value>
-  </data>
-  <data name="&gt;&gt;tcProxyInfo.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="gbListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>471, 3</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 761</value>
-  </data>
-  <data name="tlpProxySet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSocketProxy_Data.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <data name="tlpSocketProxy_Parameter.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="nudProxyPort.TabIndex" type="System.Int32, mscorlib">
+  <data name="tlpSystemProxy.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="tlpProxySet_Auth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbEnable_SystemProxy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cbEnable_SystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpProxySet_Port.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tpProxyList.Name" xml:space="preserve">
-    <value>tpProxyList</value>
-  </data>
-  <data name="&gt;&gt;tcClientInfo.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tlpSystemProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpProxyList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="txtAuth_PassWord.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 100</value>
-  </data>
-  <data name="gbProxyType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="&gt;&gt;cbDeleteClosed.Parent" xml:space="preserve">
-    <value>tlpClientList</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="lAuth_UserName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbEnable_SOCKS5.Text" xml:space="preserve">
-    <value>SOCKS 5</value>
-  </data>
-  <data name="tlpSocketProxy_Data.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tcSocketProxy_Log" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcProxyData" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcProxyInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tcClientInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,70" /&gt;&lt;Rows Styles="Percent,100,Absolute,250" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Parameter</value>
-  </data>
-  <data name="tcProxyInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Port.Name" xml:space="preserve">
-    <value>tlpProxySet_Port</value>
-  </data>
-  <data name="cbEnable_SOCKS5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 21</value>
-  </data>
-  <data name="cbLogList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoClear.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpProxySet.Name" xml:space="preserve">
-    <value>tpProxySet</value>
-  </data>
-  <data name="tlpSocketProxy_Data.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 100</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyType.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bStop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbLogList_AutoRoll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbEnable_SystemProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
-  </data>
-  <data name="tlpProxySet_Port.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudProxyPort" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;hbData.Type" xml:space="preserve">
-    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="hbData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
-    <value>粘贴</value>
-  </data>
-  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tpListSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tlpSocketProxy_Data.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 636</value>
-  </data>
-  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>894, 0</value>
-  </data>
-  <data name="gbProxySet_Port.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 58</value>
-  </data>
-  <data name="tpClientList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tlpProxySet_Auth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet.Name" xml:space="preserve">
-    <value>tlpProxySet</value>
-  </data>
-  <data name="hbData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
-    <value>剪切</value>
-  </data>
-  <data name="&gt;&gt;tpData.Name" xml:space="preserve">
-    <value>tpData</value>
-  </data>
-  <data name="&gt;&gt;tlpButton_Start.Parent" xml:space="preserve">
-    <value>tlpButton</value>
-  </data>
-  <data name="gbProxySet_Auth.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="gbProxyType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet.Parent" xml:space="preserve">
-    <value>tpProxySet</value>
-  </data>
-  <data name="&gt;&gt;tcClientInfo.Name" xml:space="preserve">
-    <value>tcClientInfo</value>
-  </data>
-  <data name="tpProxyList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>314, 356</value>
-  </data>
-  <data name="&gt;&gt;cLogContent.Name" xml:space="preserve">
-    <value>cLogContent</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxySet.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Parameter</value>
-  </data>
-  <data name="lAuth_PassWord.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoClear.Name" xml:space="preserve">
-    <value>cbLogList_AutoClear</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpClientList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tlpListSet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tpClientList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;bStart.Name" xml:space="preserve">
-    <value>bStart</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Auth.Name" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
-  </data>
-  <data name="nudProxyPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="hbData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
-    <value>全选</value>
-  </data>
-  <data name="&gt;&gt;gbProxyList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbProxySet_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>123, 3</value>
-  </data>
-  <data name="&gt;&gt;gbProxyType.Parent" xml:space="preserve">
-    <value>tlpProxySet</value>
-  </data>
-  <data name="cbNoCache.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;ssSocketProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bStart.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpButton_Start.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 10</value>
-  </data>
-  <data name="gbProxySet_Auth.Text" xml:space="preserve">
-    <value>身份认证</value>
-  </data>
-  <data name="lAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 8</value>
-  </data>
-  <data name="tlpButton_Start.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
-    <value>tlpButton</value>
-  </data>
-  <data name="tvProxyInfo.SelectedImageIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tpProxyList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Auth.Name" xml:space="preserve">
-    <value>gbProxySet_Auth</value>
-  </data>
-  <data name="tlpClientList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbDeleteClosed" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tvProxyData.Name" xml:space="preserve">
-    <value>tvProxyData</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Port.Parent" xml:space="preserve">
-    <value>gbProxySet_Port</value>
-  </data>
-  <data name="txtAuth_UserName.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;bCleanUp.Name" xml:space="preserve">
-    <value>bCleanUp</value>
-  </data>
-  <data name="txtAuth_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tpProxySet.Parent" xml:space="preserve">
-    <value>tcSocketProxySet</value>
-  </data>
-  <data name="tlpClientList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>300, 42</value>
-  </data>
-  <data name="cbNoCache.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="ssSocketProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tlpListSet_LogList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLogList_AutoClearValue" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoClear" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpButton_Start.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 90</value>
-  </data>
-  <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
-    <value>自动滚动</value>
   </data>
   <data name="cbEnable_SystemProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>18, 27</value>
   </data>
-  <data name="tlpProxySet_Auth.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbEnable_SystemProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 21</value>
+  </data>
+  <data name="cbEnable_SystemProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbEnable_SystemProxy.Text" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SystemProxy.Name" xml:space="preserve">
+    <value>cbEnable_SystemProxy</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SystemProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SystemProxy.Parent" xml:space="preserve">
+    <value>tlpSystemProxy</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SystemProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSystemProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpSystemProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSystemProxy.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpSystemProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>88, 75</value>
+  </data>
+  <data name="tlpSystemProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemProxy.Name" xml:space="preserve">
+    <value>tlpSystemProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemProxy.Parent" xml:space="preserve">
+    <value>gbSystemProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpSystemProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSystemProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbEnable_SystemProxy" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbSystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbSystemProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>797, 3</value>
+  </data>
+  <data name="gbSystemProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbSystemProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 97</value>
+  </data>
+  <data name="gbSystemProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="gbSystemProxy.Text" xml:space="preserve">
+    <value>[ 系统代理 ]</value>
+  </data>
+  <data name="&gt;&gt;gbSystemProxy.Name" xml:space="preserve">
+    <value>gbSystemProxy</value>
+  </data>
+  <data name="&gt;&gt;gbSystemProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbSystemProxy.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Parameter</value>
+  </data>
+  <data name="&gt;&gt;gbSystemProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxySet.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="&gt;&gt;cbEnable_SOCKS5.Parent" xml:space="preserve">
+  <data name="tlpProxyIP.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cbbProxyIP_Appoint.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbbProxyIP_Appoint.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 10</value>
+  </data>
+  <data name="cbbProxyIP_Appoint.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 25</value>
+  </data>
+  <data name="cbbProxyIP_Appoint.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyIP_Appoint.Name" xml:space="preserve">
+    <value>cbbProxyIP_Appoint</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyIP_Appoint.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyIP_Appoint.Parent" xml:space="preserve">
+    <value>tlpProxyIP</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyIP_Appoint.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbProxyIP_Auto.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbProxyIP_Auto.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbProxyIP_Auto.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbProxyIP_Auto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 10</value>
+  </data>
+  <data name="cbProxyIP_Auto.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 25</value>
+  </data>
+  <data name="cbProxyIP_Auto.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="cbProxyIP_Auto.Text" xml:space="preserve">
+    <value>自动检测</value>
+  </data>
+  <data name="&gt;&gt;cbProxyIP_Auto.Name" xml:space="preserve">
+    <value>cbProxyIP_Auto</value>
+  </data>
+  <data name="&gt;&gt;cbProxyIP_Auto.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbProxyIP_Auto.Parent" xml:space="preserve">
+    <value>tlpProxyIP</value>
+  </data>
+  <data name="&gt;&gt;cbProxyIP_Auto.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpProxyIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxyIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpProxyIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpProxyIP.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpProxyIP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 45</value>
+  </data>
+  <data name="tlpProxyIP.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyIP.Name" xml:space="preserve">
+    <value>tlpProxyIP</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyIP.Parent" xml:space="preserve">
+    <value>gbProxyIP</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyIP.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyIP.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbProxyIP_Appoint" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbProxyIP_Auto" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,150,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbProxyIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbProxyIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbProxyIP.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbProxyIP.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbProxyIP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 64</value>
+  </data>
+  <data name="gbProxyIP.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="gbProxyIP.Text" xml:space="preserve">
+    <value>代理 IP 地址</value>
+  </data>
+  <data name="&gt;&gt;gbProxyIP.Name" xml:space="preserve">
+    <value>gbProxyIP</value>
+  </data>
+  <data name="&gt;&gt;gbProxyIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbProxyIP.Parent" xml:space="preserve">
+    <value>tlpProxySet</value>
+  </data>
+  <data name="&gt;&gt;gbProxyIP.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyType.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nudProxyPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudProxyPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>128, 11</value>
+  </data>
+  <data name="nudProxyPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudProxyPort.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nudProxyPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudProxyPort.Name" xml:space="preserve">
+    <value>nudProxyPort</value>
+  </data>
+  <data name="&gt;&gt;nudProxyPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudProxyPort.Parent" xml:space="preserve">
     <value>tlpProxyType</value>
   </data>
   <data name="&gt;&gt;nudProxyPort.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;nudLogList_AutoClearValue.Parent" xml:space="preserve">
-    <value>tlpListSet_LogList</value>
+  <data name="cbEnable_SOCKS5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="&gt;&gt;tlpSystemProxy.Name" xml:space="preserve">
-    <value>tlpSystemProxy</value>
+  <data name="cbEnable_SOCKS5.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="&gt;&gt;cFuncName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cbEnable_SOCKS5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 11</value>
+  </data>
+  <data name="cbEnable_SOCKS5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 23</value>
+  </data>
+  <data name="cbEnable_SOCKS5.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbEnable_SOCKS5.Text" xml:space="preserve">
+    <value>SOCKS 5</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SOCKS5.Name" xml:space="preserve">
+    <value>cbEnable_SOCKS5</value>
   </data>
   <data name="&gt;&gt;cbEnable_SOCKS5.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="hbData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="&gt;&gt;cbEnable_SOCKS5.Parent" xml:space="preserve">
+    <value>tlpProxyType</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_SOCKS5.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lSOCKS_Port.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSOCKS_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;gbProxySet_Auth.Parent" xml:space="preserve">
-    <value>tlpProxySet</value>
+  <data name="lSOCKS_Port.Location" type="System.Drawing.Point, System.Drawing">
+    <value>87, 11</value>
   </data>
-  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyList.Name" xml:space="preserve">
-    <value>tlpProxyList</value>
-  </data>
-  <data name="&gt;&gt;cLogID.Name" xml:space="preserve">
-    <value>cLogID</value>
-  </data>
-  <data name="hbData.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
-  <data name="cLogID.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <data name="&gt;&gt;tsslSplit1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tpProxyList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lSOCKS_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="tlpListSet_LogList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lSOCKS_Port.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 23</value>
+  </data>
+  <data name="lSOCKS_Port.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lSOCKS_Port.Text" xml:space="preserve">
+    <value>端口:</value>
+  </data>
+  <data name="lSOCKS_Port.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lSOCKS_Port.Name" xml:space="preserve">
+    <value>lSOCKS_Port</value>
+  </data>
+  <data name="&gt;&gt;lSOCKS_Port.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSOCKS_Port.Parent" xml:space="preserve">
+    <value>tlpProxyType</value>
+  </data>
+  <data name="&gt;&gt;lSOCKS_Port.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpProxyType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxyType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpProxyType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="lAuth_PassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="tlpProxyType.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="tlpSocketProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpSocketProxy_Data" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpSocketProxy_Parameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssSocketProxy" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,100,Percent,100,AutoSize,0,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="tlpProxyType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 45</value>
   </data>
-  <data name="tlpSocketProxy_Data.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tlpProxyType.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyType.Name" xml:space="preserve">
+    <value>tlpProxyType</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyType.Parent" xml:space="preserve">
+    <value>gbProxyType</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyType.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudProxyPort" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_SOCKS5" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lSOCKS_Port" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbProxyType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbProxyType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>393, 3</value>
+  </data>
+  <data name="gbProxyType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbProxyType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbProxyType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 64</value>
+  </data>
+  <data name="gbProxyType.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="gbProxyType.Text" xml:space="preserve">
+    <value>代理类型</value>
+  </data>
+  <data name="&gt;&gt;gbProxyType.Name" xml:space="preserve">
+    <value>gbProxyType</value>
+  </data>
+  <data name="&gt;&gt;gbProxyType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbProxyType.Parent" xml:space="preserve">
+    <value>tlpProxySet</value>
+  </data>
+  <data name="&gt;&gt;gbProxyType.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpProxySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxySet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpProxySet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpProxySet.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpProxySet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tlpProxySet.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpProxySet.Name" xml:space="preserve">
+    <value>tlpProxySet</value>
+  </data>
+  <data name="&gt;&gt;tlpProxySet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxySet.Parent" xml:space="preserve">
+    <value>tpProxySet</value>
+  </data>
+  <data name="&gt;&gt;tlpProxySet.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxySet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyIP" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbProxyType" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpProxySet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpProxySet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tpProxySet.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpProxySet.Text" xml:space="preserve">
+    <value>[ 代理设置 ]</value>
+  </data>
+  <data name="&gt;&gt;tpProxySet.Name" xml:space="preserve">
+    <value>tpProxySet</value>
+  </data>
+  <data name="&gt;&gt;tpProxySet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpProxySet.Parent" xml:space="preserve">
+    <value>tcSocketProxySet</value>
+  </data>
+  <data name="&gt;&gt;tpProxySet.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAuthSet.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpAuthSet_Auth.ColumnCount" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
   <data name="txtAuth_PassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 100</value>
+  <data name="txtAuth_PassWord.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
-  <data name="&gt;&gt;tlpProxyList.ZOrder" xml:space="preserve">
+  <data name="txtAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>328, 11</value>
+  </data>
+  <data name="txtAuth_PassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtAuth_PassWord.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_PassWord.Name" xml:space="preserve">
+    <value>txtAuth_PassWord</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_PassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_PassWord.Parent" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_PassWord.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpProxyType.ColumnCount" type="System.Int32, mscorlib">
+  <data name="lAuth_PassWord.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lAuth_PassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lAuth_PassWord.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>287, 11</value>
+  </data>
+  <data name="lAuth_PassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lAuth_PassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 23</value>
+  </data>
+  <data name="lAuth_PassWord.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="lAuth_PassWord.Text" xml:space="preserve">
+    <value>密码:</value>
+  </data>
+  <data name="lAuth_PassWord.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lAuth_PassWord.Name" xml:space="preserve">
+    <value>lAuth_PassWord</value>
+  </data>
+  <data name="&gt;&gt;lAuth_PassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lAuth_PassWord.Parent" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;lAuth_PassWord.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cbEnable_Auth.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbEnable_Auth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbEnable_Auth.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbEnable_Auth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 11</value>
+  </data>
+  <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cbEnable_Auth.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbEnable_Auth.Text" xml:space="preserve">
+    <value>启用认证</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_Auth.Name" xml:space="preserve">
+    <value>cbEnable_Auth</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_Auth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_Auth.Parent" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_Auth.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lAuth_UserName.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lAuth_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lAuth_UserName.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 11</value>
+  </data>
+  <data name="lAuth_UserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lAuth_UserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 23</value>
+  </data>
+  <data name="lAuth_UserName.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="lAuth_UserName.Text" xml:space="preserve">
+    <value>用户名:</value>
+  </data>
+  <data name="lAuth_UserName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lAuth_UserName.Name" xml:space="preserve">
+    <value>lAuth_UserName</value>
+  </data>
+  <data name="&gt;&gt;lAuth_UserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lAuth_UserName.Parent" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;lAuth_UserName.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="txtAuth_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtAuth_UserName.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="txtAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>137, 11</value>
+  </data>
+  <data name="txtAuth_UserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtAuth_UserName.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
   <data name="&gt;&gt;txtAuth_UserName.Name" xml:space="preserve">
     <value>txtAuth_UserName</value>
   </data>
-  <data name="tcProxyData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="&gt;&gt;txtAuth_UserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_UserName.Parent" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;txtAuth_UserName.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tlpAuthSet_Auth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="tlpAuthSet_Auth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpAuthSet_Auth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAuthSet_Auth.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpAuthSet_Auth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 45</value>
+  </data>
+  <data name="tlpAuthSet_Auth.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet_Auth.Name" xml:space="preserve">
+    <value>tlpAuthSet_Auth</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet_Auth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet_Auth.Parent" xml:space="preserve">
+    <value>gbAuthSet</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet_Auth.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAuthSet_Auth.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtAuth_PassWord" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="lAuth_PassWord" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_Auth" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lAuth_UserName" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtAuth_UserName" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,150,AutoSize,0,Absolute,150,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbAuthSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbAuthSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbAuthSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbAuthSet.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>774, 64</value>
+  </data>
+  <data name="gbAuthSet.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbAuthSet.Text" xml:space="preserve">
+    <value>身份认证</value>
+  </data>
+  <data name="&gt;&gt;gbAuthSet.Name" xml:space="preserve">
+    <value>gbAuthSet</value>
+  </data>
+  <data name="&gt;&gt;gbAuthSet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbAuthSet.Parent" xml:space="preserve">
+    <value>tlpAuthSet</value>
+  </data>
+  <data name="&gt;&gt;gbAuthSet.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAuthSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpAuthSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpAuthSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAuthSet.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tlpAuthSet.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet.Name" xml:space="preserve">
+    <value>tlpAuthSet</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet.Parent" xml:space="preserve">
+    <value>tpAuthSet</value>
+  </data>
+  <data name="&gt;&gt;tlpAuthSet.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAuthSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbAuthSet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpAuthSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tpAuthSet.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tpAuthSet.Text" xml:space="preserve">
+    <value>[ 认证设置 ]</value>
+  </data>
+  <data name="&gt;&gt;tpAuthSet.Name" xml:space="preserve">
+    <value>tpAuthSet</value>
+  </data>
+  <data name="&gt;&gt;tpAuthSet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpAuthSet.Parent" xml:space="preserve">
+    <value>tcSocketProxySet</value>
+  </data>
+  <data name="&gt;&gt;tpAuthSet.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpListSet.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpClientList.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbDeleteClosed.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="cbDeleteClosed.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="gbProxyType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 58</value>
+  <data name="cbDeleteClosed.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="nudLogList_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
-    <value>56</value>
+  <data name="cbDeleteClosed.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
   </data>
-  <data name="&gt;&gt;tlpSystemProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cbDeleteClosed.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 21</value>
   </data>
-  <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>780, 67</value>
+  <data name="cbDeleteClosed.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;tcProxyData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cbDeleteClosed.Text" xml:space="preserve">
+    <value>清理关闭的链接</value>
+  </data>
+  <data name="&gt;&gt;cbDeleteClosed.Name" xml:space="preserve">
+    <value>cbDeleteClosed</value>
+  </data>
+  <data name="&gt;&gt;cbDeleteClosed.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbDeleteClosed.Parent" xml:space="preserve">
+    <value>tlpClientList</value>
+  </data>
+  <data name="&gt;&gt;cbDeleteClosed.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="tlpClientList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;tlpProxyType.Name" xml:space="preserve">
-    <value>tlpProxyType</value>
+  <data name="tlpClientList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpClientList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpClientList.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpClientList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 45</value>
+  </data>
+  <data name="tlpClientList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpClientList.Name" xml:space="preserve">
+    <value>tlpClientList</value>
+  </data>
+  <data name="&gt;&gt;tlpClientList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpClientList.Parent" xml:space="preserve">
+    <value>gbClientList</value>
+  </data>
+  <data name="&gt;&gt;tlpClientList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpClientList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbDeleteClosed" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbClientList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbClientList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>237, 3</value>
+  </data>
+  <data name="gbClientList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbClientList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbClientList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 64</value>
+  </data>
+  <data name="gbClientList.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="gbClientList.Text" xml:space="preserve">
+    <value>客户端列表</value>
+  </data>
+  <data name="&gt;&gt;gbClientList.Name" xml:space="preserve">
+    <value>gbClientList</value>
+  </data>
+  <data name="&gt;&gt;gbClientList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbClientList.Parent" xml:space="preserve">
+    <value>tlpListSet</value>
+  </data>
+  <data name="&gt;&gt;gbClientList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyList.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbNoRecordData.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbNoRecordData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbNoRecordData.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbNoRecordData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
+  </data>
+  <data name="cbNoRecordData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>87, 21</value>
+  </data>
+  <data name="cbNoRecordData.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbNoRecordData.Text" xml:space="preserve">
+    <value>不记录数据</value>
+  </data>
+  <data name="&gt;&gt;cbNoRecordData.Name" xml:space="preserve">
+    <value>cbNoRecordData</value>
+  </data>
+  <data name="&gt;&gt;cbNoRecordData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbNoRecordData.Parent" xml:space="preserve">
+    <value>tlpProxyList</value>
+  </data>
+  <data name="&gt;&gt;cbNoRecordData.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxyList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpProxyList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpProxyList.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpProxyList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 45</value>
+  </data>
+  <data name="tlpProxyList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyList.Name" xml:space="preserve">
+    <value>tlpProxyList</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyList.Parent" xml:space="preserve">
+    <value>gbProxyList</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbNoRecordData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbProxyList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbProxyList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbProxyList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbProxyList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbProxyList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 64</value>
+  </data>
+  <data name="gbProxyList.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="gbProxyList.Text" xml:space="preserve">
+    <value>代理列表</value>
+  </data>
+  <data name="&gt;&gt;gbProxyList.Name" xml:space="preserve">
+    <value>gbProxyList</value>
+  </data>
+  <data name="&gt;&gt;gbProxyList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbProxyList.Parent" xml:space="preserve">
+    <value>tlpListSet</value>
+  </data>
+  <data name="&gt;&gt;gbProxyList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpListSet_LogList.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>165, 11</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 23</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="nudLogList_AutoClearValue.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudLogList_AutoClearValue.Name" xml:space="preserve">
+    <value>nudLogList_AutoClearValue</value>
+  </data>
+  <data name="&gt;&gt;nudLogList_AutoClearValue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudLogList_AutoClearValue.Parent" xml:space="preserve">
+    <value>tlpListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;nudLogList_AutoClearValue.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbLogList_AutoClear.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbLogList_AutoClear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbLogList_AutoClear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbLogList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 11</value>
+  </data>
+  <data name="cbLogList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cbLogList_AutoClear.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbLogList_AutoClear.Text" xml:space="preserve">
+    <value>自动清理</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoClear.Name" xml:space="preserve">
+    <value>cbLogList_AutoClear</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoClear.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoClear.Parent" xml:space="preserve">
+    <value>tlpListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoClear.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cbLogList_AutoRoll.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbLogList_AutoRoll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbLogList_AutoRoll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbLogList_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 11</value>
+  </data>
+  <data name="cbLogList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cbLogList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
+    <value>自动滚动</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoRoll.Name" xml:space="preserve">
+    <value>cbLogList_AutoRoll</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoRoll.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoRoll.Parent" xml:space="preserve">
+    <value>tlpListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;cbLogList_AutoRoll.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpListSet_LogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpListSet_LogList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpListSet_LogList.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 45</value>
+  </data>
+  <data name="tlpListSet_LogList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_LogList.Name" xml:space="preserve">
+    <value>tlpListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_LogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_LogList.Parent" xml:space="preserve">
+    <value>gbListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet_LogList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpListSet_LogList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLogList_AutoClearValue" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoClear" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbLogList_AutoRoll" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbListSet_LogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>471, 3</value>
+  </data>
+  <data name="gbListSet_LogList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbListSet_LogList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>306, 64</value>
+  </data>
+  <data name="gbListSet_LogList.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbListSet_LogList.Text" xml:space="preserve">
+    <value>日志列表</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_LogList.Name" xml:space="preserve">
+    <value>gbListSet_LogList</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_LogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_LogList.Parent" xml:space="preserve">
+    <value>tlpListSet</value>
+  </data>
+  <data name="&gt;&gt;gbListSet_LogList.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpListSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpListSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpListSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpListSet.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tlpListSet.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet.Name" xml:space="preserve">
+    <value>tlpListSet</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet.Parent" xml:space="preserve">
+    <value>tpListSet</value>
+  </data>
+  <data name="&gt;&gt;tlpListSet.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpListSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbClientList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbProxyList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,30,Percent,40" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpListSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpListSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tpListSet.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tpListSet.Text" xml:space="preserve">
+    <value>[ 列表设置 ]</value>
+  </data>
+  <data name="&gt;&gt;tpListSet.Name" xml:space="preserve">
+    <value>tpListSet</value>
+  </data>
+  <data name="&gt;&gt;tpListSet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpListSet.Parent" xml:space="preserve">
+    <value>tcSocketProxySet</value>
+  </data>
+  <data name="&gt;&gt;tpListSet.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tcSocketProxySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcSocketProxySet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tcSocketProxySet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="tcSocketProxySet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>788, 97</value>
+  </data>
+  <data name="tcSocketProxySet.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxySet.Name" xml:space="preserve">
+    <value>tcSocketProxySet</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxySet.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxySet.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Parameter</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxySet.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bCleanUp.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bCleanUp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bCleanUp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 13</value>
+  </data>
+  <data name="bCleanUp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="bCleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 87</value>
+  </data>
+  <data name="bCleanUp.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bCleanUp.Text" xml:space="preserve">
+    <value>清 空
+数 据
+(&amp;C)</value>
+  </data>
+  <data name="&gt;&gt;bCleanUp.Name" xml:space="preserve">
+    <value>bCleanUp</value>
+  </data>
+  <data name="&gt;&gt;bCleanUp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bCleanUp.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bCleanUp.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpButton_Start.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bStop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bStop.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="bStop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bStop.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 50</value>
+  </data>
+  <data name="bStop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 40</value>
+  </data>
+  <data name="bStop.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bStop.Text" xml:space="preserve">
+    <value> 停 止 (&amp;T)</value>
+  </data>
+  <data name="bStop.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="bStop.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
+    <value>ImageBeforeText</value>
+  </data>
+  <data name="&gt;&gt;bStop.Name" xml:space="preserve">
+    <value>bStop</value>
+  </data>
+  <data name="&gt;&gt;bStop.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bStop.Parent" xml:space="preserve">
+    <value>tlpButton_Start</value>
+  </data>
+  <data name="&gt;&gt;bStop.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bStart.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bStart.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 0</value>
+  </data>
+  <data name="bStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bStart.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 40</value>
+  </data>
+  <data name="bStart.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="bStart.Text" xml:space="preserve">
+    <value> 开 始 (&amp;K)</value>
+  </data>
+  <data name="bStart.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleRight</value>
+  </data>
+  <data name="bStart.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
+    <value>ImageBeforeText</value>
+  </data>
+  <data name="&gt;&gt;bStart.Name" xml:space="preserve">
+    <value>bStart</value>
+  </data>
+  <data name="&gt;&gt;bStart.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bStart.Parent" xml:space="preserve">
+    <value>tlpButton_Start</value>
+  </data>
+  <data name="&gt;&gt;bStart.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton_Start.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton_Start.Location" type="System.Drawing.Point, System.Drawing">
+    <value>65, 10</value>
+  </data>
+  <data name="tlpButton_Start.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton_Start.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpButton_Start.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 90</value>
+  </data>
+  <data name="tlpButton_Start.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpButton_Start.Name" xml:space="preserve">
+    <value>tlpButton_Start</value>
+  </data>
+  <data name="&gt;&gt;tlpButton_Start.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton_Start.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton_Start.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton_Start.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bStop" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bStart" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,10" /&gt;&lt;Rows Styles="Absolute,40,Percent,100,Absolute,40" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>894, 0</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>190, 100</value>
+  </data>
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Parameter</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bCleanUp" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton_Start" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,5,Absolute,60,Percent,100" /&gt;&lt;Rows Styles="Absolute,10,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 100</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Parameter.Name" xml:space="preserve">
+    <value>tlpSocketProxy_Parameter</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Parameter.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Parameter.Parent" xml:space="preserve">
+    <value>tlpSocketProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Parameter.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpSocketProxy_Parameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSystemProxy" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcSocketProxySet" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,190" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tvProxyData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tvProxyData.ImageIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <metadata name="ilSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="ilSocketProxy.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
+        EQAAAk1TRnQBSQFMAgEBCQEAASwBAgEsAQIBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
+        AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
+        AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
+        AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
+        AZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMCAAHM
+        AWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQABZgEA
+        ATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8BAAEz
+        AWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQABMwGZ
+        AWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQABMwLM
+        AQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQABMwEA
+        AWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMBmQEA
+        AWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQABZgGZ
+        AWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYBzAH/
+        AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMBmQEA
+        AZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgABmQFm
+        ATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwBAAKZ
+        Af8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB/wEz
+        AQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQABmQEA
+        AcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYCAAHM
+        AWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYBAAHM
+        ApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8CAAHM
+        Af8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQABmQEA
+        AcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMBAAHM
+        AmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB/wGZ
+        AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
+        AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
+        AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
+        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD/wEAAfMO8QHzMAAB8A7x
+        AbwwAAHwDP8C9AHwMAAB8A7/AfAwAAHwA/8B8wEHAfMB/wH0AbwBBwHwA/8B8DAAAfAD/wEHAe8B8wL/
+        AfMBBwHvA/8B8DAAAbwD/wHvAQcB9AP/AbwB7wP/AbwwAAG8Av8B8QHtAbwE/wHwAQcB9AL/AbwwAAG8
+        Av8B8AHvAfEE/wHzAbwB8wL/AbwwAAG8A/8B7wEHBP8B8AHvAv8B9AG8MAABvAP/ArwB9AL/AfQB8AG8
+        Af8C9AG8MAABvAT/AfQD/wHyAvQC8wHyAbwwAAG8Cv8B8wPwAfEwAAG8C/8B9AHzAfQB/zAAAbwL/wHz
+        AfQC/zAAAfAK8QHzBP8wAAH0DbwmAAH0AvMB9APzAfQB/wMAAf8J7wIHAu8B/wUAAfQBCAFyAkkBcgEI
+        AfQIAAH/ARoBbwJMAW8BGgH/BgAB/wH0AbQBswO0ArMBtAHyAf8DAAEHAvcEkgL3Ae8B9wHvAfcB8AH/
+        AwAB8gFPAVAEmAJPAfEGAAHzAm8BkwKUARYCTAEbBQAB8gG0AbMB1AHVAdQCswHUArQB8QH/AgAB8gHv
+        AfcBkgXtA/cC/wHxAgAB8gFPAXgBCAGYApcBmAEIAZcBSQHxBAAB8wFMARYBlAEWAm8BFgGUAW8BTAEb
+        AwAB9AO0AdsBtATUAdUCtAG8Af8CAAH/AfIC7APtAesBkgG8AfAC8gH/AQAB/wFQAXgBCAaXAQgBlwFP
+        AfQCAAH/AW8BFgGaAm8ClAIXAZQCbwH/AQAB/wG7AbQB2wEZAQkBugTUAdwB2wG0AQkB/wEAAfQB8QEH
+        AusB7ALrAW0B7AH3AfAB/wMAAQgBVgEIApcBeAEbAZgDlwEIAU8BCAIAARoBbwGaA+MC/wJvARcBlAFv
+        ARoBAAHyAbMB1AG0AhkE2wHVAdsB1QHUAbMB8wEAAbwC8Am8AfEDAAGXApgBlwF4A/8BmAKXApgBcgIA
+        ARYClAPjApQDbwEWAZMBbwEAAbsBswHUAdUB3AG7BLoBtAG6AbQB1AGzAbsBAAG8Cq4BvAHxAwABVQGY
+        AZcBeAL/AfQC/wGYApcBmAFPAgAB4wGaAXUD4wG9Af8C4wJvAZQBTAEAAbMC1QHbA9wC2wHcARkB4gHc
+        A7MBAAHwAa4IZgGuAbwB8gMAAVYBCAF4AZcBCAHxAZcBCAL/AZgBlwGYAU8CAAHjAZoBdQPjAv8E4wGU
+        AUwBAAGzAdoD3AXbAQkB4gEJAdsB1AGzAQAB8QHtAuoGZgHsAbwB8wMAAZcCmAWXAQgB/wHzApgBcgIA
+        A5QBdQLjAv8D4wKUAW8BAAG0A9sB3AXbAdwB2wG6AbMB1QG0AQAB8gH3Am0B6gVmAe0BvAH0AwABCAGX
+        AQgGlwEIAZcBCAFQAQgCAAEaARYBmgN1Av8D4wGaAW8BGgEAAQkBugLbAtwG2wHaAdQBtAEJAQAB8gH3
+        A64BbQESA2YB7QG8Af8DAAH/AZcBeAEIBpcBCAF4AVAB/wIAAfYBdQGUAZoCdQL/AuMBmgEWAW8B/wEA
+        AfQBuwPbAdwD2wHcAtsB2gHVAbsB/wEAAfIB9wLrA64BbQESAWYB7QEHAf8EAAHzAVYBeAEIAZgCeAGY
+        AQgBeAFPARsEAAHzAXUBlAGaAZQCdQGUAZoBdQFvAfMCAAH/AfIBugLbBdwD2wG0AQkB/wEAAfIB7wPs
+        Aa4D6wGuAfcBvAH/BQAB8wKXBJgBlwFWARsGAAHzAZQBFgGUApoBlAEWAXUB8wQAAf8BCQLbAdwBGQHi
+        AQkC2wG6AbQBuwH/AgAB8gEHBO0E7AHvAbwHAAH/AQgBeAJWAZcBCAH/CAAB/wEaAZQCdQGUARoB/wYA
+        Af8BCQG7AdwBCQHcA9sBugG7Af8DAAH/B/ID8QHyJgAB/wH0ARkBugK5AdsBGQHzAfQB/wUAA/8B9AHz
+        AfIB8wL0Af8DAAH/D/AFAAa1Af8LAAHzAQcB/wgAAf8C9AG8AfAB9AH/AfQB8AG8AvQCAAH/AfAN9AHw
+        BQABrQTUAbMB/woAAfQClwEIAf8GAAH/AfQB8wHwB/8B8AHzAfQBAAH/AfEN/wHxBAAB/wGtBNQBswH0
+        CQAB/wSXAQgB/wUAAvQB8An/AfAB9AL/AfIN/wHxBAAB/wGtBdQB9AgAAf8BnQOXAXcBlwH0BQAB/wHw
+        AgcB/wG8AfMB8QHwAfQDBwHxAfQB/wHyDf8B8QUAAa0F1AH0BwAB/wGYA5cBdwOXAfQDAAH0Af8BvAH/
+        AbwB/wHwAfQB8gHxAfQBvAH/AbwB8AL/AfIB/wHwAf8B8QHzAf8B8AH/AfID8AH0AfEFAAGzBdQB9AYA
+        Af8BmAGdA5cBnQKXAp0B/wIAAvQD8QH/AfIC9AHzAf8D8QL0Af8B8gH/AQcB/wG8AfAB/wEHAf8B8AG8
+        AfIBBwH0AfEEAAH/AbMF1AH0BgAB8QudAf8BAAH/AfQN/wH0Af8B8gH/AbwB/wHxAfIB/wG8Af8B8QHw
+        AfMBvAH0AfEBAAG0AosCswTaAdQBrQGzAYsBrgHxAQAB8wOdAZYInQEIAv8C9Af/AvQB/wP0Af8B8gH/
+        AfQB/wL0Af8B9AH/AvQC8wH/AfEBAAH0AbMF2gHUBNoBswHwAf8BAAEIA5gBdwadApgBuwL0Af8BvAH/
+        AQcB8AG8AfMB8gHwAbwBBwH/AQcBvAL/AfIM/wH0AfACAAH0AbMI2gHUAQkB/wQAAv8GnQH0Av8CAAL/
+        AfEB/wG8AfQB8AH0AfMB8QH0AbwB/wG8AfMC/wHyCv8B9AHzAfIBvAMAARkBuQfaAbsIAAadAfQFAAH/
+        BfQC/wP0Af8B8wH0Av8B8gn/AfQBvAMHBAAB8AbaAbQB/wgABp0B9AUAAv8B8wn/AfMB9AL/AfIJ/wLz
+        Af8C8wQAAf8B8QTaAboB/wkABp0B/wYAAfQB/wH0AfMF/wHzAvQB/wEAAf8B8gn/AfMB9AHyAv8FAAH/
+        AQkB2gHbAboB/woABp0B/wcAA/8B9APyAfQB/wH0Af8CAAH/AfII/wHyAbwB8QP/BgAB/wG7AbQB9AsA
+        Bp0B/wkAAf8B9AL/AvQFABD/FQADnQGWAp0B/wQAAUIBTQE+BwABPgMAASgDAAFAAwABMAMAAQEBAAEB
+        BQABgAEBFgAD/4IAAQME/wHwAQcBAAEBAfABDwHwAQ8BwAEDAYABAAHgAQcB4AEHAcABAQGAAQABwAED
+        AcABAwGAAQABwAEAAYABAQGAAQECAAGAAQMBgAEBAYABAQIAAYABAwGAAQEBgAEBAgABgAEDAYABAQGA
+        AQECAAGAAQMBgAEBAYABAQIAAYABAwGAAQEBgAEBAgABgAEDAYABAQGAAQECAAGAAQMBgAEBAYABAQIA
+        AYABAwHAAQMBwAEDAgABgAEDAeABBwHgAQcBgAEBAYABBwHwAQ8B8AEPAcABAwGAAQcE/wHgAQMB4AEH
+        AgAB+AEPAf4BPwHAAQMCAAH4AQ8B/AEfAYABAQIAAfABDwH4AQ8BgAMAAfABDwHwAQ8BgAMAAfgBDwHg
+        AQcEAAH4AQ8BwAEDBAAB8AEPAcABAQQAAYABAAGABQABgAEAAYAFAAHAAQEB4AEDBAAB4AEHAfgBDwGA
+        AwAB8AEHAfgBDwGAAwAB8AEPAfgBDwHAAQECAAH4AR8B+AEPAeABAwIAAfwBPwH4AQ8B+AEfAgAC/wH4
+        AQ8L
+</value>
+  </data>
+  <data name="tvProxyData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tvProxyData.SelectedImageIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tvProxyData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>308, 350</value>
+  </data>
+  <data name="tvProxyData.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tvProxyData.Name" xml:space="preserve">
+    <value>tvProxyData</value>
+  </data>
+  <data name="&gt;&gt;tvProxyData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tvProxyData.Parent" xml:space="preserve">
+    <value>tpProxyList</value>
+  </data>
+  <data name="&gt;&gt;tvProxyData.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tpProxyList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpProxyList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tpProxyList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>314, 356</value>
+  </data>
+  <data name="tpProxyList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpProxyList.Text" xml:space="preserve">
+    <value>[ 代理列表 ]</value>
+  </data>
+  <data name="&gt;&gt;tpProxyList.Name" xml:space="preserve">
+    <value>tpProxyList</value>
+  </data>
+  <data name="&gt;&gt;tpProxyList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpProxyList.Parent" xml:space="preserve">
+    <value>tcProxyInfo</value>
+  </data>
+  <data name="&gt;&gt;tpProxyList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tcProxyInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcProxyInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 0</value>
+  </data>
+  <data name="tcProxyInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 0, 0</value>
+  </data>
+  <data name="tcProxyInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>322, 386</value>
+  </data>
+  <data name="tcProxyInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tcProxyInfo.Name" xml:space="preserve">
+    <value>tcProxyInfo</value>
+  </data>
+  <data name="&gt;&gt;tcProxyInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcProxyInfo.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Data</value>
+  </data>
+  <data name="&gt;&gt;tcProxyInfo.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <metadata name="ssSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>133, 17</value>
+  </metadata>
+  <data name="ssSocketProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlProxyTotal_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
+  <data name="tlProxyTotal_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlProxyTotal_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlSplit1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tlSplit1.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlProxyTCP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 17</value>
+  </data>
+  <data name="tlProxyTCP.Text" xml:space="preserve">
+    <value>TCP:</value>
+  </data>
+  <data name="tlProxyTCP_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
+  <data name="tlProxyTCP_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlProxyTCP_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel3.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlProxyUDP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 17</value>
+  </data>
+  <data name="tlProxyUDP.Text" xml:space="preserve">
+    <value>UDP:</value>
+  </data>
+  <data name="tlProxyUDP_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
+  <data name="tlProxyUDP_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlProxyUDP_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel6.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlProxyCache.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="tlProxyCache.Text" xml:space="preserve">
+    <value>缓存区:</value>
+  </data>
+  <data name="tlProxyCache_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
+  <data name="tlProxyCache_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlProxyCache_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel4.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlProxyLinks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="tlProxyLinks.Text" xml:space="preserve">
+    <value>链接数:</value>
+  </data>
+  <data name="tlProxyLinks_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
+  <data name="tlProxyLinks_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tlProxyLinks_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel5.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tsslTotalBytes.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 17</value>
+  </data>
+  <data name="tsslTotalBytes.Text" xml:space="preserve">
+    <value>TotalBytes</value>
+  </data>
+  <data name="ssSocketProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 736</value>
+  </data>
+  <data name="ssSocketProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="ssSocketProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1078, 22</value>
+  </data>
+  <data name="ssSocketProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="ssSocketProxy.Text" xml:space="preserve">
+    <value>statusStrip1</value>
+  </data>
+  <data name="&gt;&gt;ssSocketProxy.Name" xml:space="preserve">
+    <value>ssSocketProxy</value>
+  </data>
+  <data name="&gt;&gt;ssSocketProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ssSocketProxy.Parent" xml:space="preserve">
+    <value>tlpSocketProxy</value>
+  </data>
+  <data name="&gt;&gt;ssSocketProxy.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="hbData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="hbData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="hbData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="hbData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="hbData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbData.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="hbData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="hbData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="hbData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>742, 350</value>
+  </data>
+  <data name="hbData.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;hbData.Name" xml:space="preserve">
+    <value>hbData</value>
+  </data>
+  <data name="&gt;&gt;hbData.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;hbData.Parent" xml:space="preserve">
+    <value>tpData</value>
+  </data>
+  <data name="&gt;&gt;hbData.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tpData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpData.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tpData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>748, 356</value>
+  </data>
+  <data name="tpData.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpData.Text" xml:space="preserve">
+    <value>[ 数据 ]</value>
+  </data>
+  <data name="&gt;&gt;tpData.Name" xml:space="preserve">
+    <value>tpData</value>
   </data>
   <data name="&gt;&gt;tpData.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -936,166 +1924,320 @@
   <data name="&gt;&gt;tpData.Parent" xml:space="preserve">
     <value>tcProxyData</value>
   </data>
-  <data name="&gt;&gt;tcProxyInfo.Name" xml:space="preserve">
-    <value>tcProxyInfo</value>
-  </data>
-  <data name="cbEnable_SystemProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;tlpClientList.Name" xml:space="preserve">
-    <value>tlpClientList</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Auth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpSocketProxy_Data.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cLogTime.Name" xml:space="preserve">
-    <value>cLogTime</value>
-  </data>
-  <data name="tpData.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lAuth_PassWord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 23</value>
-  </data>
-  <data name="tlpProxySet_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
-  </data>
-  <data name="gbProxySet_Auth.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="cbNoCache.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bCleanUp" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton_Start" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,5,Absolute,60,Percent,100" /&gt;&lt;Rows Styles="Absolute,10,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;gbSystemProxy.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tpData.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tvProxyData.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="bCleanUp.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="&gt;&gt;tpListSet.Name" xml:space="preserve">
-    <value>tpListSet</value>
-  </data>
-  <data name="&gt;&gt;tvProxyData.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpProxySet_Port.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;bStop.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxySet_Port.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 39</value>
-  </data>
-  <data name="&gt;&gt;nudLogList_AutoClearValue.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxyList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tcProxyData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpListSet.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="tcProxyData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>325, 0</value>
   </data>
-  <data name="tsslServerInfo.Text" xml:space="preserve">
-    <value>ServerInfo</value>
+  <data name="tcProxyData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 3, 0</value>
   </data>
-  <data name="&gt;&gt;dgvLogList.Parent" xml:space="preserve">
-    <value>tpLog</value>
+  <data name="tcProxyData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>756, 386</value>
   </data>
-  <data name="tlpProxyList.RowCount" type="System.Int32, mscorlib">
+  <data name="tcProxyData.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tcProxyData.Name" xml:space="preserve">
+    <value>tcProxyData</value>
+  </data>
+  <data name="&gt;&gt;tcProxyData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcProxyData.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Data</value>
+  </data>
+  <data name="&gt;&gt;tcProxyData.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpSocketProxy_Data.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="bCleanUp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 13</value>
+  <metadata name="cLogID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLogID.HeaderText" xml:space="preserve">
+    <value>序号</value>
   </data>
-  <data name="nudProxyPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 8</value>
+  <data name="cLogID.Width" type="System.Int32, mscorlib">
+    <value>50</value>
   </data>
-  <data name="&gt;&gt;gbListSet_LogList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <metadata name="cLogTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLogTime.HeaderText" xml:space="preserve">
+    <value>记录时间</value>
   </data>
-  <data name="cbLogList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
+  <metadata name="cFuncName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cFuncName.HeaderText" xml:space="preserve">
+    <value>模块</value>
   </data>
-  <data name="&gt;&gt;cbEnable_Auth.Name" xml:space="preserve">
-    <value>cbEnable_Auth</value>
+  <data name="cFuncName.Width" type="System.Int32, mscorlib">
+    <value>150</value>
   </data>
-  <data name="bStart.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="gbSystemProxy.Text" xml:space="preserve">
-    <value>[ 系统代理 ]</value>
-  </data>
-  <data name="tlpProxySet_Auth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="bCleanUp.Text" xml:space="preserve">
-    <value>清 空
-数 据
-(&amp;C)</value>
-  </data>
-  <data name="gbListSet_LogList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="txtAuth_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
-  </data>
-  <data name="gbListSet_LogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Port.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;gbSystemProxy.Name" xml:space="preserve">
-    <value>gbSystemProxy</value>
-  </data>
-  <data name="cbLogList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 3</value>
-  </data>
-  <data name="tcClientInfo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 389</value>
+  <metadata name="cLogContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLogContent.HeaderText" xml:space="preserve">
+    <value>日志内容</value>
   </data>
   <data name="dgvLogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;bCleanUp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="dgvLogList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
-  <data name="&gt;&gt;ssSocketProxy.Name" xml:space="preserve">
-    <value>ssSocketProxy</value>
+  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>742, 214</value>
   </data>
-  <data name="&gt;&gt;tlpProxySet_Auth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="dgvLogList.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="tlpProxyType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 16</value>
+  <data name="&gt;&gt;dgvLogList.Name" xml:space="preserve">
+    <value>dgvLogList</value>
   </data>
-  <data name="txtAuth_PassWord.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;dgvLogList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.Parent" xml:space="preserve">
+    <value>tpLog</value>
+  </data>
+  <data name="&gt;&gt;dgvLogList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tpLog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpLog.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tpLog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>748, 220</value>
+  </data>
+  <data name="tpLog.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpLog.Text" xml:space="preserve">
+    <value>[ 代理日志 ]</value>
+  </data>
+  <data name="&gt;&gt;tpLog.Name" xml:space="preserve">
+    <value>tpLog</value>
+  </data>
+  <data name="&gt;&gt;tpLog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpLog.Parent" xml:space="preserve">
+    <value>tcSocketProxy_Log</value>
+  </data>
+  <data name="&gt;&gt;tpLog.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tcSocketProxy_Log.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcSocketProxy_Log.Location" type="System.Drawing.Point, System.Drawing">
+    <value>325, 386</value>
+  </data>
+  <data name="tcSocketProxy_Log.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 3, 0</value>
+  </data>
+  <data name="tcSocketProxy_Log.Size" type="System.Drawing.Size, System.Drawing">
+    <value>756, 250</value>
+  </data>
+  <data name="tcSocketProxy_Log.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="gbListSet_LogList.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;tcSocketProxy_Log.Name" xml:space="preserve">
+    <value>tcSocketProxy_Log</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxy_Log.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxy_Log.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Data</value>
+  </data>
+  <data name="&gt;&gt;tcSocketProxy_Log.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tvProxyInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tvProxyInfo.ImageIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tvProxyInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tvProxyInfo.SelectedImageIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tvProxyInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>308, 214</value>
+  </data>
+  <data name="tvProxyInfo.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tsslServerInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 17</value>
+  <data name="&gt;&gt;tvProxyInfo.Name" xml:space="preserve">
+    <value>tvProxyInfo</value>
   </data>
-  <data name="bStop.Text" xml:space="preserve">
-    <value> 停 止 (&amp;T)</value>
+  <data name="&gt;&gt;tvProxyInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpProxyType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbEnable_SOCKS5" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="&gt;&gt;tvProxyInfo.Parent" xml:space="preserve">
+    <value>tpClientList</value>
   </data>
-  <data name="cbEnable_SystemProxy.AutoSize" type="System.Boolean, mscorlib">
+  <data name="&gt;&gt;tvProxyInfo.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tpClientList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpClientList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tpClientList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>314, 220</value>
+  </data>
+  <data name="tpClientList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tpClientList.Text" xml:space="preserve">
+    <value>[ 客户端列表 ]</value>
+  </data>
+  <data name="&gt;&gt;tpClientList.Name" xml:space="preserve">
+    <value>tpClientList</value>
+  </data>
+  <data name="&gt;&gt;tpClientList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpClientList.Parent" xml:space="preserve">
+    <value>tcClientInfo</value>
+  </data>
+  <data name="&gt;&gt;tpClientList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tcClientInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tcClientInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 386</value>
+  </data>
+  <data name="tcClientInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 0, 0</value>
+  </data>
+  <data name="tcClientInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>322, 250</value>
+  </data>
+  <data name="tcClientInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;tcClientInfo.Name" xml:space="preserve">
+    <value>tcClientInfo</value>
+  </data>
+  <data name="&gt;&gt;tcClientInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tcClientInfo.Parent" xml:space="preserve">
+    <value>tlpSocketProxy_Data</value>
+  </data>
+  <data name="&gt;&gt;tcClientInfo.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpSocketProxy_Data.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSocketProxy_Data.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 100</value>
+  </data>
+  <data name="tlpSocketProxy_Data.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSocketProxy_Data.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpSocketProxy_Data.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 636</value>
+  </data>
+  <data name="tlpSocketProxy_Data.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Data.Name" xml:space="preserve">
+    <value>tlpSocketProxy_Data</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Data.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Data.Parent" xml:space="preserve">
+    <value>tlpSocketProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy_Data.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSocketProxy_Data.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tcSocketProxy_Log" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcProxyData" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcProxyInfo" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tcClientInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,70" /&gt;&lt;Rows Styles="Percent,100,Absolute,250" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpSocketProxy.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpSocketProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpSocketProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpSocketProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpSocketProxy.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpSocketProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 761</value>
+  </data>
+  <data name="tlpSocketProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy.Name" xml:space="preserve">
+    <value>tlpSocketProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpSocketProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpSocketProxy_Data" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpSocketProxy_Parameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssSocketProxy" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,100,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="tSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>255, 17</value>
+  </metadata>
+  <metadata name="tCheckProxyState.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>369, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 761</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -7269,963 +8411,154 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="&gt;&gt;gbProxySet_Port.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bStop.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SystemProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Data.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lAuth_UserName.Name" xml:space="preserve">
-    <value>lAuth_UserName</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet_Port.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tcClientInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Parameter.Parent" xml:space="preserve">
-    <value>tlpSocketProxy</value>
-  </data>
-  <data name="&gt;&gt;tvProxyInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Parameter.Name" xml:space="preserve">
-    <value>tlpSocketProxy_Parameter</value>
-  </data>
-  <data name="&gt;&gt;ssSocketProxy.Parent" xml:space="preserve">
-    <value>tlpSocketProxy</value>
-  </data>
-  <data name="gbSystemProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet.Name" xml:space="preserve">
-    <value>tlpListSet</value>
-  </data>
-  <data name="&gt;&gt;txtAuth_UserName.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tSocketProxy.Name" xml:space="preserve">
-    <value>tSocketProxy</value>
-  </data>
-  <data name="ssSocketProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 736</value>
-  </data>
-  <data name="&gt;&gt;gbClientList.Name" xml:space="preserve">
-    <value>gbClientList</value>
-  </data>
-  <data name="lAuth_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 23</value>
-  </data>
-  <data name="tlpSocketProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpButton_Start.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cbNoCache.Parent" xml:space="preserve">
-    <value>tlpProxyList</value>
-  </data>
-  <data name="gbClientList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="tlpSystemProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tcProxyData.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tpListSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>780, 67</value>
-  </data>
-  <data name="cbNoCache.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 21</value>
-  </data>
-  <data name="tlpSocketProxy_Parameter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tpLog.Name" xml:space="preserve">
-    <value>tpLog</value>
-  </data>
-  <data name="&gt;&gt;bStop.Name" xml:space="preserve">
-    <value>bStop</value>
-  </data>
-  <data name="&gt;&gt;dgvLogList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxy_Log.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbEnable_SOCKS5.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="gbClientList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>237, 3</value>
-  </data>
-  <data name="&gt;&gt;tpListSet.Parent" xml:space="preserve">
-    <value>tcSocketProxySet</value>
-  </data>
-  <data name="&gt;&gt;tpClientList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpProxyList.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="nudProxyPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 23</value>
-  </data>
-  <data name="bStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 40</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SystemProxy.Parent" xml:space="preserve">
-    <value>tlpSystemProxy</value>
-  </data>
-  <data name="&gt;&gt;gbListSet_LogList.Name" xml:space="preserve">
-    <value>gbListSet_LogList</value>
-  </data>
-  <data name="tcClientInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>322, 244</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SOCKS5.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbProxyList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbLogList_AutoRoll.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tlpProxyList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="tlpSocketProxy.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;gbProxyList.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpSocketProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 761</value>
-  </data>
-  <data name="tlpSystemProxy.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tpProxyList.Parent" xml:space="preserve">
-    <value>tcProxyInfo</value>
-  </data>
-  <data name="&gt;&gt;tCheckProxyState.Name" xml:space="preserve">
-    <value>tCheckProxyState</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>SocketProxy_Form</value>
-  </data>
-  <data name="&gt;&gt;lAuth_UserName.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpProxySet_Auth.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;gbSystemProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpClientList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>222, 42</value>
-  </data>
-  <data name="cbEnable_Auth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 8</value>
-  </data>
-  <data name="tcSocketProxy_Log.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="dgvLogList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpListSet.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;nudLogList_AutoClearValue.Name" xml:space="preserve">
-    <value>nudLogList_AutoClearValue</value>
-  </data>
-  <data name="&gt;&gt;ilSocketProxy.Name" xml:space="preserve">
-    <value>ilSocketProxy</value>
-  </data>
-  <data name="&gt;&gt;cFuncName.Name" xml:space="preserve">
-    <value>cFuncName</value>
-  </data>
-  <data name="&gt;&gt;tlpClientList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbDeleteClosed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="cbLogList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tpData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="bStart.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="tlpSystemProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tcClientInfo.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Data</value>
-  </data>
-  <data name="cbEnable_SOCKS5.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_Auth.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="lAuth_PassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Parameter.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cbNoCache.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxySet.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tvProxyInfo.Parent" xml:space="preserve">
-    <value>tpClientList</value>
-  </data>
-  <data name="tcSocketProxy_Log.Size" type="System.Drawing.Size, System.Drawing">
-    <value>756, 250</value>
-  </data>
-  <data name="&gt;&gt;tpClientList.Parent" xml:space="preserve">
-    <value>tcClientInfo</value>
-  </data>
-  <data name="bStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 40</value>
-  </data>
-  <data name="gbProxyList.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tlpProxyList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbNoCache" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="lAuth_PassWord.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="tlpListSet_LogList.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="tlpListSet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Port.Parent" xml:space="preserve">
-    <value>tlpProxySet</value>
-  </data>
-  <data name="&gt;&gt;gbProxyType.Name" xml:space="preserve">
-    <value>gbProxyType</value>
-  </data>
-  <data name="&gt;&gt;lAuth_PassWord.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lAuth_PassWord.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tvProxyData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>308, 350</value>
-  </data>
-  <data name="tlpButton_Start.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bStop" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bStart" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,100,Absolute,10" /&gt;&lt;Rows Styles="Absolute,40,Percent,100,Absolute,40" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet.Parent" xml:space="preserve">
-    <value>tpListSet</value>
-  </data>
-  <data name="gbClientList.Text" xml:space="preserve">
-    <value>客户端列表</value>
-  </data>
-  <data name="&gt;&gt;tsslTotalBytes.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbClientList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="cbNoCache.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="tpProxySet.Text" xml:space="preserve">
-    <value>[ 代理设置 ]</value>
-  </data>
-  <data name="lAuth_PassWord.Text" xml:space="preserve">
-    <value>密码:</value>
-  </data>
-  <data name="tlpListSet.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="cLogID.HeaderText" xml:space="preserve">
-    <value>序号</value>
-  </data>
-  <data name="tvProxyData.SelectedImageIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tlpProxySet.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="gbProxySet_Port.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="gbProxyList.Text" xml:space="preserve">
-    <value>代理列表</value>
-  </data>
-  <data name="tpListSet.Text" xml:space="preserve">
-    <value>[ 列表设置 ]</value>
-  </data>
-  <data name="tpData.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tpClientList.Name" xml:space="preserve">
-    <value>tpClientList</value>
-  </data>
-  <data name="&gt;&gt;tpData.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cLogTime.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbDeleteClosed.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tpLog.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tlpProxySet.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="tlpProxySet_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="bCleanUp.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProxySet_Auth.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtAuth_PassWord" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="lAuth_PassWord" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_Auth" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lAuth_UserName" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtAuth_UserName" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Absolute,150,AutoSize,0,Absolute,150,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Data.Name" xml:space="preserve">
-    <value>tlpSocketProxy_Data</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoClear.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lAuth_UserName.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tcProxyData.Name" xml:space="preserve">
-    <value>tcProxyData</value>
-  </data>
-  <data name="tlpListSet_LogList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;cbEnable_SystemProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbSystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="gbClientList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>228, 64</value>
-  </data>
-  <data name="&gt;&gt;tpProxySet.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="hbData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tcSocketProxySet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>788, 97</value>
-  </data>
-  <data name="tpLog.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tlpListSet.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="lAuth_UserName.Text" xml:space="preserve">
-    <value>用户名:</value>
-  </data>
-  <data name="cbLogList_AutoClear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet_LogList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bStart.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
-    <value>ImageBeforeText</value>
-  </data>
-  <data name="cbEnable_SOCKS5.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;cbDeleteClosed.Name" xml:space="preserve">
-    <value>cbDeleteClosed</value>
-  </data>
-  <data name="&gt;&gt;tpClientList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tcProxyData.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Data</value>
-  </data>
-  <data name="cbLogList_AutoClear.Text" xml:space="preserve">
-    <value>自动清理</value>
-  </data>
-  <data name="bCleanUp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbLogList_AutoRoll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tcSocketProxySet.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tcSocketProxy_Log.Location" type="System.Drawing.Point, System.Drawing">
-    <value>325, 386</value>
-  </data>
-  <data name="tvProxyInfo.ImageIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="gbClientList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="ssSocketProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1078, 22</value>
-  </data>
-  <data name="tlpProxySet_Auth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>542, 39</value>
-  </data>
-  <data name="cbNoCache.Text" xml:space="preserve">
-    <value>不缓存数据</value>
-  </data>
-  <data name="hbData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>742, 350</value>
-  </data>
-  <data name="&gt;&gt;txtAuth_PassWord.Parent" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SOCKS 代理模式</value>
   </data>
-  <data name="ilSocketProxy.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
-    <value>
-        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
-        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
-        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQIAAQIBCAECARABAAEQAQAE/wEJARAI/wFCAU0BNgEEBgABNgEEAgABKAMA
-        AUADAAEwAwABAQEAAQgGAAEMGAABgAIAAYADAAKAAQABgAMAAYABAAGAAQACgAIAA8ABAAHAAdwBwAEA
-        AfABygGmAQABMwUAATMBAAEzAQABMwEAAjMCAAMWAQADHAEAAyIBAAMpAQADVQEAA00BAANCAQADOQEA
-        AYABfAH/AQACUAH/AQABkwEAAdYBAAH/AewBzAEAAcYB1gHvAQAB1gLnAQABkAGpAa0CAAH/ATMDAAFm
-        AwABmQMAAcwCAAEzAwACMwIAATMBZgIAATMBmQIAATMBzAIAATMB/wIAAWYDAAFmATMCAAJmAgABZgGZ
-        AgABZgHMAgABZgH/AgABmQMAAZkBMwIAAZkBZgIAApkCAAGZAcwCAAGZAf8CAAHMAwABzAEzAgABzAFm
-        AgABzAGZAgACzAIAAcwB/wIAAf8BZgIAAf8BmQIAAf8BzAEAATMB/wIAAf8BAAEzAQABMwEAAWYBAAEz
-        AQABmQEAATMBAAHMAQABMwEAAf8BAAH/ATMCAAMzAQACMwFmAQACMwGZAQACMwHMAQACMwH/AQABMwFm
-        AgABMwFmATMBAAEzAmYBAAEzAWYBmQEAATMBZgHMAQABMwFmAf8BAAEzAZkCAAEzAZkBMwEAATMBmQFm
-        AQABMwKZAQABMwGZAcwBAAEzAZkB/wEAATMBzAIAATMBzAEzAQABMwHMAWYBAAEzAcwBmQEAATMCzAEA
-        ATMBzAH/AQABMwH/ATMBAAEzAf8BZgEAATMB/wGZAQABMwH/AcwBAAEzAv8BAAFmAwABZgEAATMBAAFm
-        AQABZgEAAWYBAAGZAQABZgEAAcwBAAFmAQAB/wEAAWYBMwIAAWYCMwEAAWYBMwFmAQABZgEzAZkBAAFm
-        ATMBzAEAAWYBMwH/AQACZgIAAmYBMwEAA2YBAAJmAZkBAAJmAcwBAAFmAZkCAAFmAZkBMwEAAWYBmQFm
-        AQABZgKZAQABZgGZAcwBAAFmAZkB/wEAAWYBzAIAAWYBzAEzAQABZgHMAZkBAAFmAswBAAFmAcwB/wEA
-        AWYB/wIAAWYB/wEzAQABZgH/AZkBAAFmAf8BzAEAAcwBAAH/AQAB/wEAAcwBAAKZAgABmQEzAZkBAAGZ
-        AQABmQEAAZkBAAHMAQABmQMAAZkCMwEAAZkBAAFmAQABmQEzAcwBAAGZAQAB/wEAAZkBZgIAAZkBZgEz
-        AQABmQEzAWYBAAGZAWYBmQEAAZkBZgHMAQABmQEzAf8BAAKZATMBAAKZAWYBAAOZAQACmQHMAQACmQH/
-        AQABmQHMAgABmQHMATMBAAFmAcwBZgEAAZkBzAGZAQABmQLMAQABmQHMAf8BAAGZAf8CAAGZAf8BMwEA
-        AZkBzAFmAQABmQH/AZkBAAGZAf8BzAEAAZkC/wEAAcwDAAGZAQABMwEAAcwBAAFmAQABzAEAAZkBAAHM
-        AQABzAEAAZkBMwIAAcwCMwEAAcwBMwFmAQABzAEzAZkBAAHMATMBzAEAAcwBMwH/AQABzAFmAgABzAFm
-        ATMBAAGZAmYBAAHMAWYBmQEAAcwBZgHMAQABmQFmAf8BAAHMAZkCAAHMAZkBMwEAAcwBmQFmAQABzAKZ
-        AQABzAGZAcwBAAHMAZkB/wEAAswCAALMATMBAALMAWYBAALMAZkBAAPMAQACzAH/AQABzAH/AgABzAH/
-        ATMBAAGZAf8BZgEAAcwB/wGZAQABzAH/AcwBAAHMAv8BAAHMAQABMwEAAf8BAAFmAQAB/wEAAZkBAAHM
-        ATMCAAH/AjMBAAH/ATMBZgEAAf8BMwGZAQAB/wEzAcwBAAH/ATMB/wEAAf8BZgIAAf8BZgEzAQABzAJm
-        AQAB/wFmAZkBAAH/AWYBzAEAAcwBZgH/AQAB/wGZAgAB/wGZATMBAAH/AZkBZgEAAf8CmQEAAf8BmQHM
-        AQAB/wGZAf8BAAH/AcwCAAH/AcwBMwEAAf8BzAFmAQAB/wHMAZkBAAH/AswBAAH/AcwB/wEAAv8BMwEA
-        AcwB/wFmAQAC/wGZAQAC/wHMAQACZgH/AQABZgH/AWYBAAFmAv8BAAH/AmYBAAH/AWYB/wEAAv8BZgEA
-        ASEBAAGlAQADXwEAA3cBAAOGAQADlgEAA8sBAAOyAQAD1wEAA90BAAPjAQAD6gEAA/EBAAP4AQAB8AH7
-        Af8BAAGkAqABAAOAAwAB/wIAAf8DAAL/AQAB/wMAAf8BAAH/AQAC/wIAA/8BAAHzDvEB8zAAAfAO8QG8
-        MAAB8Az/AvQB8DAAAfAO/wHwMAAB8AP/AfMBBwHzAf8B9AG8AQcB8AP/AfAwAAHwA/8BBwHvAfMC/wHz
-        AQcB7wP/AfAwAAG8A/8B7wEHAfQD/wG8Ae8D/wG8MAABvAL/AfEB7QG8BP8B8AEHAfQC/wG8MAABvAL/
-        AfAB7wHxBP8B8wG8AfMC/wG8MAABvAP/Ae8BBwT/AfAB7wL/AfQBvDAAAbwD/wK8AfQC/wH0AfABvAH/
-        AvQBvDAAAbwE/wH0A/8B8gL0AvMB8gG8MAABvAr/AfMD8AHxMAABvAv/AfQB8wH0Af8wAAG8C/8B8wH0
-        Av8wAAHwCvEB8wT/MAAB9A28JgAB9ALzAfQD8wH0Af8DAAH/Ce8CBwLvAf8FAAH0AQgBcgJJAXIBCAH0
-        CAAB/wEaAW8CTAFvARoB/wYAAf8B9AG0AbMDtAKzAbQB8gH/AwABBwL3BJIC9wHvAfcB7wH3AfAB/wMA
-        AfIBTwFQBJgCTwHxBgAB8wJvAZMClAEWAkwBGwUAAfIBtAGzAdQB1QHUArMB1AK0AfEB/wIAAfIB7wH3
-        AZIF7QP3Av8B8QIAAfIBTwF4AQgBmAKXAZgBCAGXAUkB8QQAAfMBTAEWAZQBFgJvARYBlAFvAUwBGwMA
-        AfQDtAHbAbQE1AHVArQBvAH/AgAB/wHyAuwD7QHrAZIBvAHwAvIB/wEAAf8BUAF4AQgGlwEIAZcBTwH0
-        AgAB/wFvARYBmgJvApQCFwGUAm8B/wEAAf8BuwG0AdsBGQEJAboE1AHcAdsBtAEJAf8BAAH0AfEBBwLr
-        AewC6wFtAewB9wHwAf8DAAEIAVYBCAKXAXgBGwGYA5cBCAFPAQgCAAEaAW8BmgPjAv8CbwEXAZQBbwEa
-        AQAB8gGzAdQBtAIZBNsB1QHbAdUB1AGzAfMBAAG8AvAJvAHxAwABlwKYAZcBeAP/AZgClwKYAXICAAEW
-        ApQD4wKUA28BFgGTAW8BAAG7AbMB1AHVAdwBuwS6AbQBugG0AdQBswG7AQABvAquAbwB8QMAAVUBmAGX
-        AXgC/wH0Av8BmAKXAZgBTwIAAeMBmgF1A+MBvQH/AuMCbwGUAUwBAAGzAtUB2wPcAtsB3AEZAeIB3AOz
-        AQAB8AGuCGYBrgG8AfIDAAFWAQgBeAGXAQgB8QGXAQgC/wGYAZcBmAFPAgAB4wGaAXUD4wL/BOMBlAFM
-        AQABswHaA9wF2wEJAeIBCQHbAdQBswEAAfEB7QLqBmYB7AG8AfMDAAGXApgFlwEIAf8B8wKYAXICAAOU
-        AXUC4wL/A+MClAFvAQABtAPbAdwF2wHcAdsBugGzAdUBtAEAAfIB9wJtAeoFZgHtAbwB9AMAAQgBlwEI
-        BpcBCAGXAQgBUAEIAgABGgEWAZoDdQL/A+MBmgFvARoBAAEJAboC2wLcBtsB2gHUAbQBCQEAAfIB9wOu
-        AW0BEgNmAe0BvAH/AwAB/wGXAXgBCAaXAQgBeAFQAf8CAAH2AXUBlAGaAnUC/wLjAZoBFgFvAf8BAAH0
-        AbsD2wHcA9sB3ALbAdoB1QG7Af8BAAHyAfcC6wOuAW0BEgFmAe0BBwH/BAAB8wFWAXgBCAGYAngBmAEI
-        AXgBTwEbBAAB8wF1AZQBmgGUAnUBlAGaAXUBbwHzAgAB/wHyAboC2wXcA9sBtAEJAf8BAAHyAe8D7AGu
-        A+sBrgH3AbwB/wUAAfMClwSYAZcBVgEbBgAB8wGUARYBlAKaAZQBFgF1AfMEAAH/AQkC2wHcARkB4gEJ
-        AtsBugG0AbsB/wIAAfIBBwTtBOwB7wG8BwAB/wEIAXgCVgGXAQgB/wgAAf8BGgGUAnUBlAEaAf8GAAH/
-        AQkBuwHcAQkB3APbAboBuwH/AwAB/wfyA/EB8iYAAf8B9AEZAboCuQHbARkB8wH0Af8FAAP/AfQB8wHy
-        AfMC9AH/AwAB/w/wBQAGtQH/CwAB8wEHAf8IAAH/AvQBvAHwAfQB/wH0AfABvAL0AgAB/wHwDfQB8AUA
-        Aa0E1AGzAf8KAAH0ApcBCAH/BgAB/wH0AfMB8Af/AfAB8wH0AQAB/wHxDf8B8QQAAf8BrQTUAbMB9AkA
-        Af8ElwEIAf8FAAL0AfAJ/wHwAfQC/wHyDf8B8QQAAf8BrQXUAfQIAAH/AZ0DlwF3AZcB9AUAAf8B8AIH
-        Af8BvAHzAfEB8AH0AwcB8QH0Af8B8g3/AfEFAAGtBdQB9AcAAf8BmAOXAXcDlwH0AwAB9AH/AbwB/wG8
-        Af8B8AH0AfIB8QH0AbwB/wG8AfAC/wHyAf8B8AH/AfEB8wH/AfAB/wHyA/AB9AHxBQABswXUAfQGAAH/
-        AZgBnQOXAZ0ClwKdAf8CAAL0A/EB/wHyAvQB8wH/A/EC9AH/AfIB/wEHAf8BvAHwAf8BBwH/AfABvAHy
-        AQcB9AHxBAAB/wGzBdQB9AYAAfELnQH/AQAB/wH0Df8B9AH/AfIB/wG8Af8B8QHyAf8BvAH/AfEB8AHz
-        AbwB9AHxAQABtAKLArME2gHUAa0BswGLAa4B8QEAAfMDnQGWCJ0BCAL/AvQH/wL0Af8D9AH/AfIB/wH0
-        Af8C9AH/AfQB/wL0AvMB/wHxAQAB9AGzBdoB1ATaAbMB8AH/AQABCAOYAXcGnQKYAbsC9AH/AbwB/wEH
-        AfABvAHzAfIB8AG8AQcB/wEHAbwC/wHyDP8B9AHwAgAB9AGzCNoB1AEJAf8EAAL/Bp0B9AL/AgAC/wHx
-        Af8BvAH0AfAB9AHzAfEB9AG8Af8BvAHzAv8B8gr/AfQB8wHyAbwDAAEZAbkH2gG7CAAGnQH0BQAB/wX0
-        Av8D9AH/AfMB9AL/AfIJ/wH0AbwDBwQAAfAG2gG0Af8IAAadAfQFAAL/AfMJ/wHzAfQC/wHyCf8C8wH/
-        AvMEAAH/AfEE2gG6Af8JAAadAf8GAAH0Af8B9AHzBf8B8wL0Af8BAAH/AfIJ/wHzAfQB8gL/BQAB/wEJ
-        AdoB2wG6Af8KAAadAf8HAAP/AfQD8gH0Af8B9AH/AgAB/wHyCP8B8gG8AfED/wYAAf8BuwG0AfQLAAad
-        Af8JAAH/AfQC/wL0BQAQ/xUAA50BlgKdAf8EAAFCAU0BPgcAAT4DAAEoAwABQAMAATADAAEBAQABAQUA
-        AYABARYAA/+CAAEDBP8B8AEHAQABAQHwAQ8B8AEPAcABAwGAAQAB4AEHAeABBwHAAQEBgAEAAcABAwHA
-        AQMBgAEAAcABAAGAAQEBgAEBAgABgAEDAYABAQGAAQECAAGAAQMBgAEBAYABAQIAAYABAwGAAQEBgAEB
-        AgABgAEDAYABAQGAAQECAAGAAQMBgAEBAYABAQIAAYABAwGAAQEBgAEBAgABgAEDAYABAQGAAQECAAGA
-        AQMBwAEDAcABAwIAAYABAwHgAQcB4AEHAYABAQGAAQcB8AEPAfABDwHAAQMBgAEHBP8B4AEDAeABBwIA
-        AfgBDwH+AT8BwAEDAgAB+AEPAfwBHwGAAQECAAHwAQ8B+AEPAYADAAHwAQ8B8AEPAYADAAH4AQ8B4AEH
-        BAAB+AEPAcABAwQAAfABDwHAAQEEAAGAAQABgAUAAYABAAGABQABwAEBAeABAwQAAeABBwH4AQ8BgAMA
-        AfABBwH4AQ8BgAMAAfABDwH4AQ8BwAEBAgAB+AEfAfgBDwHgAQMCAAH8AT8B+AEPAfgBHwIAAv8B+AEP
-        FgAL
-</value>
+  <data name="&gt;&gt;tlProxyTotal.Name" xml:space="preserve">
+    <value>tlProxyTotal</value>
   </data>
-  <data name="&gt;&gt;cbDeleteClosed.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tlProxyTotal.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lAuth_UserName.Parent" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
+  <data name="&gt;&gt;ilSocketProxy.Name" xml:space="preserve">
+    <value>ilSocketProxy</value>
   </data>
-  <data name="&gt;&gt;tlpButton_Start.Name" xml:space="preserve">
-    <value>tlpButton_Start</value>
+  <data name="&gt;&gt;ilSocketProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ImageList, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbLogList_AutoClear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;tlProxyTotal_CNT.Name" xml:space="preserve">
+    <value>tlProxyTotal_CNT</value>
   </data>
-  <data name="tlpClientList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="&gt;&gt;tlProxyTotal_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbLogList_AutoRoll.Name" xml:space="preserve">
-    <value>cbLogList_AutoRoll</value>
+  <data name="&gt;&gt;tlSplit1.Name" xml:space="preserve">
+    <value>tlSplit1</value>
   </data>
-  <data name="tlpSystemProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="&gt;&gt;tlSplit1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpSocketProxy.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;tlProxyTCP.Name" xml:space="preserve">
+    <value>tlProxyTCP</value>
   </data>
-  <data name="cbDeleteClosed.Text" xml:space="preserve">
-    <value>清理关闭的链接</value>
+  <data name="&gt;&gt;tlProxyTCP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;bCleanUp.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;tlProxyTCP_CNT.Name" xml:space="preserve">
+    <value>tlProxyTCP_CNT</value>
   </data>
-  <data name="&gt;&gt;bStart.Parent" xml:space="preserve">
-    <value>tlpButton_Start</value>
+  <data name="&gt;&gt;tlProxyTCP_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpListSet_LogList.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="&gt;&gt;toolStripStatusLabel3.Name" xml:space="preserve">
+    <value>toolStripStatusLabel3</value>
   </data>
-  <data name="lAuth_PassWord.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;toolStripStatusLabel3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="txtAuth_PassWord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
+  <data name="&gt;&gt;tlProxyUDP.Name" xml:space="preserve">
+    <value>tlProxyUDP</value>
+  </data>
+  <data name="&gt;&gt;tlProxyUDP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlProxyUDP_CNT.Name" xml:space="preserve">
+    <value>tlProxyUDP_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlProxyUDP_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel6.Name" xml:space="preserve">
+    <value>toolStripStatusLabel6</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlProxyCache.Name" xml:space="preserve">
+    <value>tlProxyCache</value>
+  </data>
+  <data name="&gt;&gt;tlProxyCache.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlProxyCache_CNT.Name" xml:space="preserve">
+    <value>tlProxyCache_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlProxyCache_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Name" xml:space="preserve">
+    <value>toolStripStatusLabel4</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlProxyLinks.Name" xml:space="preserve">
+    <value>tlProxyLinks</value>
+  </data>
+  <data name="&gt;&gt;tlProxyLinks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlProxyLinks_CNT.Name" xml:space="preserve">
+    <value>tlProxyLinks_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlProxyLinks_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel5.Name" xml:space="preserve">
+    <value>toolStripStatusLabel5</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsslTotalBytes.Name" xml:space="preserve">
     <value>tsslTotalBytes</value>
   </data>
-  <data name="bStop.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="&gt;&gt;tsslTotalBytes.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="bStart.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoClear.Parent" xml:space="preserve">
-    <value>tlpListSet_LogList</value>
-  </data>
-  <data name="&gt;&gt;gbProxySet_Port.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tCheckProxyState.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpProxySet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="&gt;&gt;cLogID.Name" xml:space="preserve">
+    <value>cLogID</value>
   </data>
   <data name="&gt;&gt;cLogID.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtAuth_PassWord.Name" xml:space="preserve">
-    <value>txtAuth_PassWord</value>
+  <data name="&gt;&gt;cLogTime.Name" xml:space="preserve">
+    <value>cLogTime</value>
   </data>
-  <data name="&gt;&gt;hbData.Parent" xml:space="preserve">
-    <value>tpData</value>
+  <data name="&gt;&gt;cLogTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpSocketProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;cFuncName.Name" xml:space="preserve">
+    <value>cFuncName</value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
+  <data name="&gt;&gt;cFuncName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tpLog.Parent" xml:space="preserve">
-    <value>tcSocketProxy_Log</value>
+  <data name="&gt;&gt;cLogContent.Name" xml:space="preserve">
+    <value>cLogContent</value>
   </data>
-  <data name="tpProxySet.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="&gt;&gt;cLogContent.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlpButton_Start.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="gbProxyList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="tpClientList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="gbProxySet_Auth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>223, 3</value>
-  </data>
-  <data name="tcClientInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tpData.Text" xml:space="preserve">
-    <value>[ 数据 ]</value>
-  </data>
-  <data name="tcProxyData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 3, 0</value>
-  </data>
-  <data name="cbEnable_Auth.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="bStop.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;tsslSplit1.Name" xml:space="preserve">
-    <value>tsslSplit1</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy.Name" xml:space="preserve">
-    <value>tlpSocketProxy</value>
-  </data>
-  <data name="tcProxyInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="ssSocketProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy_Data.Parent" xml:space="preserve">
-    <value>tlpSocketProxy</value>
-  </data>
-  <data name="gbClientList.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="gbProxyType.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="txtAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>304, 8</value>
-  </data>
-  <data name="tlpSocketProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="nudLogList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
-  </data>
-  <data name="nudProxyPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="gbProxyType.Text" xml:space="preserve">
-    <value>代理类型</value>
-  </data>
-  <data name="&gt;&gt;tlpListSet_LogList.Name" xml:space="preserve">
-    <value>tlpListSet_LogList</value>
-  </data>
-  <data name="cbNoCache.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpProxyList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tcProxyData.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;bStart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 0</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
-  </data>
-  <data name="cbEnable_SystemProxy.Text" xml:space="preserve">
-    <value>启用</value>
-  </data>
-  <data name="lAuth_UserName.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="tcProxyData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>325, 0</value>
-  </data>
-  <data name="tcClientInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 0, 3</value>
+  <data name="&gt;&gt;tSocketProxy.Name" xml:space="preserve">
+    <value>tSocketProxy</value>
   </data>
   <data name="&gt;&gt;tSocketProxy.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>742, 214</value>
+  <data name="&gt;&gt;tCheckProxyState.Name" xml:space="preserve">
+    <value>tCheckProxyState</value>
   </data>
-  <data name="tpListSet.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;tCheckProxyState.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtAuth_PassWord.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpLog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cLogTime.HeaderText" xml:space="preserve">
-    <value>记录时间</value>
-  </data>
-  <data name="tcProxyInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 0, 0</value>
-  </data>
-  <data name="gbProxySet_Port.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpButton_Start.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lAuth_PassWord.Parent" xml:space="preserve">
-    <value>tlpProxySet_Auth</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxy_Log.Name" xml:space="preserve">
-    <value>tcSocketProxy_Log</value>
-  </data>
-  <data name="ssSocketProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbLogList_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tvProxyInfo.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>SocketProxy_Form</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbLogList_AutoClear.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbSystemProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 97</value>
-  </data>
-  <data name="&gt;&gt;tlpClientList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbProxyType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSystemProxy.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;tpProxySet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpProxyList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbProxySet_Port.Text" xml:space="preserve">
-    <value>端口号</value>
-  </data>
-  <data name="tcSocketProxy_Log.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tvProxyData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TreeView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="gbProxySet_Auth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>548, 58</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxy_Log.Parent" xml:space="preserve">
-    <value>tlpSocketProxy_Data</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxy_Log.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tvProxyData.ImageIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tcSocketProxySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tsslServerInfo.Name" xml:space="preserve">
-    <value>tsslServerInfo</value>
-  </data>
-  <data name="tcProxyData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>756, 386</value>
-  </data>
-  <data name="tlpSocketProxy_Data.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tvProxyInfo.Name" xml:space="preserve">
-    <value>tvProxyInfo</value>
-  </data>
-  <data name="cLogContent.HeaderText" xml:space="preserve">
-    <value>日志内容</value>
-  </data>
-  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tcProxyInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bStop.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="&gt;&gt;tpProxyList.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="hbData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
-    <value>复制</value>
-  </data>
-  <data name="&gt;&gt;gbClientList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tpLog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 26</value>
-  </data>
-  <data name="tpLog.Text" xml:space="preserve">
-    <value>[ 代理日志 ]</value>
-  </data>
-  <data name="tsslTotalBytes.Text" xml:space="preserve">
-    <value>TotalBytes</value>
-  </data>
-  <data name="tpProxyList.Text" xml:space="preserve">
-    <value>[ 代理列表 ]</value>
-  </data>
-  <data name="cbEnable_Auth.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="bStop.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
-    <value>ImageBeforeText</value>
-  </data>
-  <data name="gbSystemProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 0</value>
-  </data>
-  <data name="cbDeleteClosed.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 21</value>
-  </data>
-  <data name="tlpProxySet_Port.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tvProxyData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="&gt;&gt;nudProxyPort.Name" xml:space="preserve">
-    <value>nudProxyPort</value>
-  </data>
-  <data name="bCleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 87</value>
-  </data>
-  <data name="lAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>60, 8</value>
-  </data>
-  <data name="tlpListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="&gt;&gt;cbLogList_AutoRoll.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;tcSocketProxySet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cbDeleteClosed.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="&gt;&gt;tsslServerInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tpLog.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpProxySet.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;gbClientList.Parent" xml:space="preserve">
-    <value>tlpListSet</value>
-  </data>
-  <data name="cbDeleteClosed.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;tcClientInfo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpButton_Start.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <metadata name="cLogContent.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cFuncName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cLogTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ssSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>133, 17</value>
-  </metadata>
-  <metadata name="cLogID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ilSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="tCheckProxyState.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>369, 17</value>
-  </metadata>
-  <metadata name="tSocketProxy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>255, 17</value>
-  </metadata>
 </root>

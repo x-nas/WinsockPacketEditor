@@ -1399,13 +1399,16 @@ namespace WPELibrary.Lib
 
         #region//获取IP地址信息
 
-        public static IPAddress[] GetLocalIPAddress()
+        public static async Task<IPAddress[]> GetLocalIPAddress()
         {
             IPAddress[] ipAddres = null;
 
             try
             {
-                ipAddres = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToArray();
+                await Task.Run(() =>
+                {
+                    ipAddres = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToArray();
+                });                
             }
             catch (Exception ex)
             {
@@ -2871,13 +2874,14 @@ namespace WPELibrary.Lib
         {
             try
             {
+                Properties.Settings.Default.ProxyConfig_ProxyIP_Auto = Socket_Cache.SocketProxy.ProxyIP_Auto;                
                 Properties.Settings.Default.ProxyConfig_EnableSOCKS5 = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 Properties.Settings.Default.ProxyConfig_ProxyPort = Socket_Cache.SocketProxy.ProxyPort;
                 Properties.Settings.Default.ProxyConfig_EnableAuth = Socket_Cache.SocketProxy.Enable_Auth;
                 Properties.Settings.Default.ProxyConfig_Auth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
                 Properties.Settings.Default.ProxyConfig_Auth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
 
-                Properties.Settings.Default.ProxyConfig_ProxyList_NoCache = Socket_Cache.SocketProxyList.NoCache;
+                Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord = Socket_Cache.SocketProxyList.NoRecord;
                 Properties.Settings.Default.ProxyConfig_ClientList_DelClosed = Socket_Cache.SocketProxyList.DelClosed;
 
                 Properties.Settings.Default.ProxyConfig_LogList_AutoRoll = Socket_Cache.LogList.Proxy_AutoRoll;
@@ -2955,13 +2959,14 @@ namespace WPELibrary.Lib
         {
             try
             {
+                Socket_Cache.SocketProxy.ProxyIP_Auto = Properties.Settings.Default.ProxyConfig_ProxyIP_Auto;                
                 Socket_Cache.SocketProxy.Enable_SOCKS5 = Properties.Settings.Default.ProxyConfig_EnableSOCKS5;
                 Socket_Cache.SocketProxy.ProxyPort = Properties.Settings.Default.ProxyConfig_ProxyPort;
                 Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;
                 Socket_Cache.SocketProxy.Auth_UserName = Properties.Settings.Default.ProxyConfig_Auth_UserName;
                 Socket_Cache.SocketProxy.Auth_PassWord = Properties.Settings.Default.ProxyConfig_Auth_PassWord;
 
-                Socket_Cache.SocketProxyList.NoCache = Properties.Settings.Default.ProxyConfig_ProxyList_NoCache;
+                Socket_Cache.SocketProxyList.NoRecord = Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord;
                 Socket_Cache.SocketProxyList.DelClosed = Properties.Settings.Default.ProxyConfig_ClientList_DelClosed;
 
                 Socket_Cache.LogList.Proxy_AutoRoll = Properties.Settings.Default.ProxyConfig_LogList_AutoRoll;

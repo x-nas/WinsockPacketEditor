@@ -518,12 +518,12 @@ namespace WPELibrary.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ProxyConfig_ProxyList_NoCache {
+        public bool ProxyConfig_ProxyList_NoRecord {
             get {
-                return ((bool)(this["ProxyConfig_ProxyList_NoCache"]));
+                return ((bool)(this["ProxyConfig_ProxyList_NoRecord"]));
             }
             set {
-                this["ProxyConfig_ProxyList_NoCache"] = value;
+                this["ProxyConfig_ProxyList_NoRecord"] = value;
             }
         }
         
@@ -536,6 +536,18 @@ namespace WPELibrary.Properties {
             }
             set {
                 this["ProxyConfig_ClientList_DelClosed"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ProxyConfig_ProxyIP_Auto {
+            get {
+                return ((bool)(this["ProxyConfig_ProxyIP_Auto"]));
+            }
+            set {
+                this["ProxyConfig_ProxyIP_Auto"] = value;
             }
         }
     }

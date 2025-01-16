@@ -95,23 +95,15 @@ namespace WinsockPacketEditor
             {
                 this.Text = Socket_Cache.WPE + " - " + Socket_Operation.AssemblyVersion;
 
-                string sServerInfo = string.Empty;
-                IPAddress[] ipAddresses = Socket_Operation.GetLocalIPAddress();
-
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
 
-                this.Auth_CheckedChanged();
-                this.LogList_AutoClearChange();
+                this.InitProxyIPAppoint();
 
-                foreach (var address in ipAddresses)
-                {
-                    sServerInfo += address.ToString() + ", ";
-                }
-
-                sServerInfo = sServerInfo.Trim().TrimEnd(',');
-
-                this.tsslServerInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_137), sServerInfo);
+                this.ProxyIP_Appoint_Changed();
+                this.EnableAuth_Changed();
+                this.LogList_AutoClear_Changed();
+                
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
             }
             catch (Exception ex)
@@ -120,12 +112,61 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void cbProxySet_Auth_CheckedChanged(object sender, EventArgs e)
+        private async void InitProxyIPAppoint()
         {
-            this.Auth_CheckedChanged();
+            try
+            {
+                IPAddress[] ipAddresses = await Socket_Operation.GetLocalIPAddress();
+
+                this.cbbProxyIP_Appoint.Items.Clear();
+
+                foreach (IPAddress ipAddress in ipAddresses)
+                {
+                    this.cbbProxyIP_Appoint.Items.Add(ipAddress.ToString());
+                }
+
+                if (this.cbbProxyIP_Appoint.Items.Count > 0)
+                {
+                    this.cbbProxyIP_Appoint.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
-        private void Auth_CheckedChanged()
+        #endregion
+
+        #region//指定代理IP地址
+
+        private void cbProxyIP_Auto_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ProxyIP_Appoint_Changed();
+        }
+
+        private void ProxyIP_Appoint_Changed()
+        {
+            try
+            {
+                this.cbbProxyIP_Appoint.Enabled = !this.cbProxyIP_Auto.Checked;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//启用身份认证
+
+        private void cbEnable_Auth_CheckedChanged(object sender, EventArgs e)
+        {
+            this.EnableAuth_Changed();
+        }
+
+        private void EnableAuth_Changed()
         {
             try
             {
@@ -137,7 +178,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion                        
+        #endregion
 
         #region//加载系统参数
 
@@ -147,13 +188,14 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.LoadConfigs_SocketProxy();
 
+                this.cbProxyIP_Auto.Checked = Socket_Cache.SocketProxy.ProxyIP_Auto;            
                 this.cbEnable_SOCKS5.Checked = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 this.nudProxyPort.Value = Socket_Cache.SocketProxy.ProxyPort;
                 this.cbEnable_Auth.Checked = Socket_Cache.SocketProxy.Enable_Auth;
                 this.txtAuth_UserName.Text = Socket_Cache.SocketProxy.Auth_UserName;
                 this.txtAuth_PassWord.Text = Socket_Cache.SocketProxy.Auth_PassWord;
 
-                this.cbNoCache.Checked = Socket_Cache.SocketProxyList.NoCache;
+                this.cbNoRecordData.Checked = Socket_Cache.SocketProxyList.NoRecord;
                 this.cbDeleteClosed.Checked = Socket_Cache.SocketProxyList.DelClosed;
 
                 this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Proxy_AutoRoll;
@@ -174,13 +216,14 @@ namespace WinsockPacketEditor
         {
             try
             {
+                Socket_Cache.SocketProxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;             
                 Socket_Cache.SocketProxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
                 Socket_Cache.SocketProxy.ProxyPort = ((ushort)this.nudProxyPort.Value);
                 Socket_Cache.SocketProxy.Enable_Auth = this.cbEnable_Auth.Checked;
                 Socket_Cache.SocketProxy.Auth_UserName = this.txtAuth_UserName.Text.Trim();
                 Socket_Cache.SocketProxy.Auth_PassWord = this.txtAuth_PassWord.Text.Trim();
 
-                Socket_Cache.SocketProxyList.NoCache = this.cbNoCache.Checked;
+                Socket_Cache.SocketProxyList.NoRecord = this.cbNoRecordData.Checked;
                 Socket_Cache.SocketProxyList.DelClosed = this.cbDeleteClosed.Checked;
 
                 Socket_Cache.LogList.Proxy_AutoRoll = this.cbLogList_AutoRoll.Checked;
@@ -229,10 +272,10 @@ namespace WinsockPacketEditor
 
         private void cbLogList_AutoClear_CheckedChanged(object sender, EventArgs e)
         {
-            this.LogList_AutoClearChange();
+            this.LogList_AutoClear_Changed();
         }
 
-        private void LogList_AutoClearChange()
+        private void LogList_AutoClear_Changed()
         {
             try
             {
@@ -262,13 +305,13 @@ namespace WinsockPacketEditor
                 if (this.CheckProxySet())
                 {
                     Socket_Cache.SocketProxy.IsListening = true;
-                    Socket_Cache.SocketProxy.ProxyIP = IPAddress.Any;
+
+                    this.InitProxyStart();                    
 
                     this.bStart.Enabled = false;
                     this.bStop.Enabled = true;
                     this.tpProxySet.Enabled = false;
-
-                    this.SaveConfigs_Parameter();
+                    this.tpAuthSet.Enabled = false;
 
                     if (SocketServer == null)
                     {
@@ -276,7 +319,7 @@ namespace WinsockPacketEditor
                         SocketServer = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                         SocketServer.Bind(ep);
                         SocketServer.Listen(int.MaxValue);
-                        AcceptClients();
+                        AcceptClients();                        
                     }
 
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
@@ -290,7 +333,37 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
+        private void InitProxyStart()
+        {
+            try
+            {
+                if (this.cbProxyIP_Auto.Checked)
+                {
+                    Socket_Cache.SocketProxy.ProxyTCP_IP = IPAddress.Any;
+                    Socket_Cache.SocketProxy.ProxyUDP_IP = IPAddress.Parse(this.cbbProxyIP_Appoint.Items[0].ToString());
+                }
+                else
+                {
+                    Socket_Cache.SocketProxy.ProxyTCP_IP = IPAddress.Parse(this.cbbProxyIP_Appoint.SelectedItem.ToString());
+                    Socket_Cache.SocketProxy.ProxyUDP_IP = IPAddress.Parse(this.cbbProxyIP_Appoint.SelectedItem.ToString());
+                }
+
+                Socket_Cache.SocketProxy.ProxyTotal_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyTCP_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyUDP_CNT = 0;
+
+                this.SaveConfigs_Parameter();
+
+                string sProxyIP = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_137), Socket_Cache.SocketProxy.ProxyTCP_IP, Socket_Cache.SocketProxy.ProxyUDP_IP);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sProxyIP);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void AcceptClients()
         {
@@ -376,6 +449,7 @@ namespace WinsockPacketEditor
                 this.bStart.Enabled = true;
                 this.bStop.Enabled = false;
                 this.tpProxySet.Enabled = true;
+                this.tpAuthSet.Enabled = true;
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_143));
             }
@@ -416,9 +490,7 @@ namespace WinsockPacketEditor
                     }
 
                     this.AutoCleanUp_LogList();
-                }
-
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
+                }                                
             }
             catch (Exception ex)
             {
@@ -429,6 +501,7 @@ namespace WinsockPacketEditor
         private async void tCheckProxyState_Tick(object sender, EventArgs e)
         {
             await this.CheckProxyState();
+            this.ShowProxyInfo();
         }
 
         #endregion
@@ -560,7 +633,7 @@ namespace WinsockPacketEditor
                             {
                                 tvProxyInfo.BeginInvoke(new MethodInvoker(delegate
                                 {
-                                    if (Socket_Cache.SocketProxyList.DelClosed)
+                                    if (this.cbDeleteClosed.Checked)
                                     {
                                         ClientNode.Remove();
                                     }
@@ -638,7 +711,7 @@ namespace WinsockPacketEditor
                         await Socket_Operation.AddTreeNode(this.tvProxyData, RootNode.Nodes, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_139), ResponseImgIndex, null);
                     }
 
-                    if (!Socket_Cache.SocketProxyList.NoCache)
+                    if (!this.cbNoRecordData.Checked)
                     {
                         TreeNode DataNode = new TreeNode();
                         switch (spd.DataType)
@@ -746,6 +819,31 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//显示代理信息（异步）
+
+        private void ShowProxyInfo()
+        {
+            try
+            {
+                ulong ProxyTCP_CNT = Socket_Cache.SocketProxy.ProxyTCP_CNT;
+                ulong ProxyUDP_CNT = Socket_Cache.SocketProxy.ProxyUDP_CNT;
+                ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
+
+                this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
+                this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();
+                this.tlProxyUDP_CNT.Text = ProxyUDP_CNT.ToString();
+                this.tlProxyCache_CNT.Text = Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count.ToString();             
+                this.tlProxyLinks_CNT.Text = Socket_Cache.SocketProxyList.lstProxyInfo.Count.ToString();
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示选中的代理数据
 
         private void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
@@ -772,7 +870,8 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
+
 
         #endregion        
     }

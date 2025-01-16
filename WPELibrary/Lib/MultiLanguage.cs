@@ -146,7 +146,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
         public static string[] MutiLan_136 = { "查看数据修改 - 序号 [{0}]", "Show Data Modify - ID [{0}]" };
-        public static string[] MutiLan_137 = { "代理服务器IP地址: [ {0} ]", "Proxy server IP address: [ {0} ]" };
+        public static string[] MutiLan_137 = { "代理IP地址: TCP [{0}] UDP [{1}]", "Proxy IP: TCP [{0}] UDP [{1}]" };
         public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
         public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };
         public static string[] MutiLan_140 = { "< {0} 字节 >", "< {0} Bytes >" };

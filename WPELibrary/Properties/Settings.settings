@@ -125,11 +125,14 @@
     <Setting Name="HookConfig_HookWS2_RecvFrom" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="ProxyConfig_ProxyList_NoCache" Type="System.Boolean" Scope="User">
+    <Setting Name="ProxyConfig_ProxyList_NoRecord" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="ProxyConfig_ClientList_DelClosed" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_ProxyIP_Auto" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>
