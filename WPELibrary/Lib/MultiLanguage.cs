@@ -170,6 +170,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_158 = { "发送到", "SendTo" };
         public static string[] MutiLan_159 = { "接收自", "RecvFrom" };
         public static string[] MutiLan_160 = { "发送列表保存完毕 {0}", "The Send List saved {0}" };
+        //public static string[] MutiLan_161 = { "", "" };
 
         #endregion
 
