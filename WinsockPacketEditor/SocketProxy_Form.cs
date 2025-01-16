@@ -516,6 +516,23 @@ namespace WinsockPacketEditor
                 this.CleanUp_ProxyInfo();
                 this.CleanUp_LogList();
                 this.CleanUp_HexBox();
+                this.CleanUp_ShowProxyInfo();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_ShowProxyInfo()
+        {
+            try
+            {
+                Socket_Cache.SocketProxy.ProxyTotal_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyTCP_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyUDP_CNT = 0;
+                Socket_Cache.SocketProxy.Total_Request = 0;
+                Socket_Cache.SocketProxy.Total_Response = 0;
             }
             catch (Exception ex)
             {
@@ -529,7 +546,7 @@ namespace WinsockPacketEditor
             {
                 Socket_Cache.SocketProxyQueue.ResetProxyDataQueue();
                 Socket_Cache.SocketProxyList.ResetProxyDataList();
-                this.tvProxyData.Nodes.Clear();
+                this.tvProxyData.Nodes.Clear();                
             }
             catch (Exception ex)
             {
