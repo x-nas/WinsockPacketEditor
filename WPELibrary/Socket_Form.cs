@@ -16,8 +16,6 @@ namespace WPELibrary
 {
     public partial class Socket_Form : Form
     {
-        private int Select_Index = -1;
-        private int Search_Index = -1;
         private bool bWakeUp = true;
         private readonly ToolTip tt = new ToolTip();
         private readonly WinSockHook ws = new WinSockHook();
@@ -576,7 +574,7 @@ namespace WPELibrary
                 Socket_Cache.SocketQueue.ResetSocketQueue();
                 Socket_Cache.SocketList.lstRecPacket.Clear();
 
-                this.Select_Index = -1;
+                Socket_Cache.SocketList.Select_Index = -1;
                 this.dgvSocketList.Rows.Clear();
 
                 Socket_Cache.SocketQueue.FilterSocketList_CNT = 0;
@@ -1015,7 +1013,7 @@ namespace WPELibrary
 
                             if (res == -1)
                             {
-                                Search_Index += 1;
+                                Socket_Cache.SocketList.Search_Index += 1;
                                 await this.SearchSocketListNext();
                             }
                         }));
@@ -1059,12 +1057,12 @@ namespace WPELibrary
 
                         if (rbFromHead.Checked)
                         {
-                            Search_Index = 0;
+                            Socket_Cache.SocketList.Search_Index = 0;
                             this.rbFromIndex.Checked = true;
                             this.hbPacketData.SelectionStart = 0;
                         }
 
-                        int iIndex = await Socket_Cache.SocketList.FindSocketList(efFormat, Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
+                        int iIndex = await Socket_Cache.SocketList.FindSocketList(efFormat, Socket_Cache.SocketList.Search_Index, sSearch_Text, Socket_Cache.SocketList.FindOptions.MatchCase);
 
                         if (iIndex >= 0)
                         {
@@ -1094,15 +1092,13 @@ namespace WPELibrary
         {
             try
             {
-                if (dgvSocketList.SelectedRows.Count == 1)
+                if (dgvSocketList.SelectedRows.Count > 0 && dgvSocketList.CurrentCell != null)
                 {
-                    Select_Index = dgvSocketList.SelectedRows[0].Index;
+                    Socket_Cache.SocketList.Select_Index = Socket_Cache.SocketList.Search_Index = dgvSocketList.CurrentCell.RowIndex;
 
-                    Search_Index = Select_Index;
-
-                    if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    if (Socket_Cache.SocketList.Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
                     {
-                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
+                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer;
 
                         if (bSelected != null)
                         {
@@ -1133,19 +1129,19 @@ namespace WPELibrary
 
             try
             {
-                if (Select_Index > -1)
+                if (Socket_Cache.SocketList.Select_Index > -1)
                 {
                     switch (sItemText)
                     {
                         case "cmsHexBox_Send":
 
-                            Socket_Operation.ShowSendForm(Select_Index);
+                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
 
                             break;
 
                         case "cmsHexBox_SendList":
 
-                            Socket_Cache.SendList.AddToSendList_BytIndex(Select_Index);
+                            Socket_Cache.SendList.AddToSendList_BytIndex(Socket_Cache.SocketList.Select_Index);
                             Socket_Operation.ShowSendListForm();
 
                             break;
@@ -1157,11 +1153,11 @@ namespace WPELibrary
                                 this.hbPacketData.CopyHex();
 
                                 byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBuffer);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, bBuffer);
                             }
                             else
                             {
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, null);
+                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, null);
                             }
 
                             break;
@@ -1265,9 +1261,9 @@ namespace WPELibrary
                 {
                     case "cmsSocketList_Send":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            Socket_Operation.ShowSendForm(Select_Index);
+                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
                         }
 
                         break;
@@ -1288,18 +1284,18 @@ namespace WPELibrary
 
                     case "cmsSocketList_FilterList":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, null);
+                            Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, null);
                         }
 
                         break;
 
                     case "cmsSocketList_ShowModified":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            Socket_Operation.ShowSocketCompareForm(Select_Index);
+                            Socket_Operation.ShowSocketCompareForm(Socket_Cache.SocketList.Select_Index);
                         }
 
                         break;
@@ -1312,9 +1308,9 @@ namespace WPELibrary
 
                     case "cmsSocketList_UseSocket":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            Socket_Cache.SendList.UseSocket = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
+                            Socket_Cache.SendList.UseSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
                         }
 
                         break;
@@ -1330,9 +1326,9 @@ namespace WPELibrary
 
                     case "cmsSocketList_Comparison_A":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer);
                             this.rtbComparison_A.Text = sPacketHex;
                         }
 
@@ -1340,9 +1336,9 @@ namespace WPELibrary
 
                     case "cmsSocketList_Comparison_B":
 
-                        if (Select_Index > -1)
+                        if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer);
+                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer);
                             this.rtbComparison_B.Text = sPacketHex;
                         }
 

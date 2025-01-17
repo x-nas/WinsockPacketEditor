@@ -1238,11 +1238,9 @@ namespace WPELibrary.Lib
             public static bool AutoRoll;
             public static bool AutoClear;
             public static decimal AutoClear_Value;
-
+            public static int Select_Index, Search_Index;
             public static FindOptions FindOptions = new FindOptions();
-
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
-
             public delegate void SocketPacketReceived(Socket_PacketInfo si);
             public static event SocketPacketReceived RecSocketPacket;
 
@@ -1383,6 +1381,31 @@ namespace WPELibrary.Lib
                 }
 
                 return iResult;
+            }
+
+            #endregion
+
+            #region//发送封包列表中的封包
+
+            public static void SendSocketList_ByIndex(int Index)
+            {
+                try
+                {
+                    if (Index > -1 && Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    {
+                        int Socket = Socket_Cache.SocketList.lstRecPacket[Index].PacketSocket;
+                        Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Index].PacketType;
+                        string From = Socket_Cache.SocketList.lstRecPacket[Index].PacketFrom;
+                        string To = Socket_Cache.SocketList.lstRecPacket[Index].PacketTo;
+                        byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[Index].PacketBuffer;
+
+                        Socket_Operation.SendPacket(Socket, ptType, From, To, bBuffer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
@@ -3600,37 +3623,38 @@ namespace WPELibrary.Lib
 
             public enum KeyBoardType
             {
-                Press,
-                Down,
-                Up,
-                Combine,
-                Text,
+                Press = 0,
+                Down = 1,
+                Up = 2,
+                Combine = 3,
+                Text = 4,
             }
 
             public enum MouseType
             {
-                LeftClick,
-                RightClick,
-                LeftDBClick,
-                RightDBClick,
-                LeftDown,
-                LeftUp,
-                RightDown,
-                RightUp,
-                WheelUp,
-                WheelDown,
-                MoveTo,
-                MoveBy,
+                LeftClick = 0,
+                RightClick = 1,
+                LeftDBClick = 2,
+                RightDBClick = 3,
+                LeftDown = 4,
+                LeftUp = 5,
+                RightDown = 6,
+                RightUp = 7,
+                WheelUp = 8,
+                WheelDown = 9,
+                MoveTo = 10,
+                MoveBy = 11,
             }
 
             public enum InstructionType
             {
-                Send,
-                Delay,
-                LoopStart,
-                LoopEnd,
-                KeyBoard,
-                Mouse,
+                Send = 0,                
+                Delay = 1,
+                LoopStart = 2,
+                LoopEnd = 3,
+                KeyBoard = 4,
+                Mouse = 5,
+                SendSocketList = 6,
             }
 
             #endregion
@@ -3790,6 +3814,10 @@ namespace WPELibrary.Lib
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
                             break;
 
+                        case Socket_Cache.Robot.InstructionType.SendSocketList:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
+                            break;
+
                         case Socket_Cache.Robot.InstructionType.Delay:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_95);
                             break;
@@ -3832,6 +3860,10 @@ namespace WPELibrary.Lib
                     switch (instructionType)
                     {
                         case Socket_Cache.Robot.InstructionType.Send:
+                            cReturn = Color.YellowGreen;
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.SendSocketList:
                             cReturn = Color.YellowGreen;
                             break;
 
@@ -3890,6 +3922,12 @@ namespace WPELibrary.Lib
                                     sReturn += string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114), SendPacket_Socket);
                                 }                           
                             }
+
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.SendSocketList:
+
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_161);
 
                             break;
 

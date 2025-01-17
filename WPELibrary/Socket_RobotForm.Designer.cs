@@ -51,6 +51,12 @@
             this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbSendList = new System.Windows.Forms.GroupBox();
             this.dgvSendList = new System.Windows.Forms.DataGridView();
+            this.cSendList_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpRobotInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbRobotName = new System.Windows.Forms.GroupBox();
             this.txtRobotName = new System.Windows.Forms.TextBox();
@@ -72,6 +78,10 @@
             this.tcRobotInstruction = new System.Windows.Forms.TabControl();
             this.tpInstruction_Socket = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Socket = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSpecifySend = new System.Windows.Forms.GroupBox();
+            this.tlpSpecifySend = new System.Windows.Forms.TableLayoutPanel();
+            this.bSend_SocketList = new System.Windows.Forms.Button();
+            this.lSpecifySend_SocketList = new System.Windows.Forms.Label();
             this.gbSend = new System.Windows.Forms.GroupBox();
             this.tlpSend = new System.Windows.Forms.TableLayoutPanel();
             this.nudSendSocket = new System.Windows.Forms.NumericUpDown();
@@ -111,7 +121,7 @@
             this.bKeyBoard = new System.Windows.Forms.Button();
             this.tlpKeyBoardCombine = new System.Windows.Forms.TableLayoutPanel();
             this.gbKeyboard_Text = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpKeyboard_Text = new System.Windows.Forms.TableLayoutPanel();
             this.txtKeyboard_Text = new System.Windows.Forms.TextBox();
             this.bKeyboard_Text = new System.Windows.Forms.Button();
             this.gbKeyboard_combination = new System.Windows.Forms.GroupBox();
@@ -153,12 +163,6 @@
             this.bSave = new System.Windows.Forms.Button();
             this.gbExecute = new System.Windows.Forms.GroupBox();
             this.txtExecute = new System.Windows.Forms.TextBox();
-            this.cSendList_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpRobotForm.SuspendLayout();
             this.ssRobotInstruction.SuspendLayout();
             this.tlpListInfo.SuspendLayout();
@@ -172,6 +176,8 @@
             this.tcRobotInstruction.SuspendLayout();
             this.tpInstruction_Socket.SuspendLayout();
             this.tlpInstruction_Socket.SuspendLayout();
+            this.gbSpecifySend.SuspendLayout();
+            this.tlpSpecifySend.SuspendLayout();
             this.gbSend.SuspendLayout();
             this.tlpSend.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket)).BeginInit();
@@ -194,7 +200,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).BeginInit();
             this.tlpKeyBoardCombine.SuspendLayout();
             this.gbKeyboard_Text.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tlpKeyboard_Text.SuspendLayout();
             this.gbKeyboard_combination.SuspendLayout();
             this.tlpKeyboard_combination.SuspendLayout();
             this.tpInstruction_Mouse.SuspendLayout();
@@ -240,8 +246,8 @@
             // 
             // ssRobotInstruction_Total
             // 
-            this.ssRobotInstruction_Total.Name = "ssRobotInstruction_Total";
             resources.ApplyResources(this.ssRobotInstruction_Total, "ssRobotInstruction_Total");
+            this.ssRobotInstruction_Total.Name = "ssRobotInstruction_Total";
             // 
             // ssRobotInstruction_Total_Value
             // 
@@ -251,14 +257,14 @@
             // 
             // ssRobotInstruction_Split1
             // 
+            resources.ApplyResources(this.ssRobotInstruction_Split1, "ssRobotInstruction_Split1");
             this.ssRobotInstruction_Split1.ForeColor = System.Drawing.Color.DarkGray;
             this.ssRobotInstruction_Split1.Name = "ssRobotInstruction_Split1";
-            resources.ApplyResources(this.ssRobotInstruction_Split1, "ssRobotInstruction_Split1");
             // 
             // ssRobotInstruction_Success
             // 
-            this.ssRobotInstruction_Success.Name = "ssRobotInstruction_Success";
             resources.ApplyResources(this.ssRobotInstruction_Success, "ssRobotInstruction_Success");
+            this.ssRobotInstruction_Success.Name = "ssRobotInstruction_Success";
             // 
             // ssRobotInstruction_Success_Value
             // 
@@ -268,14 +274,14 @@
             // 
             // toolStripStatusLabel3
             // 
+            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
             this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
             // 
             // ssRobotInstruction_Fail
             // 
-            this.ssRobotInstruction_Fail.Name = "ssRobotInstruction_Fail";
             resources.ApplyResources(this.ssRobotInstruction_Fail, "ssRobotInstruction_Fail");
+            this.ssRobotInstruction_Fail.Name = "ssRobotInstruction_Fail";
             // 
             // ssRobotInstruction_Fail_Value
             // 
@@ -292,13 +298,14 @@
             // 
             // gbSendList
             // 
-            this.gbSendList.Controls.Add(this.dgvSendList);
             resources.ApplyResources(this.gbSendList, "gbSendList");
+            this.gbSendList.Controls.Add(this.dgvSendList);
             this.gbSendList.Name = "gbSendList";
             this.gbSendList.TabStop = false;
             // 
             // dgvSendList
             // 
+            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.AllowUserToAddRows = false;
             this.dgvSendList.AllowUserToDeleteRows = false;
             this.dgvSendList.AllowUserToResizeRows = false;
@@ -312,7 +319,6 @@
             this.cType,
             this.cIPTo,
             this.cLen});
-            resources.ApplyResources(this.dgvSendList, "dgvSendList");
             this.dgvSendList.MultiSelect = false;
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
@@ -324,6 +330,71 @@
             this.dgvSendList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSendList_CellFormatting);
             this.dgvSendList.SelectionChanged += new System.EventHandler(this.dgvSendList_SelectionChanged);
             // 
+            // cSendList_ID
+            // 
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSendList_ID.DefaultCellStyle = dataGridViewCellStyle9;
+            resources.ApplyResources(this.cSendList_ID, "cSendList_ID");
+            this.cSendList_ID.Name = "cSendList_ID";
+            this.cSendList_ID.ReadOnly = true;
+            this.cSendList_ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cSendList_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cNote
+            // 
+            this.cNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cNote.DataPropertyName = "Remark";
+            resources.ApplyResources(this.cNote, "cNote");
+            this.cNote.Name = "cNote";
+            this.cNote.ReadOnly = true;
+            this.cNote.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cNote.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cSocket
+            // 
+            this.cSocket.DataPropertyName = "Socket";
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cSocket.DefaultCellStyle = dataGridViewCellStyle10;
+            resources.ApplyResources(this.cSocket, "cSocket");
+            this.cSocket.Name = "cSocket";
+            this.cSocket.ReadOnly = true;
+            this.cSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cType
+            // 
+            this.cType.DataPropertyName = "Type";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cType.DefaultCellStyle = dataGridViewCellStyle11;
+            resources.ApplyResources(this.cType, "cType");
+            this.cType.Name = "cType";
+            this.cType.ReadOnly = true;
+            this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPTo
+            // 
+            this.cIPTo.DataPropertyName = "ToAddress";
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle12;
+            resources.ApplyResources(this.cIPTo, "cIPTo");
+            this.cIPTo.Name = "cIPTo";
+            this.cIPTo.ReadOnly = true;
+            this.cIPTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLen
+            // 
+            this.cLen.DataPropertyName = "Len";
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLen.DefaultCellStyle = dataGridViewCellStyle13;
+            resources.ApplyResources(this.cLen, "cLen");
+            this.cLen.Name = "cLen";
+            this.cLen.ReadOnly = true;
+            this.cLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tlpRobotInfo
             // 
             resources.ApplyResources(this.tlpRobotInfo, "tlpRobotInfo");
@@ -333,8 +404,8 @@
             // 
             // gbRobotName
             // 
-            this.gbRobotName.Controls.Add(this.txtRobotName);
             resources.ApplyResources(this.gbRobotName, "gbRobotName");
+            this.gbRobotName.Controls.Add(this.txtRobotName);
             this.gbRobotName.Name = "gbRobotName";
             this.gbRobotName.TabStop = false;
             // 
@@ -345,13 +416,14 @@
             // 
             // gbRobotInstruction
             // 
-            this.gbRobotInstruction.Controls.Add(this.dgvRobotInstruction);
             resources.ApplyResources(this.gbRobotInstruction, "gbRobotInstruction");
+            this.gbRobotInstruction.Controls.Add(this.dgvRobotInstruction);
             this.gbRobotInstruction.Name = "gbRobotInstruction";
             this.gbRobotInstruction.TabStop = false;
             // 
             // dgvRobotInstruction
             // 
+            resources.ApplyResources(this.dgvRobotInstruction, "dgvRobotInstruction");
             this.dgvRobotInstruction.AllowUserToAddRows = false;
             this.dgvRobotInstruction.AllowUserToDeleteRows = false;
             this.dgvRobotInstruction.AllowUserToResizeRows = false;
@@ -364,7 +436,6 @@
             this.cRobotInstruction_Type,
             this.cRobotInstruction_Content});
             this.dgvRobotInstruction.ContextMenuStrip = this.cmsRobotInstruction;
-            resources.ApplyResources(this.dgvRobotInstruction, "dgvRobotInstruction");
             this.dgvRobotInstruction.MultiSelect = false;
             this.dgvRobotInstruction.Name = "dgvRobotInstruction";
             this.dgvRobotInstruction.ReadOnly = true;
@@ -380,9 +451,9 @@
             // 
             // cRobotInstruction_ID
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle14;
             resources.ApplyResources(this.cRobotInstruction_ID, "cRobotInstruction_ID");
             this.cRobotInstruction_ID.Name = "cRobotInstruction_ID";
             this.cRobotInstruction_ID.ReadOnly = true;
@@ -392,9 +463,9 @@
             // cRobotInstruction_Type
             // 
             this.cRobotInstruction_Type.DataPropertyName = "Type";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle15;
             resources.ApplyResources(this.cRobotInstruction_Type, "cRobotInstruction_Type");
             this.cRobotInstruction_Type.Name = "cRobotInstruction_Type";
             this.cRobotInstruction_Type.ReadOnly = true;
@@ -405,9 +476,9 @@
             // 
             this.cRobotInstruction_Content.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cRobotInstruction_Content.DataPropertyName = "Content";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle16;
             resources.ApplyResources(this.cRobotInstruction_Content, "cRobotInstruction_Content");
             this.cRobotInstruction_Content.Name = "cRobotInstruction_Content";
             this.cRobotInstruction_Content.ReadOnly = true;
@@ -416,6 +487,7 @@
             // 
             // cmsRobotInstruction
             // 
+            resources.ApplyResources(this.cmsRobotInstruction, "cmsRobotInstruction");
             this.cmsRobotInstruction.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsRobotInstruction_Top,
             this.toolStripSeparator1,
@@ -427,87 +499,113 @@
             this.cmsRobotInstruction_Delete,
             this.cmsRobotInstruction_CleanUp});
             this.cmsRobotInstruction.Name = "cmsRobotInstruction";
-            resources.ApplyResources(this.cmsRobotInstruction, "cmsRobotInstruction");
             this.cmsRobotInstruction.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsRobotInstruction_ItemClicked);
             // 
             // cmsRobotInstruction_Top
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_Top, "cmsRobotInstruction_Top");
             this.cmsRobotInstruction_Top.Image = global::WPELibrary.Properties.Resources.go_top;
             this.cmsRobotInstruction_Top.Name = "cmsRobotInstruction_Top";
-            resources.ApplyResources(this.cmsRobotInstruction_Top, "cmsRobotInstruction_Top");
             // 
             // toolStripSeparator1
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
             // 
             // cmsRobotInstruction_Up
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_Up, "cmsRobotInstruction_Up");
             this.cmsRobotInstruction_Up.Image = global::WPELibrary.Properties.Resources.Up;
             this.cmsRobotInstruction_Up.Name = "cmsRobotInstruction_Up";
-            resources.ApplyResources(this.cmsRobotInstruction_Up, "cmsRobotInstruction_Up");
             // 
             // cmsRobotInstruction_Down
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_Down, "cmsRobotInstruction_Down");
             this.cmsRobotInstruction_Down.Image = global::WPELibrary.Properties.Resources.Down;
             this.cmsRobotInstruction_Down.Name = "cmsRobotInstruction_Down";
-            resources.ApplyResources(this.cmsRobotInstruction_Down, "cmsRobotInstruction_Down");
             // 
             // toolStripSeparator2
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
             resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
             // 
             // cmsRobotInstruction_Bottom
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_Bottom, "cmsRobotInstruction_Bottom");
             this.cmsRobotInstruction_Bottom.Image = global::WPELibrary.Properties.Resources.go_bottom;
             this.cmsRobotInstruction_Bottom.Name = "cmsRobotInstruction_Bottom";
-            resources.ApplyResources(this.cmsRobotInstruction_Bottom, "cmsRobotInstruction_Bottom");
             // 
             // toolStripSeparator3
             // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
             resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
             // 
             // cmsRobotInstruction_Delete
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_Delete, "cmsRobotInstruction_Delete");
             this.cmsRobotInstruction_Delete.Image = global::WPELibrary.Properties.Resources.Delete;
             this.cmsRobotInstruction_Delete.Name = "cmsRobotInstruction_Delete";
-            resources.ApplyResources(this.cmsRobotInstruction_Delete, "cmsRobotInstruction_Delete");
             // 
             // cmsRobotInstruction_CleanUp
             // 
+            resources.ApplyResources(this.cmsRobotInstruction_CleanUp, "cmsRobotInstruction_CleanUp");
             this.cmsRobotInstruction_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
             this.cmsRobotInstruction_CleanUp.Name = "cmsRobotInstruction_CleanUp";
-            resources.ApplyResources(this.cmsRobotInstruction_CleanUp, "cmsRobotInstruction_CleanUp");
             // 
             // tcRobotInstruction
             // 
+            resources.ApplyResources(this.tcRobotInstruction, "tcRobotInstruction");
             this.tcRobotInstruction.Controls.Add(this.tpInstruction_Socket);
             this.tcRobotInstruction.Controls.Add(this.tpInstruction_Control);
             this.tcRobotInstruction.Controls.Add(this.tpInstruction_keyboard);
             this.tcRobotInstruction.Controls.Add(this.tpInstruction_Mouse);
-            resources.ApplyResources(this.tcRobotInstruction, "tcRobotInstruction");
             this.tcRobotInstruction.Name = "tcRobotInstruction";
             this.tcRobotInstruction.SelectedIndex = 0;
             // 
             // tpInstruction_Socket
             // 
+            resources.ApplyResources(this.tpInstruction_Socket, "tpInstruction_Socket");
             this.tpInstruction_Socket.BackColor = System.Drawing.SystemColors.Control;
             this.tpInstruction_Socket.Controls.Add(this.tlpInstruction_Socket);
-            resources.ApplyResources(this.tpInstruction_Socket, "tpInstruction_Socket");
             this.tpInstruction_Socket.Name = "tpInstruction_Socket";
             // 
             // tlpInstruction_Socket
             // 
             resources.ApplyResources(this.tlpInstruction_Socket, "tlpInstruction_Socket");
+            this.tlpInstruction_Socket.Controls.Add(this.gbSpecifySend, 1, 0);
             this.tlpInstruction_Socket.Controls.Add(this.gbSend, 0, 0);
             this.tlpInstruction_Socket.Name = "tlpInstruction_Socket";
             // 
+            // gbSpecifySend
+            // 
+            resources.ApplyResources(this.gbSpecifySend, "gbSpecifySend");
+            this.gbSpecifySend.Controls.Add(this.tlpSpecifySend);
+            this.gbSpecifySend.Name = "gbSpecifySend";
+            this.gbSpecifySend.TabStop = false;
+            // 
+            // tlpSpecifySend
+            // 
+            resources.ApplyResources(this.tlpSpecifySend, "tlpSpecifySend");
+            this.tlpSpecifySend.Controls.Add(this.bSend_SocketList, 2, 0);
+            this.tlpSpecifySend.Controls.Add(this.lSpecifySend_SocketList, 0, 0);
+            this.tlpSpecifySend.Name = "tlpSpecifySend";
+            // 
+            // bSend_SocketList
+            // 
+            resources.ApplyResources(this.bSend_SocketList, "bSend_SocketList");
+            this.bSend_SocketList.Name = "bSend_SocketList";
+            this.bSend_SocketList.UseVisualStyleBackColor = true;
+            this.bSend_SocketList.Click += new System.EventHandler(this.bSend_SocketList_Click);
+            // 
+            // lSpecifySend_SocketList
+            // 
+            resources.ApplyResources(this.lSpecifySend_SocketList, "lSpecifySend_SocketList");
+            this.lSpecifySend_SocketList.Name = "lSpecifySend_SocketList";
+            // 
             // gbSend
             // 
-            this.gbSend.Controls.Add(this.tlpSend);
             resources.ApplyResources(this.gbSend, "gbSend");
+            this.gbSend.Controls.Add(this.tlpSend);
             this.gbSend.Name = "gbSend";
             this.gbSend.TabStop = false;
             // 
@@ -619,9 +717,9 @@
             // 
             // tpInstruction_Control
             // 
+            resources.ApplyResources(this.tpInstruction_Control, "tpInstruction_Control");
             this.tpInstruction_Control.BackColor = System.Drawing.SystemColors.Control;
             this.tpInstruction_Control.Controls.Add(this.tlpInstruction_Control);
-            resources.ApplyResources(this.tpInstruction_Control, "tpInstruction_Control");
             this.tpInstruction_Control.Name = "tpInstruction_Control";
             // 
             // tlpInstruction_Control
@@ -633,8 +731,8 @@
             // 
             // gbLoop
             // 
-            this.gbLoop.Controls.Add(this.tlpLoop);
             resources.ApplyResources(this.gbLoop, "gbLoop");
+            this.gbLoop.Controls.Add(this.tlpLoop);
             this.gbLoop.Name = "gbLoop";
             this.gbLoop.TabStop = false;
             // 
@@ -688,8 +786,8 @@
             // 
             // gbDelay
             // 
-            this.gbDelay.Controls.Add(this.tlpDelay);
             resources.ApplyResources(this.gbDelay, "gbDelay");
+            this.gbDelay.Controls.Add(this.tlpDelay);
             this.gbDelay.Name = "gbDelay";
             this.gbDelay.TabStop = false;
             // 
@@ -730,9 +828,9 @@
             // 
             // tpInstruction_keyboard
             // 
+            resources.ApplyResources(this.tpInstruction_keyboard, "tpInstruction_keyboard");
             this.tpInstruction_keyboard.BackColor = System.Drawing.SystemColors.Control;
             this.tpInstruction_keyboard.Controls.Add(this.tlpInstruction_keyboard);
-            resources.ApplyResources(this.tpInstruction_keyboard, "tpInstruction_keyboard");
             this.tpInstruction_keyboard.Name = "tpInstruction_keyboard";
             // 
             // tlpInstruction_keyboard
@@ -744,8 +842,8 @@
             // 
             // gbKeyboard
             // 
-            this.gbKeyboard.Controls.Add(this.tlpKeyboard);
             resources.ApplyResources(this.gbKeyboard, "gbKeyboard");
+            this.gbKeyboard.Controls.Add(this.tlpKeyboard);
             this.gbKeyboard.Name = "gbKeyboard";
             this.gbKeyboard.TabStop = false;
             // 
@@ -811,8 +909,8 @@
             // 
             // txtKeyBoard_KeyCode
             // 
-            this.txtKeyBoard_KeyCode.BackColor = System.Drawing.SystemColors.Window;
             resources.ApplyResources(this.txtKeyBoard_KeyCode, "txtKeyBoard_KeyCode");
+            this.txtKeyBoard_KeyCode.BackColor = System.Drawing.SystemColors.Window;
             this.txtKeyBoard_KeyCode.Name = "txtKeyBoard_KeyCode";
             this.txtKeyBoard_KeyCode.ReadOnly = true;
             this.txtKeyBoard_KeyCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyBoard_Key_KeyDown);
@@ -853,22 +951,22 @@
             // 
             // gbKeyboard_Text
             // 
-            this.gbKeyboard_Text.Controls.Add(this.tableLayoutPanel1);
             resources.ApplyResources(this.gbKeyboard_Text, "gbKeyboard_Text");
+            this.gbKeyboard_Text.Controls.Add(this.tlpKeyboard_Text);
             this.gbKeyboard_Text.Name = "gbKeyboard_Text";
             this.gbKeyboard_Text.TabStop = false;
             // 
-            // tableLayoutPanel1
+            // tlpKeyboard_Text
             // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.txtKeyboard_Text, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bKeyboard_Text, 2, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            resources.ApplyResources(this.tlpKeyboard_Text, "tlpKeyboard_Text");
+            this.tlpKeyboard_Text.Controls.Add(this.txtKeyboard_Text, 0, 0);
+            this.tlpKeyboard_Text.Controls.Add(this.bKeyboard_Text, 2, 0);
+            this.tlpKeyboard_Text.Name = "tlpKeyboard_Text";
             // 
             // txtKeyboard_Text
             // 
-            this.txtKeyboard_Text.BackColor = System.Drawing.SystemColors.Window;
             resources.ApplyResources(this.txtKeyboard_Text, "txtKeyboard_Text");
+            this.txtKeyboard_Text.BackColor = System.Drawing.SystemColors.Window;
             this.txtKeyboard_Text.Name = "txtKeyboard_Text";
             // 
             // bKeyboard_Text
@@ -880,8 +978,8 @@
             // 
             // gbKeyboard_combination
             // 
-            this.gbKeyboard_combination.Controls.Add(this.tlpKeyboard_combination);
             resources.ApplyResources(this.gbKeyboard_combination, "gbKeyboard_combination");
+            this.gbKeyboard_combination.Controls.Add(this.tlpKeyboard_combination);
             this.gbKeyboard_combination.Name = "gbKeyboard_combination";
             this.gbKeyboard_combination.TabStop = false;
             // 
@@ -900,8 +998,8 @@
             // 
             // txtKeyboard_combination
             // 
-            this.txtKeyboard_combination.BackColor = System.Drawing.SystemColors.Window;
             resources.ApplyResources(this.txtKeyboard_combination, "txtKeyboard_combination");
+            this.txtKeyboard_combination.BackColor = System.Drawing.SystemColors.Window;
             this.txtKeyboard_combination.Name = "txtKeyboard_combination";
             this.txtKeyboard_combination.ReadOnly = true;
             this.txtKeyboard_combination.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyboard_combination_KeyDown);
@@ -916,9 +1014,9 @@
             // 
             // tpInstruction_Mouse
             // 
+            resources.ApplyResources(this.tpInstruction_Mouse, "tpInstruction_Mouse");
             this.tpInstruction_Mouse.BackColor = System.Drawing.SystemColors.Control;
             this.tpInstruction_Mouse.Controls.Add(this.tlpInstruction_Mouse);
-            resources.ApplyResources(this.tpInstruction_Mouse, "tpInstruction_Mouse");
             this.tpInstruction_Mouse.Name = "tpInstruction_Mouse";
             // 
             // tlpInstruction_Mouse
@@ -931,8 +1029,8 @@
             // 
             // gbMouseWheel
             // 
-            this.gbMouseWheel.Controls.Add(this.tlpMouseWheel);
             resources.ApplyResources(this.gbMouseWheel, "gbMouseWheel");
+            this.gbMouseWheel.Controls.Add(this.tlpMouseWheel);
             this.gbMouseWheel.Name = "gbMouseWheel";
             this.gbMouseWheel.TabStop = false;
             // 
@@ -995,8 +1093,8 @@
             // 
             // gbMouseMove
             // 
-            this.gbMouseMove.Controls.Add(this.tlpMouseMove);
             resources.ApplyResources(this.gbMouseMove, "gbMouseMove");
+            this.gbMouseMove.Controls.Add(this.tlpMouseMove);
             this.gbMouseMove.Name = "gbMouseMove";
             this.gbMouseMove.TabStop = false;
             // 
@@ -1065,8 +1163,8 @@
             // 
             // gbMouse
             // 
-            this.gbMouse.Controls.Add(this.tlpMouse);
             resources.ApplyResources(this.gbMouse, "gbMouse");
+            this.gbMouse.Controls.Add(this.tlpMouse);
             this.gbMouse.Name = "gbMouse";
             this.gbMouse.TabStop = false;
             // 
@@ -1194,84 +1292,19 @@
             // 
             // gbExecute
             // 
-            this.gbExecute.Controls.Add(this.txtExecute);
             resources.ApplyResources(this.gbExecute, "gbExecute");
+            this.gbExecute.Controls.Add(this.txtExecute);
             this.gbExecute.Name = "gbExecute";
             this.gbExecute.TabStop = false;
             // 
             // txtExecute
             // 
+            resources.ApplyResources(this.txtExecute, "txtExecute");
             this.txtExecute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.txtExecute.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtExecute, "txtExecute");
             this.txtExecute.ForeColor = System.Drawing.Color.RoyalBlue;
             this.txtExecute.Name = "txtExecute";
             this.txtExecute.ReadOnly = true;
-            // 
-            // cSendList_ID
-            // 
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSendList_ID.DefaultCellStyle = dataGridViewCellStyle12;
-            resources.ApplyResources(this.cSendList_ID, "cSendList_ID");
-            this.cSendList_ID.Name = "cSendList_ID";
-            this.cSendList_ID.ReadOnly = true;
-            this.cSendList_ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSendList_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cNote
-            // 
-            this.cNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cNote.DataPropertyName = "Remark";
-            resources.ApplyResources(this.cNote, "cNote");
-            this.cNote.Name = "cNote";
-            this.cNote.ReadOnly = true;
-            this.cNote.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cNote.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle13;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cType
-            // 
-            this.cType.DataPropertyName = "Type";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle14;
-            resources.ApplyResources(this.cType, "cType");
-            this.cType.Name = "cType";
-            this.cType.ReadOnly = true;
-            this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPTo
-            // 
-            this.cIPTo.DataPropertyName = "ToAddress";
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle15;
-            resources.ApplyResources(this.cIPTo, "cIPTo");
-            this.cIPTo.Name = "cIPTo";
-            this.cIPTo.ReadOnly = true;
-            this.cIPTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "Len";
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle16;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // Socket_RobotForm
             // 
@@ -1297,6 +1330,9 @@
             this.tcRobotInstruction.ResumeLayout(false);
             this.tpInstruction_Socket.ResumeLayout(false);
             this.tlpInstruction_Socket.ResumeLayout(false);
+            this.gbSpecifySend.ResumeLayout(false);
+            this.tlpSpecifySend.ResumeLayout(false);
+            this.tlpSpecifySend.PerformLayout();
             this.gbSend.ResumeLayout(false);
             this.tlpSend.ResumeLayout(false);
             this.tlpSend.PerformLayout();
@@ -1323,8 +1359,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).EndInit();
             this.tlpKeyBoardCombine.ResumeLayout(false);
             this.gbKeyboard_Text.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tlpKeyboard_Text.ResumeLayout(false);
+            this.tlpKeyboard_Text.PerformLayout();
             this.gbKeyboard_combination.ResumeLayout(false);
             this.tlpKeyboard_combination.ResumeLayout(false);
             this.tlpKeyboard_combination.PerformLayout();
@@ -1463,7 +1499,7 @@
         private System.Windows.Forms.TextBox txtKeyboard_combination;
         private System.Windows.Forms.Button bKeyboard_combination;
         private System.Windows.Forms.GroupBox gbKeyboard_Text;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_Text;
         private System.Windows.Forms.TextBox txtKeyboard_Text;
         private System.Windows.Forms.Button bKeyboard_Text;
         private System.Windows.Forms.RadioButton rbMoveBy;
@@ -1474,5 +1510,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
+        private System.Windows.Forms.GroupBox gbSpecifySend;
+        private System.Windows.Forms.TableLayoutPanel tlpSpecifySend;
+        private System.Windows.Forms.Label lSpecifySend_SocketList;
+        private System.Windows.Forms.Button bSend_SocketList;
     }
 }

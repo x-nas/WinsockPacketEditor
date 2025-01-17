@@ -214,6 +214,21 @@
   <data name="tpInstruction_Socket.Text" xml:space="preserve">
     <value>[ Socket Inst ]</value>
   </data>
+  <data name="gbSpecifySend.Text" xml:space="preserve">
+    <value>[ Specify Send ]</value>
+  </data>
+  <data name="bSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>276, 1</value>
+  </data>
+  <data name="bSend_SocketList.Text" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="lSpecifySend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>249, 23</value>
+  </data>
+  <data name="lSpecifySend_SocketList.Text" xml:space="preserve">
+    <value>Send the select packet in the [Socket List]</value>
+  </data>
   <data name="gbSend.Text" xml:space="preserve">
     <value>[ Send ]</value>
   </data>

@@ -156,6 +156,12 @@ namespace WPELibrary.Lib
 
                                 break;
 
+                            case Socket_Cache.Robot.InstructionType.SendSocketList:
+
+                                Socket_Cache.SocketList.SendSocketList_ByIndex(Socket_Cache.SocketList.Select_Index);
+
+                                break;
+
                             case Socket_Cache.Robot.InstructionType.Delay:
 
                                 if (int.TryParse(sContent, out int iDelay))

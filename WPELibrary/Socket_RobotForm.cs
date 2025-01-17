@@ -564,6 +564,22 @@ namespace WPELibrary
 
         #endregion
 
+        #region//封包指令 - 指定发送
+
+        private void bSend_SocketList_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.SendSocketList, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//封包指令 - 延迟
 
         private void bDelay_Click(object sender, EventArgs e)
