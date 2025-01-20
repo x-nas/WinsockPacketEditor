@@ -622,7 +622,7 @@ namespace WPELibrary.Lib
 
         #region//十六进制字符串转byte[]
 
-        public static byte[] Hex_To_Bytes(string hexString)
+        private static byte[] Hex_To_Bytes(string hexString)
         {
             byte[] bReturn = null;
 
@@ -1081,6 +1081,44 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//初始化发送列表的选择框
+
+        public static void InitSendListComboBox(ComboBox cbb)
+        {
+            try
+            {
+                cbb.Items.Clear();
+
+                foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                {
+                    cbb.Items.Add(new Socket_Cache.SendList.SendListItem { SName = ssi.SName, SID = ssi.SID });
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void InitSendListComboBox(ToolStripComboBox tscb)
+        {
+            try
+            {
+                tscb.Items.Clear();
+
+                foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                {
+                    tscb.Items.Add(new Socket_Cache.SendList.SendListItem { SName = ssi.SName, SID = ssi.SID });
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -2691,27 +2729,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion
-
-        #region//显示发送列表窗体
-
-        public static void ShowSendListForm()
-        {
-            try
-            {
-                if (Socket_Cache.SendList.bShow_SendListForm)
-                {
-                    Socket_SendListForm sslForm = new Socket_SendListForm();
-                    sslForm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//显示查找窗体
 
@@ -2752,6 +2770,26 @@ namespace WPELibrary.Lib
         }
 
         #endregion                
+
+        #region//显示发送列表窗体（对话框）
+
+        public static void ShowSendListForm_Dialog(int SIndex)
+        {
+            try
+            {
+                if (Socket_Cache.SendList.lstSend.Count > 0)
+                {
+                    Socket_SendListForm fSendListForm = new Socket_SendListForm(SIndex);
+                    fSendListForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//显示机器人窗体（对话框）
 

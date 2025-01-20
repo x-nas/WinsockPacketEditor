@@ -146,7 +146,7 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 256</value>
+    <value>175, 226</value>
   </data>
   <data name="ssProcessInfo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
@@ -334,31 +334,22 @@
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
+  <data name="cmsSocketList_SystemSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 24</value>
+  </data>
+  <data name="cmsSocketList_SystemSocket.Text" xml:space="preserve">
+    <value>Set SYS Socket</value>
+  </data>
+  <data name="tss5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>171, 6</value>
+  </data>
   <data name="cmsSocketList_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
   <data name="cmsSocketList_ShowModified.Text" xml:space="preserve">
     <value>Show Data Modify</value>
   </data>
-  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 6</value>
-  </data>
-  <data name="cmsSocketList_UseSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 24</value>
-  </data>
-  <data name="cmsSocketList_UseSocket.Text" xml:space="preserve">
-    <value>Use Socket</value>
-  </data>
-  <data name="tss4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 6</value>
-  </data>
-  <data name="cmsSocketList_ShowSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 24</value>
-  </data>
-  <data name="cmsSocketList_ShowSendList.Text" xml:space="preserve">
-    <value>Show Send List</value>
-  </data>
-  <data name="tss5.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tss6.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
   <data name="cmsSocketList_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
@@ -749,14 +740,23 @@
   <data name="tlpHotKeySet.Size" type="System.Drawing.Size, System.Drawing">
     <value>770, 94</value>
   </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>300, 3</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>262, 15</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>（ Execute the list based on the selected tab ）</value>
+  </data>
   <data name="lHotKey_RobotList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 15</value>
+    <value>173, 15</value>
   </data>
   <data name="lHotKey_RobotList.Text" xml:space="preserve">
-    <value>Execute Robot List 1 ~ 12:</value>
+    <value>Execute Send or Robot 1 ~ 12:</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>158, 3</value>
+    <value>182, 3</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>112, 15</value>
@@ -870,7 +870,7 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 210</value>
+    <value>167, 204</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
     <value>864, 207</value>
@@ -889,9 +889,6 @@
   </data>
   <data name="cmsHexBox_SendList.Text" xml:space="preserve">
     <value>Add To Send List</value>
-  </data>
-  <data name="cmsHexBox_tss2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 6</value>
   </data>
   <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>166, 22</value>
@@ -1353,7 +1350,7 @@
     <value>189, 213</value>
   </data>
   <data name="tpFilterList.Text" xml:space="preserve">
-    <value>[ Filter List ]</value>
+    <value>[ Filter ]</value>
   </data>
   <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>189, 213</value>
@@ -1443,6 +1440,75 @@
   <data name="tsFilterList_CleanUp.Text" xml:space="preserve">
     <value>Clean Up</value>
   </data>
+  <data name="tpSendList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 24</value>
+  </data>
+  <data name="tpSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 213</value>
+  </data>
+  <data name="tpSendList.Text" xml:space="preserve">
+    <value>[ Send ]</value>
+  </data>
+  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 213</value>
+  </data>
+  <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 176</value>
+  </data>
+  <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>183, 178</value>
+  </data>
+  <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Top.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsSendList_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Up.Text" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="cmsSendList_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Down.Text" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="toolStripSeparator10.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsSendList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Bottom.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="toolStripSeparator11.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsSendList_Copy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Copy.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="cmsSendList_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Export.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsSendList_Delete.Text" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="tpRobotList.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
@@ -1450,7 +1516,7 @@
     <value>189, 213</value>
   </data>
   <data name="tpRobotList.Text" xml:space="preserve">
-    <value>[ Robot List ]</value>
+    <value>[ Robot ]</value>
   </data>
   <data name="tlpRobotList.Size" type="System.Drawing.Size, System.Drawing">
     <value>189, 213</value>
@@ -1527,6 +1593,12 @@
   <data name="tsslProcessName.Size" type="System.Drawing.Size, System.Drawing">
     <value>85, 18</value>
   </data>
+  <data name="tsslSplit2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>10, 18</value>
+  </data>
+  <data name="tsslProcessInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>71, 18</value>
+  </data>
   <data name="tsslSplit1.Size" type="System.Drawing.Size, System.Drawing">
     <value>10, 18</value>
   </data>
@@ -1543,7 +1615,7 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="cmsIcon.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 160</value>
+    <value>132, 132</value>
   </data>
   <data name="niWPE.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -7718,49 +7790,40 @@
 </value>
   </data>
   <data name="cmsIcon_Show.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
+    <value>131, 22</value>
   </data>
   <data name="cmsIcon_Show.Text" xml:space="preserve">
     <value>Show</value>
   </data>
   <data name="tss17.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 6</value>
+    <value>128, 6</value>
   </data>
   <data name="cmsIcon_StartHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
+    <value>131, 22</value>
   </data>
   <data name="cmsIcon_StartHook.Text" xml:space="preserve">
     <value>Start Hook</value>
   </data>
   <data name="cmsIcon_StopHook.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
+    <value>131, 22</value>
   </data>
   <data name="cmsIcon_StopHook.Text" xml:space="preserve">
     <value>Stop Hook</value>
   </data>
   <data name="tss18.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 6</value>
+    <value>128, 6</value>
   </data>
   <data name="cmsIcon_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
+    <value>131, 22</value>
   </data>
   <data name="cmsIcon_CleanUp.Text" xml:space="preserve">
     <value>Clean Up</value>
   </data>
   <data name="tss19.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 6</value>
-  </data>
-  <data name="cmsIcon_ShowSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
-  </data>
-  <data name="cmsIcon_ShowSendList.Text" xml:space="preserve">
-    <value>Show Send List</value>
-  </data>
-  <data name="tss20.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 6</value>
+    <value>128, 6</value>
   </data>
   <data name="cmsIcon_Exit.Size" type="System.Drawing.Size, System.Drawing">
-    <value>159, 22</value>
+    <value>131, 22</value>
   </data>
   <data name="cmsIcon_Exit.Text" xml:space="preserve">
     <value>Exit</value>

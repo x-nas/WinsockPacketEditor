@@ -23,6 +23,7 @@ namespace WPELibrary.Lib
     {
         public static string WPE = "Winsock Packet Editor x64";
         public static IntPtr MainHandle = IntPtr.Zero;
+        public static int SystemSocket = 0;
 
         #region//结构定义
 
@@ -954,51 +955,51 @@ namespace WPELibrary.Lib
 
             public enum PacketType
             {
-                WS1_Send,
-                WS2_Send,
-                WS1_SendTo,
-                WS2_SendTo,
-                WS1_Recv,
-                WS2_Recv,
-                WS1_RecvFrom,
-                WS2_RecvFrom,
-                WSASend,
-                WSASendTo,
-                WSARecv,
-                WSARecvEx,
-                WSARecvFrom,
+                WS1_Send = 0,
+                WS2_Send = 1,
+                WS1_SendTo = 2,
+                WS2_SendTo = 3,
+                WS1_Recv = 4,
+                WS2_Recv = 5,
+                WS1_RecvFrom = 6,
+                WS2_RecvFrom = 7,
+                WSASend = 8,
+                WSASendTo = 9,
+                WSARecv = 10,
+                WSARecvEx = 11,
+                WSARecvFrom = 12,
             }
 
             public enum IPType
             {
-                From,
-                To,
+                From = 0,
+                To = 1,
             }
 
             public enum EncodingFormat
             {
-                Default,
-                Char,
-                Byte,
-                Bytes,
-                Short,
-                UShort,
-                Int32,
-                UInt32,
-                Int64,
-                UInt64,
-                Float,
-                Double,
-                Bin,
-                GBK,
-                Unicode,
-                ASCII,
-                Hex,
-                UTF7,
-                UTF8,
-                UTF16,
-                UTF32,
-                Base64,
+                Default = 0,
+                Char = 1,
+                Byte = 2,
+                Bytes = 3,
+                Short = 4,
+                UShort = 5,
+                Int32 = 6,
+                UInt32 = 7,
+                Int64 = 8,
+                UInt64 = 9,
+                Float = 10,
+                Double = 11,
+                Bin = 12,
+                GBK = 13,
+                Unicode = 14,
+                ASCII = 15,
+                Hex = 16,
+                UTF7 = 17,
+                UTF8 = 18,
+                UTF16 = 19,
+                UTF32 = 20,
+                Base64 = 21,
             }
 
             #endregion
@@ -3648,7 +3649,7 @@ namespace WPELibrary.Lib
 
             public enum InstructionType
             {
-                Send = 0,                
+                SendSendList = 0,                
                 Delay = 1,
                 LoopStart = 2,
                 LoopEnd = 3,
@@ -3810,7 +3811,7 @@ namespace WPELibrary.Lib
                 {
                     switch (instructionType)
                     {
-                        case Socket_Cache.Robot.InstructionType.Send:
+                        case Socket_Cache.Robot.InstructionType.SendSendList:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
                             break;
 
@@ -3859,7 +3860,7 @@ namespace WPELibrary.Lib
                 {
                     switch (instructionType)
                     {
-                        case Socket_Cache.Robot.InstructionType.Send:
+                        case Socket_Cache.Robot.InstructionType.SendSendList:
                             cReturn = Color.YellowGreen;
                             break;
 
@@ -3908,19 +3909,14 @@ namespace WPELibrary.Lib
                 {
                     switch (instructionType)
                     {
-                        case Socket_Cache.Robot.InstructionType.Send:
+                        case Socket_Cache.Robot.InstructionType.SendSendList:
 
-                            if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                            if (!string.IsNullOrEmpty(sContent))
                             {
-                                string SendPacket_Index = sContent.Split('|')[0];                             
-                                string SendPacket_Socket = sContent.Split('|')[1];                            
+                                Guid SID = Guid.Parse(sContent);
+                                string SName = Socket_Cache.Send.GetSendName_ByGuid(SID);
 
-                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_113), SendPacket_Index);
-
-                                if (!string.IsNullOrEmpty(SendPacket_Socket) && !SendPacket_Socket.Equals("0"))
-                                {
-                                    sReturn += string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114), SendPacket_Socket);
-                                }                           
+                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_113), SName);                                              
                             }
 
                             break;
@@ -4128,7 +4124,7 @@ namespace WPELibrary.Lib
                 {
                     if (dtRInstruction != null && dtRInstruction.Rows.Count > 0)
                     {
-                        List<int> listSend = new List<int>();                 
+                        List<int> listSendSendList = new List<int>();                 
                         List<int> listLoopStart = new List<int>();
                         List<int> listLoopEnd = new List<int>();
 
@@ -4138,8 +4134,8 @@ namespace WPELibrary.Lib
 
                             switch (instructionType)
                             {
-                                case Socket_Cache.Robot.InstructionType.Send:
-                                    listSend.Add(i);
+                                case Socket_Cache.Robot.InstructionType.SendSendList:
+                                    listSendSendList.Add(i);
                                     break;                      
 
                                 case Socket_Cache.Robot.InstructionType.LoopStart:
@@ -4154,23 +4150,24 @@ namespace WPELibrary.Lib
 
                         #region//检测发送指令
 
-                        foreach (int iSendIndex in listSend)
+                        foreach (int iSendIndex in listSendSendList)
                         { 
                             string sSendContent = dtRInstruction.Rows[iSendIndex]["Content"].ToString();
 
-                            if (!string.IsNullOrEmpty(sSendContent) && sSendContent.IndexOf("|") > 0)
+                            if (!string.IsNullOrEmpty(sSendContent))
                             {
-                                int iSendPacketID = int.Parse(sSendContent.Split('|')[0].ToString());
+                                Guid SID = Guid.Parse(sSendContent);
+                                string SName = Socket_Cache.Send.GetSendName_ByGuid(SID);
 
-                                if (iSendPacketID < 1 || iSendPacketID > Socket_Cache.SendList.dtSendList.Rows.Count)
+                                if (string.IsNullOrEmpty(SName))
                                 {
                                     string sError = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_99), iSendIndex + 1, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_103));
 
                                     if (!bFromSystem)
                                     {
                                         Socket_Operation.ShowMessageBox(sError);
-                                    }                                    
-                                    
+                                    }
+
                                     return iSendIndex;
                                 }
                             }
@@ -4733,69 +4730,88 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//发送列表
+        #region//发送
 
-        public static class SendList
+        public static class Send
         {
-            public static int Loop_CNT = 0;
-            public static int Loop_Int = 0;
-            public static int Loop_Send_CNT = 0;
-            public static int SendList_Success_CNT = 0;
-            public static int SendList_Fail_CNT = 0;
-            public static int UseSocket = 0;
-            public static bool bShow_SendListForm = true;
-            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\SendList.sp";
-            public static string AESKey = string.Empty;
+            #region//初始化发送集
 
-            public static DataTable dtSendList = new DataTable();
-
-            #region//初始化发送列表
-
-            private static void InitSendList()
+            public static DataTable InitSendCollection()
             {
+                DataTable dtSendCollection = new DataTable();
+
                 try
                 {
-                    if (dtSendList.Columns.Count == 0)
+                    dtSendCollection.Columns.Add("Remark", typeof(string));
+                    dtSendCollection.Columns.Add("Socket", typeof(int));
+                    dtSendCollection.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
+                    dtSendCollection.Columns.Add("IPTo", typeof(string));
+                    dtSendCollection.Columns.Add("Length", typeof(int));
+                    dtSendCollection.Columns.Add("Buffer", typeof(byte[]));
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtSendCollection;
+            }
+
+            #endregion
+
+            #region//获取发送集
+
+            public static DataTable GetSendCollection_ByGuid(Guid SID)
+            {
+                DataTable dtReturn = null;
+
+                try
+                {
+                    if (SID != null && SID != Guid.Empty)
                     {
-                        dtSendList.Columns.Add("Remark", typeof(string));
-                        dtSendList.Columns.Add("Socket", typeof(int));
-                        dtSendList.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
-                        dtSendList.Columns.Add("ToAddress", typeof(string));
-                        dtSendList.Columns.Add("Len", typeof(int));
-                        dtSendList.Columns.Add("Data", typeof(string));
-                        dtSendList.Columns.Add("Bytes", typeof(byte[]));
+                        foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                        {
+                            if (ssi.SID == SID)
+                            {
+                                return ssi.SCollection;                                
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return dtReturn;
             }
 
-            #endregion            
+            #endregion
 
-            #region//发送列表中的封包
+            #region//新增发送集
 
-            public static bool DoSendList_ByIndex(int Socket, int iIndex)
+            public static void AddSendCollection_ByIndex(Guid SID, int Index)
             {
-                bool bResult = false;
-
                 try
                 {
-                    if (iIndex > -1 && iIndex < dtSendList.Rows.Count)
+                    if (SID != null && SID != Guid.Empty)
                     {
-                        Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dtSendList.Rows[iIndex]["Type"];
-                        string sIPTo = dtSendList.Rows[iIndex]["ToAddress"].ToString().Trim();
-                        byte[] bBuffer = (byte[])dtSendList.Rows[iIndex]["Bytes"];
-
-                        if (bBuffer.Length > 0)
+                        if (Index > -1 && Index < Socket_Cache.SocketList.lstRecPacket.Count)
                         {
-                            if (Socket == 0)
+                            foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
                             {
-                                Socket = (int)dtSendList.Rows[iIndex]["Socket"];
-                            }
+                                if (ssi.SID == SID)
+                                {
+                                    DataTable SCollection = ssi.SCollection;
+                                    string Remark = string.Empty;
+                                    int Socket = Socket_Cache.SocketList.lstRecPacket[Index].PacketSocket;
+                                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Index].PacketType;
+                                    string IPTo = Socket_Cache.SocketList.lstRecPacket[Index].PacketTo;
+                                    byte[] Buffer = Socket_Cache.SocketList.lstRecPacket[Index].PacketBuffer;
 
-                            bResult = Socket_Operation.SendPacket(Socket, ptType, string.Empty, sIPTo, bBuffer);                            
+                                    Socket_Cache.Send.AddSendCollection(SCollection, Remark, Socket, ptType, IPTo, Buffer);
+                                }
+                            }
                         }
                     }                    
                 }
@@ -4803,28 +4819,87 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
 
-                return bResult;
+            public static void AddSendCollection(DataTable SCollection, string Remark, int Socket, Socket_Cache.SocketPacket.PacketType ptType, string IPTo, byte[] Buffer)
+            {
+                try
+                {
+                    DataRow dr = SCollection.NewRow();
+                    dr["Remark"] = Remark;
+                    dr["Socket"] = Socket;
+                    dr["Type"] = ptType;
+                    dr["IPTo"] = IPTo;
+                    dr["Length"] = Buffer.Length;
+                    dr["Buffer"] = Buffer;
+                    SCollection.Rows.Add(dr);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion                        
+
+            #region//获取发送名称
+
+            public static string GetSendName_ByGuid(Guid SID)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    if (SID != null && SID != Guid.Empty)
+                    {
+                        foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                        {
+                            if (ssi.SID == SID)
+                            {
+                                return ssi.SName;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
             }
 
             #endregion
 
-            #region//添加
+            #region//新增发送
 
-            public static void AddToSendList_BytIndex(int iSIndex)
+            public static void AddSend_New()
             {
                 try
                 {
-                    if (iSIndex > -1 && iSIndex < SocketList.lstRecPacket.Count)
-                    {
-                        string sRemark = string.Empty;
-                        int iSocket = SocketList.lstRecPacket[iSIndex].PacketSocket;
-                        Socket_Cache.SocketPacket.PacketType ptType = SocketList.lstRecPacket[iSIndex].PacketType;
-                        string sToAddress = SocketList.lstRecPacket[iSIndex].PacketTo;
-                        byte[] bBuffer = SocketList.lstRecPacket[iSIndex].PacketBuffer;
-                        string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                    Guid SID = Guid.NewGuid();
+                    int SNum = Socket_Cache.SendList.lstSend.Count + 1;
+                    string SName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_162), SNum.ToString());
+                    bool SSystemSocket = false;              
+                    int SLoopCNT = 1;
+                    int SLoopINT = 1000;
 
-                        AddToSendList(sRemark, iSocket, ptType, sToAddress, sData,bBuffer);
+                    AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection());
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void AddSend(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection)
+            {
+                try
+                {
+                    if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
+                    {
+                        Socket_SendInfo ssi = new Socket_SendInfo(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection);
+                        Socket_Cache.SendList.SendToList(ssi);
                     }
                 }
                 catch (Exception ex)
@@ -4833,42 +4908,22 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddToSendList(string sRemark, int iSocket, Socket_Cache.SocketPacket.PacketType ptType, string sToAddress, string sData, byte[] bBuffer)
-            {
-                try
-                {
-                    Socket_Cache.SendList.InitSendList();
-
-                    DataRow dr = dtSendList.NewRow();
-             
-                    dr["Remark"] = sRemark;
-                    dr["Socket"] = iSocket;
-                    dr["Type"] = ptType;
-                    dr["ToAddress"] = sToAddress;
-                    dr["Len"] = bBuffer.Length;
-                    dr["Data"] = sData;
-                    dr["Bytes"] = bBuffer;
-
-                    dtSendList.Rows.Add(dr);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
             #endregion
 
-            #region//删除
+            #region//更新发送
 
-            public static void DeleteFromSendList_ByIndex(int iSIndex)
+            public static void UpdateSend_BySendIndex(int SIndex, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection)
             {
                 try
                 {
-                    if (iSIndex > -1 && iSIndex < dtSendList.Rows.Count)
+                    if (SIndex > -1)
                     {
-                        dtSendList.Rows[iSIndex].Delete();
-                    }                        
+                        Socket_Cache.SendList.lstSend[SIndex].SName = SName;
+                        Socket_Cache.SendList.lstSend[SIndex].SSystemSocket = SSystemSocket;                     
+                        Socket_Cache.SendList.lstSend[SIndex].SLoopCNT = SLoopCNT;
+                        Socket_Cache.SendList.lstSend[SIndex].SLoopINT = SLoopINT;
+                        Socket_Cache.SendList.lstSend[SIndex].SCollection = SCollection.Copy();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -4877,6 +4932,292 @@ namespace WPELibrary.Lib
             }
 
             #endregion
+
+            #region//复制发送
+
+            public static int CopySend_BySendIndex(int SIndex)
+            {
+                int iReturn = -1;
+
+                try
+                {
+                    Guid SID_New = Guid.NewGuid();
+                    string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.SendList.lstSend[SIndex].SName);
+                    bool SSystemSocket_Copy = Socket_Cache.SendList.lstSend[SIndex].SSystemSocket;                
+                    int SLoopCNT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopCNT;
+                    int SLoopINT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopINT;
+                    DataTable SCollection_Copy = Socket_Cache.SendList.lstSend[SIndex].SCollection.Copy();
+
+                    Socket_Cache.Send.AddSend(SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy);
+                    iReturn = Socket_Cache.SendList.lstSend.Count - 1;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
+            #endregion
+
+            #region//删除发送
+
+            public static void DeleteSend_BySendIndex_Dialog(int SIndex)
+            {
+                try
+                {
+                    if (SIndex > -1)
+                    {
+                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
+
+                        if (dr.Equals(DialogResult.OK))
+                        {
+                            Socket_Cache.Send.DeleteSend_BySendIndex(SIndex);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DeleteSend_BySendIndex(int SIndex)
+            {
+                try
+                {
+                    if (SIndex > -1)
+                    {
+                        Socket_Cache.SendList.lstSend.RemoveAt(SIndex);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//执行发送
+
+            private static void DoSend_ByIndex(int SendListIndex)
+            {
+                try
+                {
+                    if (SendListIndex > -1 && SendListIndex < Socket_Cache.SendList.lstSend.Count)
+                    {
+                        Guid SID = Socket_Cache.SendList.lstSend[SendListIndex].SID;
+                        Socket_Cache.Send.DoSend(SID);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DoSend(Guid SID)
+            {
+                try
+                {
+                    if (SID != null && SID != Guid.Empty)
+                    {
+                        Socket_SendInfo ssi = Socket_Cache.SendList.lstSend.Where(item => item.SID == SID).FirstOrDefault();
+
+                        if (ssi != null)
+                        {
+                            if (ssi.SCollection.Rows.Count > 0)
+                            {
+                                Socket_Send ss = new Socket_Send();
+                                ss.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DoSend_ByHotKey(int HOTKEY_ID)
+            {
+                switch (HOTKEY_ID)
+                {
+                    case 9001:
+                        Socket_Cache.Send.DoSend_ByIndex(0);
+                        break;
+
+                    case 9002:
+                        Socket_Cache.Send.DoSend_ByIndex(1);
+                        break;
+
+                    case 9003:
+                        Socket_Cache.Send.DoSend_ByIndex(2);
+                        break;
+
+                    case 9004:
+                        Socket_Cache.Send.DoSend_ByIndex(3);
+                        break;
+
+                    case 9005:
+                        Socket_Cache.Send.DoSend_ByIndex(4);
+                        break;
+
+                    case 9006:
+                        Socket_Cache.Send.DoSend_ByIndex(5);
+                        break;
+
+                    case 9007:
+                        Socket_Cache.Send.DoSend_ByIndex(6);
+                        break;
+
+                    case 9008:
+                        Socket_Cache.Send.DoSend_ByIndex(7);
+                        break;
+
+                    case 9009:
+                        Socket_Cache.Send.DoSend_ByIndex(8);
+                        break;
+
+                    case 9010:
+                        Socket_Cache.Send.DoSend_ByIndex(9);
+                        break;
+
+                    case 9011:
+                        Socket_Cache.Send.DoSend_ByIndex(10);
+                        break;
+
+                    case 9012:
+                        Socket_Cache.Send.DoSend_ByIndex(11);
+                        break;
+                }
+            }
+
+            #endregion                        
+        }
+
+        #endregion
+
+        #region//发送列表
+
+        public static class SendList
+        {  
+            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\SendList.sp";
+            public static string AESKey = string.Empty;
+
+            public static BindingList<Socket_SendInfo> lstSend = new BindingList<Socket_SendInfo>();
+            public delegate void SocketSendReceived(Socket_SendInfo ssi);
+            public static event SocketSendReceived RecSocketSend;
+
+            #region//发送列表索引项
+
+            public class SendListItem
+            {                
+                public string SName { get; set; }
+
+                public Guid SID { get; set; }
+
+                public override string ToString()
+                {
+                    return SName;
+                }
+            }
+
+            #endregion
+
+            #region//发送入列表
+
+            public static void SendToList(Socket_SendInfo ssi)
+            {
+                try
+                {
+                    RecSocketSend?.Invoke(ssi);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//发送列表的列表操作
+
+            public static int UpdateSendList_ByListAction(Socket_Cache.ListAction listAction, int iSIndex)
+            {
+                int iReturn = -1;
+
+                try
+                {
+                    int iSendListCount = Socket_Cache.SendList.lstSend.Count;
+                    Socket_SendInfo ssi = Socket_Cache.SendList.lstSend[iSIndex];
+
+                    switch (listAction)
+                    {
+                        case Socket_Cache.ListAction.Top:
+                            if (iSIndex > 0)
+                            {
+                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Insert(0, ssi);
+                                iReturn = 0;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Up:
+                            if (iSIndex > 0)
+                            {
+                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Insert(iSIndex - 1, ssi);
+                                iReturn = iSIndex - 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Down:
+                            if (iSIndex < iSendListCount - 1)
+                            {
+                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Insert(iSIndex + 1, ssi);
+                                iReturn = iSIndex + 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Bottom:
+                            if (iSIndex < iSendListCount - 1)
+                            {
+                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Add(ssi);
+                                iReturn = Socket_Cache.SendList.lstSend.Count - 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Copy:
+                            Socket_Cache.Send.CopySend_BySendIndex(iSIndex);
+                            iReturn = Socket_Cache.SendList.lstSend.Count - 1;
+                            break;
+
+                        case Socket_Cache.ListAction.Export:
+                            string sSName = Socket_Cache.SendList.lstSend[iSIndex].SName;
+                            Socket_Cache.SendList.SaveSendList_Dialog(sSName, iSIndex);
+                            iReturn = iSIndex;
+                            break;
+
+                        case Socket_Cache.ListAction.Delete:
+                            Socket_Cache.Send.DeleteSend_BySendIndex_Dialog(iSIndex);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
+            #endregion                        
 
             #region//清空发送列表（对话框）
 
@@ -4899,18 +5240,25 @@ namespace WPELibrary.Lib
 
             private static void SendListClear()
             {
-                dtSendList.Rows.Clear();
+                try
+                {
+                    lstSend.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
 
             #region//保存发送列表（对话框）
 
-            public static void SaveSendList_Dialog(string FileName, int SendPacketIndex)
+            public static void SaveSendList_Dialog(string FileName, int SendIndex)
             {
                 try
                 {
-                    if (Socket_Cache.SendList.dtSendList.Rows.Count > 0)
+                    if (Socket_Cache.SendList.lstSend.Count > 0)
                     {
                         SaveFileDialog sfdSaveFile = new SaveFileDialog();
 
@@ -4932,7 +5280,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveSendList(FilePath, SendPacketIndex, true);
+                                SaveSendList(FilePath, SendIndex, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_160), FilePath);
                                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -4968,7 +5316,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveSendList_ToXDocument(string FilePath, int SendPacketIndex)
+            private static void SaveSendList_ToXDocument(string FilePath, int SendIndex)
             {
                 try
                 {
@@ -4980,37 +5328,63 @@ namespace WPELibrary.Lib
                     XElement xeRoot = new XElement("SendList");
                     xdoc.Add(xeRoot);
 
-                    if (Socket_Cache.SendList.dtSendList.Rows.Count > 0)
+                    if (Socket_Cache.SendList.lstSend.Count > 0)
                     {
                         int Start = 0;
-                        int End = Socket_Cache.SendList.dtSendList.Rows.Count;
+                        int End = Socket_Cache.SendList.lstSend.Count;
 
-                        if (SendPacketIndex > -1 && SendPacketIndex < End)
+                        if (SendIndex > -1 && SendIndex < End)
                         {
-                            Start = SendPacketIndex;
-                            End = SendPacketIndex + 1;
+                            Start = SendIndex;
+                            End = SendIndex + 1;
                         }
 
                         for (int i = Start; i < End; i++)
-                        {  
-                            string sRemark = Socket_Cache.SendList.dtSendList.Rows[i]["Remark"].ToString().Trim();
-                            string sSocket = Socket_Cache.SendList.dtSendList.Rows[i]["Socket"].ToString().Trim();
-                            Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)Socket_Cache.SendList.dtSendList.Rows[i]["Type"];
-                            string sPacketType = Socket_Cache.SocketPacket.GetName_ByPacketType((Socket_Cache.SocketPacket.PacketType)Socket_Cache.SendList.dtSendList.Rows[i]["Type"]);
-                            string sToAddress = Socket_Cache.SendList.dtSendList.Rows[i]["ToAddress"].ToString().Trim();                            
-                            byte[] bBuffer = (byte[])Socket_Cache.SendList.dtSendList.Rows[i]["Bytes"];
-                            string sData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                        {
+                            string SID = Socket_Cache.SendList.lstSend[i].SID.ToString().ToUpper();
+                            string SName = Socket_Cache.SendList.lstSend[i].SName;
+                            string SSystemSocket = Socket_Cache.SendList.lstSend[i].SSystemSocket.ToString();                       
+                            string LoopCNT = Socket_Cache.SendList.lstSend[i].SLoopCNT.ToString();
+                            string LoopINT = Socket_Cache.SendList.lstSend[i].SLoopINT.ToString();
+                            DataTable SCollection = Socket_Cache.SendList.lstSend[i].SCollection;
 
-                            XElement xeRobot =
+                            XElement xeSend =
                                 new XElement("Send",
-                                new XElement("Remark", sRemark),
-                                new XElement("Socket", sSocket),
-                                new XElement("Type", ptType),
-                                new XElement("ToAddress", sToAddress),                                
-                                new XElement("Data", sData)
-                                );                          
+                                new XElement("ID", SID),
+                                new XElement("Name", SName),
+                                new XElement("SystemSocket", SSystemSocket),                            
+                                new XElement("LoopCNT", LoopCNT),
+                                new XElement("LoopINT", LoopINT)
+                                );
 
-                            xeRoot.Add(xeRobot);
+                            if (SCollection.Rows.Count > 0)
+                            {
+                                XElement xeCollection = new XElement("SendCollection");
+
+                                foreach (DataRow row in SCollection.Rows)
+                                {
+                                    string sRemark = row["Remark"].ToString();
+                                    string sSocket = row["Socket"].ToString();
+                                    string sType = row["Type"].ToString();
+                                    string sIPTo = row["IPTo"].ToString();
+                                    string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
+
+                                    XElement xeColl =
+                                        new XElement("Collection",                                   
+                                        new XElement("Remark", sRemark),
+                                        new XElement("Socket", sSocket),
+                                        new XElement("Type", sType),
+                                        new XElement("IPTo", sIPTo),
+                                        new XElement("Buffer", sBuffer)
+                                        );
+
+                                    xeCollection.Add(xeColl);
+                                }
+
+                                xeSend.Add(xeCollection);
+                            }
+
+                            xeRoot.Add(xeSend);
                         }
                     }
 
@@ -5116,38 +5490,81 @@ namespace WPELibrary.Lib
                 {
                     foreach (XElement xeSend in xdoc.Root.Elements())
                     {
-                        string sSRemark = string.Empty;
-                        if (xeSend.Element("Remark") != null)
+                        Guid SID = Guid.Empty;
+                        if (xeSend.Element("ID") != null)
                         {
-                            sSRemark = xeSend.Element("Remark").Value;
+                            SID = Guid.Parse(xeSend.Element("ID").Value);
+                        }
+                        else
+                        {
+                            SID = Guid.NewGuid();
                         }
 
-                        int iSSocket = -1;
-                        if (xeSend.Element("Socket") != null)
+                        string SName = string.Empty;
+                        if (xeSend.Element("Name") != null)
                         {
-                            iSSocket = int.Parse(xeSend.Element("Socket").Value);
+                            SName = xeSend.Element("Name").Value;
                         }
 
-                        Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
-                        if (xeSend.Element("Type") != null)
+                        bool SSystemSocket = false;
+                        if (xeSend.Element("SystemSocket") != null)
                         {
-                            ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeSend.Element("Type").Value);
+                            SSystemSocket = bool.Parse(xeSend.Element("SystemSocket").Value);
                         }
 
-                        string sSToAddress = string.Empty;
-                        if (xeSend.Element("ToAddress") != null)
+                        int SLoopCNT = 1;
+                        if (xeSend.Element("LoopCNT") != null)
                         {
-                            sSToAddress = xeSend.Element("ToAddress").Value;
-                        }                     
-
-                        string sSData = string.Empty;
-                        if (xeSend.Element("Data") != null)
-                        {
-                            sSData = xeSend.Element("Data").Value;
+                            SLoopCNT = int.Parse(xeSend.Element("LoopCNT").Value);
                         }
 
-                        byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sSData);
-                        Socket_Cache.SendList.AddToSendList(sSRemark, iSSocket, ptType, sSToAddress, sSData, bBuffer);
+                        int SLoopINT = 1000;
+                        if (xeSend.Element("LoopINT") != null)
+                        {
+                            SLoopINT = int.Parse(xeSend.Element("LoopINT").Value);
+                        }
+
+                        DataTable SCollection = Socket_Cache.Send.InitSendCollection();
+
+                        if (xeSend.Element("SendCollection") != null)
+                        {
+                            foreach (XElement xeCollection in xeSend.Element("SendCollection").Elements())
+                            {
+                                string sRemark = string.Empty;
+                                if (xeCollection.Element("Remark") != null)
+                                {
+                                    sRemark = xeCollection.Element("Remark").Value;
+                                }
+
+                                int iSocket = 0;
+                                if (xeCollection.Element("Socket") != null)
+                                {
+                                    iSocket = int.Parse(xeCollection.Element("Socket").Value);
+                                }
+
+                                Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
+                                if (xeCollection.Element("Type") != null)
+                                {
+                                    ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
+                                }
+
+                                string sIPTo = string.Empty;
+                                if (xeCollection.Element("IPTo") != null)
+                                {
+                                    sIPTo = xeCollection.Element("IPTo").Value;
+                                }
+
+                                byte[] bBuffer = null;
+                                if (xeCollection.Element("Buffer") != null)
+                                {
+                                    bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
+                                }
+
+                                Socket_Cache.Send.AddSendCollection(SCollection, sRemark, iSocket, ptType, sIPTo, bBuffer);                                
+                            }
+                        }
+
+                        Socket_Cache.Send.AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection);
                     }
                 }
                 catch (Exception ex)

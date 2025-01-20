@@ -65,7 +65,9 @@ namespace WPELibrary
                 this.cbbKeyBoard_KeyType.SelectedIndex = 0;
                 this.cbbMouse.SelectedIndex = 0;
                 this.cbbMouseWheel_Direction.SelectedIndex = 0;
-                this.InitRobot();                               
+                
+                this.InitComboBox();
+                this.InitRobot();
             }
             catch (Exception ex)
             {
@@ -93,13 +95,26 @@ namespace WPELibrary
         {
             try
             {
-                dgvSendList.AutoGenerateColumns = false;
-                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
-                dgvSendList.DataSource = Socket_Cache.SendList.dtSendList;
-
                 dgvRobotInstruction.AutoGenerateColumns = false;
                 dgvRobotInstruction.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotInstruction, true, null);
                 dgvRobotInstruction.DataSource = this.dtRobotInstruction;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitComboBox()
+        {
+            try
+            {
+                Socket_Operation.InitSendListComboBox(this.cbbSendLIst);
+
+                if (this.cbbSendLIst.Items.Count > 0)
+                { 
+                    this.cbbSendLIst.SelectedIndex = 0;
+                }
             }
             catch (Exception ex)
             {
@@ -136,56 +151,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void dgvSendList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                if (e.ColumnIndex == dgvSendList.Columns["cSendList_ID"].Index)
-                {
-                    e.Value = (e.RowIndex + 1).ToString();
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvSendList.Columns["cType"].Index)
-                {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSendList.Rows[e.RowIndex].Cells["cType"].Value;
-                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
-                    e.FormattingApplied = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvSendList_SelectionChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (dgvSendList.SelectedRows.Count == 1)
-                {
-                    int iSelectSocket = 0;
-                    int iSelectIndex = dgvSendList.SelectedRows[0].Index;
-
-                    if (iSelectIndex < Socket_Cache.SendList.dtSendList.Rows.Count)
-                    {
-                        if (int.TryParse(Socket_Cache.SendList.dtSendList.Rows[iSelectIndex]["Socket"].ToString(), out int iSocket))
-                        {
-                            iSelectSocket = iSocket;
-                        }
-                        
-                        this.nudSendIndex.Value = iSelectIndex + 1;
-                        this.nudSendSocket.Value = iSelectSocket;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         #endregion
 
@@ -267,11 +233,6 @@ namespace WPELibrary
                             this.dgvRobotInstruction.ContextMenuStrip.Enabled = false;
                         }
 
-                        if (this.dgvSendList.ContextMenuStrip != null)
-                        {
-                            this.dgvSendList.ContextMenuStrip.Enabled = false;
-                        }
-
                         sr.StartRobot(this.RobotName, this.dtRobotInstruction);
                     }
                 }                
@@ -310,15 +271,6 @@ namespace WPELibrary
                 {
                     this.dgvRobotInstruction.ContextMenuStrip.Enabled = true;
                 }
-
-                if (this.dgvSendList.ContextMenuStrip != null)
-                {
-                    this.dgvSendList.ContextMenuStrip.Enabled = true;
-                }
-
-                this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
-                this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
-                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();                
             }
             catch (Exception ex)
             {
@@ -338,10 +290,6 @@ namespace WPELibrary
                     this.dgvRobotInstruction.FirstDisplayedScrollingRowIndex = iIndex;
                 }
 
-                this.ssRobotInstruction_Total_Value.Text = this.sr.Total_Instruction.ToString();
-                this.ssRobotInstruction_Success_Value.Text = this.sr.Send_Success.ToString();
-                this.ssRobotInstruction_Fail_Value.Text = this.sr.Send_Failure.ToString();
-                
                 this.txtExecute.AppendText((iIndex + 1).ToString() + ", ");
             }
             catch (Exception ex)
@@ -531,30 +479,20 @@ namespace WPELibrary
 
         #endregion
 
-        #region//封包指令 - 发送
+        #region//封包指令 - 发送 - 发送列表
 
-        private void bSend_Click(object sender, EventArgs e)
+        private void bSend_SendList_Click(object sender, EventArgs e)
         {
             try
             {
-                int SendPacket_Index = ((int)this.nudSendIndex.Value);
-                int SendPacket_Times = ((int)this.nudSendTimes.Value);
-                int SendPacket_Interval = ((int)this.nudSendInterval.Value);
-                int SendPacket_Socket = ((int)this.nudSendSocket.Value);
-                string sContent = SendPacket_Index + "|" + SendPacket_Socket;
-
-                if (SendPacket_Times > 1)
+                if (this.cbbSendLIst.SelectedItem != null)
                 {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, SendPacket_Times.ToString());
-                }
+                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cbbSendLIst.SelectedItem;              
+                    Guid SID = item.SID;
+                    string sContent = SID.ToString().ToUpper();
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Send, sContent);
-
-                if (SendPacket_Times > 1)
-                {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, SendPacket_Interval.ToString());
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
-                }            
+                    this.AddInstruction(Socket_Cache.Robot.InstructionType.SendSendList, sContent);
+                }                
             }
             catch (Exception ex)
             {
@@ -564,7 +502,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//封包指令 - 指定发送
+        #region//封包指令 - 发送 - 封包列表
 
         private void bSend_SocketList_Click(object sender, EventArgs e)
         {
@@ -640,9 +578,6 @@ namespace WPELibrary
 
                 if (!string.IsNullOrEmpty(KeyCode))
                 {
-                    int KeyTimes = ((int)this.nudKeyBoard_Times.Value);
-                    int KeyInterval = ((int)this.nudKeyBoard_Interval.Value);
-
                     Socket_Cache.Robot.KeyBoardType kbType = new Socket_Cache.Robot.KeyBoardType();
 
                     switch (this.cbbKeyBoard_KeyType.SelectedIndex)
@@ -661,19 +596,7 @@ namespace WPELibrary
                     }
 
                     string sContent = kbType + "|" + KeyCode;
-
-                    if (KeyTimes > 1 && kbType == Socket_Cache.Robot.KeyBoardType.Press)
-                    {
-                        this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, KeyTimes.ToString());
-                    }
-
                     this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
-
-                    if (KeyTimes > 1 && kbType == Socket_Cache.Robot.KeyBoardType.Press)
-                    {
-                        this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, KeyInterval.ToString());
-                        this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
-                    }
                 }                
             }
             catch (Exception ex)
@@ -826,10 +749,7 @@ namespace WPELibrary
         private void bMouse_Click(object sender, EventArgs e)
         {
             try
-            {  
-                int MouseTimes = ((int)this.nudMouse_Times.Value);
-                int MouseInterval = ((int)this.nudMouse_Interval.Value);
-
+            {
                 Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
                 switch (this.cbbMouse.SelectedIndex)
                 { 
@@ -867,29 +787,7 @@ namespace WPELibrary
                 }
                 
                 string sContent = mType + "|" + string.Empty;
-
-                if (MouseTimes > 1 && 
-                    (mType == Socket_Cache.Robot.MouseType.LeftClick || 
-                    mType == Socket_Cache.Robot.MouseType.RightClick ||
-                    mType == Socket_Cache.Robot.MouseType.LeftDBClick ||
-                    mType == Socket_Cache.Robot.MouseType.RightDBClick)
-                    )
-                {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, MouseTimes.ToString());
-                }
-
                 this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
-
-                if (MouseTimes > 1 &&
-                    (mType == Socket_Cache.Robot.MouseType.LeftClick ||
-                    mType == Socket_Cache.Robot.MouseType.RightClick ||
-                    mType == Socket_Cache.Robot.MouseType.LeftDBClick ||
-                    mType == Socket_Cache.Robot.MouseType.RightDBClick)
-                    )
-                {
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, MouseInterval.ToString());
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);
-                }
             }
             catch (Exception ex)
             {

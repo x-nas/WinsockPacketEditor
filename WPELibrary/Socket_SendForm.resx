@@ -1533,32 +1533,41 @@
   <metadata name="cmsHexBox.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>136, 17</value>
   </metadata>
+  <data name="tscbSendList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 25</value>
+  </data>
+  <data name="cmsHexBox_SendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
+  </data>
   <data name="cmsHexBox_SendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 30</value>
+    <value>164, 22</value>
   </data>
   <data name="cmsHexBox_SendList.Text" xml:space="preserve">
     <value>添加到 发送列表</value>
   </data>
-  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 6</value>
+  <data name="cmsHexBox_FilterList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 30</value>
+    <value>164, 22</value>
   </data>
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>添加到 滤镜列表</value>
   </data>
-  <data name="cmsHexBox_Split2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>169, 6</value>
+  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>161, 6</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+    <value>None</value>
   </data>
   <data name="cmsHexBox_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 30</value>
+    <value>164, 22</value>
   </data>
   <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
     <value>全选</value>
   </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>173, 106</value>
+    <value>165, 76</value>
   </data>
   <data name="&gt;&gt;cmsHexBox.Name" xml:space="preserve">
     <value>cmsHexBox</value>
@@ -1753,7 +1762,7 @@
     <value>2</value>
   </data>
   <data name="tlpParameter.ColumnCount" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>3</value>
   </data>
   <data name="tlpSendSocket.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1765,10 +1774,10 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 30</value>
+    <value>84, 30</value>
   </data>
   <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 21</value>
+    <value>181, 21</value>
   </data>
   <data name="nudSendSocket_Len.TabIndex" type="System.Int32, mscorlib">
     <value>128</value>
@@ -1804,7 +1813,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 21</value>
+    <value>75, 21</value>
   </data>
   <data name="lSendSocket_Len.TabIndex" type="System.Int32, mscorlib">
     <value>127</value>
@@ -1843,13 +1852,13 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 21</value>
+    <value>75, 21</value>
   </data>
   <data name="lSendSocket_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
   </data>
   <data name="lSendSocket_Socket.Text" xml:space="preserve">
-    <value>使用 Socket:</value>
+    <value>使用 套接字:</value>
   </data>
   <data name="lSendSocket_Socket.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -1873,10 +1882,10 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendSocket_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 3</value>
+    <value>84, 3</value>
   </data>
   <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>98, 21</value>
+    <value>181, 21</value>
   </data>
   <data name="nudSendSocket_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>125</value>
@@ -1909,7 +1918,7 @@
     <value>3</value>
   </data>
   <data name="tlpSendSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 72</value>
+    <value>268, 72</value>
   </data>
   <data name="tlpSendSocket.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1933,10 +1942,10 @@
     <value>Fill</value>
   </data>
   <data name="gbSendSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>80, 3</value>
+    <value>3, 3</value>
   </data>
   <data name="gbSendSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 94</value>
+    <value>274, 94</value>
   </data>
   <data name="gbSendSocket.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -2035,7 +2044,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendType_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>211, 3</value>
+    <value>284, 3</value>
   </data>
   <data name="lSendType_Times.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2074,7 +2083,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendType_Int.Location" type="System.Drawing.Point, System.Drawing">
-    <value>211, 30</value>
+    <value>284, 30</value>
   </data>
   <data name="lSendType_Int.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2086,7 +2095,7 @@
     <value>127</value>
   </data>
   <data name="lSendType_Int.Text" xml:space="preserve">
-    <value>间隔 (ms)</value>
+    <value>间隔 (毫秒)</value>
   </data>
   <data name="lSendType_Int.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -2113,7 +2122,7 @@
     <value>90, 30</value>
   </data>
   <data name="nudSendType_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 21</value>
+    <value>188, 21</value>
   </data>
   <data name="nudSendType_Interval.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
@@ -2143,7 +2152,7 @@
     <value>90, 3</value>
   </data>
   <data name="nudSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>115, 21</value>
+    <value>188, 21</value>
   </data>
   <data name="nudSendType_Times.TabIndex" type="System.Int32, mscorlib">
     <value>123</value>
@@ -2176,7 +2185,7 @@
     <value>3</value>
   </data>
   <data name="tlpSendType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>288, 72</value>
+    <value>361, 72</value>
   </data>
   <data name="tlpSendType.TabIndex" type="System.Int32, mscorlib">
     <value>125</value>
@@ -2200,10 +2209,10 @@
     <value>Fill</value>
   </data>
   <data name="gbSendType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>280, 3</value>
+    <value>283, 3</value>
   </data>
   <data name="gbSendType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 94</value>
+    <value>367, 94</value>
   </data>
   <data name="gbSendType.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2311,7 +2320,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendStep_Len_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>231, 30</value>
+    <value>232, 30</value>
   </data>
   <data name="lSendStep_Len_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2350,7 +2359,7 @@
     <value>101, 30</value>
   </data>
   <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 21</value>
+    <value>125, 21</value>
   </data>
   <data name="nudSendStep_Len.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -2422,7 +2431,7 @@
     <value>NoControl</value>
   </data>
   <data name="lSendStep_Position_Value.Location" type="System.Drawing.Point, System.Drawing">
-    <value>231, 3</value>
+    <value>232, 3</value>
   </data>
   <data name="lSendStep_Position_Value.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -2461,7 +2470,7 @@
     <value>101, 3</value>
   </data>
   <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 21</value>
+    <value>125, 21</value>
   </data>
   <data name="nudSendStep_Position.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -2494,7 +2503,7 @@
     <value>3</value>
   </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 72</value>
+    <value>269, 72</value>
   </data>
   <data name="tlpSendStepSet.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -2518,10 +2527,10 @@
     <value>Fill</value>
   </data>
   <data name="gbSendStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>580, 3</value>
+    <value>656, 3</value>
   </data>
   <data name="gbSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 94</value>
+    <value>275, 94</value>
   </data>
   <data name="gbSendStep.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2572,7 +2581,7 @@
     <value>3</value>
   </data>
   <data name="tlpParameter.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendSocket" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSendType" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSendStep" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,200,Absolute,300,Absolute,280,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSendSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSendType" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbSendStep" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Percent,40,Percent,30" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpButtons.ColumnCount" type="System.Int32, mscorlib">
     <value>9</value>
@@ -9082,11 +9091,11 @@
   <data name="&gt;&gt;cmsHexBox_SendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsHexBox_Split1.Name" xml:space="preserve">
-    <value>cmsHexBox_Split1</value>
+  <data name="&gt;&gt;tscbSendList.Name" xml:space="preserve">
+    <value>tscbSendList</value>
   </data>
-  <data name="&gt;&gt;cmsHexBox_Split1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tscbSendList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_FilterList.Name" xml:space="preserve">
     <value>cmsHexBox_FilterList</value>
@@ -9094,10 +9103,10 @@
   <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsHexBox_Split2.Name" xml:space="preserve">
-    <value>cmsHexBox_Split2</value>
+  <data name="&gt;&gt;cmsHexBox_Split1.Name" xml:space="preserve">
+    <value>cmsHexBox_Split1</value>
   </data>
-  <data name="&gt;&gt;cmsHexBox_Split2.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsHexBox_Split1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_SelectAll.Name" xml:space="preserve">

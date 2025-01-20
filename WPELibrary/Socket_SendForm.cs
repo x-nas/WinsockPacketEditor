@@ -4,6 +4,7 @@ using System.Threading;
 using WPELibrary.Lib;
 using System.Reflection;
 using Be.Windows.Forms;
+using System.Data;
 
 namespace WPELibrary
 {
@@ -458,32 +459,63 @@ namespace WPELibrary
 
         #region//右键菜单
 
+        private void cmsHexBox_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Socket_Operation.InitSendListComboBox(this.tscbSendList);
+        }
+
+        private void tscbSendList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.tscbSendList.SelectedItem != null)
+                {
+                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Guid SID = item.SID;
+                    DataTable SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+
+                    if (SCollection != null)
+                    {
+                        int iSocket = (int)this.nudSendSocket_Socket.Value;
+                        string sIPTo = this.txtIPTo.Text.Trim();
+
+                        byte[] bBuffer = null;
+
+                        if (this.hbPacketData.CanCopy())
+                        {
+                            this.hbPacketData.CopyHex();
+                            bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());                            
+                        }
+                        else
+                        {
+                            DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
+                            bBuffer = dbp.Bytes.ToArray();
+                        }                        
+
+                        Socket_Cache.Send.AddSendCollection(SCollection, string.Empty, iSocket, this.Send_PacketType, sIPTo, bBuffer);                      
+                    }                                       
+
+                    this.cmsHexBox.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             try
             {
                 string sItemText = e.ClickedItem.Name;
                 this.cmsHexBox.Close();
-              
-                Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;
 
                 DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;                
-                byte[] bBuffer = dbp.Bytes.ToArray();                
-
-                string sHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
+                byte[] bBuffer = dbp.Bytes.ToArray();
 
                 switch (sItemText)
-                {                    
-                    case "cmsHexBox_SendList":
-
-                        int iSocket = (int)this.nudSendSocket_Socket.Value;
-                        string sIPTo = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
-
-                        Socket_Cache.SendList.AddToSendList(string.Empty, iSocket, ptType, sIPTo, sHex, bBuffer);
-                        Socket_Operation.ShowSendListForm();                       
-
-                        break;
-                    
+                {  
                     case "cmsHexBox_FilterList":
 
                         if (Select_Index > -1)
@@ -856,6 +888,6 @@ namespace WPELibrary
 
         #endregion
 
-        #endregion        
+        #endregion
     }
 }

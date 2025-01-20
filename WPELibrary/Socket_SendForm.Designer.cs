@@ -86,9 +86,9 @@ namespace WPELibrary
             this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsHexBox_Split1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tscbSendList = new System.Windows.Forms.ToolStripComboBox();
             this.cmsHexBox_FilterList = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsHexBox_Split2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_Split1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_SelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.lHexBox_Position = new System.Windows.Forms.Label();
             this.ssSocketSend = new System.Windows.Forms.StatusStrip();
@@ -547,41 +547,45 @@ namespace WPELibrary
             this.cmsHexBox.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsHexBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsHexBox_SendList,
-            this.cmsHexBox_Split1,
             this.cmsHexBox_FilterList,
-            this.cmsHexBox_Split2,
+            this.cmsHexBox_Split1,
             this.cmsHexBox_SelectAll});
             this.cmsHexBox.Name = "cmsSocketSend";
             resources.ApplyResources(this.cmsHexBox, "cmsHexBox");
+            this.cmsHexBox.Opening += new System.ComponentModel.CancelEventHandler(this.cmsHexBox_Opening);
             this.cmsHexBox.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsHexBox_ItemClicked);
             // 
             // cmsHexBox_SendList
             // 
+            this.cmsHexBox_SendList.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tscbSendList});
             this.cmsHexBox_SendList.Image = global::WPELibrary.Properties.Resources.addto;
-            this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
             resources.ApplyResources(this.cmsHexBox_SendList, "cmsHexBox_SendList");
+            this.cmsHexBox_SendList.Name = "cmsHexBox_SendList";
+            // 
+            // tscbSendList
+            // 
+            this.tscbSendList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tscbSendList.Name = "tscbSendList";
+            resources.ApplyResources(this.tscbSendList, "tscbSendList");
+            this.tscbSendList.SelectedIndexChanged += new System.EventHandler(this.tscbSendList_SelectedIndexChanged);
+            // 
+            // cmsHexBox_FilterList
+            // 
+            this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
+            resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
+            this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
             // 
             // cmsHexBox_Split1
             // 
             this.cmsHexBox_Split1.Name = "cmsHexBox_Split1";
             resources.ApplyResources(this.cmsHexBox_Split1, "cmsHexBox_Split1");
             // 
-            // cmsHexBox_FilterList
-            // 
-            this.cmsHexBox_FilterList.Image = global::WPELibrary.Properties.Resources.addto;
-            this.cmsHexBox_FilterList.Name = "cmsHexBox_FilterList";
-            resources.ApplyResources(this.cmsHexBox_FilterList, "cmsHexBox_FilterList");
-            // 
-            // cmsHexBox_Split2
-            // 
-            this.cmsHexBox_Split2.Name = "cmsHexBox_Split2";
-            resources.ApplyResources(this.cmsHexBox_Split2, "cmsHexBox_Split2");
-            // 
             // cmsHexBox_SelectAll
             // 
             this.cmsHexBox_SelectAll.Image = global::WPELibrary.Properties.Resources.SelectAll;
-            this.cmsHexBox_SelectAll.Name = "cmsHexBox_SelectAll";
             resources.ApplyResources(this.cmsHexBox_SelectAll, "cmsHexBox_SelectAll");
+            this.cmsHexBox_SelectAll.Name = "cmsHexBox_SelectAll";
             // 
             // lHexBox_Position
             // 
@@ -650,9 +654,9 @@ namespace WPELibrary
             // tlpParameter
             // 
             resources.ApplyResources(this.tlpParameter, "tlpParameter");
-            this.tlpParameter.Controls.Add(this.gbSendSocket, 1, 0);
-            this.tlpParameter.Controls.Add(this.gbSendType, 2, 0);
-            this.tlpParameter.Controls.Add(this.gbSendStep, 3, 0);
+            this.tlpParameter.Controls.Add(this.gbSendSocket, 0, 0);
+            this.tlpParameter.Controls.Add(this.gbSendType, 1, 0);
+            this.tlpParameter.Controls.Add(this.gbSendStep, 2, 0);
             this.tlpParameter.Name = "tlpParameter";
             // 
             // gbSendSocket
@@ -987,7 +991,6 @@ namespace WPELibrary
         private System.Windows.Forms.GroupBox gbSendType;
         private System.Windows.Forms.GroupBox gbSendStep;
         private System.Windows.Forms.ContextMenuStrip cmsHexBox;
-        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
         private System.Windows.Forms.ToolStripSeparator cmsHexBox_Split1;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_FilterList;
         private System.ComponentModel.BackgroundWorker bgwSendPacket;
@@ -1055,7 +1058,6 @@ namespace WPELibrary
         private System.Windows.Forms.Label lSendSocket_Len;
         private System.Windows.Forms.Label lSendSocket_Socket;
         private System.Windows.Forms.NumericUpDown nudSendSocket_Socket;
-        private System.Windows.Forms.ToolStripSeparator cmsHexBox_Split2;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
         private System.Windows.Forms.TableLayoutPanel tlpSendType;
         private System.Windows.Forms.RadioButton rbSendType_Continuously;
@@ -1072,5 +1074,7 @@ namespace WPELibrary
         private System.Windows.Forms.Label lSendStep_Position_Value;
         private System.Windows.Forms.NumericUpDown nudSendStep_Position;
         private System.Windows.Forms.RadioButton rbSendType_Times;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
+        private System.Windows.Forms.ToolStripComboBox tscbSendList;
     }
 }

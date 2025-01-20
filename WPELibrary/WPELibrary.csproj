@@ -82,6 +82,8 @@
     <Compile Include="Lib\NativeMethods\User32.cs" />
     <Compile Include="Lib\NativeMethods\WS2_32.cs" />
     <Compile Include="Lib\NativeMethods\WSock32.cs" />
+    <Compile Include="Lib\Socket_Send.cs" />
+    <Compile Include="Lib\Socket_SendInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

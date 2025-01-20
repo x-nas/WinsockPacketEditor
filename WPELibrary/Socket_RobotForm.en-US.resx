@@ -117,52 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="gbExecute.Text" xml:space="preserve">
-    <value>[ Instruction execution record ]</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ssRobotInstruction_Total.Size" type="System.Drawing.Size, System.Drawing">
-    <value>166, 17</value>
-  </data>
-  <data name="ssRobotInstruction_Total.Text" xml:space="preserve">
-    <value>Total executed instructions:</value>
-  </data>
-  <data name="ssRobotInstruction_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>89, 17</value>
-  </data>
-  <data name="ssRobotInstruction_Success.Text" xml:space="preserve">
-    <value>Send Success:</value>
-  </data>
-  <data name="ssRobotInstruction_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 17</value>
-  </data>
-  <data name="ssRobotInstruction_Fail.Text" xml:space="preserve">
-    <value>Send Fail:</value>
-  </data>
-  <data name="gbSendList.Text" xml:space="preserve">
-    <value>[ Send List ]</value>
-  </data>
-  <data name="cSendList_ID.HeaderText" xml:space="preserve">
-    <value>ID</value>
-  </data>
-  <data name="cNote.HeaderText" xml:space="preserve">
-    <value>Remark</value>
-  </data>
-  <data name="cSocket.HeaderText" xml:space="preserve">
-    <value>Socket</value>
-  </data>
-  <data name="cIPTo.HeaderText" xml:space="preserve">
-    <value>To Address</value>
-  </data>
-  <data name="cLen.HeaderText" xml:space="preserve">
-    <value>Length</value>
-  </data>
   <data name="gbRobotName.Text" xml:space="preserve">
     <value>[ Robot Name ]</value>
   </data>
-  <data name="gbRobotInstruction.Text" xml:space="preserve">
-    <value>[ Robot Instruction Set ]</value>
+  <data name="gbExecute.Text" xml:space="preserve">
+    <value>[ Instruction execution record ]</value>
   </data>
+  <data name="gbRobotInstruction.Text" xml:space="preserve">
+    <value>[ Robot Instructions ]</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cmsRobotInstruction.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 154</value>
   </data>
@@ -212,131 +176,61 @@
     <value>Clean Up</value>
   </data>
   <data name="tpInstruction_Socket.Text" xml:space="preserve">
-    <value>[ Socket Inst ]</value>
+    <value>[ Socket ]</value>
   </data>
-  <data name="gbSpecifySend.Text" xml:space="preserve">
-    <value>[ Specify Send ]</value>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Send [ Socket List ]</value>
   </data>
-  <data name="bSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 1</value>
+  <data name="lSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>202, 23</value>
+  </data>
+  <data name="lSend_SocketList.Text" xml:space="preserve">
+    <value>Selected packet in the Socket List</value>
   </data>
   <data name="bSend_SocketList.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
-  <data name="lSpecifySend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>249, 23</value>
-  </data>
-  <data name="lSpecifySend_SocketList.Text" xml:space="preserve">
-    <value>Send the select packet in the [Socket List]</value>
-  </data>
   <data name="gbSend.Text" xml:space="preserve">
-    <value>[ Send ]</value>
+    <value>Send [ Send List ]</value>
   </data>
-  <data name="nudSendSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 3</value>
-  </data>
-  <data name="lSendSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 3</value>
-  </data>
-  <data name="lSendSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="lSendSocket.Text" xml:space="preserve">
-    <value>Use Socket:</value>
-  </data>
-  <data name="nudSendInterval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 32</value>
-  </data>
-  <data name="lSendInterval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>187, 32</value>
-  </data>
-  <data name="lSendInterval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="lSendInterval.Text" xml:space="preserve">
-    <value>Interval (ms):</value>
-  </data>
-  <data name="nudSendTimes.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 32</value>
-  </data>
-  <data name="lSendTimes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
-  </data>
-  <data name="lSendTimes.Text" xml:space="preserve">
-    <value>Send Times:</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lSendIndex.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lSendIndex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
-  </data>
-  <data name="lSendIndex.Text" xml:space="preserve">
-    <value>Packet ID:</value>
-  </data>
-  <data name="nudSendIndex.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 3</value>
-  </data>
-  <data name="bSend.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bSend.Location" type="System.Drawing.Point, System.Drawing">
-    <value>394, 30</value>
-  </data>
-  <data name="bSend.Text" xml:space="preserve">
+  <data name="bSend_SendList.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
   <data name="tpInstruction_Control.Text" xml:space="preserve">
-    <value>[ Control Inst ]</value>
+    <value>[ Control ]</value>
   </data>
   <data name="gbLoop.Text" xml:space="preserve">
-    <value>[ Loop ]</value>
-  </data>
-  <data name="lLoop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 23</value>
-  </data>
-  <data name="lLoop.Text" xml:space="preserve">
-    <value>Times:</value>
-  </data>
-  <data name="bLoopEnd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>272, 1</value>
+    <value>Loop</value>
   </data>
   <data name="bLoopEnd.Text" xml:space="preserve">
     <value>Insert End</value>
   </data>
-  <data name="bLoopStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>172, 1</value>
-  </data>
   <data name="bLoopStart.Text" xml:space="preserve">
     <value>Insert Start</value>
   </data>
-  <data name="nudLoop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 3</value>
-  </data>
   <data name="gbDelay.Text" xml:space="preserve">
-    <value>[ Delay ]</value>
-  </data>
-  <data name="lDelay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 23</value>
-  </data>
-  <data name="lDelay.Text" xml:space="preserve">
-    <value>Time: (ms)</value>
-  </data>
-  <data name="bDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>195, 1</value>
+    <value>Delay</value>
   </data>
   <data name="bDelay.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
-  <data name="nudDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>77, 3</value>
-  </data>
   <data name="tpInstruction_keyboard.Text" xml:space="preserve">
-    <value>[ Keyboard Inst ]</value>
+    <value>[ Keyboard ]</value>
+  </data>
+  <data name="gbKeyboard_Text.Text" xml:space="preserve">
+    <value>Input Text</value>
+  </data>
+  <data name="bKeyboard_Text.Text" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="gbKeyboard_combination.Text" xml:space="preserve">
+    <value>Keyboard Combination</value>
+  </data>
+  <data name="bKeyboard_combination.Text" xml:space="preserve">
+    <value>Insert</value>
   </data>
   <data name="gbKeyboard.Text" xml:space="preserve">
-    <value>[ Keyboard ]</value>
+    <value>Keyboard</value>
   </data>
   <data name="cbbKeyBoard_KeyType.Items" xml:space="preserve">
     <value>Press</value>
@@ -348,88 +242,31 @@
     <value>Key Up</value>
   </data>
   <data name="cbbKeyBoard_KeyType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>243, 3</value>
-  </data>
-  <data name="lKeyBoard_KeyType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 3</value>
+    <value>73, 32</value>
   </data>
   <data name="lKeyBoard_KeyType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
+    <value>64, 25</value>
   </data>
   <data name="lKeyBoard_KeyType.Text" xml:space="preserve">
     <value>Key Type:</value>
   </data>
-  <data name="nudKeyBoard_Interval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>243, 32</value>
-  </data>
-  <data name="lKeyBoard_Interval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 32</value>
-  </data>
-  <data name="lKeyBoard_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="lKeyBoard_Interval.Text" xml:space="preserve">
-    <value>Interval (ms):</value>
-  </data>
-  <data name="lKeyBoard_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 23</value>
-  </data>
-  <data name="lKeyBoard_Times.Text" xml:space="preserve">
-    <value>Times:</value>
-  </data>
-  <data name="lKeyBoard_KeyCode.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
   <data name="lKeyBoard_KeyCode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 23</value>
+    <value>64, 23</value>
   </data>
   <data name="lKeyBoard_KeyCode.Text" xml:space="preserve">
     <value>Key:</value>
   </data>
   <data name="txtKeyBoard_KeyCode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 3</value>
-  </data>
-  <data name="nudKeyBoard_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 32</value>
-  </data>
-  <data name="bKeyBoard.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="bKeyBoard.Location" type="System.Drawing.Point, System.Drawing">
-    <value>361, 30</value>
+    <value>73, 3</value>
   </data>
   <data name="bKeyBoard.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
-  <data name="gbKeyboard_Text.Text" xml:space="preserve">
-    <value>[ Text ]</value>
-  </data>
-  <data name="bKeyboard_Text.Text" xml:space="preserve">
-    <value>Insert</value>
-  </data>
-  <data name="gbKeyboard_combination.Text" xml:space="preserve">
-    <value>[ Keyboard Combination ]</value>
-  </data>
-  <data name="lKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 23</value>
-  </data>
-  <data name="lKeyboard_combination.Text" xml:space="preserve">
-    <value>Combination Key:</value>
-  </data>
-  <data name="txtKeyboard_combination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>119, 3</value>
-  </data>
-  <data name="txtKeyboard_combination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 23</value>
-  </data>
-  <data name="bKeyboard_combination.Text" xml:space="preserve">
-    <value>Insert</value>
-  </data>
   <data name="tpInstruction_Mouse.Text" xml:space="preserve">
-    <value>[ Mouse Inst ]</value>
+    <value>[ Mouse ]</value>
   </data>
   <data name="gbMouseWheel.Text" xml:space="preserve">
-    <value>[ Mouse Wheel ]</value>
+    <value>Mouse Wheel</value>
   </data>
   <data name="lMouseWheel_Distance.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 23</value>
@@ -446,9 +283,6 @@
   <data name="nudMouseWheel_Distance.Location" type="System.Drawing.Point, System.Drawing">
     <value>72, 34</value>
   </data>
-  <data name="bMouseWheel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>190, 1</value>
-  </data>
   <data name="bMouseWheel.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
@@ -456,76 +290,49 @@
     <value>72, 3</value>
   </data>
   <data name="gbMouseMove.Text" xml:space="preserve">
-    <value>[ Mouse Move ]</value>
+    <value>Mouse Move</value>
   </data>
   <data name="rbMoveBy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 3</value>
+    <value>87, 3</value>
   </data>
   <data name="rbMoveBy.Text" xml:space="preserve">
-    <value>MoveBy</value>
+    <value>Move By</value>
   </data>
   <data name="nudMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>229, 33</value>
-  </data>
-  <data name="lMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>163, 33</value>
+    <value>87, 63</value>
   </data>
   <data name="lMouseMove_Y.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 25</value>
+    <value>78, 23</value>
   </data>
   <data name="lMouseMove_Y.Text" xml:space="preserve">
     <value>Y-Coord:</value>
-  </data>
-  <data name="bMouseMove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>327, 31</value>
   </data>
   <data name="bMouseMove.Text" xml:space="preserve">
     <value>Insert</value>
   </data>
   <data name="nudMouseMove_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 33</value>
+    <value>87, 34</value>
   </data>
   <data name="lMouseMove_X.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 25</value>
+    <value>78, 23</value>
   </data>
   <data name="lMouseMove_X.Text" xml:space="preserve">
     <value>X-Coord:</value>
   </data>
   <data name="rbMoveTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 24</value>
+    <value>78, 25</value>
   </data>
   <data name="rbMoveTo.Text" xml:space="preserve">
-    <value>MoveTo</value>
+    <value>Move To</value>
   </data>
   <data name="gbMouse.Text" xml:space="preserve">
-    <value>[ Mouse Key ]</value>
-  </data>
-  <data name="nudMouse_Interval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>92, 63</value>
-  </data>
-  <data name="lMouse_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="lMouse_Interval.Text" xml:space="preserve">
-    <value>Interval (ms):</value>
-  </data>
-  <data name="lMouse_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="lMouse_Times.Text" xml:space="preserve">
-    <value>Times:</value>
+    <value>Mouse Key</value>
   </data>
   <data name="lMouse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 25</value>
+    <value>76, 25</value>
   </data>
   <data name="lMouse.Text" xml:space="preserve">
     <value>Mouse Key:</value>
-  </data>
-  <data name="nudMouse_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>92, 34</value>
-  </data>
-  <data name="bMouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>210, 1</value>
   </data>
   <data name="bMouse.Text" xml:space="preserve">
     <value>Insert</value>
@@ -555,7 +362,7 @@
     <value>Right Up</value>
   </data>
   <data name="cbbMouse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>92, 3</value>
+    <value>85, 3</value>
   </data>
   <data name="bStop.Text" xml:space="preserve">
     <value>Stop（&amp;T）</value>
@@ -566,6 +373,7 @@
   <data name="bClose.Text" xml:space="preserve">
     <value>Close（&amp;C）</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="bSave.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>

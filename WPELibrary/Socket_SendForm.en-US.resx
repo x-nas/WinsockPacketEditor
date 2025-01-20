@@ -161,25 +161,25 @@
     <value>Cut</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 30</value>
+    <value>132, 22</value>
   </data>
   <data name="tsPacketData_Copy_Copy.Text" xml:space="preserve">
     <value>Copy</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>140, 30</value>
+    <value>132, 22</value>
   </data>
   <data name="tsPacketData_Copy_CopyHex.Text" xml:space="preserve">
     <value>Copy Hex</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 30</value>
+    <value>133, 22</value>
   </data>
   <data name="tsPacketData_Paste_Paste.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Size" type="System.Drawing.Size, System.Drawing">
-    <value>141, 30</value>
+    <value>133, 22</value>
   </data>
   <data name="tsPacketData_Paste_PasteHex.Text" xml:space="preserve">
     <value>Paste Hex</value>
@@ -209,28 +209,25 @@
     <value>Select All</value>
   </data>
   <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 106</value>
+    <value>176, 76</value>
   </data>
   <data name="cmsHexBox_SendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 30</value>
+    <value>175, 22</value>
   </data>
   <data name="cmsHexBox_SendList.Text" xml:space="preserve">
     <value>Add To Send List</value>
   </data>
-  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 6</value>
-  </data>
   <data name="cmsHexBox_FilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 30</value>
+    <value>175, 22</value>
   </data>
   <data name="cmsHexBox_FilterList.Text" xml:space="preserve">
     <value>Add To Filter List</value>
   </data>
-  <data name="cmsHexBox_Split2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 6</value>
+  <data name="cmsHexBox_Split1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 6</value>
   </data>
   <data name="cmsHexBox_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 30</value>
+    <value>175, 22</value>
   </data>
   <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
     <value>Select All</value>
@@ -260,13 +257,13 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSendSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 74</value>
+    <value>268, 74</value>
   </data>
   <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
     <value>81, 30</value>
   </data>
   <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 21</value>
+    <value>184, 21</value>
   </data>
   <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
     <value>72, 21</value>
@@ -284,7 +281,7 @@
     <value>81, 3</value>
   </data>
   <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 21</value>
+    <value>184, 21</value>
   </data>
   <data name="gbSendType.Text" xml:space="preserve">
     <value>[ Send ]</value>
@@ -293,7 +290,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSendType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>288, 74</value>
+    <value>361, 74</value>
   </data>
   <data name="rbSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 21</value>
@@ -317,13 +314,13 @@
     <value>97, 30</value>
   </data>
   <data name="nudSendType_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 21</value>
+    <value>181, 21</value>
   </data>
   <data name="nudSendType_Times.Location" type="System.Drawing.Point, System.Drawing">
     <value>97, 3</value>
   </data>
   <data name="nudSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 21</value>
+    <value>181, 21</value>
   </data>
   <data name="gbSendStep.Text" xml:space="preserve">
     <value>[ Progressively ]</value>
@@ -332,7 +329,7 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 74</value>
+    <value>269, 74</value>
   </data>
   <data name="cbSendStep.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 21</value>
@@ -353,7 +350,7 @@
     <value>134, 30</value>
   </data>
   <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 21</value>
+    <value>92, 21</value>
   </data>
   <data name="lSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
     <value>74, 30</value>
@@ -368,7 +365,7 @@
     <value>134, 3</value>
   </data>
   <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 21</value>
+    <value>92, 21</value>
   </data>
   <data name="bSave.Text" xml:space="preserve">
     <value>Save (&amp;S)</value>

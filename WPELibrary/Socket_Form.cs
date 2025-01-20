@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Text;
 using WPELibrary.Lib.NativeMethods;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace WPELibrary
 {
@@ -121,8 +122,16 @@ namespace WPELibrary
             {
                 if (m.Msg == User32.WM_HOTKEY)
                 {
-                    int HOTKEY_ID = m.WParam.ToInt32();
-                    Socket_Cache.Robot.DoRobot_ByHotKey(HOTKEY_ID);                                        
+                    int HOTKEY_ID = m.WParam.ToInt32();                    
+
+                    if (this.tcAutomation.SelectedIndex == 1)
+                    {
+                        Socket_Cache.Send.DoSend_ByHotKey(HOTKEY_ID);
+                    }
+                    else if (this.tcAutomation.SelectedIndex == 2)
+                    {
+                        Socket_Cache.Robot.DoRobot_ByHotKey(HOTKEY_ID);
+                    }                                                            
                 }
             }
             catch (Exception ex)
@@ -206,6 +215,11 @@ namespace WPELibrary
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
                 Socket_Cache.FilterList.RecSocketFilter += new Socket_Cache.FilterList.SocketFilterReceived(Event_RecSocketFilter);
+
+                dgvSendList.AutoGenerateColumns = false;
+                dgvSendList.DataSource = Socket_Cache.SendList.lstSend;
+                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
+                Socket_Cache.SendList.RecSocketSend += new Socket_Cache.SendList.SocketSendReceived(Event_RecSocketSend);
 
                 dgvRobotList.AutoGenerateColumns = false;
                 dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
@@ -959,6 +973,28 @@ namespace WPELibrary
 
         #endregion
 
+        #region//显示发送列表（异步）
+
+        private void Event_RecSocketSend(Socket_SendInfo ssi)
+        {
+            try
+            {
+                if (!this.dgvSendList.IsDisposed)
+                {
+                    this.dgvSendList.Invoke(new MethodInvoker(delegate
+                    {
+                        Socket_Cache.SendList.lstSend.Add(ssi);
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示机器人列表（异步）
 
         private void Event_RecSocketRobot(Socket_RobotInfo sri)
@@ -1122,6 +1158,54 @@ namespace WPELibrary
 
         #region//封包编辑器菜单
 
+        private void cmsHexBox_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Socket_Operation.InitSendListComboBox(this.cmsHexBox_tscbSendList);
+        }
+
+        private void cmsHexBox_tscbSendList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Socket_Cache.SocketList.Select_Index > -1 && Socket_Cache.SocketList.Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                {
+                    if (this.cmsHexBox_tscbSendList.SelectedItem != null)
+                    {
+                        Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
+                        Guid SID = item.SID;
+                        DataTable SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+
+                        if (SCollection != null)
+                        {
+                            int iSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
+                            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketType;
+                            string sIPTo = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketTo;
+
+                            byte[] bBuffer = null;
+
+                            if (this.hbPacketData.CanCopy())
+                            {
+                                this.hbPacketData.CopyHex();
+                                bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
+                            }
+                            else
+                            {
+                                bBuffer = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer;
+                            }
+
+                            Socket_Cache.Send.AddSendCollection(SCollection, string.Empty, iSocket, ptType, sIPTo, bBuffer);
+                        }
+
+                        this.cmsHexBox.Close();
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             string sItemText = e.ClickedItem.Name;
@@ -1136,13 +1220,6 @@ namespace WPELibrary
                         case "cmsHexBox_Send":
 
                             Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
-
-                            break;
-
-                        case "cmsHexBox_SendList":
-
-                            Socket_Cache.SendList.AddToSendList_BytIndex(Socket_Cache.SocketList.Select_Index);
-                            Socket_Operation.ShowSendListForm();
 
                             break;
 
@@ -1231,10 +1308,6 @@ namespace WPELibrary
                         this.CleanUp_MainForm();
                         break;
 
-                    case "cmsIcon_ShowSendList":
-                        Socket_Operation.ShowSendListForm();
-                        break;
-
                     case "cmsIcon_Exit":
                         this.Close();
                         break;
@@ -1249,6 +1322,37 @@ namespace WPELibrary
         #endregion
 
         #region//封包列表菜单
+
+        private void cmsSocketList_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Socket_Operation.InitSendListComboBox(this.tscbSendList);
+        }
+
+        private void tscbSendList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.tscbSendList.SelectedItem != null)
+                {
+                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Guid SID = item.SID;
+
+                    for (int i = 0; i < dgvSocketList.Rows.Count; i++)
+                    {
+                        if (dgvSocketList.Rows[i].Selected)
+                        {
+                            Socket_Cache.Send.AddSendCollection_ByIndex(SID, i);
+                        }
+                    }
+
+                    this.cmsSocketList.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void cmsSocketList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -1266,21 +1370,7 @@ namespace WPELibrary
                             Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
                         }
 
-                        break;
-
-                    case "cmsSocketList_SendList":
-
-                        for (int i = 0; i < dgvSocketList.Rows.Count; i++)
-                        {
-                            if (dgvSocketList.Rows[i].Selected)
-                            {
-                                Socket_Cache.SendList.AddToSendList_BytIndex(i);
-                            }
-                        }
-
-                        Socket_Operation.ShowSendListForm();
-
-                        break;
+                        break;                  
 
                     case "cmsSocketList_FilterList":
 
@@ -1291,26 +1381,20 @@ namespace WPELibrary
 
                         break;
 
+                    case "cmsSocketList_SystemSocket":
+
+                        if (Socket_Cache.SocketList.Select_Index > -1)
+                        {
+                            Socket_Cache.SystemSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
+                        }
+
+                        break;                        
+
                     case "cmsSocketList_ShowModified":
 
                         if (Socket_Cache.SocketList.Select_Index > -1)
                         {
                             Socket_Operation.ShowSocketCompareForm(Socket_Cache.SocketList.Select_Index);
-                        }
-
-                        break;
-
-                    case "cmsSocketList_ShowSendList":
-
-                        Socket_Operation.ShowSendListForm();
-
-                        break;
-
-                    case "cmsSocketList_UseSocket":
-
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            Socket_Cache.SendList.UseSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
                         }
 
                         break;
@@ -1406,6 +1490,70 @@ namespace WPELibrary
                             this.dgvFilterList.Rows[iIndex].Selected = true;
                             this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[iIndex].Cells[0];
                         }                       
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//发送列表菜单
+
+        private void cmsSendList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsSendList.Close();
+
+            try
+            {
+                if (dgvSendList.Rows.Count > 0)
+                {
+                    int iIndex = 0;
+                    int iSIndex = this.dgvSendList.CurrentRow.Index;
+
+                    if (iSIndex > -1)
+                    {
+                        switch (sItemText)
+                        {
+                            case "cmsSendList_Top":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Top, iSIndex);
+                                break;
+
+                            case "cmsSendList_Up":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Up, iSIndex);
+                                break;
+
+                            case "cmsSendList_Down":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Down, iSIndex);
+                                break;
+
+                            case "cmsSendList_Bottom":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Bottom, iSIndex);
+                                break;
+
+                            case "cmsSendList_Copy":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Copy, iSIndex);
+                                break;
+
+                            case "cmsSendList_Export":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Export, iSIndex);
+                                break;
+
+                            case "cmsSendList_Delete":
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Delete, iSIndex);
+                                break;
+                        }
+
+                        if (iIndex > -1 && iIndex < dgvSendList.RowCount)
+                        {
+                            this.dgvSendList.ClearSelection();
+                            this.dgvSendList.Rows[iIndex].Selected = true;
+                            this.dgvSendList.CurrentCell = this.dgvSendList.Rows[iIndex].Cells[0];
+                        }
                     }
                 }
             }
@@ -1621,6 +1769,60 @@ namespace WPELibrary
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//发送列表操作
+
+        private void dgvSendList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvSendList.Rows.Count > 0)
+                {
+                    int SIndex = e.RowIndex;
+
+                    if (SIndex > -1)
+                    {
+                        Socket_Operation.ShowSendListForm_Dialog(SIndex);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//发送列表按钮
+
+        private void tsSendList_Load_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.SendList.LoadSendList_Dialog();
+        }
+
+        private void tsSendList_Save_Click(object sender, EventArgs e)
+        {
+            if (dgvSendList.Rows.Count > 0)
+            {
+                Socket_Cache.SendList.SaveSendList_Dialog(string.Empty, -1);
+            }
+        }
+
+        private void tsSendList_Add_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.Send.AddSend_New();
+        }
+
+        private void tsSendList_CleanUp_Click(object sender, EventArgs e)
+        {
+            if (dgvSendList.Rows.Count > 0)
+            {
+                Socket_Cache.SendList.CleanUpSendList_Dialog();
             }
         }
 
@@ -2227,6 +2429,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
 
         #endregion        
     }

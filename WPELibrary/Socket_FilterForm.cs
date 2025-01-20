@@ -310,6 +310,11 @@ namespace WPELibrary
             }
         }
 
+        private void dgvFilterAdvanced_Modify_FromPosition_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            e.Column.FillWeight = 50;
+        }
+
         private void InitDGV_Advanced_Modify_Position()
         {
             try
@@ -319,7 +324,7 @@ namespace WPELibrary
                     this.dgvFilterAdvanced_Modify_FromPosition.Columns.Clear();
                 }
 
-                int iSize = Socket_Cache.Filter.FilterSize_MaxLen / 2;
+                int iSize = Socket_Cache.Filter.FilterSize_MaxLen;
 
                 for (int i = -iSize; i <= iSize; i++)
                 {
@@ -1203,6 +1208,8 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
+        #endregion
+
+        
     }
 }

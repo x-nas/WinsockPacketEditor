@@ -30,36 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_RobotForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpRobotForm = new System.Windows.Forms.TableLayoutPanel();
-            this.ssRobotInstruction = new System.Windows.Forms.StatusStrip();
-            this.ssRobotInstruction_Total = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Total_Value = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Split1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Success = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Success_Value = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Fail = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ssRobotInstruction_Fail_Value = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.gbSendList = new System.Windows.Forms.GroupBox();
-            this.dgvSendList = new System.Windows.Forms.DataGridView();
-            this.cSendList_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cSocket = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tlpRobotInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbRobotName = new System.Windows.Forms.GroupBox();
             this.txtRobotName = new System.Windows.Forms.TextBox();
+            this.tlpListInfo = new System.Windows.Forms.TableLayoutPanel();
             this.gbRobotInstruction = new System.Windows.Forms.GroupBox();
             this.dgvRobotInstruction = new System.Windows.Forms.DataGridView();
             this.cRobotInstruction_ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,57 +55,42 @@
             this.tcRobotInstruction = new System.Windows.Forms.TabControl();
             this.tpInstruction_Socket = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Socket = new System.Windows.Forms.TableLayoutPanel();
-            this.gbSpecifySend = new System.Windows.Forms.GroupBox();
-            this.tlpSpecifySend = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.lSend_SocketList = new System.Windows.Forms.Label();
             this.bSend_SocketList = new System.Windows.Forms.Button();
-            this.lSpecifySend_SocketList = new System.Windows.Forms.Label();
             this.gbSend = new System.Windows.Forms.GroupBox();
             this.tlpSend = new System.Windows.Forms.TableLayoutPanel();
-            this.nudSendSocket = new System.Windows.Forms.NumericUpDown();
-            this.lSendSocket = new System.Windows.Forms.Label();
-            this.nudSendInterval = new System.Windows.Forms.NumericUpDown();
-            this.lSendInterval = new System.Windows.Forms.Label();
-            this.nudSendTimes = new System.Windows.Forms.NumericUpDown();
-            this.lSendTimes = new System.Windows.Forms.Label();
-            this.lSendIndex = new System.Windows.Forms.Label();
-            this.nudSendIndex = new System.Windows.Forms.NumericUpDown();
-            this.bSend = new System.Windows.Forms.Button();
+            this.bSend_SendList = new System.Windows.Forms.Button();
+            this.cbbSendLIst = new System.Windows.Forms.ComboBox();
             this.tpInstruction_Control = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Control = new System.Windows.Forms.TableLayoutPanel();
             this.gbLoop = new System.Windows.Forms.GroupBox();
             this.tlpLoop = new System.Windows.Forms.TableLayoutPanel();
-            this.lLoop = new System.Windows.Forms.Label();
             this.bLoopEnd = new System.Windows.Forms.Button();
             this.bLoopStart = new System.Windows.Forms.Button();
             this.nudLoop = new System.Windows.Forms.NumericUpDown();
             this.gbDelay = new System.Windows.Forms.GroupBox();
             this.tlpDelay = new System.Windows.Forms.TableLayoutPanel();
-            this.lDelay = new System.Windows.Forms.Label();
             this.bDelay = new System.Windows.Forms.Button();
             this.nudDelay = new System.Windows.Forms.NumericUpDown();
             this.tpInstruction_keyboard = new System.Windows.Forms.TabPage();
             this.tlpInstruction_keyboard = new System.Windows.Forms.TableLayoutPanel();
-            this.gbKeyboard = new System.Windows.Forms.GroupBox();
-            this.tlpKeyboard = new System.Windows.Forms.TableLayoutPanel();
-            this.cbbKeyBoard_KeyType = new System.Windows.Forms.ComboBox();
-            this.lKeyBoard_KeyType = new System.Windows.Forms.Label();
-            this.nudKeyBoard_Interval = new System.Windows.Forms.NumericUpDown();
-            this.lKeyBoard_Interval = new System.Windows.Forms.Label();
-            this.lKeyBoard_Times = new System.Windows.Forms.Label();
-            this.lKeyBoard_KeyCode = new System.Windows.Forms.Label();
-            this.txtKeyBoard_KeyCode = new System.Windows.Forms.TextBox();
-            this.nudKeyBoard_Times = new System.Windows.Forms.NumericUpDown();
-            this.bKeyBoard = new System.Windows.Forms.Button();
-            this.tlpKeyBoardCombine = new System.Windows.Forms.TableLayoutPanel();
             this.gbKeyboard_Text = new System.Windows.Forms.GroupBox();
             this.tlpKeyboard_Text = new System.Windows.Forms.TableLayoutPanel();
             this.txtKeyboard_Text = new System.Windows.Forms.TextBox();
             this.bKeyboard_Text = new System.Windows.Forms.Button();
             this.gbKeyboard_combination = new System.Windows.Forms.GroupBox();
             this.tlpKeyboard_combination = new System.Windows.Forms.TableLayoutPanel();
-            this.lKeyboard_combination = new System.Windows.Forms.Label();
             this.txtKeyboard_combination = new System.Windows.Forms.TextBox();
             this.bKeyboard_combination = new System.Windows.Forms.Button();
+            this.gbKeyboard = new System.Windows.Forms.GroupBox();
+            this.tlpKeyboard = new System.Windows.Forms.TableLayoutPanel();
+            this.cbbKeyBoard_KeyType = new System.Windows.Forms.ComboBox();
+            this.lKeyBoard_KeyType = new System.Windows.Forms.Label();
+            this.lKeyBoard_KeyCode = new System.Windows.Forms.Label();
+            this.txtKeyBoard_KeyCode = new System.Windows.Forms.TextBox();
+            this.bKeyBoard = new System.Windows.Forms.Button();
             this.tpInstruction_Mouse = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Mouse = new System.Windows.Forms.TableLayoutPanel();
             this.gbMouseWheel = new System.Windows.Forms.GroupBox();
@@ -149,11 +111,7 @@
             this.rbMoveTo = new System.Windows.Forms.RadioButton();
             this.gbMouse = new System.Windows.Forms.GroupBox();
             this.tlpMouse = new System.Windows.Forms.TableLayoutPanel();
-            this.nudMouse_Interval = new System.Windows.Forms.NumericUpDown();
-            this.lMouse_Interval = new System.Windows.Forms.Label();
-            this.lMouse_Times = new System.Windows.Forms.Label();
             this.lMouse = new System.Windows.Forms.Label();
-            this.nudMouse_Times = new System.Windows.Forms.NumericUpDown();
             this.bMouse = new System.Windows.Forms.Button();
             this.cbbMouse = new System.Windows.Forms.ComboBox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
@@ -164,26 +122,18 @@
             this.gbExecute = new System.Windows.Forms.GroupBox();
             this.txtExecute = new System.Windows.Forms.TextBox();
             this.tlpRobotForm.SuspendLayout();
-            this.ssRobotInstruction.SuspendLayout();
-            this.tlpListInfo.SuspendLayout();
-            this.gbSendList.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).BeginInit();
-            this.tlpRobotInfo.SuspendLayout();
             this.gbRobotName.SuspendLayout();
+            this.tlpListInfo.SuspendLayout();
             this.gbRobotInstruction.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvRobotInstruction)).BeginInit();
             this.cmsRobotInstruction.SuspendLayout();
             this.tcRobotInstruction.SuspendLayout();
             this.tpInstruction_Socket.SuspendLayout();
             this.tlpInstruction_Socket.SuspendLayout();
-            this.gbSpecifySend.SuspendLayout();
-            this.tlpSpecifySend.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.gbSend.SuspendLayout();
             this.tlpSend.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendInterval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendTimes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendIndex)).BeginInit();
             this.tpInstruction_Control.SuspendLayout();
             this.tlpInstruction_Control.SuspendLayout();
             this.gbLoop.SuspendLayout();
@@ -194,15 +144,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).BeginInit();
             this.tpInstruction_keyboard.SuspendLayout();
             this.tlpInstruction_keyboard.SuspendLayout();
-            this.gbKeyboard.SuspendLayout();
-            this.tlpKeyboard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).BeginInit();
-            this.tlpKeyBoardCombine.SuspendLayout();
             this.gbKeyboard_Text.SuspendLayout();
             this.tlpKeyboard_Text.SuspendLayout();
             this.gbKeyboard_combination.SuspendLayout();
             this.tlpKeyboard_combination.SuspendLayout();
+            this.gbKeyboard.SuspendLayout();
+            this.tlpKeyboard.SuspendLayout();
             this.tpInstruction_Mouse.SuspendLayout();
             this.tlpInstruction_Mouse.SuspendLayout();
             this.gbMouseWheel.SuspendLayout();
@@ -214,8 +161,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudMouseMove_X)).BeginInit();
             this.gbMouse.SuspendLayout();
             this.tlpMouse.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMouse_Interval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMouse_Times)).BeginInit();
             this.tlpButton.SuspendLayout();
             this.gbExecute.SuspendLayout();
             this.SuspendLayout();
@@ -223,184 +168,11 @@
             // tlpRobotForm
             // 
             resources.ApplyResources(this.tlpRobotForm, "tlpRobotForm");
-            this.tlpRobotForm.Controls.Add(this.ssRobotInstruction, 0, 4);
-            this.tlpRobotForm.Controls.Add(this.tlpListInfo, 0, 0);
-            this.tlpRobotForm.Controls.Add(this.tcRobotInstruction, 0, 2);
+            this.tlpRobotForm.Controls.Add(this.gbRobotName, 0, 0);
+            this.tlpRobotForm.Controls.Add(this.tlpListInfo, 0, 1);
             this.tlpRobotForm.Controls.Add(this.tlpButton, 0, 3);
-            this.tlpRobotForm.Controls.Add(this.gbExecute, 0, 1);
+            this.tlpRobotForm.Controls.Add(this.gbExecute, 0, 2);
             this.tlpRobotForm.Name = "tlpRobotForm";
-            // 
-            // ssRobotInstruction
-            // 
-            resources.ApplyResources(this.ssRobotInstruction, "ssRobotInstruction");
-            this.ssRobotInstruction.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ssRobotInstruction_Total,
-            this.ssRobotInstruction_Total_Value,
-            this.ssRobotInstruction_Split1,
-            this.ssRobotInstruction_Success,
-            this.ssRobotInstruction_Success_Value,
-            this.toolStripStatusLabel3,
-            this.ssRobotInstruction_Fail,
-            this.ssRobotInstruction_Fail_Value});
-            this.ssRobotInstruction.Name = "ssRobotInstruction";
-            // 
-            // ssRobotInstruction_Total
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Total, "ssRobotInstruction_Total");
-            this.ssRobotInstruction_Total.Name = "ssRobotInstruction_Total";
-            // 
-            // ssRobotInstruction_Total_Value
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Total_Value, "ssRobotInstruction_Total_Value");
-            this.ssRobotInstruction_Total_Value.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.ssRobotInstruction_Total_Value.Name = "ssRobotInstruction_Total_Value";
-            // 
-            // ssRobotInstruction_Split1
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Split1, "ssRobotInstruction_Split1");
-            this.ssRobotInstruction_Split1.ForeColor = System.Drawing.Color.DarkGray;
-            this.ssRobotInstruction_Split1.Name = "ssRobotInstruction_Split1";
-            // 
-            // ssRobotInstruction_Success
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Success, "ssRobotInstruction_Success");
-            this.ssRobotInstruction_Success.Name = "ssRobotInstruction_Success";
-            // 
-            // ssRobotInstruction_Success_Value
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Success_Value, "ssRobotInstruction_Success_Value");
-            this.ssRobotInstruction_Success_Value.ForeColor = System.Drawing.Color.DarkGreen;
-            this.ssRobotInstruction_Success_Value.Name = "ssRobotInstruction_Success_Value";
-            // 
-            // toolStripStatusLabel3
-            // 
-            resources.ApplyResources(this.toolStripStatusLabel3, "toolStripStatusLabel3");
-            this.toolStripStatusLabel3.ForeColor = System.Drawing.Color.DarkGray;
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            // 
-            // ssRobotInstruction_Fail
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Fail, "ssRobotInstruction_Fail");
-            this.ssRobotInstruction_Fail.Name = "ssRobotInstruction_Fail";
-            // 
-            // ssRobotInstruction_Fail_Value
-            // 
-            resources.ApplyResources(this.ssRobotInstruction_Fail_Value, "ssRobotInstruction_Fail_Value");
-            this.ssRobotInstruction_Fail_Value.ForeColor = System.Drawing.Color.DarkRed;
-            this.ssRobotInstruction_Fail_Value.Name = "ssRobotInstruction_Fail_Value";
-            // 
-            // tlpListInfo
-            // 
-            resources.ApplyResources(this.tlpListInfo, "tlpListInfo");
-            this.tlpListInfo.Controls.Add(this.gbSendList, 1, 0);
-            this.tlpListInfo.Controls.Add(this.tlpRobotInfo, 0, 0);
-            this.tlpListInfo.Name = "tlpListInfo";
-            // 
-            // gbSendList
-            // 
-            resources.ApplyResources(this.gbSendList, "gbSendList");
-            this.gbSendList.Controls.Add(this.dgvSendList);
-            this.gbSendList.Name = "gbSendList";
-            this.gbSendList.TabStop = false;
-            // 
-            // dgvSendList
-            // 
-            resources.ApplyResources(this.dgvSendList, "dgvSendList");
-            this.dgvSendList.AllowUserToAddRows = false;
-            this.dgvSendList.AllowUserToDeleteRows = false;
-            this.dgvSendList.AllowUserToResizeRows = false;
-            this.dgvSendList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dgvSendList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.dgvSendList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvSendList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cSendList_ID,
-            this.cNote,
-            this.cSocket,
-            this.cType,
-            this.cIPTo,
-            this.cLen});
-            this.dgvSendList.MultiSelect = false;
-            this.dgvSendList.Name = "dgvSendList";
-            this.dgvSendList.RowHeadersVisible = false;
-            this.dgvSendList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.dgvSendList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvSendList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.LimeGreen;
-            this.dgvSendList.RowTemplate.Height = 23;
-            this.dgvSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSendList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSendList_CellFormatting);
-            this.dgvSendList.SelectionChanged += new System.EventHandler(this.dgvSendList_SelectionChanged);
-            // 
-            // cSendList_ID
-            // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSendList_ID.DefaultCellStyle = dataGridViewCellStyle9;
-            resources.ApplyResources(this.cSendList_ID, "cSendList_ID");
-            this.cSendList_ID.Name = "cSendList_ID";
-            this.cSendList_ID.ReadOnly = true;
-            this.cSendList_ID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSendList_ID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cNote
-            // 
-            this.cNote.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cNote.DataPropertyName = "Remark";
-            resources.ApplyResources(this.cNote, "cNote");
-            this.cNote.Name = "cNote";
-            this.cNote.ReadOnly = true;
-            this.cNote.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cNote.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cSocket
-            // 
-            this.cSocket.DataPropertyName = "Socket";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cSocket.DefaultCellStyle = dataGridViewCellStyle10;
-            resources.ApplyResources(this.cSocket, "cSocket");
-            this.cSocket.Name = "cSocket";
-            this.cSocket.ReadOnly = true;
-            this.cSocket.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cSocket.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cType
-            // 
-            this.cType.DataPropertyName = "Type";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cType.DefaultCellStyle = dataGridViewCellStyle11;
-            resources.ApplyResources(this.cType, "cType");
-            this.cType.Name = "cType";
-            this.cType.ReadOnly = true;
-            this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cType.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPTo
-            // 
-            this.cIPTo.DataPropertyName = "ToAddress";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.cIPTo.DefaultCellStyle = dataGridViewCellStyle12;
-            resources.ApplyResources(this.cIPTo, "cIPTo");
-            this.cIPTo.Name = "cIPTo";
-            this.cIPTo.ReadOnly = true;
-            this.cIPTo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPTo.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLen
-            // 
-            this.cLen.DataPropertyName = "Len";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLen.DefaultCellStyle = dataGridViewCellStyle13;
-            resources.ApplyResources(this.cLen, "cLen");
-            this.cLen.Name = "cLen";
-            this.cLen.ReadOnly = true;
-            this.cLen.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLen.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // tlpRobotInfo
-            // 
-            resources.ApplyResources(this.tlpRobotInfo, "tlpRobotInfo");
-            this.tlpRobotInfo.Controls.Add(this.gbRobotName, 0, 0);
-            this.tlpRobotInfo.Controls.Add(this.gbRobotInstruction, 0, 1);
-            this.tlpRobotInfo.Name = "tlpRobotInfo";
             // 
             // gbRobotName
             // 
@@ -413,6 +185,13 @@
             // 
             resources.ApplyResources(this.txtRobotName, "txtRobotName");
             this.txtRobotName.Name = "txtRobotName";
+            // 
+            // tlpListInfo
+            // 
+            resources.ApplyResources(this.tlpListInfo, "tlpListInfo");
+            this.tlpListInfo.Controls.Add(this.gbRobotInstruction, 1, 0);
+            this.tlpListInfo.Controls.Add(this.tcRobotInstruction, 0, 0);
+            this.tlpListInfo.Name = "tlpListInfo";
             // 
             // gbRobotInstruction
             // 
@@ -451,9 +230,9 @@
             // 
             // cRobotInstruction_ID
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_ID.DefaultCellStyle = dataGridViewCellStyle4;
             resources.ApplyResources(this.cRobotInstruction_ID, "cRobotInstruction_ID");
             this.cRobotInstruction_ID.Name = "cRobotInstruction_ID";
             this.cRobotInstruction_ID.ReadOnly = true;
@@ -463,9 +242,9 @@
             // cRobotInstruction_Type
             // 
             this.cRobotInstruction_Type.DataPropertyName = "Type";
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Type.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.cRobotInstruction_Type, "cRobotInstruction_Type");
             this.cRobotInstruction_Type.Name = "cRobotInstruction_Type";
             this.cRobotInstruction_Type.ReadOnly = true;
@@ -476,9 +255,9 @@
             // 
             this.cRobotInstruction_Content.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cRobotInstruction_Content.DataPropertyName = "Content";
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRobotInstruction_Content.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cRobotInstruction_Content, "cRobotInstruction_Content");
             this.cRobotInstruction_Content.Name = "cRobotInstruction_Content";
             this.cRobotInstruction_Content.ReadOnly = true;
@@ -572,23 +351,28 @@
             // tlpInstruction_Socket
             // 
             resources.ApplyResources(this.tlpInstruction_Socket, "tlpInstruction_Socket");
-            this.tlpInstruction_Socket.Controls.Add(this.gbSpecifySend, 1, 0);
+            this.tlpInstruction_Socket.Controls.Add(this.groupBox1, 0, 1);
             this.tlpInstruction_Socket.Controls.Add(this.gbSend, 0, 0);
             this.tlpInstruction_Socket.Name = "tlpInstruction_Socket";
             // 
-            // gbSpecifySend
+            // groupBox1
             // 
-            resources.ApplyResources(this.gbSpecifySend, "gbSpecifySend");
-            this.gbSpecifySend.Controls.Add(this.tlpSpecifySend);
-            this.gbSpecifySend.Name = "gbSpecifySend";
-            this.gbSpecifySend.TabStop = false;
+            resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.TabStop = false;
             // 
-            // tlpSpecifySend
+            // tableLayoutPanel1
             // 
-            resources.ApplyResources(this.tlpSpecifySend, "tlpSpecifySend");
-            this.tlpSpecifySend.Controls.Add(this.bSend_SocketList, 2, 0);
-            this.tlpSpecifySend.Controls.Add(this.lSpecifySend_SocketList, 0, 0);
-            this.tlpSpecifySend.Name = "tlpSpecifySend";
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.lSend_SocketList, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.bSend_SocketList, 2, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // lSend_SocketList
+            // 
+            resources.ApplyResources(this.lSend_SocketList, "lSend_SocketList");
+            this.lSend_SocketList.Name = "lSend_SocketList";
             // 
             // bSend_SocketList
             // 
@@ -596,11 +380,6 @@
             this.bSend_SocketList.Name = "bSend_SocketList";
             this.bSend_SocketList.UseVisualStyleBackColor = true;
             this.bSend_SocketList.Click += new System.EventHandler(this.bSend_SocketList_Click);
-            // 
-            // lSpecifySend_SocketList
-            // 
-            resources.ApplyResources(this.lSpecifySend_SocketList, "lSpecifySend_SocketList");
-            this.lSpecifySend_SocketList.Name = "lSpecifySend_SocketList";
             // 
             // gbSend
             // 
@@ -612,108 +391,23 @@
             // tlpSend
             // 
             resources.ApplyResources(this.tlpSend, "tlpSend");
-            this.tlpSend.Controls.Add(this.nudSendSocket, 3, 0);
-            this.tlpSend.Controls.Add(this.lSendSocket, 2, 0);
-            this.tlpSend.Controls.Add(this.nudSendInterval, 3, 1);
-            this.tlpSend.Controls.Add(this.lSendInterval, 2, 1);
-            this.tlpSend.Controls.Add(this.nudSendTimes, 1, 1);
-            this.tlpSend.Controls.Add(this.lSendTimes, 0, 1);
-            this.tlpSend.Controls.Add(this.lSendIndex, 0, 0);
-            this.tlpSend.Controls.Add(this.nudSendIndex, 1, 0);
-            this.tlpSend.Controls.Add(this.bSend, 5, 1);
+            this.tlpSend.Controls.Add(this.bSend_SendList, 2, 0);
+            this.tlpSend.Controls.Add(this.cbbSendLIst, 0, 0);
             this.tlpSend.Name = "tlpSend";
             // 
-            // nudSendSocket
+            // bSend_SendList
             // 
-            resources.ApplyResources(this.nudSendSocket, "nudSendSocket");
-            this.nudSendSocket.Maximum = new decimal(new int[] {
-            999999,
-            0,
-            0,
-            0});
-            this.nudSendSocket.Name = "nudSendSocket";
+            resources.ApplyResources(this.bSend_SendList, "bSend_SendList");
+            this.bSend_SendList.Name = "bSend_SendList";
+            this.bSend_SendList.UseVisualStyleBackColor = true;
+            this.bSend_SendList.Click += new System.EventHandler(this.bSend_SendList_Click);
             // 
-            // lSendSocket
+            // cbbSendLIst
             // 
-            resources.ApplyResources(this.lSendSocket, "lSendSocket");
-            this.lSendSocket.Name = "lSendSocket";
-            // 
-            // nudSendInterval
-            // 
-            resources.ApplyResources(this.nudSendInterval, "nudSendInterval");
-            this.nudSendInterval.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudSendInterval.Name = "nudSendInterval";
-            this.nudSendInterval.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // lSendInterval
-            // 
-            resources.ApplyResources(this.lSendInterval, "lSendInterval");
-            this.lSendInterval.Name = "lSendInterval";
-            // 
-            // nudSendTimes
-            // 
-            resources.ApplyResources(this.nudSendTimes, "nudSendTimes");
-            this.nudSendTimes.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudSendTimes.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSendTimes.Name = "nudSendTimes";
-            this.nudSendTimes.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lSendTimes
-            // 
-            resources.ApplyResources(this.lSendTimes, "lSendTimes");
-            this.lSendTimes.Name = "lSendTimes";
-            // 
-            // lSendIndex
-            // 
-            resources.ApplyResources(this.lSendIndex, "lSendIndex");
-            this.lSendIndex.Name = "lSendIndex";
-            // 
-            // nudSendIndex
-            // 
-            resources.ApplyResources(this.nudSendIndex, "nudSendIndex");
-            this.nudSendIndex.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudSendIndex.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSendIndex.Name = "nudSendIndex";
-            this.nudSendIndex.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // bSend
-            // 
-            resources.ApplyResources(this.bSend, "bSend");
-            this.bSend.Name = "bSend";
-            this.bSend.UseVisualStyleBackColor = true;
-            this.bSend.Click += new System.EventHandler(this.bSend_Click);
+            resources.ApplyResources(this.cbbSendLIst, "cbbSendLIst");
+            this.cbbSendLIst.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbSendLIst.FormattingEnabled = true;
+            this.cbbSendLIst.Name = "cbbSendLIst";
             // 
             // tpInstruction_Control
             // 
@@ -725,7 +419,7 @@
             // tlpInstruction_Control
             // 
             resources.ApplyResources(this.tlpInstruction_Control, "tlpInstruction_Control");
-            this.tlpInstruction_Control.Controls.Add(this.gbLoop, 1, 0);
+            this.tlpInstruction_Control.Controls.Add(this.gbLoop, 0, 1);
             this.tlpInstruction_Control.Controls.Add(this.gbDelay, 0, 0);
             this.tlpInstruction_Control.Name = "tlpInstruction_Control";
             // 
@@ -739,16 +433,10 @@
             // tlpLoop
             // 
             resources.ApplyResources(this.tlpLoop, "tlpLoop");
-            this.tlpLoop.Controls.Add(this.lLoop, 0, 0);
             this.tlpLoop.Controls.Add(this.bLoopEnd, 5, 0);
             this.tlpLoop.Controls.Add(this.bLoopStart, 3, 0);
             this.tlpLoop.Controls.Add(this.nudLoop, 1, 0);
             this.tlpLoop.Name = "tlpLoop";
-            // 
-            // lLoop
-            // 
-            resources.ApplyResources(this.lLoop, "lLoop");
-            this.lLoop.Name = "lLoop";
             // 
             // bLoopEnd
             // 
@@ -794,15 +482,9 @@
             // tlpDelay
             // 
             resources.ApplyResources(this.tlpDelay, "tlpDelay");
-            this.tlpDelay.Controls.Add(this.lDelay, 0, 0);
-            this.tlpDelay.Controls.Add(this.bDelay, 3, 0);
-            this.tlpDelay.Controls.Add(this.nudDelay, 1, 0);
+            this.tlpDelay.Controls.Add(this.bDelay, 2, 0);
+            this.tlpDelay.Controls.Add(this.nudDelay, 0, 0);
             this.tlpDelay.Name = "tlpDelay";
-            // 
-            // lDelay
-            // 
-            resources.ApplyResources(this.lDelay, "lDelay");
-            this.lDelay.Name = "lDelay";
             // 
             // bDelay
             // 
@@ -836,118 +518,10 @@
             // tlpInstruction_keyboard
             // 
             resources.ApplyResources(this.tlpInstruction_keyboard, "tlpInstruction_keyboard");
+            this.tlpInstruction_keyboard.Controls.Add(this.gbKeyboard_Text, 0, 2);
+            this.tlpInstruction_keyboard.Controls.Add(this.gbKeyboard_combination, 0, 1);
             this.tlpInstruction_keyboard.Controls.Add(this.gbKeyboard, 0, 0);
-            this.tlpInstruction_keyboard.Controls.Add(this.tlpKeyBoardCombine, 1, 0);
             this.tlpInstruction_keyboard.Name = "tlpInstruction_keyboard";
-            // 
-            // gbKeyboard
-            // 
-            resources.ApplyResources(this.gbKeyboard, "gbKeyboard");
-            this.gbKeyboard.Controls.Add(this.tlpKeyboard);
-            this.gbKeyboard.Name = "gbKeyboard";
-            this.gbKeyboard.TabStop = false;
-            // 
-            // tlpKeyboard
-            // 
-            resources.ApplyResources(this.tlpKeyboard, "tlpKeyboard");
-            this.tlpKeyboard.Controls.Add(this.cbbKeyBoard_KeyType, 3, 0);
-            this.tlpKeyboard.Controls.Add(this.lKeyBoard_KeyType, 2, 0);
-            this.tlpKeyboard.Controls.Add(this.nudKeyBoard_Interval, 3, 1);
-            this.tlpKeyboard.Controls.Add(this.lKeyBoard_Interval, 2, 1);
-            this.tlpKeyboard.Controls.Add(this.lKeyBoard_Times, 0, 1);
-            this.tlpKeyboard.Controls.Add(this.lKeyBoard_KeyCode, 0, 0);
-            this.tlpKeyboard.Controls.Add(this.txtKeyBoard_KeyCode, 1, 0);
-            this.tlpKeyboard.Controls.Add(this.nudKeyBoard_Times, 1, 1);
-            this.tlpKeyboard.Controls.Add(this.bKeyBoard, 5, 1);
-            this.tlpKeyboard.Name = "tlpKeyboard";
-            // 
-            // cbbKeyBoard_KeyType
-            // 
-            resources.ApplyResources(this.cbbKeyBoard_KeyType, "cbbKeyBoard_KeyType");
-            this.cbbKeyBoard_KeyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbKeyBoard_KeyType.FormattingEnabled = true;
-            this.cbbKeyBoard_KeyType.Items.AddRange(new object[] {
-            resources.GetString("cbbKeyBoard_KeyType.Items"),
-            resources.GetString("cbbKeyBoard_KeyType.Items1"),
-            resources.GetString("cbbKeyBoard_KeyType.Items2")});
-            this.cbbKeyBoard_KeyType.Name = "cbbKeyBoard_KeyType";
-            // 
-            // lKeyBoard_KeyType
-            // 
-            resources.ApplyResources(this.lKeyBoard_KeyType, "lKeyBoard_KeyType");
-            this.lKeyBoard_KeyType.Name = "lKeyBoard_KeyType";
-            // 
-            // nudKeyBoard_Interval
-            // 
-            resources.ApplyResources(this.nudKeyBoard_Interval, "nudKeyBoard_Interval");
-            this.nudKeyBoard_Interval.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudKeyBoard_Interval.Name = "nudKeyBoard_Interval";
-            this.nudKeyBoard_Interval.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // lKeyBoard_Interval
-            // 
-            resources.ApplyResources(this.lKeyBoard_Interval, "lKeyBoard_Interval");
-            this.lKeyBoard_Interval.Name = "lKeyBoard_Interval";
-            // 
-            // lKeyBoard_Times
-            // 
-            resources.ApplyResources(this.lKeyBoard_Times, "lKeyBoard_Times");
-            this.lKeyBoard_Times.Name = "lKeyBoard_Times";
-            // 
-            // lKeyBoard_KeyCode
-            // 
-            resources.ApplyResources(this.lKeyBoard_KeyCode, "lKeyBoard_KeyCode");
-            this.lKeyBoard_KeyCode.Name = "lKeyBoard_KeyCode";
-            // 
-            // txtKeyBoard_KeyCode
-            // 
-            resources.ApplyResources(this.txtKeyBoard_KeyCode, "txtKeyBoard_KeyCode");
-            this.txtKeyBoard_KeyCode.BackColor = System.Drawing.SystemColors.Window;
-            this.txtKeyBoard_KeyCode.Name = "txtKeyBoard_KeyCode";
-            this.txtKeyBoard_KeyCode.ReadOnly = true;
-            this.txtKeyBoard_KeyCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyBoard_Key_KeyDown);
-            // 
-            // nudKeyBoard_Times
-            // 
-            resources.ApplyResources(this.nudKeyBoard_Times, "nudKeyBoard_Times");
-            this.nudKeyBoard_Times.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudKeyBoard_Times.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudKeyBoard_Times.Name = "nudKeyBoard_Times";
-            this.nudKeyBoard_Times.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // bKeyBoard
-            // 
-            resources.ApplyResources(this.bKeyBoard, "bKeyBoard");
-            this.bKeyBoard.Name = "bKeyBoard";
-            this.bKeyBoard.UseVisualStyleBackColor = true;
-            this.bKeyBoard.Click += new System.EventHandler(this.bKeyBoard_Click);
-            // 
-            // tlpKeyBoardCombine
-            // 
-            resources.ApplyResources(this.tlpKeyBoardCombine, "tlpKeyBoardCombine");
-            this.tlpKeyBoardCombine.Controls.Add(this.gbKeyboard_Text, 0, 1);
-            this.tlpKeyBoardCombine.Controls.Add(this.gbKeyboard_combination, 0, 0);
-            this.tlpKeyBoardCombine.Name = "tlpKeyBoardCombine";
             // 
             // gbKeyboard_Text
             // 
@@ -986,15 +560,9 @@
             // tlpKeyboard_combination
             // 
             resources.ApplyResources(this.tlpKeyboard_combination, "tlpKeyboard_combination");
-            this.tlpKeyboard_combination.Controls.Add(this.lKeyboard_combination, 0, 0);
-            this.tlpKeyboard_combination.Controls.Add(this.txtKeyboard_combination, 1, 0);
-            this.tlpKeyboard_combination.Controls.Add(this.bKeyboard_combination, 3, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.txtKeyboard_combination, 0, 0);
+            this.tlpKeyboard_combination.Controls.Add(this.bKeyboard_combination, 2, 0);
             this.tlpKeyboard_combination.Name = "tlpKeyboard_combination";
-            // 
-            // lKeyboard_combination
-            // 
-            resources.ApplyResources(this.lKeyboard_combination, "lKeyboard_combination");
-            this.lKeyboard_combination.Name = "lKeyboard_combination";
             // 
             // txtKeyboard_combination
             // 
@@ -1012,6 +580,59 @@
             this.bKeyboard_combination.UseVisualStyleBackColor = true;
             this.bKeyboard_combination.Click += new System.EventHandler(this.bKeyboard_combination_Click);
             // 
+            // gbKeyboard
+            // 
+            resources.ApplyResources(this.gbKeyboard, "gbKeyboard");
+            this.gbKeyboard.Controls.Add(this.tlpKeyboard);
+            this.gbKeyboard.Name = "gbKeyboard";
+            this.gbKeyboard.TabStop = false;
+            // 
+            // tlpKeyboard
+            // 
+            resources.ApplyResources(this.tlpKeyboard, "tlpKeyboard");
+            this.tlpKeyboard.Controls.Add(this.cbbKeyBoard_KeyType, 1, 1);
+            this.tlpKeyboard.Controls.Add(this.lKeyBoard_KeyType, 0, 1);
+            this.tlpKeyboard.Controls.Add(this.lKeyBoard_KeyCode, 0, 0);
+            this.tlpKeyboard.Controls.Add(this.txtKeyBoard_KeyCode, 1, 0);
+            this.tlpKeyboard.Controls.Add(this.bKeyBoard, 3, 0);
+            this.tlpKeyboard.Name = "tlpKeyboard";
+            // 
+            // cbbKeyBoard_KeyType
+            // 
+            resources.ApplyResources(this.cbbKeyBoard_KeyType, "cbbKeyBoard_KeyType");
+            this.cbbKeyBoard_KeyType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbKeyBoard_KeyType.FormattingEnabled = true;
+            this.cbbKeyBoard_KeyType.Items.AddRange(new object[] {
+            resources.GetString("cbbKeyBoard_KeyType.Items"),
+            resources.GetString("cbbKeyBoard_KeyType.Items1"),
+            resources.GetString("cbbKeyBoard_KeyType.Items2")});
+            this.cbbKeyBoard_KeyType.Name = "cbbKeyBoard_KeyType";
+            // 
+            // lKeyBoard_KeyType
+            // 
+            resources.ApplyResources(this.lKeyBoard_KeyType, "lKeyBoard_KeyType");
+            this.lKeyBoard_KeyType.Name = "lKeyBoard_KeyType";
+            // 
+            // lKeyBoard_KeyCode
+            // 
+            resources.ApplyResources(this.lKeyBoard_KeyCode, "lKeyBoard_KeyCode");
+            this.lKeyBoard_KeyCode.Name = "lKeyBoard_KeyCode";
+            // 
+            // txtKeyBoard_KeyCode
+            // 
+            resources.ApplyResources(this.txtKeyBoard_KeyCode, "txtKeyBoard_KeyCode");
+            this.txtKeyBoard_KeyCode.BackColor = System.Drawing.SystemColors.Window;
+            this.txtKeyBoard_KeyCode.Name = "txtKeyBoard_KeyCode";
+            this.txtKeyBoard_KeyCode.ReadOnly = true;
+            this.txtKeyBoard_KeyCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyBoard_Key_KeyDown);
+            // 
+            // bKeyBoard
+            // 
+            resources.ApplyResources(this.bKeyBoard, "bKeyBoard");
+            this.bKeyBoard.Name = "bKeyBoard";
+            this.bKeyBoard.UseVisualStyleBackColor = true;
+            this.bKeyBoard.Click += new System.EventHandler(this.bKeyBoard_Click);
+            // 
             // tpInstruction_Mouse
             // 
             resources.ApplyResources(this.tpInstruction_Mouse, "tpInstruction_Mouse");
@@ -1022,8 +643,8 @@
             // tlpInstruction_Mouse
             // 
             resources.ApplyResources(this.tlpInstruction_Mouse, "tlpInstruction_Mouse");
-            this.tlpInstruction_Mouse.Controls.Add(this.gbMouseWheel, 1, 0);
-            this.tlpInstruction_Mouse.Controls.Add(this.gbMouseMove, 2, 0);
+            this.tlpInstruction_Mouse.Controls.Add(this.gbMouseWheel, 0, 1);
+            this.tlpInstruction_Mouse.Controls.Add(this.gbMouseMove, 0, 2);
             this.tlpInstruction_Mouse.Controls.Add(this.gbMouse, 0, 0);
             this.tlpInstruction_Mouse.Name = "tlpInstruction_Mouse";
             // 
@@ -1040,7 +661,7 @@
             this.tlpMouseWheel.Controls.Add(this.lMouseWheel_Distance, 0, 1);
             this.tlpMouseWheel.Controls.Add(this.lMouseWheel_Direction, 0, 0);
             this.tlpMouseWheel.Controls.Add(this.nudMouseWheel_Distance, 1, 1);
-            this.tlpMouseWheel.Controls.Add(this.bMouseWheel, 4, 0);
+            this.tlpMouseWheel.Controls.Add(this.bMouseWheel, 3, 0);
             this.tlpMouseWheel.Controls.Add(this.cbbMouseWheel_Direction, 1, 0);
             this.tlpMouseWheel.Name = "tlpMouseWheel";
             // 
@@ -1102,9 +723,9 @@
             // 
             resources.ApplyResources(this.tlpMouseMove, "tlpMouseMove");
             this.tlpMouseMove.Controls.Add(this.rbMoveBy, 1, 0);
-            this.tlpMouseMove.Controls.Add(this.nudMouseMove_Y, 3, 1);
-            this.tlpMouseMove.Controls.Add(this.lMouseMove_Y, 2, 1);
-            this.tlpMouseMove.Controls.Add(this.bMouseMove, 5, 1);
+            this.tlpMouseMove.Controls.Add(this.nudMouseMove_Y, 1, 2);
+            this.tlpMouseMove.Controls.Add(this.lMouseMove_Y, 0, 2);
+            this.tlpMouseMove.Controls.Add(this.bMouseMove, 3, 0);
             this.tlpMouseMove.Controls.Add(this.nudMouseMove_X, 1, 1);
             this.tlpMouseMove.Controls.Add(this.lMouseMove_X, 0, 1);
             this.tlpMouseMove.Controls.Add(this.rbMoveTo, 0, 0);
@@ -1171,64 +792,15 @@
             // tlpMouse
             // 
             resources.ApplyResources(this.tlpMouse, "tlpMouse");
-            this.tlpMouse.Controls.Add(this.nudMouse_Interval, 1, 2);
-            this.tlpMouse.Controls.Add(this.lMouse_Interval, 0, 2);
-            this.tlpMouse.Controls.Add(this.lMouse_Times, 0, 1);
             this.tlpMouse.Controls.Add(this.lMouse, 0, 0);
-            this.tlpMouse.Controls.Add(this.nudMouse_Times, 1, 1);
-            this.tlpMouse.Controls.Add(this.bMouse, 4, 0);
+            this.tlpMouse.Controls.Add(this.bMouse, 3, 0);
             this.tlpMouse.Controls.Add(this.cbbMouse, 1, 0);
             this.tlpMouse.Name = "tlpMouse";
-            // 
-            // nudMouse_Interval
-            // 
-            resources.ApplyResources(this.nudMouse_Interval, "nudMouse_Interval");
-            this.nudMouse_Interval.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudMouse_Interval.Name = "nudMouse_Interval";
-            this.nudMouse_Interval.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // lMouse_Interval
-            // 
-            resources.ApplyResources(this.lMouse_Interval, "lMouse_Interval");
-            this.lMouse_Interval.Name = "lMouse_Interval";
-            // 
-            // lMouse_Times
-            // 
-            resources.ApplyResources(this.lMouse_Times, "lMouse_Times");
-            this.lMouse_Times.Name = "lMouse_Times";
             // 
             // lMouse
             // 
             resources.ApplyResources(this.lMouse, "lMouse");
             this.lMouse.Name = "lMouse";
-            // 
-            // nudMouse_Times
-            // 
-            resources.ApplyResources(this.nudMouse_Times, "nudMouse_Times");
-            this.nudMouse_Times.Maximum = new decimal(new int[] {
-            99999,
-            0,
-            0,
-            0});
-            this.nudMouse_Times.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudMouse_Times.Name = "nudMouse_Times";
-            this.nudMouse_Times.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // bMouse
             // 
@@ -1312,58 +884,43 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.tlpRobotForm);
             this.DoubleBuffered = true;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_RobotForm";
             this.Load += new System.EventHandler(this.Socket_RobotForm_Load);
             this.tlpRobotForm.ResumeLayout(false);
-            this.tlpRobotForm.PerformLayout();
-            this.ssRobotInstruction.ResumeLayout(false);
-            this.ssRobotInstruction.PerformLayout();
-            this.tlpListInfo.ResumeLayout(false);
-            this.gbSendList.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvSendList)).EndInit();
-            this.tlpRobotInfo.ResumeLayout(false);
             this.gbRobotName.ResumeLayout(false);
             this.gbRobotName.PerformLayout();
+            this.tlpListInfo.ResumeLayout(false);
             this.gbRobotInstruction.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvRobotInstruction)).EndInit();
             this.cmsRobotInstruction.ResumeLayout(false);
             this.tcRobotInstruction.ResumeLayout(false);
             this.tpInstruction_Socket.ResumeLayout(false);
             this.tlpInstruction_Socket.ResumeLayout(false);
-            this.gbSpecifySend.ResumeLayout(false);
-            this.tlpSpecifySend.ResumeLayout(false);
-            this.tlpSpecifySend.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.gbSend.ResumeLayout(false);
             this.tlpSend.ResumeLayout(false);
-            this.tlpSend.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendSocket)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendInterval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendTimes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendIndex)).EndInit();
             this.tpInstruction_Control.ResumeLayout(false);
             this.tlpInstruction_Control.ResumeLayout(false);
             this.gbLoop.ResumeLayout(false);
             this.tlpLoop.ResumeLayout(false);
-            this.tlpLoop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop)).EndInit();
             this.gbDelay.ResumeLayout(false);
             this.tlpDelay.ResumeLayout(false);
-            this.tlpDelay.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).EndInit();
             this.tpInstruction_keyboard.ResumeLayout(false);
             this.tlpInstruction_keyboard.ResumeLayout(false);
-            this.gbKeyboard.ResumeLayout(false);
-            this.tlpKeyboard.ResumeLayout(false);
-            this.tlpKeyboard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudKeyBoard_Times)).EndInit();
-            this.tlpKeyBoardCombine.ResumeLayout(false);
             this.gbKeyboard_Text.ResumeLayout(false);
             this.tlpKeyboard_Text.ResumeLayout(false);
             this.tlpKeyboard_Text.PerformLayout();
             this.gbKeyboard_combination.ResumeLayout(false);
             this.tlpKeyboard_combination.ResumeLayout(false);
             this.tlpKeyboard_combination.PerformLayout();
+            this.gbKeyboard.ResumeLayout(false);
+            this.tlpKeyboard.ResumeLayout(false);
+            this.tlpKeyboard.PerformLayout();
             this.tpInstruction_Mouse.ResumeLayout(false);
             this.tlpInstruction_Mouse.ResumeLayout(false);
             this.gbMouseWheel.ResumeLayout(false);
@@ -1378,8 +935,6 @@
             this.gbMouse.ResumeLayout(false);
             this.tlpMouse.ResumeLayout(false);
             this.tlpMouse.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMouse_Interval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMouse_Times)).EndInit();
             this.tlpButton.ResumeLayout(false);
             this.gbExecute.ResumeLayout(false);
             this.gbExecute.PerformLayout();
@@ -1391,18 +946,6 @@
 
         private System.Windows.Forms.TableLayoutPanel tlpRobotForm;
         private System.Windows.Forms.TableLayoutPanel tlpListInfo;
-        private System.Windows.Forms.TabControl tcRobotInstruction;
-        private System.Windows.Forms.TabPage tpInstruction_Socket;
-        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Socket;
-        private System.Windows.Forms.GroupBox gbSend;
-        private System.Windows.Forms.TableLayoutPanel tlpSend;
-        private System.Windows.Forms.Label lSendIndex;
-        private System.Windows.Forms.NumericUpDown nudSendIndex;
-        private System.Windows.Forms.Label lSendTimes;
-        private System.Windows.Forms.NumericUpDown nudSendTimes;
-        private System.Windows.Forms.NumericUpDown nudSendInterval;
-        private System.Windows.Forms.Label lSendInterval;
-        private System.Windows.Forms.Button bSend;
         private System.Windows.Forms.ContextMenuStrip cmsRobotInstruction;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotInstruction_Top;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotInstruction_Bottom;
@@ -1415,104 +958,79 @@
         private System.Windows.Forms.TableLayoutPanel tlpButton;
         private System.Windows.Forms.Button bClose;
         private System.Windows.Forms.Button bSave;
-        private System.Windows.Forms.TableLayoutPanel tlpRobotInfo;
-        private System.Windows.Forms.GroupBox gbRobotInstruction;
-        private System.Windows.Forms.DataGridView dgvRobotInstruction;
-        private System.Windows.Forms.GroupBox gbSendList;
-        private System.Windows.Forms.DataGridView dgvSendList;
-        private System.Windows.Forms.GroupBox gbRobotName;
-        private System.Windows.Forms.TextBox txtRobotName;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotInstruction_CleanUp;
         private System.Windows.Forms.Button bExecute;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Content;
-        private System.Windows.Forms.NumericUpDown nudSendSocket;
-        private System.Windows.Forms.Label lSendSocket;
         private System.Windows.Forms.Button bStop;
-        private System.Windows.Forms.StatusStrip ssRobotInstruction;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Total;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Total_Value;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Split1;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Success;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Success_Value;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Fail;
-        private System.Windows.Forms.ToolStripStatusLabel ssRobotInstruction_Fail_Value;
-        private System.Windows.Forms.TabPage tpInstruction_keyboard;
-        private System.Windows.Forms.TableLayoutPanel tlpInstruction_keyboard;
-        private System.Windows.Forms.TabPage tpInstruction_Mouse;
-        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Mouse;
-        private System.Windows.Forms.GroupBox gbKeyboard;
-        private System.Windows.Forms.GroupBox gbMouseMove;
-        private System.Windows.Forms.GroupBox gbMouse;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyboard;
-        private System.Windows.Forms.Label lKeyBoard_Times;
-        private System.Windows.Forms.Label lKeyBoard_KeyCode;
-        private System.Windows.Forms.TextBox txtKeyBoard_KeyCode;
-        private System.Windows.Forms.NumericUpDown nudKeyBoard_Times;
-        private System.Windows.Forms.Button bKeyBoard;
-        private System.Windows.Forms.NumericUpDown nudKeyBoard_Interval;
-        private System.Windows.Forms.Label lKeyBoard_Interval;
         private System.Windows.Forms.GroupBox gbExecute;
         private System.Windows.Forms.TextBox txtExecute;
-        private System.Windows.Forms.TableLayoutPanel tlpMouse;
-        private System.Windows.Forms.NumericUpDown nudMouse_Interval;
-        private System.Windows.Forms.Label lMouse_Interval;
-        private System.Windows.Forms.Label lMouse_Times;
-        private System.Windows.Forms.Label lMouse;
-        private System.Windows.Forms.NumericUpDown nudMouse_Times;
-        private System.Windows.Forms.Button bMouse;
-        private System.Windows.Forms.ComboBox cbbMouse;
+        private System.Windows.Forms.TabControl tcRobotInstruction;
+        private System.Windows.Forms.TabPage tpInstruction_Socket;
+        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Socket;
+        private System.Windows.Forms.GroupBox gbSend;
+        private System.Windows.Forms.TableLayoutPanel tlpSend;
+        private System.Windows.Forms.Button bSend_SendList;
+        private System.Windows.Forms.TabPage tpInstruction_Control;
+        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Control;
+        private System.Windows.Forms.GroupBox gbDelay;
+        private System.Windows.Forms.TableLayoutPanel tlpDelay;
+        private System.Windows.Forms.Button bDelay;
+        private System.Windows.Forms.NumericUpDown nudDelay;
+        private System.Windows.Forms.TabPage tpInstruction_keyboard;
+        private System.Windows.Forms.TableLayoutPanel tlpInstruction_keyboard;
+        private System.Windows.Forms.GroupBox gbKeyboard;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyboard;
+        private System.Windows.Forms.ComboBox cbbKeyBoard_KeyType;
+        private System.Windows.Forms.Label lKeyBoard_KeyType;
+        private System.Windows.Forms.Label lKeyBoard_KeyCode;
+        private System.Windows.Forms.TextBox txtKeyBoard_KeyCode;
+        private System.Windows.Forms.Button bKeyBoard;
+        private System.Windows.Forms.TabPage tpInstruction_Mouse;
+        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Mouse;
         private System.Windows.Forms.GroupBox gbMouseWheel;
         private System.Windows.Forms.TableLayoutPanel tlpMouseWheel;
         private System.Windows.Forms.Label lMouseWheel_Distance;
         private System.Windows.Forms.Label lMouseWheel_Direction;
         private System.Windows.Forms.NumericUpDown nudMouseWheel_Distance;
-        private System.Windows.Forms.Button bMouseWheel;
         private System.Windows.Forms.ComboBox cbbMouseWheel_Direction;
+        private System.Windows.Forms.GroupBox gbMouseMove;
         private System.Windows.Forms.TableLayoutPanel tlpMouseMove;
-        private System.Windows.Forms.NumericUpDown nudMouseMove_X;
-        private System.Windows.Forms.Label lMouseMove_X;
+        private System.Windows.Forms.RadioButton rbMoveBy;
         private System.Windows.Forms.NumericUpDown nudMouseMove_Y;
         private System.Windows.Forms.Label lMouseMove_Y;
         private System.Windows.Forms.Button bMouseMove;
-        private System.Windows.Forms.TabPage tpInstruction_Control;
-        private System.Windows.Forms.TableLayoutPanel tlpInstruction_Control;
+        private System.Windows.Forms.NumericUpDown nudMouseMove_X;
+        private System.Windows.Forms.Label lMouseMove_X;
+        private System.Windows.Forms.RadioButton rbMoveTo;
+        private System.Windows.Forms.GroupBox gbMouse;
+        private System.Windows.Forms.TableLayoutPanel tlpMouse;
+        private System.Windows.Forms.Label lMouse;
+        private System.Windows.Forms.Button bMouse;
+        private System.Windows.Forms.ComboBox cbbMouse;
         private System.Windows.Forms.GroupBox gbLoop;
         private System.Windows.Forms.TableLayoutPanel tlpLoop;
-        private System.Windows.Forms.Label lLoop;
         private System.Windows.Forms.Button bLoopEnd;
         private System.Windows.Forms.Button bLoopStart;
         private System.Windows.Forms.NumericUpDown nudLoop;
-        private System.Windows.Forms.GroupBox gbDelay;
-        private System.Windows.Forms.TableLayoutPanel tlpDelay;
-        private System.Windows.Forms.Label lDelay;
-        private System.Windows.Forms.Button bDelay;
-        private System.Windows.Forms.NumericUpDown nudDelay;
-        private System.Windows.Forms.ComboBox cbbKeyBoard_KeyType;
-        private System.Windows.Forms.Label lKeyBoard_KeyType;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyBoardCombine;
-        private System.Windows.Forms.GroupBox gbKeyboard_combination;
-        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
-        private System.Windows.Forms.Label lKeyboard_combination;
-        private System.Windows.Forms.TextBox txtKeyboard_combination;
-        private System.Windows.Forms.Button bKeyboard_combination;
         private System.Windows.Forms.GroupBox gbKeyboard_Text;
         private System.Windows.Forms.TableLayoutPanel tlpKeyboard_Text;
         private System.Windows.Forms.TextBox txtKeyboard_Text;
         private System.Windows.Forms.Button bKeyboard_Text;
-        private System.Windows.Forms.RadioButton rbMoveBy;
-        private System.Windows.Forms.RadioButton rbMoveTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSendList_ID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cNote;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIPTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
-        private System.Windows.Forms.GroupBox gbSpecifySend;
-        private System.Windows.Forms.TableLayoutPanel tlpSpecifySend;
-        private System.Windows.Forms.Label lSpecifySend_SocketList;
+        private System.Windows.Forms.GroupBox gbKeyboard_combination;
+        private System.Windows.Forms.TableLayoutPanel tlpKeyboard_combination;
+        private System.Windows.Forms.TextBox txtKeyboard_combination;
+        private System.Windows.Forms.Button bKeyboard_combination;
+        private System.Windows.Forms.GroupBox gbRobotName;
+        private System.Windows.Forms.TextBox txtRobotName;
+        private System.Windows.Forms.GroupBox gbRobotInstruction;
+        private System.Windows.Forms.DataGridView dgvRobotInstruction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Content;
+        private System.Windows.Forms.Button bMouseWheel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label lSend_SocketList;
         private System.Windows.Forms.Button bSend_SocketList;
+        private System.Windows.Forms.ComboBox cbbSendLIst;
     }
 }

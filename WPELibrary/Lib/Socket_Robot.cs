@@ -11,9 +11,7 @@ namespace WPELibrary.Lib
 {
     public class Socket_Robot
     {
-        public int Instruction_Index = 0;
-        public int Send_Success = 0;
-        public int Send_Failure = 0;
+        public int Instruction_Index = 0;      
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
         
@@ -46,10 +44,11 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (!this.Worker.IsBusy)
+                if (dtRobotInstruction.Rows.Count > 0)
                 {
-                    if (dtRobotInstruction.Rows.Count > 0)
+                    if (!this.Worker.IsBusy)
                     {
+                        this.Total_Instruction = 0;
                         this.RobotName = RobotName;
                         this.RobotInstruction = dtRobotInstruction;
 
@@ -68,7 +67,7 @@ namespace WPELibrary.Lib
                             Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                         }
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -105,9 +104,6 @@ namespace WPELibrary.Lib
             {
                 if (this.RobotInstruction.Rows.Count > 0)
                 {
-                    this.Total_Instruction = 0;
-                    this.Send_Success = 0;
-                    this.Send_Failure = 0;
                     Stack<int> sLoopStart = new Stack<int>();
                     Dictionary<int, int> dLoopCNT = new Dictionary<int, int>();
 
@@ -118,295 +114,277 @@ namespace WPELibrary.Lib
                             e.Cancel = true;
                             return;
                         }
-
-                        Worker.ReportProgress(i);             
-
-                        Socket_Cache.Robot.InstructionType instructionType = (Socket_Cache.Robot.InstructionType)RobotInstruction.Rows[i]["Type"];
-                        string sContent = RobotInstruction.Rows[i]["Content"].ToString();
-
-                        switch (instructionType)
+                        else
                         {
-                            case Socket_Cache.Robot.InstructionType.Send:
+                            Worker.ReportProgress(i);
 
-                                if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
-                                {
-                                    int SendPacket_Index = 0;
-                                    if (int.TryParse(sContent.Split('|')[0], out int iIndex))
+                            Socket_Cache.Robot.InstructionType instructionType = (Socket_Cache.Robot.InstructionType)RobotInstruction.Rows[i]["Type"];
+                            string sContent = RobotInstruction.Rows[i]["Content"].ToString();
+
+                            switch (instructionType)
+                            {
+                                case Socket_Cache.Robot.InstructionType.SendSendList:
+
+                                    if (!string.IsNullOrEmpty(sContent))
                                     {
-                                        SendPacket_Index = iIndex - 1;
+                                        Guid SID = Guid.Parse(sContent);
+                                        Socket_Cache.Send.DoSend(SID);
                                     }
 
-                                    int SendPacket_Socket = 0;
-                                    if (int.TryParse(sContent.Split('|')[1], out int iSocket))
+                                    break;
+
+                                case Socket_Cache.Robot.InstructionType.SendSocketList:
+
+                                    Socket_Cache.SocketList.SendSocketList_ByIndex(Socket_Cache.SocketList.Select_Index);
+
+                                    break;
+
+                                case Socket_Cache.Robot.InstructionType.Delay:
+
+                                    if (int.TryParse(sContent, out int iDelay))
                                     {
-                                        SendPacket_Socket = iSocket;
+                                        Thread.Sleep(iDelay);
                                     }
 
-                                    bool bOK = Socket_Cache.SendList.DoSendList_ByIndex(SendPacket_Socket, SendPacket_Index);
+                                    break;
 
-                                    if (bOK)
+                                case Socket_Cache.Robot.InstructionType.LoopStart:
+
+                                    if (int.TryParse(sContent, out int Count))
                                     {
-                                        this.Send_Success++;
-                                    }
-                                    else
-                                    {
-                                        this.Send_Failure++;
-                                    }                                  
-                                }
+                                        sLoopStart.Push(i);
 
-                                break;
-
-                            case Socket_Cache.Robot.InstructionType.SendSocketList:
-
-                                Socket_Cache.SocketList.SendSocketList_ByIndex(Socket_Cache.SocketList.Select_Index);
-
-                                break;
-
-                            case Socket_Cache.Robot.InstructionType.Delay:
-
-                                if (int.TryParse(sContent, out int iDelay))
-                                {
-                                    Thread.Sleep(iDelay);                                
-                                }
-
-                                break;
-
-                            case Socket_Cache.Robot.InstructionType.LoopStart:                           
-
-                                if (int.TryParse(sContent, out int Count))
-                                {
-                                    sLoopStart.Push(i);
-
-                                    if (dLoopCNT.ContainsKey(i))
-                                    {
-                                        dLoopCNT[i] = Count;
-                                    }
-                                    else
-                                    {
-                                        dLoopCNT.Add(i, Count);
-                                    }                                    
-                                }
-
-                                break;
-
-                            case Socket_Cache.Robot.InstructionType.LoopEnd:
-
-                                if (sLoopStart.Count > 0)
-                                {
-                                    int iLoopStart = sLoopStart.Peek();
-
-                                    if (dLoopCNT.ContainsKey(iLoopStart))
-                                    {
-                                        int iLoopCNT = dLoopCNT[iLoopStart];
-
-                                        iLoopCNT--;
-
-                                        if (iLoopCNT > 0)
+                                        if (dLoopCNT.ContainsKey(i))
                                         {
-                                            dLoopCNT[iLoopStart] = iLoopCNT;
-                                            i = iLoopStart;
+                                            dLoopCNT[i] = Count;
                                         }
                                         else
                                         {
-                                            sLoopStart.Pop();
+                                            dLoopCNT.Add(i, Count);
                                         }
                                     }
-                                }
 
-                                break;
+                                    break;
 
-                            case Socket_Cache.Robot.InstructionType.KeyBoard:
+                                case Socket_Cache.Robot.InstructionType.LoopEnd:
 
-                                if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
-                                {
-                                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.GetKeyBoardType_ByString(sContent.Split('|')[0].ToString());
-                                    string KeyCode = sContent.Split('|')[1];
-
-                                    Keys kCode;
-                                    VirtualKeyCode vkCode;                                    
-
-                                    switch (kbType)
+                                    if (sLoopStart.Count > 0)
                                     {
-                                        case Socket_Cache.Robot.KeyBoardType.Press:
+                                        int iLoopStart = sLoopStart.Peek();
 
-                                            if (Enum.TryParse(KeyCode, true, out kCode))
+                                        if (dLoopCNT.ContainsKey(iLoopStart))
+                                        {
+                                            int iLoopCNT = dLoopCNT[iLoopStart];
+
+                                            iLoopCNT--;
+
+                                            if (iLoopCNT > 0)
                                             {
-                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
-                                                {
-                                                    sim.Keyboard.KeyPress(vkCode);
-                                                }
-                                            }                                            
-
-                                            break;
-
-                                        case Socket_Cache.Robot.KeyBoardType.Down:
-
-                                            if (Enum.TryParse(KeyCode, true, out kCode))
-                                            {
-                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
-                                                {
-                                                    sim.Keyboard.KeyDown(vkCode);
-                                                }
+                                                dLoopCNT[iLoopStart] = iLoopCNT;
+                                                i = iLoopStart;
                                             }
-
-                                            break;
-
-                                        case Socket_Cache.Robot.KeyBoardType.Up:
-
-                                            if (Enum.TryParse(KeyCode, true, out kCode))
+                                            else
                                             {
-                                                if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
-                                                {
-                                                    sim.Keyboard.KeyUp(vkCode);
-                                                }
+                                                sLoopStart.Pop();
                                             }
+                                        }
+                                    }
 
-                                            break;
+                                    break;
 
-                                        case Socket_Cache.Robot.KeyBoardType.Combine:
+                                case Socket_Cache.Robot.InstructionType.KeyBoard:
 
-                                            if (KeyCode.IndexOf("+") > 0)
-                                            {
-                                                string[] slKeyCode = KeyCode.Split('+');                                                
+                                    if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                                    {
+                                        Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.GetKeyBoardType_ByString(sContent.Split('|')[0].ToString());
+                                        string KeyCode = sContent.Split('|')[1];
 
-                                                List<VirtualKeyCode> ControlKey = new List<VirtualKeyCode>();
-                                                List<VirtualKeyCode> NormalKey = new List<VirtualKeyCode>();                                               
+                                        Keys kCode;
+                                        VirtualKeyCode vkCode;
 
-                                                foreach (string sKey in slKeyCode)
+                                        switch (kbType)
+                                        {
+                                            case Socket_Cache.Robot.KeyBoardType.Press:
+
+                                                if (Enum.TryParse(KeyCode, true, out kCode))
                                                 {
-                                                    if (Enum.TryParse(sKey, true, out kCode))
+                                                    if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
                                                     {
-                                                        if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
-                                                        {
-                                                            if (vkCode == VirtualKeyCode.CONTROL || vkCode == VirtualKeyCode.MENU || vkCode == VirtualKeyCode.SHIFT)
-                                                            {
-                                                                ControlKey.Add(vkCode);
-                                                            }
-                                                            else
-                                                            {
-                                                                NormalKey.Add(vkCode);
-                                                            }
-                                                        }
+                                                        sim.Keyboard.KeyPress(vkCode);
                                                     }
                                                 }
 
-                                                sim.Keyboard.ModifiedKeyStroke(ControlKey, NormalKey);
-                                            }
+                                                break;
 
-                                            break;
+                                            case Socket_Cache.Robot.KeyBoardType.Down:
 
-                                        case Socket_Cache.Robot.KeyBoardType.Text:
-
-                                            if (!string.IsNullOrEmpty(KeyCode))
-                                            {
-                                                sim.Keyboard.TextEntry(KeyCode);
-                                            }
-
-                                            break;
-                                    }                                    
-                                }                           
-
-                                break;
-
-                            case Socket_Cache.Robot.InstructionType.Mouse:
-
-                                if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
-                                {
-                                    Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.GetMouseType_ByString(sContent.Split('|')[0].ToString());
-                                    string MouseCode = sContent.Split('|')[1];
-
-                                    int iMouseCode = 0;
-                                    switch (mType)
-                                    {
-                                        case Socket_Cache.Robot.MouseType.LeftClick:
-                                            sim.Mouse.LeftButtonClick();                                           
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.RightClick:
-                                            sim.Mouse.RightButtonClick();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.LeftDBClick:
-                                            sim.Mouse.LeftButtonDoubleClick();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.RightDBClick:
-                                            sim.Mouse.RightButtonDoubleClick();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.LeftDown:
-                                            sim.Mouse.LeftButtonDown();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.LeftUp:
-                                            sim.Mouse.LeftButtonUp();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.RightDown:
-                                            sim.Mouse.RightButtonDown();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.RightUp:
-                                            sim.Mouse.RightButtonUp();
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.WheelUp:
-
-                                            if (int.TryParse(MouseCode, out iMouseCode))
-                                            {
-                                                sim.Mouse.VerticalScroll(iMouseCode);                                                
-                                            }
-                                            
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.WheelDown:
-
-                                            if (int.TryParse(MouseCode, out iMouseCode))
-                                            {
-                                                sim.Mouse.VerticalScroll(-iMouseCode);
-                                            }
-
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.MoveTo:
-
-                                            if (MouseCode.IndexOf(",") > 0)
-                                            {
-                                                string sMoveX = MouseCode.Split(',')[0].Trim();
-                                                string sMoveY = MouseCode.Split(',')[1].Trim();
-
-                                                if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
+                                                if (Enum.TryParse(KeyCode, true, out kCode))
                                                 {
-                                                    sim.Mouse.MoveMouseTo(iX, iY);
-                                                }                                              
-                                            }                                         
-
-                                            break;
-
-                                        case Socket_Cache.Robot.MouseType.MoveBy:
-
-                                            if (MouseCode.IndexOf(",") > 0)
-                                            {
-                                                string sMoveX = MouseCode.Split(',')[0].Trim();
-                                                string sMoveY = MouseCode.Split(',')[1].Trim();
-
-                                                if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
-                                                {
-                                                    sim.Mouse.MoveMouseBy(iX, iY);
+                                                    if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                    {
+                                                        sim.Keyboard.KeyDown(vkCode);
+                                                    }
                                                 }
-                                            }
 
-                                            break;
+                                                break;
+
+                                            case Socket_Cache.Robot.KeyBoardType.Up:
+
+                                                if (Enum.TryParse(KeyCode, true, out kCode))
+                                                {
+                                                    if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                    {
+                                                        sim.Keyboard.KeyUp(vkCode);
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Robot.KeyBoardType.Combine:
+
+                                                if (KeyCode.IndexOf("+") > 0)
+                                                {
+                                                    string[] slKeyCode = KeyCode.Split('+');
+
+                                                    List<VirtualKeyCode> ControlKey = new List<VirtualKeyCode>();
+                                                    List<VirtualKeyCode> NormalKey = new List<VirtualKeyCode>();
+
+                                                    foreach (string sKey in slKeyCode)
+                                                    {
+                                                        if (Enum.TryParse(sKey, true, out kCode))
+                                                        {
+                                                            if (Enum.TryParse(((int)kCode).ToString(), true, out vkCode))
+                                                            {
+                                                                if (vkCode == VirtualKeyCode.CONTROL || vkCode == VirtualKeyCode.MENU || vkCode == VirtualKeyCode.SHIFT)
+                                                                {
+                                                                    ControlKey.Add(vkCode);
+                                                                }
+                                                                else
+                                                                {
+                                                                    NormalKey.Add(vkCode);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    sim.Keyboard.ModifiedKeyStroke(ControlKey, NormalKey);
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Robot.KeyBoardType.Text:
+
+                                                if (!string.IsNullOrEmpty(KeyCode))
+                                                {
+                                                    sim.Keyboard.TextEntry(KeyCode);
+                                                }
+
+                                                break;
+                                        }
                                     }
-                                }
 
-                                break;
-                        }
+                                    break;
 
-                        if (instructionType != Socket_Cache.Robot.InstructionType.LoopStart && instructionType != Socket_Cache.Robot.InstructionType.LoopEnd)
-                        {
-                            this.Total_Instruction++;
-                        }
+                                case Socket_Cache.Robot.InstructionType.Mouse:
+
+                                    if (!string.IsNullOrEmpty(sContent) && sContent.IndexOf("|") > 0)
+                                    {
+                                        Socket_Cache.Robot.MouseType mType = Socket_Cache.Robot.GetMouseType_ByString(sContent.Split('|')[0].ToString());
+                                        string MouseCode = sContent.Split('|')[1];
+
+                                        int iMouseCode = 0;
+                                        switch (mType)
+                                        {
+                                            case Socket_Cache.Robot.MouseType.LeftClick:
+                                                sim.Mouse.LeftButtonClick();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.RightClick:
+                                                sim.Mouse.RightButtonClick();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.LeftDBClick:
+                                                sim.Mouse.LeftButtonDoubleClick();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.RightDBClick:
+                                                sim.Mouse.RightButtonDoubleClick();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.LeftDown:
+                                                sim.Mouse.LeftButtonDown();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.LeftUp:
+                                                sim.Mouse.LeftButtonUp();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.RightDown:
+                                                sim.Mouse.RightButtonDown();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.RightUp:
+                                                sim.Mouse.RightButtonUp();
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.WheelUp:
+
+                                                if (int.TryParse(MouseCode, out iMouseCode))
+                                                {
+                                                    sim.Mouse.VerticalScroll(iMouseCode);
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.WheelDown:
+
+                                                if (int.TryParse(MouseCode, out iMouseCode))
+                                                {
+                                                    sim.Mouse.VerticalScroll(-iMouseCode);
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.MoveTo:
+
+                                                if (MouseCode.IndexOf(",") > 0)
+                                                {
+                                                    string sMoveX = MouseCode.Split(',')[0].Trim();
+                                                    string sMoveY = MouseCode.Split(',')[1].Trim();
+
+                                                    if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
+                                                    {
+                                                        sim.Mouse.MoveMouseTo(iX, iY);
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Robot.MouseType.MoveBy:
+
+                                                if (MouseCode.IndexOf(",") > 0)
+                                                {
+                                                    string sMoveX = MouseCode.Split(',')[0].Trim();
+                                                    string sMoveY = MouseCode.Split(',')[1].Trim();
+
+                                                    if (int.TryParse(sMoveX, out int iX) && int.TryParse(sMoveY, out int iY))
+                                                    {
+                                                        sim.Mouse.MoveMouseBy(iX, iY);
+                                                    }
+                                                }
+
+                                                break;
+                                        }
+                                    }
+
+                                    break;
+                            }
+
+                            if (instructionType != Socket_Cache.Robot.InstructionType.LoopStart && instructionType != Socket_Cache.Robot.InstructionType.LoopEnd)
+                            {
+                                this.Total_Instruction++;
+                            }
+                        }                        
                     }
                 }
             }

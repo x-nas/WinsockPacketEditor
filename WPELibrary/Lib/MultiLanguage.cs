@@ -57,7 +57,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
         public static string[] MutiLan_47 = { "递进设置错误", "Progressive setting error" };
-        public static string[] MutiLan_48 = { "发送列表 - ", "Send List - " };
+        public static string[] MutiLan_48 = { "发送列表 - [ 序号 {0} ] - {1}", "Send List - [ ID {0} ] - {1}" };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜 {0}", "Filter {0}" };
         public static string[] MutiLan_51 = { "[{0}] {1} | [{2}] 封包长度: {3}", "[{0}] {1} | [{2}] Packet Length: {3}" };
@@ -93,7 +93,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_81 = { "加载滤镜列表成功! [已加密]", "Load filter list successful! [Encrypted]" };
         public static string[] MutiLan_82 = { "递进位置超出封包长度", "Progressive position exceeds packet length" };
         public static string[] MutiLan_83 = { "不是合法的十六进制数据", "Not legal hexadecimal data" };
-        public static string[] MutiLan_84 = { "请选择需要发送的封包", "Please select the packets to sent" };
+        public static string[] MutiLan_84 = { "执行发送 [{0}]", "Execute Send [{0}]" };
         public static string[] MutiLan_85 = { "十六进制", "Hexadecimal" };
         public static string[] MutiLan_86 = { "二进制", "Binary" };
         public static string[] MutiLan_87 = { "十进制", "Decimal" };
@@ -112,7 +112,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_100 = { "加载发送列表成功! [未加密]", "Load send list successful! [Unencrypted]" };
         public static string[] MutiLan_101 = { "加载发送列表成功! [已加密]", "Load send list successful! [Encrypted]" };
         public static string[] MutiLan_102 = { "请参阅: {0}/tutorials.html 问题与解答!", "Please refer to the {0}/tutorials_enUS.html Q&A!" };
-        public static string[] MutiLan_103 = { "封包序号不正确!", "Incorrect packet ID!" };
+        public static string[] MutiLan_103 = { "发送列表不正确!", "Incorrect Send List!" };
         public static string[] MutiLan_104 = { "循环指令设置不正确!", "The loop instruction setting is incorrect!" };
         public static string[] MutiLan_105 = { "键盘", "Keyboard" };
         public static string[] MutiLan_106 = { "按键 {0}", "Press {0}" };
@@ -122,8 +122,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_110 = { "机器人 [{0}] 已停止!", "Robot [{0}] has stopped!" };
         public static string[] MutiLan_111 = { "机器人 [{0}] 发生错误: {1}", "Robot [{0}] error occurred: {1}" };
         public static string[] MutiLan_112 = { "机器人 [{0}] 执行完毕!", "Robot [{0}] execution completed!" };
-        public static string[] MutiLan_113 = { "封包 - [序号 {0}]", "Packet - [ID {0}]" };
-        public static string[] MutiLan_114 = { ", 使用套接字: {0}", ", Use Socket: {0}" };
+        public static string[] MutiLan_113 = { "发送列表 - [{0}]", "Send List - [{0}]" };
+        //public static string[] MutiLan_114 = { ", 使用套接字: {0}", ", Use Socket: {0}" };
         public static string[] MutiLan_115 = { "{0} 毫秒", "{0} ms" };
         public static string[] MutiLan_116 = { "循环 {0} 次", "Loop {0} Times" };
         public static string[] MutiLan_117 = { "左键单击", "Left Click" };
@@ -171,6 +171,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_159 = { "接收自", "RecvFrom" };
         public static string[] MutiLan_160 = { "发送列表保存完毕 {0}", "The Send List saved {0}" };
         public static string[] MutiLan_161 = { "[封包列表] 选中的封包", "[Socket List] Selected packet" };
+        public static string[] MutiLan_162 = { "发送 {0}", "Send {0}" };
+        public static string[] MutiLan_163 = { "发送 [{0}] 已停止!", "Send [{0}] has stopped!" };
+        public static string[] MutiLan_164 = { "发送 [{0}] 发生错误: {1}", "Send [{0}] error occurred: {1}" };
+        public static string[] MutiLan_165 = { "发送 [{0}] 执行完毕!", "Send [{0}] execution completed!" };
 
         #endregion
 
