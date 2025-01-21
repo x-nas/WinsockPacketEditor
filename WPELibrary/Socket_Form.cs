@@ -1193,7 +1193,7 @@ namespace WPELibrary
                                 bBuffer = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer;
                             }
 
-                            Socket_Cache.Send.AddSendCollection(SCollection, string.Empty, iSocket, ptType, sIPTo, bBuffer);
+                            Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPTo, bBuffer);
                         }
 
                         this.cmsHexBox.Close();

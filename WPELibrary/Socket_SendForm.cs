@@ -492,7 +492,7 @@ namespace WPELibrary
                             bBuffer = dbp.Bytes.ToArray();
                         }                        
 
-                        Socket_Cache.Send.AddSendCollection(SCollection, string.Empty, iSocket, this.Send_PacketType, sIPTo, bBuffer);                      
+                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.Send_PacketType, sIPTo, bBuffer);                      
                     }                                       
 
                     this.cmsHexBox.Close();

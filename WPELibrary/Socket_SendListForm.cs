@@ -103,7 +103,7 @@ namespace WPELibrary
             }
         }
 
-        private void dgvSendList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        private void dgvSendCollection_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
             {
@@ -111,10 +111,10 @@ namespace WPELibrary
                 {
                     e.Value = (e.RowIndex + 1).ToString();
                     e.FormattingApplied = true;
-                }                
+                }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cType"].Index)
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSendCollection.Rows[e.RowIndex].Cells["cType"].Value;
+                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)this.dgvSendCollection.Rows[e.RowIndex].Cells["cType"].Value;
                     e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
                     e.FormattingApplied = true;
                 }
@@ -382,7 +382,7 @@ namespace WPELibrary
             {
                 int iSendCollectionCount = this.dtSendCollection.Rows.Count;
                 DataRow dr = this.dtSendCollection.NewRow();
-                dr.ItemArray = (object[])this.dtSendCollection.Rows[iSIndex].ItemArray.Clone();
+                dr.ItemArray = this.dtSendCollection.Rows[iSIndex].ItemArray;
 
                 switch (listAction)
                 {

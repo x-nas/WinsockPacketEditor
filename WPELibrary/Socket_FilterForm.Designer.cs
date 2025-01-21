@@ -198,6 +198,7 @@ namespace WPELibrary
             this.dgvFilterNormal.AllowUserToDeleteRows = false;
             this.dgvFilterNormal.AllowUserToResizeColumns = false;
             this.dgvFilterNormal.AllowUserToResizeRows = false;
+            this.dgvFilterNormal.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -313,6 +314,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToResizeColumns = false;
             this.dgvFilterAdvanced_Modify_FromPosition.AllowUserToResizeRows = false;
+            this.dgvFilterAdvanced_Modify_FromPosition.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -359,6 +361,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Search.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Search.AllowUserToResizeColumns = false;
             this.dgvFilterAdvanced_Search.AllowUserToResizeRows = false;
+            this.dgvFilterAdvanced_Search.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
@@ -404,6 +407,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToDeleteRows = false;
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeColumns = false;
             this.dgvFilterAdvanced_Modify_FromHead.AllowUserToResizeRows = false;
+            this.dgvFilterAdvanced_Modify_FromHead.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle13.Font = new System.Drawing.Font("微软雅黑", 9F);

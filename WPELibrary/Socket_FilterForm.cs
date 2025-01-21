@@ -183,6 +183,7 @@ namespace WPELibrary
                 this.InitDGV_Advanced_Search();
                 this.InitDGV_Advanced_Modify_Head();
                 this.InitDGV_Advanced_Modify_Position();
+                this.InitDGV_Normal_ByAdvance();
 
                 this.dgvFilterAdvanced_Search.Height = this.tlpFilterAdvanced.Height / 2;
                 this.dgvFilterAdvanced_Modify_FromHead.Height = this.tlpFilterAdvanced.Height / 2;
@@ -214,13 +215,7 @@ namespace WPELibrary
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.LightYellow);
                     dgvFilterNormal.Columns.Add(dgv);
-
-                    int iWidth = dgv.HeaderCell.PreferredSize.Width;
-                    if (iWidth < 55)
-                    {
-                        iWidth = 55;
-                    }
-                    dgv.Width = iWidth;
+                    dgv.Width = dgv.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, true) + 5;
                 }
 
                 if (dgvFilterNormal.Rows.Count == 0)
@@ -228,6 +223,23 @@ namespace WPELibrary
                     dgvFilterNormal.Rows.Add();
                     dgvFilterNormal.Rows.Add();
                 }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitDGV_Normal_ByAdvance()
+        {
+            try
+            {
+                int iWidth = this.dgvFilterAdvanced_Search.Columns[0].Width;
+
+                for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
+                {
+                    this.dgvFilterNormal.Columns[i].Width = iWidth;
+                }
             }
             catch (Exception ex)
             {
@@ -248,19 +260,13 @@ namespace WPELibrary
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.LightYellow);
                     dgvFilterAdvanced_Search.Columns.Add(dgv);
-
-                    int iWidth = dgv.HeaderCell.PreferredSize.Width;
-                    if (iWidth < 55)
-                    {
-                        iWidth = 55;
-                    }
-                    dgv.Width = iWidth;
+                    dgv.Width = dgv.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, true) + 5;
                 }
 
                 if (dgvFilterAdvanced_Search.Rows.Count == 0)
                 {
                     dgvFilterAdvanced_Search.Rows.Add();
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -281,13 +287,7 @@ namespace WPELibrary
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.Yellow);
                     dgvFilterAdvanced_Modify_FromHead.Columns.Add(dgv);
-
-                    int iWidth = dgv.HeaderCell.PreferredSize.Width;
-                    if (iWidth < 55)
-                    {
-                        iWidth = 55;
-                    }
-                    dgv.Width = iWidth;
+                    dgv.Width = dgv.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, true) + 5;
                 }
 
                 if (dgvFilterAdvanced_Modify_FromHead.Rows.Count == 0)
@@ -321,13 +321,7 @@ namespace WPELibrary
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i, Color.RoyalBlue, Color.Yellow);
                     dgvFilterAdvanced_Modify_FromPosition.Columns.Add(dgv);
-
-                    int iWidth = dgv.HeaderCell.PreferredSize.Width;
-                    if (iWidth < 55)
-                    {
-                        iWidth = 55;
-                    }
-                    dgv.Width = iWidth;                    
+                    dgv.Width = dgv.GetPreferredWidth(DataGridViewAutoSizeColumnMode.AllCells, true) + 5;
                 }
 
                 if (dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 0)

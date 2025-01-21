@@ -711,6 +711,8 @@ namespace WPELibrary
             this.dgvSocketList.AllowUserToDeleteRows = false;
             this.dgvSocketList.AllowUserToResizeColumns = false;
             this.dgvSocketList.AllowUserToResizeRows = false;
+            this.dgvSocketList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvSocketList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvSocketList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
@@ -760,6 +762,7 @@ namespace WPELibrary
             this.cTypeImg.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.cTypeImg, "cTypeImg");
             this.cTypeImg.Image = global::WPELibrary.Properties.Resources.Info16;
+            this.cTypeImg.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
             this.cTypeImg.Name = "cTypeImg";
             this.cTypeImg.ReadOnly = true;
             this.cTypeImg.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -3483,14 +3486,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator cmsRobotList_Split3;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_ShowModified;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn2;
-        private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cTo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogID;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
@@ -3541,5 +3536,13 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewImageColumn cImg;
         private System.Windows.Forms.DataGridViewTextBoxColumn cRName;
+        private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cPacketType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSocket;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFrom;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cTo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLen;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cData;
     }
 }

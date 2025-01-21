@@ -4748,7 +4748,6 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    dtSendCollection.Columns.Add("Remark", typeof(string));
                     dtSendCollection.Columns.Add("Socket", typeof(int));
                     dtSendCollection.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
                     dtSendCollection.Columns.Add("IPTo", typeof(string));
@@ -4808,14 +4807,13 @@ namespace WPELibrary.Lib
                             {
                                 if (ssi.SID == SID)
                                 {
-                                    DataTable SCollection = ssi.SCollection;
-                                    string Remark = string.Empty;
+                                    DataTable SCollection = ssi.SCollection;                                 
                                     int Socket = Socket_Cache.SocketList.lstRecPacket[Index].PacketSocket;
                                     Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Index].PacketType;
                                     string IPTo = Socket_Cache.SocketList.lstRecPacket[Index].PacketTo;
                                     byte[] Buffer = Socket_Cache.SocketList.lstRecPacket[Index].PacketBuffer;
 
-                                    Socket_Cache.Send.AddSendCollection(SCollection, Remark, Socket, ptType, IPTo, Buffer);
+                                    Socket_Cache.Send.AddSendCollection(SCollection, Socket, ptType, IPTo, Buffer);
                                 }
                             }
                         }
@@ -4827,12 +4825,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddSendCollection(DataTable SCollection, string Remark, int Socket, Socket_Cache.SocketPacket.PacketType ptType, string IPTo, byte[] Buffer)
+            public static void AddSendCollection(DataTable SCollection, int Socket, Socket_Cache.SocketPacket.PacketType ptType, string IPTo, byte[] Buffer)
             {
                 try
                 {
                     DataRow dr = SCollection.NewRow();
-                    dr["Remark"] = Remark;
                     dr["Socket"] = Socket;
                     dr["Type"] = ptType;
                     dr["IPTo"] = IPTo;
@@ -5369,15 +5366,13 @@ namespace WPELibrary.Lib
 
                                 foreach (DataRow row in SCollection.Rows)
                                 {
-                                    string sRemark = row["Remark"].ToString();
                                     string sSocket = row["Socket"].ToString();
                                     string sType = row["Type"].ToString();
                                     string sIPTo = row["IPTo"].ToString();
                                     string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
 
                                     XElement xeColl =
-                                        new XElement("Collection",                                   
-                                        new XElement("Remark", sRemark),
+                                        new XElement("Collection",
                                         new XElement("Socket", sSocket),
                                         new XElement("Type", sType),
                                         new XElement("IPTo", sIPTo),
@@ -5536,12 +5531,6 @@ namespace WPELibrary.Lib
                         {
                             foreach (XElement xeCollection in xeSend.Element("SendCollection").Elements())
                             {
-                                string sRemark = string.Empty;
-                                if (xeCollection.Element("Remark") != null)
-                                {
-                                    sRemark = xeCollection.Element("Remark").Value;
-                                }
-
                                 int iSocket = 0;
                                 if (xeCollection.Element("Socket") != null)
                                 {
@@ -5566,7 +5555,7 @@ namespace WPELibrary.Lib
                                     bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
                                 }
 
-                                Socket_Cache.Send.AddSendCollection(SCollection, sRemark, iSocket, ptType, sIPTo, bBuffer);                                
+                                Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPTo, bBuffer);                                
                             }
                         }
 

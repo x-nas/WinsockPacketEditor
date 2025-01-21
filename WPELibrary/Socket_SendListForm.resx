@@ -131,19 +131,7 @@
     <value>8</value>
   </data>
   <data name="cID.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <metadata name="cRemark.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cRemark.HeaderText" xml:space="preserve">
-    <value>备注</value>
-  </data>
-  <data name="cRemark.MinimumWidth" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="cRemark.Width" type="System.Int32, mscorlib">
-    <value>200</value>
+    <value>44</value>
   </data>
   <metadata name="cSocket.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -155,13 +143,16 @@
     <value>8</value>
   </data>
   <data name="cSocket.Width" type="System.Int32, mscorlib">
-    <value>60</value>
+    <value>56</value>
   </data>
   <metadata name="cType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="cType.HeaderText" xml:space="preserve">
     <value>类别</value>
+  </data>
+  <data name="cType.Width" type="System.Int32, mscorlib">
+    <value>44</value>
   </data>
   <metadata name="cIPTo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -173,7 +164,7 @@
     <value>8</value>
   </data>
   <data name="cIPTo.Width" type="System.Int32, mscorlib">
-    <value>160</value>
+    <value>68</value>
   </data>
   <metadata name="cLength.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -185,7 +176,7 @@
     <value>8</value>
   </data>
   <data name="cLength.Width" type="System.Int32, mscorlib">
-    <value>50</value>
+    <value>44</value>
   </data>
   <metadata name="cData.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -7300,48 +7291,6 @@
   <data name="$this.Text" xml:space="preserve">
     <value>发送列表</value>
   </data>
-  <data name="&gt;&gt;cID.Name" xml:space="preserve">
-    <value>cID</value>
-  </data>
-  <data name="&gt;&gt;cID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cRemark.Name" xml:space="preserve">
-    <value>cRemark</value>
-  </data>
-  <data name="&gt;&gt;cRemark.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
-    <value>cSocket</value>
-  </data>
-  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cType.Name" xml:space="preserve">
-    <value>cType</value>
-  </data>
-  <data name="&gt;&gt;cType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cIPTo.Name" xml:space="preserve">
-    <value>cIPTo</value>
-  </data>
-  <data name="&gt;&gt;cIPTo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cLength.Name" xml:space="preserve">
-    <value>cLength</value>
-  </data>
-  <data name="&gt;&gt;cLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cData.Name" xml:space="preserve">
-    <value>cData</value>
-  </data>
-  <data name="&gt;&gt;cData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cmsSendList_Top.Name" xml:space="preserve">
     <value>cmsSendList_Top</value>
   </data>
@@ -7449,6 +7398,42 @@
   </data>
   <data name="&gt;&gt;tlSend_Fail_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cID.Name" xml:space="preserve">
+    <value>cID</value>
+  </data>
+  <data name="&gt;&gt;cID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Name" xml:space="preserve">
+    <value>cSocket</value>
+  </data>
+  <data name="&gt;&gt;cSocket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cType.Name" xml:space="preserve">
+    <value>cType</value>
+  </data>
+  <data name="&gt;&gt;cType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIPTo.Name" xml:space="preserve">
+    <value>cIPTo</value>
+  </data>
+  <data name="&gt;&gt;cIPTo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLength.Name" xml:space="preserve">
+    <value>cLength</value>
+  </data>
+  <data name="&gt;&gt;cLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cData.Name" xml:space="preserve">
+    <value>cData</value>
+  </data>
+  <data name="&gt;&gt;cData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_SendListForm</value>

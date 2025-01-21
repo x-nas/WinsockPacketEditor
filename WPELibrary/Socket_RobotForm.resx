@@ -187,7 +187,7 @@
     <value>序号</value>
   </data>
   <data name="cRobotInstruction_ID.Width" type="System.Int32, mscorlib">
-    <value>60</value>
+    <value>5</value>
   </data>
   <metadata name="cRobotInstruction_Type.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -196,7 +196,7 @@
     <value>指令类型</value>
   </data>
   <data name="cRobotInstruction_Type.Width" type="System.Int32, mscorlib">
-    <value>80</value>
+    <value>5</value>
   </data>
   <metadata name="cRobotInstruction_Content.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
