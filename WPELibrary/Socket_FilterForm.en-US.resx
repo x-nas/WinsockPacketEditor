@@ -228,10 +228,10 @@
     <value>210, 63</value>
   </data>
   <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>46, 6</value>
+    <value>43, 3</value>
   </data>
   <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 23</value>
+    <value>34, 17</value>
   </data>
   <data name="lProgressionStep.Text" xml:space="preserve">
     <value>Step</value>
@@ -246,22 +246,22 @@
     <value>253, 63</value>
   </data>
   <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 35</value>
+    <value>75, 30</value>
   </data>
   <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 23</value>
+    <value>66, 21</value>
   </data>
   <data name="cbFilter_AppointLength.Text" xml:space="preserve">
     <value>Length</value>
   </data>
   <data name="cbFilter_AppointSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 23</value>
+    <value>66, 21</value>
   </data>
   <data name="cbFilter_AppointSocket.Text" xml:space="preserve">
     <value>Socket</value>
   </data>
   <data name="nudFilter_SocketContent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 6</value>
+    <value>75, 3</value>
   </data>
   <data name="gbFilterAction.Size" type="System.Drawing.Size, System.Drawing">
     <value>259, 125</value>

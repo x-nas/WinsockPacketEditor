@@ -538,10 +538,13 @@
     <value>Fill</value>
   </data>
   <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 6</value>
+    <value>65, 3</value>
+  </data>
+  <data name="nudProgressionStep.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
+    <value>100, 23</value>
   </data>
   <data name="nudProgressionStep.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -577,7 +580,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 23</value>
+    <value>56, 17</value>
   </data>
   <data name="lProgressionStep.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -673,10 +676,13 @@
     <value>Fill</value>
   </data>
   <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>99, 35</value>
+    <value>96, 30</value>
+  </data>
+  <data name="nudFilter_LengthContent.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudFilter_LengthContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
+    <value>100, 23</value>
   </data>
   <data name="nudFilter_LengthContent.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
@@ -706,10 +712,10 @@
     <value>NoControl</value>
   </data>
   <data name="cbFilter_AppointLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 35</value>
+    <value>6, 33</value>
   </data>
   <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 23</value>
+    <value>87, 21</value>
   </data>
   <data name="cbFilter_AppointLength.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
@@ -742,7 +748,7 @@
     <value>6, 6</value>
   </data>
   <data name="cbFilter_AppointSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>87, 23</value>
+    <value>87, 21</value>
   </data>
   <data name="cbFilter_AppointSocket.TabIndex" type="System.Int32, mscorlib">
     <value>32</value>
@@ -766,10 +772,13 @@
     <value>Fill</value>
   </data>
   <data name="nudFilter_SocketContent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>99, 6</value>
+    <value>96, 3</value>
+  </data>
+  <data name="nudFilter_SocketContent.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudFilter_SocketContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 23</value>
+    <value>100, 23</value>
   </data>
   <data name="nudFilter_SocketContent.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>

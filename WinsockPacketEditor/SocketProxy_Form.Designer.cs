@@ -44,6 +44,7 @@
             this.tlpProxySet = new System.Windows.Forms.TableLayoutPanel();
             this.gbProxyIP = new System.Windows.Forms.GroupBox();
             this.tlpProxyIP = new System.Windows.Forms.TableLayoutPanel();
+            this.cbbProxyIP_Appoint = new System.Windows.Forms.ComboBox();
             this.cbProxyIP_Auto = new System.Windows.Forms.CheckBox();
             this.gbProxyType = new System.Windows.Forms.GroupBox();
             this.tlpProxyType = new System.Windows.Forms.TableLayoutPanel();
@@ -114,7 +115,6 @@
             this.tlpSocketProxy = new System.Windows.Forms.TableLayoutPanel();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
             this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
-            this.cbbProxyIP_Appoint = new System.Windows.Forms.ComboBox();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -224,6 +224,13 @@
             this.tlpProxyIP.Controls.Add(this.cbbProxyIP_Appoint, 1, 1);
             this.tlpProxyIP.Controls.Add(this.cbProxyIP_Auto, 0, 1);
             this.tlpProxyIP.Name = "tlpProxyIP";
+            // 
+            // cbbProxyIP_Appoint
+            // 
+            resources.ApplyResources(this.cbbProxyIP_Appoint, "cbbProxyIP_Appoint");
+            this.cbbProxyIP_Appoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbProxyIP_Appoint.FormattingEnabled = true;
+            this.cbbProxyIP_Appoint.Name = "cbbProxyIP_Appoint";
             // 
             // cbProxyIP_Auto
             // 
@@ -680,6 +687,8 @@
             this.dgvLogList.AllowUserToDeleteRows = false;
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
+            this.dgvLogList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvLogList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -702,13 +711,16 @@
             this.dgvLogList.ReadOnly = true;
             this.dgvLogList.RowHeadersVisible = false;
             this.dgvLogList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvLogList.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLogList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvLogList_CellFormatting);
             // 
             // cLogID
             // 
+            this.cLogID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.cLogID.DefaultCellStyle = dataGridViewCellStyle2;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
@@ -785,13 +797,6 @@
             // 
             this.tCheckProxyState.Interval = 1000;
             this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
-            // 
-            // cbbProxyIP_Appoint
-            // 
-            resources.ApplyResources(this.cbbProxyIP_Appoint, "cbbProxyIP_Appoint");
-            this.cbbProxyIP_Appoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbProxyIP_Appoint.FormattingEnabled = true;
-            this.cbbProxyIP_Appoint.Name = "cbbProxyIP_Appoint";
             // 
             // SocketProxy_Form
             // 
@@ -892,10 +897,6 @@
         private System.Windows.Forms.GroupBox gbProxyType;
         private System.Windows.Forms.TableLayoutPanel tlpProxyType;
         private System.Windows.Forms.CheckBox cbEnable_SOCKS5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLogID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
         private System.Windows.Forms.GroupBox gbSystemProxy;
         private System.Windows.Forms.TableLayoutPanel tlpSystemProxy;
         private System.Windows.Forms.CheckBox cbEnable_SystemProxy;
@@ -936,5 +937,9 @@
         private System.Windows.Forms.ToolStripStatusLabel tlProxyLinks_CNT;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
         private System.Windows.Forms.ComboBox cbbProxyIP_Appoint;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
     }
 }

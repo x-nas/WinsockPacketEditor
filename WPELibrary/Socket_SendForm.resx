@@ -1774,10 +1774,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 30</value>
+    <value>81, 23</value>
+  </data>
+  <data name="nudSendSocket_Len.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 21</value>
+    <value>187, 21</value>
   </data>
   <data name="nudSendSocket_Len.TabIndex" type="System.Int32, mscorlib">
     <value>128</value>
@@ -1807,13 +1810,13 @@
     <value>NoControl</value>
   </data>
   <data name="lSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 30</value>
+    <value>3, 26</value>
   </data>
   <data name="lSendSocket_Len.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 21</value>
+    <value>75, 17</value>
   </data>
   <data name="lSendSocket_Len.TabIndex" type="System.Int32, mscorlib">
     <value>127</value>
@@ -1852,7 +1855,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 21</value>
+    <value>75, 17</value>
   </data>
   <data name="lSendSocket_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
@@ -1882,10 +1885,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendSocket_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 3</value>
+    <value>81, 0</value>
+  </data>
+  <data name="nudSendSocket_Socket.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 21</value>
+    <value>187, 21</value>
   </data>
   <data name="nudSendSocket_Socket.TabIndex" type="System.Int32, mscorlib">
     <value>125</value>
@@ -2119,10 +2125,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendType_Interval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 30</value>
+    <value>87, 27</value>
+  </data>
+  <data name="nudSendType_Interval.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendType_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 21</value>
+    <value>194, 21</value>
   </data>
   <data name="nudSendType_Interval.TabIndex" type="System.Int32, mscorlib">
     <value>126</value>
@@ -2149,10 +2158,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendType_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 3</value>
+    <value>87, 0</value>
+  </data>
+  <data name="nudSendType_Times.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 21</value>
+    <value>194, 21</value>
   </data>
   <data name="nudSendType_Times.TabIndex" type="System.Int32, mscorlib">
     <value>123</value>
@@ -2326,7 +2338,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendStep_Len_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 21</value>
+    <value>34, 17</value>
   </data>
   <data name="lSendStep_Len_Value.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -2356,10 +2368,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 30</value>
+    <value>98, 27</value>
+  </data>
+  <data name="nudSendStep_Len.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 21</value>
+    <value>131, 21</value>
   </data>
   <data name="nudSendStep_Len.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -2395,7 +2410,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>35, 21</value>
+    <value>35, 17</value>
   </data>
   <data name="lSendStep_Len.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -2467,10 +2482,13 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="nudSendStep_Position.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 3</value>
+    <value>98, 0</value>
+  </data>
+  <data name="nudSendStep_Position.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 21</value>
+    <value>131, 21</value>
   </data>
   <data name="nudSendStep_Position.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>

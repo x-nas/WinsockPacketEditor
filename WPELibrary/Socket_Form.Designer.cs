@@ -2232,6 +2232,8 @@ namespace WPELibrary
             this.dgvLogList.AllowUserToDeleteRows = false;
             this.dgvLogList.AllowUserToResizeColumns = false;
             this.dgvLogList.AllowUserToResizeRows = false;
+            this.dgvLogList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvLogList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -2254,6 +2256,7 @@ namespace WPELibrary
             this.dgvLogList.ReadOnly = true;
             this.dgvLogList.RowHeadersVisible = false;
             this.dgvLogList.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvLogList.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvLogList.RowTemplate.Height = 23;
             this.dgvLogList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvLogList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvLogList_CellFormatting);
@@ -2350,6 +2353,8 @@ namespace WPELibrary
             this.dgvFilterList.AllowUserToDeleteRows = false;
             this.dgvFilterList.AllowUserToResizeColumns = false;
             this.dgvFilterList.AllowUserToResizeRows = false;
+            this.dgvFilterList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvFilterList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvFilterList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvFilterList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvFilterList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
@@ -2363,13 +2368,15 @@ namespace WPELibrary
             this.dgvFilterList.Name = "dgvFilterList";
             this.dgvFilterList.RowHeadersVisible = false;
             this.dgvFilterList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
-            this.dgvFilterList.RowTemplate.Height = 25;
+            this.dgvFilterList.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
+            this.dgvFilterList.RowTemplate.Height = 30;
             this.dgvFilterList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvFilterList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellContentClick);
             this.dgvFilterList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvFilterList_CellDoubleClick);
             // 
             // cIsCheck
             // 
+            this.cIsCheck.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cIsCheck.DataPropertyName = "IsEnable";
             dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle9.NullValue = false;
@@ -2481,7 +2488,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_Load, "tsFilterList_Load");
             this.tsFilterList_Load.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
-            this.tsFilterList_Load.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_Load.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_Load.Name = "tsFilterList_Load";
             this.tsFilterList_Load.Click += new System.EventHandler(this.tsFilterList_Load_Click);
             // 
@@ -2490,7 +2497,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_Save, "tsFilterList_Save");
             this.tsFilterList_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_Save.Image = global::WPELibrary.Properties.Resources.save;
-            this.tsFilterList_Save.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_Save.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_Save.Name = "tsFilterList_Save";
             this.tsFilterList_Save.Click += new System.EventHandler(this.tsFilterList_Save_Click);
             // 
@@ -2505,7 +2512,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_SelectAll, "tsFilterList_SelectAll");
             this.tsFilterList_SelectAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_SelectAll.Image = global::WPELibrary.Properties.Resources.Select_true;
-            this.tsFilterList_SelectAll.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_SelectAll.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_SelectAll.Name = "tsFilterList_SelectAll";
             this.tsFilterList_SelectAll.Click += new System.EventHandler(this.tsFilterList_SelectAll_Click);
             // 
@@ -2514,7 +2521,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_SelectNo, "tsFilterList_SelectNo");
             this.tsFilterList_SelectNo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_SelectNo.Image = global::WPELibrary.Properties.Resources.Select_false;
-            this.tsFilterList_SelectNo.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_SelectNo.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_SelectNo.Name = "tsFilterList_SelectNo";
             this.tsFilterList_SelectNo.Click += new System.EventHandler(this.tsFilterList_SelectNo_Click);
             // 
@@ -2529,7 +2536,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_Add, "tsFilterList_Add");
             this.tsFilterList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_Add.Image = global::WPELibrary.Properties.Resources.Add;
-            this.tsFilterList_Add.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_Add.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_Add.Name = "tsFilterList_Add";
             this.tsFilterList_Add.Click += new System.EventHandler(this.tsFilterList_Add_Click);
             // 
@@ -2538,7 +2545,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsFilterList_CleanUp, "tsFilterList_CleanUp");
             this.tsFilterList_CleanUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsFilterList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
-            this.tsFilterList_CleanUp.Margin = new System.Windows.Forms.Padding(1);
+            this.tsFilterList_CleanUp.Margin = new System.Windows.Forms.Padding(3);
             this.tsFilterList_CleanUp.Name = "tsFilterList_CleanUp";
             this.tsFilterList_CleanUp.Click += new System.EventHandler(this.tsFilterList_CleanUp_Click);
             // 
@@ -2563,6 +2570,8 @@ namespace WPELibrary
             this.dgvSendList.AllowUserToDeleteRows = false;
             this.dgvSendList.AllowUserToResizeColumns = false;
             this.dgvSendList.AllowUserToResizeRows = false;
+            this.dgvSendList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvSendList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvSendList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvSendList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvSendList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
@@ -2576,13 +2585,14 @@ namespace WPELibrary
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
             this.dgvSendList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dgvSendList.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvSendList.RowTemplate.Height = 25;
             this.dgvSendList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSendList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSendList_CellDoubleClick);
             // 
             // dataGridViewImageColumn3
             // 
-            this.dataGridViewImageColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewImageColumn3.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             resources.ApplyResources(this.dataGridViewImageColumn3, "dataGridViewImageColumn3");
             this.dataGridViewImageColumn3.Image = global::WPELibrary.Properties.Resources.sent;
             this.dataGridViewImageColumn3.Name = "dataGridViewImageColumn3";
@@ -2690,7 +2700,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsSendList_Load, "tsSendList_Load");
             this.tsSendList_Load.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsSendList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
-            this.tsSendList_Load.Margin = new System.Windows.Forms.Padding(1);
+            this.tsSendList_Load.Margin = new System.Windows.Forms.Padding(3);
             this.tsSendList_Load.Name = "tsSendList_Load";
             this.tsSendList_Load.Click += new System.EventHandler(this.tsSendList_Load_Click);
             // 
@@ -2699,7 +2709,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsSendList_Save, "tsSendList_Save");
             this.tsSendList_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsSendList_Save.Image = global::WPELibrary.Properties.Resources.save;
-            this.tsSendList_Save.Margin = new System.Windows.Forms.Padding(1);
+            this.tsSendList_Save.Margin = new System.Windows.Forms.Padding(3);
             this.tsSendList_Save.Name = "tsSendList_Save";
             this.tsSendList_Save.Click += new System.EventHandler(this.tsSendList_Save_Click);
             // 
@@ -2714,7 +2724,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsSendList_Add, "tsSendList_Add");
             this.tsSendList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsSendList_Add.Image = global::WPELibrary.Properties.Resources.Add;
-            this.tsSendList_Add.Margin = new System.Windows.Forms.Padding(1);
+            this.tsSendList_Add.Margin = new System.Windows.Forms.Padding(3);
             this.tsSendList_Add.Name = "tsSendList_Add";
             this.tsSendList_Add.Click += new System.EventHandler(this.tsSendList_Add_Click);
             // 
@@ -2723,7 +2733,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsSendList_CleanUp, "tsSendList_CleanUp");
             this.tsSendList_CleanUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsSendList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
-            this.tsSendList_CleanUp.Margin = new System.Windows.Forms.Padding(1);
+            this.tsSendList_CleanUp.Margin = new System.Windows.Forms.Padding(3);
             this.tsSendList_CleanUp.Name = "tsSendList_CleanUp";
             this.tsSendList_CleanUp.Click += new System.EventHandler(this.tsSendList_CleanUp_Click);
             // 
@@ -2748,6 +2758,8 @@ namespace WPELibrary
             this.dgvRobotList.AllowUserToDeleteRows = false;
             this.dgvRobotList.AllowUserToResizeColumns = false;
             this.dgvRobotList.AllowUserToResizeRows = false;
+            this.dgvRobotList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvRobotList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvRobotList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvRobotList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvRobotList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
@@ -2761,13 +2773,14 @@ namespace WPELibrary
             this.dgvRobotList.Name = "dgvRobotList";
             this.dgvRobotList.RowHeadersVisible = false;
             this.dgvRobotList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
+            this.dgvRobotList.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvRobotList.RowTemplate.Height = 25;
             this.dgvRobotList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvRobotList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvRobotList_CellDoubleClick);
             // 
             // cImg
             // 
-            this.cImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.cImg.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             resources.ApplyResources(this.cImg, "cImg");
             this.cImg.Image = global::WPELibrary.Properties.Resources.computer;
             this.cImg.Name = "cImg";
@@ -2875,7 +2888,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsRobotList_Load, "tsRobotList_Load");
             this.tsRobotList_Load.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsRobotList_Load.Image = global::WPELibrary.Properties.Resources.openHS;
-            this.tsRobotList_Load.Margin = new System.Windows.Forms.Padding(1);
+            this.tsRobotList_Load.Margin = new System.Windows.Forms.Padding(3);
             this.tsRobotList_Load.Name = "tsRobotList_Load";
             this.tsRobotList_Load.Click += new System.EventHandler(this.tsRobotList_Load_Click);
             // 
@@ -2884,7 +2897,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsRobotList_Save, "tsRobotList_Save");
             this.tsRobotList_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsRobotList_Save.Image = global::WPELibrary.Properties.Resources.save;
-            this.tsRobotList_Save.Margin = new System.Windows.Forms.Padding(1);
+            this.tsRobotList_Save.Margin = new System.Windows.Forms.Padding(3);
             this.tsRobotList_Save.Name = "tsRobotList_Save";
             this.tsRobotList_Save.Click += new System.EventHandler(this.tsRobotList_Save_Click);
             // 
@@ -2899,7 +2912,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsRobotList_Add, "tsRobotList_Add");
             this.tsRobotList_Add.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsRobotList_Add.Image = global::WPELibrary.Properties.Resources.Add;
-            this.tsRobotList_Add.Margin = new System.Windows.Forms.Padding(1);
+            this.tsRobotList_Add.Margin = new System.Windows.Forms.Padding(3);
             this.tsRobotList_Add.Name = "tsRobotList_Add";
             this.tsRobotList_Add.Click += new System.EventHandler(this.tsRobotList_Add_Click);
             // 
@@ -2908,7 +2921,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tsRobotList_CleanUp, "tsRobotList_CleanUp");
             this.tsRobotList_CleanUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsRobotList_CleanUp.Image = global::WPELibrary.Properties.Resources.Trash_can16;
-            this.tsRobotList_CleanUp.Margin = new System.Windows.Forms.Padding(1);
+            this.tsRobotList_CleanUp.Margin = new System.Windows.Forms.Padding(3);
             this.tsRobotList_CleanUp.Name = "tsRobotList_CleanUp";
             this.tsRobotList_CleanUp.Click += new System.EventHandler(this.tsRobotList_CleanUp_Click);
             // 
@@ -3449,8 +3462,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripButton tsRobotList_CleanUp;
         private System.Windows.Forms.ContextMenuStrip cmsRobotList;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Delete;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_FilterList;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Copy;
@@ -3513,10 +3524,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsSendList_Copy;
         private System.Windows.Forms.ToolStripMenuItem cmsSendList_Export;
         private System.Windows.Forms.ToolStripMenuItem cmsSendList_Delete;
-        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewImageColumn cImg;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRName;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_SystemSocket;
         private System.Windows.Forms.ToolStripSeparator tss6;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_SendList;
@@ -3524,5 +3531,11 @@ namespace WPELibrary
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
         private System.Windows.Forms.ToolStripComboBox cmsHexBox_tscbSendList;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsCheck;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
+        private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewImageColumn cImg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRName;
     }
 }

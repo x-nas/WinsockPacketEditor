@@ -751,7 +751,7 @@ namespace WPELibrary.Lib
                                 iFIndex += 250;
                             }
 
-                            Return += iFIndex.ToString() + "-" + sHex.Substring(j * 2, 2) + ",";
+                            Return += iFIndex.ToString() + "|" + sHex.Substring(j * 2, 2) + ",";
                         }
                     }
 
@@ -1081,6 +1081,31 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//初始化滤镜的显示列
+
+        public static DataGridViewTextBoxColumn InitDGVColumn(int ColIndex, Color cFore, Color cBack)
+        {
+            DataGridViewTextBoxColumn dtcReturn = new DataGridViewTextBoxColumn();
+
+            try
+            {
+                dtcReturn.Name = "col" + ColIndex.ToString("000");
+                dtcReturn.HeaderText = ColIndex.ToString("000");
+                dtcReturn.MaxInputLength = 2;
+                dtcReturn.DefaultCellStyle.ForeColor = cFore;
+                dtcReturn.DefaultCellStyle.BackColor = cBack;
+                dtcReturn.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return dtcReturn;
         }
 
         #endregion

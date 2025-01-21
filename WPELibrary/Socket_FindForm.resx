@@ -195,6 +195,198 @@
   <data name="tlpLine.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
+  <data name="&gt;&gt;lFind.Name" xml:space="preserve">
+    <value>lFind</value>
+  </data>
+  <data name="&gt;&gt;lFind.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lFind.Parent" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;lFind.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pLine.Name" xml:space="preserve">
+    <value>pLine</value>
+  </data>
+  <data name="&gt;&gt;pLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pLine.Parent" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;pLine.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpLine.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpLine.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 0</value>
+  </data>
+  <data name="tlpLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpLine.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="tlpLine.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Name" xml:space="preserve">
+    <value>tlpLine</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpLine.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpLine.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lFind" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Name" xml:space="preserve">
+    <value>btnOK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 292</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 54</value>
+  </data>
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="btnCancel" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="btnOK" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,25,Absolute,20,Percent,25" /&gt;&lt;Rows Styles="Absolute,10,Percent,100,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Name" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Parent" xml:space="preserve">
+    <value>pFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFindType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="chkMatchCase" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbHex" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbString" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,20,Percent,60" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="pFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pFindType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 34</value>
+  </data>
+  <data name="pFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="pFindType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="pFindType.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Name" xml:space="preserve">
+    <value>pFindType</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pFindType.Parent" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;pFindType.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="tlpFindForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFindForm.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFindForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFindForm.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tlpFindForm.Size" type="System.Drawing.Size, System.Drawing">
+    <value>448, 346</value>
+  </data>
+  <data name="tlpFindForm.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Name" xml:space="preserve">
+    <value>tlpFindForm</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpFindForm.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFindForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hexFind" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtFind" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pFindType" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,10,Percent,10,Percent,10,Percent,55,Percent,15,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
   <data name="lFind.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -254,42 +446,6 @@
   </data>
   <data name="&gt;&gt;pLine.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="tlpLine.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpLine.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 0</value>
-  </data>
-  <data name="tlpLine.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpLine.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpLine.Size" type="System.Drawing.Size, System.Drawing">
-    <value>408, 34</value>
-  </data>
-  <data name="tlpLine.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpLine.Name" xml:space="preserve">
-    <value>tlpLine</value>
-  </data>
-  <data name="&gt;&gt;tlpLine.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpLine.Parent" xml:space="preserve">
-    <value>tlpFindForm</value>
-  </data>
-  <data name="&gt;&gt;tlpLine.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="tlpLine.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lFind" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
   </data>
   <data name="btnCancel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -357,41 +513,80 @@
   <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 292</value>
-  </data>
-  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>408, 54</value>
-  </data>
-  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
-    <value>tlpButton</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
-    <value>tlpFindForm</value>
-  </data>
-  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="btnCancel" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="btnOK" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,25,Absolute,20,Percent,25" /&gt;&lt;Rows Styles="Absolute,10,Percent,100,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
   <data name="tlpFindType.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Name" xml:space="preserve">
+    <value>chkMatchCase</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;chkMatchCase.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Name" xml:space="preserve">
+    <value>rbHex</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbHex.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;rbHex.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;rbString.Name" xml:space="preserve">
+    <value>rbString</value>
+  </data>
+  <data name="&gt;&gt;rbString.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbString.Parent" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;rbString.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFindType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFindType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tlpFindType.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpFindType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>408, 34</value>
+  </data>
+  <data name="tlpFindType.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Name" xml:space="preserve">
+    <value>tlpFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.Parent" xml:space="preserve">
+    <value>pFindType</value>
+  </data>
+  <data name="&gt;&gt;tlpFindType.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFindType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="chkMatchCase" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbHex" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbString" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,20,Percent,60" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="chkMatchCase.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -491,102 +686,6 @@
   </data>
   <data name="&gt;&gt;rbString.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="tlpFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpFindType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpFindType.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="tlpFindType.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpFindType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>408, 34</value>
-  </data>
-  <data name="tlpFindType.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpFindType.Name" xml:space="preserve">
-    <value>tlpFindType</value>
-  </data>
-  <data name="&gt;&gt;tlpFindType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpFindType.Parent" xml:space="preserve">
-    <value>pFindType</value>
-  </data>
-  <data name="&gt;&gt;tlpFindType.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpFindType.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="chkMatchCase" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="rbHex" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbString" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,20,Percent,20,Percent,60" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="pFindType.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pFindType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>20, 34</value>
-  </data>
-  <data name="pFindType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="pFindType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>408, 34</value>
-  </data>
-  <data name="pFindType.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;pFindType.Name" xml:space="preserve">
-    <value>pFindType</value>
-  </data>
-  <data name="&gt;&gt;pFindType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pFindType.Parent" xml:space="preserve">
-    <value>tlpFindForm</value>
-  </data>
-  <data name="&gt;&gt;pFindType.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="tlpFindForm.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpFindForm.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpFindForm.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpFindForm.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tlpFindForm.Size" type="System.Drawing.Size, System.Drawing">
-    <value>448, 346</value>
-  </data>
-  <data name="tlpFindForm.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpFindForm.Name" xml:space="preserve">
-    <value>tlpFindForm</value>
-  </data>
-  <data name="&gt;&gt;tlpFindForm.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpFindForm.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpFindForm.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpFindForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hexFind" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtFind" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpLine" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="pFindType" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,10,Percent,10,Percent,10,Percent,55,Percent,15,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -6773,7 +6872,7 @@
 </value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
+    <value>CenterParent</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>查找</value>

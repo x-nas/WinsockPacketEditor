@@ -1239,7 +1239,7 @@ namespace WPELibrary.Lib
             public static bool AutoRoll;
             public static bool AutoClear;
             public static decimal AutoClear_Value;
-            public static int Select_Index, Search_Index;
+            public static int Select_Index = -1, Search_Index = -1;
             public static FindOptions FindOptions = new FindOptions();
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
             public delegate void SocketPacketReceived(Socket_PacketInfo si);
@@ -2539,26 +2539,28 @@ namespace WPELibrary.Lib
 
                         foreach (string sSearch in slSearch)
                         {
-                            if (!string.IsNullOrEmpty(sSearch) && sSearch.IndexOf("-") > 0)
+                            if (!string.IsNullOrEmpty(sSearch) && sSearch.IndexOf("|") > 0)
                             {
-                                int iIndex = int.Parse(sSearch.Split('-')[0]);
-                                string sValue = sSearch.Split('-')[1];
-
-                                if (iIndex >= 0 && iIndex < bBuffer.Length)
+                                if (int.TryParse(sSearch.Split('|')[0], out int iIndex))
                                 {
-                                    string sBuffValue = bBuffer[iIndex].ToString("X2");
+                                    string sValue = sSearch.Split('|')[1];
 
-                                    if (!sValue.Equals(sBuffValue))
+                                    if (iIndex > -1 && iIndex < bBuffer.Length)
+                                    {
+                                        string sBuffValue = bBuffer[iIndex].ToString("X2");
+
+                                        if (!sValue.Equals(sBuffValue))
+                                        {
+                                            bResult = false;
+                                            break;
+                                        }
+                                    }
+                                    else
                                     {
                                         bResult = false;
                                         break;
                                     }
-                                }
-                                else
-                                {
-                                    bResult = false;
-                                    break;
-                                }
+                                }                                
                             }
                         }
                     }
@@ -2591,12 +2593,14 @@ namespace WPELibrary.Lib
 
                         for (int i = 0; i < slSearch.Length; i++)
                         {
-                            int iIndex = int.Parse(slSearch[i].Split('-')[0]);
-                            string sValue = slSearch[i].Split('-')[1];
-                            byte bValue = Convert.ToByte(sValue, 16);
+                            if (int.TryParse(slSearch[i].Split('|')[0], out int iIndex))
+                            {
+                                string sValue = slSearch[i].Split('|')[1];
+                                byte bValue = Convert.ToByte(sValue, 16);
 
-                            dSearchIndex.Add(i, iIndex);
-                            dSearchValue.Add(i, bValue);
+                                dSearchIndex.Add(i, iIndex);
+                                dSearchValue.Add(i, bValue);
+                            }                            
                         }
 
                         int iMatchIndex = -1;
@@ -2684,16 +2688,18 @@ namespace WPELibrary.Lib
 
                         foreach (string sModify in slModify)
                         {
-                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
+                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
                             {
-                                int iIndex = int.Parse(sModify.Split('-')[0]);
-                                string sValue = sModify.Split('-')[1];
-
-                                if (iIndex >= 0 && iIndex < bBuffer.Length)
+                                if (int.TryParse(sModify.Split('|')[0], out int iIndex))
                                 {
-                                    byte bValue = Convert.ToByte(sValue, 16);
-                                    bBuffer[iIndex] = bValue;                                    
-                                }
+                                    string sValue = sModify.Split('|')[1];
+
+                                    if (iIndex > -1 && iIndex < bBuffer.Length)
+                                    {
+                                        byte bValue = Convert.ToByte(sValue, 16);
+                                        bBuffer[iIndex] = bValue;
+                                    }
+                                }                                
                             }
                         }
                     }
@@ -2759,18 +2765,18 @@ namespace WPELibrary.Lib
 
                         foreach (string sModify in slModify)
                         {
-                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("-") > 0)
+                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
                             {
-                                if (int.TryParse(sModify.Split('-')[0], out int iIndex))
+                                if (int.TryParse(sModify.Split('|')[0], out int iIndex))
                                 {
-                                    string sValue = sModify.Split('-')[1];
+                                    string sValue = sModify.Split('|')[1];
 
                                     if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
                                     {
-                                        iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                        iIndex += iMatch;
                                     }
 
-                                    if (iIndex >= 0 && iIndex < bBuffer.Length)
+                                    if (iIndex > -1 && iIndex < bBuffer.Length)
                                     {
                                         byte bValue = Convert.ToByte(sValue, 16);
                                         bBuffer[iIndex] = bValue;                                        
@@ -2793,10 +2799,10 @@ namespace WPELibrary.Lib
                                 {
                                     if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
                                     {
-                                        iIndex = iMatch + (iIndex - (Socket_Cache.Filter.FilterSize_MaxLen / 2));
+                                        iIndex += iMatch;
                                     }
 
-                                    if (iIndex >= 0 && iIndex < bBuffer.Length)
+                                    if (iIndex > -1 && iIndex < bBuffer.Length)
                                     {
                                         byte bValue = bBuffer[iIndex];
                                         bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
