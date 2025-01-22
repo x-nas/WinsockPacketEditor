@@ -253,6 +253,12 @@
       <Progid>WPE64</Progid>
       <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
     </FileAssociation>
+    <FileAssociation Include=".sc">
+      <Visible>False</Visible>
+      <Description>WPE64 Send Collection File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
     <FileAssociation Include=".sp">
       <Visible>False</Visible>
       <Description>WPE64 Send List File</Description>
