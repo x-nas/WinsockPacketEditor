@@ -939,6 +939,7 @@ namespace WPELibrary
             this.Controls.Add(this.tlpSendForm);
             this.DoubleBuffered = true;
             this.Name = "Socket_SendForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Socket_SendForm_FormClosing);
             this.Load += new System.EventHandler(this.Socket_SendForm_Load);
             this.tlpSendForm.ResumeLayout(false);
             this.tlpSendForm.PerformLayout();

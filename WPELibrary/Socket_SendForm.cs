@@ -49,6 +49,11 @@ namespace WPELibrary
             this.InitSendParameters();
         }
 
+        private void Socket_SendForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            this.StopSend();
+        }
+
         private void InitSendInfo()
         {
             try
@@ -405,7 +410,22 @@ namespace WPELibrary
 
         private void bSendStop_Click(object sender, EventArgs e)
         {
-            bgwSendPacket.CancelAsync();
+            this.StopSend();
+        }
+
+        private void StopSend()
+        {
+            try
+            {
+                if (bgwSendPacket.IsBusy)
+                {
+                    bgwSendPacket.CancelAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion                
@@ -447,11 +467,6 @@ namespace WPELibrary
 
         private void bClose_Click(object sender, EventArgs e)
         {
-            if (bgwSendPacket.IsBusy)
-            {
-                bgwSendPacket.CancelAsync();
-            }
-
             this.Close();
         }
 
@@ -888,6 +903,6 @@ namespace WPELibrary
 
         #endregion
 
-        #endregion
+        #endregion        
     }
 }
