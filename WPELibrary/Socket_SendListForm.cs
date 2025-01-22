@@ -314,54 +314,61 @@ namespace WPELibrary
 
             try
             {
-                if (dgvSendCollection.Rows.Count > 0)
+                int iIndex = 0;
+                int iSIndex = -1;
+
+                if (this.dgvSendCollection.Rows.Count > 0 && this.dgvSendCollection.CurrentRow != null && this.dgvSendCollection.SelectedRows.Count > 0)
                 {
-                    int iIndex = 0;
-                    int iSIndex = this.dgvSendCollection.CurrentRow.Index;
+                    iSIndex = this.dgvSendCollection.CurrentRow.Index;
+                }
 
-                    if (iSIndex > -1)
-                    {
-                        switch (sItemText)
+                switch (sItemText)
+                {
+                    case "cmsSendList_Top":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Top, iSIndex);
+                        break;
+
+                    case "cmsSendList_Up":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Up, iSIndex);
+                        break;
+
+                    case "cmsSendList_Down":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Down, iSIndex);
+                        break;
+
+                    case "cmsSendList_Bottom":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Bottom, iSIndex);
+                        break;
+
+                    case "cmsSendList_Delete":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Delete, iSIndex);
+                        break;
+
+                    case "cmsSendList_Export":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Export, iSIndex);
+                        break;
+
+                    case "cmsSendList_Import":
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Import, iSIndex);
+                        break;
+
+                    case "cmsSendList_CleanUp":
+                        if (this.dgvSendCollection.Rows.Count > 0)
                         {
-                            case "cmsSendList_Top":
-                                iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.Top, iSIndex);
-                                break;
-
-                            case "cmsSendList_Up":
-                                iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.Up, iSIndex);
-                                break;
-
-                            case "cmsSendList_Down":
-                                iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.Down, iSIndex);
-                                break;
-
-                            case "cmsSendList_Bottom":
-                                iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.Bottom, iSIndex);
-                                break;
-
-                            case "cmsSendList_Delete":
-                                iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.Delete, iSIndex);
-                                break;
-
-                            case "cmsSendList_CleanUp":
-
-                                DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                                if (dr.Equals(DialogResult.OK))
-                                {
-                                    iIndex = this.UpdateSendCollection_ByListAction(Socket_Cache.ListAction.CleanUp, iSIndex);
-                                }
-                                
-                                break;
+                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
+                            if (dr.Equals(DialogResult.OK))
+                            {
+                                iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.CleanUp, iSIndex);
+                            }
                         }
+                        break;
+                }
 
-                        if (iIndex > -1 && iIndex < dgvSendCollection.RowCount)
-                        {
-                            this.dgvSendCollection.ClearSelection();
-                            this.dgvSendCollection.Rows[iIndex].Selected = true;
-                            this.dgvSendCollection.CurrentCell = this.dgvSendCollection.Rows[iIndex].Cells[0];
-                        }
-                    }
+                if (iIndex > -1 && iIndex < dgvSendCollection.RowCount)
+                {
+                    this.dgvSendCollection.ClearSelection();
+                    this.dgvSendCollection.Rows[iIndex].Selected = true;
+                    this.dgvSendCollection.CurrentCell = this.dgvSendCollection.Rows[iIndex].Cells[0];
                 }
             }
             catch (Exception ex)
@@ -370,75 +377,6 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//发送集的列表操作
-
-        public int UpdateSendCollection_ByListAction(Socket_Cache.ListAction listAction, int iSIndex)
-        {
-            int iReturn = -1;
-
-            try
-            {
-                int iSendCollectionCount = this.dtSendCollection.Rows.Count;
-                DataRow dr = this.dtSendCollection.NewRow();
-                dr.ItemArray = this.dtSendCollection.Rows[iSIndex].ItemArray;
-
-                switch (listAction)
-                {
-                    case Socket_Cache.ListAction.Top:
-                        if (iSIndex > 0)
-                        {
-                            this.dtSendCollection.Rows.RemoveAt(iSIndex);
-                            this.dtSendCollection.Rows.InsertAt(dr, 0);
-                            iReturn = 0;
-                        }
-                        break;
-
-                    case Socket_Cache.ListAction.Up:
-                        if (iSIndex > 0)
-                        {
-                            this.dtSendCollection.Rows.RemoveAt(iSIndex);
-                            this.dtSendCollection.Rows.InsertAt(dr, iSIndex - 1);
-                            iReturn = iSIndex - 1;
-                        }
-                        break;
-
-                    case Socket_Cache.ListAction.Down:
-                        if (iSIndex < iSendCollectionCount - 1)
-                        {
-                            this.dtSendCollection.Rows.RemoveAt(iSIndex);
-                            this.dtSendCollection.Rows.InsertAt(dr, iSIndex + 1);
-                            iReturn = iSIndex + 1;
-                        }
-                        break;
-
-                    case Socket_Cache.ListAction.Bottom:
-                        if (iSIndex < iSendCollectionCount - 1)
-                        {
-                            this.dtSendCollection.Rows.RemoveAt(iSIndex);
-                            this.dtSendCollection.Rows.Add(dr);
-                            iReturn = this.dtSendCollection.Rows.Count - 1;
-                        }
-                        break;                    
-
-                    case Socket_Cache.ListAction.Delete:
-                        this.dtSendCollection.Rows.RemoveAt(iSIndex);
-                        break;
-
-                    case Socket_Cache.ListAction.CleanUp:
-                        this.dtSendCollection.Rows.Clear();
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return iReturn;
-        }
-
-        #endregion
+        #endregion        
     }
 }

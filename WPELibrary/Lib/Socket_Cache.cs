@@ -29,24 +29,27 @@ namespace WPELibrary.Lib
 
         public enum PWType
         {
-            FilterList_Import,
-            FilterList_Export,
-            RobotList_Import,
-            RobotList_Export,
-            SendList_Import,
-            SendList_Export,
+            FilterList_Import = 0,
+            FilterList_Export = 1,
+            RobotList_Import = 2,
+            RobotList_Export = 3,
+            SendList_Import = 4,
+            SendList_Export = 5,
+            SendCollection_Import = 6,
+            SendCollection_Export = 7,
         }
 
         public enum ListAction
         {
-            Top,
-            Up,
-            Down,
-            Bottom,
-            Copy,
-            Export,
-            Delete,
-            CleanUp,
+            Top = 0,
+            Up = 1,
+            Down = 2,
+            Bottom = 3,
+            Copy = 4,
+            Export = 5,
+            Delete = 6,
+            CleanUp = 7,
+            Import = 8,
         }
 
         public enum LogType
@@ -4740,6 +4743,9 @@ namespace WPELibrary.Lib
 
         public static class Send
         {
+            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\SendCollection.sc";
+            public static string AESKey = string.Empty;
+
             #region//初始化发送集
 
             public static DataTable InitSendCollection()
@@ -4843,7 +4849,97 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion                        
+            #endregion
+
+            #region//发送集的列表操作
+
+            public static int UpdateSendCollection_ByListAction(DataTable dtSendCollection, Socket_Cache.ListAction listAction, int iSIndex)
+            {
+                int iReturn = -1;
+
+                try
+                {
+                    int iSendCollectionCount = dtSendCollection.Rows.Count;
+
+                    DataRow dr = dtSendCollection.NewRow();
+                    if (iSIndex > -1 && iSIndex < dtSendCollection.Rows.Count)
+                    {
+                        dr.ItemArray = dtSendCollection.Rows[iSIndex].ItemArray;
+                    }
+
+                    switch (listAction)
+                    {
+                        case Socket_Cache.ListAction.Top:
+                            if (iSIndex > 0 && iSIndex < iSendCollectionCount)
+                            {
+                                dtSendCollection.Rows.RemoveAt(iSIndex);
+                                dtSendCollection.Rows.InsertAt(dr, 0);
+                                iReturn = 0;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Up:
+                            if (iSIndex > 0 && iSIndex < iSendCollectionCount)
+                            {
+                                dtSendCollection.Rows.RemoveAt(iSIndex);
+                                dtSendCollection.Rows.InsertAt(dr, iSIndex - 1);
+                                iReturn = iSIndex - 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Down:
+                            if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
+                            {
+                                dtSendCollection.Rows.RemoveAt(iSIndex);
+                                dtSendCollection.Rows.InsertAt(dr, iSIndex + 1);
+                                iReturn = iSIndex + 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Bottom:
+                            if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
+                            {
+                                dtSendCollection.Rows.RemoveAt(iSIndex);
+                                dtSendCollection.Rows.Add(dr);
+                                iReturn = dtSendCollection.Rows.Count - 1;
+                            }
+                            break;
+
+                        case Socket_Cache.ListAction.Delete:
+                            if (iSIndex > -1 && iSIndex < iSendCollectionCount)
+                            {
+                                dtSendCollection.Rows.RemoveAt(iSIndex);
+                            }                            
+                            break;
+
+                        case Socket_Cache.ListAction.Export:
+                            if (iSendCollectionCount > 0)
+                            {
+                                Socket_Cache.Send.SaveSendCollection_Dialog(string.Empty, dtSendCollection);
+                            }                            
+                            break;
+
+                        case Socket_Cache.ListAction.Import:
+                            Socket_Cache.Send.LoadSendCollection_Dialog(dtSendCollection);
+                            break;
+
+                        case Socket_Cache.ListAction.CleanUp:
+                            if (iSendCollectionCount > 0)
+                            {
+                                dtSendCollection.Rows.Clear();
+                            }                            
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;
+            }
+
+            #endregion
 
             #region//获取发送名称
 
@@ -5100,6 +5196,237 @@ namespace WPELibrary.Lib
             }
 
             #endregion                        
+
+            #region//保存发送集（对话框）
+
+            public static void SaveSendCollection_Dialog(string FileName, DataTable SendCollection)
+            {
+                try
+                {
+                    if (SendCollection.Rows.Count > 0)
+                    {
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                        sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114) + "（*.sc）|*.sc";
+
+                        if (!string.IsNullOrEmpty(FileName))
+                        {
+                            sfdSaveFile.FileName = FileName;
+                        }
+
+                        sfdSaveFile.RestoreDirectory = true;
+
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Export);
+                            pwForm.ShowDialog();
+
+                            string FilePath = sfdSaveFile.FileName;
+
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                SaveSendCollection(FilePath, SendCollection, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_166), FilePath);
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void SaveSendCollection(string FilePath, DataTable SendCollection, bool DoEncrypt)
+            {
+                try
+                {
+                    SaveSendCollection_ToXDocument(FilePath, SendCollection);
+
+                    if (DoEncrypt)
+                    {
+                        string sPassword = Socket_Cache.Send.AESKey;
+
+                        if (!string.IsNullOrEmpty(sPassword))
+                        {
+                            Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void SaveSendCollection_ToXDocument(string FilePath, DataTable SendCollection)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeRoot = new XElement("SendCollection");
+                    xdoc.Add(xeRoot);
+
+                    if (SendCollection.Rows.Count > 0)
+                    {
+                        foreach (DataRow row in SendCollection.Rows)
+                        {
+                            string sSocket = row["Socket"].ToString();
+                            string sType = row["Type"].ToString();
+                            string sIPTo = row["IPTo"].ToString();
+                            string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
+
+                            XElement xeColl =
+                                new XElement("Collection",
+                                new XElement("Socket", sSocket),
+                                new XElement("Type", sType),
+                                new XElement("IPTo", sIPTo),
+                                new XElement("Buffer", sBuffer)
+                                );
+
+                            xeRoot.Add(xeColl);
+                        }                     
+                    }                
+
+                    xdoc.Save(FilePath);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//加载发送集（对话框）
+
+            public static void LoadSendCollection_Dialog(DataTable SendCollection)
+            {
+                try
+                {
+                    OpenFileDialog ofdLoadFile = new OpenFileDialog();
+                    ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114) + "（*.sc）|*.sc";
+                    ofdLoadFile.RestoreDirectory = true;
+
+                    if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string FilePath = ofdLoadFile.FileName;
+
+                        if (!string.IsNullOrEmpty(FilePath))
+                        {
+                            LoadSendCollection(FilePath, SendCollection, true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void LoadSendCollection(string FilePath, DataTable SendCollection, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        XDocument xdoc = new XDocument();
+                        bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+
+                        if (bEncrypt)
+                        {
+                            if (LoadFromUser)
+                            {
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendCollection_Import);
+                                pwForm.ShowDialog();
+                            }
+
+                            xdoc = Socket_Operation.DecryptXMLFile(FilePath, Socket_Cache.Send.AESKey);
+                        }
+                        else
+                        {
+                            xdoc = XDocument.Load(FilePath);
+                        }
+
+                        if (xdoc == null)
+                        {
+                            string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+
+                            if (LoadFromUser)
+                            {
+                                Socket_Operation.ShowMessageBox(sError);
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                            }
+                        }
+                        else
+                        {
+                            LoadSendCollection_FromXDocument(xdoc, SendCollection);
+
+                            if (bEncrypt)
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_168));
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_167));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadSendCollection_FromXDocument(XDocument xdoc, DataTable SendCollection)
+            {
+                try
+                {
+                    foreach (XElement xeCollection in xdoc.Root.Elements())
+                    {
+                        int iSocket = 0;
+                        if (xeCollection.Element("Socket") != null)
+                        {
+                            iSocket = int.Parse(xeCollection.Element("Socket").Value);
+                        }
+
+                        Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
+                        if (xeCollection.Element("Type") != null)
+                        {
+                            ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
+                        }
+
+                        string sIPTo = string.Empty;
+                        if (xeCollection.Element("IPTo") != null)
+                        {
+                            sIPTo = xeCollection.Element("IPTo").Value;
+                        }
+
+                        byte[] bBuffer = null;
+                        if (xeCollection.Element("Buffer") != null)
+                        {
+                            bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
+                        }
+
+                        Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
         }
 
         #endregion

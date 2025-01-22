@@ -120,27 +120,103 @@
   <data name="cID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
-  <data name="cRemark.HeaderText" xml:space="preserve">
-    <value>Remark</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cID.Width" type="System.Int32, mscorlib">
+    <value>33</value>
   </data>
   <data name="cSocket.HeaderText" xml:space="preserve">
     <value>Socket</value>
   </data>
+  <data name="cSocket.Width" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
   <data name="cType.HeaderText" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="cType.Width" type="System.Int32, mscorlib">
+    <value>48</value>
   </data>
   <data name="cIPTo.HeaderText" xml:space="preserve">
     <value>To Address</value>
   </data>
+  <data name="cIPTo.Width" type="System.Int32, mscorlib">
+    <value>87</value>
+  </data>
   <data name="cLength.HeaderText" xml:space="preserve">
     <value>Len</value>
+  </data>
+  <data name="cLength.Width" type="System.Int32, mscorlib">
+    <value>40</value>
   </data>
   <data name="cData.HeaderText" xml:space="preserve">
     <value>Data</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Top.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="cmsSendList_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Up.Text" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="cmsSendList_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Down.Text" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="cmsSendList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Bottom.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Delete.Text" xml:space="preserve">
+    <value>Remove from list</value>
+  </data>
+  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="cmsSendList_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Export.Text" xml:space="preserve">
+    <value>Export this list</value>
+  </data>
+  <data name="cmsSendList_Import.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_Import.Text" xml:space="preserve">
+    <value>Import to this list</value>
+  </data>
+  <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 6</value>
+  </data>
+  <data name="cmsSendList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="cmsSendList_CleanUp.Text" xml:space="preserve">
+    <value>Clean Up</value>
+  </data>
   <data name="cmsSendCollection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>147, 160</value>
+    <value>177, 210</value>
   </data>
   <data name="dgvSendCollection.Size" type="System.Drawing.Size, System.Drawing">
     <value>961, 150</value>
@@ -165,54 +241,6 @@
   </data>
   <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>967, 304</value>
-  </data>
-  <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_Top.Text" xml:space="preserve">
-    <value>Top</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 6</value>
-  </data>
-  <data name="cmsSendList_Up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_Up.Text" xml:space="preserve">
-    <value>Move Up</value>
-  </data>
-  <data name="cmsSendList_Down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_Down.Text" xml:space="preserve">
-    <value>Move Down</value>
-  </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 6</value>
-  </data>
-  <data name="cmsSendList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_Bottom.Text" xml:space="preserve">
-    <value>Bottom</value>
-  </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 6</value>
-  </data>
-  <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_Delete.Text" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 6</value>
-  </data>
-  <data name="cmsSendList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>146, 22</value>
-  </data>
-  <data name="cmsSendList_CleanUp.Text" xml:space="preserve">
-    <value>Clean Up</value>
   </data>
   <data name="bClose.Location" type="System.Drawing.Point, System.Drawing">
     <value>616, 15</value>
@@ -284,13 +312,13 @@
     <value>147, 3</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>33, 23</value>
+    <value>33, 17</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
     <value>(ms)</value>
   </data>
   <data name="nudLoop_INT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 23</value>
+    <value>144, 23</value>
   </data>
   <data name="gbLoopCNT.Location" type="System.Drawing.Point, System.Drawing">
     <value>582, 3</value>
@@ -305,16 +333,16 @@
     <value>181, 32</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 23</value>
+    <value>45, 17</value>
   </data>
   <data name="label2.Text" xml:space="preserve">
     <value>Times:</value>
   </data>
   <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>54, 3</value>
+    <value>51, 0</value>
   </data>
   <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 23</value>
+    <value>130, 23</value>
   </data>
   <data name="gbSystemSocket.Location" type="System.Drawing.Point, System.Drawing">
     <value>341, 3</value>

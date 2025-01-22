@@ -123,7 +123,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_111 = { "机器人 [{0}] 发生错误: {1}", "Robot [{0}] error occurred: {1}" };
         public static string[] MutiLan_112 = { "机器人 [{0}] 执行完毕!", "Robot [{0}] execution completed!" };
         public static string[] MutiLan_113 = { "发送列表 - [{0}]", "Send List - [{0}]" };
-        //public static string[] MutiLan_114 = { ", 使用套接字: {0}", ", Use Socket: {0}" };
+        public static string[] MutiLan_114 = { "发送集文件", "Send Collection File" };
         public static string[] MutiLan_115 = { "{0} 毫秒", "{0} ms" };
         public static string[] MutiLan_116 = { "循环 {0} 次", "Loop {0} Times" };
         public static string[] MutiLan_117 = { "左键单击", "Left Click" };
@@ -175,6 +175,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_163 = { "发送 [{0}] 已停止!", "Send [{0}] has stopped!" };
         public static string[] MutiLan_164 = { "发送 [{0}] 发生错误: {1}", "Send [{0}] error occurred: {1}" };
         public static string[] MutiLan_165 = { "发送 [{0}] 执行完毕!", "Send [{0}] execution completed!" };
+        public static string[] MutiLan_166 = { "发送集保存完毕 {0}", "The Send Collection Saved {0}" };
+        public static string[] MutiLan_167 = { "加载发送集成功! [未加密]", "Load send collection successful! [Unencrypted]" };
+        public static string[] MutiLan_168 = { "加载发送集成功! [已加密]", "Load send collection successful! [Encrypted]" };
 
         #endregion
 
