@@ -353,14 +353,7 @@ namespace WPELibrary
                         break;
 
                     case "cmsSendList_CleanUp":
-                        if (this.dgvSendCollection.Rows.Count > 0)
-                        {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-                            if (dr.Equals(DialogResult.OK))
-                            {
-                                iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.CleanUp, iSIndex);
-                            }
-                        }
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.CleanUp, iSIndex);
                         break;
                 }
 

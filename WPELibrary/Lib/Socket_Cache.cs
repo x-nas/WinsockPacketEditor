@@ -4926,7 +4926,11 @@ namespace WPELibrary.Lib
                         case Socket_Cache.ListAction.CleanUp:
                             if (iSendCollectionCount > 0)
                             {
-                                dtSendCollection.Rows.Clear();
+                                DialogResult dia = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
+                                if (dia.Equals(DialogResult.OK))
+                                {
+                                    dtSendCollection.Rows.Clear();
+                                }                                
                             }                            
                             break;
                     }
@@ -5391,33 +5395,83 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    foreach (XElement xeCollection in xdoc.Root.Elements())
+                    XElement xeRoot = xdoc.Root;
+
+                    switch (xeRoot.Name.LocalName)
                     {
-                        int iSocket = 0;
-                        if (xeCollection.Element("Socket") != null)
-                        {
-                            iSocket = int.Parse(xeCollection.Element("Socket").Value);
-                        }
+                        case "SendList":
 
-                        Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
-                        if (xeCollection.Element("Type") != null)
-                        {
-                            ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
-                        }
+                            #region//SendList File
 
-                        string sIPTo = string.Empty;
-                        if (xeCollection.Element("IPTo") != null)
-                        {
-                            sIPTo = xeCollection.Element("IPTo").Value;
-                        }
+                            foreach (XElement xeSend in xeRoot.Elements())
+                            {
+                                int iSocket = 0;
+                                if (xeSend.Element("Socket") != null)
+                                {
+                                    iSocket = int.Parse(xeSend.Element("Socket").Value);
+                                }
 
-                        byte[] bBuffer = null;
-                        if (xeCollection.Element("Buffer") != null)
-                        {
-                            bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
-                        }
+                                Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
+                                if (xeSend.Element("Type") != null)
+                                {
+                                    ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeSend.Element("Type").Value);
+                                }
 
-                        Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                                string sIPTo = string.Empty;
+                                if (xeSend.Element("ToAddress") != null)
+                                {
+                                    sIPTo = xeSend.Element("ToAddress").Value;
+                                }
+
+                                byte[] bBuffer = null;
+                                if (xeSend.Element("Data") != null)
+                                {
+                                    bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeSend.Element("Data").Value);
+                                }
+
+                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                            }
+
+                            #endregion
+
+                            break;
+
+                        case "SendCollection":
+
+                            #region//SendCollection File
+
+                            foreach (XElement xeCollection in xeRoot.Elements())
+                            {
+                                int iSocket = 0;
+                                if (xeCollection.Element("Socket") != null)
+                                {
+                                    iSocket = int.Parse(xeCollection.Element("Socket").Value);
+                                }
+
+                                Socket_Cache.SocketPacket.PacketType ptType = new Socket_Cache.SocketPacket.PacketType();
+                                if (xeCollection.Element("Type") != null)
+                                {
+                                    ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
+                                }
+
+                                string sIPTo = string.Empty;
+                                if (xeCollection.Element("IPTo") != null)
+                                {
+                                    sIPTo = xeCollection.Element("IPTo").Value;
+                                }
+
+                                byte[] bBuffer = null;
+                                if (xeCollection.Element("Buffer") != null)
+                                {
+                                    bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
+                                }
+
+                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                            }
+
+                            #endregion
+
+                            break;
                     }
                 }
                 catch (Exception ex)
