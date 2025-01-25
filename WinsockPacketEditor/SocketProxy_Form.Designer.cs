@@ -73,6 +73,16 @@
             this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
             this.cbLogList_AutoClear = new System.Windows.Forms.CheckBox();
             this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
+            this.tpExternalProxy = new System.Windows.Forms.TabPage();
+            this.tlpExternalProxy = new System.Windows.Forms.TableLayoutPanel();
+            this.lHttpsProxy = new System.Windows.Forms.Label();
+            this.txtEXTHttpsPort = new System.Windows.Forms.TextBox();
+            this.txtEXTHttpsIP = new System.Windows.Forms.TextBox();
+            this.txtEXTHttpPort = new System.Windows.Forms.TextBox();
+            this.cbEnable_EXTHttps = new System.Windows.Forms.CheckBox();
+            this.cbEnable_EXTHttp = new System.Windows.Forms.CheckBox();
+            this.txtEXTHttpIP = new System.Windows.Forms.TextBox();
+            this.lHttpProxy = new System.Windows.Forms.Label();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bCleanUp = new System.Windows.Forms.Button();
             this.tlpButton_Start = new System.Windows.Forms.TableLayoutPanel();
@@ -139,6 +149,8 @@
             this.gbListSet_LogList.SuspendLayout();
             this.tlpListSet_LogList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
+            this.tpExternalProxy.SuspendLayout();
+            this.tlpExternalProxy.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpButton_Start.SuspendLayout();
             this.tpProxyList.SuspendLayout();
@@ -193,6 +205,7 @@
             this.tcSocketProxySet.Controls.Add(this.tpProxySet);
             this.tcSocketProxySet.Controls.Add(this.tpAuthSet);
             this.tcSocketProxySet.Controls.Add(this.tpListSet);
+            this.tcSocketProxySet.Controls.Add(this.tpExternalProxy);
             resources.ApplyResources(this.tcSocketProxySet, "tcSocketProxySet");
             this.tcSocketProxySet.Name = "tcSocketProxySet";
             this.tcSocketProxySet.SelectedIndex = 0;
@@ -446,6 +459,74 @@
             this.cbLogList_AutoRoll.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbLogList_AutoRoll.Name = "cbLogList_AutoRoll";
             this.cbLogList_AutoRoll.UseVisualStyleBackColor = true;
+            // 
+            // tpExternalProxy
+            // 
+            this.tpExternalProxy.BackColor = System.Drawing.SystemColors.Control;
+            this.tpExternalProxy.Controls.Add(this.tlpExternalProxy);
+            resources.ApplyResources(this.tpExternalProxy, "tpExternalProxy");
+            this.tpExternalProxy.Name = "tpExternalProxy";
+            // 
+            // tlpExternalProxy
+            // 
+            resources.ApplyResources(this.tlpExternalProxy, "tlpExternalProxy");
+            this.tlpExternalProxy.Controls.Add(this.lHttpsProxy, 2, 2);
+            this.tlpExternalProxy.Controls.Add(this.txtEXTHttpsPort, 3, 2);
+            this.tlpExternalProxy.Controls.Add(this.txtEXTHttpsIP, 1, 2);
+            this.tlpExternalProxy.Controls.Add(this.txtEXTHttpPort, 3, 1);
+            this.tlpExternalProxy.Controls.Add(this.cbEnable_EXTHttps, 0, 2);
+            this.tlpExternalProxy.Controls.Add(this.cbEnable_EXTHttp, 0, 1);
+            this.tlpExternalProxy.Controls.Add(this.txtEXTHttpIP, 1, 1);
+            this.tlpExternalProxy.Controls.Add(this.lHttpProxy, 2, 1);
+            this.tlpExternalProxy.Name = "tlpExternalProxy";
+            // 
+            // lHttpsProxy
+            // 
+            resources.ApplyResources(this.lHttpsProxy, "lHttpsProxy");
+            this.lHttpsProxy.Name = "lHttpsProxy";
+            // 
+            // txtEXTHttpsPort
+            // 
+            this.txtEXTHttpsPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtEXTHttpsPort, "txtEXTHttpsPort");
+            this.txtEXTHttpsPort.Name = "txtEXTHttpsPort";
+            // 
+            // txtEXTHttpsIP
+            // 
+            this.txtEXTHttpsIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtEXTHttpsIP, "txtEXTHttpsIP");
+            this.txtEXTHttpsIP.Name = "txtEXTHttpsIP";
+            // 
+            // txtEXTHttpPort
+            // 
+            this.txtEXTHttpPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtEXTHttpPort, "txtEXTHttpPort");
+            this.txtEXTHttpPort.Name = "txtEXTHttpPort";
+            // 
+            // cbEnable_EXTHttps
+            // 
+            resources.ApplyResources(this.cbEnable_EXTHttps, "cbEnable_EXTHttps");
+            this.cbEnable_EXTHttps.Name = "cbEnable_EXTHttps";
+            this.cbEnable_EXTHttps.UseVisualStyleBackColor = true;
+            this.cbEnable_EXTHttps.CheckedChanged += new System.EventHandler(this.cbEnableHttpsProxy_CheckedChanged);
+            // 
+            // cbEnable_EXTHttp
+            // 
+            resources.ApplyResources(this.cbEnable_EXTHttp, "cbEnable_EXTHttp");
+            this.cbEnable_EXTHttp.Name = "cbEnable_EXTHttp";
+            this.cbEnable_EXTHttp.UseVisualStyleBackColor = true;
+            this.cbEnable_EXTHttp.CheckedChanged += new System.EventHandler(this.cbEnableHttpProxy_CheckedChanged);
+            // 
+            // txtEXTHttpIP
+            // 
+            this.txtEXTHttpIP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtEXTHttpIP, "txtEXTHttpIP");
+            this.txtEXTHttpIP.Name = "txtEXTHttpIP";
+            // 
+            // lHttpProxy
+            // 
+            resources.ApplyResources(this.lHttpProxy, "lHttpProxy");
+            this.lHttpProxy.Name = "lHttpProxy";
             // 
             // tlpButton
             // 
@@ -838,6 +919,9 @@
             this.tlpListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
+            this.tpExternalProxy.ResumeLayout(false);
+            this.tlpExternalProxy.ResumeLayout(false);
+            this.tlpExternalProxy.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton_Start.ResumeLayout(false);
             this.tpProxyList.ResumeLayout(false);
@@ -941,5 +1025,15 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cFuncName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
+        private System.Windows.Forms.TabPage tpExternalProxy;
+        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy;
+        private System.Windows.Forms.CheckBox cbEnable_EXTHttps;
+        private System.Windows.Forms.CheckBox cbEnable_EXTHttp;
+        private System.Windows.Forms.Label lHttpsProxy;
+        private System.Windows.Forms.TextBox txtEXTHttpsPort;
+        private System.Windows.Forms.TextBox txtEXTHttpsIP;
+        private System.Windows.Forms.TextBox txtEXTHttpPort;
+        private System.Windows.Forms.TextBox txtEXTHttpIP;
+        private System.Windows.Forms.Label lHttpProxy;
     }
 }

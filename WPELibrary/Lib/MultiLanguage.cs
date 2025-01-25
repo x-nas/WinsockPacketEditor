@@ -178,6 +178,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_166 = { "发送集保存完毕 {0}", "The Send Collection Saved {0}" };
         public static string[] MutiLan_167 = { "加载发送集成功! [未加密]", "Load send collection successful! [Unencrypted]" };
         public static string[] MutiLan_168 = { "加载发送集成功! [已加密]", "Load send collection successful! [Encrypted]" };
+        public static string[] MutiLan_169 = { "已启用身份认证！", "Identity authentication enabled!" };
+        public static string[] MutiLan_170 = { "已启用外部 HTTP 代理！", "External HTTP proxy enabled!" };
+        public static string[] MutiLan_171 = { "已启用外部 HTTPS 代理！", "External HTTPS proxy enabled!" };
 
         #endregion
 

@@ -550,5 +550,77 @@ namespace WPELibrary.Properties {
                 this["ProxyConfig_ProxyIP_Auto"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_EXTProxy_EnableHttp {
+            get {
+                return ((bool)(this["ProxyConfig_EXTProxy_EnableHttp"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_EnableHttp"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_EXTProxy_EnableHttps {
+            get {
+                return ((bool)(this["ProxyConfig_EXTProxy_EnableHttps"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_EnableHttps"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyConfig_EXTProxy_HttpIP {
+            get {
+                return ((string)(this["ProxyConfig_EXTProxy_HttpIP"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_HttpIP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ProxyConfig_EXTProxy_HttpsIP {
+            get {
+                return ((string)(this["ProxyConfig_EXTProxy_HttpsIP"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_HttpsIP"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort ProxyConfig_EXTProxy_HttpPort {
+            get {
+                return ((ushort)(this["ProxyConfig_EXTProxy_HttpPort"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_HttpPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort ProxyConfig_EXTProxy_HttpsPort {
+            get {
+                return ((ushort)(this["ProxyConfig_EXTProxy_HttpsPort"]));
+            }
+            set {
+                this["ProxyConfig_EXTProxy_HttpsPort"] = value;
+            }
+        }
     }
 }

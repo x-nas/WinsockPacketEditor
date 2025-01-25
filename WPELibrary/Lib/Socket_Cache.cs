@@ -69,7 +69,10 @@ namespace WPELibrary.Lib
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
             public static bool IsListening = false;
             public static bool ProxyIP_Auto;
-            public static bool Enable_SOCKS5, Enable_Auth;            
+            public static bool Enable_SOCKS5, Enable_Auth;
+            public static bool Enable_EXTHttp, Enable_EXTHttps;
+            public static string EXTHttpIP, EXTHttpsIP;
+            public static ushort EXTHttpPort, EXTHttpsPort;
             public static string Auth_UserName, Auth_PassWord;
             public static ushort ProxyPort;
             public static int UDPCloseTime = 60;
@@ -403,6 +406,8 @@ namespace WPELibrary.Lib
 
                                     #region//代理 TCP
 
+                                    spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
                                     switch (spi.DomainType)
                                     {
                                         case Socket_Cache.SocketProxy.DomainType.Http:
@@ -411,13 +416,30 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                                spi.TargetSocket.Connect(targetEP);
-                                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                if (Socket_Cache.SocketProxy.Enable_EXTHttp)
+                                                {
+                                                    IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpIP), Socket_Cache.SocketProxy.EXTHttpPort);
+                                                    spi.TargetSocket.Connect(HttpProxyEP);
 
-                                                Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                                    if (Socket_Operation.CheckHttpProxyState(spi, sIPString, uPort))
+                                                    {
+                                                        spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                        Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    }
+                                                }
+                                                else
+                                                {  
+                                                    spi.TargetSocket.Connect(targetEP);
+                                                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                                }                                                
                                             }
                                             catch (SocketException)
                                             {
@@ -434,13 +456,30 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                                spi.TargetSocket.Connect(targetEP);
-                                                spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
-                                                spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                if (Socket_Cache.SocketProxy.Enable_EXTHttps)
+                                                {
+                                                    IPEndPoint HttpsProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpsIP), Socket_Cache.SocketProxy.EXTHttpsPort);
+                                                    spi.TargetSocket.Connect(HttpsProxyEP);
 
-                                                Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                                    if (Socket_Operation.CheckHttpProxyState(spi, sIPString, uPort))
+                                                    {
+                                                        spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                        spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                        Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));                                                        
+                                                    }
+                                                    else
+                                                    {
+                                                        Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    spi.TargetSocket.Connect(targetEP);
+                                                    spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
+                                                    spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                    Socket_Operation.SendTCPData(spi.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                    Socket_Cache.SocketProxyQueue.ProxyInfoToQueue(spi);
+                                                }
                                             }
                                             catch (SocketException)
                                             {
@@ -457,7 +496,6 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                spi.TargetSocket = new Socket(targetEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                                                 spi.TargetSocket.Connect(targetEP);
                                                 spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
                                                 spi.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
@@ -549,7 +587,11 @@ namespace WPELibrary.Lib
                                 #region//HTTP
 
                                 Socket_Operation.SendTCPData(spi.TargetSocket, bData);
-                                Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+
+                                if (!Socket_Cache.SocketProxy.Enable_EXTHttp)
+                                {
+                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                                }                                
 
                                 #endregion
 
@@ -560,7 +602,11 @@ namespace WPELibrary.Lib
                                 #region//HTTPS
 
                                 Socket_Operation.SendTCPData(spi.TargetSocket, bData);
-                                Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+
+                                if (!Socket_Cache.SocketProxy.Enable_EXTHttps)
+                                {
+                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, bData, Socket_Cache.SocketProxy.DataType.Request);
+                                }                                
 
                                 #endregion
 
@@ -604,10 +650,39 @@ namespace WPELibrary.Lib
 
                         if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
-                            Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
-                        }
+                            switch (spi.DomainType)
+                            { 
+                                case Socket_Cache.SocketProxy.DomainType.Http:
 
-                        Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+                                    Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
+
+                                    if (!Socket_Cache.SocketProxy.Enable_EXTHttp)
+                                    {
+                                        Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+                                    }                                        
+
+                                    break;
+
+                                case Socket_Cache.SocketProxy.DomainType.Https:
+
+                                    Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
+
+                                    if (!Socket_Cache.SocketProxy.Enable_EXTHttps)
+                                    {
+                                        Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+                                    }                                    
+
+                                    break;
+
+                                case Socket_Cache.SocketProxy.DomainType.Socket:
+
+                                    Socket_Operation.SendTCPData(spi.ClientSocket, spi.TargetData);
+                                    Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
+
+                                    break;
+                            }                            
+                        }
+                        
                         spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
                     }
                     else
@@ -697,9 +772,18 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    if (spi != null && spi.ClientSocket != null && !string.IsNullOrEmpty(spi.ClientAddress))
+                    if (spi != null && !string.IsNullOrEmpty(spi.ClientAddress))
                     {
-                        sReturn = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                        if (spi.ClientSocket != null)
+                        {
+                            if (spi.ClientSocket.RemoteEndPoint != null)
+                            {
+                                if (((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address != null)
+                                {
+                                    sReturn = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Address.ToString();
+                                }                                
+                            }
+                        }                     
                     }
                 }
                 catch (Exception ex)

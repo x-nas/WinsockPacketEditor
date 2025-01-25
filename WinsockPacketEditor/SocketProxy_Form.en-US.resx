@@ -142,8 +142,11 @@
   <data name="gbProxyIP.Text" xml:space="preserve">
     <value>Proxy Server IP</value>
   </data>
+  <data name="cbbProxyIP_Appoint.Location" type="System.Drawing.Point, System.Drawing">
+    <value>104, 12</value>
+  </data>
   <data name="cbProxyIP_Auto.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 25</value>
+    <value>95, 21</value>
   </data>
   <data name="cbProxyIP_Auto.Text" xml:space="preserve">
     <value>Auto Detect</value>
@@ -215,22 +218,55 @@
     <value>Log List</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
-    <value>183, 11</value>
+    <value>180, 9</value>
   </data>
   <data name="cbLogList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
-    <value>89, 11</value>
+    <value>89, 12</value>
   </data>
   <data name="cbLogList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 23</value>
+    <value>88, 21</value>
   </data>
   <data name="cbLogList_AutoClear.Text" xml:space="preserve">
     <value>Auto Clear</value>
   </data>
   <data name="cbLogList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 23</value>
+    <value>80, 21</value>
   </data>
   <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
+  </data>
+  <data name="tpExternalProxy.Text" xml:space="preserve">
+    <value>[ EXT Proxy ]</value>
+  </data>
+  <data name="lHttpsProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>362, 34</value>
+  </data>
+  <data name="txtEXTHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>377, 36</value>
+  </data>
+  <data name="txtEXTHttpsIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>214, 36</value>
+  </data>
+  <data name="txtEXTHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>377, 7</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 23</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Text" xml:space="preserve">
+    <value>Enable - External HTTPS Proxy:</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 23</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Text" xml:space="preserve">
+    <value>Enable - External HTTP Proxy:</value>
+  </data>
+  <data name="txtEXTHttpIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>214, 7</value>
+  </data>
+  <data name="lHttpProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>362, 5</value>
   </data>
   <data name="bCleanUp.Text" xml:space="preserve">
     <value>Clear
@@ -247,7 +283,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAWABAQFgAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAWgBAQFoAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -361,24 +397,27 @@
   <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cLogID.Width" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
   <data name="cLogTime.HeaderText" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="cLogTime.Width" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
   <data name="cFuncName.HeaderText" xml:space="preserve">
     <value>Module</value>
+  </data>
+  <data name="cFuncName.Width" type="System.Int32, mscorlib">
+    <value>59</value>
   </data>
   <data name="cLogContent.HeaderText" xml:space="preserve">
     <value>Content</value>
   </data>
   <data name="tpClientList.Text" xml:space="preserve">
     <value>[ Client List ]</value>
-  </data>
-  <data name="cbbProxyIP_Appoint.Location" type="System.Drawing.Point, System.Drawing">
-    <value>104, 10</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cbbProxyIP_Appoint.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

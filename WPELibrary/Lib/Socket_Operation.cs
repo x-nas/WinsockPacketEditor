@@ -795,17 +795,17 @@ namespace WPELibrary.Lib
 
         #region//判断地址的类型
 
-        private static bool IsIPv4(string IPString)
+        public static bool IsIPv4(string IPString)
         {
             return IPAddress.TryParse(IPString, out IPAddress ip);
         }
 
-        private static bool IsIPv6(string IPString)
+        public static bool IsIPv6(string IPString)
         {
             return IPAddress.TryParse(IPString, out IPAddress ip) && ip.AddressFamily == AddressFamily.InterNetworkV6;
         }
 
-        private static bool IsDomain(string IPString)
+        public static bool IsDomain(string IPString)
         {
             try
             {
@@ -1074,6 +1074,59 @@ namespace WPELibrary.Lib
 
                         break;
                 }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//判断 Http 外部代理连接状态
+
+        public static bool CheckHttpProxyState(Socket_ProxyInfo spi, string targetAddress, ushort targetPort)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                byte[] bRequest = Socket_Operation.BuildHttpProxyRequest(targetAddress, targetPort);
+
+                if (bRequest != null)
+                {
+                    Socket_Operation.SendTCPData(spi.TargetSocket, bRequest);
+
+                    byte[] buffer = new byte[4096];
+                    int bytesRead = spi.TargetSocket.Receive(buffer);
+                    string response = Encoding.Default.GetString(buffer, 0, bytesRead);
+
+                    if (response.StartsWith("HTTP/1.1 200"))
+                    {
+                        bReturn = true;
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
+        }
+
+        private static byte[] BuildHttpProxyRequest(string targetAddress, ushort targetPort)
+        {
+            byte[] bReturn = null;
+
+            try
+            {
+                string sRequest = $"CONNECT {targetAddress}:{targetPort} HTTP/1.1\r\n";
+                sRequest += $"Host: {targetAddress}:{targetPort}\r\n";
+                sRequest += "Proxy-Connection: Keep-Alive\r\n\r\n";
+                bReturn = Encoding.UTF8.GetBytes(sRequest);
             }
             catch (Exception ex)
             {
@@ -1458,7 +1511,7 @@ namespace WPELibrary.Lib
             return saReturn;
         }
 
-        #endregion
+        #endregion        
 
         #region//获取IP地址信息
 
@@ -2951,6 +3004,13 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_LogList_AutoClear = Socket_Cache.LogList.Proxy_AutoClear;
                 Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
+                Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttp =Socket_Cache.SocketProxy.Enable_EXTHttp;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpIP = Socket_Cache.SocketProxy.EXTHttpIP;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpPort = Socket_Cache.SocketProxy.EXTHttpPort;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps = Socket_Cache.SocketProxy.Enable_EXTHttps;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP = Socket_Cache.SocketProxy.EXTHttpsIP;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort = Socket_Cache.SocketProxy.EXTHttpsPort;
+
                 Properties.Settings.Default.Save();
             }
             catch (Exception ex)
@@ -3035,6 +3095,13 @@ namespace WPELibrary.Lib
                 Socket_Cache.LogList.Proxy_AutoRoll = Properties.Settings.Default.ProxyConfig_LogList_AutoRoll;
                 Socket_Cache.LogList.Proxy_AutoClear = Properties.Settings.Default.ProxyConfig_LogList_AutoClear;
                 Socket_Cache.LogList.Proxy_AutoClear_Value = Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value;
+
+                Socket_Cache.SocketProxy.Enable_EXTHttp = Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttp;
+                Socket_Cache.SocketProxy.EXTHttpIP = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpIP;
+                Socket_Cache.SocketProxy.EXTHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpPort;
+                Socket_Cache.SocketProxy.Enable_EXTHttps = Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps;
+                Socket_Cache.SocketProxy.EXTHttpsIP = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP;
+                Socket_Cache.SocketProxy.EXTHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort;
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }

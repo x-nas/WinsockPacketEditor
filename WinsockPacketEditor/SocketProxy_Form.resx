@@ -1308,6 +1308,306 @@
   <data name="&gt;&gt;tpListSet.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="tlpExternalProxy.ColumnCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lHttpsProxy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lHttpsProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lHttpsProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lHttpsProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 34</value>
+  </data>
+  <data name="lHttpsProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="lHttpsProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 27</value>
+  </data>
+  <data name="lHttpsProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="lHttpsProxy.Text" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="lHttpsProxy.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lHttpsProxy.Name" xml:space="preserve">
+    <value>lHttpsProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpsProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lHttpsProxy.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpsProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtEXTHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtEXTHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>332, 36</value>
+  </data>
+  <data name="txtEXTHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 23</value>
+  </data>
+  <data name="txtEXTHttpsPort.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="txtEXTHttpsPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsPort.Name" xml:space="preserve">
+    <value>txtEXTHttpsPort</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsPort.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="txtEXTHttpsIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtEXTHttpsIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 36</value>
+  </data>
+  <data name="txtEXTHttpsIP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtEXTHttpsIP.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsIP.Name" xml:space="preserve">
+    <value>txtEXTHttpsIP</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsIP.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpsIP.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="txtEXTHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtEXTHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>332, 7</value>
+  </data>
+  <data name="txtEXTHttpPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 23</value>
+  </data>
+  <data name="txtEXTHttpPort.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="txtEXTHttpPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpPort.Name" xml:space="preserve">
+    <value>txtEXTHttpPort</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpPort.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbEnable_EXTHttps.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbEnable_EXTHttps.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 36</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 23</value>
+  </data>
+  <data name="cbEnable_EXTHttps.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbEnable_EXTHttps.Text" xml:space="preserve">
+    <value>启用 - 外部 HTTPS 代理:</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttps.Name" xml:space="preserve">
+    <value>cbEnable_EXTHttps</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttps.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttps.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttps.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="cbEnable_EXTHttp.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 7</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Size" type="System.Drawing.Size, System.Drawing">
+    <value>160, 23</value>
+  </data>
+  <data name="cbEnable_EXTHttp.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbEnable_EXTHttp.Text" xml:space="preserve">
+    <value>启用 - 外部 HTTP 代理:</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttp.Name" xml:space="preserve">
+    <value>cbEnable_EXTHttp</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttp.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttp.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_EXTHttp.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="txtEXTHttpIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtEXTHttpIP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 7</value>
+  </data>
+  <data name="txtEXTHttpIP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtEXTHttpIP.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpIP.Name" xml:space="preserve">
+    <value>txtEXTHttpIP</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpIP.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtEXTHttpIP.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lHttpProxy.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lHttpProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lHttpProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>317, 5</value>
+  </data>
+  <data name="lHttpProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="lHttpProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 27</value>
+  </data>
+  <data name="lHttpProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lHttpProxy.Text" xml:space="preserve">
+    <value>:</value>
+  </data>
+  <data name="lHttpProxy.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lHttpProxy.Name" xml:space="preserve">
+    <value>lHttpProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lHttpProxy.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpProxy.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tlpExternalProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpExternalProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpExternalProxy.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpExternalProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tlpExternalProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy.Name" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy.Parent" xml:space="preserve">
+    <value>tpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpExternalProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHttpsProxy" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpPort" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttps" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttp" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpIP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lHttpProxy" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,150,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpExternalProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="tpExternalProxy.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tpExternalProxy.Text" xml:space="preserve">
+    <value>[ 外部代理 ]</value>
+  </data>
+  <data name="&gt;&gt;tpExternalProxy.Name" xml:space="preserve">
+    <value>tpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;tpExternalProxy.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpExternalProxy.Parent" xml:space="preserve">
+    <value>tcSocketProxySet</value>
+  </data>
+  <data name="&gt;&gt;tpExternalProxy.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="tcSocketProxySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -1570,7 +1870,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAZwBAgGcAQIBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAbQBAgG0AQIBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
