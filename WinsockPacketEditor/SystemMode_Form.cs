@@ -45,16 +45,18 @@ namespace WinsockPacketEditor
 
         private void bProxy_Start_Click(object sender, EventArgs e)
         {
-            Program.Mode = "Proxy";
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            Program.Mode = Socket_Cache.SystemMode.Proxy;
+            this.ExitMainForm();
         }
 
         private void bProcess_Start_Click(object sender, EventArgs e)
         {
-            Program.Mode = "Process";
+            Program.Mode = Socket_Cache.SystemMode.Process;
+            this.ExitMainForm();
+        }
 
+        private void ExitMainForm()
+        {
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

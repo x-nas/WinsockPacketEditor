@@ -6,20 +6,23 @@ using System.Windows.Forms;
 using WPELibrary.Lib;
 using Be.Windows.Forms;
 using System.Threading.Tasks;
+using WPELibrary;
 
 namespace WinsockPacketEditor
 {
     public partial class SocketProxy_Form : Form
     {
+        private Socket_Form socketForm;
         private static Socket SocketServer;
 
         #region//窗体加载
 
-        public SocketProxy_Form()
+        public SocketProxy_Form(Socket_Form socketForm)
         {
             try
             {
                 InitializeComponent();
+                this.socketForm = socketForm;
                 this.InitSocketDGV();
             }
             catch (Exception ex)
@@ -52,6 +55,11 @@ namespace WinsockPacketEditor
                 if (this.cbEnable_SystemProxy.Checked)
                 { 
                     Socket_Operation.StopSystemProxy();
+                }
+
+                if (this.socketForm != null)
+                {
+                    this.socketForm.ExitMainForm();
                 }
             }
             catch (Exception ex)

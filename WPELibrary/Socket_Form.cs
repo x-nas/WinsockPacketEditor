@@ -100,13 +100,14 @@ namespace WPELibrary
             }
         }
 
-        private void ExitMainForm()
+        public void ExitMainForm()
         {
             try
             {
                 ws.ExitHook();
 
                 this.SaveConfigs_Parameter();
+                this.niWPE.Visible = false;
                 Socket_Operation.SaveSystemList();
                 Socket_Operation.UnregisterHotKey();
             }

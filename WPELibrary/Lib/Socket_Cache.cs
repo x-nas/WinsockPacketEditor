@@ -27,6 +27,12 @@ namespace WPELibrary.Lib
 
         #region//结构定义
 
+        public enum SystemMode
+        { 
+            Process = 0,
+            Proxy = 1,
+        }
+
         public enum PWType
         {
             FilterList_Import = 0,

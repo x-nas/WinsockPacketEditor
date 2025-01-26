@@ -11,7 +11,7 @@ namespace WinsockPacketEditor
         public static int PID = -1;
         public static string PNAME = string.Empty;
         public static string PATH = string.Empty;
-        public static string Mode = string.Empty;
+        public static Socket_Cache.SystemMode Mode = new Socket_Cache.SystemMode();
 
         #region//主函数
 
@@ -38,16 +38,22 @@ namespace WinsockPacketEditor
 
                     if (systemMode_Form.ShowDialog() == DialogResult.OK)
                     {
-                        if (Mode.Equals("Proxy"))
-                        {
-                            Socket_Form socket_Form = new Socket_Form(Properties.Settings.Default.DefaultLanguage);
-                            socket_Form.Show();
+                        switch (Mode)
+                        { 
+                            case Socket_Cache.SystemMode.Proxy:
 
-                            Application.Run(new SocketProxy_Form());
-                        }
-                        else
-                        {
-                            Application.Run(new Injector_Form());
+                                Socket_Form socket_Form = new Socket_Form(Properties.Settings.Default.DefaultLanguage);
+                                socket_Form.Show();
+
+                                Application.Run(new SocketProxy_Form(socket_Form));
+
+                                break;
+
+                            case Socket_Cache.SystemMode.Process:
+
+                                Application.Run(new Injector_Form());
+
+                                break;
                         }
                     }
                 }
