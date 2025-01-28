@@ -14,10 +14,12 @@ namespace WPELibrary.Lib
         public int Instruction_Index = 0;      
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
-        
+
+        private CancellationTokenSource cts;
         private DataTable RobotInstruction = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
         private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();
+        private Socket_Send ss;
 
         #region//初始化
 
@@ -61,6 +63,7 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
+                            this.cts = new CancellationTokenSource();
                             this.Worker.RunWorkerAsync();
 
                             string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_109), this.RobotName);
@@ -85,6 +88,16 @@ namespace WPELibrary.Lib
             {
                 if (this.Worker.IsBusy)
                 {
+                    if (ss != null)
+                    { 
+                        ss.StopSend();
+                    }
+
+                    if (this.cts != null)
+                    {
+                        this.cts.Cancel();
+                    }
+                    
                     this.Worker.CancelAsync();
                 }                
             }
@@ -128,7 +141,12 @@ namespace WPELibrary.Lib
                                     if (!string.IsNullOrEmpty(sContent))
                                     {
                                         Guid SID = Guid.Parse(sContent);
-                                        Socket_Cache.Send.DoSend(SID);
+                                        this.ss = Socket_Cache.Send.DoSend(SID);
+
+                                        while (this.ss.Worker.IsBusy)
+                                        {
+                                            Socket_Operation.DoSleepAsync(10, this.cts.Token).Wait();
+                                        }
                                     }
 
                                     break;
@@ -143,7 +161,7 @@ namespace WPELibrary.Lib
 
                                     if (int.TryParse(sContent, out int iDelay))
                                     {
-                                        Thread.Sleep(iDelay);
+                                        Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
                                     }
 
                                     break;

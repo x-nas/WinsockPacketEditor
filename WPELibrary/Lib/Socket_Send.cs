@@ -17,6 +17,7 @@ namespace WPELibrary.Lib
         public int Total_Send = 0;
         public string SendName = string.Empty;
 
+        private CancellationTokenSource cts;
         private DataTable SendCollection = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
 
@@ -59,6 +60,7 @@ namespace WPELibrary.Lib
                         this.LoopINT = LoopINT;
                         this.SendCollection = SendCollection;
 
+                        this.cts = new CancellationTokenSource();
                         this.Worker.RunWorkerAsync();
 
                         string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_84), this.SendName);
@@ -82,6 +84,11 @@ namespace WPELibrary.Lib
             {
                 if (this.Worker.IsBusy)
                 {
+                    if (this.cts != null)
+                    {
+                        this.cts.Cancel();
+                    }
+                    
                     this.Worker.CancelAsync();
                 }
             }
@@ -148,7 +155,7 @@ namespace WPELibrary.Lib
 
                                 if (this.LoopINT > 0)
                                 {
-                                    Thread.Sleep(this.LoopINT);
+                                    Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
                                 }
                             }
                         }                                                

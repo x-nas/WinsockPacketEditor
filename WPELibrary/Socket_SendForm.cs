@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Threading;
 using WPELibrary.Lib;
 using System.Reflection;
 using Be.Windows.Forms;
 using System.Data;
+using System.Threading;
 
 namespace WPELibrary
 {
@@ -14,7 +14,8 @@ namespace WPELibrary
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;
-        private Socket_Cache.SocketPacket.PacketType Send_PacketType;        
+        private Socket_Cache.SocketPacket.PacketType Send_PacketType;
+        private CancellationTokenSource cts;
 
         #region//窗体加载
 
@@ -284,6 +285,7 @@ namespace WPELibrary
                         this.Send_Success = 0;
                         this.Send_Fail = 0;
 
+                        this.cts =new CancellationTokenSource();
                         this.bgwSendPacket.RunWorkerAsync();
                     }
                 }
@@ -314,9 +316,8 @@ namespace WPELibrary
                     while (!bgwSendPacket.CancellationPending)
                     {
                         this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
-
                         bgwSendPacket.ReportProgress(Send_CNT);
-                        Thread.Sleep(iSend_Interval);
+                        Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
                     }
                 }
                 else
@@ -330,9 +331,8 @@ namespace WPELibrary
                         else
                         {
                             this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
-
                             bgwSendPacket.ReportProgress(Send_CNT);
-                            Thread.Sleep(iSend_Interval);
+                            Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
                         }
                     }
                 }
@@ -417,9 +417,14 @@ namespace WPELibrary
         {
             try
             {
-                if (bgwSendPacket.IsBusy)
+                if (this.bgwSendPacket.IsBusy)
                 {
-                    bgwSendPacket.CancelAsync();
+                    if (this.cts != null)
+                    {
+                        this.cts.Cancel();
+                    }
+                    
+                    this.bgwSendPacket.CancelAsync();
                 }
             }
             catch (Exception ex)

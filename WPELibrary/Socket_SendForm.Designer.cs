@@ -773,7 +773,7 @@ namespace WPELibrary
             0,
             0});
             this.nudSendType_Interval.Maximum = new decimal(new int[] {
-            99999,
+            999999999,
             0,
             0,
             0});

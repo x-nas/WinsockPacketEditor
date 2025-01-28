@@ -2287,6 +2287,22 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//支持取消的等待（异步）
+
+        public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay(MilliSecond, cancellationToken);
+            }
+            catch (TaskCanceledException)
+            {
+                //
+            }
+        }        
+
+        #endregion
+
         #region//发送 TCP 代理数据
 
         public static int SendTCPData(Socket socket, byte[] bData)

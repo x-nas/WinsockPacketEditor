@@ -5211,8 +5211,10 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void DoSend(Guid SID)
+            public static Socket_Send DoSend(Guid SID)
             {
+                Socket_Send ssReturn = null;
+
                 try
                 {
                     if (SID != null && SID != Guid.Empty)
@@ -5223,8 +5225,8 @@ namespace WPELibrary.Lib
                         {
                             if (ssi.SCollection.Rows.Count > 0)
                             {
-                                Socket_Send ss = new Socket_Send();
-                                ss.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection);
+                                ssReturn = new Socket_Send();
+                                ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection);
                             }
                         }
                     }
@@ -5233,6 +5235,8 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return ssReturn;
             }
 
             public static void DoSend_ByHotKey(int HOTKEY_ID)
