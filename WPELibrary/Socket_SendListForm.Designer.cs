@@ -558,6 +558,7 @@ namespace WPELibrary
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_SendListForm";
+            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SocketSendList_Form_FormClosed);
             this.Load += new System.EventHandler(this.SocketSendList_Form_Load);
             this.tlpSendList.ResumeLayout(false);

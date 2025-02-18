@@ -826,6 +826,7 @@ namespace WPELibrary
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_FilterForm";
+            this.TopMost = true;
             this.tlpFilterForm.ResumeLayout(false);
             this.tlpFilterButton.ResumeLayout(false);
             this.tcFilterInfo.ResumeLayout(false);

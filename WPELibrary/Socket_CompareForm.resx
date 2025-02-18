@@ -145,10 +145,10 @@
     <value>Microsoft YaHei UI, 9pt</value>
   </data>
   <data name="hbModifiedData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>595, 33</value>
+    <value>470, 33</value>
   </data>
   <data name="hbModifiedData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>586, 330</value>
+    <value>461, 240</value>
   </data>
   <data name="hbModifiedData.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -172,13 +172,13 @@
     <value>Fill</value>
   </data>
   <data name="lModifiedData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>595, 3</value>
+    <value>470, 3</value>
   </data>
   <data name="lModifiedData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lModifiedData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>586, 24</value>
+    <value>461, 24</value>
   </data>
   <data name="lModifiedData.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -214,7 +214,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lRawData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>586, 24</value>
+    <value>461, 24</value>
   </data>
   <data name="lRawData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -259,7 +259,7 @@
     <value>3, 33</value>
   </data>
   <data name="hbRawData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>586, 330</value>
+    <value>461, 240</value>
   </data>
   <data name="hbRawData.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -289,7 +289,7 @@
     <value>2</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 366</value>
+    <value>934, 276</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -316,7 +316,7 @@
     <value>3, 3</value>
   </data>
   <data name="rtbCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1170, 234</value>
+    <value>920, 174</value>
   </data>
   <data name="rtbCompare.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -340,7 +340,7 @@
     <value>Fill</value>
   </data>
   <data name="pCompare.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 366</value>
+    <value>3, 276</value>
   </data>
   <data name="pCompare.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 3</value>
@@ -349,7 +349,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="pCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1178, 242</value>
+    <value>928, 182</value>
   </data>
   <data name="pCompare.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -379,7 +379,7 @@
     <value>2</value>
   </data>
   <data name="tlpSocketCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 611</value>
+    <value>934, 461</value>
   </data>
   <data name="tlpSocketCompare.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -409,7 +409,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1184, 611</value>
+    <value>934, 461</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>

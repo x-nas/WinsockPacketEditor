@@ -49,8 +49,8 @@
             // 
             // rtbShowInfo
             // 
-            resources.ApplyResources(this.rtbShowInfo, "rtbShowInfo");
             this.rtbShowInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.rtbShowInfo, "rtbShowInfo");
             this.rtbShowInfo.Name = "rtbShowInfo";
             this.rtbShowInfo.ReadOnly = true;
             // 
@@ -89,6 +89,7 @@
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_PasswordFrom";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Socket_PasswordFrom_FormClosing);
             this.tlpSocketPasswordFrom.ResumeLayout(false);
             this.tlpSocketPasswordFrom.PerformLayout();

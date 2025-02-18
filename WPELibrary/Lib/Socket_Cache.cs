@@ -3337,7 +3337,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Export);                            
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
