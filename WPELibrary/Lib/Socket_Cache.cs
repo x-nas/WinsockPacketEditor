@@ -2234,7 +2234,7 @@ namespace WPELibrary.Lib
                     for (int i = 0; i < bBuffer.Length; i++)
                     {
                         string sHex = bBuffer[i].ToString("X2");
-                        sReturn += i.ToString() + "-" + sHex + ",";
+                        sReturn += i.ToString() + "|" + sHex + ",";
                     }
 
                     sReturn = sReturn.Trim(',');
