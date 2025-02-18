@@ -5076,8 +5076,9 @@ namespace WPELibrary.Lib
                     bool SSystemSocket = false;              
                     int SLoopCNT = 1;
                     int SLoopINT = 1000;
+                    string SNotes = string.Empty;
 
-                    AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection());
+                    AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection(), SNotes);
                 }
                 catch (Exception ex)
                 {
@@ -5085,13 +5086,13 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddSend(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection)
+            public static void AddSend(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
             {
                 try
                 {
                     if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
                     {
-                        Socket_SendInfo ssi = new Socket_SendInfo(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection);
+                        Socket_SendInfo ssi = new Socket_SendInfo(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                         Socket_Cache.SendList.SendToList(ssi);
                     }
                 }
@@ -5105,7 +5106,7 @@ namespace WPELibrary.Lib
 
             #region//更新发送
 
-            public static void UpdateSend_BySendIndex(int SIndex, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection)
+            public static void UpdateSend_BySendIndex(int SIndex, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
             {
                 try
                 {
@@ -5116,6 +5117,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.SendList.lstSend[SIndex].SLoopCNT = SLoopCNT;
                         Socket_Cache.SendList.lstSend[SIndex].SLoopINT = SLoopINT;
                         Socket_Cache.SendList.lstSend[SIndex].SCollection = SCollection.Copy();
+                        Socket_Cache.SendList.lstSend[SIndex].SNotes = SNotes;
                     }
                 }
                 catch (Exception ex)
@@ -5140,8 +5142,9 @@ namespace WPELibrary.Lib
                     int SLoopCNT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopCNT;
                     int SLoopINT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopINT;
                     DataTable SCollection_Copy = Socket_Cache.SendList.lstSend[SIndex].SCollection.Copy();
+                    string SNotes_Copy = Socket_Cache.SendList.lstSend[SIndex].SNotes;
 
-                    Socket_Cache.Send.AddSend(SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy);
+                    Socket_Cache.Send.AddSend(SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
                     iReturn = Socket_Cache.SendList.lstSend.Count - 1;
                 }
                 catch (Exception ex)
@@ -5825,6 +5828,7 @@ namespace WPELibrary.Lib
                             string LoopCNT = Socket_Cache.SendList.lstSend[i].SLoopCNT.ToString();
                             string LoopINT = Socket_Cache.SendList.lstSend[i].SLoopINT.ToString();
                             DataTable SCollection = Socket_Cache.SendList.lstSend[i].SCollection;
+                            string SNotes = Socket_Cache.SendList.lstSend[i].SNotes;
 
                             XElement xeSend =
                                 new XElement("Send",
@@ -5832,7 +5836,8 @@ namespace WPELibrary.Lib
                                 new XElement("Name", SName),
                                 new XElement("SystemSocket", SSystemSocket),                            
                                 new XElement("LoopCNT", LoopCNT),
-                                new XElement("LoopINT", LoopINT)
+                                new XElement("LoopINT", LoopINT),
+                                new XElement("Notes", SNotes)
                                 );
 
                             if (SCollection.Rows.Count > 0)
@@ -6000,6 +6005,12 @@ namespace WPELibrary.Lib
                             SLoopINT = int.Parse(xeSend.Element("LoopINT").Value);
                         }
 
+                        string SNotes = string.Empty;
+                        if (xeSend.Element("Notes") != null)
+                        {
+                            SNotes = xeSend.Element("Notes").Value;
+                        }
+
                         DataTable SCollection = Socket_Cache.Send.InitSendCollection();
 
                         if (xeSend.Element("SendCollection") != null)
@@ -6034,7 +6045,7 @@ namespace WPELibrary.Lib
                             }
                         }
 
-                        Socket_Cache.Send.AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection);
+                        Socket_Cache.Send.AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                     }
                 }
                 catch (Exception ex)

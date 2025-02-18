@@ -78,6 +78,7 @@ namespace WPELibrary
                 this.nudLoop_CNT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopCNT;
                 this.nudLoop_INT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopINT;
                 this.dtSendCollection = Socket_Cache.SendList.lstSend[this.SendIndex].SCollection.Copy();
+                this.rtbNotes.Text = Socket_Cache.SendList.lstSend[this.SendIndex].SNotes;
 
                 this.InitSend();
             }
@@ -148,8 +149,9 @@ namespace WPELibrary
                 bool SSystemSocket_New = this.cbSystemSocket.Checked;           
                 int SLoopCNT_New = ((int)this.nudLoop_CNT.Value);
                 int SLoopINT_New = ((int)this.nudLoop_INT.Value);
+                string SNotes_New = this.rtbNotes.Text.Trim();
 
-                Socket_Cache.Send.UpdateSend_BySendIndex(this.SendIndex, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.dtSendCollection);
+                Socket_Cache.Send.UpdateSend_BySendIndex(this.SendIndex, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.dtSendCollection, SNotes_New);
 
                 this.Close();
             }

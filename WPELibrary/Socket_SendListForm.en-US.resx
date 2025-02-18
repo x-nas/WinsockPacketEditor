@@ -117,6 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="bClose.Text" xml:space="preserve">
+    <value>Close (&amp;C)</value>
+  </data>
+  <data name="bSave.Text" xml:space="preserve">
+    <value>Save (&amp;S)</value>
+  </data>
+  <data name="bStop.Text" xml:space="preserve">
+    <value>Stop (&amp;T)</value>
+  </data>
+  <data name="bExecute.Text" xml:space="preserve">
+    <value>Execute (&amp;E)</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tlTotal_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>73, 17</value>
+  </data>
+  <data name="tlTotal_Send.Text" xml:space="preserve">
+    <value>Total Send:</value>
+  </data>
+  <data name="tlSend_Success.Size" type="System.Drawing.Size, System.Drawing">
+    <value>56, 17</value>
+  </data>
+  <data name="tlSend_Success.Text" xml:space="preserve">
+    <value>Success:</value>
+  </data>
+  <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 17</value>
+  </data>
+  <data name="tlSend_Fail.Text" xml:space="preserve">
+    <value>Fail:</value>
+  </data>
+  <data name="gbSendName.Text" xml:space="preserve">
+    <value>[ Send Name ]</value>
+  </data>
+  <data name="gbLoopINT.Text" xml:space="preserve">
+    <value>[ Interval ]</value>
+  </data>
+  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>141, 3</value>
+  </data>
+  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 17</value>
+  </data>
+  <data name="label3.Text" xml:space="preserve">
+    <value>(ms)</value>
+  </data>
+  <data name="nudLoop_INT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 23</value>
+  </data>
+  <data name="gbLoopCNT.Text" xml:space="preserve">
+    <value>[ Loop ]</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 17</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Times:</value>
+  </data>
+  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>51, 0</value>
+  </data>
+  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 23</value>
+  </data>
+  <data name="gbSystemSocket.Text" xml:space="preserve">
+    <value>[ Socket ]</value>
+  </data>
+  <data name="cbSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 21</value>
+  </data>
+  <data name="cbSystemSocket.Text" xml:space="preserve">
+    <value>Use SYS Socket:</value>
+  </data>
+  <data name="lSystemSocket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>129, 3</value>
+  </data>
+  <data name="lSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>89, 21</value>
+  </data>
   <data name="cID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
@@ -151,225 +230,74 @@
   <data name="cData.HeaderText" xml:space="preserve">
     <value>Data</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cmsSendCollection.Size" type="System.Drawing.Size, System.Drawing">
+    <value>177, 210</value>
+  </data>
   <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Top.Text" xml:space="preserve">
     <value>Top</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_Up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Up.Text" xml:space="preserve">
     <value>Move Up</value>
   </data>
   <data name="cmsSendList_Down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Down.Text" xml:space="preserve">
     <value>Move Down</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Bottom.Text" xml:space="preserve">
     <value>Bottom</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_Delete.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Delete.Text" xml:space="preserve">
     <value>Remove from list</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_Export.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Export.Text" xml:space="preserve">
     <value>Export this list</value>
   </data>
   <data name="cmsSendList_Import.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_Import.Text" xml:space="preserve">
     <value>Import to this list</value>
   </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>176, 22</value>
   </data>
   <data name="cmsSendList_CleanUp.Text" xml:space="preserve">
     <value>Clean Up</value>
   </data>
-  <data name="cmsSendCollection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 210</value>
-  </data>
-  <data name="dgvSendCollection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>961, 150</value>
-  </data>
-  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 216</value>
-  </data>
-  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>967, 60</value>
-  </data>
-  <data name="ssSocketSendList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 279</value>
-  </data>
-  <data name="ssSocketSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>961, 22</value>
-  </data>
-  <data name="tlpParameter.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 156</value>
-  </data>
-  <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>967, 60</value>
-  </data>
-  <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>967, 304</value>
-  </data>
-  <data name="bClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>616, 15</value>
-  </data>
-  <data name="bClose.Text" xml:space="preserve">
-    <value>Close (&amp;C)</value>
-  </data>
-  <data name="bSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>496, 15</value>
-  </data>
-  <data name="bSave.Text" xml:space="preserve">
-    <value>Save (&amp;S)</value>
-  </data>
-  <data name="bStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>376, 15</value>
-  </data>
-  <data name="bStop.Text" xml:space="preserve">
-    <value>Stop (&amp;T)</value>
-  </data>
-  <data name="bExecute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>256, 15</value>
-  </data>
-  <data name="bExecute.Text" xml:space="preserve">
-    <value>Execute (&amp;E)</value>
-  </data>
-  <data name="tlTotal_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 17</value>
-  </data>
-  <data name="tlTotal_Send.Text" xml:space="preserve">
-    <value>Total Send:</value>
-  </data>
-  <data name="tlSend_Success.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
-  </data>
-  <data name="tlSend_Success.Text" xml:space="preserve">
-    <value>Success:</value>
-  </data>
-  <data name="tlSend_Fail.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 17</value>
-  </data>
-  <data name="tlSend_Fail.Text" xml:space="preserve">
-    <value>Fail:</value>
-  </data>
-  <data name="gbSendName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>332, 54</value>
-  </data>
-  <data name="gbSendName.Text" xml:space="preserve">
-    <value>[ Send Name ]</value>
-  </data>
-  <data name="tlpSendName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>326, 32</value>
-  </data>
-  <data name="txtSendName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 23</value>
-  </data>
-  <data name="gbLoopINT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>775, 3</value>
-  </data>
-  <data name="gbLoopINT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>189, 54</value>
-  </data>
-  <data name="gbLoopINT.Text" xml:space="preserve">
-    <value>[ Interval ]</value>
-  </data>
-  <data name="tlpLoopINT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>183, 32</value>
-  </data>
-  <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>147, 3</value>
-  </data>
-  <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>33, 17</value>
-  </data>
-  <data name="label3.Text" xml:space="preserve">
-    <value>(ms)</value>
-  </data>
-  <data name="nudLoop_INT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
-  </data>
-  <data name="gbLoopCNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>582, 3</value>
-  </data>
-  <data name="gbLoopCNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>187, 54</value>
-  </data>
-  <data name="gbLoopCNT.Text" xml:space="preserve">
-    <value>[ Loop ]</value>
-  </data>
-  <data name="tlpLoopCNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 32</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 17</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Times:</value>
-  </data>
-  <data name="nudLoop_CNT.Location" type="System.Drawing.Point, System.Drawing">
-    <value>51, 0</value>
-  </data>
-  <data name="nudLoop_CNT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>130, 23</value>
-  </data>
-  <data name="gbSystemSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>341, 3</value>
-  </data>
-  <data name="gbSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 54</value>
-  </data>
-  <data name="gbSystemSocket.Text" xml:space="preserve">
-    <value>[ Socket ]</value>
-  </data>
-  <data name="tlpSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 32</value>
-  </data>
-  <data name="cbSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>120, 21</value>
-  </data>
-  <data name="cbSystemSocket.Text" xml:space="preserve">
-    <value>Use SYS Socket:</value>
-  </data>
-  <data name="lSystemSocket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>129, 3</value>
-  </data>
-  <data name="lSystemSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>97, 21</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>967, 304</value>
+  <data name="gbNotes.Text" xml:space="preserve">
+    <value>[ Notes ]</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

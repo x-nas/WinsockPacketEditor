@@ -284,6 +284,9 @@ namespace WPELibrary
                         this.Send_CNT = 0;
                         this.Send_Success = 0;
                         this.Send_Fail = 0;
+                        this.tlSendTimes_Value.Text = this.Send_CNT.ToString();
+                        this.tlSend_Success_Value.Text = this.Send_Success.ToString();
+                        this.tlSend_Fail_Value.Text = this.Send_Fail.ToString();
 
                         this.cts =new CancellationTokenSource();
                         this.bgwSendPacket.RunWorkerAsync();
@@ -316,8 +319,11 @@ namespace WPELibrary
                     while (!bgwSendPacket.CancellationPending)
                     {
                         this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
-                        bgwSendPacket.ReportProgress(Send_CNT);
-                        Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+
+                        if (iSend_Interval > 0)
+                        {
+                            Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+                        }                        
                     }
                 }
                 else
@@ -331,25 +337,14 @@ namespace WPELibrary
                         else
                         {
                             this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
-                            bgwSendPacket.ReportProgress(Send_CNT);
-                            Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+
+                            if (iSend_Interval > 0)
+                            {
+                                Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
+                            }                                
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bgwSendPacket_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
-        {
-            try
-            {
-                this.tlSendTimes_Value.Text = this.Send_CNT.ToString();
-                this.tlSend_Success_Value.Text = this.Send_Success.ToString();
-                this.tlSend_Fail_Value.Text = this.Send_Fail.ToString();
             }
             catch (Exception ex)
             {
@@ -361,6 +356,10 @@ namespace WPELibrary
         {
             try
             {
+                this.tlSendTimes_Value.Text = this.Send_CNT.ToString();
+                this.tlSend_Success_Value.Text = this.Send_Success.ToString();
+                this.tlSend_Fail_Value.Text = this.Send_Fail.ToString();
+
                 this.bSend.Enabled = true;
                 this.bSendStop.Enabled = false;
                 this.gbSendSocket.Enabled = true;                

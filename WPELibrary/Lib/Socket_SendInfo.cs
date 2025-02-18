@@ -77,9 +77,21 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//备注
+
+        protected string snotes;
+
+        public string SNotes
+        {
+            get { return snotes; }
+            set { snotes = value; }
+        }
+
+        #endregion
+
         #region//Socket_SendInfo
 
-        public Socket_SendInfo(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection)
+        public Socket_SendInfo(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
         {
             this.sid = SID;
             this.sname = SName;
@@ -87,6 +99,7 @@ namespace WPELibrary.Lib
             this.sloopcnt = SLoopCNT;
             this.sloopint = SLoopINT;
             this.scollection = SCollection;
+            this.snotes = SNotes;
         }
 
         #endregion

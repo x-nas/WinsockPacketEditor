@@ -926,10 +926,8 @@ namespace WPELibrary
             // 
             // bgwSendPacket
             // 
-            this.bgwSendPacket.WorkerReportsProgress = true;
             this.bgwSendPacket.WorkerSupportsCancellation = true;
             this.bgwSendPacket.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSendPacket_DoWork);
-            this.bgwSendPacket.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwSendPacket_ProgressChanged);
             this.bgwSendPacket.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSendPacket_RunWorkerCompleted);
             // 
             // Socket_SendForm

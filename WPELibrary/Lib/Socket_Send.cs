@@ -126,8 +126,6 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            Worker.ReportProgress(j);
-
                             int Socket = (int)this.SendCollection.Rows[j]["Socket"];
                             Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)this.SendCollection.Rows[j]["Type"];
                             string sIPTo = this.SendCollection.Rows[j]["IPTo"].ToString();
@@ -155,6 +153,7 @@ namespace WPELibrary.Lib
 
                                 if (this.LoopINT > 0)
                                 {
+                                    Worker.ReportProgress(j);
                                     Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
                                 }
                             }
