@@ -1954,21 +1954,53 @@ namespace WPELibrary.Lib
 
         public static Socket_Cache.SocketProxy.DomainType GetDomainType_ByPort(ushort Port)
         {
-            Socket_Cache.SocketProxy.DomainType dtReturn = new Socket_Cache.SocketProxy.DomainType();
+            Socket_Cache.SocketProxy.DomainType dtReturn = new Socket_Cache.SocketProxy.DomainType();            
 
             try
             {
-                if (Port == 80)
+                if (Socket_Cache.SocketProxy.Enable_EXTHttp)
                 {
-                    dtReturn = Socket_Cache.SocketProxy.DomainType.Http;
+                    if (!string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpPort))
+                    {
+                        string[] slHttpPort = Socket_Cache.SocketProxy.AppointHttpPort.Split(',');
+
+                        foreach (string s in slHttpPort)
+                        {
+                            if (s.Equals(Port.ToString()))
+                            {
+                                return Socket_Cache.SocketProxy.DomainType.Http;
+                            }
+                        }
+                    }                    
+                }                
+
+                if (Socket_Cache.SocketProxy.Enable_EXTHttps)
+                {
+                    if (!string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpsPort))
+                    {
+                        string[] slHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort.Split(',');
+
+                        foreach (string s in slHttpsPort)
+                        {
+                            if (s.Equals(Port.ToString()))
+                            {
+                                return Socket_Cache.SocketProxy.DomainType.Https;
+                            }
+                        }
+                    }
                 }
-                else if (Port == 443)
+
+                if (Port == 80 || Port == 8080)
                 {
-                    dtReturn = Socket_Cache.SocketProxy.DomainType.Https;
+                    return Socket_Cache.SocketProxy.DomainType.Http;
+                }
+                else if (Port == 443 || Port == 8443)
+                {
+                    return Socket_Cache.SocketProxy.DomainType.Https;
                 }
                 else
                 {
-                    dtReturn = Socket_Cache.SocketProxy.DomainType.Socket;
+                    return Socket_Cache.SocketProxy.DomainType.Socket;
                 }
             }
             catch (Exception ex)
@@ -3026,6 +3058,8 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps = Socket_Cache.SocketProxy.Enable_EXTHttps;
                 Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP = Socket_Cache.SocketProxy.EXTHttpsIP;
                 Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort = Socket_Cache.SocketProxy.EXTHttpsPort;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort = Socket_Cache.SocketProxy.AppointHttpPort;
+                Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort;
 
                 Properties.Settings.Default.Save();
             }
@@ -3118,6 +3152,8 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketProxy.Enable_EXTHttps = Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps;
                 Socket_Cache.SocketProxy.EXTHttpsIP = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP;
                 Socket_Cache.SocketProxy.EXTHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort;
+                Socket_Cache.SocketProxy.AppointHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort;
+                Socket_Cache.SocketProxy.AppointHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort;
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }

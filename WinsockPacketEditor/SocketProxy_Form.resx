@@ -1309,7 +1309,7 @@
     <value>2</value>
   </data>
   <data name="tlpExternalProxy.ColumnCount" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="lHttpsProxy.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1551,6 +1551,126 @@
   <data name="&gt;&gt;lHttpProxy.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
+  <data name="lHttpPort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 7</value>
+  </data>
+  <data name="lHttpPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lHttpPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="lHttpPort.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="lHttpPort.Text" xml:space="preserve">
+    <value>指定端口:</value>
+  </data>
+  <data name="lHttpPort.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lHttpPort.Name" xml:space="preserve">
+    <value>lHttpPort</value>
+  </data>
+  <data name="&gt;&gt;lHttpPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lHttpPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpPort.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="lHttpsPort.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 36</value>
+  </data>
+  <data name="lHttpsPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 23</value>
+  </data>
+  <data name="lHttpsPort.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="lHttpsPort.Text" xml:space="preserve">
+    <value>指定端口:</value>
+  </data>
+  <data name="lHttpsPort.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lHttpsPort.Name" xml:space="preserve">
+    <value>lHttpsPort</value>
+  </data>
+  <data name="&gt;&gt;lHttpsPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lHttpsPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;lHttpsPort.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="txtAppointHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtAppointHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>477, 7</value>
+  </data>
+  <data name="txtAppointHttpPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtAppointHttpPort.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpPort.Name" xml:space="preserve">
+    <value>txtAppointHttpPort</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpPort.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="txtAppointHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtAppointHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>477, 36</value>
+  </data>
+  <data name="txtAppointHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 23</value>
+  </data>
+  <data name="txtAppointHttpsPort.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpsPort.Name" xml:space="preserve">
+    <value>txtAppointHttpsPort</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpsPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpsPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy</value>
+  </data>
+  <data name="&gt;&gt;txtAppointHttpsPort.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
   <data name="tlpExternalProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -1582,7 +1702,7 @@
     <value>0</value>
   </data>
   <data name="tlpExternalProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHttpsProxy" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpPort" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttps" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttp" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpIP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lHttpProxy" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,150,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHttpsProxy" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpPort" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttps" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbEnable_EXTHttp" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpIP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lHttpProxy" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lHttpPort" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="lHttpsPort" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="txtAppointHttpPort" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txtAppointHttpsPort" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,150,AutoSize,0,Absolute,80,AutoSize,0,Absolute,150,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -1870,7 +1990,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAbQBAgG0AQIBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAcwBAgHMAQIBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

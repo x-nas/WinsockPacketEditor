@@ -152,5 +152,11 @@
     <Setting Name="ProxyConfig_EXTProxy_HttpsPort" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="ProxyConfig_EXTProxy_AppointHttpPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">80,8080</Value>
+    </Setting>
+    <Setting Name="ProxyConfig_EXTProxy_AppointHttpsPort" Type="System.String" Scope="User">
+      <Value Profile="(Default)">443,8443</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

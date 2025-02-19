@@ -79,6 +79,7 @@ namespace WPELibrary.Lib
             public static bool Enable_EXTHttp, Enable_EXTHttps;
             public static string EXTHttpIP, EXTHttpsIP;
             public static ushort EXTHttpPort, EXTHttpsPort;
+            public static string AppointHttpPort, AppointHttpsPort;
             public static string Auth_UserName, Auth_PassWord;
             public static ushort ProxyPort;
             public static int UDPCloseTime = 60;

@@ -83,6 +83,10 @@
             this.cbEnable_EXTHttp = new System.Windows.Forms.CheckBox();
             this.txtEXTHttpIP = new System.Windows.Forms.TextBox();
             this.lHttpProxy = new System.Windows.Forms.Label();
+            this.lHttpPort = new System.Windows.Forms.Label();
+            this.lHttpsPort = new System.Windows.Forms.Label();
+            this.txtAppointHttpPort = new System.Windows.Forms.TextBox();
+            this.txtAppointHttpsPort = new System.Windows.Forms.TextBox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bCleanUp = new System.Windows.Forms.Button();
             this.tlpButton_Start = new System.Windows.Forms.TableLayoutPanel();
@@ -478,6 +482,10 @@
             this.tlpExternalProxy.Controls.Add(this.cbEnable_EXTHttp, 0, 1);
             this.tlpExternalProxy.Controls.Add(this.txtEXTHttpIP, 1, 1);
             this.tlpExternalProxy.Controls.Add(this.lHttpProxy, 2, 1);
+            this.tlpExternalProxy.Controls.Add(this.lHttpPort, 4, 1);
+            this.tlpExternalProxy.Controls.Add(this.lHttpsPort, 4, 2);
+            this.tlpExternalProxy.Controls.Add(this.txtAppointHttpPort, 5, 1);
+            this.tlpExternalProxy.Controls.Add(this.txtAppointHttpsPort, 5, 2);
             this.tlpExternalProxy.Name = "tlpExternalProxy";
             // 
             // lHttpsProxy
@@ -527,6 +535,28 @@
             // 
             resources.ApplyResources(this.lHttpProxy, "lHttpProxy");
             this.lHttpProxy.Name = "lHttpProxy";
+            // 
+            // lHttpPort
+            // 
+            resources.ApplyResources(this.lHttpPort, "lHttpPort");
+            this.lHttpPort.Name = "lHttpPort";
+            // 
+            // lHttpsPort
+            // 
+            resources.ApplyResources(this.lHttpsPort, "lHttpsPort");
+            this.lHttpsPort.Name = "lHttpsPort";
+            // 
+            // txtAppointHttpPort
+            // 
+            this.txtAppointHttpPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtAppointHttpPort, "txtAppointHttpPort");
+            this.txtAppointHttpPort.Name = "txtAppointHttpPort";
+            // 
+            // txtAppointHttpsPort
+            // 
+            this.txtAppointHttpsPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtAppointHttpsPort, "txtAppointHttpsPort");
+            this.txtAppointHttpsPort.Name = "txtAppointHttpsPort";
             // 
             // tlpButton
             // 
@@ -1035,5 +1065,9 @@
         private System.Windows.Forms.TextBox txtEXTHttpPort;
         private System.Windows.Forms.TextBox txtEXTHttpIP;
         private System.Windows.Forms.Label lHttpProxy;
+        private System.Windows.Forms.Label lHttpPort;
+        private System.Windows.Forms.Label lHttpsPort;
+        private System.Windows.Forms.TextBox txtAppointHttpPort;
+        private System.Windows.Forms.TextBox txtAppointHttpsPort;
     }
 }

@@ -218,6 +218,8 @@ namespace WinsockPacketEditor
                 this.cbEnable_EXTHttps.Checked = Socket_Cache.SocketProxy.Enable_EXTHttps;
                 this.txtEXTHttpsIP.Text = Socket_Cache.SocketProxy.EXTHttpsIP;
                 this.txtEXTHttpsPort.Text = Socket_Cache.SocketProxy.EXTHttpsPort.ToString();
+                this.txtAppointHttpPort.Text = Socket_Cache.SocketProxy.AppointHttpPort;
+                this.txtAppointHttpsPort.Text = Socket_Cache.SocketProxy.AppointHttpsPort;
             }
             catch (Exception ex)
             {
@@ -253,6 +255,8 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.Enable_EXTHttps = this.cbEnable_EXTHttps.Checked;
                 Socket_Cache.SocketProxy.EXTHttpsIP = this.txtEXTHttpsIP.Text.Trim();
                 Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
+                Socket_Cache.SocketProxy.AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
+                Socket_Cache.SocketProxy.AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
 
                 Socket_Operation.SaveConfigs_SocketProxy();
             }
@@ -331,7 +335,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.txtEXTHttpIP.Enabled = this.txtEXTHttpPort.Enabled = this.cbEnable_EXTHttp.Checked;
+                this.txtEXTHttpIP.Enabled = this.txtEXTHttpPort.Enabled = this.txtAppointHttpPort.Enabled = this.cbEnable_EXTHttp.Checked;
             }
             catch (Exception ex)
             {
@@ -348,7 +352,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.txtEXTHttpsIP.Enabled = this.txtEXTHttpsPort.Enabled = this.cbEnable_EXTHttps.Checked;
+                this.txtEXTHttpsIP.Enabled = this.txtEXTHttpsPort.Enabled = this.txtAppointHttpsPort.Enabled = this.cbEnable_EXTHttps.Checked;
             }
             catch (Exception ex)
             {
@@ -510,6 +514,7 @@ namespace WinsockPacketEditor
                 {
                     string HttpIP = this.txtEXTHttpIP.Text.Trim();
                     ushort HttpPort = ushort.Parse(this.txtEXTHttpPort.Text.Trim());
+                    string AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
 
                     if (string.IsNullOrEmpty(HttpIP) || HttpPort < 1)
                     {
@@ -520,12 +525,18 @@ namespace WinsockPacketEditor
                     {
                         return false;
                     }
+
+                    if (string.IsNullOrEmpty(AppointHttpPort))
+                    {
+                        return false;
+                    }                    
                 }
 
                 if (this.cbEnable_EXTHttps.Checked)
                 {
                     string HttpsIP = this.txtEXTHttpsIP.Text.Trim();
                     ushort HttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
+                    string AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
 
                     if (string.IsNullOrEmpty(HttpsIP) || HttpsPort < 1)
                     {
@@ -533,6 +544,11 @@ namespace WinsockPacketEditor
                     }
 
                     if (!Socket_Operation.IsIPv4(HttpsIP))
+                    {
+                        return false;
+                    }
+
+                    if (string.IsNullOrEmpty(AppointHttpsPort))
                     {
                         return false;
                     }

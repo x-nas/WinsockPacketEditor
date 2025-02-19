@@ -268,6 +268,30 @@
   <data name="lHttpProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>362, 5</value>
   </data>
+  <data name="lHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 7</value>
+  </data>
+  <data name="lHttpPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 23</value>
+  </data>
+  <data name="lHttpPort.Text" xml:space="preserve">
+    <value>Appoint Port:</value>
+  </data>
+  <data name="lHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>457, 36</value>
+  </data>
+  <data name="lHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>85, 23</value>
+  </data>
+  <data name="lHttpsPort.Text" xml:space="preserve">
+    <value>Appoint Port:</value>
+  </data>
+  <data name="txtAppointHttpPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>548, 7</value>
+  </data>
+  <data name="txtAppointHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>548, 36</value>
+  </data>
   <data name="bCleanUp.Text" xml:space="preserve">
     <value>Clear
 (&amp;C)</value>
@@ -283,7 +307,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAWgBAQFoAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAXABAQFwAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
