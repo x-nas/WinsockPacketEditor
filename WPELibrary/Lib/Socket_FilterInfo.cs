@@ -4,18 +4,6 @@ namespace WPELibrary.Lib
 {
     public class Socket_FilterInfo
     {
-        #region//序号
-
-        protected Guid fid;
-
-        public Guid FID
-        {
-            get { return fid; }
-            set { fid = value; }
-        }
-
-        #endregion
-
         #region//是否启用
 
         protected bool isenable;
@@ -27,6 +15,18 @@ namespace WPELibrary.Lib
         }
 
         #endregion
+
+        #region//序号
+
+        protected Guid fid;
+
+        public Guid FID
+        {
+            get { return fid; }
+            set { fid = value; }
+        }
+
+        #endregion        
 
         #region//滤镜名称
 

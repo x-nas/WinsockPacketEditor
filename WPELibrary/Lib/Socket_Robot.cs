@@ -18,8 +18,7 @@ namespace WPELibrary.Lib
         private CancellationTokenSource cts;
         private DataTable RobotInstruction = new DataTable();
         public BackgroundWorker Worker = new BackgroundWorker();
-        private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();
-        private Socket_Send ss;
+        private readonly WindowsInput.InputSimulator sim = new WindowsInput.InputSimulator();        
 
         #region//初始化
 
@@ -88,11 +87,6 @@ namespace WPELibrary.Lib
             {
                 if (this.Worker.IsBusy)
                 {
-                    if (ss != null)
-                    { 
-                        ss.StopSend();
-                    }
-
                     if (this.cts != null)
                     {
                         this.cts.Cancel();
@@ -141,11 +135,19 @@ namespace WPELibrary.Lib
                                     if (!string.IsNullOrEmpty(sContent))
                                     {
                                         Guid SID = Guid.Parse(sContent);
-                                        this.ss = Socket_Cache.Send.DoSend(SID);
+                                        Socket_Send ss = Socket_Cache.Send.DoSend(SID);
 
-                                        while (this.ss.Worker.IsBusy)
+                                        while (ss.Worker.IsBusy)
                                         {
-                                            Socket_Operation.DoSleepAsync(10, this.cts.Token).Wait();
+                                            if (this.Worker.CancellationPending)
+                                            { 
+                                                ss.StopSend();
+
+                                                e.Cancel = true;
+                                                return;
+                                            }
+
+                                            Thread.Sleep(100);
                                         }
                                     }
 

@@ -5,6 +5,18 @@ namespace WPELibrary.Lib
 {
     public class Socket_SendInfo
     {
+        #region//是否启用
+
+        protected bool isenable;
+
+        public bool IsEnable
+        {
+            get { return isenable; }
+            set { isenable = value; }
+        }
+
+        #endregion
+
         #region//序号
 
         protected Guid sid;
@@ -15,7 +27,7 @@ namespace WPELibrary.Lib
             set { sid = value; }
         }
 
-        #endregion
+        #endregion        
 
         #region//名称
 
@@ -91,8 +103,17 @@ namespace WPELibrary.Lib
 
         #region//Socket_SendInfo
 
-        public Socket_SendInfo(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
+        public Socket_SendInfo(
+            bool IsEnable, 
+            Guid SID, 
+            string SName, 
+            bool SSystemSocket, 
+            int SLoopCNT, 
+            int SLoopINT, 
+            DataTable SCollection, 
+            string SNotes)
         {
+            this.isenable = IsEnable;
             this.sid = SID;
             this.sname = SName;
             this.ssystemsocket = SSystemSocket;         

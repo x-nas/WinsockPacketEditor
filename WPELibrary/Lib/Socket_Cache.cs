@@ -3787,11 +3787,12 @@ namespace WPELibrary.Lib
             {
                 try
                 {
+                    bool IsEnable = false;
                     Guid RID = Guid.NewGuid();
                     int RNum = Socket_Cache.RobotList.lstRobot.Count + 1;
                     string RName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_27), RNum.ToString());
 
-                    AddRobot(RID, RName, Socket_Cache.Robot.InitInstructions());
+                    AddRobot(IsEnable, RID, RName, Socket_Cache.Robot.InitInstructions());
                 }
                 catch (Exception ex)
                 {
@@ -3799,13 +3800,13 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddRobot(Guid RID, string RName, DataTable RInstructions)
+            public static void AddRobot(bool IsEnable, Guid RID, string RName, DataTable RInstructions)
             {
                 try
                 {
                     if (RID != Guid.Empty && !string.IsNullOrEmpty(RName))
                     {
-                        Socket_RobotInfo sri = new Socket_RobotInfo(RID, RName, RInstructions);
+                        Socket_RobotInfo sri = new Socket_RobotInfo(IsEnable, RID, RName, RInstructions);
                         Socket_Cache.RobotList.RobotToList(sri);
                     }
                 }
@@ -3845,11 +3846,12 @@ namespace WPELibrary.Lib
 
                 try
                 {
+                    bool IsEnable = false;
                     Guid RID_New = Guid.NewGuid();
                     string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.RobotList.lstRobot[RIndex].RName);
                     DataTable RInstruction_Copy = Socket_Cache.RobotList.lstRobot[RIndex].RInstruction.Copy();
 
-                    Socket_Cache.Robot.AddRobot(RID_New, RName_Copy, RInstruction_Copy);
+                    Socket_Cache.Robot.AddRobot(IsEnable, RID_New, RName_Copy, RInstruction_Copy);
                     iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
                 }
                 catch (Exception ex)
@@ -3891,6 +3893,25 @@ namespace WPELibrary.Lib
                     if (RIndex > -1)
                     {
                         Socket_Cache.RobotList.lstRobot.RemoveAt(RIndex);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//设置机器人是否启用
+
+            public static void SetIsCheck_ByRobotIndex(int RIndex, bool bCheck)
+            {
+                try
+                {
+                    if (RIndex > -1)
+                    {
+                        Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
                     }
                 }
                 catch (Exception ex)
@@ -4348,8 +4369,10 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void DoRobot(Guid RID)
+            public static Socket_Robot DoRobot(Guid RID)
             {
+                Socket_Robot srReturn = null;
+
                 try
                 {
                     if (RID != Guid.Empty)
@@ -4360,8 +4383,8 @@ namespace WPELibrary.Lib
                         {
                             if (sri.RInstruction.Rows.Count > 0)
                             {
-                                Socket_Robot sr = new Socket_Robot();                                
-                                sr.StartRobot(sri.RName, sri.RInstruction);                             
+                                srReturn = new Socket_Robot();
+                                srReturn.StartRobot(sri.RName, sri.RInstruction);
                             }
                         }
                     }
@@ -4370,6 +4393,8 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return srReturn;
             }
 
             public static void DoRobot_ByHotKey(int HOTKEY_ID)
@@ -4658,6 +4683,12 @@ namespace WPELibrary.Lib
                 {
                     foreach (XElement xeRobot in xdoc.Root.Elements())
                     {
+                        bool IsEnable = false;
+                        if (xeRobot.Element("IsEnable") != null)
+                        {
+                            IsEnable = bool.Parse(xeRobot.Element("IsEnable").Value);
+                        }
+
                         Guid RID = Guid.Empty;
                         if (xeRobot.Element("ID") != null)
                         {
@@ -4690,7 +4721,7 @@ namespace WPELibrary.Lib
                             }
                         }
 
-                        Socket_Cache.Robot.AddRobot(RID, RName, RInstruction);
+                        Socket_Cache.Robot.AddRobot(IsEnable, RID, RName, RInstruction);
                     }
                 }
                 catch (Exception ex)
@@ -4790,12 +4821,14 @@ namespace WPELibrary.Lib
 
                         for (int i = Start; i < End; i++)
                         {
+                            string IsEnable = Socket_Cache.RobotList.lstRobot[i].IsEnable.ToString();
                             string sRID = Socket_Cache.RobotList.lstRobot[i].RID.ToString().ToUpper();
                             string sRName = Socket_Cache.RobotList.lstRobot[i].RName;
                             DataTable dtRInstruction = Socket_Cache.RobotList.lstRobot[i].RInstruction;
 
                             XElement xeRobot =
                                 new XElement("Robot",
+                                new XElement("IsEnable", IsEnable),
                                 new XElement("ID", sRID),
                                 new XElement("Name", sRName)
                                 );
@@ -5071,6 +5104,7 @@ namespace WPELibrary.Lib
             {
                 try
                 {
+                    bool IsEnable = false;
                     Guid SID = Guid.NewGuid();
                     int SNum = Socket_Cache.SendList.lstSend.Count + 1;
                     string SName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_162), SNum.ToString());
@@ -5079,7 +5113,7 @@ namespace WPELibrary.Lib
                     int SLoopINT = 1000;
                     string SNotes = string.Empty;
 
-                    AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection(), SNotes);
+                    Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection(), SNotes);
                 }
                 catch (Exception ex)
                 {
@@ -5087,13 +5121,13 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddSend(Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
+            public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
             {
                 try
                 {
                     if (SID != Guid.Empty && !string.IsNullOrEmpty(SName))
                     {
-                        Socket_SendInfo ssi = new Socket_SendInfo(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                        Socket_SendInfo ssi = new Socket_SendInfo(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                         Socket_Cache.SendList.SendToList(ssi);
                     }
                 }
@@ -5137,6 +5171,7 @@ namespace WPELibrary.Lib
 
                 try
                 {
+                    bool IsEnable_Copy = false;
                     Guid SID_New = Guid.NewGuid();
                     string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.SendList.lstSend[SIndex].SName);
                     bool SSystemSocket_Copy = Socket_Cache.SendList.lstSend[SIndex].SSystemSocket;                
@@ -5145,7 +5180,7 @@ namespace WPELibrary.Lib
                     DataTable SCollection_Copy = Socket_Cache.SendList.lstSend[SIndex].SCollection.Copy();
                     string SNotes_Copy = Socket_Cache.SendList.lstSend[SIndex].SNotes;
 
-                    Socket_Cache.Send.AddSend(SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
+                    Socket_Cache.Send.AddSend(IsEnable_Copy, SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
                     iReturn = Socket_Cache.SendList.lstSend.Count - 1;
                 }
                 catch (Exception ex)
@@ -5199,7 +5234,7 @@ namespace WPELibrary.Lib
 
             #region//执行发送
 
-            private static void DoSend_ByIndex(int SendListIndex)
+            public static void DoSend_ByIndex(int SendListIndex)
             {
                 try
                 {
@@ -5298,6 +5333,25 @@ namespace WPELibrary.Lib
             }
 
             #endregion                        
+
+            #region//设置发送是否启用
+
+            public static void SetIsCheck_BySendIndex(int SIndex, bool bCheck)
+            {
+                try
+                {
+                    if (SIndex > -1)
+                    {
+                        Socket_Cache.SendList.lstSend[SIndex].IsEnable = bCheck;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
 
             #region//保存发送集（对话框）
 
@@ -5823,6 +5877,7 @@ namespace WPELibrary.Lib
 
                         for (int i = Start; i < End; i++)
                         {
+                            string IsEnable = Socket_Cache.SendList.lstSend[i].IsEnable.ToString();
                             string SID = Socket_Cache.SendList.lstSend[i].SID.ToString().ToUpper();
                             string SName = Socket_Cache.SendList.lstSend[i].SName;
                             string SSystemSocket = Socket_Cache.SendList.lstSend[i].SSystemSocket.ToString();                       
@@ -5833,6 +5888,7 @@ namespace WPELibrary.Lib
 
                             XElement xeSend =
                                 new XElement("Send",
+                                new XElement("IsEnable", IsEnable),
                                 new XElement("ID", SID),
                                 new XElement("Name", SName),
                                 new XElement("SystemSocket", SSystemSocket),                            
@@ -5972,6 +6028,12 @@ namespace WPELibrary.Lib
                 {
                     foreach (XElement xeSend in xdoc.Root.Elements())
                     {
+                        bool IsEnable = false;
+                        if (xeSend.Element("IsEnable") != null)
+                        {
+                            IsEnable = bool.Parse(xeSend.Element("IsEnable").Value);
+                        }
+
                         Guid SID = Guid.Empty;
                         if (xeSend.Element("ID") != null)
                         {
@@ -6046,7 +6108,7 @@ namespace WPELibrary.Lib
                             }
                         }
 
-                        Socket_Cache.Send.AddSend(SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                        Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                     }
                 }
                 catch (Exception ex)

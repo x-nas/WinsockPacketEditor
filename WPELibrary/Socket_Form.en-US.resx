@@ -124,8 +124,15 @@
   <data name="cPacketID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cPacketID.Width" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
   <data name="cPacketType.HeaderText" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="cPacketType.Width" type="System.Int32, mscorlib">
+    <value>45</value>
   </data>
   <data name="cSocket.HeaderText" xml:space="preserve">
     <value>Socket</value>
@@ -133,11 +140,20 @@
   <data name="cFrom.HeaderText" xml:space="preserve">
     <value>Local Address</value>
   </data>
+  <data name="cFrom.Width" type="System.Int32, mscorlib">
+    <value>96</value>
+  </data>
   <data name="cTo.HeaderText" xml:space="preserve">
     <value>Remote Address</value>
   </data>
+  <data name="cTo.Width" type="System.Int32, mscorlib">
+    <value>110</value>
+  </data>
   <data name="cLen.HeaderText" xml:space="preserve">
     <value>Len</value>
+  </data>
+  <data name="cLen.Width" type="System.Int32, mscorlib">
+    <value>40</value>
   </data>
   <data name="cData.HeaderText" xml:space="preserve">
     <value>Packet Data</value>
@@ -152,28 +168,28 @@
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlTotal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+    <value>37, 17</value>
   </data>
   <data name="tlTotal.Text" xml:space="preserve">
     <value>Total:</value>
   </data>
   <data name="tlSplit1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlFilterExecute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 20</value>
+    <value>72, 17</value>
   </data>
   <data name="tlFilterExecute.Text" xml:space="preserve">
     <value>Filter EXEC:</value>
   </data>
   <data name="tlSplit4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlQueue.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlQueue.Size" type="System.Drawing.Size, System.Drawing">
-    <value>42, 20</value>
+    <value>42, 17</value>
   </data>
   <data name="tlQueue.Text" xml:space="preserve">
     <value>Buffer:</value>
@@ -182,22 +198,22 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="tlSplit2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlFilterSocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+    <value>37, 17</value>
   </data>
   <data name="tlFilterSocketList.Text" xml:space="preserve">
     <value>Filter:</value>
   </data>
   <data name="toolStripStatusLabel9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlSend.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlSend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 20</value>
+    <value>39, 17</value>
   </data>
   <data name="tlSend.Text" xml:space="preserve">
     <value>Send:</value>
@@ -206,13 +222,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="tlSplit3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlRecv.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlRecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>37, 20</value>
+    <value>37, 17</value>
   </data>
   <data name="tlRecv.Text" xml:space="preserve">
     <value>Recv:</value>
@@ -221,13 +237,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlSendTo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlSendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 20</value>
+    <value>53, 17</value>
   </data>
   <data name="tlSendTo.Text" xml:space="preserve">
     <value>SendTo:</value>
@@ -236,13 +252,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlRecvFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlRecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 20</value>
+    <value>66, 17</value>
   </data>
   <data name="tlRecvFrom.Text" xml:space="preserve">
     <value>RecvFrom:</value>
@@ -251,13 +267,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlWSASend.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlWSASend.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 20</value>
+    <value>65, 17</value>
   </data>
   <data name="tlWSASend.Text" xml:space="preserve">
     <value>WSASend:</value>
@@ -266,13 +282,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlWSARecv.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlWSARecv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 20</value>
+    <value>63, 17</value>
   </data>
   <data name="tlWSARecv.Text" xml:space="preserve">
     <value>WSARecv:</value>
@@ -281,13 +297,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel14.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlWSASendTo.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>79, 20</value>
+    <value>79, 17</value>
   </data>
   <data name="tlWSASendTo.Text" xml:space="preserve">
     <value>WSASendTo:</value>
@@ -296,13 +312,13 @@
     <value>Microsoft Sans Serif, 9pt, style=Bold</value>
   </data>
   <data name="toolStripStatusLabel17.Size" type="System.Drawing.Size, System.Drawing">
-    <value>10, 20</value>
+    <value>10, 17</value>
   </data>
   <data name="tlWSARecvFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlWSARecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 20</value>
+    <value>92, 17</value>
   </data>
   <data name="tlWSARecvFrom.Text" xml:space="preserve">
     <value>WSARecvFrom:</value>
@@ -843,16 +859,16 @@
     <value>4, 24</value>
   </data>
   <data name="tpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpPacketData.Text" xml:space="preserve">
     <value>[ Packet Data ]</value>
   </data>
   <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tlpHexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="hbPacketData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
     <value>Copy</value>
@@ -873,7 +889,7 @@
     <value>167, 204</value>
   </data>
   <data name="hbPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>834, 197</value>
+    <value>834, 198</value>
   </data>
   <data name="cmsHexBox_Send.Size" type="System.Drawing.Size, System.Drawing">
     <value>166, 22</value>
@@ -939,13 +955,13 @@
     <value>4, 24</value>
   </data>
   <data name="tpComparison.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpComparison.Text" xml:space="preserve">
     <value>[ Text Diff ]</value>
   </data>
   <data name="tlpComparison.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="bComparison_Exchange.Text" xml:space="preserve">
     <value>Exchange</value>
@@ -963,34 +979,34 @@
     <value>Text A</value>
   </data>
   <data name="pComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 173</value>
+    <value>275, 174</value>
   </data>
   <data name="rtbComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 165</value>
+    <value>267, 166</value>
   </data>
   <data name="pComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 173</value>
+    <value>275, 174</value>
   </data>
   <data name="rtbComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 165</value>
+    <value>267, 166</value>
   </data>
   <data name="pComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 173</value>
+    <value>284, 174</value>
   </data>
   <data name="rtbComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>276, 165</value>
+    <value>276, 166</value>
   </data>
   <data name="tpXOR.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
   <data name="tpXOR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpXOR.Text" xml:space="preserve">
     <value>[ XOR Calculation ]</value>
   </data>
   <data name="tlpPacketInfo_XOR.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="hbXOR_To.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
     <value>Copy</value>
@@ -1005,13 +1021,13 @@
     <value>Select All</value>
   </data>
   <data name="hbXOR_To.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 119</value>
+    <value>3, 120</value>
   </data>
   <data name="hbXOR_To.Size" type="System.Drawing.Size, System.Drawing">
     <value>834, 81</value>
   </data>
   <data name="tlpPacketInfo_XOR_Button.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 86</value>
+    <value>0, 87</value>
   </data>
   <data name="lXOR2.Location" type="System.Drawing.Point, System.Drawing">
     <value>489, 3</value>
@@ -1062,22 +1078,22 @@
     <value>Select All</value>
   </data>
   <data name="hbXOR_From.Size" type="System.Drawing.Size, System.Drawing">
-    <value>834, 80</value>
+    <value>834, 81</value>
   </data>
   <data name="tpEncoding.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
   <data name="tpEncoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpEncoding.Text" xml:space="preserve">
     <value>[ Encoding ]</value>
   </data>
   <data name="tlpPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Button.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 197</value>
+    <value>94, 198</value>
   </data>
   <data name="bPacketInfo_Decoding.Location" type="System.Drawing.Point, System.Drawing">
     <value>10, 120</value>
@@ -1095,7 +1111,7 @@
     <value>10, 83</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>518, 203</value>
+    <value>518, 204</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUnicode.Location" type="System.Drawing.Point, System.Drawing">
     <value>339, 138</value>
@@ -1254,31 +1270,31 @@
     <value>175, 21</value>
   </data>
   <data name="pPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 203</value>
+    <value>220, 204</value>
   </data>
   <data name="rtbPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
-    <value>212, 195</value>
+    <value>212, 196</value>
   </data>
   <data name="tpExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
   <data name="tpExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpExtraction.Text" xml:space="preserve">
     <value>[ Data Extraction ]</value>
   </data>
   <data name="tlpExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="pExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>834, 167</value>
+    <value>834, 168</value>
   </data>
   <data name="cmsExtraction.Size" type="System.Drawing.Size, System.Drawing">
     <value>157, 26</value>
   </data>
   <data name="rtbExtraction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>826, 159</value>
+    <value>826, 160</value>
   </data>
   <data name="cmsExtraction_Export.Size" type="System.Drawing.Size, System.Drawing">
     <value>156, 22</value>
@@ -1302,7 +1318,7 @@
     <value>4, 24</value>
   </data>
   <data name="tpSystemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="tpSystemLog.Text" xml:space="preserve">
     <value>[ System Log ]</value>
@@ -1310,7 +1326,6 @@
   <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cLogID.Width" type="System.Int32, mscorlib">
     <value>44</value>
   </data>
@@ -1336,7 +1351,7 @@
     <value>152, 54</value>
   </data>
   <data name="dgvLogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>840, 203</value>
+    <value>840, 204</value>
   </data>
   <data name="cmsLogList_CleanUp.Size" type="System.Drawing.Size, System.Drawing">
     <value>151, 22</value>
@@ -1357,19 +1372,19 @@
     <value>4, 24</value>
   </data>
   <data name="tpFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="tpFilterList.Text" xml:space="preserve">
     <value>[ Filter ]</value>
   </data>
   <data name="tlpFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="cmsFilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 176</value>
   </data>
   <data name="dgvFilterList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 167</value>
+    <value>213, 168</value>
   </data>
   <data name="cmsFilterList_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
@@ -1454,19 +1469,19 @@
     <value>4, 24</value>
   </data>
   <data name="tpSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="tpSendList.Text" xml:space="preserve">
     <value>[ Send ]</value>
   </data>
   <data name="tlpSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="cmsSendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 176</value>
   </data>
   <data name="dgvSendList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 168</value>
+    <value>213, 169</value>
   </data>
   <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
@@ -1519,23 +1534,29 @@
   <data name="cmsSendList_Delete.Text" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="tsSendList_Start.Text" xml:space="preserve">
+    <value>Start SendList</value>
+  </data>
+  <data name="tsSendList_Stop.Text" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="tpRobotList.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 24</value>
   </data>
   <data name="tpRobotList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="tpRobotList.Text" xml:space="preserve">
     <value>[ Robot ]</value>
   </data>
   <data name="tlpRobotList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 203</value>
+    <value>219, 204</value>
   </data>
   <data name="cmsRobotList.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 176</value>
   </data>
   <data name="dgvRobotList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>213, 168</value>
+    <value>213, 169</value>
   </data>
   <data name="cmsRobotList_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
@@ -1593,6 +1614,12 @@
   </data>
   <data name="tsRobotList_Save.Text" xml:space="preserve">
     <value>Save Robot List</value>
+  </data>
+  <data name="tsRobotList_Start.Text" xml:space="preserve">
+    <value>Start RobotList</value>
+  </data>
+  <data name="tsRobotList_Stop.Text" xml:space="preserve">
+    <value>Stop</value>
   </data>
   <data name="tsRobotList_Add.Text" xml:space="preserve">
     <value>Add Robot</value>

@@ -12,6 +12,7 @@ using System.Text;
 using WPELibrary.Lib.NativeMethods;
 using System.Threading.Tasks;
 using System.Data;
+using System.Threading;
 
 namespace WPELibrary
 {
@@ -1777,6 +1778,26 @@ namespace WPELibrary
 
         #region//发送列表操作
 
+        private void dgvSendList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvSendList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+                {
+                    int SIndex = e.RowIndex;
+                    bool bCheck = !bool.Parse(dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+                    dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
+
+                    Socket_Cache.Send.SetIsCheck_BySendIndex(SIndex, bCheck);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         private void dgvSendList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -1814,6 +1835,25 @@ namespace WPELibrary
             }
         }
 
+        private void tsSendList_Start_Click(object sender, EventArgs e)
+        {
+            if (dgvSendList.Rows.Count > 0)
+            {
+                if (!this.bgwSendList.IsBusy)
+                {
+                    this.tsSendList_Start.Enabled = false;
+                    this.tsSendList_Stop.Enabled = true;
+
+                    this.bgwSendList.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void tsSendList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwSendList.CancelAsync();
+        }
+
         private void tsSendList_Add_Click(object sender, EventArgs e)
         {
             Socket_Cache.Send.AddSend_New();
@@ -1829,7 +1869,75 @@ namespace WPELibrary
 
         #endregion
 
+        #region//执行发送列表（异步）
+
+        private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                {
+                    if (ssi.IsEnable)
+                    {
+                        Socket_Send ss = Socket_Cache.Send.DoSend(ssi.SID);
+
+                        while (ss.Worker.IsBusy)
+                        {
+                            if (this.bgwSendList.CancellationPending)
+                            { 
+                                ss.StopSend();
+
+                                e.Cancel = true;
+                                return;
+                            }
+
+                            Thread.Sleep(100);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.tsSendList_Start.Enabled = true;
+                this.tsSendList_Stop.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//机器人列表操作
+
+        private void dgvRobotList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvRobotList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+                {
+                    int RIndex = e.RowIndex;
+                    bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+                    dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
+
+                    Socket_Cache.Robot.SetIsCheck_ByRobotIndex(RIndex, bCheck);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         private void dgvRobotList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1868,6 +1976,25 @@ namespace WPELibrary
             }
         }
 
+        private void tsRobotList_Start_Click(object sender, EventArgs e)
+        {
+            if (dgvRobotList.Rows.Count > 0)
+            {
+                if (!this.bgwRobotList.IsBusy)
+                {
+                    this.tsRobotList_Start.Enabled = false;
+                    this.tsRobotList_Stop.Enabled = true;
+
+                    this.bgwRobotList.RunWorkerAsync();
+                }
+            }
+        }
+
+        private void tsRobotList_Stop_Click(object sender, EventArgs e)
+        {
+            this.bgwRobotList.CancelAsync();
+        }
+
         private void tsRobotList_Add_Click(object sender, EventArgs e)
         {
             Socket_Cache.Robot.AddRobot_New();
@@ -1878,6 +2005,54 @@ namespace WPELibrary
             if (dgvRobotList.Rows.Count > 0)
             {
                 Socket_Cache.RobotList.CleanUpRobotList_Dialog();
+            }
+        }
+
+        #endregion
+
+        #region//执行机器人列表（异步）
+
+        private void bgwRobotList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                foreach (Socket_RobotInfo sri in Socket_Cache.RobotList.lstRobot)
+                {
+                    if (sri.IsEnable)
+                    {
+                        Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID);
+
+                        while (sr.Worker.IsBusy)
+                        {
+                            if (this.bgwRobotList.CancellationPending)
+                            {
+                                sr.StopRobot();
+
+                                e.Cancel = true;
+                                return;
+                            }
+
+                            Thread.Sleep(100);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwRobotList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.tsRobotList_Start.Enabled = true;
+                this.tsRobotList_Stop.Enabled = false;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2430,6 +2605,9 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+
+
 
         #endregion        
     }
