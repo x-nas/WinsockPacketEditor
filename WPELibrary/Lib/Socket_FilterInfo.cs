@@ -100,6 +100,26 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//指定端口
+
+        protected bool appointport;
+
+        public bool AppointPort
+        {
+            get { return appointport; }
+            set { appointport = value; }
+        }
+
+        protected decimal portcontent;
+
+        public decimal PortContent
+        {
+            get { return portcontent; }
+            set { portcontent = value; }
+        }
+
+        #endregion
+
         #region//模式
 
         protected Socket_Cache.Filter.FilterMode fmode;
@@ -255,7 +275,9 @@ namespace WPELibrary.Lib
             bool AppointSocket, 
             decimal SocketContent, 
             bool AppointLength, 
-            decimal LengthContent, 
+            decimal LengthContent,
+            bool AppointPort,
+            decimal PortContent,
             Socket_Cache.Filter.FilterMode FMode, 
             Socket_Cache.Filter.FilterAction FAction,
             bool IsExecute,
@@ -278,6 +300,8 @@ namespace WPELibrary.Lib
             this.socketcontent = SocketContent;
             this.appointlength = AppointLength;
             this.lengthcontent = LengthContent;
+            this.appointport = AppointPort;
+            this.portcontent = PortContent;
             this.fmode = FMode;
             this.faction = FAction;
             this.isexecute = IsExecute;

@@ -228,22 +228,31 @@
     <value>210, 63</value>
   </data>
   <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>43, 3</value>
+    <value>79, 3</value>
   </data>
   <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 17</value>
+    <value>70, 17</value>
   </data>
   <data name="lProgressionStep.Text" xml:space="preserve">
-    <value>Step</value>
+    <value>Step Value</value>
   </data>
   <data name="gbFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 85</value>
+    <value>303, 85</value>
   </data>
   <data name="gbFilterAppoint.Text" xml:space="preserve">
     <value>[ Appoint Type ]</value>
   </data>
   <data name="tlpFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>253, 63</value>
+    <value>297, 63</value>
+  </data>
+  <data name="nudFilter_PortContent.Location" type="System.Drawing.Point, System.Drawing">
+    <value>214, 3</value>
+  </data>
+  <data name="cbFilter_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>160, 6</value>
+  </data>
+  <data name="cbFilter_AppointPort.Text" xml:space="preserve">
+    <value>Port</value>
   </data>
   <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>75, 30</value>
@@ -264,26 +273,23 @@
     <value>75, 3</value>
   </data>
   <data name="gbFilterAction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 125</value>
+    <value>303, 125</value>
   </data>
   <data name="gbFilterAction.Text" xml:space="preserve">
     <value>[ Action ]</value>
   </data>
   <data name="tlpFilterAction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>253, 103</value>
+    <value>297, 103</value>
   </data>
   <data name="cbbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 65</value>
+    <value>90, 66</value>
   </data>
   <data name="cbbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 25</value>
+    <value>201, 25</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cbbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
     <value>18</value>
-  </data>
-  <data name="rbFilterAction_Intercept.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 29</value>
   </data>
   <data name="rbFilterAction_Intercept.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 21</value>
@@ -292,37 +298,34 @@
     <value>Intercept</value>
   </data>
   <data name="rbFilterAction_Replace.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 22</value>
+    <value>78, 23</value>
   </data>
   <data name="rbFilterAction_Replace.Text" xml:space="preserve">
     <value>Replace</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 7.5pt</value>
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Location" type="System.Drawing.Point, System.Drawing">
     <value>90, 5</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 20</value>
+    <value>201, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Text" xml:space="preserve">
     <value>No Modify - Display</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 7.5pt</value>
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 29</value>
+    <value>90, 30</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>157, 21</value>
+    <value>201, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Text" xml:space="preserve">
     <value>No Modify - No Display</value>
-  </data>
-  <data name="cbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 65</value>
   </data>
   <data name="cbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 21</value>
@@ -403,25 +406,25 @@
     <value>WSARecvFrom</value>
   </data>
   <data name="tlpFilterNameAndAppoint.Location" type="System.Drawing.Point, System.Drawing">
-    <value>265, 0</value>
+    <value>309, 0</value>
   </data>
   <data name="tlpFilterNameAndAppoint.Size" type="System.Drawing.Size, System.Drawing">
-    <value>397, 125</value>
+    <value>353, 125</value>
   </data>
   <data name="gbFilterAppoint_Advance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>391, 63</value>
+    <value>347, 63</value>
   </data>
   <data name="gbFilterAppoint_Advance.Text" xml:space="preserve">
     <value>[ Advance Appoint ]</value>
   </data>
   <data name="tlpFilterAppoint_Advance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>385, 41</value>
+    <value>341, 41</value>
   </data>
   <data name="txtFilter_HeaderContent.Location" type="System.Drawing.Point, System.Drawing">
     <value>82, 6</value>
   </data>
   <data name="txtFilter_HeaderContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>297, 23</value>
+    <value>253, 23</value>
   </data>
   <data name="cbFilter_AppointHeader.Size" type="System.Drawing.Size, System.Drawing">
     <value>70, 23</value>
@@ -430,64 +433,64 @@
     <value>Header</value>
   </data>
   <data name="gbFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>391, 62</value>
+    <value>347, 62</value>
   </data>
   <data name="gbFilterName.Text" xml:space="preserve">
     <value>[ Filter Name ]</value>
   </data>
   <data name="tlpFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>385, 40</value>
+    <value>341, 40</value>
   </data>
   <data name="txtFilterName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 23</value>
+    <value>329, 23</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>265, 125</value>
+    <value>309, 125</value>
   </data>
   <data name="tlpFilterModifyFromAndMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>397, 85</value>
+    <value>353, 85</value>
   </data>
   <data name="gbFilterMode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>280, 0</value>
+    <value>250, 0</value>
   </data>
   <data name="gbFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 85</value>
+    <value>100, 85</value>
   </data>
   <data name="gbFilterMode.Text" xml:space="preserve">
     <value>[ Mode ]</value>
   </data>
   <data name="tlpFilterMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>108, 63</value>
+    <value>94, 63</value>
   </data>
   <data name="rbFilterMode_Advanced.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 21</value>
+    <value>82, 21</value>
   </data>
   <data name="rbFilterMode_Advanced.Text" xml:space="preserve">
     <value>Advanced</value>
   </data>
   <data name="rbFilterMode_Normal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 21</value>
+    <value>82, 21</value>
   </data>
   <data name="rbFilterMode_Normal.Text" xml:space="preserve">
     <value>Normal</value>
   </data>
   <data name="gbFilterModifyFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>271, 85</value>
+    <value>241, 85</value>
   </data>
   <data name="gbFilterModifyFrom.Text" xml:space="preserve">
     <value>[ Starting Modify From ]</value>
   </data>
   <data name="tlpFilterModifyFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>265, 63</value>
+    <value>235, 63</value>
   </data>
   <data name="rbFilterModifyFrom_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>253, 21</value>
+    <value>223, 21</value>
   </data>
   <data name="rbFilterModifyFrom_Position.Text" xml:space="preserve">
     <value>Position of the chain</value>
   </data>
   <data name="rbFilterModifyFrom_Head.Size" type="System.Drawing.Size, System.Drawing">
-    <value>253, 21</value>
+    <value>223, 21</value>
   </data>
   <data name="rbFilterModifyFrom_Head.Text" xml:space="preserve">
     <value>Beginning of the packet</value>

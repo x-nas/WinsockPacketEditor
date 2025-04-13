@@ -74,6 +74,8 @@ namespace WPELibrary
             this.lProgressionStep = new System.Windows.Forms.Label();
             this.gbFilterAppoint = new System.Windows.Forms.GroupBox();
             this.tlpFilterAppoint = new System.Windows.Forms.TableLayoutPanel();
+            this.nudFilter_PortContent = new System.Windows.Forms.NumericUpDown();
+            this.cbFilter_AppointPort = new System.Windows.Forms.CheckBox();
             this.nudFilter_LengthContent = new System.Windows.Forms.NumericUpDown();
             this.cbFilter_AppointLength = new System.Windows.Forms.CheckBox();
             this.cbFilter_AppointSocket = new System.Windows.Forms.CheckBox();
@@ -130,6 +132,7 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudProgressionStep)).BeginInit();
             this.gbFilterAppoint.SuspendLayout();
             this.tlpFilterAppoint.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_PortContent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFilter_LengthContent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFilter_SocketContent)).BeginInit();
             this.gbFilterAction.SuspendLayout();
@@ -509,11 +512,30 @@ namespace WPELibrary
             // tlpFilterAppoint
             // 
             resources.ApplyResources(this.tlpFilterAppoint, "tlpFilterAppoint");
+            this.tlpFilterAppoint.Controls.Add(this.nudFilter_PortContent, 4, 0);
+            this.tlpFilterAppoint.Controls.Add(this.cbFilter_AppointPort, 3, 0);
             this.tlpFilterAppoint.Controls.Add(this.nudFilter_LengthContent, 1, 1);
             this.tlpFilterAppoint.Controls.Add(this.cbFilter_AppointLength, 0, 1);
             this.tlpFilterAppoint.Controls.Add(this.cbFilter_AppointSocket, 0, 0);
             this.tlpFilterAppoint.Controls.Add(this.nudFilter_SocketContent, 1, 0);
             this.tlpFilterAppoint.Name = "tlpFilterAppoint";
+            // 
+            // nudFilter_PortContent
+            // 
+            resources.ApplyResources(this.nudFilter_PortContent, "nudFilter_PortContent");
+            this.nudFilter_PortContent.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudFilter_PortContent.Name = "nudFilter_PortContent";
+            // 
+            // cbFilter_AppointPort
+            // 
+            resources.ApplyResources(this.cbFilter_AppointPort, "cbFilter_AppointPort");
+            this.cbFilter_AppointPort.Name = "cbFilter_AppointPort";
+            this.cbFilter_AppointPort.UseVisualStyleBackColor = true;
+            this.cbFilter_AppointPort.CheckedChanged += new System.EventHandler(this.cbFilter_AppointPort_CheckedChanged);
             // 
             // nudFilter_LengthContent
             // 
@@ -846,6 +868,7 @@ namespace WPELibrary
             this.gbFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudFilter_PortContent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFilter_LengthContent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudFilter_SocketContent)).EndInit();
             this.gbFilterAction.ResumeLayout(false);
@@ -940,5 +963,7 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Progression_Disable;
         private System.Windows.Forms.CheckBox cbFilterAction_Execute;
         private System.Windows.Forms.ComboBox cbbFilterAction_Execute;
+        private System.Windows.Forms.NumericUpDown nudFilter_PortContent;
+        private System.Windows.Forms.CheckBox cbFilter_AppointPort;
     }
 }

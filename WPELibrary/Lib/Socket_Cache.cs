@@ -1891,7 +1891,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, false, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, 0, false, 0, FilterMode, FilterAction, false, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -1923,7 +1923,7 @@ namespace WPELibrary.Lib
 
                         string sFSearch = Socket_Cache.Filter.GetFilterString_ByBytes(bBuffer);
 
-                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, 0, FilterMode, FilterAction, false, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, 0, false, 0, FilterMode, FilterAction, false, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
                     }
                 }
                 catch (Exception ex)
@@ -1942,6 +1942,8 @@ namespace WPELibrary.Lib
                 decimal SocketContent,
                 bool bAppointLength,
                 decimal LengthContent,
+                bool bAppointPort,
+                decimal PortContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
                 Socket_Cache.Filter.FilterAction FilterAction,
                 bool IsExecute,
@@ -1969,6 +1971,8 @@ namespace WPELibrary.Lib
                         SocketContent,
                         bAppointLength,
                         LengthContent,
+                        bAppointPort,
+                        PortContent,
                         FilterMode,
                         FilterAction,
                         IsExecute,
@@ -2004,6 +2008,8 @@ namespace WPELibrary.Lib
                 decimal SocketContent,
                 bool AppointLength,
                 decimal LengthContent,
+                bool AppointPort,
+                decimal PortContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
                 Socket_Cache.Filter.FilterAction FilterAction,
                 bool IsExecute,
@@ -2026,6 +2032,8 @@ namespace WPELibrary.Lib
                         Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent = SocketContent;
                         Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength = AppointLength;
                         Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent = LengthContent;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].AppointPort = AppointPort;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].PortContent = PortContent;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FMode = FilterMode;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FAction = FilterAction;
                         Socket_Cache.FilterList.lstFilter[iFIndex].IsExecute = IsExecute;
@@ -2100,6 +2108,8 @@ namespace WPELibrary.Lib
                     decimal SocketContent = Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent;
                     bool bAppointLength = Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength;
                     decimal LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
+                    bool bAppointPort = Socket_Cache.FilterList.lstFilter[iFIndex].AppointPort;
+                    decimal PortContent = Socket_Cache.FilterList.lstFilter[iFIndex].PortContent;
                     Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
                     Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
                     bool IsExecute = Socket_Cache.FilterList.lstFilter[iFIndex].IsExecute;
@@ -2123,6 +2133,8 @@ namespace WPELibrary.Lib
                         SocketContent,
                         bAppointLength,
                         LengthContent,
+                        bAppointPort,
+                        PortContent,
                         FMode,
                         FAction,
                         IsExecute,
@@ -2409,7 +2421,7 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否生效
 
-            public static bool CheckFilter_IsEffective(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_FilterInfo sfi)
+            public static bool CheckFilter_IsEffective(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, Socket_FilterInfo sfi)
             {
                 bool bResult = true;
 
@@ -2430,6 +2442,14 @@ namespace WPELibrary.Lib
                             if (sfi.AppointLength)
                             {
                                 if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointLength(bBuffer.Length, sfi.LengthContent))
+                                {
+                                    return false;
+                                }
+                            }
+
+                            if (sfi.AppointPort)
+                            {
+                                if (!Socket_Cache.Filter.CheckPacket_IsMatch_AppointPort(iSocket, ptType, sAddr, sfi.PortContent))
                                 {
                                     return false;
                                 }
@@ -2571,6 +2591,55 @@ namespace WPELibrary.Lib
                     if (iLen == dLengthContent)
                     {
                         bResult = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                }
+
+                return bResult;
+            }
+
+            #endregion
+
+            #region//检查是否匹配指定端口
+
+            public static bool CheckPacket_IsMatch_AppointPort(Int32 iSocket, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, decimal dPortContent)
+            {
+                bool bResult = false;
+
+                try
+                {
+                    string sPort = string.Empty;
+                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
+
+                    if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
+                    {
+                        string sIPFrom = sPacketIP.Split('|')[0];
+                        string sIPTo = sPacketIP.Split('|')[1];
+                        string sPortFrom = string.Empty;
+                        string sPortTo = string.Empty;
+
+                        if (!string.IsNullOrEmpty(sIPFrom) && sIPFrom.IndexOf(":") > 0)
+                        {
+                            sPortFrom = sIPFrom.Split(':')[1];
+
+                            if (sPortFrom.Equals(dPortContent.ToString()))
+                            {
+                                bResult = true;
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(sIPTo) && sIPTo.IndexOf(":") > 0)
+                        {
+                            sPortTo = sIPTo.Split(':')[1];
+
+                            if (sPortTo.Equals(dPortContent.ToString()))
+                            {
+                                bResult = true;
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -3107,7 +3176,7 @@ namespace WPELibrary.Lib
 
             #region//执行滤镜列表
 
-            public static Socket_Cache.Filter.FilterAction DoFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, byte[] bBuffer)
+            public static Socket_Cache.Filter.FilterAction DoFilterList(Int32 iSocket, byte[] bBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr)
             {
                 bool bBreak = false;
                 string sFName = string.Empty;
@@ -3118,7 +3187,7 @@ namespace WPELibrary.Lib
                     foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
                     {
                         sFName = sfi.FName;
-                        bool bIsEffective = Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bBuffer, ptType, sfi);
+                        bool bIsEffective = Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bBuffer, ptType, sAddr, sfi);
 
                         if (bIsEffective)
                         {
@@ -3269,7 +3338,7 @@ namespace WPELibrary.Lib
                 return faReturn;
             }
 
-            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Socket_Cache.SocketPacket.PacketType ptType, Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, int dwBufferCount, int BytesCNT)
+            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, int dwBufferCount, int BytesCNT)
             {
                 Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.None;
 
@@ -3295,7 +3364,7 @@ namespace WPELibrary.Lib
                             BytesLeft -= iBuffLen;
 
                             byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffers.buf, iBuffLen);                          
-                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(ptType, iSocket, bBuffer);
+                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(iSocket, bBuffer, ptType, sAddr);
                             Marshal.Copy(bBuffer, 0, lpBuffers.buf, iBuffLen);
 
                             faReturn = FilterAction;
@@ -3415,6 +3484,8 @@ namespace WPELibrary.Lib
                             string sFSocketContent = Socket_Cache.FilterList.lstFilter[i].SocketContent.ToString();
                             string sFAppointLength = Socket_Cache.FilterList.lstFilter[i].AppointLength.ToString();
                             string sFLengthContent = Socket_Cache.FilterList.lstFilter[i].LengthContent.ToString();
+                            string sFAppointPort = Socket_Cache.FilterList.lstFilter[i].AppointPort.ToString();
+                            string sFPortContent = Socket_Cache.FilterList.lstFilter[i].PortContent.ToString();
                             string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
                             string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
                             string sIsExecute = Socket_Cache.FilterList.lstFilter[i].IsExecute.ToString();
@@ -3437,6 +3508,8 @@ namespace WPELibrary.Lib
                                 new XElement("SocketContent", sFSocketContent),
                                 new XElement("AppointLength", sFAppointLength),
                                 new XElement("LengthContent", sFLengthContent),
+                                new XElement("AppointPort", sFAppointPort),
+                                new XElement("PortContent", sFPortContent),
                                 new XElement("Mode", sFMode),
                                 new XElement("Action", sFAction),
                                 new XElement("IsExecute", sIsExecute),
@@ -3613,6 +3686,18 @@ namespace WPELibrary.Lib
                             dFLengthContent = decimal.Parse(xeFilter.Element("LengthContent").Value);
                         }
 
+                        bool bAppointPort = false;
+                        if (xeFilter.Element("AppointPort") != null)
+                        {
+                            bAppointPort = bool.Parse(xeFilter.Element("AppointPort").Value);
+                        }
+
+                        decimal dFPortContent = 1;
+                        if (xeFilter.Element("PortContent") != null)
+                        {
+                            dFPortContent = decimal.Parse(xeFilter.Element("PortContent").Value);
+                        }
+
                         Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                         if (xeFilter.Element("Mode") != null)
                         {
@@ -3690,7 +3775,9 @@ namespace WPELibrary.Lib
                             bAppointSocket, 
                             dFSocketContent, 
                             bAppointLength, 
-                            dFLengthContent, 
+                            dFLengthContent,
+                            bAppointPort,
+                            dFPortContent,
                             FilterMode, 
                             FilterAction,
                             bIsExecute,
