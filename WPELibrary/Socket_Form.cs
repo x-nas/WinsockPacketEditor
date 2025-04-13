@@ -1881,18 +1881,21 @@ namespace WPELibrary
                     {
                         Socket_Send ss = Socket_Cache.Send.DoSend(ssi.SID);
 
-                        while (ss.Worker.IsBusy)
+                        if (ss != null)
                         {
-                            if (this.bgwSendList.CancellationPending)
-                            { 
-                                ss.StopSend();
+                            while (ss.Worker.IsBusy)
+                            {
+                                if (this.bgwSendList.CancellationPending)
+                                {
+                                    ss.StopSend();
 
-                                e.Cancel = true;
-                                return;
+                                    e.Cancel = true;
+                                    return;
+                                }
+
+                                Thread.Sleep(100);
                             }
-
-                            Thread.Sleep(100);
-                        }
+                        }                        
                     }
                 }
             }
@@ -2022,18 +2025,21 @@ namespace WPELibrary
                     {
                         Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID);
 
-                        while (sr.Worker.IsBusy)
+                        if (sr != null) 
                         {
-                            if (this.bgwRobotList.CancellationPending)
+                            while (sr.Worker.IsBusy)
                             {
-                                sr.StopRobot();
+                                if (this.bgwRobotList.CancellationPending)
+                                {
+                                    sr.StopRobot();
 
-                                e.Cancel = true;
-                                return;
+                                    e.Cancel = true;
+                                    return;
+                                }
+
+                                Thread.Sleep(100);
                             }
-
-                            Thread.Sleep(100);
-                        }
+                        }                        
                     }
                 }
             }
