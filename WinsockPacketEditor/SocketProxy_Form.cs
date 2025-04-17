@@ -7,6 +7,7 @@ using WPELibrary.Lib;
 using Be.Windows.Forms;
 using System.Threading.Tasks;
 using WPELibrary;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace WinsockPacketEditor
 {
@@ -115,6 +116,7 @@ namespace WinsockPacketEditor
                 this.Enable_EXTHttps_Changed();                
                 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
+                this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00");
             }
             catch (Exception ex)
             {
@@ -629,6 +631,7 @@ namespace WinsockPacketEditor
         {
             await this.CheckProxyState();
             this.ShowProxyInfo();
+            this.ShowProxyChart();
         }
 
         #endregion
@@ -1018,6 +1021,45 @@ namespace WinsockPacketEditor
         }
 
 
-        #endregion        
+        #endregion
+
+        #region//显示代理性能图表
+
+        private void ShowProxyChart()
+        {
+            try
+            {
+                double dProxySpeed = Socket_Cache.SocketProxy.ProxyTCP_Speed + Socket_Cache.SocketProxy.ProxyUDP_Speed;
+                Socket_Cache.SocketProxy.ProxyTCP_Speed = 0;
+                Socket_Cache.SocketProxy.ProxyUDP_Speed = 0;                
+           
+                this.Invoke((MethodInvoker)delegate
+                {
+                    Series sProxy = cProxyChart.Series[0];                    
+
+                    if (sProxy.Points.Count >= Socket_Cache.SocketProxy.MaxChartPoint)
+                    {
+                        sProxy.Points.RemoveAt(0);
+                    }
+
+                    double dChartProxySpeed = dProxySpeed / Socket_Cache.SocketProxy.MaxNetworkSpeed;
+
+                    if (dChartProxySpeed > 10)
+                    {
+                        dChartProxySpeed = 10;
+                    }
+
+                    sProxy.Points.AddY(dChartProxySpeed);
+
+                    this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), (dProxySpeed / 1024).ToString("0.00"));                    
+                });
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

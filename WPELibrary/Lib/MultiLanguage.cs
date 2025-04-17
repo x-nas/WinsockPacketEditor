@@ -181,6 +181,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_169 = { "已启用身份认证！", "Identity authentication enabled!" };
         public static string[] MutiLan_170 = { "已启用外部 HTTP 代理！", "External HTTP proxy enabled!" };
         public static string[] MutiLan_171 = { "已启用外部 HTTPS 代理！", "External HTTPS proxy enabled!" };
+        public static string[] MutiLan_172 = { "速率: {0} KB/s", "Speed: {0} KB/s" };
 
         #endregion
 

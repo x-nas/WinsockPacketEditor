@@ -921,6 +921,34 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//统计代理速率
+
+        public static void CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType protocolType, int ProxySpeed)
+        {
+            try
+            {
+                if (ProxySpeed > 0)
+                {
+                    switch (protocolType)
+                    {
+                        case Socket_Cache.SocketProxy.ProxyProtocolType.TCP:
+                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxyTCP_Speed, ProxySpeed);
+                            break;
+
+                        case Socket_Cache.SocketProxy.ProxyProtocolType.UDP:
+                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxyUDP_Speed, ProxySpeed);
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
+
         #region//判断文本框输入的字符类型
 
         public static bool CheckTextInput_IsDigit(char keyChar)

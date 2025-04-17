@@ -31,7 +31,7 @@ namespace WPELibrary.Lib
         { 
             Process = 0,
             Proxy = 1,
-        }
+        }        
 
         public enum PWType
         {
@@ -71,6 +71,7 @@ namespace WPELibrary.Lib
         public static class SocketProxy
         {
             public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT;
+            public static int ProxyTCP_Speed, ProxyUDP_Speed;
             public static IPAddress ProxyTCP_IP = IPAddress.Any;
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
             public static bool IsListening = false;
@@ -85,6 +86,8 @@ namespace WPELibrary.Lib
             public static int UDPCloseTime = 60;
             public static long Total_Request = 0;
             public static long Total_Response = 0;
+            public static int MaxChartPoint = 100;
+            public const long MaxNetworkSpeed = 100000;         
 
             #region//定义结构
 
@@ -143,6 +146,12 @@ namespace WPELibrary.Lib
             {
                 Request = 0,
                 Response = 1,
+            }
+
+            public enum ProxyProtocolType
+            {
+                TCP = 0,
+                UDP = 1,
             }
 
             #endregion
@@ -587,6 +596,8 @@ namespace WPELibrary.Lib
                 {
                     if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
+                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.TCP, bData.Length);
+
                         switch (spi.DomainType)
                         {
                             case Socket_Cache.SocketProxy.DomainType.Http:
@@ -657,6 +668,8 @@ namespace WPELibrary.Lib
 
                         if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
+                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.TCP, bytesRead);
+
                             switch (spi.DomainType)
                             { 
                                 case Socket_Cache.SocketProxy.DomainType.Http:
@@ -721,6 +734,8 @@ namespace WPELibrary.Lib
                     {
                         if (bData.Length > 0)
                         {
+                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.UDP, bData.Length);
+
                             if (bData[0].Equals(0) && bData[1].Equals(0) && bData[2].Equals(0))
                             {
                                 Socket_Cache.SocketProxy.AddressType addressType = (Socket_Cache.SocketProxy.AddressType)bData[3];
