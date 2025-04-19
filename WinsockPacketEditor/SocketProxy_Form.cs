@@ -116,7 +116,7 @@ namespace WinsockPacketEditor
                 this.Enable_EXTHttps_Changed();                
                 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
-                this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00");
+                this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00", "0.00");
             }
             catch (Exception ex)
             {
@@ -967,7 +967,38 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示代理信息（异步）
+        #region//显示选中的代理数据
+
+        private void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            try
+            {
+                byte[] bBuffer = null;
+                if (e.Node.Tag != null)
+                {
+                    bBuffer = e.Node.Tag as byte[];
+                }
+
+                if (bBuffer != null)
+                {
+                    DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
+                    this.hbData.ByteProvider = dbp;
+                }
+                else
+                {
+                    this.hbData.ByteProvider = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+
+        #endregion
+
+        #region//显示代理信息
 
         private void ShowProxyInfo()
         {
@@ -992,66 +1023,46 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示选中的代理数据
-
-        private void tvSocketProxy_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            try
-            {
-                byte[] bBuffer = null;
-                if (e.Node.Tag != null)
-                {
-                    bBuffer = e.Node.Tag as byte[];                  
-                }
-
-                if (bBuffer != null)
-                {
-                    DynamicByteProvider dbp = new DynamicByteProvider(bBuffer);
-                    this.hbData.ByteProvider = dbp;
-                }
-                else
-                {
-                    this.hbData.ByteProvider = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-
-        #endregion
-
         #region//显示代理性能图表
 
         private void ShowProxyChart()
         {
             try
             {
-                double dProxySpeed = Socket_Cache.SocketProxy.ProxyTCP_Speed + Socket_Cache.SocketProxy.ProxyUDP_Speed;
-                Socket_Cache.SocketProxy.ProxyTCP_Speed = 0;
-                Socket_Cache.SocketProxy.ProxyUDP_Speed = 0;                
+                double dProxySpeed_Uplink = Socket_Cache.SocketProxy.ProxySpeed_Uplink;
+                Socket_Cache.SocketProxy.ProxySpeed_Uplink = 0;
+                double dProxySpeed_Downlink = Socket_Cache.SocketProxy.ProxySpeed_Downlink;                
+                Socket_Cache.SocketProxy.ProxySpeed_Downlink = 0;                
            
                 this.Invoke((MethodInvoker)delegate
                 {
-                    Series sProxy = cProxyChart.Series[0];                    
-
-                    if (sProxy.Points.Count >= Socket_Cache.SocketProxy.MaxChartPoint)
+                    Series sProxy_Uplink = cProxyChart.Series[0];
+                    if (sProxy_Uplink.Points.Count >= Socket_Cache.SocketProxy.MaxChartPoint)
                     {
-                        sProxy.Points.RemoveAt(0);
+                        sProxy_Uplink.Points.RemoveAt(0);
                     }
 
-                    double dChartProxySpeed = dProxySpeed / Socket_Cache.SocketProxy.MaxNetworkSpeed;
-
-                    if (dChartProxySpeed > 10)
+                    double dChartProxySpeed_Uplink = dProxySpeed_Uplink / Socket_Cache.SocketProxy.MaxNetworkSpeed;
+                    if (dChartProxySpeed_Uplink > 10)
                     {
-                        dChartProxySpeed = 10;
+                        dChartProxySpeed_Uplink = 10;
+                    }
+                    sProxy_Uplink.Points.AddY(dChartProxySpeed_Uplink);
+
+                    Series sProxy_Downlink = cProxyChart.Series[1];
+                    if (sProxy_Downlink.Points.Count >= Socket_Cache.SocketProxy.MaxChartPoint)
+                    {
+                        sProxy_Downlink.Points.RemoveAt(0);
                     }
 
-                    sProxy.Points.AddY(dChartProxySpeed);
+                    double dChartProxySpeed_Downlink = dProxySpeed_Downlink / Socket_Cache.SocketProxy.MaxNetworkSpeed;
+                    if (dChartProxySpeed_Downlink > 10)
+                    {
+                        dChartProxySpeed_Downlink = 10;
+                    }
+                    sProxy_Downlink.Points.AddY(dChartProxySpeed_Downlink);
 
-                    this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), (dProxySpeed / 1024).ToString("0.00"));                    
+                    this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), (dProxySpeed_Uplink / 1024).ToString("0.00"), (dProxySpeed_Downlink / 1024).ToString("0.00"));                    
                 });
             }
             catch (Exception ex)

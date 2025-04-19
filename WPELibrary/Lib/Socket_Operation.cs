@@ -923,20 +923,20 @@ namespace WPELibrary.Lib
 
         #region//统计代理速率
 
-        public static void CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType protocolType, int ProxySpeed)
+        public static void CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType psType, int ProxySpeed)
         {
             try
             {
                 if (ProxySpeed > 0)
                 {
-                    switch (protocolType)
+                    switch (psType)
                     {
-                        case Socket_Cache.SocketProxy.ProxyProtocolType.TCP:
-                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxyTCP_Speed, ProxySpeed);
+                        case Socket_Cache.SocketProxy.ProxySpeedType.Uplink:
+                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxySpeed_Uplink, ProxySpeed);
                             break;
 
-                        case Socket_Cache.SocketProxy.ProxyProtocolType.UDP:
-                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxyUDP_Speed, ProxySpeed);
+                        case Socket_Cache.SocketProxy.ProxySpeedType.Downlink:
+                            Interlocked.Add(ref Socket_Cache.SocketProxy.ProxySpeed_Downlink, ProxySpeed);
                             break;
                     }
                 }

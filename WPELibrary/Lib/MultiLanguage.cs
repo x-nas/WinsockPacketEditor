@@ -52,7 +52,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_40 = { "结束拦截!", "Stop Intercepting!" };
         public static string[] MutiLan_41 = { "已开启极速模式!", "Speed mode has been activated!" };
         public static string[] MutiLan_42 = { "粘贴的不是有效的十六进制数据!", "The pasted data is not valid hex data!" };
-        public static string[] MutiLan_43 = { "已请求: {0}  已响应: {1}", "Request: {0} Response: {1}" };
+        public static string[] MutiLan_43 = { "请求: {0}  响应: {1}", "Request: {0} Response: {1}" };
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
@@ -181,7 +181,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_169 = { "已启用身份认证！", "Identity authentication enabled!" };
         public static string[] MutiLan_170 = { "已启用外部 HTTP 代理！", "External HTTP proxy enabled!" };
         public static string[] MutiLan_171 = { "已启用外部 HTTPS 代理！", "External HTTPS proxy enabled!" };
-        public static string[] MutiLan_172 = { "速率: {0} KB/s", "Speed: {0} KB/s" };
+        public static string[] MutiLan_172 = { "上行: {0} KB/s 下行: {1} KB/s", "Uplink: {0} KB/s Downlink: {1} KB/s" };
 
         #endregion
 

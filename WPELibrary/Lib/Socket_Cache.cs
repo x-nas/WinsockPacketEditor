@@ -71,7 +71,7 @@ namespace WPELibrary.Lib
         public static class SocketProxy
         {
             public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT;
-            public static int ProxyTCP_Speed, ProxyUDP_Speed;
+            public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
             public static IPAddress ProxyTCP_IP = IPAddress.Any;
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
             public static bool IsListening = false;
@@ -148,10 +148,10 @@ namespace WPELibrary.Lib
                 Response = 1,
             }
 
-            public enum ProxyProtocolType
+            public enum ProxySpeedType
             {
-                TCP = 0,
-                UDP = 1,
+                Uplink = 0,
+                Downlink = 1,
             }
 
             #endregion
@@ -596,7 +596,7 @@ namespace WPELibrary.Lib
                 {
                     if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.TCP, bData.Length);
+                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bData.Length);
 
                         switch (spi.DomainType)
                         {
@@ -668,7 +668,7 @@ namespace WPELibrary.Lib
 
                         if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
-                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.TCP, bytesRead);
+                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Downlink, bytesRead);
 
                             switch (spi.DomainType)
                             { 
@@ -734,8 +734,6 @@ namespace WPELibrary.Lib
                     {
                         if (bData.Length > 0)
                         {
-                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxyProtocolType.UDP, bData.Length);
-
                             if (bData[0].Equals(0) && bData[1].Equals(0) && bData[2].Equals(0))
                             {
                                 Socket_Cache.SocketProxy.AddressType addressType = (Socket_Cache.SocketProxy.AddressType)bData[3];
@@ -754,6 +752,7 @@ namespace WPELibrary.Lib
                                     {
                                         spi.ClientUDP_Time = DateTime.Now;
                                         Socket_Cache.SocketProxy.Total_Request += bUDP_Data.Length;
+                                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bUDP_Data.Length);
                                         Socket_Operation.SendUDPData(spi.ClientUDP, bUDP_Data, targetEndPoint);
                                     }
                                 }
@@ -769,6 +768,7 @@ namespace WPELibrary.Lib
                                 {
                                     spi.ClientUDP_Time = DateTime.Now;
                                     Socket_Cache.SocketProxy.Total_Response += bResponseData.Length;
+                                    Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Downlink, bResponseData.Length);
                                     Socket_Operation.SendUDPData(spi.ClientUDP, bResponseData, spi.ClientUDP_EndPoint);
                                 }
                             }
