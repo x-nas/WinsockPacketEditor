@@ -138,22 +138,13 @@
   <data name="btnOK.Text" xml:space="preserve">
     <value>Find（&amp;F）</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="chkMatchCase.Location" type="System.Drawing.Point, System.Drawing">
-    <value>307, 6</value>
-  </data>
-  <data name="chkMatchCase.Size" type="System.Drawing.Size, System.Drawing">
-    <value>95, 22</value>
-  </data>
-  <data name="chkMatchCase.Text" xml:space="preserve">
-    <value>Match Case</value>
-  </data>
   <data name="rbHex.Text" xml:space="preserve">
     <value>Hex</value>
   </data>
   <data name="rbString.Text" xml:space="preserve">
     <value>Text</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAoIAQAZgAAAICAAAABACAAKAgBAI4gBABAQAAAAQAgAChCAAC2KAUAMDAAAAEA

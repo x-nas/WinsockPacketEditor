@@ -281,11 +281,32 @@
   <data name="tlpFilterAction.Size" type="System.Drawing.Size, System.Drawing">
     <value>297, 103</value>
   </data>
+  <data name="cbbFilterAction_ExecuteType.Items" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="cbbFilterAction_ExecuteType.Items1" xml:space="preserve">
+    <value>Robot</value>
+  </data>
+  <data name="cbbFilterAction_ExecuteType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>87, 73</value>
+  </data>
+  <data name="cbbFilterAction_ExecuteType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>84, 25</value>
+  </data>
+  <data name="rbFilterAction_Change.Location" type="System.Drawing.Point, System.Drawing">
+    <value>90, 6</value>
+  </data>
+  <data name="rbFilterAction_Change.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 21</value>
+  </data>
+  <data name="rbFilterAction_Change.Text" xml:space="preserve">
+    <value>Change</value>
+  </data>
   <data name="cbbFilterAction_Execute.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 66</value>
+    <value>181, 73</value>
   </data>
   <data name="cbbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
-    <value>201, 25</value>
+    <value>113, 25</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cbbFilterAction_Execute.TabIndex" type="System.Int32, mscorlib">
@@ -298,34 +319,28 @@
     <value>Intercept</value>
   </data>
   <data name="rbFilterAction_Replace.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
+    <value>78, 21</value>
   </data>
   <data name="rbFilterAction_Replace.Text" xml:space="preserve">
     <value>Replace</value>
   </data>
-  <data name="rbFilterAction_NoModify_Display.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
   <data name="rbFilterAction_NoModify_Display.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 5</value>
+    <value>184, 6</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Size" type="System.Drawing.Size, System.Drawing">
-    <value>201, 21</value>
+    <value>107, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_Display.Text" xml:space="preserve">
-    <value>No Modify - Display</value>
-  </data>
-  <data name="rbFilterAction_NoModify_NoDisplay.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+    <value>Only Display</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>90, 30</value>
+    <value>184, 33</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>201, 21</value>
+    <value>107, 21</value>
   </data>
   <data name="rbFilterAction_NoModify_NoDisplay.Text" xml:space="preserve">
-    <value>No Modify - No Display</value>
+    <value>Not Display</value>
   </data>
   <data name="cbFilterAction_Execute.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 21</value>

@@ -25,6 +25,8 @@ namespace WPELibrary
         private bool FilterAppointPort = false;
         private Socket_Cache.Filter.FilterMode FilterMode;
         private Socket_Cache.Filter.FilterAction FilterAction;
+        private Socket_Cache.Filter.FilterExecuteType FilterExecuteType;
+        private Guid SID = Guid.Empty;
         private Guid RID = Guid.Empty;
         private Socket_Cache.Filter.FilterFunction FilterFunction;        
         private Socket_Cache.Filter.FilterStartFrom FilterStartFrom;
@@ -81,6 +83,8 @@ namespace WPELibrary
                 this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
                 this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
                 this.IsExecute = Socket_Cache.FilterList.lstFilter[FilterIndex].IsExecute;
+                this.FilterExecuteType = Socket_Cache.FilterList.lstFilter[FilterIndex].FEType;
+                this.SID = Socket_Cache.FilterList.lstFilter[FilterIndex].SID;
                 this.RID = Socket_Cache.FilterList.lstFilter[FilterIndex].RID;
                 this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
                 this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
@@ -111,6 +115,10 @@ namespace WPELibrary
                         this.rbFilterAction_Intercept.Checked = true;
                         break;
 
+                    case Socket_Cache.Filter.FilterAction.Change:
+                        this.rbFilterAction_Change.Checked = true;
+                        break;
+
                     case Socket_Cache.Filter.FilterAction.NoModify_Display:
                         this.rbFilterAction_NoModify_Display.Checked = true;
                         break;
@@ -134,6 +142,18 @@ namespace WPELibrary
 
                 this.cbFilterAction_Execute.Checked = IsExecute;
                 this.FilterAction_ExecuteChange();
+
+                switch (FilterExecuteType)
+                { 
+                    case Socket_Cache.Filter.FilterExecuteType.Send:
+                        this.cbbFilterAction_ExecuteType.SelectedIndex = 0;
+                        break;
+
+                    case Socket_Cache.Filter.FilterExecuteType.Robot:
+                        this.cbbFilterAction_ExecuteType.SelectedIndex = 1;
+                        break;
+                }
+                this.FilterAction_ExecuteTypeChanged();
 
                 this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
                 this.txtFilter_HeaderContent.Text = FilterHeaderContent;
@@ -161,9 +181,7 @@ namespace WPELibrary
                 this.cbFilterFunction_WSASend.Checked = FilterFunction.WSASend;
                 this.cbFilterFunction_WSASendTo.Checked = FilterFunction.WSASendTo;
                 this.cbFilterFunction_WSARecv.Checked = FilterFunction.WSARecv;
-                this.cbFilterFunction_WSARecvFrom.Checked = FilterFunction.WSARecvFrom;
-
-                this.InitRobotInfo();
+                this.cbFilterFunction_WSARecvFrom.Checked = FilterFunction.WSARecvFrom;                
             }
             catch (Exception ex)
             {
@@ -404,6 +422,63 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }        
+
+        #endregion
+
+        #region//滤镜动作-执行
+
+        private void cbFilterAction_Execute_CheckedChanged(object sender, EventArgs e)
+        {
+            this.FilterAction_ExecuteChange();
+        }      
+
+        private void FilterAction_ExecuteChange()
+        {
+            this.cbbFilterAction_Execute.Enabled = this.cbbFilterAction_ExecuteType.Enabled = cbFilterAction_Execute.Checked;            
+        }
+
+        private void cbbFilterAction_ExecuteType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.FilterAction_ExecuteTypeChanged();
+        }
+
+        private void FilterAction_ExecuteTypeChanged()
+        {
+            try
+            {
+                if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
+                {
+                    this.InitSendInfo();
+                }
+                else
+                {
+                    this.InitRobotInfo();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void InitSendInfo()
+        {
+            try
+            {
+                if (Socket_Cache.SendList.lstSend.Count > 0)
+                {
+                    cbbFilterAction_Execute.DataSource = Socket_Cache.SendList.lstSend;
+                    cbbFilterAction_Execute.DisplayMember = "SName";
+                    cbbFilterAction_Execute.ValueMember = "SID";
+
+                    this.cbbFilterAction_Execute.SelectedValue = this.SID;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void InitRobotInfo()
@@ -417,34 +492,6 @@ namespace WPELibrary
                     cbbFilterAction_Execute.ValueMember = "RID";
 
                     this.cbbFilterAction_Execute.SelectedValue = this.RID;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
-
-        #region//机器人信息
-
-        private void cbFilterAction_Execute_CheckedChanged(object sender, EventArgs e)
-        {
-            this.FilterAction_ExecuteChange();
-        }      
-
-        private void FilterAction_ExecuteChange()
-        {
-            try
-            {
-                if (cbFilterAction_Execute.Checked)
-                {
-                    this.cbbFilterAction_Execute.Enabled = true;
-                }
-                else
-                {
-                    this.cbbFilterAction_Execute.Enabled = false;
                 }
             }
             catch (Exception ex)
@@ -797,6 +844,107 @@ namespace WPELibrary
                         }
                     }
                 }
+
+                //换包（数据完整度检测）
+                if (this.rbFilterAction_Change.Checked)
+                {
+                    int iMaxIndex = 0;
+
+                    //普通滤镜
+                    if (this.rbFilterMode_Normal.Checked)
+                    {
+                        for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
+                        {
+                            if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
+                            {
+                                sCheckValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }                                
+                        }
+
+                        if (iMaxIndex == 0)
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                            return false;
+                        }
+
+                        for (int i = 0; i < iMaxIndex; i++)
+                        {
+                            if (dgvFilterNormal.Rows[1].Cells[i].Value == null)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                                return false;
+                            }                                
+                        }
+                    }
+
+                    //高级滤镜（从头开始）
+                    if (this.rbFilterMode_Advanced.Checked && this.rbFilterModifyFrom_Head.Checked)
+                    {
+                        for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
+                        {
+                            if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
+                            {
+                                sCheckValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }
+                        }
+
+                        if (iMaxIndex == 0)
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                            return false;
+                        }
+
+                        for (int i = 0; i < iMaxIndex; i++)
+                        {
+                            if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value == null)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                                return false;
+                            }
+                        }
+                    }
+
+                    //高级滤镜（从发现有连锁的位置）
+                    if (this.rbFilterMode_Advanced.Checked && this.rbFilterModifyFrom_Position.Checked)
+                    {
+                        int iStartIndex = Socket_Cache.Filter.FilterSize_MaxLen;
+
+                        for (int i = iStartIndex; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
+                        {
+                            if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
+                            {
+                                sCheckValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }
+                        }
+
+                        if (iMaxIndex == iStartIndex)
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                            return false;
+                        }
+
+                        for (int i = iStartIndex; i < iMaxIndex; i++)
+                        {
+                            if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value == null)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_174));
+                                return false;
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -839,6 +987,8 @@ namespace WPELibrary
 
                     Socket_Cache.Filter.FilterMode FilterMode_New;
                     Socket_Cache.Filter.FilterAction FilterAction_New;
+                    Socket_Cache.Filter.FilterExecuteType FilterExecuteType_New;
+                    Guid SID_New = Guid.Empty;
                     Guid RID_New = Guid.Empty;
                     Socket_Cache.Filter.FilterFunction FilterFunction_New;
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
@@ -876,6 +1026,10 @@ namespace WPELibrary
                     {
                         FilterAction_New = Socket_Cache.Filter.FilterAction.Intercept;
                     }
+                    else if (rbFilterAction_Change.Checked)
+                    {
+                        FilterAction_New = Socket_Cache.Filter.FilterAction.Change;
+                    }
                     else if (rbFilterAction_NoModify_Display.Checked)
                     {
                         FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
@@ -891,10 +1045,32 @@ namespace WPELibrary
 
                     if (cbFilterAction_Execute.Checked)
                     {
-                        if (cbbFilterAction_Execute.SelectedValue != null)
+                        if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
                         {
-                            RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                            FilterExecuteType_New = Socket_Cache.Filter.FilterExecuteType.Send;
+
+                            if (cbbFilterAction_Execute.SelectedValue != null)
+                            {
+                                SID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                            }
                         }
+                        else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
+                        {
+                            FilterExecuteType_New = Socket_Cache.Filter.FilterExecuteType.Robot;
+
+                            if (cbbFilterAction_Execute.SelectedValue != null)
+                            {
+                                RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                            }
+                        }
+                        else
+                        {
+                            FilterExecuteType_New = new Socket_Cache.Filter.FilterExecuteType();
+                        }
+                    }
+                    else
+                    {
+                        FilterExecuteType_New = new Socket_Cache.Filter.FilterExecuteType();
                     }
 
                     FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
@@ -1036,6 +1212,8 @@ namespace WPELibrary
                         FilterMode_New,
                         FilterAction_New,
                         bIsExecute,
+                        FilterExecuteType_New,
+                        SID_New,
                         RID_New,
                         FilterFunction_New,
                         FilterStartFrom_New,

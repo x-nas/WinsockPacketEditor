@@ -287,7 +287,7 @@ namespace WPELibrary.Lib
             [In] Int32 Length,
             [In] SocketFlags Flags)
         {
-            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            IntPtr lpCache = IntPtr.Zero;
             Int32 res = 0;
 
             try
@@ -296,24 +296,26 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, ref bBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
+                    Length = bBuffer.Length;
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
                         res = 0;
                     }
                     else
-                    {                        
-                        Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
+                    {
+                        lpCache = Marshal.AllocHGlobal(Length);
+                        Marshal.Copy(bBuffer, 0, lpCache, Length);
 
                         switch (ptType)
                         {
                             case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                                res = WSock32.send(Socket, lpCache, bBuffer.Length, Flags);
+                                res = WSock32.send(Socket, lpCache, Length, Flags);
                                 break;
 
                             case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                                res = WS2_32.send(Socket, lpCache, bBuffer.Length, Flags);
+                                res = WS2_32.send(Socket, lpCache, Length, Flags);
                                 break;
                         }                        
 
@@ -349,11 +351,13 @@ namespace WPELibrary.Lib
             [In] Int32 Length,
             [In] SocketFlags Flags)
         {
-            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            IntPtr lpCache = IntPtr.Zero;
             Int32 res = 0;
 
             try
             {
+                lpCache = Marshal.AllocHGlobal(Length);
+
                 switch (ptType)
                 {
                     case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
@@ -373,7 +377,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, ref bBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -381,6 +385,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
+                        res = Length = bBuffer.Length;
                         Marshal.Copy(bBuffer, 0, lpBuffer, res);
                     }
 
@@ -412,7 +417,7 @@ namespace WPELibrary.Lib
             [In] ref Socket_Cache.SocketPacket.SockAddr To,
             [In] Int32 ToLen)
         {
-            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            IntPtr lpCache = IntPtr.Zero;
             Int32 res = 0;
 
             try
@@ -421,7 +426,8 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffer, Length);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBuffer, ptType, To);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, ref bBuffer, ptType, To);
+                    Length = bBuffer.Length;
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -429,16 +435,17 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        Marshal.Copy(bBuffer, 0, lpCache, bBuffer.Length);
+                        lpCache = Marshal.AllocHGlobal(Length);
+                        Marshal.Copy(bBuffer, 0, lpCache, Length);
 
                         switch (ptType)
                         {
                             case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                                res = WSock32.sendto(Socket, lpCache, bBuffer.Length, Flags, ref To, ToLen);
+                                res = WSock32.sendto(Socket, lpCache, Length, Flags, ref To, ToLen);
                                 break;
 
                             case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                                res = WS2_32.sendto(Socket, lpCache, bBuffer.Length, Flags, ref To, ToLen);
+                                res = WS2_32.sendto(Socket, lpCache, Length, Flags, ref To, ToLen);
                                 break;
                         }
 
@@ -476,11 +483,13 @@ namespace WPELibrary.Lib
             [In, Out] ref Socket_Cache.SocketPacket.SockAddr From,
             [In, Out, Optional] IntPtr FromLen)
         {
-            IntPtr lpCache = Marshal.AllocHGlobal(Length);
+            IntPtr lpCache = IntPtr.Zero;
             Int32 res = 0;
 
             try
             {
+                lpCache = Marshal.AllocHGlobal(Length);
+
                 switch (ptType)
                 {
                     case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
@@ -496,7 +505,7 @@ namespace WPELibrary.Lib
                 {
                     byte[] bRawBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
                     byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpCache, res);
-                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBuffer, ptType, From);
+                    Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, ref bBuffer, ptType, From);
 
                     if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
                     {
@@ -504,6 +513,7 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
+                        res = Length = bBuffer.Length;
                         Marshal.Copy(bBuffer, 0, lpBuffer, res);
                     }
 

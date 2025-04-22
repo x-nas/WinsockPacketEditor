@@ -35,7 +35,7 @@ namespace WPELibrary
                 }
 
                 this.txtFind.Text = Socket_Cache.SocketList.FindOptions.Text;
-                this.chkMatchCase.Checked = Socket_Cache.SocketList.FindOptions.MatchCase;              
+                //this.chkMatchCase.Checked = Socket_Cache.SocketList.FindOptions.MatchCase;              
 
                 if (Socket_Cache.SocketList.FindOptions.Hex != null && Socket_Cache.SocketList.FindOptions.Hex.Length > 0)
                 {
@@ -101,7 +101,7 @@ namespace WPELibrary
                     }
 
                     Socket_Cache.SocketList.FindOptions.Text = txtFind.Text;
-                    Socket_Cache.SocketList.FindOptions.MatchCase = chkMatchCase.Checked;
+                    //Socket_Cache.SocketList.FindOptions.MatchCase = chkMatchCase.Checked;
 
                     DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
 

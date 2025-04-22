@@ -82,6 +82,8 @@ namespace WPELibrary
             this.nudFilter_SocketContent = new System.Windows.Forms.NumericUpDown();
             this.gbFilterAction = new System.Windows.Forms.GroupBox();
             this.tlpFilterAction = new System.Windows.Forms.TableLayoutPanel();
+            this.cbbFilterAction_ExecuteType = new System.Windows.Forms.ComboBox();
+            this.rbFilterAction_Change = new System.Windows.Forms.RadioButton();
             this.cbbFilterAction_Execute = new System.Windows.Forms.ComboBox();
             this.rbFilterAction_Intercept = new System.Windows.Forms.RadioButton();
             this.rbFilterAction_Replace = new System.Windows.Forms.RadioButton();
@@ -581,13 +583,32 @@ namespace WPELibrary
             // tlpFilterAction
             // 
             resources.ApplyResources(this.tlpFilterAction, "tlpFilterAction");
-            this.tlpFilterAction.Controls.Add(this.cbbFilterAction_Execute, 1, 3);
+            this.tlpFilterAction.Controls.Add(this.cbbFilterAction_ExecuteType, 1, 3);
+            this.tlpFilterAction.Controls.Add(this.rbFilterAction_Change, 1, 0);
+            this.tlpFilterAction.Controls.Add(this.cbbFilterAction_Execute, 3, 3);
             this.tlpFilterAction.Controls.Add(this.rbFilterAction_Intercept, 0, 1);
             this.tlpFilterAction.Controls.Add(this.rbFilterAction_Replace, 0, 0);
-            this.tlpFilterAction.Controls.Add(this.rbFilterAction_NoModify_Display, 1, 0);
-            this.tlpFilterAction.Controls.Add(this.rbFilterAction_NoModify_NoDisplay, 1, 1);
+            this.tlpFilterAction.Controls.Add(this.rbFilterAction_NoModify_Display, 3, 0);
+            this.tlpFilterAction.Controls.Add(this.rbFilterAction_NoModify_NoDisplay, 3, 1);
             this.tlpFilterAction.Controls.Add(this.cbFilterAction_Execute, 0, 3);
             this.tlpFilterAction.Name = "tlpFilterAction";
+            // 
+            // cbbFilterAction_ExecuteType
+            // 
+            resources.ApplyResources(this.cbbFilterAction_ExecuteType, "cbbFilterAction_ExecuteType");
+            this.cbbFilterAction_ExecuteType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbFilterAction_ExecuteType.FormattingEnabled = true;
+            this.cbbFilterAction_ExecuteType.Items.AddRange(new object[] {
+            resources.GetString("cbbFilterAction_ExecuteType.Items"),
+            resources.GetString("cbbFilterAction_ExecuteType.Items1")});
+            this.cbbFilterAction_ExecuteType.Name = "cbbFilterAction_ExecuteType";
+            this.cbbFilterAction_ExecuteType.SelectedIndexChanged += new System.EventHandler(this.cbbFilterAction_ExecuteType_SelectedIndexChanged);
+            // 
+            // rbFilterAction_Change
+            // 
+            resources.ApplyResources(this.rbFilterAction_Change, "rbFilterAction_Change");
+            this.rbFilterAction_Change.Name = "rbFilterAction_Change";
+            this.rbFilterAction_Change.UseVisualStyleBackColor = true;
             // 
             // cbbFilterAction_Execute
             // 
@@ -965,5 +986,7 @@ namespace WPELibrary
         private System.Windows.Forms.ComboBox cbbFilterAction_Execute;
         private System.Windows.Forms.NumericUpDown nudFilter_PortContent;
         private System.Windows.Forms.CheckBox cbFilter_AppointPort;
+        private System.Windows.Forms.RadioButton rbFilterAction_Change;
+        private System.Windows.Forms.ComboBox cbbFilterAction_ExecuteType;
     }
 }

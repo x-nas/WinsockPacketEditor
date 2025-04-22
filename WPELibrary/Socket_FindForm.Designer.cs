@@ -40,7 +40,6 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.pFindType = new System.Windows.Forms.Panel();
             this.tlpFindType = new System.Windows.Forms.TableLayoutPanel();
-            this.chkMatchCase = new System.Windows.Forms.CheckBox();
             this.rbHex = new System.Windows.Forms.RadioButton();
             this.rbString = new System.Windows.Forms.RadioButton();
             this.tlpFindForm.SuspendLayout();
@@ -130,16 +129,9 @@
             // tlpFindType
             // 
             resources.ApplyResources(this.tlpFindType, "tlpFindType");
-            this.tlpFindType.Controls.Add(this.chkMatchCase, 2, 0);
             this.tlpFindType.Controls.Add(this.rbHex, 1, 0);
             this.tlpFindType.Controls.Add(this.rbString, 0, 0);
             this.tlpFindType.Name = "tlpFindType";
-            // 
-            // chkMatchCase
-            // 
-            resources.ApplyResources(this.chkMatchCase, "chkMatchCase");
-            this.chkMatchCase.Name = "chkMatchCase";
-            this.chkMatchCase.UseVisualStyleBackColor = true;
             // 
             // rbHex
             // 
@@ -193,7 +185,6 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Panel pFindType;
         private System.Windows.Forms.TableLayoutPanel tlpFindType;
-        private System.Windows.Forms.CheckBox chkMatchCase;
         private System.Windows.Forms.RadioButton rbHex;
         private System.Windows.Forms.RadioButton rbString;
     }

@@ -144,7 +144,7 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//是否执行机器人
+        #region//是否执行
 
         protected bool isexecute;
 
@@ -155,6 +155,30 @@ namespace WPELibrary.Lib
         }
 
         #endregion
+
+        #region//执行类型
+
+        protected Socket_Cache.Filter.FilterExecuteType fetype;
+
+        public Socket_Cache.Filter.FilterExecuteType FEType
+        {
+            get { return fetype; }
+            set { fetype = value; }
+        }
+
+        #endregion        
+
+        #region//发送序号
+
+        protected Guid sid;
+
+        public Guid SID
+        {
+            get { return sid; }
+            set { sid = value; }
+        }
+
+        #endregion        
 
         #region//机器人序号
 
@@ -281,6 +305,8 @@ namespace WPELibrary.Lib
             Socket_Cache.Filter.FilterMode FMode, 
             Socket_Cache.Filter.FilterAction FAction,
             bool IsExecute,
+            Socket_Cache.Filter.FilterExecuteType FEType,
+            Guid SID,
             Guid RID,
             Socket_Cache.Filter.FilterFunction FFunction, 
             Socket_Cache.Filter.FilterStartFrom FStartFrom,
@@ -305,6 +331,8 @@ namespace WPELibrary.Lib
             this.fmode = FMode;
             this.faction = FAction;
             this.isexecute = IsExecute;
+            this.fetype = FEType;
+            this.sid = SID;
             this.rid = RID;
             this.ffunction = FFunction;
             this.fstartfrom = FStartFrom;
