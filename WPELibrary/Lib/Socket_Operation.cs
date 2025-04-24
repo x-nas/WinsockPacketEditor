@@ -3089,6 +3089,8 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort = Socket_Cache.SocketProxy.AppointHttpPort;
                 Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort;
 
+                Properties.Settings.Default.ProxyConfig_SpeedMode = Socket_Cache.SocketProxy.SpeedMode;
+
                 Properties.Settings.Default.Save();
             }
             catch (Exception ex)
@@ -3182,6 +3184,8 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketProxy.EXTHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort;
                 Socket_Cache.SocketProxy.AppointHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort;
                 Socket_Cache.SocketProxy.AppointHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort;
+
+                Socket_Cache.SocketProxy.SpeedMode = Properties.Settings.Default.ProxyConfig_SpeedMode;
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }

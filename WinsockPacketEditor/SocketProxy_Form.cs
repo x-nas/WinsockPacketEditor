@@ -222,6 +222,8 @@ namespace WinsockPacketEditor
                 this.txtEXTHttpsPort.Text = Socket_Cache.SocketProxy.EXTHttpsPort.ToString();
                 this.txtAppointHttpPort.Text = Socket_Cache.SocketProxy.AppointHttpPort;
                 this.txtAppointHttpsPort.Text = Socket_Cache.SocketProxy.AppointHttpsPort;
+
+                this.cbSpeedMode.Checked = Socket_Cache.SocketProxy.SpeedMode;
             }
             catch (Exception ex)
             {
@@ -259,6 +261,8 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
                 Socket_Cache.SocketProxy.AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
                 Socket_Cache.SocketProxy.AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
+
+                Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
 
                 Socket_Operation.SaveConfigs_SocketProxy();
             }
@@ -381,6 +385,7 @@ namespace WinsockPacketEditor
                     this.tpProxySet.Enabled = false;
                     this.tpAuthSet.Enabled = false;
                     this.tpExternalProxy.Enabled = false;
+                    this.tpSystemSet.Enabled = false;
 
                     if (SocketServer == null)
                     {
@@ -422,6 +427,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.ProxyTotal_CNT = 0;
                 Socket_Cache.SocketProxy.ProxyTCP_CNT = 0;
                 Socket_Cache.SocketProxy.ProxyUDP_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyLink_CNT = 0;
 
                 this.SaveConfigs_Parameter();
 
@@ -579,6 +585,7 @@ namespace WinsockPacketEditor
                 this.tpProxySet.Enabled = true;
                 this.tpAuthSet.Enabled = true;
                 this.tpExternalProxy.Enabled = true;
+                this.tpSystemSet.Enabled = true;
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_143));
             }
@@ -661,6 +668,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.ProxyTotal_CNT = 0;
                 Socket_Cache.SocketProxy.ProxyTCP_CNT = 0;
                 Socket_Cache.SocketProxy.ProxyUDP_CNT = 0;
+                Socket_Cache.SocketProxy.ProxyLink_CNT = 0;
                 Socket_Cache.SocketProxy.Total_Request = 0;
                 Socket_Cache.SocketProxy.Total_Response = 0;
             }
@@ -783,6 +791,7 @@ namespace WinsockPacketEditor
                                     if (this.cbDeleteClosed.Checked)
                                     {
                                         ClientNode.Remove();
+                                        Socket_Cache.SocketProxy.ProxyLink_CNT--;
                                     }
                                     else
                                     {
@@ -801,6 +810,7 @@ namespace WinsockPacketEditor
                         if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
                         {
                             Socket_Cache.SocketProxyList.lstProxyInfo[i].CloseUDPClient();
+                            Socket_Cache.SocketProxy.ProxyLink_CNT--;
                         }
                     }
                 }
@@ -1011,8 +1021,8 @@ namespace WinsockPacketEditor
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();
                 this.tlProxyUDP_CNT.Text = ProxyUDP_CNT.ToString();
-                this.tlProxyCache_CNT.Text = Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count.ToString();             
-                this.tlProxyLinks_CNT.Text = Socket_Cache.SocketProxyList.lstProxyInfo.Count.ToString();
+                this.tlProxyCache_CNT.Text = Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count.ToString();
+                this.tlProxyLinks_CNT.Text = Socket_Cache.SocketProxy.ProxyLink_CNT.ToString();
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
             }
             catch (Exception ex)

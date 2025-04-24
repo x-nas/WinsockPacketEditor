@@ -70,10 +70,11 @@ namespace WPELibrary.Lib
 
         public static class SocketProxy
         {
-            public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT;
+            public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT, ProxyLink_CNT;
             public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
             public static IPAddress ProxyTCP_IP = IPAddress.Any;
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
+            public static bool SpeedMode;
             public static bool IsListening = false;
             public static bool ProxyIP_Auto;
             public static bool Enable_SOCKS5, Enable_Auth;
@@ -596,8 +597,6 @@ namespace WPELibrary.Lib
                 {
                     if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bData.Length);
-
                         switch (spi.DomainType)
                         {
                             case Socket_Cache.SocketProxy.DomainType.Http:
@@ -668,8 +667,6 @@ namespace WPELibrary.Lib
 
                         if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                         {
-                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Downlink, bytesRead);
-
                             switch (spi.DomainType)
                             { 
                                 case Socket_Cache.SocketProxy.DomainType.Http:
@@ -700,7 +697,7 @@ namespace WPELibrary.Lib
                                     Socket_Cache.SocketProxyQueue.ProxyDataToQueue(spi, spi.TargetData, Socket_Cache.SocketProxy.DataType.Response);
 
                                     break;
-                            }                            
+                            }
                         }
                         
                         spi.TargetSocket.BeginReceive(spi.TargetBuffer, 0, spi.TargetBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spi);
@@ -834,7 +831,12 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    qSocket_ProxyInfo.Enqueue(spi);
+                    Socket_Cache.SocketProxy.ProxyLink_CNT++;
+
+                    if (!Socket_Cache.SocketProxy.SpeedMode)
+                    {
+                        qSocket_ProxyInfo.Enqueue(spi);
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -850,8 +852,26 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    Socket_ProxyData spd = new Socket_ProxyData(spi.TargetAddress, spi.DomainType, bData, DataType);
-                    qSocket_ProxyData.Enqueue(spd);
+                    switch (DataType)
+                    {
+                        case SocketProxy.DataType.Request:
+                            Socket_Cache.SocketProxy.Total_Request += bData.Length;
+                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bData.Length);
+                            break;
+
+                        case SocketProxy.DataType.Response:
+                            Socket_Cache.SocketProxy.Total_Response += bData.Length;
+                            Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Downlink, bData.Length);
+                            break;
+                    }
+
+                    Socket_Cache.SocketProxy.ProxyTCP_CNT++;                    
+
+                    if (!Socket_Cache.SocketProxy.SpeedMode)
+                    {
+                        Socket_ProxyData spd = new Socket_ProxyData(spi.TargetAddress, spi.DomainType, bData, DataType);
+                        qSocket_ProxyData.Enqueue(spd);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -945,18 +965,6 @@ namespace WPELibrary.Lib
                     {
                         if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
                         {
-                            switch (spd.DataType)
-                            {
-                                case SocketProxy.DataType.Request:
-                                    Socket_Cache.SocketProxy.Total_Request += spd.Buffer.Length;
-                                    break;
-
-                                case SocketProxy.DataType.Response:
-                                    Socket_Cache.SocketProxy.Total_Response += spd.Buffer.Length;
-                                    break;
-                            }
-
-                            Socket_Cache.SocketProxy.ProxyTCP_CNT++;
                             RecProxyData?.Invoke(spd);
                         }
                     });                    

@@ -135,6 +135,11 @@
             this.cProxyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
             this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
+            this.tpSystemSet = new System.Windows.Forms.TabPage();
+            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbWorkMode = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbSpeedMode = new System.Windows.Forms.CheckBox();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -176,6 +181,10 @@
             this.tpClientList.SuspendLayout();
             this.tlpSocketProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).BeginInit();
+            this.tpSystemSet.SuspendLayout();
+            this.tlpSystemSet.SuspendLayout();
+            this.gbWorkMode.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlProxyTotal
@@ -217,6 +226,7 @@
             this.tcSocketProxySet.Controls.Add(this.tpAuthSet);
             this.tcSocketProxySet.Controls.Add(this.tpListSet);
             this.tcSocketProxySet.Controls.Add(this.tpExternalProxy);
+            this.tcSocketProxySet.Controls.Add(this.tpSystemSet);
             resources.ApplyResources(this.tcSocketProxySet, "tcSocketProxySet");
             this.tcSocketProxySet.Name = "tcSocketProxySet";
             this.tcSocketProxySet.SelectedIndex = 0;
@@ -975,6 +985,38 @@
             this.tCheckProxyState.Interval = 1000;
             this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
             // 
+            // tpSystemSet
+            // 
+            this.tpSystemSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tpSystemSet.Controls.Add(this.tlpSystemSet);
+            resources.ApplyResources(this.tpSystemSet, "tpSystemSet");
+            this.tpSystemSet.Name = "tpSystemSet";
+            // 
+            // tlpSystemSet
+            // 
+            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
+            this.tlpSystemSet.Controls.Add(this.gbWorkMode, 0, 0);
+            this.tlpSystemSet.Name = "tlpSystemSet";
+            // 
+            // gbWorkMode
+            // 
+            this.gbWorkMode.Controls.Add(this.tableLayoutPanel1);
+            resources.ApplyResources(this.gbWorkMode, "gbWorkMode");
+            this.gbWorkMode.Name = "gbWorkMode";
+            this.gbWorkMode.TabStop = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.cbSpeedMode, 0, 1);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // cbSpeedMode
+            // 
+            resources.ApplyResources(this.cbSpeedMode, "cbSpeedMode");
+            this.cbSpeedMode.Name = "cbSpeedMode";
+            this.cbSpeedMode.UseVisualStyleBackColor = true;
+            // 
             // SocketProxy_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1035,6 +1077,11 @@
             this.tlpSocketProxy.ResumeLayout(false);
             this.tlpSocketProxy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).EndInit();
+            this.tpSystemSet.ResumeLayout(false);
+            this.tlpSystemSet.ResumeLayout(false);
+            this.gbWorkMode.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1139,5 +1186,10 @@
         private System.Windows.Forms.DataVisualization.Charting.Chart cProxyChart;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel tsslProxySpeed;
+        private System.Windows.Forms.TabPage tpSystemSet;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet;
+        private System.Windows.Forms.GroupBox gbWorkMode;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.CheckBox cbSpeedMode;
     }
 }

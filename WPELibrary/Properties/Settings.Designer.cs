@@ -646,5 +646,17 @@ namespace WPELibrary.Properties {
                 this["ProxyConfig_EXTProxy_AppointHttpsPort"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyConfig_SpeedMode {
+            get {
+                return ((bool)(this["ProxyConfig_SpeedMode"]));
+            }
+            set {
+                this["ProxyConfig_SpeedMode"] = value;
+            }
+        }
     }
 }
