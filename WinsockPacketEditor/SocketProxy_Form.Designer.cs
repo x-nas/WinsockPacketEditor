@@ -90,6 +90,11 @@
             this.lHttpsPort = new System.Windows.Forms.Label();
             this.txtAppointHttpPort = new System.Windows.Forms.TextBox();
             this.txtAppointHttpsPort = new System.Windows.Forms.TextBox();
+            this.tpSystemSet = new System.Windows.Forms.TabPage();
+            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbWorkMode = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbSpeedMode = new System.Windows.Forms.CheckBox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bCleanUp = new System.Windows.Forms.Button();
             this.tlpButton_Start = new System.Windows.Forms.TableLayoutPanel();
@@ -135,11 +140,6 @@
             this.cProxyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
             this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
-            this.tpSystemSet = new System.Windows.Forms.TabPage();
-            this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
-            this.gbWorkMode = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.cbSpeedMode = new System.Windows.Forms.CheckBox();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -166,6 +166,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
             this.tpExternalProxy.SuspendLayout();
             this.tlpExternalProxy.SuspendLayout();
+            this.tpSystemSet.SuspendLayout();
+            this.tlpSystemSet.SuspendLayout();
+            this.gbWorkMode.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpButton_Start.SuspendLayout();
             this.tpProxyList.SuspendLayout();
@@ -181,10 +185,6 @@
             this.tpClientList.SuspendLayout();
             this.tlpSocketProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).BeginInit();
-            this.tpSystemSet.SuspendLayout();
-            this.tlpSystemSet.SuspendLayout();
-            this.gbWorkMode.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlProxyTotal
@@ -574,6 +574,38 @@
             this.txtAppointHttpsPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtAppointHttpsPort, "txtAppointHttpsPort");
             this.txtAppointHttpsPort.Name = "txtAppointHttpsPort";
+            // 
+            // tpSystemSet
+            // 
+            this.tpSystemSet.BackColor = System.Drawing.SystemColors.Control;
+            this.tpSystemSet.Controls.Add(this.tlpSystemSet);
+            resources.ApplyResources(this.tpSystemSet, "tpSystemSet");
+            this.tpSystemSet.Name = "tpSystemSet";
+            // 
+            // tlpSystemSet
+            // 
+            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
+            this.tlpSystemSet.Controls.Add(this.gbWorkMode, 0, 0);
+            this.tlpSystemSet.Name = "tlpSystemSet";
+            // 
+            // gbWorkMode
+            // 
+            this.gbWorkMode.Controls.Add(this.tableLayoutPanel1);
+            resources.ApplyResources(this.gbWorkMode, "gbWorkMode");
+            this.gbWorkMode.Name = "gbWorkMode";
+            this.gbWorkMode.TabStop = false;
+            // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.cbSpeedMode, 0, 1);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // cbSpeedMode
+            // 
+            resources.ApplyResources(this.cbSpeedMode, "cbSpeedMode");
+            this.cbSpeedMode.Name = "cbSpeedMode";
+            this.cbSpeedMode.UseVisualStyleBackColor = true;
             // 
             // tlpButton
             // 
@@ -985,38 +1017,6 @@
             this.tCheckProxyState.Interval = 1000;
             this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
             // 
-            // tpSystemSet
-            // 
-            this.tpSystemSet.BackColor = System.Drawing.SystemColors.Control;
-            this.tpSystemSet.Controls.Add(this.tlpSystemSet);
-            resources.ApplyResources(this.tpSystemSet, "tpSystemSet");
-            this.tpSystemSet.Name = "tpSystemSet";
-            // 
-            // tlpSystemSet
-            // 
-            resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
-            this.tlpSystemSet.Controls.Add(this.gbWorkMode, 0, 0);
-            this.tlpSystemSet.Name = "tlpSystemSet";
-            // 
-            // gbWorkMode
-            // 
-            this.gbWorkMode.Controls.Add(this.tableLayoutPanel1);
-            resources.ApplyResources(this.gbWorkMode, "gbWorkMode");
-            this.gbWorkMode.Name = "gbWorkMode";
-            this.gbWorkMode.TabStop = false;
-            // 
-            // tableLayoutPanel1
-            // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.cbSpeedMode, 0, 1);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            // 
-            // cbSpeedMode
-            // 
-            resources.ApplyResources(this.cbSpeedMode, "cbSpeedMode");
-            this.cbSpeedMode.Name = "cbSpeedMode";
-            this.cbSpeedMode.UseVisualStyleBackColor = true;
-            // 
             // SocketProxy_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -1060,6 +1060,11 @@
             this.tpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.PerformLayout();
+            this.tpSystemSet.ResumeLayout(false);
+            this.tlpSystemSet.ResumeLayout(false);
+            this.gbWorkMode.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton_Start.ResumeLayout(false);
             this.tpProxyList.ResumeLayout(false);
@@ -1077,11 +1082,6 @@
             this.tlpSocketProxy.ResumeLayout(false);
             this.tlpSocketProxy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).EndInit();
-            this.tpSystemSet.ResumeLayout(false);
-            this.tlpSystemSet.ResumeLayout(false);
-            this.gbWorkMode.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

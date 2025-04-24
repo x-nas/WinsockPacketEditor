@@ -24,6 +24,7 @@ namespace WPELibrary.Lib
         public static string WPE = "Winsock Packet Editor x64";
         public static IntPtr MainHandle = IntPtr.Zero;
         public static int SystemSocket = 0;
+        public static bool ShowDebug = false;
 
         #region//结构定义
 
@@ -1306,16 +1307,21 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);                    
+                    Socket_Operation.CountSocketInfo(ptPacketType, bBuffByte.Length);
 
-                    if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
+                    if (!Socket_Cache.SocketPacket.SpeedMode)
                     {
-                        string sIPFrom = sPacketIP.Split('|')[0];
-                        string sIPTo = sPacketIP.Split('|')[1];
-                        DateTime dtTime = DateTime.Now;
+                        string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
-                        Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
-                        qSocket_PacketInfo.Enqueue(spi);
+                        if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
+                        {
+                            string sIPFrom = sPacketIP.Split('|')[0];
+                            string sIPTo = sPacketIP.Split('|')[1];
+                            DateTime dtTime = DateTime.Now;
+
+                            Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
+                            qSocket_PacketInfo.Enqueue(spi);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -1378,64 +1384,7 @@ namespace WPELibrary.Lib
                                 int iPacketLen = spi.PacketLen;
                                 byte[] bBuffer = spi.PacketBuffer;
 
-                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);
-
-                                Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
-
-                                switch (ptType)
-                                {
-                                    case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                                        SocketQueue.Send_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                                        SocketQueue.Send_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                                        SocketQueue.SendTo_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                                        SocketQueue.SendTo_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
-                                        SocketQueue.Recv_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
-                                        SocketQueue.Recv_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
-                                        SocketQueue.RecvFrom_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
-                                        SocketQueue.RecvFrom_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WSASend:
-                                        SocketQueue.WSASend_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                                        SocketQueue.WSASendTo_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                                        SocketQueue.WSARecv_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                                        SocketQueue.WSARecv_CNT++;
-                                        break;
-
-                                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                                        SocketQueue.WSARecvFrom_CNT++;
-                                        break;
-                                }
+                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);                                
 
                                 RecSocketPacket?.Invoke(spi);
                             }

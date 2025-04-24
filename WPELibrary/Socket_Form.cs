@@ -584,7 +584,17 @@ namespace WPELibrary
                 Socket_Cache.SocketPacket.TotalPackets = 0;
                 Socket_Cache.SocketPacket.Total_SendBytes = 0;
                 Socket_Cache.SocketPacket.Total_RecvBytes = 0;
-                Socket_Cache.Filter.FilterExecute_CNT = 0;              
+                Socket_Cache.Filter.FilterExecute_CNT = 0;
+
+                Socket_Cache.SocketQueue.FilterSocketList_CNT = 0;
+                Socket_Cache.SocketQueue.Send_CNT = 0;
+                Socket_Cache.SocketQueue.Recv_CNT = 0;
+                Socket_Cache.SocketQueue.SendTo_CNT = 0;
+                Socket_Cache.SocketQueue.RecvFrom_CNT = 0;
+                Socket_Cache.SocketQueue.WSASend_CNT = 0;
+                Socket_Cache.SocketQueue.WSARecv_CNT = 0;
+                Socket_Cache.SocketQueue.WSASendTo_CNT = 0;
+                Socket_Cache.SocketQueue.WSARecvFrom_CNT = 0;
             }
             catch (Exception ex)
             {
@@ -598,19 +608,8 @@ namespace WPELibrary
             {
                 Socket_Cache.SocketQueue.ResetSocketQueue();
                 Socket_Cache.SocketList.lstRecPacket.Clear();
-
                 Socket_Cache.SocketList.Select_Index = -1;
-                this.dgvSocketList.Rows.Clear();
-
-                Socket_Cache.SocketQueue.FilterSocketList_CNT = 0;
-                Socket_Cache.SocketQueue.Send_CNT = 0;
-                Socket_Cache.SocketQueue.Recv_CNT = 0;
-                Socket_Cache.SocketQueue.SendTo_CNT = 0;
-                Socket_Cache.SocketQueue.RecvFrom_CNT = 0;
-                Socket_Cache.SocketQueue.WSASend_CNT = 0;
-                Socket_Cache.SocketQueue.WSARecv_CNT = 0;
-                Socket_Cache.SocketQueue.WSASendTo_CNT = 0;
-                Socket_Cache.SocketQueue.WSARecvFrom_CNT = 0;
+                this.dgvSocketList.Rows.Clear();                
             }
             catch(Exception ex)
             {

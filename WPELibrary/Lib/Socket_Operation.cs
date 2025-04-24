@@ -860,54 +860,67 @@ namespace WPELibrary.Lib
                     switch (ptPacketType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
+                            Socket_Cache.SocketQueue.Send_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                            Socket_Cache.SocketQueue.Send_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
+                            Socket_Cache.SocketQueue.SendTo_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                            Socket_Cache.SocketQueue.SendTo_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                            Socket_Cache.SocketQueue.Recv_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            Socket_Cache.SocketQueue.Recv_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                            Socket_Cache.SocketQueue.RecvFrom_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                            Socket_Cache.SocketQueue.RecvFrom_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
+                            Socket_Cache.SocketQueue.WSASend_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                            Socket_Cache.SocketQueue.WSASendTo_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                            Socket_Cache.SocketQueue.WSARecv_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                            Socket_Cache.SocketQueue.WSARecv_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                            Socket_Cache.SocketQueue.WSARecvFrom_CNT++;
                             Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
                             break;
                     }
@@ -1367,7 +1380,7 @@ namespace WPELibrary.Lib
 
         #region//处理 Hook 结果（异步）
 
-        public static void ProcessingHookResult(
+        public static async Task ProcessingHookResult(
             Int32 socket,
             byte[] bRawBuffer,
             byte[] bBuffer, 
@@ -1376,11 +1389,9 @@ namespace WPELibrary.Lib
             Socket_Cache.Filter.FilterAction FilterAction, 
             Socket_Cache.SocketPacket.SockAddr sockaddr)
         {
-            try
+            await Task.Run(() =>
             {
-                Socket_Operation.CountSocketInfo(ptType, res);
-
-                if (!Socket_Cache.SocketPacket.SpeedMode)
+                try
                 {
                     if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
                     {
@@ -1397,11 +1408,11 @@ namespace WPELibrary.Lib
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });            
         }
 
         #endregion

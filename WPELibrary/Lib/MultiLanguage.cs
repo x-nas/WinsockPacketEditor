@@ -40,7 +40,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_28 = { "数据加载出错!", "Data loading error!" };
         public static string[] MutiLan_29 = { "两个数据相同!", "The two data are the same!" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
-        public static string[] MutiLan_31 = { "已发送: {0}  已接收: {1}", "Sent: {0} Received: {1}" };
+        public static string[] MutiLan_31 = { "发送: {0}  接收: {1}", "Sent: {0} Received: {1}" };
         public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
