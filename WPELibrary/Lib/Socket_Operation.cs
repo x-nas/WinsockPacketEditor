@@ -288,16 +288,16 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取内存的数据
+        #region//从内存获取数据
 
-        public static byte[] GetBytesFromIntPtr(IntPtr ipBuffer, int Length)
+        public static unsafe byte[] GetBytesFromIntPtr(IntPtr ipBuffer, int Length)
         {
-            byte[] bReturn = null;
+            byte[] bReturn = new byte[Length];
 
             try
             {
-                bReturn = new byte[Length];
-                Marshal.Copy(ipBuffer, bReturn, 0, Length);
+                Span<byte> bSpan = new Span<byte>((byte*)ipBuffer, Length);
+                bSpan.CopyTo(bReturn);
             }
             catch (Exception ex)
             {
@@ -305,9 +305,9 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
-        }
+        }        
 
-        #endregion
+        #endregion        
 
         #region//设置系统代理
 
@@ -573,11 +573,12 @@ namespace WPELibrary.Lib
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Hex:
+                            StringBuilder sb = new StringBuilder();
                             foreach (byte b in buffer)
                             {
-                                sReturn += b.ToString("X2") + " ";
+                                sb.Append(b.ToString("X2")).Append(" ");                                
                             }
-                            sReturn = sReturn.Trim();
+                            sReturn = sb.ToString().Trim();
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.GBK:
@@ -1772,7 +1773,7 @@ namespace WPELibrary.Lib
 
         public static string GetPacketData_Hex(byte[] bBuff, int Max_DataLen)
         {
-            string sReturn = "";
+            string sReturn = string.Empty;
 
             try
             {
@@ -1780,14 +1781,8 @@ namespace WPELibrary.Lib
 
                 if (iPacketLen > Max_DataLen)
                 {
-                    byte[] bTemp = new byte[Max_DataLen];
-
-                    for (int j = 0; j < Max_DataLen; j++)
-                    {
-                        bTemp[j] = bBuff[j];
-                    }
-
-                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bTemp) + " ...";
+                    Span<byte> bTemp = bBuff.AsSpan(0, Max_DataLen);
+                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bTemp.ToArray()) + " ...";
                 }
                 else
                 {
@@ -1800,50 +1795,6 @@ namespace WPELibrary.Lib
             }
 
             return sReturn;
-        }
-
-        #endregion
-
-        #region//获取WSABUF数组的字节数组        
-
-        public static byte[] GetByteFromWSABUF(Socket_Cache.SocketPacket.WSABUF lpBuffers, Int32 dwBufferCount, int BytesCNT)
-        {
-            byte[] bReturn = new byte[0];
-
-            try
-            {
-                int BytesLeft = BytesCNT;
-
-                for (int i = 0; i < dwBufferCount; i++)
-                {
-                    if (BytesLeft > 0)
-                    {
-                        int iBuffLen = 0;
-
-                        if (lpBuffers.len >= BytesLeft)
-                        {
-                            iBuffLen = BytesLeft;
-                        }
-                        else
-                        {
-                            iBuffLen = lpBuffers.len;
-                        }
-
-                        BytesLeft -= iBuffLen;
-
-                        byte[] bBuff = new byte[iBuffLen];
-                        Marshal.Copy(lpBuffers.buf, bBuff, 0, iBuffLen);
-
-                        bReturn = bReturn.Concat(bBuff).ToArray();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
         }
 
         #endregion        

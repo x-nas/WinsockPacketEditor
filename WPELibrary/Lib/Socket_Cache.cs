@@ -3486,53 +3486,7 @@ namespace WPELibrary.Lib
 
                 return faReturn;
             }
-
-            public static Socket_Cache.Filter.FilterAction DoWSAFilterList(Int32 iSocket, Socket_Cache.SocketPacket.WSABUF lpBuffers, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, int dwBufferCount, int BytesCNT)
-            {
-                Socket_Cache.Filter.FilterAction faReturn = Socket_Cache.Filter.FilterAction.None;
-
-                try
-                {
-                    int BytesLeft = BytesCNT;
-
-                    for (int i = 0; i < dwBufferCount; i++)
-                    {
-                        if (BytesLeft > 0)
-                        {
-                            int iBuffLen = 0;
-
-                            if (lpBuffers.len >= BytesLeft)
-                            {
-                                iBuffLen = BytesLeft;
-                            }
-                            else
-                            {
-                                iBuffLen = lpBuffers.len;
-                            }
-
-                            BytesLeft -= iBuffLen;
-
-                            byte[] bBuffer = Socket_Operation.GetBytesFromIntPtr(lpBuffers.buf, iBuffLen);                          
-                            Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(iSocket, ref bBuffer, ptType, sAddr);
-                            Marshal.Copy(bBuffer, 0, lpBuffers.buf, iBuffLen);
-
-                            faReturn = FilterAction;
-
-                            if (FilterAction != Filter.FilterAction.Replace && FilterAction != Filter.FilterAction.None)
-                            {
-                                break;
-                            }                         
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return faReturn;
-            }
-
+            
             #endregion
 
             #region//保存滤镜列表（对话框）

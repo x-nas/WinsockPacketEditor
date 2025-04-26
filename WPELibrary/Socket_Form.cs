@@ -4,7 +4,6 @@ using System.Reflection;
 using WPELibrary.Lib;
 using EasyHook;
 using Be.Windows.Forms;
-using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Xml.Linq;
@@ -884,14 +883,12 @@ namespace WPELibrary
             {
                 if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;                    
-                    e.Value = Socket_Cache.SocketPacket.GetImg_ByPacketType(ptType);
+                    e.Value = Socket_Cache.SocketPacket.GetImg_ByPacketType((Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cPacketType"].Index)
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value;
-                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
+                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType((Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cPacketID"].Index)
@@ -901,9 +898,23 @@ namespace WPELibrary
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cData"].Index)
                 {
-                    Color[] cColor = Socket_Cache.Filter.GetColor_ByFilterAction(Socket_Cache.SocketList.lstRecPacket[e.RowIndex].FilterAction);
-                    this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = cColor[0];
-                    this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = cColor[1];
+                    switch (Socket_Cache.SocketList.lstRecPacket[e.RowIndex].FilterAction)
+                    {
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Replace;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Replace;
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Intercept;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Intercept;
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Change;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Change;
+                            break;
+                    }
                 }
             }
             catch (Exception ex)
