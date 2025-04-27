@@ -19,6 +19,7 @@ using System.Drawing;
 using WPELibrary.Lib.NativeMethods;
 using EasyHook;
 using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace WPELibrary.Lib
 {   
@@ -2381,20 +2382,9 @@ namespace WPELibrary.Lib
                 if (Socket_Cache.SocketPacket.CheckSocket)
                 {
                     bool bIsFilter = Socket_Operation.IsFilter_BySocket(spi.PacketSocket);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == bIsFilter)
                     {
-                        if (bIsFilter)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bIsFilter)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 
@@ -2403,21 +2393,10 @@ namespace WPELibrary.Lib
                 {
                     bool bIsFilter_From = Socket_Operation.IsFilter_ByIP(spi.PacketFrom);
                     bool bIsFilter_To = Socket_Operation.IsFilter_ByIP(spi.PacketTo);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                     {
-                        if (bIsFilter_From || bIsFilter_To)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!(bIsFilter_From || bIsFilter_To))
-                        {
-                            return false;
-                        }
-                    }               
+                        return false;
+                    }     
                 }
 
                 //端口号
@@ -2425,20 +2404,9 @@ namespace WPELibrary.Lib
                 {
                     bool bIsFilter_From = Socket_Operation.IsFilter_ByPort(spi.PacketFrom);
                     bool bIsFilter_To = Socket_Operation.IsFilter_ByPort(spi.PacketTo);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == (bIsFilter_From || bIsFilter_To))
                     {
-                        if (bIsFilter_From || bIsFilter_To)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!(bIsFilter_From || bIsFilter_To))
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 
@@ -2446,20 +2414,9 @@ namespace WPELibrary.Lib
                 if (Socket_Cache.SocketPacket.CheckHead)
                 {
                     bool bIsFilter = Socket_Operation.IsFilter_ByHead(spi.PacketBuffer);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == bIsFilter)
                     {
-                        if (bIsFilter)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bIsFilter)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 
@@ -2467,20 +2424,9 @@ namespace WPELibrary.Lib
                 if (Socket_Cache.SocketPacket.CheckData)
                 {
                     bool bIsFilter = Socket_Operation.IsFilter_ByPacket(spi.PacketBuffer);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == bIsFilter)
                     {
-                        if (bIsFilter)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bIsFilter)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
 
@@ -2488,20 +2434,9 @@ namespace WPELibrary.Lib
                 if (Socket_Cache.SocketPacket.CheckSize)
                 {
                     bool bIsFilter = Socket_Operation.IsFilter_BySize(spi.PacketLen);
-
-                    if (Socket_Cache.SocketPacket.CheckNotShow)
+                    if (Socket_Cache.SocketPacket.CheckNotShow == bIsFilter)
                     {
-                        if (bIsFilter)
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bIsFilter)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }               
             }
@@ -2517,28 +2452,22 @@ namespace WPELibrary.Lib
 
         private static bool IsFilter_BySocket(int iPacketSocket)
         {
-            bool bReturn = false;
-
             try
             {
                 if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckSocket_Value))
                 {
                     string[] sSocketArr = Socket_Cache.SocketPacket.CheckSocket_Value.Split(';');
+                    HashSet<int> socketSet = new HashSet<int>();
 
                     foreach (string sSocket in sSocketArr)
                     {
-                        if (!string.IsNullOrEmpty(sSocket))
+                        if (!string.IsNullOrEmpty(sSocket) && int.TryParse(sSocket, out int iCheckSocket))
                         {
-                            if (int.TryParse(sSocket, out int iCheckSocket))
-                            {
-                                if (iPacketSocket == iCheckSocket)
-                                {
-                                    bReturn = true;
-                                    break;
-                                }
-                            }
+                            socketSet.Add(iCheckSocket);
                         }
                     }
+
+                    return socketSet.Contains(iPacketSocket);
                 }
             }
             catch (Exception ex)
@@ -2546,7 +2475,7 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
+            return false;
         }
 
         #endregion
@@ -2555,39 +2484,24 @@ namespace WPELibrary.Lib
 
         private static bool IsFilter_ByIP(string sPacketIP)
         {
-            bool bReturn = false;
-
             try
             {
-                if (!string.IsNullOrEmpty(sPacketIP))
+                if (string.IsNullOrEmpty(sPacketIP) || string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckIP_Value))
                 {
-                    string sIP = sPacketIP.Split(':')[0];
-                    string sPort = sPacketIP.Split(':')[1];
-
-                    if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckIP_Value))
-                    {
-                        string[] sIPArr = Socket_Cache.SocketPacket.CheckIP_Value.Split(';');
-
-                        foreach (string sCheckIP in sIPArr)
-                        {
-                            if (!string.IsNullOrEmpty(sCheckIP))
-                            {
-                                if (sIP.Equals(sCheckIP))
-                                {
-                                    bReturn = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    return false;
                 }
+
+                string sIP = sPacketIP.Split(':')[0];
+                HashSet<string> ipSet = new HashSet<string>(Socket_Cache.SocketPacket.CheckIP_Value.Split(';'));
+
+                return ipSet.Contains(sIP);
             }
             catch (Exception ex)
             {
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
+            return false;
         }
 
         #endregion
@@ -2596,39 +2510,24 @@ namespace WPELibrary.Lib
 
         private static bool IsFilter_ByPort(string sPacketPort)
         {
-            bool bReturn = false;
-
             try
             {
-                if (!string.IsNullOrEmpty(sPacketPort))
+                if (string.IsNullOrEmpty(sPacketPort) || string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckPort_Value))
                 {
-                    string sIP = sPacketPort.Split(':')[0];
-                    string sPort = sPacketPort.Split(':')[1];
-
-                    if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckPort_Value))
-                    {
-                        string[] sPortArr = Socket_Cache.SocketPacket.CheckPort_Value.Split(';');
-
-                        foreach (string sCheckPort in sPortArr)
-                        {
-                            if (!string.IsNullOrEmpty(sCheckPort))
-                            {
-                                if (sPort.Equals(sCheckPort))
-                                {
-                                    bReturn = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    return false;
                 }
+
+                string sPort = sPacketPort.Split(':')[1];
+                HashSet<string> portSet = new HashSet<string>(Socket_Cache.SocketPacket.CheckPort_Value.Split(';'));
+
+                return portSet.Contains(sPort);
             }
             catch (Exception ex)
             {
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
+            return false;
         }
 
         #endregion
@@ -2637,113 +2536,37 @@ namespace WPELibrary.Lib
 
         private static bool IsFilter_ByHead(byte[] bBuffer)
         {
-            bool bReturn = false;
-
             try
             {
-                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckHead_Value))
+                if (string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckHead_Value))
                 {
-                    string sPacket = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
-                    sPacket = sPacket.Replace(" ", "");
-
-                    string[] sHeadArr = Socket_Cache.SocketPacket.CheckHead_Value.Replace(" ", "").Split(';');
-
-                    foreach (string sCheckHead in sHeadArr)
-                    {
-                        if (!string.IsNullOrEmpty(sCheckHead))
-                        {
-                            if (sPacket.IndexOf(sCheckHead) == 0)
-                            {
-                                return true;
-                            }
-                        }                        
-                    }
+                    return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
 
-            return bReturn;
-        }
+                string checkHeadValue = Socket_Cache.SocketPacket.CheckHead_Value.Replace(" ", "");
+                string[] headValues = checkHeadValue.Split(';');
 
-        #endregion
-
-        #region//检测封包内容
-
-        private static bool IsFilter_ByPacket(byte[] bBuffer)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckData_Value))
+                foreach (string headValue in headValues)
                 {
-                    string sPacket = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer);
-                    sPacket = sPacket.Replace(" ", "");
-
-                    string[] sPacketArr = Socket_Cache.SocketPacket.CheckData_Value.Replace(" ", "").Split(';');
-
-                    foreach (string sCheckPacket in sPacketArr)
+                    if (!string.IsNullOrEmpty(headValue))
                     {
-                        if (!string.IsNullOrEmpty(sCheckPacket))
+                        byte[] headBytes = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, headValue);
+
+                        if (bBuffer.Length >= headBytes.Length)
                         {
-                            if (sPacket.IndexOf(sCheckPacket) >= 0)
+                            bool match = true;
+                            for (int i = 0; i < headBytes.Length; i++)
+                            {
+                                if (bBuffer[i] != headBytes[i])
+                                {
+                                    match = false;
+                                    break;
+                                }
+                            }
+
+                            if (match)
                             {
                                 return true;
-                            }
-                        }                        
-                    }
-                }                    
-            }
-            catch (Exception ex)
-            {
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//检测封包大小
-
-        private static bool IsFilter_BySize(int PacketLength)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                if (!string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckLength_Value))
-                {
-                    string[] sLengthArr = Socket_Cache.SocketPacket.CheckLength_Value.Split(';');
-
-                    foreach (string sLength in sLengthArr)
-                    {
-                        if (!string.IsNullOrEmpty(sLength))
-                        {
-                            if (sLength.IndexOf("-") > 0)
-                            {
-                                if (int.TryParse(sLength.Split('-')[0], out int iFrom) && int.TryParse(sLength.Split('-')[1], out int iTo))
-                                {
-                                    if (PacketLength >= iFrom && PacketLength <= iTo)
-                                    {
-                                        bReturn = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (int.TryParse(sLength, out int iLength))
-                                {
-                                    if (PacketLength == iLength)
-                                    {
-                                        bReturn = true;
-                                        break;
-                                    }
-                                }
                             }
                         }
                     }
@@ -2754,7 +2577,94 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return bReturn;
+            return false;
+        }
+
+        #endregion
+
+        #region//检测封包内容
+
+        private static bool IsFilter_ByPacket(byte[] bBuffer)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckData_Value))
+                {
+                    return false;
+                }
+
+                string checkDataValue = Socket_Cache.SocketPacket.CheckData_Value.Replace(" ", "");
+                string[] checkDataArray = checkDataValue.Split(';');
+
+                string packetString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffer).Replace(" ", "");
+
+                foreach (string checkData in checkDataArray)
+                {
+                    if (!string.IsNullOrEmpty(checkData) && packetString.IndexOf(checkData) >= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return false;
+        }
+
+        #endregion
+
+        #region//检测封包大小
+
+        private static bool IsFilter_BySize(int PacketLength)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(Socket_Cache.SocketPacket.CheckLength_Value))
+                {
+                    return false;
+                }
+
+                string[] lengthArray = Socket_Cache.SocketPacket.CheckLength_Value.Split(';');
+
+                foreach (string length in lengthArray)
+                {
+                    if (string.IsNullOrEmpty(length))
+                    {
+                        continue;
+                    }
+
+                    if (length.Contains("-"))
+                    {
+                        string[] range = length.Split('-');
+                        if (range.Length == 2 && int.TryParse(range[0], out int iFrom) && int.TryParse(range[1], out int iTo))
+                        {
+                            if (PacketLength >= iFrom && PacketLength <= iTo)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (int.TryParse(length, out int iLength))
+                        {
+                            if (PacketLength == iLength)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return false;
         }
 
         #endregion

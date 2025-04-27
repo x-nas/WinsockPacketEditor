@@ -208,27 +208,25 @@ namespace WPELibrary.Lib
 
         public static string GetDefaultLanguage(string[] MutiLanID)
         {
-            string sReturn = string.Empty;
-
             try
             {
                 switch (DefaultLanguage)
                 {
                     case "zh-CN":
-                        sReturn = MutiLanID[0].ToString();
-                        break;
+                        return MutiLanID[0];
 
                     case "en-US":
-                        sReturn = MutiLanID[1].ToString();
-                        break;
+                        return MutiLanID[1];
+
+                    default:
+                        return string.Empty;
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return string.Empty;
             }
-
-            return sReturn;
         }
 
         #endregion

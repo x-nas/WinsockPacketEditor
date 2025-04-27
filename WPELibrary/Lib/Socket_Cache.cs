@@ -1220,59 +1220,36 @@ namespace WPELibrary.Lib
 
             public static Image GetImg_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
             {
-                Image imgReturn = null;
-
                 try
                 {
                     switch (socketType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                            imgReturn = Properties.Resources.sent;
-                            break;
                         case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                            imgReturn = Properties.Resources.sent;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
-                            imgReturn = Properties.Resources.received;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
-                            imgReturn = Properties.Resources.received;
-                            break;
                         case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                            imgReturn = Properties.Resources.sent;
-                            break;
                         case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                            imgReturn = Properties.Resources.sent;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
-                            imgReturn = Properties.Resources.received;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
-                            imgReturn = Properties.Resources.received;
-                            break;
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
-                            imgReturn = Properties.Resources.sent;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                            imgReturn = Properties.Resources.received;
-                            break;
-                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                            imgReturn = Properties.Resources.received;
-                            break;
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            imgReturn = Properties.Resources.sent;
-                            break;
+                            return Properties.Resources.sent;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            imgReturn = Properties.Resources.received;
-                            break;
+                            return Properties.Resources.received;
+
+                        default:
+                            return null;
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return null;
                 }
-
-                return imgReturn;
             }
 
             #endregion            
@@ -1382,11 +1359,7 @@ namespace WPELibrary.Lib
                             bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spi);
                             if (bIsShow)
                             {
-                                int iPacketLen = spi.PacketLen;
-                                byte[] bBuffer = spi.PacketBuffer;
-
-                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bBuffer, iMax_DataLen);                                
-
+                                spi.PacketData = Socket_Operation.GetPacketData_Hex(spi.PacketBuffer, iMax_DataLen);
                                 RecSocketPacket?.Invoke(spi);
                             }
                             else
