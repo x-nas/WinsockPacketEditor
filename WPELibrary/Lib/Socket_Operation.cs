@@ -286,27 +286,6 @@ namespace WPELibrary.Lib
             return image;
         }
 
-        #endregion
-
-        #region//从内存获取数据
-
-        public static unsafe byte[] GetBytesFromIntPtr(IntPtr ipBuffer, int Length)
-        {
-            byte[] bReturn = new byte[Length];
-
-            try
-            {
-                Span<byte> bSpan = new Span<byte>((byte*)ipBuffer, Length);
-                bSpan.CopyTo(bReturn);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }        
-
         #endregion        
 
         #region//设置系统代理
@@ -625,7 +604,10 @@ namespace WPELibrary.Lib
 
         private static byte[] Hex_To_Bytes(string hexString)
         {
-            byte[] bReturn = null;
+            if (string.IsNullOrEmpty(hexString))
+            {
+                return Array.Empty<byte>();
+            }
 
             try
             {
@@ -637,20 +619,19 @@ namespace WPELibrary.Lib
                 }
 
                 byte[] returnBytes = new byte[hexString.Length / 2];
+                Span<byte> span = returnBytes.AsSpan();
 
-                for (int i = 0; i < returnBytes.Length; i++)
+                for (int i = 0; i < span.Length; i++)
                 {
-                    returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                    span[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
                 }
 
-                bReturn = returnBytes;
+                return returnBytes;
             }
             catch
             {
-                bReturn = new byte[0];
+                return Array.Empty<byte>();
             }
-
-            return bReturn;
         }
 
         #endregion
@@ -1396,17 +1377,10 @@ namespace WPELibrary.Lib
                 {
                     if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
                     {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept || res > 0)
                         {
                             Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
-                        }
-                        else
-                        {
-                            if (res > 0)
-                            {
-                                Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
-                            }
-                        }
+                        }                        
                     }
                 }
                 catch (Exception ex)
@@ -1803,31 +1777,11 @@ namespace WPELibrary.Lib
 
         public static byte GetStepByte(byte bStepByte, int iStepLen)
         {
-            byte bReturn = byte.MinValue;
+            int iStepValue = bStepByte + iStepLen;
 
-            try
-            {
-                int iStepValue = Convert.ToInt32(bStepByte);
-                iStepValue += iStepLen;
+            iStepValue = (iStepValue % 256 + 256) % 256;
 
-                while (iStepValue > 255)
-                {
-                    iStepValue -= 256;
-                }
-
-                while (iStepValue < 0)
-                {
-                    iStepValue += 256;
-                }
-
-                bReturn = Convert.ToByte(iStepValue);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
+            return (byte)iStepValue;
         }
 
         #endregion

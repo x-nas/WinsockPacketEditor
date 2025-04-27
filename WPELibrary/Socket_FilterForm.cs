@@ -980,6 +980,7 @@ namespace WPELibrary
                     decimal dPortContent_New = 0;
                     decimal dProgressionStep_New = 0;
                     string sProgression_New = string.Empty;
+                    int iProgressionCount = 0;
                     string sSearch_New = string.Empty;
                     string sModify_New = string.Empty;
                     bool bIsExecute;
@@ -1219,6 +1220,7 @@ namespace WPELibrary
                         FilterStartFrom_New,
                         dProgressionStep_New,
                         sProgression_New,
+                        iProgressionCount,
                         sSearch_New,
                         sModify_New);
 
