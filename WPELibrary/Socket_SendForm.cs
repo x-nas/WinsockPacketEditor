@@ -444,15 +444,22 @@ namespace WPELibrary
                 {
                     DynamicByteProvider dbp = hbPacketData.ByteProvider as DynamicByteProvider;
 
-                    byte[] bNewBuff = dbp.Bytes.ToArray();
-                    int iNewLen = bNewBuff.Length;
-                    string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bNewBuff, Socket_Cache.SocketPacket.PacketData_MaxLen);
+                    if (dbp != null)
+                    {
+                        byte[] bNewBuff = dbp.Bytes.ToArray();
+                        int iNewLen = bNewBuff.Length;
+                        Span<byte> bufferSpan = bNewBuff.AsSpan();
+                        string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Socket_Cache.SocketPacket.PacketData_MaxLen);
 
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
-                    Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen = iNewLen;
+                        if (Select_Index >= 0 && Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                        {
+                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
+                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
+                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen = iNewLen;
+                        }
 
-                    dbp.ApplyChanges();
+                        dbp.ApplyChanges();
+                    }                    
                 }
             }
             catch (Exception ex)

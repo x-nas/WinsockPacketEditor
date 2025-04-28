@@ -20,6 +20,7 @@ using WPELibrary.Lib.NativeMethods;
 using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace WPELibrary.Lib
 {   
@@ -152,18 +153,16 @@ namespace WPELibrary.Lib
 
             try
             {
-                await Task.Run(() =>
+                using (HttpClient client = new HttpClient())
                 {
-                    HttpWebRequest hwr = (HttpWebRequest)WebRequest.Create(sURL);
+                    client.Timeout = TimeSpan.FromSeconds(5);
+                    HttpResponseMessage response = await client.GetAsync(sURL);
 
-                    using (HttpWebResponse resp = (HttpWebResponse)hwr.GetResponse())
+                    if (response.IsSuccessStatusCode)
                     {
-                        if (resp.StatusCode == HttpStatusCode.OK)
-                        {
-                            bReturn = true;
-                        }
+                        bReturn = true;
                     }
-                });                
+                }  
             }
             catch
             {
@@ -226,68 +225,94 @@ namespace WPELibrary.Lib
 
         #region//获取进程的图标
 
-        private static Image IconFromFile(Process p)
+        private static Image IconFromFile(Process process)
         {
-            string filePath = "";
-            Image image = null;
-
-            try
+            string filePath = GetFilePath(process);
+            if (string.IsNullOrEmpty(filePath))
             {
-                filePath = p.MainModule.FileName.Replace(".ni.dll", ".dll");
-            }
-            catch
-            {
-                filePath = "";
+                return new Icon(SystemIcons.Application, 256, 256).ToBitmap();
             }
 
             try
             {
                 var extractor = new IconExtractor.IconExtractor(filePath);
                 var icon = extractor.GetIcon(0);
-
-                Icon[] splitIcons = IconExtractor.IconUtil.Split(icon);
-
-                Icon selectedIcon = null;
-
-                foreach (var item in splitIcons)
+                if (icon != null)
                 {
-                    if (selectedIcon == null)
-                    {
-                        selectedIcon = item;
-                    }
-                    else
-                    {
-                        if (IconExtractor.IconUtil.GetBitCount(item) > IconExtractor.IconUtil.GetBitCount(selectedIcon))
-                        {
-                            selectedIcon = item;
-                        }
-                        else if (IconExtractor.IconUtil.GetBitCount(item) == IconExtractor.IconUtil.GetBitCount(selectedIcon) && item.Width > selectedIcon.Width)
-                        {
-                            selectedIcon = item;
-                        }
-                    }
+                    var splitIcons = IconExtractor.IconUtil.Split(icon);
+                    return GetBestIcon(splitIcons);
                 }
-
-                return selectedIcon.ToBitmap();
             }
-            catch
+            catch (Exception ex)
             {
-                //
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             try
             {
-                image = Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
+                return Icon.ExtractAssociatedIcon(filePath)?.ToBitmap();
             }
-            catch
+            catch (Exception ex)
             {
-                image = new Icon(SystemIcons.Application, 256, 256).ToBitmap();
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return image;
+            return new Icon(SystemIcons.Application, 256, 256).ToBitmap();
         }
 
-        #endregion        
+        private static string GetFilePath(Process process)
+        {
+            try
+            {
+                return process.MainModule.FileName.Replace(".ni.dll", ".dll");
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return null;
+            }
+        }
+
+        private static Image GetBestIcon(Icon[] icons)
+        {
+            if (icons == null || icons.Length == 0)
+            {
+                return null;
+            }
+
+            Icon bestIcon = icons[0];
+
+            foreach (var icon in icons)
+            {
+                if (IconExtractor.IconUtil.GetBitCount(icon) > IconExtractor.IconUtil.GetBitCount(bestIcon))
+                {
+                    bestIcon = icon;
+                }
+                else if (IconExtractor.IconUtil.GetBitCount(icon) == IconExtractor.IconUtil.GetBitCount(bestIcon) && icon.Width > bestIcon.Width)
+                {
+                    bestIcon = icon;
+                }
+            }
+
+            return bestIcon.ToBitmap();
+        }        
+
+        #endregion
+
+        #region//将数据写回内存
+
+        public static unsafe void CopyBufferToIntPtr(IntPtr lpBuffer, byte[] bBuffer)
+        {
+            if (bBuffer.Length > 0)
+            {
+                fixed (byte* bufferPtr = bBuffer)
+                {
+                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, bBuffer.Length, bBuffer.Length);
+                }
+            }
+        }
+
+        #endregion
 
         #region//设置系统代理
 
@@ -444,7 +469,7 @@ namespace WPELibrary.Lib
 
         #region//byte[]转字符串
 
-        public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, byte[] buffer)
+        public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, Span<byte> buffer)
         {
             string sReturn = string.Empty;
 
@@ -455,19 +480,12 @@ namespace WPELibrary.Lib
                     switch (efFormat)
                     {
                         case Socket_Cache.SocketPacket.EncodingFormat.Default:
-                            sReturn = Encoding.Default.GetString(buffer);
+                            sReturn = Encoding.Default.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Char:
-                            char c = Convert.ToChar(buffer[0]);
-                            if ((int)c > 31)
-                            {
-                                sReturn = c.ToString();
-                            }
-                            else
-                            {
-                                sReturn = ".";
-                            }
+                            char c = (char)buffer[0];
+                            sReturn = (char.IsControl(c) ? "." : c.ToString());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Byte:
@@ -475,118 +493,114 @@ namespace WPELibrary.Lib
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Bytes:
-
+                            StringBuilder sbBytes = new StringBuilder();
                             foreach (byte b in buffer)
                             {
-                                sReturn += Convert.ToInt32(b) + ",";
+                                sbBytes.Append(b).Append(",");
                             }
-
-                            sReturn = sReturn.TrimEnd(',');
-                            sReturn = string.Format("{{{0}}}", sReturn);
-
+                            sReturn = sbBytes.ToString().TrimEnd(',');
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Short:
                             if (buffer.Length >= 2)
                             {
-                                sReturn = BitConverter.ToInt16(buffer, 0).ToString();
+                                sReturn = BitConverter.ToInt16(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UShort:
                             if (buffer.Length >= 2)
                             {
-                                sReturn = BitConverter.ToUInt16(buffer, 0).ToString();
+                                sReturn = BitConverter.ToUInt16(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Int32:
                             if (buffer.Length >= 4)
                             {
-                                sReturn = BitConverter.ToInt32(buffer, 0).ToString();
+                                sReturn = BitConverter.ToInt32(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UInt32:
                             if (buffer.Length >= 4)
                             {
-                                sReturn = BitConverter.ToUInt32(buffer, 0).ToString();
+                                sReturn = BitConverter.ToUInt32(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Int64:
                             if (buffer.Length >= 8)
                             {
-                                sReturn = BitConverter.ToInt64(buffer, 0).ToString();
+                                sReturn = BitConverter.ToInt64(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UInt64:
                             if (buffer.Length >= 8)
                             {
-                                sReturn = BitConverter.ToUInt64(buffer, 0).ToString();
+                                sReturn = BitConverter.ToUInt64(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Float:
                             if (buffer.Length >= 4)
                             {
-                                sReturn = BitConverter.ToSingle(buffer, 0).ToString();
+                                sReturn = BitConverter.ToSingle(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Double:
                             if (buffer.Length >= 8)
                             {
-                                sReturn = BitConverter.ToDouble(buffer, 0).ToString();
+                                sReturn = BitConverter.ToDouble(buffer.ToArray(), 0).ToString();
                             }
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Bin:
+                            StringBuilder sbBin = new StringBuilder();
                             foreach (byte b in buffer)
                             {
-                                string strTemp = Convert.ToString(b, 2);
-                                strTemp = strTemp.Insert(0, new string('0', 8 - strTemp.Length));
-                                sReturn += strTemp + " ";
+                                sbBin.Append(Convert.ToString(b, 2).PadLeft(8, '0')).Append(" ");
                             }
-                            sReturn = sReturn.Trim();
+                            sReturn = sbBin.ToString().Trim();
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Hex:
-                            StringBuilder sb = new StringBuilder();
+                            StringBuilder sbHex = new StringBuilder();
                             foreach (byte b in buffer)
                             {
-                                sb.Append(b.ToString("X2")).Append(" ");                                
+                                sbHex.Append(b.ToString("X2")).Append(" ");
                             }
-                            sReturn = sb.ToString().Trim();
+                            sReturn = sbHex.ToString().Trim();
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.GBK:
-                            sReturn = Encoding.GetEncoding("GBK").GetString(buffer);
+                            sReturn = Encoding.GetEncoding("GBK").GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.Unicode:
-                            sReturn = Encoding.Unicode.GetString(buffer);
+                            sReturn = Encoding.Unicode.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.ASCII:
-                            sReturn = Encoding.ASCII.GetString(buffer);
+                            sReturn = Encoding.ASCII.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UTF7:
-                            sReturn = Encoding.UTF7.GetString(buffer);
+                            sReturn = Encoding.UTF7.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UTF8:
-                            sReturn = Encoding.UTF8.GetString(buffer);
+                            sReturn = Encoding.UTF8.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UTF16:
-                            sReturn = Encoding.BigEndianUnicode.GetString(buffer);
+                            sReturn = Encoding.BigEndianUnicode.GetString(buffer.ToArray());
                             break;
 
                         case Socket_Cache.SocketPacket.EncodingFormat.UTF32:
-                            sReturn = Encoding.UTF32.GetString(buffer);
+                            sReturn = Encoding.UTF32.GetString(buffer.ToArray());
                             break;
                     }
                 }
@@ -645,9 +659,9 @@ namespace WPELibrary.Lib
 
             try
             {
-                string pattern = @"^([A-Fa-f0-9]{2}\s?)+$";
-
-                bReturn = Regex.IsMatch(value, pattern);
+                const string pattern = @"^([A-Fa-f0-9]{2}\s?)+$";
+                Regex regex = new Regex(pattern, RegexOptions.Compiled);
+                bReturn = regex.IsMatch(value);
             }
             catch (Exception ex)
             {
@@ -659,21 +673,14 @@ namespace WPELibrary.Lib
 
         public static bool IsValidFilterString(string value)
         {
-            bool bReturn = true;
-
-            try
+            if (!String.IsNullOrEmpty(value))
             {
-                if (!String.IsNullOrEmpty(value))
-                {
-                    bReturn = Socket_Operation.IsHexString(value);
-                }
+                return Socket_Operation.IsHexString(value);
             }
-            catch (Exception ex)
+            else
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return false;
             }
-
-            return bReturn;
         }
 
         #endregion
@@ -832,79 +839,59 @@ namespace WPELibrary.Lib
 
         #region//统计封包数量
 
-        public static void CountSocketInfo(Socket_Cache.SocketPacket.PacketType ptPacketType, int iPacketLen)
+        public static void CountSocketInfo(Socket_Cache.SocketPacket.PacketType ptPacketType, int packetLength)
         {
             try
             {
-                if (iPacketLen > 0)
+                if (packetLength > 0)
                 {
                     Interlocked.Increment(ref Socket_Cache.SocketPacket.TotalPackets);
 
                     switch (ptPacketType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                            Socket_Cache.SocketQueue.Send_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
-                            break;
-
                         case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                            Socket_Cache.SocketQueue.Send_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.Send_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, packetLength);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                            Socket_Cache.SocketQueue.SendTo_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
-                            break;
-
                         case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                            Socket_Cache.SocketQueue.SendTo_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
-                            Socket_Cache.SocketQueue.Recv_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
-                            Socket_Cache.SocketQueue.Recv_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
-                            Socket_Cache.SocketQueue.RecvFrom_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
-                            Socket_Cache.SocketQueue.RecvFrom_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.SendTo_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, packetLength);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
-                            Socket_Cache.SocketQueue.WSASend_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.WSASend_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, packetLength);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            Socket_Cache.SocketQueue.WSASendTo_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.WSASendTo_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_SendBytes, packetLength);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.Recv_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, packetLength);
+                            break;
+
+                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.RecvFrom_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, packetLength);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                            Socket_Cache.SocketQueue.WSARecv_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
-                            break;
-
                         case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                            Socket_Cache.SocketQueue.WSARecv_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.WSARecv_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, packetLength);
                             break;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            Socket_Cache.SocketQueue.WSARecvFrom_CNT++;
-                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, iPacketLen);
+                            Interlocked.Increment(ref Socket_Cache.SocketQueue.WSARecvFrom_CNT);
+                            Interlocked.Add(ref Socket_Cache.SocketPacket.Total_RecvBytes, packetLength);
                             break;
                     }
                 }                
@@ -1397,38 +1384,41 @@ namespace WPELibrary.Lib
 
         public static string GetIPString_BySocketAddr(int pSocket, Socket_Cache.SocketPacket.SockAddr pAddr, Socket_Cache.SocketPacket.PacketType pType)
         {
-            string sReturn = string.Empty;
+            string sIP_From = string.Empty;
+            string sIP_To = string.Empty;
 
             try
-            {  
-                string sIP_From = string.Empty;
-                string sIP_To = string.Empty;
+            {
+                sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);
 
-                sIP_From = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.From);                
+                switch (pType)
+                {
+                    case Socket_Cache.SocketPacket.PacketType.WS1_Send:
+                    case Socket_Cache.SocketPacket.PacketType.WS2_Send:
+                    case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
+                    case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
+                    case Socket_Cache.SocketPacket.PacketType.WSASend:
+                    case Socket_Cache.SocketPacket.PacketType.WSARecv:
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
+                        sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
+                        break;
 
-                if (pType == Socket_Cache.SocketPacket.PacketType.WS1_Send ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS2_Send ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS1_Recv ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS2_Recv ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WSASend || 
-                    pType == Socket_Cache.SocketPacket.PacketType.WSARecv ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WSARecvEx)
-                {
-                    sIP_To = Socket_Operation.GetIP_BySocket(pSocket, Socket_Cache.SocketPacket.IPType.To);
-                }
-                else if (pType == Socket_Cache.SocketPacket.PacketType.WS1_SendTo ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS2_SendTo ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom ||
-                    pType == Socket_Cache.SocketPacket.PacketType.WSASendTo || 
-                    pType == Socket_Cache.SocketPacket.PacketType.WSARecvFrom)
-                {
-                    sIP_To = Socket_Operation.GetIP_BySockAddr(pAddr);
+                    case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
+                    case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
+                    case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
+                    case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
+                    case Socket_Cache.SocketPacket.PacketType.WSASendTo:
+                    case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
+                        sIP_To = Socket_Operation.GetIP_BySockAddr(pAddr);
+                        break;
                 }
 
                 if (!string.IsNullOrEmpty(sIP_From) && !string.IsNullOrEmpty(sIP_To))
                 {
-                    sReturn = sIP_From + "|" + sIP_To;
+                    var sb = new StringBuilder(sIP_From);
+                    sb.Append("|");
+                    sb.Append(sIP_To);
+                    return sb.ToString();
                 }
             }
             catch (Exception ex)
@@ -1436,7 +1426,7 @@ namespace WPELibrary.Lib
                 DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return sReturn;
+            return string.Empty;
         }
 
         public static string GetIP_BySockAddr(Socket_Cache.SocketPacket.SockAddr saAddr)
@@ -1449,8 +1439,7 @@ namespace WPELibrary.Lib
                 {
                     string sIP = Marshal.PtrToStringAnsi(WS2_32.inet_ntoa(saAddr.sin_addr));
                     string sPort = WS2_32.ntohs(saAddr.sin_port).ToString();
-
-                    sReturn = sIP + ":" + sPort;
+                    sReturn = $"{sIP}:{sPort}";
                 }
             }
             catch (Exception ex)
@@ -1474,15 +1463,11 @@ namespace WPELibrary.Lib
                 switch (IPType)
                 {
                     case Socket_Cache.SocketPacket.IPType.From:
-
                         WS2_32.getsockname(Socket, ref saAddr, ref iAddrLen);
-
                         break;
 
                     case Socket_Cache.SocketPacket.IPType.To:
-
                         WS2_32.getpeername(Socket, ref saAddr, ref iAddrLen);
-
                         break;                    
                 }
 
@@ -1746,7 +1731,7 @@ namespace WPELibrary.Lib
 
         #region//获取封包数据字符串（十六进制）
 
-        public static string GetPacketData_Hex(byte[] bBuff, int Max_DataLen)
+        public static string GetPacketData_Hex(Span<byte> bBuff, int Max_DataLen)
         {
             string sReturn = string.Empty;
 
@@ -1756,8 +1741,8 @@ namespace WPELibrary.Lib
 
                 if (iPacketLen > Max_DataLen)
                 {
-                    Span<byte> bTemp = bBuff.AsSpan(0, Max_DataLen);
-                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bTemp.ToArray()) + " ...";
+                    Span<byte> bBuffSlice = bBuff.Slice(0, Max_DataLen);                
+                    sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, bBuffSlice) + " ...";
                 }
                 else
                 {
@@ -3247,7 +3232,7 @@ namespace WPELibrary.Lib
 
         #region//发送封包
 
-        public static bool SendPacket(int Socket, Socket_Cache.SocketPacket.PacketType stType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
+        public static unsafe bool SendPacket(int Socket, Socket_Cache.SocketPacket.PacketType packetType, string sIPFrom, string sIPTo, byte[] bSendBuffer)
         {
             bool bReturn = false;
             IntPtr ipSend = IntPtr.Zero;
@@ -3259,10 +3244,8 @@ namespace WPELibrary.Lib
                     ipSend = Marshal.AllocHGlobal(bSendBuffer.Length);
                     Marshal.Copy(bSendBuffer, 0, ipSend, bSendBuffer.Length);
 
-                    int res = -1;
                     string sIPString = string.Empty;
-
-                    switch (stType)
+                    switch (packetType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                         case Socket_Cache.SocketPacket.PacketType.WS2_Send:
@@ -3283,7 +3266,8 @@ namespace WPELibrary.Lib
                             break;
                     }
 
-                    switch (stType)
+                    int res = -1;
+                    switch (packetType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
                         case Socket_Cache.SocketPacket.PacketType.WS1_Recv:

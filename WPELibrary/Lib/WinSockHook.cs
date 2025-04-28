@@ -276,7 +276,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion        
+        #endregion                
 
         #region//Send_Hook
 
@@ -311,10 +311,7 @@ namespace WPELibrary.Lib
                         if (bNewBuffer.Length > 0)
                         {
                             Length = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
-                            {
-                                Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
-                            }
+                            Socket_Operation.CopyBufferToIntPtr(lpBuffer, bNewBuffer);
                         }
                         break;
 
@@ -403,10 +400,7 @@ namespace WPELibrary.Lib
                             if (bNewBuffer.Length > 0)
                             {
                                 res = Length = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
-                                }
+                                Socket_Operation.CopyBufferToIntPtr(lpBuffer, bNewBuffer);
                             }
                             break;
 
@@ -469,10 +463,7 @@ namespace WPELibrary.Lib
                             if (bNewBuffer.Length > 0)
                             {
                                 Length = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
-                                }
+                                Socket_Operation.CopyBufferToIntPtr(lpBuffer, bNewBuffer);
                             }
                             break;
 
@@ -560,10 +551,7 @@ namespace WPELibrary.Lib
                             if (bNewBuffer.Length > 0)
                             {
                                 res = Length = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
-                                }
+                                Socket_Operation.CopyBufferToIntPtr(lpBuffer, bNewBuffer);
                             }
                             break;
 
@@ -621,25 +609,23 @@ namespace WPELibrary.Lib
                     switch (FilterAction)
                     {
                         case Socket_Cache.Filter.FilterAction.Intercept:
-                            Marshal.WriteInt32(lpNumberOfBytesSend, 0);
+                            BytesSend = 0;
+                            Marshal.WriteInt32(lpNumberOfBytesSend, BytesSend);
                             bNewBuffer = bRawBuffer;
                             break;
 
                         case Socket_Cache.Filter.FilterAction.Change:
                             if (bNewBuffer.Length > 0)
                             {
-                                BytesSend = WSABuffer.len = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
-                                }
+                                WSABuffer.len = bNewBuffer.Length;
+                                Socket_Operation.CopyBufferToIntPtr(WSABuffer.buf, bNewBuffer);
                             }
                             break;
 
                         case Socket_Cache.Filter.FilterAction.Replace:
                             if (bNewBuffer.Length > 0)
                             {
-                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                                WSABuffer.len = bNewBuffer.Length;
                             }
                             break;
 
@@ -652,10 +638,14 @@ namespace WPELibrary.Lib
 
                     if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
                     {
-                        res = WS2_32.WSASend(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref Overlapped, lpCompletionRoutine);
+                        res = WS2_32.WSASend(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref Overlapped, lpCompletionRoutine);                        
                     }
 
-                    _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                    if (res == SocketError.Success)
+                    {
+                        BytesSend = Marshal.ReadInt32(lpNumberOfBytesSend);
+                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                    }
                 }
             }
             catch (Exception ex)
@@ -697,7 +687,8 @@ namespace WPELibrary.Lib
                         switch (FilterAction)
                         {
                             case Socket_Cache.Filter.FilterAction.Intercept:
-                                Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
+                                BytesRecvd = 0;
+                                Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
                                 bNewBuffer = bRawBuffer;
                                 break;
 
@@ -705,11 +696,8 @@ namespace WPELibrary.Lib
                                 if (bNewBuffer.Length > 0)
                                 {
                                     BytesRecvd = WSABuffer.len = bNewBuffer.Length;
-                                    fixed (byte* bufferPtr = bNewBuffer)
-                                    {
-                                        Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
-                                    }
                                     Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                    Socket_Operation.CopyBufferToIntPtr(WSABuffer.buf, bNewBuffer);                                    
                                 }
                                 break;
 
@@ -771,25 +759,23 @@ namespace WPELibrary.Lib
                     switch (FilterAction)
                     {
                         case Socket_Cache.Filter.FilterAction.Intercept:
-                            Marshal.WriteInt32(lpNumberOfBytesSend, 0);
+                            BytesSend = 0;
+                            Marshal.WriteInt32(lpNumberOfBytesSend, BytesSend);
                             bNewBuffer = bRawBuffer;
                             break;
 
                         case Socket_Cache.Filter.FilterAction.Change:
                             if (bNewBuffer.Length > 0)
                             {
-                                BytesSend = WSABuffer.len = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
-                                }
+                                WSABuffer.len = bNewBuffer.Length;
+                                Socket_Operation.CopyBufferToIntPtr(WSABuffer.buf, bNewBuffer);
                             }
                             break;
 
                         case Socket_Cache.Filter.FilterAction.Replace:
                             if (bNewBuffer.Length > 0)
                             {
-                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                                WSABuffer.len = bNewBuffer.Length;
                             }
                             break;
 
@@ -802,10 +788,14 @@ namespace WPELibrary.Lib
 
                     if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
                     {
-                        res = WS2_32.WSASendTo(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref To, lpToLen, ref Overlapped, lpCompletionRoutine);
+                        res = WS2_32.WSASendTo(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref To, lpToLen, ref Overlapped, lpCompletionRoutine);                        
                     }
 
-                    _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, To);
+                    if (res == SocketError.Success)
+                    {
+                        BytesSend = Marshal.ReadInt32(lpNumberOfBytesSend);
+                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, To);
+                    }
                 }
             }
             catch (Exception ex)
@@ -849,7 +839,8 @@ namespace WPELibrary.Lib
                         switch (FilterAction)
                         {
                             case Socket_Cache.Filter.FilterAction.Intercept:
-                                Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
+                                BytesRecvd = 0;
+                                Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
                                 bNewBuffer = bRawBuffer;
                                 break;
 
@@ -857,11 +848,8 @@ namespace WPELibrary.Lib
                                 if (bNewBuffer.Length > 0)
                                 {
                                     BytesRecvd = WSABuffer.len = bNewBuffer.Length;
-                                    fixed (byte* bufferPtr = bNewBuffer)
-                                    {
-                                        Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
-                                    }
                                     Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                    Socket_Operation.CopyBufferToIntPtr(WSABuffer.buf, bNewBuffer);
                                 }
                                 break;
 

@@ -1291,10 +1291,11 @@ namespace WPELibrary.Lib
                     {
                         string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptPacketType);
 
-                        if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
+                        if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.Contains("|"))
                         {
-                            string sIPFrom = sPacketIP.Split('|')[0];
-                            string sIPTo = sPacketIP.Split('|')[1];
+                            string[] ipParts = sPacketIP.Split('|');
+                            string sIPFrom = ipParts[0];
+                            string sIPTo = ipParts[1];
                             DateTime dtTime = DateTime.Now;
 
                             Socket_PacketInfo spi = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
@@ -1359,7 +1360,8 @@ namespace WPELibrary.Lib
                             bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spi);
                             if (bIsShow)
                             {
-                                spi.PacketData = Socket_Operation.GetPacketData_Hex(spi.PacketBuffer, iMax_DataLen);
+                                Span<byte> bufferSpan = spi.PacketBuffer.AsSpan();
+                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bufferSpan, iMax_DataLen);
                                 RecSocketPacket?.Invoke(spi);
                             }
                             else

@@ -523,6 +523,30 @@ namespace WPELibrary
             }
         }
 
+        private void AutoScrollDataGridView(DataGridView dgv, bool autoScroll)
+        {
+            if (autoScroll && !dgv.IsDisposed)
+            {
+                if (dgv.InvokeRequired)
+                {
+                    dgv.Invoke(new Action(() =>
+                    {
+                        if (dgv.Rows.Count > 0 && dgv.Height > dgv.RowTemplate.Height)
+                        {
+                            dgv.FirstDisplayedScrollingRowIndex = dgv.RowCount - 1;
+                        }
+                    }));
+                }
+                else
+                {
+                    if (dgv.Rows.Count > 0 && dgv.Height > dgv.RowTemplate.Height)
+                    {
+                        dgv.FirstDisplayedScrollingRowIndex = dgv.RowCount - 1;
+                    }
+                }
+            }
+        }
+
         #endregion        
 
         #region//系统设置
@@ -822,30 +846,14 @@ namespace WPELibrary
                 if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                 {
                     await Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
-
-                    if (this.cbSocketList_AutoRoll.Checked && !this.dgvSocketList.IsDisposed)
-                    {
-                        if (dgvSocketList.Rows.Count > 0 && dgvSocketList.Height > dgvSocketList.RowTemplate.Height)
-                        {
-                            dgvSocketList.FirstDisplayedScrollingRowIndex = dgvSocketList.RowCount - 1;
-                        }
-                    }
-
+                    this.AutoScrollDataGridView(dgvSocketList, cbSocketList_AutoRoll.Checked);
                     this.AutoCleanUp_SocketList();
                 }
 
                 if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
                     await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
-
-                    if (this.cbLogList_AutoRoll.Checked && !this.dgvLogList.IsDisposed)
-                    {
-                        if (dgvLogList.Rows.Count > 0 && dgvLogList.Height > dgvLogList.RowTemplate.Height)
-                        {
-                            dgvLogList.FirstDisplayedScrollingRowIndex = dgvLogList.RowCount - 1;
-                        }
-                    }
-
+                    this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
                     this.AutoCleanUp_LogList();
                 }
             }
@@ -853,7 +861,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion        
 
