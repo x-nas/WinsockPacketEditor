@@ -3247,7 +3247,7 @@ namespace WPELibrary.Lib
             public static Socket_Cache.Filter.FilterAction DoFilterList(Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr)
             {  
                 bool bBreak = false;
-                bNewBuffer = bufferSpan.ToArray();
+                bNewBuffer = Array.Empty<byte>();
                 Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.None;            
 
                 try

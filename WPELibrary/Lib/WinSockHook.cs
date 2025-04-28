@@ -300,21 +300,40 @@ namespace WPELibrary.Lib
                 byte[] bRawBuffer = bBufferSpan.ToArray();
                 Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
 
-                if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                switch (FilterAction)
                 {
-                    res = 0;
-                }
-                else
-                {
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                    {
-                        Length = bNewBuffer.Length;
-                        fixed (byte* bufferPtr = bNewBuffer)
-                        {
-                            Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
-                        }
-                    }
+                    case Socket_Cache.Filter.FilterAction.Intercept:
+                        res = 0;
+                        bNewBuffer = bRawBuffer;
+                        break;
 
+                    case Socket_Cache.Filter.FilterAction.Change:
+                        if (bNewBuffer.Length > 0)
+                        {
+                            Length = bNewBuffer.Length;
+                            fixed (byte* bufferPtr = bNewBuffer)
+                            {
+                                Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
+                            }
+                        }
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.Replace:
+                        if (bNewBuffer.Length > 0)
+                        {
+                            Length = bNewBuffer.Length;
+                        }
+                        break;
+
+                    case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                    case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                    case Socket_Cache.Filter.FilterAction.None:
+                        bNewBuffer = bRawBuffer;
+                        break;
+                }
+
+                if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
+                {
                     switch (ptType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
@@ -373,20 +392,36 @@ namespace WPELibrary.Lib
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
 
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    switch (FilterAction)
                     {
-                        res = 0;
-                    }
-                    else
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                        {
-                            res = Length = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            res = 0;
+                            bNewBuffer = bRawBuffer;
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            if (bNewBuffer.Length > 0)
                             {
-                                Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
+                                res = Length = bNewBuffer.Length;
+                                fixed (byte* bufferPtr = bNewBuffer)
+                                {
+                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
+                                }
                             }
-                        }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                res = Length = bNewBuffer.Length;
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        case Socket_Cache.Filter.FilterAction.None:
+                            bNewBuffer = bRawBuffer;
+                            break;
                     }
 
                     _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
@@ -423,21 +458,40 @@ namespace WPELibrary.Lib
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, To);
 
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    switch (FilterAction)
                     {
-                        res = 0;
-                    }
-                    else
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                        {
-                            Length = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
-                            {
-                                Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
-                            }
-                        }
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            res = 0;
+                            bNewBuffer = bRawBuffer;
+                            break;
 
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                Length = bNewBuffer.Length;
+                                fixed (byte* bufferPtr = bNewBuffer)
+                                {
+                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, Length, Length);
+                                }
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                Length = bNewBuffer.Length;
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        case Socket_Cache.Filter.FilterAction.None:
+                            bNewBuffer = bRawBuffer;
+                            break;
+                    }
+
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
+                    {
                         switch (ptType)
                         {
                             case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
@@ -495,20 +549,36 @@ namespace WPELibrary.Lib
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, From);
 
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    switch (FilterAction)
                     {
-                        res = 0;
-                    }
-                    else
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                        {
-                            res = Length = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            res = 0;
+                            bNewBuffer = bRawBuffer;
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            if (bNewBuffer.Length > 0)
                             {
-                                Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
+                                res = Length = bNewBuffer.Length;
+                                fixed (byte* bufferPtr = bNewBuffer)
+                                {
+                                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, res, res);
+                                }
                             }
-                        }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                res = Length = bNewBuffer.Length;
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        case Socket_Cache.Filter.FilterAction.None:
+                            bNewBuffer = bRawBuffer;
+                            break;
                     }
 
                     _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, From);
@@ -548,22 +618,41 @@ namespace WPELibrary.Lib
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
 
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    switch (FilterAction)
                     {
-                        Marshal.WriteInt32(lpNumberOfBytesSend, 0);
-                    }
-                    else
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                        {
-                            BytesSend = WSABuffer.len = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
-                            {
-                                Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
-                            }
-                        }
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            Marshal.WriteInt32(lpNumberOfBytesSend, 0);
+                            bNewBuffer = bRawBuffer;
+                            break;
 
-                        res = WS2_32.WSASend(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref Overlapped, lpCompletionRoutine);                        
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                                fixed (byte* bufferPtr = bNewBuffer)
+                                {
+                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
+                                }
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        case Socket_Cache.Filter.FilterAction.None:
+                            bNewBuffer = bRawBuffer;
+                            break;
+                    }
+
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = WS2_32.WSASend(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref Overlapped, lpCompletionRoutine);
                     }
 
                     _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
@@ -605,22 +694,38 @@ namespace WPELibrary.Lib
                         byte[] bRawBuffer = bBufferSpan.ToArray();
                         Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
 
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                        switch (FilterAction)
                         {
-                            Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);                            
-                        }
-                        else
-                        {
-                            if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                            {
-                                BytesRecvd = WSABuffer.len = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
+                            case Socket_Cache.Filter.FilterAction.Intercept:
+                                Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
+                                bNewBuffer = bRawBuffer;
+                                break;
+
+                            case Socket_Cache.Filter.FilterAction.Change:
+                                if (bNewBuffer.Length > 0)
                                 {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
+                                    BytesRecvd = WSABuffer.len = bNewBuffer.Length;
+                                    fixed (byte* bufferPtr = bNewBuffer)
+                                    {
+                                        Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
+                                    }
+                                    Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
                                 }
-                            }
-                            
-                            Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                break;
+
+                            case Socket_Cache.Filter.FilterAction.Replace:
+                                if (bNewBuffer.Length > 0)
+                                {
+                                    BytesRecvd = WSABuffer.len = bNewBuffer.Length;
+                                    Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                }
+                                break;
+
+                            case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                            case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                            case Socket_Cache.Filter.FilterAction.None:
+                                bNewBuffer = bRawBuffer;
+                                break;
                         }
 
                         _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
@@ -663,22 +768,41 @@ namespace WPELibrary.Lib
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, To);
 
-                    if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                    switch (FilterAction)
                     {
-                        Marshal.WriteInt32(lpNumberOfBytesSend, 0);                        
-                    }
-                    else
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                        {
-                            BytesSend = WSABuffer.len = bNewBuffer.Length;
-                            fixed (byte* bufferPtr = bNewBuffer)
-                            {
-                                Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
-                            }
-                        }
+                        case Socket_Cache.Filter.FilterAction.Intercept:
+                            Marshal.WriteInt32(lpNumberOfBytesSend, 0);
+                            bNewBuffer = bRawBuffer;
+                            break;
 
-                        res = WS2_32.WSASendTo(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref To, lpToLen, ref Overlapped, lpCompletionRoutine);                        
+                        case Socket_Cache.Filter.FilterAction.Change:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                                fixed (byte* bufferPtr = bNewBuffer)
+                                {
+                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesSend, BytesSend);
+                                }
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.Replace:
+                            if (bNewBuffer.Length > 0)
+                            {
+                                BytesSend = WSABuffer.len = bNewBuffer.Length;
+                            }
+                            break;
+
+                        case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                        case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                        case Socket_Cache.Filter.FilterAction.None:
+                            bNewBuffer = bRawBuffer;
+                            break;
+                    }
+
+                    if (FilterAction != Socket_Cache.Filter.FilterAction.Intercept)
+                    {
+                        res = WS2_32.WSASendTo(Socket, ref WSABuffer, BufferCount, lpNumberOfBytesSend, Flags, ref To, lpToLen, ref Overlapped, lpCompletionRoutine);
                     }
 
                     _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, To);
@@ -722,22 +846,38 @@ namespace WPELibrary.Lib
                         byte[] bRawBuffer = bBufferSpan.ToArray();
                         Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, From);
 
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept)
+                        switch (FilterAction)
                         {
-                            Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);                            
-                        }
-                        else
-                        {
-                            if (FilterAction == Socket_Cache.Filter.FilterAction.Change && bNewBuffer.Length > 0)
-                            {
-                                BytesRecvd = WSABuffer.len = bNewBuffer.Length;
-                                fixed (byte* bufferPtr = bNewBuffer)
-                                {
-                                    Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
-                                }
-                            }
+                            case Socket_Cache.Filter.FilterAction.Intercept:
+                                Marshal.WriteInt32(lpNumberOfBytesRecvd, 0);
+                                bNewBuffer = bRawBuffer;
+                                break;
 
-                            Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                            case Socket_Cache.Filter.FilterAction.Change:
+                                if (bNewBuffer.Length > 0)
+                                {
+                                    BytesRecvd = WSABuffer.len = bNewBuffer.Length;
+                                    fixed (byte* bufferPtr = bNewBuffer)
+                                    {
+                                        Buffer.MemoryCopy(bufferPtr, (void*)WSABuffer.buf, BytesRecvd, BytesRecvd);
+                                    }
+                                    Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                }
+                                break;
+
+                            case Socket_Cache.Filter.FilterAction.Replace:
+                                if (bNewBuffer.Length > 0)
+                                {
+                                    BytesRecvd = WSABuffer.len = bNewBuffer.Length;
+                                    Marshal.WriteInt32(lpNumberOfBytesRecvd, BytesRecvd);
+                                }
+                                break;
+
+                            case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                            case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                            case Socket_Cache.Filter.FilterAction.None:
+                                bNewBuffer = bRawBuffer;
+                                break;
                         }
 
                         _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, From);
