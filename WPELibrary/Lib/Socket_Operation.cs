@@ -469,7 +469,7 @@ namespace WPELibrary.Lib
 
         #region//byte[]转字符串
 
-        public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, Span<byte> buffer)
+        public static string BytesToString(Socket_Cache.SocketPacket.EncodingFormat efFormat, ReadOnlySpan<byte> buffer)
         {
             string sReturn = string.Empty;
 
@@ -760,15 +760,15 @@ namespace WPELibrary.Lib
 
         #region//byte[]转Int16大端
 
-        public static ushort ByteArrayToInt16BigEndian(byte[] bytes)
+        public static ushort ByteArrayToInt16BigEndian(ReadOnlySpan<byte> bytes)
         {
             ushort uReturn = 0;
 
             try
             {
-                if (bytes != null && bytes.Length == 2)
+                if (bytes.Length == 2)
                 {
-                    uReturn = (ushort)((bytes[0] << 8) | bytes[1]);
+                    uReturn = (ushort)(bytes[0] << 8 | bytes[1]);
                 }
             }
             catch (Exception ex)
@@ -995,7 +995,7 @@ namespace WPELibrary.Lib
 
         #region//判断接收的数据是否匹配代理步骤
 
-        public static bool CheckDataIsMatchProxyStep(byte[] bData, Socket_Cache.SocketProxy.ProxyStep proxyStep)
+        public static bool CheckDataIsMatchProxyStep(ReadOnlySpan<byte> bData, Socket_Cache.SocketProxy.ProxyStep proxyStep)
         {
             bool bReturn = false;
 
@@ -1534,41 +1534,33 @@ namespace WPELibrary.Lib
             return ipAddres;
         }
 
-        public static string GetIP_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        public static string GetIP_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
         { 
             string sReturn = string.Empty;
 
             try
-            {
-                byte[] bIP = null;
-                IPAddress IP = IPAddress.Any;
-
+            {                
                 switch (addressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4:
 
-                        bIP = new byte[4];
-                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
-                        IP = new IPAddress(bIP);
-                        sReturn = IP.ToString();
+                        IPAddress ipv4Address = new IPAddress(bData.Slice(0, 4).ToArray());
+                        sReturn = ipv4Address.ToString();
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
 
-                        byte Length = bData[0];
-                        bIP = new byte[Length];
-                        Buffer.BlockCopy(bData, 1, bIP, 0, bIP.Length);
-                        sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
+                        byte length = bData[0];
+                        ReadOnlySpan<byte> domainBytes = bData.Slice(1, length);
+                        sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
 
-                        bIP = new byte[16];
-                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
-                        IP = new IPAddress(bIP);
-                        sReturn = IP.ToString();
+                        IPAddress ipv6Address = new IPAddress(bData.Slice(0, 16).ToArray());
+                        sReturn = ipv6Address.ToString();
 
                         break;
                 }                
@@ -1581,40 +1573,29 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
         {
             IPEndPoint epReturn = null;
 
             try
             {
-                byte[] bIP = null;
-                byte[] bPort = null;
-                ushort port = 0;
-                string sIPString = string.Empty;
                 IPAddress ip = IPAddress.Any;
+                ushort port = 0;
 
                 switch (addressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4:
 
-                        bIP = new byte[4];
-                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
-                        ip = new IPAddress(bIP);
-
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bData, 4, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
-
-                        sIPString = ip.ToString();
+                        ip = new IPAddress(bData.Slice(0, 4).ToArray());
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(4, 2));
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
 
-                        byte Length = bData[0];
-                        bIP = new byte[Length];
-                        Buffer.BlockCopy(bData, 1, bIP, 0, bIP.Length);
-                        sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, bIP);
+                        byte length = bData[0];
+                        ReadOnlySpan<byte> domainBytes = bData.Slice(1, length);
+                        string sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
 
                         Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
 
@@ -1633,23 +1614,14 @@ namespace WPELibrary.Lib
                                 break;
                         }
 
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bData, 1 + Length, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(1 + length, 2));
 
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
 
-                        bIP = new byte[16];
-                        Buffer.BlockCopy(bData, 0, bIP, 0, bIP.Length);
-                        ip = new IPAddress(bIP);
-
-                        bPort = new byte[2];
-                        Buffer.BlockCopy(bData, 16, bPort, 0, bPort.Length);
-                        port = Socket_Operation.ByteArrayToInt16BigEndian(bPort);
-
-                        sIPString = ip.ToString();
+                        ip = new IPAddress(bData.Slice(0, 16).ToArray());
+                        port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(16, 2));
 
                         break;
                 }
@@ -1668,63 +1640,57 @@ namespace WPELibrary.Lib
 
         #region//获取UDP数据包
 
-        public static byte[] GetUDPData_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, byte[] bData)
+        public static byte[] GetUDPData_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
         {
-            byte[] bReturn = null;
-
             try
             {
                 switch (addressType)
                 {
-                    case Socket_Cache.SocketProxy.AddressType.IPV4:
-
-                        bReturn = new byte[bData.Length - 10];
-                        Buffer.BlockCopy(bData, 10, bReturn, 0, bReturn.Length);
-
-                        break;
+                    case Socket_Cache.SocketProxy.AddressType.IPV4: 
+                        return bData.Slice(10).ToArray();
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
-
                         byte LENGTH = bData[4];
-                        bReturn = new byte[bData.Length - (LENGTH + 7)];
-                        Buffer.BlockCopy(bData, LENGTH + 7, bReturn, 0, bReturn.Length);
-
-                        break;
+                        return bData.Slice(LENGTH + 7).ToArray();
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
+                        return bData.Slice(22).ToArray();
 
-                        bReturn = new byte[bData.Length - 22];
-                        Buffer.BlockCopy(bData, 22, bReturn, 0, bReturn.Length);
-
-                        break;
+                    default:
+                        return Array.Empty<byte>();
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return Array.Empty<byte>();
             }
-
-            return bReturn;
         }
 
         #endregion
 
         #region//获取返回给客户端的数据（SOCKS5，IPV4）
 
-        public static byte[] GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse CommandResponse, byte[] bServerIP, byte[] bServerPort)
+        public static byte[] GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse CommandResponse, ReadOnlySpan<byte> bServerIP, ReadOnlySpan<byte> bServerPort)
         {
-            byte[] bReturn = null;
-
             try
             {
-                bReturn = new byte[] { (byte)Socket_Cache.SocketProxy.ProxyType.Socket5, (byte)CommandResponse, 0x00, (byte)Socket_Cache.SocketProxy.AddressType.IPV4, bServerIP[0], bServerIP[1], bServerIP[2], bServerIP[3], bServerPort[1], bServerPort[0] };
+                Span<byte> response = stackalloc byte[10];
+                response[0] = (byte)Socket_Cache.SocketProxy.ProxyType.Socket5;
+                response[1] = (byte)CommandResponse;
+                response[2] = 0x00; // Reserved byte
+                response[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPV4;
+                bServerIP.CopyTo(response.Slice(4, 4));
+                response[8] = bServerPort[1]; // High byte
+                response[9] = bServerPort[0]; // Low byte
+
+                return response.ToArray();
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return Array.Empty<byte>();
             }
-
-            return bReturn;
         }
 
         #endregion
@@ -2267,15 +2233,15 @@ namespace WPELibrary.Lib
 
         #region//发送 TCP 代理数据
 
-        public static int SendTCPData(Socket socket, byte[] bData)
+        public static int SendTCPData(Socket socket, ReadOnlySpan<byte> bData)
         {
             int iReturn = 0;
 
             try
             {
-                if (socket != null)
+                if (socket != null && !bData.IsEmpty)
                 {
-                    iReturn = socket.Send(bData, SocketFlags.None);
+                    iReturn = socket.Send(bData.ToArray(), SocketFlags.None);
                 }
             }
             catch
@@ -2313,15 +2279,15 @@ namespace WPELibrary.Lib
 
         #region//发送 UDP 中继数据
 
-        public static int SendUDPData(UdpClient ClientUDP, byte[] bData, IPEndPoint ep)
+        public static int SendUDPData(UdpClient ClientUDP, ReadOnlySpan<byte> bData, IPEndPoint ep)
         {
             int iReturn = 0;
 
             try
             {
-                if (ClientUDP != null)
+                if (ClientUDP != null && !bData.IsEmpty)
                 {
-                    iReturn = ClientUDP.Send(bData, bData.Length, ep);
+                    iReturn = ClientUDP.Send(bData.ToArray(), bData.Length, ep);
                 }
             }
             catch
