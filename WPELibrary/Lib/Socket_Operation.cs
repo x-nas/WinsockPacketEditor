@@ -21,6 +21,7 @@ using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
+using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
@@ -1098,25 +1099,29 @@ namespace WPELibrary.Lib
 
         #region//判断 Http 外部代理连接状态
 
-        public static bool CheckHttpProxyState(Socket_ProxyInfo spi, string targetAddress, ushort targetPort)
+        public static bool CheckHttpProxyState(Socket_ProxyTCP spi, string targetAddress, ushort targetPort)
         {
             bool bReturn = false;
 
             try
             {
-                byte[] bRequest = Socket_Operation.BuildHttpProxyRequest(targetAddress, targetPort);
-
-                if (bRequest != null)
+                ReadOnlySpan<byte> bRequest = Socket_Operation.BuildHttpProxyRequest(targetAddress, targetPort);
+                if (!bRequest.IsEmpty)
                 {
-                    Socket_Operation.SendTCPData(spi.TargetSocket, bRequest);
+                    Socket_Operation.SendTCPData(spi.ServerSocket, bRequest);                    
 
-                    byte[] buffer = new byte[4096];
-                    int bytesRead = spi.TargetSocket.Receive(buffer);
-                    string response = Encoding.Default.GetString(buffer, 0, bytesRead);
+                    Span<byte> buffer = stackalloc byte[4096];
+                    int bytesRead = spi.ServerSocket.Receive(buffer.ToArray());
 
-                    if (response.StartsWith("HTTP/1.1 200"))
+                    if (bytesRead > 0)
                     {
-                        bReturn = true;
+                        ReadOnlySpan<byte> responseBytes = buffer.Slice(0, bytesRead);
+                        string response = Encoding.UTF8.GetString(responseBytes.ToArray());
+
+                        if (response.StartsWith("HTTP/1.1 200"))
+                        {
+                            bReturn = true;
+                        }
                     }
                 }                
             }
@@ -1128,16 +1133,18 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        private static byte[] BuildHttpProxyRequest(string targetAddress, ushort targetPort)
+        private static ReadOnlySpan<byte> BuildHttpProxyRequest(string targetAddress, ushort targetPort)
         {
-            byte[] bReturn = null;
+            ReadOnlySpan<byte> bReturn = default;
 
             try
             {
-                string sRequest = $"CONNECT {targetAddress}:{targetPort} HTTP/1.1\r\n";
-                sRequest += $"Host: {targetAddress}:{targetPort}\r\n";
-                sRequest += "Proxy-Connection: Keep-Alive\r\n\r\n";
-                bReturn = Encoding.UTF8.GetBytes(sRequest);
+                StringBuilder requestBuilder = new StringBuilder();
+                requestBuilder.Append($"CONNECT {targetAddress}:{targetPort} HTTP/1.1\r\n");
+                requestBuilder.Append($"Host: {targetAddress}:{targetPort}\r\n");
+                requestBuilder.Append("Proxy-Connection: Keep-Alive\r\n\r\n");
+
+                bReturn = Encoding.UTF8.GetBytes(requestBuilder.ToString());
             }
             catch (Exception ex)
             {
@@ -1539,31 +1546,9 @@ namespace WPELibrary.Lib
             string sReturn = string.Empty;
 
             try
-            {                
-                switch (addressType)
-                {
-                    case Socket_Cache.SocketProxy.AddressType.IPV4:
-
-                        IPAddress ipv4Address = new IPAddress(bData.Slice(0, 4).ToArray());
-                        sReturn = ipv4Address.ToString();
-
-                        break;
-
-                    case Socket_Cache.SocketProxy.AddressType.Domain:
-
-                        byte length = bData[0];
-                        ReadOnlySpan<byte> domainBytes = bData.Slice(1, length);
-                        sReturn = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
-
-                        break;
-
-                    case Socket_Cache.SocketProxy.AddressType.IPV6:
-
-                        IPAddress ipv6Address = new IPAddress(bData.Slice(0, 16).ToArray());
-                        sReturn = ipv6Address.ToString();
-
-                        break;
-                }                
+            {
+                IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
+                sReturn = result.IPAddress.ToString();
             }
             catch (Exception ex)
             {
@@ -1579,20 +1564,32 @@ namespace WPELibrary.Lib
 
             try
             {
-                IPAddress ip = IPAddress.Any;
-                ushort port = 0;
+                IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
+                epReturn = new IPEndPoint(result.IPAddress, result.Port);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
 
+            return epReturn;
+        }
+
+        public static IPAddressAndPort ExtractIPAddressAndPort(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
+        {
+            IPAddress ip = IPAddress.Any;
+            ushort port = 0;
+
+            try
+            {
                 switch (addressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4:
-
                         ip = new IPAddress(bData.Slice(0, 4).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(4, 2));
-
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
-
                         byte length = bData[0];
                         ReadOnlySpan<byte> domainBytes = bData.Slice(1, length);
                         string sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
@@ -1615,55 +1612,50 @@ namespace WPELibrary.Lib
                         }
 
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(1 + length, 2));
-
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
-
                         ip = new IPAddress(bData.Slice(0, 16).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(16, 2));
-
                         break;
                 }
-
-                epReturn = new IPEndPoint(ip, port);
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return epReturn;
+            return new IPAddressAndPort { IPAddress = ip, Port = port };
         }
 
         #endregion
 
         #region//获取UDP数据包
 
-        public static byte[] GetUDPData_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
+        public static ReadOnlySpan<byte> GetUDPData_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
         {
             try
             {
                 switch (addressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4: 
-                        return bData.Slice(10).ToArray();
+                        return bData.Slice(10);
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
                         byte LENGTH = bData[4];
-                        return bData.Slice(LENGTH + 7).ToArray();
+                        return bData.Slice(LENGTH + 7);
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
-                        return bData.Slice(22).ToArray();
+                        return bData.Slice(22);
 
                     default:
-                        return Array.Empty<byte>();
+                        return ReadOnlySpan<byte>.Empty;
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return Array.Empty<byte>();
+                return ReadOnlySpan<byte>.Empty;
             }
         }
 
@@ -1678,11 +1670,11 @@ namespace WPELibrary.Lib
                 Span<byte> response = stackalloc byte[10];
                 response[0] = (byte)Socket_Cache.SocketProxy.ProxyType.Socket5;
                 response[1] = (byte)CommandResponse;
-                response[2] = 0x00; // Reserved byte
+                response[2] = 0x00;
                 response[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPV4;
                 bServerIP.CopyTo(response.Slice(4, 4));
-                response[8] = bServerPort[1]; // High byte
-                response[9] = bServerPort[0]; // Low byte
+                response[8] = bServerPort[1];
+                response[9] = bServerPort[0];
 
                 return response.ToArray();
             }
@@ -1846,46 +1838,12 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//获取域名类型
+        #region//获取端口对应的域名类型
 
         public static Socket_Cache.SocketProxy.DomainType GetDomainType_ByPort(ushort Port)
         {
-            Socket_Cache.SocketProxy.DomainType dtReturn = new Socket_Cache.SocketProxy.DomainType();            
-
             try
             {
-                if (Socket_Cache.SocketProxy.Enable_EXTHttp)
-                {
-                    if (!string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpPort))
-                    {
-                        string[] slHttpPort = Socket_Cache.SocketProxy.AppointHttpPort.Split(',');
-
-                        foreach (string s in slHttpPort)
-                        {
-                            if (s.Equals(Port.ToString()))
-                            {
-                                return Socket_Cache.SocketProxy.DomainType.Http;
-                            }
-                        }
-                    }                    
-                }                
-
-                if (Socket_Cache.SocketProxy.Enable_EXTHttps)
-                {
-                    if (!string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpsPort))
-                    {
-                        string[] slHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort.Split(',');
-
-                        foreach (string s in slHttpsPort)
-                        {
-                            if (s.Equals(Port.ToString()))
-                            {
-                                return Socket_Cache.SocketProxy.DomainType.Https;
-                            }
-                        }
-                    }
-                }
-
                 if (Port == 80 || Port == 8080)
                 {
                     return Socket_Cache.SocketProxy.DomainType.Http;
@@ -1894,9 +1852,23 @@ namespace WPELibrary.Lib
                 {
                     return Socket_Cache.SocketProxy.DomainType.Https;
                 }
-                else
+
+                if (Socket_Cache.SocketProxy.Enable_EXTHttp && !string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpPort))
                 {
-                    return Socket_Cache.SocketProxy.DomainType.Socket;
+                    HashSet<string> httpPorts = new HashSet<string>(Socket_Cache.SocketProxy.AppointHttpPort.Split(','));
+                    if (httpPorts.Contains(Port.ToString()))
+                    {
+                        return Socket_Cache.SocketProxy.DomainType.Http;
+                    }
+                }                
+
+                if (Socket_Cache.SocketProxy.Enable_EXTHttps && !string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpsPort))
+                {
+                    HashSet<string> httpsPorts = new HashSet<string>(Socket_Cache.SocketProxy.AppointHttpsPort.Split(','));
+                    if (httpsPorts.Contains(Port.ToString()))
+                    {
+                        return Socket_Cache.SocketProxy.DomainType.Https;
+                    }
                 }
             }
             catch (Exception ex)
@@ -1904,7 +1876,7 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return dtReturn;
+            return Socket_Cache.SocketProxy.DomainType.Socket;
         }
 
         #endregion
@@ -1991,7 +1963,7 @@ namespace WPELibrary.Lib
 
         #region//获取远端地址
 
-        public static string GetTargetAddress(string IP, ushort Port, Socket_ProxyInfo spi)
+        public static string GetTargetAddress(string IP, ushort Port, Socket_ProxyTCP spi)
         {
             string sReturn = string.Empty;
 
@@ -2024,14 +1996,17 @@ namespace WPELibrary.Lib
 
         #region//获取客户端地址
 
-        public static string GetClientAddress(string IP, ushort Port, Socket_ProxyInfo spi)
+        public static string GetClientAddress(string IP, ushort Port, Socket_ProxyTCP spi)
         {
             string sReturn = string.Empty;
 
             try
             {
-                int ClientPort = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port;
-                sReturn = IP + ": " + Port + " [" + ClientPort + "]";
+                if (spi.ClientSocket != null && spi.ClientSocket.RemoteEndPoint != null)
+                {
+                    int ClientPort = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port;
+                    sReturn = IP + ": " + Port + " [" + ClientPort + "]";
+                }                
             }
             catch (Exception ex)
             {

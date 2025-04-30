@@ -89,8 +89,9 @@
     <Compile Include="Lib\NativeMethods\Kernel32.cs" />
     <Compile Include="Lib\NativeMethods\Mswsock.cs" />
     <Compile Include="Lib\Socket_ProxyData.cs" />
-    <Compile Include="Lib\Socket_ProxyInfo.cs" />
+    <Compile Include="Lib\Socket_ProxyTCP.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />
+    <Compile Include="Lib\Socket_ProxyUDP.cs" />
     <Compile Include="Lib\Socket_Robot.cs" />
     <Compile Include="Lib\Socket_RobotInfo.cs" />
     <Compile Include="Lib\NativeMethods\User32.cs" />
