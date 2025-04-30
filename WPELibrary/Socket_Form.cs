@@ -1111,9 +1111,12 @@ namespace WPELibrary
 
                         if (rbFromHead.Checked)
                         {
-                            this.rbFromIndex.Checked = true;
-                            this.hbPacketData.SelectionStart = 0;
-                            Socket_Cache.SocketList.Search_Index = 0;
+                            this.Invoke(new MethodInvoker(() =>
+                            {
+                                this.rbFromIndex.Checked = true;
+                                this.hbPacketData.SelectionStart = 0;
+                                Socket_Cache.SocketList.Search_Index = 0;
+                            }));
                         }
 
                         e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);
@@ -2268,46 +2271,43 @@ namespace WPELibrary
                 this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
 
                 DynamicByteProvider dbpXOR_From = this.hbXOR_From.ByteProvider as DynamicByteProvider;
+                if (dbpXOR_From == null)
+                {
+                    return;
+                }
+
                 byte[] blXOR_From = dbpXOR_From.Bytes.ToArray();
 
                 string sXOR_Value = this.txtXOR.Text.Trim();
                 string[] slXOR_Value = sXOR_Value.Split(' ');
 
-                if (blXOR_From != null && blXOR_From.Length > 0 && !string.IsNullOrEmpty(sXOR_Value) && slXOR_Value.Length > 0)
+                if (blXOR_From.Length == 0 || string.IsNullOrEmpty(sXOR_Value) || slXOR_Value.Length == 0)
                 {
-                    int j = 0;
+                    return;
+                }
 
-                    byte[] blXOR_To = new byte[blXOR_From.Length];
+                byte[] blXOR_To = new byte[blXOR_From.Length];
+                int j = 0;
 
-                    for (int i = 0; i < blXOR_From.Length; i++)
+                foreach (byte bXOR_From in blXOR_From)
+                {
+                    if (j == slXOR_Value.Length)
                     {
-                        if (j == slXOR_Value.Length)
-                        {
-                            j = 0;
-                        }
-
-                        byte bXOR_From = blXOR_From[i];
-
-                        byte bXOR_Value = new byte();
-
-                        bool bOK = Byte.TryParse(slXOR_Value[j], System.Globalization.NumberStyles.HexNumber, null, out bXOR_Value);
-
-                        if (bOK)
-                        {
-                            blXOR_To[i] = (byte)(bXOR_From ^ bXOR_Value);
-
-                            j++;
-                        }
-                        else
-                        {
-                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_21));
-                            return;
-                        }
+                        j = 0;
                     }
 
-                    DynamicByteProvider dbpXOR_To = new DynamicByteProvider(blXOR_To);
-                    hbXOR_To.ByteProvider = dbpXOR_To;
-                }                
+                    if (!Byte.TryParse(slXOR_Value[j], System.Globalization.NumberStyles.HexNumber, null, out byte bXOR_Value))
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_21));
+                        return;
+                    }
+
+                    blXOR_To[j] = (byte)(bXOR_From ^ bXOR_Value);
+                    j++;
+                }
+
+                DynamicByteProvider dbpXOR_To = new DynamicByteProvider(blXOR_To);
+                this.hbXOR_To.ByteProvider = dbpXOR_To;
             }
             catch (Exception ex)
             {

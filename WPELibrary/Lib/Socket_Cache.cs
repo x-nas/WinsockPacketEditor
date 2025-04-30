@@ -990,6 +990,8 @@ namespace WPELibrary.Lib
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
             private static readonly Image SentImage = Properties.Resources.sent;
             private static readonly Image ReceivedImage = Properties.Resources.received;
+            public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
+            public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
 
             #region//结构定义
 
@@ -1349,39 +1351,32 @@ namespace WPELibrary.Lib
 
             #region//搜索封包列表
 
-            public static int SearchForSocketList(int FromIndex, byte[] SearchData)
+            public static int SearchForSocketList(int fromIndex, ReadOnlySpan<byte> searchData)
             {
                 int iResult = -1;
 
                 try
                 {
-                    if (SearchData.Length > 0)
+                    if (searchData.Length == 0 || fromIndex < 0)
                     {
-                        int iListCNT = Socket_Cache.SocketList.lstRecPacket.Count;
+                        return -1;
+                    }
 
-                        if (iListCNT > 0 && FromIndex < iListCNT)
+                    int listCount = Socket_Cache.SocketList.lstRecPacket.Count;
+                    if (listCount == 0 || fromIndex >= listCount)
+                    {
+                        return -1;
+                    }
+
+                    for (int i = fromIndex; i < listCount; i++)
+                    {
+                        byte[] packetBuffer = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
+                        if (packetBuffer != null && packetBuffer.Length >= searchData.Length)
                         {
-                            for (int i = FromIndex; i < iListCNT; i++)
+                            ReadOnlySpan<byte> packetSpan = packetBuffer.AsSpan();
+                            if (packetSpan.IndexOf(searchData) != -1)
                             {
-                                byte[] bSearch = Socket_Cache.SocketList.lstRecPacket[i].PacketBuffer;
-
-                                for (int j = 0; j <= bSearch.Length - SearchData.Length; j++)
-                                {
-                                    bool found = true;
-                                    for (int k = 0; k < SearchData.Length; k++)
-                                    {
-                                        if (bSearch[j + k] != SearchData[k])
-                                        {
-                                            found = false;
-                                            break;
-                                        }
-                                    }
-
-                                    if (found)
-                                    {
-                                        return i;
-                                    }
-                                }
+                                return i;
                             }
                         }
                     }

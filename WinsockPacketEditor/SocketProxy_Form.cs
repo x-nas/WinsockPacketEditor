@@ -345,40 +345,61 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (this.CheckProxySet())
-                {
-                    Socket_Cache.SocketProxy.IsListening = true;
-
-                    this.InitProxyStart();                    
-
-                    this.bStart.Enabled = false;
-                    this.bStop.Enabled = true;
-                    this.tpProxySet.Enabled = false;
-                    this.tpAuthSet.Enabled = false;
-                    this.tpExternalProxy.Enabled = false;
-                    this.tpSystemSet.Enabled = false;
-
-                    if (SocketServer == null)
-                    {
-                        IPEndPoint ep = new IPEndPoint(IPAddress.Any, Socket_Cache.SocketProxy.ProxyPort);
-                        SocketServer = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                        SocketServer.Bind(ep);
-                        SocketServer.Listen(int.MaxValue);
-                        AcceptClients();                        
-                    }
-
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
-                }
-                else
+                if (!this.CheckProxySet())
                 {
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_141));
+                    return;
                 }
+
+                Socket_Cache.SocketProxy.IsListening = true;
+
+                this.InitProxyStart();
+                this.UpdateUIState(starting: true);
+
+                if (SocketServer == null)
+                {
+                    InitializeServerSocket();
+                }
+
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));                
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        private void UpdateUIState(bool starting)
+        {
+            this.bStart.Enabled = !starting;
+            this.bStop.Enabled = starting;
+            this.tpProxySet.Enabled = !starting;
+            this.tpAuthSet.Enabled = !starting;
+            this.tpExternalProxy.Enabled = !starting;
+            this.tpSystemSet.Enabled = !starting;
+        }
+
+        private void InitializeServerSocket()
+        {
+            try
+            {
+                IPEndPoint ep = new IPEndPoint(IPAddress.Any, Socket_Cache.SocketProxy.ProxyPort);
+                SocketServer = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    NoDelay = true,
+                    LingerState = new LingerOption(false, 0)
+                };
+
+                SocketServer.Bind(ep);
+                SocketServer.Listen(backlog: 1000);
+
+                AcceptClients();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }        
 
         private void InitProxyStart()
         {
@@ -425,6 +446,10 @@ namespace WinsockPacketEditor
             }
         }
 
+        #endregion
+
+        #region//接受客户端链接
+
         private void AcceptClients()
         {
             try
@@ -462,7 +487,7 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
 
         #region//设置有效性检测
 
@@ -550,12 +575,23 @@ namespace WinsockPacketEditor
             {
                 Socket_Cache.SocketProxy.IsListening = false;
 
-                this.bStart.Enabled = true;
-                this.bStop.Enabled = false;
-                this.tpProxySet.Enabled = true;
-                this.tpAuthSet.Enabled = true;
-                this.tpExternalProxy.Enabled = true;
-                this.tpSystemSet.Enabled = true;
+                if (SocketServer != null)
+                {
+                    try
+                    {
+                        SocketServer.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                    finally
+                    {
+                        SocketServer = null;
+                    }
+                }
+
+                this.UpdateUIState(starting: false);
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_143));
             }
@@ -714,7 +750,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//清理 TCP 和 UDP 端口（异步）
+        #region//清理 TCP 和 UDP 端口
 
         private void CheckProxyTCP()
         {

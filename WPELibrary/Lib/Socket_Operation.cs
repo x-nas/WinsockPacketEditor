@@ -42,15 +42,18 @@ namespace WPELibrary.Lib
 
             try
             {
-                Process pProcess = Process.GetProcessById(ProcessID);
-
-                if (pProcess != null)
+                using (Process pProcess = Process.GetProcessById(ProcessID))
                 {
-                    if ((Environment.OSVersion.Version.Major > 5) || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
+                    if (pProcess != null)
                     {
-                        bool retVal;
-                        Kernel32.IsWow64Process(pProcess.Handle, out retVal);
-                        bReturn = !retVal;
+                        if ((Environment.OSVersion.Version.Major > 5) || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
+                        {
+                            bool retVal;
+                            if (Kernel32.IsWow64Process(pProcess.Handle, out retVal))
+                            {
+                                bReturn = !retVal;
+                            }
+                        }
                     }
                 }
             }
@@ -384,7 +387,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sString);
+                byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sString);
                 sReturn = Convert.ToBase64String(bBuffer);
             }
             catch (Exception ex)
@@ -402,7 +405,7 @@ namespace WPELibrary.Lib
             try
             {
                 byte[] bBuffer = Convert.FromBase64String(sString);
-                sReturn = Encoding.Default.GetString(bBuffer);
+                sReturn = Encoding.UTF8.GetString(bBuffer);
             }
             catch
             {
@@ -2033,128 +2036,130 @@ namespace WPELibrary.Lib
             {
                 await Task.Run(() =>
                 {
-                    RichTextBox rtbCompare = new RichTextBox();
-                    rtbCompare.Font = font;
-
-                    if (sText_A == sText_B)
+                    using (RichTextBox rtbCompare = new RichTextBox())
                     {
-                        Socket_Operation.AppendColoredText(rtbCompare, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
-                    }
-                    else
-                    {
-                        string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
-                        string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
+                        rtbCompare.Font = font;
 
-                        int la = 0;
-                        int lb = 0;
-
-                        while (la < linesA.Length)
+                        if (sText_A == sText_B)
                         {
-                            if (lb >= linesB.Length)
-                            {
-                                Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
-                            }
-                            else if (linesA[la] == linesB[lb])
-                            {
-                                Socket_Operation.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
-                            }
-                            else
-                            {
-                                if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
-                                {
-                                    Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
-                                    Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
+                            Socket_Operation.AppendColoredText(rtbCompare, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_29), Color.Blue);
+                        }
+                        else
+                        {
+                            string[] linesA = sText_A.Split('\n').Select(s => s.Trim()).ToArray();
+                            string[] linesB = sText_B.Split('\n').Select(s => s.Trim()).ToArray();
 
-                                    lb++;
-                                }
-                                else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                            int la = 0;
+                            int lb = 0;
+
+                            while (la < linesA.Length)
+                            {
+                                if (lb >= linesB.Length)
                                 {
                                     Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
-                                    Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
-
-                                    la++;
+                                }
+                                else if (linesA[la] == linesB[lb])
+                                {
+                                    Socket_Operation.AppendColoredText(rtbCompare, linesA[la], rtbCompare.ForeColor);
                                 }
                                 else
                                 {
-                                    string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
-                                    string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
-
-                                    int wa = 0;
-                                    int wb = 0;
-                                    while (wa < wordsA.Length)
+                                    if ((lb + 1 < linesB.Length) && (linesA[la] == linesB[lb + 1]))
                                     {
-                                        if (wb >= wordsB.Length)
-                                        {
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                        }
-                                        else if (wordsA[wa] == wordsB[wb])
-                                        {
-                                            Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
-                                        }
-                                        else
-                                        {
-                                            if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
-                                            {
-                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
-                                                Socket_Operation.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
+                                        Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                                        Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesA[la], rtbCompare.ForeColor);
 
-                                                wb++;
-                                            }
-                                            else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                        lb++;
+                                    }
+                                    else if ((la + 1 < linesA.Length) && (linesA[la + 1] == linesB[lb]))
+                                    {
+                                        Socket_Operation.AppendColoredText(rtbCompare, linesA[la], Socket_Operation.col_Del);
+                                        Socket_Operation.AppendColoredText(rtbCompare, "\n" + linesB[lb], rtbCompare.ForeColor);
+
+                                        la++;
+                                    }
+                                    else
+                                    {
+                                        string[] wordsA = linesA[la].Split(' ').Select(s => s.Trim()).ToArray();
+                                        string[] wordsB = linesB[lb].Split(' ').Select(s => s.Trim()).ToArray();
+
+                                        int wa = 0;
+                                        int wb = 0;
+                                        while (wa < wordsA.Length)
+                                        {
+                                            if (wb >= wordsB.Length)
                                             {
                                                 Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                                Socket_Operation.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
-
-                                                wa++;
+                                            }
+                                            else if (wordsA[wa] == wordsB[wb])
+                                            {
+                                                Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], rtbCompare.ForeColor);
                                             }
                                             else
                                             {
-                                                Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
-                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
-                                            }
-                                        }
-                                        if (wa + 1 < wordsA.Length) Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                                if ((wb + 1 < wordsB.Length) && (wordsA[wa] == wordsB[wb + 1]))
+                                                {
+                                                    Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                    Socket_Operation.AppendColoredText(rtbCompare, " " + wordsA[wa], rtbCompare.ForeColor);
 
-                                        if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
-                                        {
-                                            while (wb + 1 < wordsB.Length)
+                                                    wb++;
+                                                }
+                                                else if ((wa + 1 < wordsA.Length) && (wordsA[wa + 1] == wordsB[wb]))
+                                                {
+                                                    Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                                    Socket_Operation.AppendColoredText(rtbCompare, " " + wordsB[wb], rtbCompare.ForeColor);
+
+                                                    wa++;
+                                                }
+                                                else
+                                                {
+                                                    Socket_Operation.AppendColoredText(rtbCompare, wordsA[wa], Socket_Operation.col_Del);
+                                                    Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                }
+                                            }
+                                            if (wa + 1 < wordsA.Length) Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+
+                                            if ((wordsB.Length >= wordsA.Length) && (wa + 1 == wordsA.Length))
                                             {
-                                                wb++;
+                                                while (wb + 1 < wordsB.Length)
+                                                {
+                                                    wb++;
 
-                                                Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
-                                                Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                    Socket_Operation.AppendColoredText(rtbCompare, " ", rtbCompare.ForeColor);
+                                                    Socket_Operation.AppendColoredText(rtbCompare, wordsB[wb], Socket_Operation.col_Add);
+                                                }
                                             }
-                                        }
 
-                                        wa++;
-                                        wb++;
+                                            wa++;
+                                            wb++;
+                                        }
                                     }
                                 }
-                            }
 
-                            if (la + 1 < linesA.Length)
-                            {
-                                Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                            }
-
-                            if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
-                            {
-                                while (lb + 1 < linesB.Length)
+                                if (la + 1 < linesA.Length)
                                 {
-                                    lb++;
-
                                     Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
-                                    Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
                                 }
+
+                                if ((linesB.Length >= linesA.Length) && (la + 1 == linesA.Length))
+                                {
+                                    while (lb + 1 < linesB.Length)
+                                    {
+                                        lb++;
+
+                                        Socket_Operation.AppendColoredText(rtbCompare, "\n", rtbCompare.ForeColor);
+                                        Socket_Operation.AppendColoredText(rtbCompare, linesB[lb], Socket_Operation.col_Add);
+                                    }
+                                }
+
+                                la++;
+                                lb++;
                             }
-
-                            la++;
-                            lb++;
                         }
-                    }
 
-                    sReturn = rtbCompare.Rtf;
-                });                
+                        sReturn = rtbCompare.Rtf;
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -2162,7 +2167,7 @@ namespace WPELibrary.Lib
             }
 
             return sReturn;
-        }
+        }        
 
         private static void AppendColoredText(RichTextBox box, string text, Color color)
         {
@@ -2173,12 +2178,12 @@ namespace WPELibrary.Lib
 
                 if (color == col_Add)
                 {
-                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Underline);
+                    box.SelectionFont = Socket_Cache.SocketPacket.FontUnderline;
                 }
 
                 if (color == col_Del)
                 {
-                    box.SelectionFont = new Font(box.SelectionFont, FontStyle.Strikeout);
+                    box.SelectionFont = Socket_Cache.SocketPacket.FontStrikeout;
                 }
 
                 box.SelectionColor = color;
