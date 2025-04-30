@@ -236,14 +236,14 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            spc.CloseClientSocket();
+                            spc.CloseTCPClient();
                         }
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
-                    spc.CloseClientSocket();
+                    spc.CloseTCPClient();
                 }
             }
 
@@ -400,26 +400,27 @@ namespace WPELibrary.Lib
 
                     if (spc.ProxyType == Socket_Cache.SocketProxy.ProxyType.Socket5)
                     {
-                        ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-
                         try
                         {
+                            ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                             ReadOnlySpan<byte> bServerTCP_IP = Socket_Cache.SocketProxy.ProxyTCP_IP.GetAddressBytes();
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
+                            
+                            string sIPString = Socket_Operation.GetIP_ByAddressType(spc.AddressType, bADDRESS);
+                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS);
+                            ushort uPort = ((ushort)epServer.Port);                            
+
+                            spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
+                            spc.ServerSocket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                            spc.ServerAddress = Socket_Operation.GetServerAddress(sIPString, uPort, spc);                            
+                            spc.ClientAddress = Socket_Operation.GetClientAddress(sIPString, uPort, spc);
+                            spc.ServerEndPoint = epServer;
 
                             switch (spc.CommandType)
                             {
                                 case Socket_Cache.SocketProxy.CommandType.Connect:
 
                                     #region//代理 TCP
-
-                                    string sIPString = Socket_Operation.GetIP_ByAddressType(spc.AddressType, bADDRESS);
-                                    spc.ServerEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS);                                    
-                                    ushort uPort = ((ushort)spc.ServerEndPoint.Port);
-                                    spc.ClientAddress = Socket_Operation.GetClientAddress(sIPString, uPort, spc);
-                                    spc.ServerSocket = new Socket(spc.ServerEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                                    spc.ServerAddress = Socket_Operation.GetTargetAddress(sIPString, uPort, spc);
-                                    spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
 
                                     switch (spc.DomainType)
                                     {
@@ -661,13 +662,13 @@ namespace WPELibrary.Lib
                     }
                     else
                     {
-                        spc.CloseServerSocket();
+                        spc.CloseTCPServer();
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
-                    spc.CloseServerSocket();
+                    spc.CloseTCPServer();
                 }
             }
 
@@ -786,16 +787,9 @@ namespace WPELibrary.Lib
 
             public static void ProxyTCP_ToQueue(Socket_ProxyTCP spc)
             {
-                try
+                if (!Socket_Cache.SocketProxy.SpeedMode)
                 {
-                    if (!Socket_Cache.SocketProxy.SpeedMode)
-                    {
-                        qSocket_ProxyTCP.Enqueue(spc);
-                    }                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    qSocket_ProxyTCP.Enqueue(spc);
                 }
             }
 
@@ -805,16 +799,9 @@ namespace WPELibrary.Lib
 
             public static void ProxyUDP_ToQueue(Socket_ProxyUDP spu)
             {
-                try
+                if (!Socket_Cache.SocketProxy.SpeedMode)
                 {
-                    if (!Socket_Cache.SocketProxy.SpeedMode)
-                    {
-                        qSocket_ProxyUDP.Enqueue(spu);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    qSocket_ProxyUDP.Enqueue(spu);
                 }
             }
 
@@ -927,22 +914,12 @@ namespace WPELibrary.Lib
 
             #region//TCP代理入列表
 
-            public static async Task ProxyTCP_ToList()
+            public static void ProxyTCP_ToList()
             {
-                try
+                if (Socket_Cache.SocketProxyQueue.qSocket_ProxyTCP.TryDequeue(out Socket_ProxyTCP spc))
                 {
-                    await Task.Run(() =>
-                    {
-                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyTCP.TryDequeue(out Socket_ProxyTCP spc))
-                        {
-                            lstProxyTCP.Add(spc);
-                            RecProxyTCP?.Invoke(spc);
-                        }
-                    });                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    lstProxyTCP.Add(spc);
+                    RecProxyTCP?.Invoke(spc);
                 }
             }
 
@@ -950,22 +927,12 @@ namespace WPELibrary.Lib
 
             #region//UDP代理入列表
 
-            public static async Task ProxyUDP_ToList()
+            public static void ProxyUDP_ToList()
             {
-                try
+                if (Socket_Cache.SocketProxyQueue.qSocket_ProxyUDP.TryDequeue(out Socket_ProxyUDP spu))
                 {
-                    await Task.Run(() =>
-                    {
-                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyUDP.TryDequeue(out Socket_ProxyUDP spu))
-                        {
-                            lstProxyUDP.Add(spu);
-                            RecProxyUDP?.Invoke(spu);
-                        }
-                    });
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    lstProxyUDP.Add(spu);
+                    RecProxyUDP?.Invoke(spu);
                 }
             }
 
@@ -973,21 +940,11 @@ namespace WPELibrary.Lib
 
             #region//代理数据入列表
 
-            public static async Task ProxyData_ToList()
+            public static void ProxyData_ToList()
             {
-                try
+                if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
                 {
-                    await Task.Run(() =>
-                    {
-                        if (Socket_Cache.SocketProxyQueue.qSocket_ProxyData.TryDequeue(out Socket_ProxyData spd))
-                        {
-                            RecProxyData?.Invoke(spd);
-                        }
-                    });                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    RecProxyData?.Invoke(spd);
                 }
             }
 
@@ -997,38 +954,17 @@ namespace WPELibrary.Lib
 
             public static void ResetProxy_TCPList()
             {
-                try
-                {
-                    lstProxyTCP.Clear();
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                lstProxyTCP.Clear();
             }
 
             public static void ResetProxy_UDPList()
             {
-                try
-                {
-                    lstProxyUDP.Clear();
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                lstProxyUDP.Clear();
             }
 
             public static void ResetProxy_DataList()
             {
-                try
-                {
-                    lstProxyData.Clear();
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                lstProxyData.Clear();
             }
 
             #endregion
@@ -1052,6 +988,8 @@ namespace WPELibrary.Lib
             public static bool HookWSA_Send, HookWSA_SendTo, HookWSA_Recv, HookWSA_RecvFrom;
             public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            private static readonly Image SentImage = Properties.Resources.sent;
+            private static readonly Image ReceivedImage = Properties.Resources.received;
 
             #region//结构定义
 
@@ -1171,73 +1109,77 @@ namespace WPELibrary.Lib
 
             #region//获取封包类型对应的名称
 
+            private static class PacketTypeNames
+            {
+                public static readonly string WS1_Send = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
+                public static readonly string WS2_Send = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_156);
+                public static readonly string WS1_Recv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
+                public static readonly string WS2_Recv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_157);
+                public static readonly string WS1_SendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
+                public static readonly string WS2_SendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_158);
+                public static readonly string WS1_RecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
+                public static readonly string WS2_RecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_159);
+                public static readonly string WSASend = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
+                public static readonly string WSARecv = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
+                public static readonly string WSARecvEx = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
+                public static readonly string WSASendTo = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
+                public static readonly string WSARecvFrom = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
+            }
+
             public static string GetName_ByPacketType(Socket_Cache.SocketPacket.PacketType socketType)
             {
-                string sReturn = string.Empty;
-
                 try
                 {
                     switch (socketType)
                     {
                         case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_54);
-                            break;
+                            return PacketTypeNames.WS1_Send;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_156);
-                            break;
+                            return PacketTypeNames.WS2_Send;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_55);
-                            break;
+                            return PacketTypeNames.WS1_Recv;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_157);
-                            break;
+                            return PacketTypeNames.WS2_Recv;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_56);
-                            break;
+                            return PacketTypeNames.WS1_SendTo;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_158);
-                            break;
+                            return PacketTypeNames.WS2_SendTo;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_57);
-                            break;
+                            return PacketTypeNames.WS1_RecvFrom;
 
                         case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_159);
-                            break;
+                            return PacketTypeNames.WS2_RecvFrom;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_58);
-                            break;
+                            return PacketTypeNames.WSASend;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                            break;
+                            return PacketTypeNames.WSARecv;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_59);
-                            break;
+                            return PacketTypeNames.WSARecvEx;
 
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_60);
-                            break;
+                            return PacketTypeNames.WSASendTo;
 
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_61);
-                            break;
+                            return PacketTypeNames.WSARecvFrom;
+
+                        default:
+                            return string.Empty;
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return string.Empty;
                 }
-
-                return sReturn;
             }
 
             #endregion            
@@ -1256,7 +1198,7 @@ namespace WPELibrary.Lib
                         case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
                         case Socket_Cache.SocketPacket.PacketType.WSASend:
                         case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            return Properties.Resources.sent;
+                            return Socket_Cache.SocketPacket.SentImage;
 
                         case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
                         case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
@@ -1265,7 +1207,7 @@ namespace WPELibrary.Lib
                         case Socket_Cache.SocketPacket.PacketType.WSARecv:
                         case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
                         case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            return Properties.Resources.received;
+                            return Socket_Cache.SocketPacket.ReceivedImage;
 
                         default:
                             return null;
@@ -1670,37 +1612,27 @@ namespace WPELibrary.Lib
 
             #region//日志入列表
 
-            public static async Task LogToList(Socket_Cache.LogType logType)
+            public static void LogToList(Socket_Cache.LogType logType)
             {
-                try
+                switch (logType)
                 {
-                    await Task.Run(() =>
-                    {
-                        switch (logType)
+                    case LogType.Socket:
+
+                        if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
                         {
-                            case LogType.Socket:
-
-                                if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
-                                {
-                                    RecSocketLog?.Invoke(sliSocket);
-                                }
-
-                                break;
-
-                            case LogType.Proxy:
-
-                                if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
-                                {
-                                    RecProxyLog?.Invoke(sliProxy);
-                                }
-
-                                break;
+                            RecSocketLog?.Invoke(sliSocket);
                         }
-                    });                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                        break;
+
+                    case LogType.Proxy:
+
+                        if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
+                        {
+                            RecProxyLog?.Invoke(sliProxy);
+                        }
+
+                        break;
                 }
             }
 
@@ -1710,22 +1642,15 @@ namespace WPELibrary.Lib
 
             public static void ResetLogList(Socket_Cache.LogType logType)
             {
-                try
+                switch (logType)
                 {
-                    switch (logType)
-                    {
-                        case LogType.Socket:
-                            lstSocketLog.Clear();
-                            break;
+                    case LogType.Socket:
+                        lstSocketLog.Clear();
+                        break;
 
-                        case LogType.Proxy:
-                            lstProxyLog.Clear();
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    case LogType.Proxy:
+                        lstProxyLog.Clear();
+                        break;
                 }
             }
 
@@ -1799,14 +1724,14 @@ namespace WPELibrary.Lib
         {
             public static long FilterExecute_CNT = 0;            
             public static int FilterSize_MaxLen = 500;
-            public static Color FilterActionForeColor_Replace = Color.Black;
-            public static Color FilterActionBackColor_Replace = Color.Goldenrod;
-            public static Color FilterActionForeColor_Intercept = Color.White;
-            public static Color FilterActionBackColor_Intercept = Color.DarkRed;
-            public static Color FilterActionForeColor_Change = Color.Black;
-            public static Color FilterActionBackColor_Change = Color.DodgerBlue;
-            public static Color FilterActionForeColor_Other = Color.LimeGreen;
-            public static Color FilterActionBackColor_Other = Color.FromArgb(30, 30, 30);
+            public static readonly Color FilterActionForeColor_Replace = Color.Black;
+            public static readonly Color FilterActionBackColor_Replace = Color.Goldenrod;
+            public static readonly Color FilterActionForeColor_Intercept = Color.White;
+            public static readonly Color FilterActionBackColor_Intercept = Color.DarkRed;
+            public static readonly Color FilterActionForeColor_Change = Color.Black;
+            public static readonly Color FilterActionBackColor_Change = Color.DodgerBlue;
+            public static readonly Color FilterActionForeColor_Other = Color.LimeGreen;
+            public static readonly Color FilterActionBackColor_Other = Color.FromArgb(30, 30, 30);
 
             #region//定义结构        
 
@@ -2323,47 +2248,6 @@ namespace WPELibrary.Lib
                 }
 
                 return sReturn;
-            }
-
-            #endregion
-
-            #region//获取滤镜动作对应的颜色
-
-            public static Color[] GetColor_ByFilterAction(Socket_Cache.Filter.FilterAction filterAction)
-            {
-                Color[] cReturn = new Color[2];
-
-                try
-                {
-                    switch (filterAction)
-                    {
-                        case Socket_Cache.Filter.FilterAction.Replace:
-                            cReturn[0] = Socket_Cache.Filter.FilterActionForeColor_Replace;
-                            cReturn[1] = Socket_Cache.Filter.FilterActionBackColor_Replace;
-                            break;
-
-                        case Socket_Cache.Filter.FilterAction.Intercept:
-                            cReturn[0] = Socket_Cache.Filter.FilterActionForeColor_Intercept;
-                            cReturn[1] = Socket_Cache.Filter.FilterActionBackColor_Intercept;
-                            break;
-
-                        case Socket_Cache.Filter.FilterAction.Change:
-                            cReturn[0] = Socket_Cache.Filter.FilterActionForeColor_Change;
-                            cReturn[1] = Socket_Cache.Filter.FilterActionBackColor_Change;
-                            break;
-
-                        default:
-                            cReturn[0] = Socket_Cache.Filter.FilterActionForeColor_Other;
-                            cReturn[1] = Socket_Cache.Filter.FilterActionBackColor_Other;
-                            break;                        
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return cReturn;
             }
 
             #endregion            

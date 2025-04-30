@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -20,7 +21,7 @@ namespace WPELibrary.Lib
         public byte[] ClientBuffer { get; set; }
         public byte[] ClientData { get; set; }
 
-        public void CloseClientSocket()
+        public void CloseTCPClient()
         {
             try
             {
@@ -29,6 +30,12 @@ namespace WPELibrary.Lib
                     this.ClientSocket.Shutdown(SocketShutdown.Both);
                     this.ClientSocket.Close();
                     this.ClientSocket = null;
+                }
+
+                if (ClientBuffer != null)
+                {
+                    ArrayPool<byte>.Shared.Return(ClientBuffer);
+                    ClientBuffer = null;
                 }
             }
             catch (Exception ex)
@@ -46,7 +53,7 @@ namespace WPELibrary.Lib
         public byte[] ServerBuffer { get; set; }
         public IPEndPoint ServerEndPoint { get; set; }
 
-        public void CloseServerSocket()
+        public void CloseTCPServer()
         {
             try
             {
@@ -55,6 +62,12 @@ namespace WPELibrary.Lib
                     this.ServerSocket.Shutdown(SocketShutdown.Both);
                     this.ServerSocket.Close();
                     this.ServerSocket = null;
+                }
+
+                if (ServerBuffer != null)
+                {
+                    ArrayPool<byte>.Shared.Return(ServerBuffer);
+                    ServerBuffer = null;
                 }
             }
             catch (Exception ex)
@@ -69,8 +82,8 @@ namespace WPELibrary.Lib
         {
             this.ClientSocket = clientSocket;
 
-            this.ClientBuffer = new byte[BufferSize];
-            this.ServerBuffer = new byte[BufferSize];
+            this.ClientBuffer = ArrayPool<byte>.Shared.Rent(BufferSize);
+            this.ServerBuffer = ArrayPool<byte>.Shared.Rent(BufferSize);
 
             this.ClientData = Array.Empty<byte>();
 

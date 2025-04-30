@@ -1880,33 +1880,24 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取对应名称的树节点
+        #region//查找树节点        
 
-        public static async Task<TreeNode> FindNodeAsync(TreeView treeView, string nodeName)
+        public static TreeNode FindNodeSync(TreeNodeCollection nodes, string nodeName)
         {
-            return await Socket_Operation.FindNode(treeView.Nodes, nodeName);
-        }
-
-        private static async Task<TreeNode> FindNode(TreeNodeCollection nodes, string nodeName)
-        {
-            TreeNode tnReturn = null;
-
             try
             {
-                foreach (TreeNode node in nodes)
+                for (int i = 0; i < nodes.Count; i++)
                 {
+                    TreeNode node = nodes[i];
                     if (node.Text == nodeName)
                     {
-                        tnReturn = node;
-                        break;
+                        return node;
                     }
 
-                    TreeNode foundNode = await FindNode(node.Nodes, nodeName);
-
+                    TreeNode foundNode = FindNodeSync(node.Nodes, nodeName);
                     if (foundNode != null)
                     {
-                        tnReturn = foundNode;
-                        break;
+                        return foundNode;
                     }
                 }
             }
@@ -1914,41 +1905,31 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-            
-            return tnReturn;
+
+            return null;
         }
 
         #endregion
 
         #region//添加树节点
 
-        public static async Task<TreeNode> AddTreeNode(TreeView treeView, TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
+        public static TreeNode AddTreeNode(TreeView treeView, TreeNodeCollection Nodes, string NodeName, int ImgIndex, byte[] bData)
         {
             TreeNode tnReturn = null;
 
             try
             {
-                await Task.Run(() =>
+                if (!treeView.IsDisposed)
                 {
-                    if (!treeView.IsDisposed)
+                    if (treeView.InvokeRequired)
                     {
-                        treeView.Invoke(new MethodInvoker(delegate
-                        {
-                            tnReturn = Nodes.Add(NodeName);
-
-                            if (ImgIndex > -1)
-                            {
-                                tnReturn.ImageIndex = ImgIndex;
-                                tnReturn.SelectedImageIndex = ImgIndex;
-                            }
-
-                            if (bData != null && bData.Length > 0)
-                            {
-                                tnReturn.Tag = bData;
-                            }
-                        }));
+                        tnReturn = (TreeNode)treeView.Invoke(new Func<TreeNode>(() => AddNode(Nodes, NodeName, ImgIndex, bData)));
                     }
-                });                
+                    else
+                    {
+                        tnReturn = AddNode(Nodes, NodeName, ImgIndex, bData);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1958,17 +1939,42 @@ namespace WPELibrary.Lib
             return tnReturn;
         }
 
+        private static TreeNode AddNode(TreeNodeCollection nodes, string nodeName, int imgIndex, byte[] bData)
+        {
+            TreeNode tn = nodes.Add(nodeName);
+
+            try
+            {
+                if (imgIndex > -1)
+                {
+                    tn.ImageIndex = imgIndex;
+                    tn.SelectedImageIndex = imgIndex;
+                }
+
+                if (bData != null && bData.Length > 0)
+                {
+                    tn.Tag = bData;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+
+            return tn;
+        }
+
         #endregion
 
         #region//获取远端地址
 
-        public static string GetTargetAddress(string IP, ushort Port, Socket_ProxyTCP spi)
+        public static string GetServerAddress(string IP, ushort Port, Socket_ProxyTCP spc)
         {
             string sReturn = string.Empty;
 
             try
             {
-                switch (spi.DomainType)
+                switch (spc.DomainType)
                 {
                     case Socket_Cache.SocketProxy.DomainType.Socket:
                         sReturn = "socket://" + IP + ": " + Port;

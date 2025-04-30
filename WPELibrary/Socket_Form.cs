@@ -852,7 +852,7 @@ namespace WPELibrary
 
                 if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
-                    await Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
+                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
                     this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
                     this.AutoCleanUp_LogList();
                 }
