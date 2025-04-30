@@ -21,7 +21,6 @@ using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
-using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
@@ -1547,7 +1546,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
+                Socket_Cache.SocketProxy.IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
                 sReturn = result.IPAddress.ToString();
             }
             catch (Exception ex)
@@ -1564,7 +1563,7 @@ namespace WPELibrary.Lib
 
             try
             {
-                IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
+                Socket_Cache.SocketProxy.IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
                 epReturn = new IPEndPoint(result.IPAddress, result.Port);
             }
             catch (Exception ex)
@@ -1575,7 +1574,7 @@ namespace WPELibrary.Lib
             return epReturn;
         }
 
-        public static IPAddressAndPort ExtractIPAddressAndPort(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
+        public static Socket_Cache.SocketProxy.IPAddressAndPort ExtractIPAddressAndPort(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
         {
             IPAddress ip = IPAddress.Any;
             ushort port = 0;
@@ -1625,7 +1624,7 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return new IPAddressAndPort { IPAddress = ip, Port = port };
+            return new Socket_Cache.SocketProxy.IPAddressAndPort { IPAddress = ip, Port = port };
         }
 
         #endregion
