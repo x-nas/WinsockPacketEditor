@@ -996,12 +996,12 @@
             this.cProxyChart.Name = "cProxyChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Color = System.Drawing.Color.Lime;
+            series1.Color = System.Drawing.Color.White;
             series1.LabelForeColor = System.Drawing.Color.Empty;
             series1.Name = "sProxy_Uplink";
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Color = System.Drawing.Color.White;
+            series2.Color = System.Drawing.Color.Lime;
             series2.LabelForeColor = System.Drawing.Color.Empty;
             series2.Name = "sProxy_Downlink";
             this.cProxyChart.Series.Add(series1);

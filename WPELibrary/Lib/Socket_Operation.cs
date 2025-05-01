@@ -2289,21 +2289,19 @@ namespace WPELibrary.Lib
 
         public static byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
         {
-            byte[] bReturn = null;
-
             try
             {
                 if (ClientUDP != null)
                 {
-                    bReturn = ClientUDP.EndReceive(ar, ref ep);                    
+                    return ClientUDP.EndReceive(ar, ref ep);                    
                 }
             }
             catch
             {
-                //
+                return Array.Empty<byte>();
             }
 
-            return bReturn;
+            return Array.Empty<byte>();
         }
 
         #endregion

@@ -240,6 +240,15 @@ namespace WPELibrary.Lib
                         }
                     }
                 }
+                catch (SocketException ex)
+                {
+                    if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
+                    }
+
+                    spc.CloseTCPClient();
+                }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
@@ -665,6 +674,15 @@ namespace WPELibrary.Lib
                         spc.CloseTCPServer();
                     }
                 }
+                catch (SocketException ex)
+                {
+                    if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
+                    }                    
+
+                    spc.CloseTCPServer();
+                }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
@@ -756,6 +774,11 @@ namespace WPELibrary.Lib
                 {
                     if (spc != null && spc.ClientSocket != null)
                     {
+                        if (!spc.ClientSocket.IsBound || !spc.ClientSocket.Connected)
+                        {
+                            return sReturn;
+                        }
+
                         if (spc.ClientSocket.RemoteEndPoint is IPEndPoint endpoint)
                         {
                             return endpoint.Address.ToString();

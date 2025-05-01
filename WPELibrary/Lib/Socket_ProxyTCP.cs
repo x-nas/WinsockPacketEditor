@@ -38,6 +38,13 @@ namespace WPELibrary.Lib
                     ClientBuffer = null;
                 }
             }
+            catch (SocketException ex)
+            {
+                if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
@@ -68,6 +75,13 @@ namespace WPELibrary.Lib
                 {
                     ArrayPool<byte>.Shared.Return(ServerBuffer);
                     ServerBuffer = null;
+                }
+            }
+            catch (SocketException ex)
+            {
+                if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
             catch (Exception ex)
