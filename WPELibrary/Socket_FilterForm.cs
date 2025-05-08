@@ -11,6 +11,7 @@ namespace WPELibrary
     public partial class Socket_FilterForm : Form
     {  
         private int FilterIndex = -1;
+        private int LoadAllCount = 0;        
         private decimal FilterSocketContent = 1;
         private decimal FilterLengthContent = 1;
         private decimal FilterPortContent = 1;
@@ -52,7 +53,7 @@ namespace WPELibrary
                     if (!this.bgwFilterInfo.IsBusy)
                     {
                         this.bFilterButton_Save.Enabled = false;
-                        this.dgvFilterAdvanced_Modify_FromPosition.Enabled = false;
+                        this.tcFilterInfo.Enabled = false;
                         this.lFilterInfo.Visible = true;
 
                         this.bgwFilterInfo.RunWorkerAsync();
@@ -80,7 +81,7 @@ namespace WPELibrary
             {
                 string sFID = Socket_Cache.FilterList.lstFilter[FilterIndex].FID.ToString().ToUpper();
                 this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sFID);
-                this.lFilterInfo.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_175);
+                this.lFilterInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_175), "0");
 
                 this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
                 this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
@@ -654,10 +655,15 @@ namespace WPELibrary
             this.ShowFilterInfo();
         }
 
+        private void bgwFilterInfo_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        {
+            this.lFilterInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_175), e.ProgressPercentage.ToString());
+        }
+
         private void bgwFilterInfo_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             this.lFilterInfo.Visible = false;
-            this.dgvFilterAdvanced_Modify_FromPosition.Enabled = true;
+            this.tcFilterInfo.Enabled = true;
             this.bFilterButton_Save.Enabled = true;
         }
 
@@ -697,7 +703,9 @@ namespace WPELibrary
                 if (!string.IsNullOrEmpty(FilterModify))
                 {
                     string[] sModifyAll = FilterModify.Split(',');
+                    this.LoadAllCount = sModifyAll.Length;
 
+                    int LoadCount = 0;
                     foreach (string s in sModifyAll)
                     {
                         if (int.TryParse(s.Split('|')[0], out int iIndex))
@@ -741,8 +749,11 @@ namespace WPELibrary
                                                 iIndex += Socket_Cache.Filter.FilterSize_MaxLen;
 
                                                 if (iIndex < this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells.Count)
-                                                {
+                                                {                                                    
                                                     this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iIndex].Value = sValue;
+
+                                                    LoadCount++;
+                                                    this.bgwFilterInfo.ReportProgress(LoadCount * 100 / LoadAllCount);
                                                 }
                                             }
 
@@ -1404,8 +1415,8 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
-        #endregion
+        #endregion        
     }
 }
