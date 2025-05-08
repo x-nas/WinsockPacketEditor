@@ -3699,15 +3699,7 @@ namespace WPELibrary.Lib
                             bIsEnable = bool.Parse(xeFilter.Element("IsEnable").Value);
                         }
 
-                        Guid gFID = Guid.Empty;
-                        if (xeFilter.Element("ID") != null)
-                        {
-                            gFID = Guid.Parse(xeFilter.Element("ID").Value);
-                        }
-                        else
-                        {
-                            gFID = Guid.NewGuid();
-                        }
+                        Guid gFID = Guid.NewGuid();
 
                         string sFName = string.Empty;
                         if (xeFilter.Element("Name") != null)
@@ -4915,15 +4907,7 @@ namespace WPELibrary.Lib
                             IsEnable = bool.Parse(xeRobot.Element("IsEnable").Value);
                         }
 
-                        Guid RID = Guid.Empty;
-                        if (xeRobot.Element("ID") != null)
-                        {
-                            RID = Guid.Parse(xeRobot.Element("ID").Value);
-                        }
-                        else
-                        {
-                            RID = Guid.NewGuid();
-                        }
+                        Guid RID = Guid.NewGuid();                        
 
                         string RName = string.Empty;
                         if (xeRobot.Element("Name") != null)
@@ -6318,15 +6302,7 @@ namespace WPELibrary.Lib
                             IsEnable = bool.Parse(xeSend.Element("IsEnable").Value);
                         }
 
-                        Guid SID = Guid.Empty;
-                        if (xeSend.Element("ID") != null)
-                        {
-                            SID = Guid.Parse(xeSend.Element("ID").Value);
-                        }
-                        else
-                        {
-                            SID = Guid.NewGuid();
-                        }
+                        Guid SID = Guid.NewGuid();
 
                         string SName = string.Empty;
                         if (xeSend.Element("Name") != null)
