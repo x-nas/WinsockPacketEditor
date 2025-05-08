@@ -17,6 +17,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Globalization;
+using System.Data.SQLite;
 
 namespace WPELibrary.Lib
 {
@@ -2999,8 +3000,7 @@ namespace WPELibrary.Lib
                 Priority,
                 Sequence,
             }
-
-            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\FilterList.fp";
+            
             public static string AESKey = string.Empty;
             public static Execute FilterList_Execute;            
 
@@ -3328,10 +3328,103 @@ namespace WPELibrary.Lib
 
                 return faReturn;
             }
-            
+
             #endregion
 
-            #region//保存滤镜列表（对话框）
+            #region//保存滤镜列表到数据库
+
+            public static void SaveFilterList_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.DeleteTable_Filter();
+
+                    foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
+                    {
+                        Socket_Cache.DataBase.InsertTable_Filter(sfi);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载滤镜列表
+
+            public static void LoadFilterList_FromDB()
+            {
+                try
+                {
+                    DataTable dtFilter = Socket_Cache.DataBase.SelectTable_Filter();
+
+                    foreach (DataRow dataRow in dtFilter.Rows) 
+                    {
+                        bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                        Guid FID = Guid.Parse(dataRow["GUID"].ToString());
+                        string FName = dataRow["Name"].ToString();
+                        bool AppointHeader = Convert.ToBoolean(dataRow["AppointHeader"]);
+                        string FHeaderContent = dataRow["HeaderContent"].ToString();
+                        bool AppointSocket = Convert.ToBoolean(dataRow["AppointSocket"]);
+                        decimal FSocketContent = Convert.ToDecimal(dataRow["SocketContent"]);
+                        bool AppointLength = Convert.ToBoolean(dataRow["AppointLength"]);
+                        decimal FLengthContent = Convert.ToDecimal(dataRow["LengthContent"]);
+                        bool AppointPort = Convert.ToBoolean(dataRow["AppointPort"]);
+                        decimal FPortContent = Convert.ToDecimal(dataRow["PortContent"]);
+                        Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString());
+                        Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.GetFilterAction_ByString(dataRow["Action"].ToString());
+                        bool IsExecute = Convert.ToBoolean(dataRow["IsExecute"]);
+                        Socket_Cache.Filter.FilterExecuteType FilterExecuteType = Socket_Cache.Filter.GetFilterExecuteType_ByString(dataRow["ExecuteType"].ToString());
+                        Guid SID = Guid.Parse(dataRow["Send_GUID"].ToString());
+                        Guid RID = Guid.Parse(dataRow["Robot_GUID"].ToString());
+                        Socket_Cache.Filter.FilterFunction FilterFunction = Socket_Cache.Filter.GetFilterFunction_ByString(dataRow["Function"].ToString());
+                        Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString());
+                        bool IsProgressionDone = false;
+                        decimal FProgressionStep = Convert.ToDecimal(dataRow["ProgressionStep"]);
+                        string FProgressionPosition = dataRow["ProgressionPosition"].ToString();
+                        int ProgressionCount = 0;
+                        string FSearch = dataRow["Search"].ToString();
+                        string FModify = dataRow["Modify"].ToString();
+
+                        Socket_Cache.Filter.AddFilter(
+                            IsEnable,
+                            FID,
+                            FName,
+                            AppointHeader,
+                            FHeaderContent,
+                            AppointSocket,
+                            FSocketContent,
+                            AppointLength,
+                            FLengthContent,
+                            AppointPort,
+                            FPortContent,
+                            FilterMode,
+                            FilterAction,
+                            IsExecute,
+                            FilterExecuteType,
+                            SID,
+                            RID,
+                            FilterFunction,
+                            FilterStartFrom,
+                            IsProgressionDone,
+                            FProgressionStep,
+                            FProgressionPosition,
+                            ProgressionCount,
+                            FSearch,
+                            FModify);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存滤镜列表到文件（对话框）
 
             public static void SaveFilterList_Dialog(string FileName, int FilterIndex)
             {
@@ -3373,7 +3466,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void SaveFilterList(string FilePath, int FilterIndex, bool DoEncrypt)
+            private static void SaveFilterList(string FilePath, int FilterIndex, bool DoEncrypt)
             {
                 try
                 {
@@ -3485,7 +3578,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//加载滤镜列表（对话框）
+            #region//从文件加载滤镜列表（对话框）
 
             public static void LoadFilterList_Dialog()
             {
@@ -3512,7 +3605,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void LoadFilterList(string FilePath, bool LoadFromUser)
+            private static void LoadFilterList(string FilePath, bool LoadFromUser)
             {
                 try
                 {
@@ -4514,9 +4607,7 @@ namespace WPELibrary.Lib
 
         public static class RobotList
         {
-            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\RobotList.rp";
             public static string AESKey = string.Empty;
-
             public static BindingList<Socket_RobotInfo> lstRobot = new BindingList<Socket_RobotInfo>();
             public delegate void SocketRobotReceived(Socket_RobotInfo sri);
             public static event SocketRobotReceived RecSocketRobot;
@@ -4645,7 +4736,65 @@ namespace WPELibrary.Lib
 
             #endregion                        
 
-            #region//加载机器人列表（对话框）
+            #region//保存机器人列表到数据库
+
+            public static void SaveRobotList_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.DeleteTable_Robot();
+
+                    foreach (Socket_RobotInfo sri in Socket_Cache.RobotList.lstRobot)
+                    {
+                        Socket_Cache.DataBase.InsertTable_Robot(sri);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载机器人列表
+
+            public static void LoadRobotList_FromDB()
+            {
+                try
+                {
+                    DataTable dtRobot = Socket_Cache.DataBase.SelectTable_Robot();
+
+                    foreach (DataRow dataRow in dtRobot.Rows)
+                    {
+                        Guid RID = Guid.Parse(dataRow["GUID"].ToString());
+                        bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                        string RName = dataRow["Name"].ToString();
+
+
+                        DataTable RInstruction = Socket_Cache.Robot.InitInstructions();
+                        DataTable dtInstruction = Socket_Cache.DataBase.SelectTable_RobotInstruction(RID);
+
+                        foreach (DataRow row in dtInstruction.Rows)
+                        {
+                            DataRow dr = RInstruction.NewRow();
+                            dr[0] = Socket_Cache.Robot.GetInstructionType_ByString(row["Type"].ToString());
+                            dr[1] = row["Content"].ToString();
+                            RInstruction.Rows.Add(dr);
+                        }
+
+                        Socket_Cache.Robot.AddRobot(IsEnable, RID, RName, RInstruction);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从文件加载机器人列表（对话框）
 
             public static void LoadRobotList_Dialog()
             {
@@ -4672,7 +4821,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void LoadRobotList(string FilePath, bool LoadFromUser)
+            private static void LoadRobotList(string FilePath, bool LoadFromUser)
             {
                 try
                 {
@@ -4786,7 +4935,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//保存机器人列表（对话框）
+            #region//保存机器人列表到文件（对话框）
 
             public static void SaveRobotList_Dialog(string FileName, int RobotIndex)
             {
@@ -4934,8 +5083,7 @@ namespace WPELibrary.Lib
                 {
                     dtSendCollection.Columns.Add("Socket", typeof(int));
                     dtSendCollection.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
-                    dtSendCollection.Columns.Add("IPTo", typeof(string));
-                    dtSendCollection.Columns.Add("Length", typeof(int));
+                    dtSendCollection.Columns.Add("IPTo", typeof(string));                    
                     dtSendCollection.Columns.Add("Buffer", typeof(byte[]));
                 }
                 catch (Exception ex)
@@ -5016,8 +5164,7 @@ namespace WPELibrary.Lib
                     DataRow dr = SCollection.NewRow();
                     dr["Socket"] = Socket;
                     dr["Type"] = ptType;
-                    dr["IPTo"] = IPTo;
-                    dr["Length"] = Buffer.Length;
+                    dr["IPTo"] = IPTo;                    
                     dr["Buffer"] = Buffer;
                     SCollection.Rows.Add(dr);
                 }
@@ -5694,10 +5841,8 @@ namespace WPELibrary.Lib
         #region//发送列表
 
         public static class SendList
-        {  
-            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\SendList.sp";
+        {
             public static string AESKey = string.Empty;
-
             public static BindingList<Socket_SendInfo> lstSend = new BindingList<Socket_SendInfo>();
             public delegate void SocketSendReceived(Socket_SendInfo ssi);
             public static event SocketSendReceived RecSocketSend;
@@ -5842,7 +5987,69 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//保存发送列表（对话框）
+            #region//保存发送列表到数据库
+
+            public static void SaveSendList_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.DeleteTable_Send();
+
+                    foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                    {
+                        Socket_Cache.DataBase.InsertTable_Send(ssi);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载滤镜列表
+
+            public static void LoadSendList_FromDB()
+            {
+                try
+                {
+                    DataTable dtSend = Socket_Cache.DataBase.SelectTable_Send();
+
+                    foreach (DataRow dataRow in dtSend.Rows)
+                    {
+                        Guid SID = Guid.Parse(dataRow["GUID"].ToString());
+                        bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                        string SName = dataRow["Name"].ToString();
+                        bool SSystemSocket = Convert.ToBoolean(dataRow["SystemSocket"]);
+                        int SLoopCNT = Convert.ToInt32(dataRow["LoopCNT"]);
+                        int SLoopINT = Convert.ToInt32(dataRow["LoopINT"]);
+                        string SNotes = dataRow["Notes"].ToString();                        
+
+                        DataTable SCollection = Socket_Cache.Send.InitSendCollection();
+                        DataTable dtCollection = Socket_Cache.DataBase.SelectTable_SendCollection(SID);
+
+                        foreach (DataRow row in dtCollection.Rows)
+                        {
+                            int Socket = Convert.ToInt32(row["Socket"]);
+                            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(row["Type"].ToString());
+                            string IPTo = row["IPTo"].ToString();
+                            byte[] Buffer = (byte[])row["Buffer"];
+                            Socket_Cache.Send.AddSendCollection(SCollection, Socket, ptType, IPTo, Buffer);
+                        }
+
+                        Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存发送列表到文件（对话框）
 
             public static void SaveSendList_Dialog(string FileName, int SendIndex)
             {
@@ -5884,7 +6091,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void SaveSendList(string FilePath, int SendPacketIndex, bool DoEncrypt)
+            private static void SaveSendList(string FilePath, int SendPacketIndex, bool DoEncrypt)
             {
                 try
                 {
@@ -5990,7 +6197,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//加载发送列表（对话框）
+            #region//从文件加载发送列表（对话框）
 
             public static void LoadSendList_Dialog()
             {
@@ -6017,7 +6224,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void LoadSendList(string FilePath, bool LoadFromUser)
+            private static void LoadSendList(string FilePath, bool LoadFromUser)
             {
                 try
                 {
@@ -6163,6 +6370,577 @@ namespace WPELibrary.Lib
                         }
 
                         Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region//数据库
+
+        public static class DataBase
+        {
+            private static string conStr = "Data Source=|DataDirectory|\\WPE64.db;Version=3;";
+
+            public static void InitDB()
+            {
+                Socket_Cache.DataBase.CreateTable_Filter();
+                Socket_Cache.DataBase.CreateTable_Send();
+                Socket_Cache.DataBase.CreateTable_Robot();
+            }
+
+            #region//滤镜
+
+            private static bool CreateTable_Filter()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {                        
+                        string sql = "CREATE TABLE IF NOT EXISTS Filter (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";                        
+                        sql += "Name TEXT NOT NULL,";
+                        sql += "AppointHeader INTEGER CHECK (AppointHeader IN (0, 1)) DEFAULT 0,";
+                        sql += "HeaderContent TEXT,";
+                        sql += "AppointSocket INTEGER CHECK (AppointSocket IN (0, 1)) DEFAULT 0,";
+                        sql += "SocketContent INTEGER DEFAULT 0,";
+                        sql += "AppointLength INTEGER CHECK (AppointLength IN (0, 1)) DEFAULT 0,";
+                        sql += "LengthContent INTEGER DEFAULT 0,";
+                        sql += "AppointPort INTEGER CHECK (AppointPort IN (0, 1)) DEFAULT 0,";
+                        sql += "PortContent INTEGER DEFAULT 0,";
+                        sql += "Mode INTEGER NOT NULL DEFAULT 0,";
+                        sql += "Action INTEGER NOT NULL DEFAULT 0,";
+                        sql += "IsExecute INTEGER CHECK (IsExecute IN (0, 1)) DEFAULT 0,";
+                        sql += "ExecuteType INTEGER DEFAULT 0,";
+                        sql += "Send_GUID TEXT NOT NULL,";
+                        sql += "Robot_GUID TEXT NOT NULL,";
+                        sql += "Function TEXT NOT NULL,";
+                        sql += "StartFrom INTEGER DEFAULT 0,";
+                        sql += "ProgressionStep INTEGER DEFAULT 1,";
+                        sql += "ProgressionPosition TEXT,";
+                        sql += "Search TEXT,";
+                        sql += "Modify TEXT";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_Filter()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM Filter;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }                      
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_Filter()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM Filter;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_Filter(Socket_FilterInfo sfi)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "INSERT INTO Filter (";
+                        sql += "GUID,";
+                        sql += "IsEnable,";                        
+                        sql += "Name,";
+                        sql += "AppointHeader,";
+                        sql += "HeaderContent,";
+                        sql += "AppointSocket,";
+                        sql += "SocketContent,";
+                        sql += "AppointLength,";
+                        sql += "LengthContent,";
+                        sql += "AppointPort,";
+                        sql += "PortContent,";
+                        sql += "Mode,";
+                        sql += "Action,";
+                        sql += "IsExecute,";
+                        sql += "ExecuteType,";
+                        sql += "Send_GUID,";
+                        sql += "Robot_GUID,";
+                        sql += "Function,";
+                        sql += "StartFrom,";
+                        sql += "ProgressionStep,";
+                        sql += "ProgressionPosition,";
+                        sql += "Search,";
+                        sql += "Modify";
+                        sql += ") VALUES (";
+                        sql += "@GUID,";
+                        sql += "@IsEnable,";                        
+                        sql += "@Name,";
+                        sql += "@AppointHeader,";
+                        sql += "@HeaderContent,";
+                        sql += "@AppointSocket,";
+                        sql += "@SocketContent,";
+                        sql += "@AppointLength,";
+                        sql += "@LengthContent,";
+                        sql += "@AppointPort,";
+                        sql += "@PortContent,";
+                        sql += "@Mode,";
+                        sql += "@Action,";
+                        sql += "@IsExecute,";
+                        sql += "@ExecuteType,";
+                        sql += "@Send_GUID,";
+                        sql += "@Robot_GUID,";
+                        sql += "@Function,";
+                        sql += "@StartFrom,";
+                        sql += "@ProgressionStep,";
+                        sql += "@ProgressionPosition,";
+                        sql += "@Search,";
+                        sql += "@Modify";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", sfi.FID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(sfi.IsEnable));
+                            cmd.Parameters.AddWithValue("@Name", sfi.FName);
+                            cmd.Parameters.AddWithValue("@AppointHeader", Convert.ToInt32(sfi.AppointHeader));
+                            cmd.Parameters.AddWithValue("@HeaderContent", sfi.HeaderContent);
+                            cmd.Parameters.AddWithValue("@AppointSocket", Convert.ToInt32(sfi.AppointSocket));
+                            cmd.Parameters.AddWithValue("@SocketContent", sfi.SocketContent);
+                            cmd.Parameters.AddWithValue("@AppointLength", Convert.ToInt32(sfi.AppointLength));
+                            cmd.Parameters.AddWithValue("@LengthContent", sfi.LengthContent);
+                            cmd.Parameters.AddWithValue("@AppointPort", Convert.ToInt32(sfi.AppointPort));
+                            cmd.Parameters.AddWithValue("@PortContent", sfi.PortContent);
+                            cmd.Parameters.AddWithValue("@Mode", sfi.FMode);
+                            cmd.Parameters.AddWithValue("@Action", sfi.FAction);
+                            cmd.Parameters.AddWithValue("@IsExecute", Convert.ToInt32(sfi.IsExecute));
+                            cmd.Parameters.AddWithValue("@ExecuteType", sfi.FEType);
+                            cmd.Parameters.AddWithValue("@Send_GUID", sfi.SID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@Robot_GUID", sfi.RID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@Function", Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction));
+                            cmd.Parameters.AddWithValue("@StartFrom", sfi.FStartFrom);
+                            cmd.Parameters.AddWithValue("@ProgressionStep", sfi.ProgressionStep);
+                            cmd.Parameters.AddWithValue("@ProgressionPosition", sfi.ProgressionPosition);
+                            cmd.Parameters.AddWithValue("@Search", sfi.FSearch);
+                            cmd.Parameters.AddWithValue("@Modify", sfi.FModify);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//发送
+
+            private static bool CreateTable_Send()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS Send (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";                        
+                        sql += "Name TEXT NOT NULL,";
+                        sql += "SystemSocket INTEGER CHECK (SystemSocket IN (0, 1)) DEFAULT 0,";
+                        sql += "LoopCNT INTEGER NOT NULL DEFAULT 1,";
+                        sql += "LoopINT INTEGER NOT NULL DEFAULT 1000,";
+                        sql += "Notes TEXT";
+                        sql += ");";
+
+                        sql += "CREATE TABLE IF NOT EXISTS SendCollection (";
+                        sql += "GUID TEXT NOT NULL,";
+                        sql += "Socket INTEGER NOT NULL,";
+                        sql += "Type INTEGER NOT NULL,";
+                        sql += "IPTo TEXT NOT NULL,";
+                        sql += "Buffer BLOB,";
+                        sql += "FOREIGN KEY (GUID) REFERENCES Send(GUID)";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_Send()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM Send;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable SelectTable_SendCollection(Guid guid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT Socket, Type, IPTo, Buffer FROM SendCollection WHERE GUID = @GUID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }  
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_Send()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM SendCollection;";
+                        sql += "DELETE FROM Send;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_Send(Socket_SendInfo ssi)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        string sql = "INSERT INTO Send (";
+                        sql += "GUID,";
+                        sql += "IsEnable,";
+                        sql += "Name,";
+                        sql += "SystemSocket,";
+                        sql += "LoopCNT,";
+                        sql += "LoopINT,";
+                        sql += "Notes";
+                        sql += ") VALUES (";
+                        sql += "@GUID,";
+                        sql += "@IsEnable,";
+                        sql += "@Name,";
+                        sql += "@SystemSocket,";
+                        sql += "@LoopCNT,";
+                        sql += "@LoopINT,";
+                        sql += "@Notes";
+                        sql += ");";                        
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(ssi.IsEnable));
+                            cmd.Parameters.AddWithValue("@Name", ssi.SName);
+                            cmd.Parameters.AddWithValue("@SystemSocket", ssi.SSystemSocket);
+                            cmd.Parameters.AddWithValue("@LoopCNT", ssi.SLoopCNT);
+                            cmd.Parameters.AddWithValue("@LoopINT", ssi.SLoopINT);
+                            cmd.Parameters.AddWithValue("@Notes", ssi.SNotes);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        foreach (DataRow row in ssi.SCollection.Rows)
+                        {
+                            sql = "INSERT INTO SendCollection (";
+                            sql += "GUID,";
+                            sql += "Socket,";
+                            sql += "Type,";
+                            sql += "IPTo,";
+                            sql += "Buffer";
+                            sql += ") VALUES (";
+                            sql += "@GUID,";
+                            sql += "@Socket,";
+                            sql += "@Type,";
+                            sql += "@IPTo,";
+                            sql += "@Buffer";
+                            sql += ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
+                                cmd.Parameters.AddWithValue("@Socket", Convert.ToInt32(row["Socket"]));
+                                cmd.Parameters.AddWithValue("@Type", Convert.ToInt32(row["Type"]));
+                                cmd.Parameters.AddWithValue("@IPTo", row["IPTo"].ToString());
+                                cmd.Parameters.AddWithValue("@Buffer", (byte[])row["Buffer"]);
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//机器人
+
+            private static bool CreateTable_Robot()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS Robot (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";
+                        sql += "Name TEXT NOT NULL";
+                        sql += ");";
+
+                        sql += "CREATE TABLE IF NOT EXISTS RobotInstruction (";
+                        sql += "GUID TEXT NOT NULL,";
+                        sql += "Type INTEGER NOT NULL,";
+                        sql += "Content TEXT,";
+                        sql += "FOREIGN KEY (GUID) REFERENCES Robot(GUID)";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_Robot()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM Robot;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable SelectTable_RobotInstruction(Guid guid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT Type, Content FROM RobotInstruction WHERE GUID = @GUID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_Robot()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM RobotInstruction;";
+                        sql += "DELETE FROM Robot;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_Robot(Socket_RobotInfo sri)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        string sql = "INSERT INTO Robot (";
+                        sql += "GUID,";
+                        sql += "IsEnable,";
+                        sql += "Name";
+                        sql += ") VALUES (";
+                        sql += "@GUID,";
+                        sql += "@IsEnable,";
+                        sql += "@Name";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", sri.RID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(sri.IsEnable));
+                            cmd.Parameters.AddWithValue("@Name", sri.RName);                            
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        foreach (DataRow row in sri.RInstruction.Rows)
+                        {
+                            sql = "INSERT INTO RobotInstruction (";
+                            sql += "GUID,";
+                            sql += "Type,";
+                            sql += "Content";
+                            sql += ") VALUES (";
+                            sql += "@GUID,";
+                            sql += "@Type,";
+                            sql += "@Content";
+                            sql += ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@GUID", sri.RID.ToString().ToUpper());
+                                cmd.Parameters.AddWithValue("@Type", Convert.ToInt32(row["Type"]));
+                                cmd.Parameters.AddWithValue("@Content", row["Content"].ToString());                                
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)

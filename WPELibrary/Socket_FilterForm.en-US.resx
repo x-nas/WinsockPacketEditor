@@ -131,16 +131,19 @@
     <value>884, 471</value>
   </data>
   <data name="bFilterButton_Save.Location" type="System.Drawing.Point, System.Drawing">
-    <value>327, 3</value>
+    <value>277, 3</value>
   </data>
   <data name="bFilterButton_Save.Text" xml:space="preserve">
     <value>Save (&amp;S)</value>
   </data>
   <data name="bFilterButton_Close.Location" type="System.Drawing.Point, System.Drawing">
-    <value>467, 3</value>
+    <value>517, 3</value>
   </data>
   <data name="bFilterButton_Close.Text" xml:space="preserve">
     <value>Close (&amp;C)</value>
+  </data>
+  <data name="lFilterInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>370, 6</value>
   </data>
   <data name="tpNormal.Size" type="System.Drawing.Size, System.Drawing">
     <value>876, 180</value>

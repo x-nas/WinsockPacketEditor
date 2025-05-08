@@ -570,65 +570,26 @@
   <data name="tlpHookSet_WinsockWSA.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
-  <data name="tlpHookSet_WinsockWSA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>489, 71</value>
-  </data>
-  <data name="cbHookWS2_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>125, 38</value>
-  </data>
-  <data name="cbHookWS2_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 30</value>
-  </data>
   <data name="cbHookWS2_RecvFrom.Text" xml:space="preserve">
     <value>RecvFrom</value>
-  </data>
-  <data name="cbHookWS2_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 38</value>
-  </data>
-  <data name="cbHookWS2_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 30</value>
   </data>
   <data name="cbHookWS2_Recv.Text" xml:space="preserve">
     <value>Recv</value>
   </data>
-  <data name="cbHookWS2_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 29</value>
-  </data>
   <data name="cbHookWS2_SendTo.Text" xml:space="preserve">
     <value>SendTo</value>
-  </data>
-  <data name="cbHookWS2_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 29</value>
   </data>
   <data name="cbHookWS2_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="cbHookWSA_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>369, 38</value>
-  </data>
-  <data name="cbHookWSA_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 30</value>
-  </data>
   <data name="cbHookWSA_RecvFrom.Text" xml:space="preserve">
     <value>WSARecvFrom</value>
-  </data>
-  <data name="cbHookWSA_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>247, 38</value>
-  </data>
-  <data name="cbHookWSA_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 30</value>
   </data>
   <data name="cbHookWSA_Recv.Text" xml:space="preserve">
     <value>WSARecv</value>
   </data>
-  <data name="cbHookWSA_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>117, 29</value>
-  </data>
   <data name="cbHookWSA_SendTo.Text" xml:space="preserve">
     <value>WSASendTo</value>
-  </data>
-  <data name="cbHookWSA_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>116, 29</value>
   </data>
   <data name="cbHookWSA_Send.Text" xml:space="preserve">
     <value>WSASend</value>
@@ -639,35 +600,14 @@
   <data name="tlpHookSet_Winsock.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
-  <data name="tlpHookSet_Winsock.Size" type="System.Drawing.Size, System.Drawing">
-    <value>257, 71</value>
-  </data>
-  <data name="cbHookWS1_RecvFrom.Location" type="System.Drawing.Point, System.Drawing">
-    <value>131, 38</value>
-  </data>
-  <data name="cbHookWS1_RecvFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 30</value>
-  </data>
   <data name="cbHookWS1_RecvFrom.Text" xml:space="preserve">
     <value>RecvFrom 1.1</value>
-  </data>
-  <data name="cbHookWS1_Recv.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 38</value>
-  </data>
-  <data name="cbHookWS1_Recv.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 30</value>
   </data>
   <data name="cbHookWS1_Recv.Text" xml:space="preserve">
     <value>Recv 1.1</value>
   </data>
-  <data name="cbHookWS1_SendTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 29</value>
-  </data>
   <data name="cbHookWS1_SendTo.Text" xml:space="preserve">
     <value>SendTo 1.1</value>
-  </data>
-  <data name="cbHookWS1_Send.Size" type="System.Drawing.Size, System.Drawing">
-    <value>122, 29</value>
   </data>
   <data name="cbHookWS1_Send.Text" xml:space="preserve">
     <value>Send 1.1</value>
@@ -692,9 +632,6 @@
   </data>
   <data name="tlpListSet_LogList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
-  </data>
-  <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>88, 25</value>
@@ -722,9 +659,6 @@
   </data>
   <data name="tlpListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
-  </data>
-  <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>373, 71</value>
   </data>
   <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>88, 25</value>
@@ -14081,5 +14015,9 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Inherit</value>
   </data>
 </root>

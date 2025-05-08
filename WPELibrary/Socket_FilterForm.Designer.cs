@@ -51,6 +51,7 @@ namespace WPELibrary
             this.tlpFilterButton = new System.Windows.Forms.TableLayoutPanel();
             this.bFilterButton_Save = new System.Windows.Forms.Button();
             this.bFilterButton_Close = new System.Windows.Forms.Button();
+            this.lFilterInfo = new System.Windows.Forms.Label();
             this.tcFilterInfo = new System.Windows.Forms.TabControl();
             this.tpNormal = new System.Windows.Forms.TabPage();
             this.dgvFilterNormal = new System.Windows.Forms.DataGridView();
@@ -166,6 +167,7 @@ namespace WPELibrary
             resources.ApplyResources(this.tlpFilterButton, "tlpFilterButton");
             this.tlpFilterButton.Controls.Add(this.bFilterButton_Save, 1, 0);
             this.tlpFilterButton.Controls.Add(this.bFilterButton_Close, 3, 0);
+            this.tlpFilterButton.Controls.Add(this.lFilterInfo, 2, 0);
             this.tlpFilterButton.Name = "tlpFilterButton";
             // 
             // bFilterButton_Save
@@ -181,6 +183,12 @@ namespace WPELibrary
             this.bFilterButton_Close.Name = "bFilterButton_Close";
             this.bFilterButton_Close.UseVisualStyleBackColor = true;
             this.bFilterButton_Close.Click += new System.EventHandler(this.bFilterButton_Close_Click);
+            // 
+            // lFilterInfo
+            // 
+            resources.ApplyResources(this.lFilterInfo, "lFilterInfo");
+            this.lFilterInfo.ForeColor = System.Drawing.Color.Maroon;
+            this.lFilterInfo.Name = "lFilterInfo";
             // 
             // tcFilterInfo
             // 
@@ -358,7 +366,6 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.Height = 30;
             this.dgvFilterAdvanced_Modify_FromPosition.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
-            this.dgvFilterAdvanced_Modify_FromPosition.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dgvFilterAdvanced_Modify_FromPosition_ColumnAdded);
             // 
             // dgvFilterAdvanced_Search
             // 
@@ -872,6 +879,7 @@ namespace WPELibrary
             this.TopMost = true;
             this.tlpFilterForm.ResumeLayout(false);
             this.tlpFilterButton.ResumeLayout(false);
+            this.tlpFilterButton.PerformLayout();
             this.tcFilterInfo.ResumeLayout(false);
             this.tpNormal.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFilterNormal)).EndInit();
@@ -988,5 +996,6 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbFilter_AppointPort;
         private System.Windows.Forms.RadioButton rbFilterAction_Change;
         private System.Windows.Forms.ComboBox cbbFilterAction_ExecuteType;
+        private System.Windows.Forms.Label lFilterInfo;
     }
 }

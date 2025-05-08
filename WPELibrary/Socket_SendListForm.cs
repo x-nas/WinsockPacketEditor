@@ -124,6 +124,11 @@ namespace WPELibrary
                     e.Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, (byte[])this.dtSendCollection.Rows[e.RowIndex]["Buffer"]);
                     e.FormattingApplied = true;
                 }
+                else if (e.ColumnIndex == dgvSendCollection.Columns["cLength"].Index)
+                {
+                    e.Value = ((byte[])this.dtSendCollection.Rows[e.RowIndex]["Buffer"]).Length.ToString();
+                    e.FormattingApplied = true;
+                }
             }
             catch (Exception ex)
             {

@@ -133,7 +133,7 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="bFilterButton_Save.Location" type="System.Drawing.Point, System.Drawing">
-    <value>352, 3</value>
+    <value>302, 3</value>
   </data>
   <data name="bFilterButton_Save.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -166,7 +166,7 @@
     <value>NoControl</value>
   </data>
   <data name="bFilterButton_Close.Location" type="System.Drawing.Point, System.Drawing">
-    <value>492, 3</value>
+    <value>542, 3</value>
   </data>
   <data name="bFilterButton_Close.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -191,6 +191,48 @@
   </data>
   <data name="&gt;&gt;bFilterButton_Close.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="lFilterInfo.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lFilterInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lFilterInfo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="lFilterInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>395, 6</value>
+  </data>
+  <data name="lFilterInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lFilterInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>144, 29</value>
+  </data>
+  <data name="lFilterInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="lFilterInfo.Text" xml:space="preserve">
+    <value>lFilterInfo</value>
+  </data>
+  <data name="lFilterInfo.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="lFilterInfo.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;lFilterInfo.Name" xml:space="preserve">
+    <value>lFilterInfo</value>
+  </data>
+  <data name="&gt;&gt;lFilterInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lFilterInfo.Parent" xml:space="preserve">
+    <value>tlpFilterButton</value>
+  </data>
+  <data name="&gt;&gt;lFilterInfo.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="tlpFilterButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -226,7 +268,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bFilterButton_Save" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bFilterButton_Close" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,90,Absolute,50,Absolute,90,Percent,50" /&gt;&lt;Rows Styles="Absolute,35,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bFilterButton_Save" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bFilterButton_Close" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lFilterInfo" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,90,Absolute,150,Absolute,90,Percent,50" /&gt;&lt;Rows Styles="Absolute,35,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="cmsDGV.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>

@@ -184,6 +184,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_172 = { "上行: {0} KB/s 下行: {1} KB/s", "Uplink: {0} KB/s Downlink: {1} KB/s" };
         public static string[] MutiLan_173 = { "换包", "Change" };
         public static string[] MutiLan_174 = { "换包数据不完整!", "The change packet data is incomplete!" };
+        public static string[] MutiLan_175 = { "正在加载数据 ...", "Loading data ..." };
 
         #endregion
 

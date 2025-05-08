@@ -31,7 +31,9 @@ namespace WinsockPacketEditor
                
                 System.Security.Principal.WindowsIdentity identity = System.Security.Principal.WindowsIdentity.GetCurrent();
                 System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
-                
+
+                Socket_Cache.DataBase.InitDB();
+
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
                     SystemMode_Form systemMode_Form = new SystemMode_Form();

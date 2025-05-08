@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace WPELibrary
 {
@@ -70,6 +71,7 @@ namespace WPELibrary
             {
                 string sFID = Socket_Cache.FilterList.lstFilter[FilterIndex].FID.ToString().ToUpper();
                 this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sFID);
+                this.lFilterInfo.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_175);
 
                 this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
                 this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
@@ -325,12 +327,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void dgvFilterAdvanced_Modify_FromPosition_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
-        {
-            e.Column.FillWeight = 50;
-        }
+        }        
 
         private void InitDGV_Advanced_Modify_Position()
         {
@@ -643,104 +640,115 @@ namespace WPELibrary
 
         #region//显示滤镜内容
 
-        private void ShowFilterInfo()
+        private async void ShowFilterInfo()
         {
-            try
+            await Task.Run(() =>
             {
-                if (!string.IsNullOrEmpty(FilterSearch))
+                this.bFilterButton_Save.Enabled = false;                
+                this.dgvFilterAdvanced_Modify_FromPosition.Enabled = false;
+                this.lFilterInfo.Visible = true;
+
+                try
                 {
-                    string[] sSearchAll = FilterSearch.Split(',');
-
-                    foreach (string s in sSearchAll)
+                    if (!string.IsNullOrEmpty(FilterSearch))
                     {
-                        if (int.TryParse(s.Split('|')[0], out int iIndex))
-                        {
-                            string sValue = s.Split('|')[1];
+                        string[] sSearchAll = FilterSearch.Split(',');
 
-                            if (this.dgvFilterNormal.Rows.Count == 2)
+                        foreach (string s in sSearchAll)
+                        {
+                            if (int.TryParse(s.Split('|')[0], out int iIndex))
                             {
-                                if (iIndex < this.dgvFilterNormal.Rows[0].Cells.Count)
+                                string sValue = s.Split('|')[1];
+
+                                if (this.dgvFilterNormal.Rows.Count == 2)
                                 {
-                                    this.dgvFilterNormal.Rows[0].Cells[iIndex].Value = sValue;
+                                    if (iIndex < this.dgvFilterNormal.Rows[0].Cells.Count)
+                                    {
+                                        this.dgvFilterNormal.Rows[0].Cells[iIndex].Value = sValue;
+                                    }
+                                }
+
+                                if (this.dgvFilterAdvanced_Search.Rows.Count == 1)
+                                {
+                                    if (iIndex < this.dgvFilterAdvanced_Search.Rows[0].Cells.Count)
+                                    {
+                                        this.dgvFilterAdvanced_Search.Rows[0].Cells[iIndex].Value = sValue;
+                                    }
                                 }
                             }
+                        }
+                    }
 
-                            if (this.dgvFilterAdvanced_Search.Rows.Count == 1)
+                    if (!string.IsNullOrEmpty(FilterModify))
+                    {
+                        string[] sModifyAll = FilterModify.Split(',');
+
+                        foreach (string s in sModifyAll)
+                        {
+                            if (int.TryParse(s.Split('|')[0], out int iIndex))
                             {
-                                if (iIndex < this.dgvFilterAdvanced_Search.Rows[0].Cells.Count)
+                                string sValue = s.Split('|')[1];
+
+                                switch (FilterMode)
                                 {
-                                    this.dgvFilterAdvanced_Search.Rows[0].Cells[iIndex].Value = sValue;
+                                    case Socket_Cache.Filter.FilterMode.Normal:
+
+                                        if (this.dgvFilterNormal.Rows.Count == 2)
+                                        {
+                                            if (iIndex < this.dgvFilterNormal.Rows[1].Cells.Count)
+                                            {
+                                                this.dgvFilterNormal.Rows[1].Cells[iIndex].Value = sValue;
+                                            }
+                                        }
+
+                                        break;
+
+                                    case Socket_Cache.Filter.FilterMode.Advanced:
+
+                                        switch (FilterStartFrom)
+                                        {
+                                            case Socket_Cache.Filter.FilterStartFrom.Head:
+
+                                                if (this.dgvFilterAdvanced_Modify_FromHead.Rows.Count == 1)
+                                                {
+                                                    if (iIndex < this.dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells.Count)
+                                                    {
+                                                        this.dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[iIndex].Value = sValue;
+                                                    }
+                                                }
+
+                                                break;
+
+                                            case Socket_Cache.Filter.FilterStartFrom.Position:
+
+                                                if (this.dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 1)
+                                                {
+                                                    iIndex += Socket_Cache.Filter.FilterSize_MaxLen;
+
+                                                    if (iIndex < this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells.Count)
+                                                    {
+                                                        this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iIndex].Value = sValue;
+                                                    }
+                                                }
+
+                                                break;
+                                        }
+
+                                        break;
                                 }
                             }
                         }
                     }
                 }
-
-                if (!string.IsNullOrEmpty(FilterModify))
+                catch (Exception ex)
                 {
-                    string[] sModifyAll = FilterModify.Split(',');
-
-                    foreach (string s in sModifyAll)
-                    {
-                        if (int.TryParse(s.Split('|')[0], out int iIndex))
-                        {
-                            string sValue = s.Split('|')[1];
-
-                            switch (FilterMode)
-                            {
-                                case Socket_Cache.Filter.FilterMode.Normal:
-
-                                    if (this.dgvFilterNormal.Rows.Count == 2)
-                                    {
-                                        if (iIndex < this.dgvFilterNormal.Rows[1].Cells.Count)
-                                        {
-                                            this.dgvFilterNormal.Rows[1].Cells[iIndex].Value = sValue;
-                                        }
-                                    }
-
-                                    break;
-
-                                case Socket_Cache.Filter.FilterMode.Advanced:
-
-                                    switch (FilterStartFrom)
-                                    {
-                                        case Socket_Cache.Filter.FilterStartFrom.Head:
-
-                                            if (this.dgvFilterAdvanced_Modify_FromHead.Rows.Count == 1)
-                                            {
-                                                if (iIndex < this.dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells.Count)
-                                                {
-                                                    this.dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[iIndex].Value = sValue;
-                                                }
-                                            }
-
-                                            break;
-
-                                        case Socket_Cache.Filter.FilterStartFrom.Position:
-
-                                            if (this.dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 1)
-                                            {
-                                                iIndex += Socket_Cache.Filter.FilterSize_MaxLen;
-
-                                                if (iIndex < this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells.Count)
-                                                {
-                                                    this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[iIndex].Value = sValue;
-                                                }
-                                            }
-
-                                            break;
-                                    }
-
-                                    break;
-                            }
-                        }                                                
-                    }
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+
+                this.lFilterInfo.Visible = false;
+                this.dgvFilterAdvanced_Modify_FromPosition.Enabled = true;
+                this.bFilterButton_Save.Enabled = true;
+            });            
         }
 
         private void DGV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)

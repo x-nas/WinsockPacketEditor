@@ -21,6 +21,7 @@ using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Data.SqlTypes;
 
 namespace WPELibrary.Lib
 {   
@@ -784,6 +785,38 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//字符串分割转 List
+
+        public static List<(int, string)> StringToList(string StringData)
+        {
+            List<(int Index, string Value)> lReturn = new List<(int Index, string Value)>();
+
+            try
+            {
+                if (!string.IsNullOrEmpty(StringData))
+                {
+                    string[] StringAll = StringData.Split(',');
+                    
+                    foreach (string s in StringAll)
+                    {
+                        string[] parts = s.Split('|');
+                        if (parts.Length == 2 && int.TryParse(parts[0], out int iIndex))
+                        {
+                            lReturn.Add((iIndex, parts[1]));
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return lReturn;
+        }
+
+        #endregion
+
         #endregion
 
         #region//判断地址的类型
@@ -1171,6 +1204,7 @@ namespace WPELibrary.Lib
                 dtcReturn.MaxInputLength = 2;
                 dtcReturn.DefaultCellStyle.ForeColor = cFore;
                 dtcReturn.DefaultCellStyle.BackColor = cBack;
+                dtcReturn.FillWeight = 50;
                 dtcReturn.SortMode = DataGridViewColumnSortMode.NotSortable;
             }
             catch (Exception ex)
@@ -2785,16 +2819,9 @@ namespace WPELibrary.Lib
 
         public static void SaveSystemList()
         {
-            try
-            {
-                Socket_Cache.FilterList.SaveFilterList(Socket_Cache.FilterList.FilePath, -1, false);
-                Socket_Cache.RobotList.SaveRobotList(Socket_Cache.RobotList.FilePath, -1, false);
-                Socket_Cache.SendList.SaveSendList(Socket_Cache.SendList.FilePath, -1, false);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            Socket_Cache.FilterList.SaveFilterList_ToDB();
+            Socket_Cache.SendList.SaveSendList_ToDB();
+            Socket_Cache.RobotList.SaveRobotList_ToDB();
         }
 
         #endregion
@@ -2805,16 +2832,9 @@ namespace WPELibrary.Lib
         {
             Task.Run(() =>
             {
-                try
-                {
-                    Socket_Cache.SendList.LoadSendList(Socket_Cache.SendList.FilePath, false);
-                    Socket_Cache.FilterList.LoadFilterList(Socket_Cache.FilterList.FilePath, false);
-                    Socket_Cache.RobotList.LoadRobotList(Socket_Cache.RobotList.FilePath, false);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
+                Socket_Cache.FilterList.LoadFilterList_FromDB();
+                Socket_Cache.SendList.LoadSendList_FromDB();
+                Socket_Cache.RobotList.LoadRobotList_FromDB();
             });            
         }
 
