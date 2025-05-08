@@ -1817,7 +1817,7 @@ namespace WPELibrary.Lib
                     Guid FID = Guid.NewGuid();
                     int FNum = Socket_Cache.FilterList.lstFilter.Count + 1;
                     string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50), FNum.ToString());
-
+                 
                     Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.Replace;
                     Socket_Cache.Filter.FilterExecuteType FilterExecuteType = new Socket_Cache.Filter.FilterExecuteType();
@@ -1826,7 +1826,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, 0, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -1860,7 +1860,7 @@ namespace WPELibrary.Lib
 
                         string sFSearch = Socket_Cache.Filter.GetFilterString_ByBytes(bBuffer);
 
-                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, 0, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
                     }
                 }
                 catch (Exception ex)
@@ -1878,7 +1878,7 @@ namespace WPELibrary.Lib
                 bool bAppointSocket,
                 decimal SocketContent,
                 bool bAppointLength,
-                decimal LengthContent,
+                string LengthContent,
                 bool bAppointPort,
                 decimal PortContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
@@ -1948,7 +1948,7 @@ namespace WPELibrary.Lib
                 bool AppointSocket,
                 decimal SocketContent,
                 bool AppointLength,
-                decimal LengthContent,
+                string LengthContent,
                 bool AppointPort,
                 decimal PortContent,
                 Socket_Cache.Filter.FilterMode FilterMode,
@@ -2054,7 +2054,7 @@ namespace WPELibrary.Lib
                     bool bAppointSocket = Socket_Cache.FilterList.lstFilter[iFIndex].AppointSocket;
                     decimal SocketContent = Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent;
                     bool bAppointLength = Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength;
-                    decimal LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
+                    string LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
                     bool bAppointPort = Socket_Cache.FilterList.lstFilter[iFIndex].AppointPort;
                     decimal PortContent = Socket_Cache.FilterList.lstFilter[iFIndex].PortContent;
                     Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
@@ -2537,16 +2537,39 @@ namespace WPELibrary.Lib
 
             #region//检查是否匹配指定长度
 
-            public static bool CheckPacket_IsMatch_AppointLength(int iLen, decimal dLengthContent)
+            public static bool CheckPacket_IsMatch_AppointLength(int Len, string LengthContent)
             {
                 bool bResult = false;
 
                 try
                 {
-                    if (iLen == dLengthContent)
+                    if (!string.IsNullOrEmpty(LengthContent))
                     {
-                        bResult = true;
-                    }
+                        if (LengthContent.Contains("-"))
+                        {
+                            string[] sLengthContent = LengthContent.Split('-');
+                            if (int.TryParse(sLengthContent[0], out int iLenFrom))
+                            {
+                                if (int.TryParse(sLengthContent[1], out int iLenTo))
+                                {
+                                    if (Len >= iLenFrom && Len <= iLenTo)
+                                    {
+                                        bResult = true;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (int.TryParse(LengthContent, out int iLength))
+                            {
+                                if (Len == iLength)
+                                {
+                                    bResult = true;
+                                }
+                            }
+                        }
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -3370,7 +3393,7 @@ namespace WPELibrary.Lib
                         bool AppointSocket = Convert.ToBoolean(dataRow["AppointSocket"]);
                         decimal FSocketContent = Convert.ToDecimal(dataRow["SocketContent"]);
                         bool AppointLength = Convert.ToBoolean(dataRow["AppointLength"]);
-                        decimal FLengthContent = Convert.ToDecimal(dataRow["LengthContent"]);
+                        string FLengthContent = dataRow["LengthContent"].ToString();
                         bool AppointPort = Convert.ToBoolean(dataRow["AppointPort"]);
                         decimal FPortContent = Convert.ToDecimal(dataRow["PortContent"]);
                         Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString());
@@ -3722,10 +3745,10 @@ namespace WPELibrary.Lib
                             bAppointLength = bool.Parse(xeFilter.Element("AppointLength").Value);
                         }
 
-                        decimal dFLengthContent = 1;
+                        string sFLengthContent = string.Empty;
                         if (xeFilter.Element("LengthContent") != null)
                         {
-                            dFLengthContent = decimal.Parse(xeFilter.Element("LengthContent").Value);
+                            sFLengthContent = xeFilter.Element("LengthContent").Value;
                         }
 
                         bool bAppointPort = false;
@@ -3833,7 +3856,7 @@ namespace WPELibrary.Lib
                             bAppointSocket, 
                             dFSocketContent, 
                             bAppointLength, 
-                            dFLengthContent,
+                            sFLengthContent,
                             bAppointPort,
                             dFPortContent,
                             FilterMode, 
@@ -6415,7 +6438,7 @@ namespace WPELibrary.Lib
                         sql += "AppointSocket INTEGER CHECK (AppointSocket IN (0, 1)) DEFAULT 0,";
                         sql += "SocketContent INTEGER DEFAULT 0,";
                         sql += "AppointLength INTEGER CHECK (AppointLength IN (0, 1)) DEFAULT 0,";
-                        sql += "LengthContent INTEGER DEFAULT 0,";
+                        sql += "LengthContent TEXT,";
                         sql += "AppointPort INTEGER CHECK (AppointPort IN (0, 1)) DEFAULT 0,";
                         sql += "PortContent INTEGER DEFAULT 0,";
                         sql += "Mode INTEGER NOT NULL DEFAULT 0,";

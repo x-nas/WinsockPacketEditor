@@ -90,9 +90,9 @@ namespace WPELibrary.Lib
             set { appointlength = value; }
         }
 
-        protected decimal lengthcontent;
+        protected string lengthcontent;
 
-        public decimal LengthContent
+        public string LengthContent
         {
             get { return lengthcontent; }
             set { lengthcontent = value; }
@@ -299,7 +299,7 @@ namespace WPELibrary.Lib
             bool AppointSocket, 
             decimal SocketContent, 
             bool AppointLength, 
-            decimal LengthContent,
+            string LengthContent,
             bool AppointPort,
             decimal PortContent,
             Socket_Cache.Filter.FilterMode FMode, 

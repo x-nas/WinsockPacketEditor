@@ -154,7 +154,7 @@
     <value>lFilterInfo</value>
   </data>
   <data name="lFilterInfo.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+    <value>BottomLeft</value>
   </data>
   <data name="lFilterInfo.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -715,6 +715,9 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAppoint.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.ColumnCount" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
   <data name="nudFilter_PortContent.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -742,7 +745,7 @@
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;nudFilter_PortContent.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
+    <value>tlpFilterAppoint_Socket</value>
   </data>
   <data name="&gt;&gt;nudFilter_PortContent.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -775,73 +778,10 @@
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbFilter_AppointPort.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
+    <value>tlpFilterAppoint_Socket</value>
   </data>
   <data name="&gt;&gt;cbFilter_AppointPort.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="nudFilter_LengthContent.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="nudFilter_LengthContent.Location" type="System.Drawing.Point, System.Drawing">
-    <value>72, 30</value>
-  </data>
-  <data name="nudFilter_LengthContent.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="nudFilter_LengthContent.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 23</value>
-  </data>
-  <data name="nudFilter_LengthContent.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="nudFilter_LengthContent.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;nudFilter_LengthContent.Name" xml:space="preserve">
-    <value>nudFilter_LengthContent</value>
-  </data>
-  <data name="&gt;&gt;nudFilter_LengthContent.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;nudFilter_LengthContent.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
-  </data>
-  <data name="&gt;&gt;nudFilter_LengthContent.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="cbFilter_AppointLength.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbFilter_AppointLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbFilter_AppointLength.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbFilter_AppointLength.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 33</value>
-  </data>
-  <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 21</value>
-  </data>
-  <data name="cbFilter_AppointLength.TabIndex" type="System.Int32, mscorlib">
-    <value>33</value>
-  </data>
-  <data name="cbFilter_AppointLength.Text" xml:space="preserve">
-    <value>长度</value>
-  </data>
-  <data name="&gt;&gt;cbFilter_AppointLength.Name" xml:space="preserve">
-    <value>cbFilter_AppointLength</value>
-  </data>
-  <data name="&gt;&gt;cbFilter_AppointLength.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbFilter_AppointLength.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
-  </data>
-  <data name="&gt;&gt;cbFilter_AppointLength.ZOrder" xml:space="preserve">
-    <value>3</value>
   </data>
   <data name="cbFilter_AppointSocket.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -871,10 +811,10 @@
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cbFilter_AppointSocket.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
+    <value>tlpFilterAppoint_Socket</value>
   </data>
   <data name="&gt;&gt;cbFilter_AppointSocket.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>2</value>
   </data>
   <data name="nudFilter_SocketContent.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -901,10 +841,211 @@
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;nudFilter_SocketContent.Parent" xml:space="preserve">
-    <value>tlpFilterAppoint</value>
+    <value>tlpFilterAppoint_Socket</value>
   </data>
   <data name="&gt;&gt;nudFilter_SocketContent.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.Size" type="System.Drawing.Size, System.Drawing">
+    <value>314, 31</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Socket.Name" xml:space="preserve">
+    <value>tlpFilterAppoint_Socket</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Socket.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Socket.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Socket.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpFilterAppoint_Socket.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudFilter_PortContent" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointPort" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_SocketContent" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,Percent,100,AutoSize,0,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.ColumnCount" type="System.Int32, mscorlib">
     <value>5</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>159, 3</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="nudFilter_LengthContent_To.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_To.Name" xml:space="preserve">
+    <value>nudFilter_LengthContent_To</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_To.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint_Length</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_To.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>60, 3</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="nudFilter_LengthContent_From.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_From.Name" xml:space="preserve">
+    <value>nudFilter_LengthContent_From</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_From.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint_Length</value>
+  </data>
+  <data name="&gt;&gt;nudFilter_LengthContent_From.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="cbFilter_AppointLength.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbFilter_AppointLength.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbFilter_AppointLength.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbFilter_AppointLength.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="cbFilter_AppointLength.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 21</value>
+  </data>
+  <data name="cbFilter_AppointLength.TabIndex" type="System.Int32, mscorlib">
+    <value>34</value>
+  </data>
+  <data name="cbFilter_AppointLength.Text" xml:space="preserve">
+    <value>长度</value>
+  </data>
+  <data name="&gt;&gt;cbFilter_AppointLength.Name" xml:space="preserve">
+    <value>cbFilter_AppointLength</value>
+  </data>
+  <data name="&gt;&gt;cbFilter_AppointLength.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbFilter_AppointLength.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint_Length</value>
+  </data>
+  <data name="&gt;&gt;cbFilter_AppointLength.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lAppointLengthSplit.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lAppointLengthSplit.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lAppointLengthSplit.Location" type="System.Drawing.Point, System.Drawing">
+    <value>143, 3</value>
+  </data>
+  <data name="lAppointLengthSplit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>13, 27</value>
+  </data>
+  <data name="lAppointLengthSplit.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="lAppointLengthSplit.Text" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="lAppointLengthSplit.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;lAppointLengthSplit.Name" xml:space="preserve">
+    <value>lAppointLengthSplit</value>
+  </data>
+  <data name="&gt;&gt;lAppointLengthSplit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lAppointLengthSplit.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint_Length</value>
+  </data>
+  <data name="&gt;&gt;lAppointLengthSplit.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 31</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.Size" type="System.Drawing.Size, System.Drawing">
+    <value>314, 32</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Length.Name" xml:space="preserve">
+    <value>tlpFilterAppoint_Length</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Length.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Length.Parent" xml:space="preserve">
+    <value>tlpFilterAppoint</value>
+  </data>
+  <data name="&gt;&gt;tlpFilterAppoint_Length.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpFilterAppoint_Length.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudFilter_LengthContent_To" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_LengthContent_From" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointLength" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lAppointLengthSplit" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpFilterAppoint.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -915,11 +1056,8 @@
   <data name="tlpFilterAppoint.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="tlpFilterAppoint.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
   <data name="tlpFilterAppoint.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="tlpFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
     <value>314, 63</value>
@@ -940,7 +1078,7 @@
     <value>0</value>
   </data>
   <data name="tlpFilterAppoint.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudFilter_PortContent" Row="0" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointPort" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_LengthContent" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointLength" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbFilter_AppointSocket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudFilter_SocketContent" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,Percent,100,AutoSize,0,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpFilterAppoint_Socket" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpFilterAppoint_Length" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbFilterAppoint.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

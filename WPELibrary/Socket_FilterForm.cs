@@ -12,12 +12,12 @@ namespace WPELibrary
     {  
         private int FilterIndex = -1;
         private int LoadAllCount = 0;        
-        private decimal FilterSocketContent = 1;
-        private decimal FilterLengthContent = 1;
+        private decimal FilterSocketContent = 1;        
         private decimal FilterPortContent = 1;
         private decimal FilterProgressionStep = 1;
         private string FilterName = string.Empty;
         private string FilterHeaderContent = string.Empty;
+        private string FilterLengthContent = string.Empty;
         private string FilterProgressionPosition = string.Empty;
         private string FilterSearch = string.Empty;
         private string FilterModify = string.Empty;
@@ -176,7 +176,31 @@ namespace WPELibrary
                 this.FilterAppointSocketChange();
 
                 this.cbFilter_AppointLength.Checked = FilterAppointLength;
-                this.nudFilter_LengthContent.Value = FilterLengthContent;
+                if (!string.IsNullOrEmpty(this.FilterLengthContent))
+                {
+                    if (this.FilterLengthContent.Contains("-"))
+                    {
+                        string[] sLengthContent = this.FilterLengthContent.Split('-');
+
+                        if (int.TryParse(sLengthContent[0], out int iLenFrom))
+                        {
+                            this.nudFilter_LengthContent_From.Value = iLenFrom;
+                        }
+
+                        if (int.TryParse(sLengthContent[1], out int iLenTo))
+                        {
+                            this.nudFilter_LengthContent_To.Value = iLenTo;
+                        }
+                    }
+                    else
+                    {
+                        if (int.TryParse(this.FilterLengthContent, out int iLength))
+                        {
+                            this.nudFilter_LengthContent_From.Value = iLength;
+                            this.nudFilter_LengthContent_To.Value = iLength;
+                        }
+                    }                    
+                }                
                 this.FilterAppointLengthChange();
 
                 this.cbFilter_AppointPort.Checked = FilterAppointPort;
@@ -627,7 +651,7 @@ namespace WPELibrary
 
         private void FilterAppointLengthChange()
         {
-            this.nudFilter_LengthContent.Enabled = this.cbFilter_AppointLength.Checked;
+            this.nudFilter_LengthContent_From.Enabled = this.nudFilter_LengthContent_To.Enabled = this.cbFilter_AppointLength.Checked;
         }
 
         #endregion
@@ -1049,8 +1073,8 @@ namespace WPELibrary
                 {
                     string sFName_New = this.txtFilterName.Text.Trim();
                     string sHeaderContent_New = string.Empty;
-                    decimal dSocketContent_New = 0;
-                    decimal dLengthContent_New = 0;
+                    string sLengthContent_New = string.Empty;
+                    decimal dSocketContent_New = 0;                    
                     decimal dPortContent_New = 0;
                     decimal dProgressionStep_New = 0;                    
                     int iProgressionCount = 0;                    
@@ -1075,8 +1099,8 @@ namespace WPELibrary
                     bAppointPort = this.cbFilter_AppointPort.Checked;
 
                     sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
-                    dSocketContent_New = this.nudFilter_SocketContent.Value;
-                    dLengthContent_New = this.nudFilter_LengthContent.Value;
+                    sLengthContent_New = this.nudFilter_LengthContent_From.Value.ToString() + "-" + this.nudFilter_LengthContent_To.Value.ToString();
+                    dSocketContent_New = this.nudFilter_SocketContent.Value;                    
                     dPortContent_New = this.nudFilter_PortContent.Value;
                     dProgressionStep_New = this.nudProgressionStep.Value;                    
 
@@ -1281,7 +1305,7 @@ namespace WPELibrary
                         bAppointSocket,
                         dSocketContent_New,
                         bAppointLength,
-                        dLengthContent_New,
+                        sLengthContent_New,
                         bAppointPort,
                         dPortContent_New,
                         FilterMode_New,
