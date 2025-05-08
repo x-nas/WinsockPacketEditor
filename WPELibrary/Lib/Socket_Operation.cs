@@ -21,7 +21,6 @@ using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Data.SqlTypes;
 
 namespace WPELibrary.Lib
 {   
@@ -783,39 +782,7 @@ namespace WPELibrary.Lib
             return uReturn;
         }
 
-        #endregion
-
-        #region//字符串分割转 List
-
-        public static List<(int, string)> StringToList(string StringData)
-        {
-            List<(int Index, string Value)> lReturn = new List<(int Index, string Value)>();
-
-            try
-            {
-                if (!string.IsNullOrEmpty(StringData))
-                {
-                    string[] StringAll = StringData.Split(',');
-                    
-                    foreach (string s in StringAll)
-                    {
-                        string[] parts = s.Split('|');
-                        if (parts.Length == 2 && int.TryParse(parts[0], out int iIndex))
-                        {
-                            lReturn.Add((iIndex, parts[1]));
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return lReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #endregion
 
