@@ -7,6 +7,7 @@ using WPELibrary.Lib;
 using Be.Windows.Forms;
 using WPELibrary;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Linq;
 
 namespace WinsockPacketEditor
 {
@@ -22,8 +23,9 @@ namespace WinsockPacketEditor
             try
             {
                 InitializeComponent();
+
                 this.socketForm = socketForm;
-                this.InitSocketDGV();
+                this.InitSocketDGV();                
             }
             catch (Exception ex)
             {
@@ -39,6 +41,7 @@ namespace WinsockPacketEditor
         {
             this.InitForm();
             this.LoadConfigs_Parameter();
+            Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
         }
 
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -51,6 +54,7 @@ namespace WinsockPacketEditor
             try
             {
                 this.SaveConfigs_Parameter();
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB();
 
                 if (this.cbEnable_SystemProxy.Checked)
                 { 
@@ -76,6 +80,11 @@ namespace WinsockPacketEditor
         {
             try
             {
+                dgvAuth.AutoGenerateColumns = false;
+                dgvAuth.DataSource = Socket_Cache.SocketProxy.lstProxyAuth;
+                dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
+                Socket_Cache.SocketProxy.RecProxyAuth += new Socket_Cache.SocketProxy.ProxyAuthReceived(Event_RecProxyAuth);
+
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstProxyLog;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
@@ -91,7 +100,7 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
@@ -105,6 +114,7 @@ namespace WinsockPacketEditor
 
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
+                this.cbbAuthType.SelectedIndex = 0;
 
                 this.InitProxyIPAppoint();
 
@@ -179,14 +189,12 @@ namespace WinsockPacketEditor
 
         private void EnableAuth_Changed()
         {
-            try
-            {
-                this.txtAuth_UserName.Enabled = this.txtAuth_PassWord.Enabled = this.cbEnable_Auth.Checked;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            this.cbbAuthType.Enabled = this.bAccount.Enabled = this.cbEnable_Auth.Checked;
+        }
+
+        private void bAccount_Click(object sender, EventArgs e)
+        {
+            Socket_Operation.ShowProxyAccountListForm();
         }
 
         #endregion
@@ -196,15 +204,13 @@ namespace WinsockPacketEditor
         private void LoadConfigs_Parameter()
         {
             try
-            {
+            {                
                 Socket_Operation.LoadConfigs_SocketProxy();
 
                 this.cbProxyIP_Auto.Checked = Socket_Cache.SocketProxy.ProxyIP_Auto;            
                 this.cbEnable_SOCKS5.Checked = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 this.nudProxyPort.Value = Socket_Cache.SocketProxy.ProxyPort;
-                this.cbEnable_Auth.Checked = Socket_Cache.SocketProxy.Enable_Auth;
-                this.txtAuth_UserName.Text = Socket_Cache.SocketProxy.Auth_UserName;
-                this.txtAuth_PassWord.Text = Socket_Cache.SocketProxy.Auth_PassWord;
+                this.cbEnable_Auth.Checked = Socket_Cache.SocketProxy.Enable_Auth;                
 
                 this.cbNoRecordData.Checked = Socket_Cache.SocketProxyList.NoRecord;
                 this.cbDeleteClosed.Checked = Socket_Cache.SocketProxyList.DelClosed;
@@ -241,9 +247,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.ProxyIP_Auto = this.cbProxyIP_Auto.Checked;             
                 Socket_Cache.SocketProxy.Enable_SOCKS5 = this.cbEnable_SOCKS5.Checked;
                 Socket_Cache.SocketProxy.ProxyPort = ((ushort)this.nudProxyPort.Value);
-                Socket_Cache.SocketProxy.Enable_Auth = this.cbEnable_Auth.Checked;
-                Socket_Cache.SocketProxy.Auth_UserName = this.txtAuth_UserName.Text.Trim();
-                Socket_Cache.SocketProxy.Auth_PassWord = this.txtAuth_PassWord.Text.Trim();
+                Socket_Cache.SocketProxy.Enable_Auth = this.cbEnable_Auth.Checked;                
 
                 Socket_Cache.SocketProxyList.NoRecord = this.cbNoRecordData.Checked;
                 Socket_Cache.SocketProxyList.DelClosed = this.cbDeleteClosed.Checked;
@@ -263,7 +267,7 @@ namespace WinsockPacketEditor
 
                 Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
 
-                Socket_Operation.SaveConfigs_SocketProxy();
+                Socket_Operation.SaveConfigs_SocketProxy();                
             }
             catch (Exception ex)
             {
@@ -374,7 +378,7 @@ namespace WinsockPacketEditor
             this.bStart.Enabled = !starting;
             this.bStop.Enabled = starting;
             this.tpProxySet.Enabled = !starting;
-            this.tpAuthSet.Enabled = !starting;
+            this.cbEnable_Auth.Enabled = !starting;            
             this.tpExternalProxy.Enabled = !starting;
             this.tpSystemSet.Enabled = !starting;
         }
@@ -500,18 +504,7 @@ namespace WinsockPacketEditor
                 if (!this.cbEnable_SOCKS5.Checked)
                 {
                     return false;
-                }
-
-                if (this.cbEnable_Auth.Checked)
-                {
-                    string sAuth_UserName = this.txtAuth_UserName.Text.Trim();
-                    string sAuth_PassWord = this.txtAuth_PassWord.Text.Trim();
-
-                    if (string.IsNullOrEmpty(sAuth_UserName) || string.IsNullOrEmpty(sAuth_PassWord))
-                    {
-                        return false;
-                    }
-                }
+                }                
 
                 if (this.cbEnable_EXTHttp.Checked)
                 {
@@ -930,6 +923,65 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//显示认证列表（异步）        
+
+        private void Event_RecProxyAuth(Proxy_AuthInfo pai)
+        {
+            try
+            {
+                if (!dgvAuth.IsDisposed)
+                {
+                    dgvAuth.Invoke(new MethodInvoker(delegate
+                    {
+                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress);
+
+                        if (paiItem != null)
+                        {
+                            Socket_Cache.SocketProxy.lstProxyAuth.Remove(paiItem);
+                        }
+
+                        Socket_Cache.SocketProxy.lstProxyAuth.Add(pai);
+
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvAuth_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            try
+            {
+                if (e.ColumnIndex == dgvAuth.Columns["cAuthID"].Index)
+                {
+                    e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)
+                {
+                    if (Convert.ToBoolean(e.Value))
+                    {
+                        e.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146);
+                    }
+                    else
+                    {
+                        e.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147);
+                    }
+                        
+                    e.FormattingApplied = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示日志列表（异步）        
 
         private void Event_RecProxyLog(Socket_LogInfo sli)
@@ -1066,6 +1118,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

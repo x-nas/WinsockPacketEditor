@@ -84,14 +84,17 @@ namespace WPELibrary.Lib
             public static bool Enable_EXTHttp, Enable_EXTHttps;
             public static string EXTHttpIP, EXTHttpsIP;
             public static ushort EXTHttpPort, EXTHttpsPort;
-            public static string AppointHttpPort, AppointHttpsPort;
-            public static string Auth_UserName, Auth_PassWord;
+            public static string AppointHttpPort, AppointHttpsPort;            
             public static ushort ProxyPort;
             public static int UDPCloseTime = 60;
             public static long Total_Request = 0;
             public static long Total_Response = 0;
             public static int MaxChartPoint = 100;
-            public const long MaxNetworkSpeed = 100000;         
+            public const long MaxNetworkSpeed = 100000;
+
+            public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
+            public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);         
+            public static event ProxyAuthReceived RecProxyAuth;
 
             #region//定义结构
 
@@ -323,8 +326,8 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146), spc.ClientSocket.RemoteEndPoint, atServer);
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                            IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
+                            Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), false);
                         }
                     }
                     else
@@ -359,31 +362,24 @@ namespace WPELibrary.Lib
 
                         string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
                         string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
-                        string sAuth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
-                        string sAuth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
-
-                        bool bAuthOK = true;
-                        if (!string.IsNullOrEmpty(sAuth_UserName) && !string.IsNullOrEmpty(sAuth_PassWord))
-                        {
-                            if (!sAuth_UserName.Equals(sUserName) || !sAuth_PassWord.Equals(sPassWord))
-                            {
-                                bAuthOK = false;
-                            }
-                        }
+                                                
+                        bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
+                        
+                        IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
+                        Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), bAuthOK);
 
                         Span<byte> bAuth = stackalloc byte[2];
                         if (bAuthOK)
                         {
                             bAuth[0] = 0x01;
                             bAuth[1] = 0x00;
+
+                            Socket_Cache.SocketProxy.RecordLoginIP(AccountID, epClient.Address.ToString());
                         }
                         else
                         {
                             bAuth[0] = 0x01;
                             bAuth[1] = 0x01;
-
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), spc.ClientSocket.RemoteEndPoint);
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
                         }
 
                         Socket_Operation.SendTCPData(spc.ClientSocket, bAuth);
@@ -765,6 +761,47 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//记录代理认证结果            
+
+            public static void AuthResult_ToList(string IPAddress, bool AuthResult)
+            {
+                try
+                {
+                    Proxy_AuthInfo pai = new Proxy_AuthInfo(IPAddress, AuthResult, DateTime.Now);
+                    RecProxyAuth?.Invoke(pai);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//记录登录端IP地址
+
+            public static void RecordLoginIP(Guid AccountID, string IPAddress)
+            {
+                try
+                {
+                    if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
+                    {
+                        Proxy_AccountInfo paiItem = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(item => item.AID == AccountID);
+
+                        if (paiItem != null)
+                        {
+                            paiItem.LoginIP = IPAddress;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//获取客户端的名称
 
             public static string GetClientName(Socket_ProxyTCP spc)
@@ -989,6 +1026,226 @@ namespace WPELibrary.Lib
             public static void ResetProxy_DataList()
             {
                 lstProxyData.Clear();
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region//代理账号
+
+        public static class ProxyAccount
+        {
+            public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();            
+
+            #region//检测代理账号是否已存在
+
+            public static bool CheckProxyAccount_Exist(string UserName)
+            {
+                try
+                {
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        if (pai.UserName.Equals(UserName))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            #endregion
+
+            #region//检测用户名和密码是否正确（不区分大小写）
+
+            public static bool CheckUserNameAndPassWord(string UserName, string PassWord, out Guid AccountID)
+            {
+                AccountID = Guid.Empty;
+
+                try
+                {
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.PassWord.Equals(PassWord))
+                        {
+                            if (pai.IsExpiry)
+                            {
+                                if (pai.ExpiryTime > DateTime.Now)
+                                {
+                                    AccountID = pai.AID;
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                AccountID = pai.AID;
+                                return true;
+                            }                                
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            #endregion
+
+            #region//新增代理账号
+
+            public static void AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+            {
+                try
+                {
+                    if (AID != Guid.Empty && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(PassWord))
+                    {
+                        Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                        Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//更新代理账号
+
+            public static void UpdateProxyAccount_ByAccountIndex(int AIndex, bool IsEnable, string UserName, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            {
+                try
+                {
+                    if (AIndex > -1)
+                    {
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsEnable = IsEnable;
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].UserName = UserName;
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].PassWord = PassWord;
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsExpiry = IsExpiry;
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].ExpiryTime = ExpiryTime;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//删除代理账号
+
+            public static void DeleteProxyAccount_ByAccountIndex_Dialog(int AIndex)
+            {
+                try
+                {
+                    if (AIndex > -1 && AIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
+                    {
+                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
+
+                        if (dr.Equals(DialogResult.OK))
+                        {
+                            Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountIndex(AIndex);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DeleteProxyAccount_ByAccountIndex(int AIndex)
+            {
+                try
+                {
+                    if (AIndex > -1 && AIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
+                    {
+                        Socket_Cache.ProxyAccount.lstProxyAccount.RemoveAt(AIndex);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//代理账号入列表
+
+            public static void ProxyAccountToList(Proxy_AccountInfo pai)
+            {
+                try
+                {
+                    Socket_Cache.ProxyAccount.lstProxyAccount.Add(pai);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存代理账号列表到数据库
+
+            public static void SaveProxyAccountList_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.DeleteTable_ProxyAccount();
+
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        Socket_Cache.DataBase.InsertTable_ProxyAccount(pai);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载代理账号列表
+
+            public static void LoadProxyAccountList_FromDB()
+            {
+                try
+                {
+                    DataTable dtProxyAccount = Socket_Cache.DataBase.SelectTable_ProxyAccount();
+
+                    foreach (DataRow dataRow in dtProxyAccount.Rows)
+                    {
+                        Guid AID = Guid.Parse(dataRow["GUID"].ToString());
+                        bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                        string UserName = dataRow["UserName"].ToString();
+                        string PassWord = dataRow["PassWord"].ToString();
+                        string LoginIP = dataRow["LoginIP"].ToString();
+                        bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
+                        DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
+                        DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);                        
+
+                        Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
@@ -5077,7 +5334,6 @@ namespace WPELibrary.Lib
 
         public static class Send
         {
-            public static string FilePath = AppDomain.CurrentDomain.BaseDirectory + "\\SendCollection.sc";
             public static string AESKey = string.Empty;
 
             #region//初始化发送集
@@ -6393,9 +6649,10 @@ namespace WPELibrary.Lib
                 Socket_Cache.DataBase.CreateTable_Filter();
                 Socket_Cache.DataBase.CreateTable_Send();
                 Socket_Cache.DataBase.CreateTable_Robot();
+                Socket_Cache.DataBase.CreateTable_ProxyAccount();
             }
 
-            #region//滤镜
+            #region//滤镜列表
 
             private static bool CreateTable_Filter()
             {
@@ -6407,19 +6664,19 @@ namespace WPELibrary.Lib
                     {                        
                         string sql = "CREATE TABLE IF NOT EXISTS Filter (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
-                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";                        
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";                        
                         sql += "Name TEXT NOT NULL,";
-                        sql += "AppointHeader INTEGER CHECK (AppointHeader IN (0, 1)) DEFAULT 0,";
+                        sql += "AppointHeader BOOLEAN DEFAULT 0,";
                         sql += "HeaderContent TEXT,";
-                        sql += "AppointSocket INTEGER CHECK (AppointSocket IN (0, 1)) DEFAULT 0,";
+                        sql += "AppointSocket BOOLEAN DEFAULT 0,";
                         sql += "SocketContent INTEGER DEFAULT 0,";
-                        sql += "AppointLength INTEGER CHECK (AppointLength IN (0, 1)) DEFAULT 0,";
+                        sql += "AppointLength BOOLEAN DEFAULT 0,";
                         sql += "LengthContent TEXT,";
-                        sql += "AppointPort INTEGER CHECK (AppointPort IN (0, 1)) DEFAULT 0,";
+                        sql += "AppointPort BOOLEAN DEFAULT 0,";
                         sql += "PortContent INTEGER DEFAULT 0,";
                         sql += "Mode INTEGER NOT NULL DEFAULT 0,";
                         sql += "Action INTEGER NOT NULL DEFAULT 0,";
-                        sql += "IsExecute INTEGER CHECK (IsExecute IN (0, 1)) DEFAULT 0,";
+                        sql += "IsExecute BOOLEAN DEFAULT 0,";
                         sql += "ExecuteType INTEGER DEFAULT 0,";
                         sql += "Send_GUID TEXT NOT NULL,";
                         sql += "Robot_GUID TEXT NOT NULL,";
@@ -6552,19 +6809,19 @@ namespace WPELibrary.Lib
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@GUID", sfi.FID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(sfi.IsEnable));
+                            cmd.Parameters.AddWithValue("@IsEnable", sfi.IsEnable);
                             cmd.Parameters.AddWithValue("@Name", sfi.FName);
-                            cmd.Parameters.AddWithValue("@AppointHeader", Convert.ToInt32(sfi.AppointHeader));
+                            cmd.Parameters.AddWithValue("@AppointHeader", sfi.AppointHeader);
                             cmd.Parameters.AddWithValue("@HeaderContent", sfi.HeaderContent);
-                            cmd.Parameters.AddWithValue("@AppointSocket", Convert.ToInt32(sfi.AppointSocket));
+                            cmd.Parameters.AddWithValue("@AppointSocket", sfi.AppointSocket);
                             cmd.Parameters.AddWithValue("@SocketContent", sfi.SocketContent);
-                            cmd.Parameters.AddWithValue("@AppointLength", Convert.ToInt32(sfi.AppointLength));
+                            cmd.Parameters.AddWithValue("@AppointLength", sfi.AppointLength);
                             cmd.Parameters.AddWithValue("@LengthContent", sfi.LengthContent);
-                            cmd.Parameters.AddWithValue("@AppointPort", Convert.ToInt32(sfi.AppointPort));
+                            cmd.Parameters.AddWithValue("@AppointPort", sfi.AppointPort);
                             cmd.Parameters.AddWithValue("@PortContent", sfi.PortContent);
                             cmd.Parameters.AddWithValue("@Mode", sfi.FMode);
                             cmd.Parameters.AddWithValue("@Action", sfi.FAction);
-                            cmd.Parameters.AddWithValue("@IsExecute", Convert.ToInt32(sfi.IsExecute));
+                            cmd.Parameters.AddWithValue("@IsExecute", sfi.IsExecute);
                             cmd.Parameters.AddWithValue("@ExecuteType", sfi.FEType);
                             cmd.Parameters.AddWithValue("@Send_GUID", sfi.SID.ToString().ToUpper());
                             cmd.Parameters.AddWithValue("@Robot_GUID", sfi.RID.ToString().ToUpper());
@@ -6588,7 +6845,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//发送
+            #region//发送列表
 
             private static bool CreateTable_Send()
             {
@@ -6600,9 +6857,9 @@ namespace WPELibrary.Lib
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS Send (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
-                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";                        
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";                        
                         sql += "Name TEXT NOT NULL,";
-                        sql += "SystemSocket INTEGER CHECK (SystemSocket IN (0, 1)) DEFAULT 0,";
+                        sql += "SystemSocket BOOLEAN DEFAULT 0,";
                         sql += "LoopCNT INTEGER NOT NULL DEFAULT 1,";
                         sql += "LoopINT INTEGER NOT NULL DEFAULT 1000,";
                         sql += "Notes TEXT";
@@ -6736,7 +6993,7 @@ namespace WPELibrary.Lib
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(ssi.IsEnable));
+                            cmd.Parameters.AddWithValue("@IsEnable", ssi.IsEnable);
                             cmd.Parameters.AddWithValue("@Name", ssi.SName);
                             cmd.Parameters.AddWithValue("@SystemSocket", ssi.SSystemSocket);
                             cmd.Parameters.AddWithValue("@LoopCNT", ssi.SLoopCNT);
@@ -6781,7 +7038,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//机器人
+            #region//机器人列表
 
             private static bool CreateTable_Robot()
             {
@@ -6793,7 +7050,7 @@ namespace WPELibrary.Lib
                     {
                         string sql = "CREATE TABLE IF NOT EXISTS Robot (";
                         sql += "GUID TEXT NOT NULL PRIMARY KEY,";
-                        sql += "IsEnable INTEGER CHECK (IsEnable IN (0, 1)) DEFAULT 0,";
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";
                         sql += "Name TEXT NOT NULL";
                         sql += ");";
 
@@ -6915,7 +7172,7 @@ namespace WPELibrary.Lib
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             cmd.Parameters.AddWithValue("@GUID", sri.RID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", Convert.ToInt32(sri.IsEnable));
+                            cmd.Parameters.AddWithValue("@IsEnable", sri.IsEnable);
                             cmd.Parameters.AddWithValue("@Name", sri.RName);                            
                             cmd.ExecuteNonQuery();
                         }
@@ -6945,6 +7202,139 @@ namespace WPELibrary.Lib
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//代理账号
+
+            private static bool CreateTable_ProxyAccount()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS ProxyAccount (";
+                        sql += "GUID TEXT NOT NULL PRIMARY KEY,";
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";
+                        sql += "UserName TEXT NOT NULL UNIQUE,";
+                        sql += "PassWord TEXT NOT NULL,";
+                        sql += "LoginIP TEXT,";
+                        sql += "IsExpiry BOOLEAN DEFAULT 0,";
+                        sql += "ExpiryTime TIMESTAMP,";                        
+                        sql += "CreateTime TIMESTAMP";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_ProxyAccount()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ProxyAccount;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_ProxyAccount()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM ProxyAccount;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_ProxyAccount(Proxy_AccountInfo pai)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "INSERT INTO ProxyAccount (";
+                        sql += "GUID,";
+                        sql += "IsEnable,";
+                        sql += "UserName,";
+                        sql += "PassWord,";
+                        sql += "LoginIP,";
+                        sql += "IsExpiry,";
+                        sql += "ExpiryTime,";
+                        sql += "CreateTime";
+                        sql += ") VALUES (";
+                        sql += "@GUID,";
+                        sql += "@IsEnable,";
+                        sql += "@UserName,";
+                        sql += "@PassWord,";
+                        sql += "@LoginIP,";
+                        sql += "@IsExpiry,";
+                        sql += "@ExpiryTime,";
+                        sql += "@CreateTime";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", pai.AID.ToString().ToUpper());
+                            cmd.Parameters.AddWithValue("@IsEnable", pai.IsEnable);
+                            cmd.Parameters.AddWithValue("@UserName", pai.UserName);
+                            cmd.Parameters.AddWithValue("@PassWord", pai.PassWord);
+                            cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
+                            cmd.Parameters.AddWithValue("@IsExpiry", pai.IsExpiry);
+                            cmd.Parameters.AddWithValue("@ExpiryTime", pai.ExpiryTime);
+                            cmd.Parameters.AddWithValue("@CreateTime", pai.CreateTime);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
 

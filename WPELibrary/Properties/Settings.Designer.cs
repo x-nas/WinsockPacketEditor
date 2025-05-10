@@ -409,30 +409,6 @@ namespace WPELibrary.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ProxyConfig_Auth_UserName {
-            get {
-                return ((string)(this["ProxyConfig_Auth_UserName"]));
-            }
-            set {
-                this["ProxyConfig_Auth_UserName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ProxyConfig_Auth_PassWord {
-            get {
-                return ((string)(this["ProxyConfig_Auth_PassWord"]));
-            }
-            set {
-                this["ProxyConfig_Auth_PassWord"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool ProxyConfig_LogList_AutoRoll {
             get {

@@ -107,6 +107,8 @@
     <Compile Include="Lib\IconExtractor\IconUtil.cs" />
     <Compile Include="Lib\NativeMethods\Kernel32.cs" />
     <Compile Include="Lib\NativeMethods\Mswsock.cs" />
+    <Compile Include="Lib\Proxy_AccountInfo.cs" />
+    <Compile Include="Lib\Proxy_AuthInfo.cs" />
     <Compile Include="Lib\Socket_ProxyData.cs" />
     <Compile Include="Lib\Socket_ProxyTCP.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />
@@ -122,6 +124,18 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_AccountForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountForm.Designer.cs">
+      <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_AccountListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountListForm.Designer.cs">
+      <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_CompareForm.cs">
       <SubType>Form</SubType>
@@ -272,6 +286,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Proxy_AccountForm.resx">
+      <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountListForm.resx">
+      <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_CompareForm.en-US.resx">
       <DependentUpon>Socket_CompareForm.cs</DependentUpon>
     </EmbeddedResource>

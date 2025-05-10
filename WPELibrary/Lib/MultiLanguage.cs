@@ -155,8 +155,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_143 = { "停止 SOCKS5 代理!", "Stop SOCKS5 proxy!" };
         public static string[] MutiLan_144 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
         public static string[] MutiLan_145 = { "不支持的 SOCKS 协议版本: {0}", "Unsupported SOCKS protocol version: {0}" };
-        public static string[] MutiLan_146 = { "{0} 不支持认证方式: {1}", "{0} does not support the authentication: {1}" };
-        public static string[] MutiLan_147 = { "{0} 认证失败!", "{0} authentication failed!" };
+        public static string[] MutiLan_146 = { "通过!", "Passed!" };
+        public static string[] MutiLan_147 = { "失败!", "Failed!" };
         public static string[] MutiLan_148 = { "启用系统代理", "Enable system proxy" };
         public static string[] MutiLan_149 = { "关闭系统代理", "Disable system proxy" };
         public static string[] MutiLan_150 = { "封包列表保存完毕 {0}", "The Socket List saved {0}" };
@@ -185,6 +185,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_173 = { "换包", "Change" };
         public static string[] MutiLan_174 = { "换包数据不完整!", "The change packet data is incomplete!" };
         public static string[] MutiLan_175 = { "正在加载滤镜数据: {0}%", "Loading Filter data: {0}%" };
+        public static string[] MutiLan_176 = { "账号信息设置错误!", "Account information setting error!" };
+        public static string[] MutiLan_177 = { "该用户名已存在!", "This UserName has already exists!" };        
 
         #endregion
 

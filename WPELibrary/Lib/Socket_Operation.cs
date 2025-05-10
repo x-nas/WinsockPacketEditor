@@ -1884,6 +1884,31 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//获取启用的代理账号数
+
+        public static int GetEnableProxyAccountCount()
+        {
+            int iReturn = 0;
+
+            try
+            {
+                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                {
+                    if (pai.IsEnable)
+                    {
+                        iReturn++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            return iReturn;
+        }
+
+        #endregion
+
         #region//查找树节点        
 
         public static TreeNode FindNodeSync(TreeNodeCollection nodes, string nodeName)
@@ -2663,6 +2688,36 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//显示账号管理窗体
+
+        public static void ShowProxyAccountListForm()
+        {
+            try
+            {
+                Proxy_AccountListForm palForm = new Proxy_AccountListForm();
+                palForm.Show();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void ShowProxyAccountForm(int AccountIndex)
+        {
+            try
+            {
+                Proxy_AccountForm paForm = new Proxy_AccountForm(AccountIndex);
+                paForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示滤镜窗体（对话框）
 
         public static void ShowFilterForm_Dialog(int FIndex)
@@ -2816,9 +2871,7 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_ProxyIP_Auto = Socket_Cache.SocketProxy.ProxyIP_Auto;                
                 Properties.Settings.Default.ProxyConfig_EnableSOCKS5 = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 Properties.Settings.Default.ProxyConfig_ProxyPort = Socket_Cache.SocketProxy.ProxyPort;
-                Properties.Settings.Default.ProxyConfig_EnableAuth = Socket_Cache.SocketProxy.Enable_Auth;
-                Properties.Settings.Default.ProxyConfig_Auth_UserName = Socket_Cache.SocketProxy.Auth_UserName;
-                Properties.Settings.Default.ProxyConfig_Auth_PassWord = Socket_Cache.SocketProxy.Auth_PassWord;
+                Properties.Settings.Default.ProxyConfig_EnableAuth = Socket_Cache.SocketProxy.Enable_Auth;                
 
                 Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord = Socket_Cache.SocketProxyList.NoRecord;
                 Properties.Settings.Default.ProxyConfig_ClientList_DelClosed = Socket_Cache.SocketProxyList.DelClosed;
@@ -2912,9 +2965,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketProxy.ProxyIP_Auto = Properties.Settings.Default.ProxyConfig_ProxyIP_Auto;                
                 Socket_Cache.SocketProxy.Enable_SOCKS5 = Properties.Settings.Default.ProxyConfig_EnableSOCKS5;
                 Socket_Cache.SocketProxy.ProxyPort = Properties.Settings.Default.ProxyConfig_ProxyPort;
-                Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;
-                Socket_Cache.SocketProxy.Auth_UserName = Properties.Settings.Default.ProxyConfig_Auth_UserName;
-                Socket_Cache.SocketProxy.Auth_PassWord = Properties.Settings.Default.ProxyConfig_Auth_PassWord;
+                Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;                
 
                 Socket_Cache.SocketProxyList.NoRecord = Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord;
                 Socket_Cache.SocketProxyList.DelClosed = Properties.Settings.Default.ProxyConfig_ClientList_DelClosed;
