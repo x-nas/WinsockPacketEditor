@@ -250,7 +250,7 @@ namespace WPELibrary.Lib
                     {
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
                     }
-
+                    
                     spc.CloseTCPClient();
                 }
                 catch (Exception ex)
@@ -374,6 +374,7 @@ namespace WPELibrary.Lib
                             bAuth[0] = 0x01;
                             bAuth[1] = 0x00;
 
+                            Socket_Cache.ProxyAccount.SetProxyAccount_Online(AccountID, true);
                             Socket_Cache.SocketProxy.RecordLoginIP(AccountID, epClient.Address.ToString());
                         }
                         else
@@ -1101,6 +1102,29 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//设置代理账号的在线情况
+
+            public static void SetProxyAccount_Online(Guid AccountID, bool IsOnline)
+            {
+                try
+                {
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        if (pai.AID.Equals(AccountID))
+                        {
+                            pai.IsOnLine = IsOnline;
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//新增代理账号
 
             public static void AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
@@ -1190,6 +1214,25 @@ namespace WPELibrary.Lib
                 try
                 {
                     Socket_Cache.ProxyAccount.lstProxyAccount.Add(pai);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//重置代理账号的在线状态
+
+            public static void ResetProxyAccount_Online()
+            {
+                try
+                {
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        pai.IsOnLine = false;
+                    }
                 }
                 catch (Exception ex)
                 {

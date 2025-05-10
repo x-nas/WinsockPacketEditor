@@ -1876,7 +1876,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return Socket_Cache.SocketProxy.DomainType.Socket;
@@ -1902,8 +1902,62 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//获取过期的代理账号数
+
+        public static int GetExpiryProxyAccountCount()
+        {
+            int iReturn = 0;
+
+            try
+            {
+                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                {
+                    if (pai.IsEnable && pai.IsExpiry)
+                    {
+                        if (DateTime.Now >= pai.ExpiryTime)
+                        {
+                            iReturn++;
+                        }                        
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            return iReturn;
+        }
+
+        #endregion
+
+        #region//获取在线的代理账号数
+
+        public static int GetOnLineProxyAccountCount()
+        {
+            int iReturn = 0;
+
+            try
+            {
+                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                {
+                    if (pai.IsOnLine)
+                    {
+                        iReturn++;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
             return iReturn;
         }
 

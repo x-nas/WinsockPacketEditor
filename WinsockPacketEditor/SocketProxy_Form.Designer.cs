@@ -30,17 +30,17 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SocketProxy_Form));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tlProxyTotal = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketProxy_Parameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbSystemProxy = new System.Windows.Forms.GroupBox();
@@ -130,6 +130,12 @@
             this.hbData = new Be.Windows.Forms.HexBox();
             this.tlpSocketProxy_Data = new System.Windows.Forms.TableLayoutPanel();
             this.tcSocketProxy_Log = new System.Windows.Forms.TabControl();
+            this.tpAuth = new System.Windows.Forms.TabPage();
+            this.dgvAuth = new System.Windows.Forms.DataGridView();
+            this.cAuthID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAuthTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAuthResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tpLog = new System.Windows.Forms.TabPage();
             this.dgvLogList = new System.Windows.Forms.DataGridView();
             this.cLogID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -143,12 +149,10 @@
             this.cProxyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
             this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
-            this.tpAuth = new System.Windows.Forms.TabPage();
-            this.dgvAuth = new System.Windows.Forms.DataGridView();
-            this.cAuthID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAuthTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAuthResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tCheckAccountOnLine = new System.Windows.Forms.Timer(this.components);
+            this.tlProxyAccount = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tlProxyAccount_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel8 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -188,14 +192,14 @@
             this.tpData.SuspendLayout();
             this.tlpSocketProxy_Data.SuspendLayout();
             this.tcSocketProxy_Log.SuspendLayout();
+            this.tpAuth.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAuth)).BeginInit();
             this.tpLog.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).BeginInit();
             this.tcClientInfo.SuspendLayout();
             this.tpClientList.SuspendLayout();
             this.tlpSocketProxy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).BeginInit();
-            this.tpAuth.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAuth)).BeginInit();
             this.SuspendLayout();
             // 
             // tlProxyTotal
@@ -706,6 +710,9 @@
             this.toolStripStatusLabel4,
             this.tlProxyLinks,
             this.tlProxyLinks_CNT,
+            this.toolStripStatusLabel8,
+            this.tlProxyAccount,
+            this.tlProxyAccount_CNT,
             this.toolStripStatusLabel5,
             this.tsslProxySpeed,
             this.toolStripStatusLabel1,
@@ -857,6 +864,92 @@
             this.tcSocketProxy_Log.Name = "tcSocketProxy_Log";
             this.tcSocketProxy_Log.SelectedIndex = 0;
             // 
+            // tpAuth
+            // 
+            this.tpAuth.Controls.Add(this.dgvAuth);
+            resources.ApplyResources(this.tpAuth, "tpAuth");
+            this.tpAuth.Name = "tpAuth";
+            this.tpAuth.UseVisualStyleBackColor = true;
+            // 
+            // dgvAuth
+            // 
+            this.dgvAuth.AllowUserToAddRows = false;
+            this.dgvAuth.AllowUserToDeleteRows = false;
+            this.dgvAuth.AllowUserToResizeColumns = false;
+            this.dgvAuth.AllowUserToResizeRows = false;
+            this.dgvAuth.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvAuth.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.dgvAuth.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dgvAuth.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAuth.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            this.dgvAuth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvAuth.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cAuthID,
+            this.cAuthTime,
+            this.cIPAddress,
+            this.cAuthResult});
+            resources.ApplyResources(this.dgvAuth, "dgvAuth");
+            this.dgvAuth.MultiSelect = false;
+            this.dgvAuth.Name = "dgvAuth";
+            this.dgvAuth.ReadOnly = true;
+            this.dgvAuth.RowHeadersVisible = false;
+            this.dgvAuth.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dgvAuth.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
+            this.dgvAuth.RowTemplate.Height = 23;
+            this.dgvAuth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvAuth.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAuth_CellFormatting);
+            // 
+            // cAuthID
+            // 
+            this.cAuthID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthID.DefaultCellStyle = dataGridViewCellStyle10;
+            resources.ApplyResources(this.cAuthID, "cAuthID");
+            this.cAuthID.Name = "cAuthID";
+            this.cAuthID.ReadOnly = true;
+            this.cAuthID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cAuthTime
+            // 
+            this.cAuthTime.DataPropertyName = "AuthTime";
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cAuthTime.DefaultCellStyle = dataGridViewCellStyle11;
+            resources.ApplyResources(this.cAuthTime, "cAuthTime");
+            this.cAuthTime.Name = "cAuthTime";
+            this.cAuthTime.ReadOnly = true;
+            this.cAuthTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPAddress
+            // 
+            this.cIPAddress.DataPropertyName = "IPAddress";
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle12;
+            resources.ApplyResources(this.cIPAddress, "cIPAddress");
+            this.cIPAddress.Name = "cIPAddress";
+            this.cIPAddress.ReadOnly = true;
+            this.cIPAddress.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cAuthResult
+            // 
+            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cAuthResult.DataPropertyName = "AuthResult";
+            resources.ApplyResources(this.cAuthResult, "cAuthResult");
+            this.cAuthResult.Name = "cAuthResult";
+            this.cAuthResult.ReadOnly = true;
+            this.cAuthResult.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthResult.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // tpLog
             // 
             this.tpLog.Controls.Add(this.dgvLogList);
@@ -874,14 +967,14 @@
             this.dgvLogList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -902,9 +995,9 @@
             // cLogID
             // 
             this.cLogID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle14;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -914,8 +1007,8 @@
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle15;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -925,8 +1018,8 @@
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle16;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -974,48 +1067,48 @@
             // 
             // cProxyChart
             // 
-            chartArea1.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
-            chartArea1.AxisX.Interval = 1D;
-            chartArea1.AxisX.LabelStyle.Enabled = false;
-            chartArea1.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisX.MajorGrid.LineColor = System.Drawing.Color.ForestGreen;
-            chartArea1.AxisX.MajorTickMark.TickMarkStyle = System.Windows.Forms.DataVisualization.Charting.TickMarkStyle.None;
-            chartArea1.AxisX.Maximum = 100D;
-            chartArea1.AxisX.Minimum = 0D;
-            chartArea1.AxisX.TitleForeColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisY.Interval = 1D;
-            chartArea1.AxisY.LabelStyle.Enabled = false;
-            chartArea1.AxisY.LabelStyle.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
-            chartArea1.AxisY.LabelStyle.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
-            chartArea1.AxisY.LineColor = System.Drawing.Color.Transparent;
-            chartArea1.AxisY.MajorGrid.LineColor = System.Drawing.Color.ForestGreen;
-            chartArea1.AxisY.MajorTickMark.TickMarkStyle = System.Windows.Forms.DataVisualization.Charting.TickMarkStyle.None;
-            chartArea1.AxisY.Maximum = 10D;
-            chartArea1.AxisY.Minimum = 0D;
-            chartArea1.BackColor = System.Drawing.Color.DarkGreen;
-            chartArea1.InnerPlotPosition.Auto = false;
-            chartArea1.InnerPlotPosition.Height = 100F;
-            chartArea1.InnerPlotPosition.Width = 100F;
-            chartArea1.Name = "ChartArea1";
-            chartArea1.Position.Auto = false;
-            chartArea1.Position.Height = 100F;
-            chartArea1.Position.Width = 100F;
-            this.cProxyChart.ChartAreas.Add(chartArea1);
+            chartArea2.AlignmentOrientation = ((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations)((System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Vertical | System.Windows.Forms.DataVisualization.Charting.AreaAlignmentOrientations.Horizontal)));
+            chartArea2.AxisX.Interval = 1D;
+            chartArea2.AxisX.LabelStyle.Enabled = false;
+            chartArea2.AxisX.LabelStyle.ForeColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisX.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisX.MajorGrid.LineColor = System.Drawing.Color.ForestGreen;
+            chartArea2.AxisX.MajorTickMark.TickMarkStyle = System.Windows.Forms.DataVisualization.Charting.TickMarkStyle.None;
+            chartArea2.AxisX.Maximum = 100D;
+            chartArea2.AxisX.Minimum = 0D;
+            chartArea2.AxisX.TitleForeColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisY.Interval = 1D;
+            chartArea2.AxisY.LabelStyle.Enabled = false;
+            chartArea2.AxisY.LabelStyle.IntervalOffsetType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
+            chartArea2.AxisY.LabelStyle.IntervalType = System.Windows.Forms.DataVisualization.Charting.DateTimeIntervalType.Seconds;
+            chartArea2.AxisY.LineColor = System.Drawing.Color.Transparent;
+            chartArea2.AxisY.MajorGrid.LineColor = System.Drawing.Color.ForestGreen;
+            chartArea2.AxisY.MajorTickMark.TickMarkStyle = System.Windows.Forms.DataVisualization.Charting.TickMarkStyle.None;
+            chartArea2.AxisY.Maximum = 10D;
+            chartArea2.AxisY.Minimum = 0D;
+            chartArea2.BackColor = System.Drawing.Color.DarkGreen;
+            chartArea2.InnerPlotPosition.Auto = false;
+            chartArea2.InnerPlotPosition.Height = 100F;
+            chartArea2.InnerPlotPosition.Width = 100F;
+            chartArea2.Name = "ChartArea1";
+            chartArea2.Position.Auto = false;
+            chartArea2.Position.Height = 100F;
+            chartArea2.Position.Width = 100F;
+            this.cProxyChart.ChartAreas.Add(chartArea2);
             resources.ApplyResources(this.cProxyChart, "cProxyChart");
             this.cProxyChart.Name = "cProxyChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series1.Color = System.Drawing.Color.White;
-            series1.LabelForeColor = System.Drawing.Color.Empty;
-            series1.Name = "sProxy_Uplink";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
-            series2.Color = System.Drawing.Color.Lime;
-            series2.LabelForeColor = System.Drawing.Color.Empty;
-            series2.Name = "sProxy_Downlink";
-            this.cProxyChart.Series.Add(series1);
-            this.cProxyChart.Series.Add(series2);
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series3.Color = System.Drawing.Color.White;
+            series3.LabelForeColor = System.Drawing.Color.Empty;
+            series3.Name = "sProxy_Uplink";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
+            series4.Color = System.Drawing.Color.Lime;
+            series4.LabelForeColor = System.Drawing.Color.Empty;
+            series4.Name = "sProxy_Downlink";
+            this.cProxyChart.Series.Add(series3);
+            this.cProxyChart.Series.Add(series4);
             // 
             // tSocketProxy
             // 
@@ -1027,91 +1120,27 @@
             this.tCheckProxyState.Interval = 1000;
             this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
             // 
-            // tpAuth
+            // tCheckAccountOnLine
             // 
-            this.tpAuth.Controls.Add(this.dgvAuth);
-            resources.ApplyResources(this.tpAuth, "tpAuth");
-            this.tpAuth.Name = "tpAuth";
-            this.tpAuth.UseVisualStyleBackColor = true;
+            this.tCheckAccountOnLine.Enabled = true;
+            this.tCheckAccountOnLine.Interval = 60000;
+            this.tCheckAccountOnLine.Tick += new System.EventHandler(this.tCheckAccountOnLine_Tick);
             // 
-            // dgvAuth
+            // tlProxyAccount
             // 
-            this.dgvAuth.AllowUserToAddRows = false;
-            this.dgvAuth.AllowUserToDeleteRows = false;
-            this.dgvAuth.AllowUserToResizeColumns = false;
-            this.dgvAuth.AllowUserToResizeRows = false;
-            this.dgvAuth.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvAuth.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dgvAuth.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dgvAuth.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAuth.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dgvAuth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvAuth.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cAuthID,
-            this.cAuthTime,
-            this.cIPAddress,
-            this.cAuthResult});
-            resources.ApplyResources(this.dgvAuth, "dgvAuth");
-            this.dgvAuth.MultiSelect = false;
-            this.dgvAuth.Name = "dgvAuth";
-            this.dgvAuth.ReadOnly = true;
-            this.dgvAuth.RowHeadersVisible = false;
-            this.dgvAuth.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dgvAuth.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
-            this.dgvAuth.RowTemplate.Height = 23;
-            this.dgvAuth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvAuth.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAuth_CellFormatting);
+            this.tlProxyAccount.Name = "tlProxyAccount";
+            resources.ApplyResources(this.tlProxyAccount, "tlProxyAccount");
             // 
-            // cAuthID
+            // tlProxyAccount_CNT
             // 
-            this.cAuthID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthID.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cAuthID, "cAuthID");
-            this.cAuthID.Name = "cAuthID";
-            this.cAuthID.ReadOnly = true;
-            this.cAuthID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            resources.ApplyResources(this.tlProxyAccount_CNT, "tlProxyAccount_CNT");
+            this.tlProxyAccount_CNT.Name = "tlProxyAccount_CNT";
             // 
-            // cAuthTime
+            // toolStripStatusLabel8
             // 
-            this.cAuthTime.DataPropertyName = "AuthTime";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cAuthTime.DefaultCellStyle = dataGridViewCellStyle3;
-            resources.ApplyResources(this.cAuthTime, "cAuthTime");
-            this.cAuthTime.Name = "cAuthTime";
-            this.cAuthTime.ReadOnly = true;
-            this.cAuthTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPAddress
-            // 
-            this.cIPAddress.DataPropertyName = "IPAddress";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle4;
-            resources.ApplyResources(this.cIPAddress, "cIPAddress");
-            this.cIPAddress.Name = "cIPAddress";
-            this.cIPAddress.ReadOnly = true;
-            this.cIPAddress.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cAuthResult
-            // 
-            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cAuthResult.DataPropertyName = "AuthResult";
-            resources.ApplyResources(this.cAuthResult, "cAuthResult");
-            this.cAuthResult.Name = "cAuthResult";
-            this.cAuthResult.ReadOnly = true;
-            this.cAuthResult.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthResult.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.toolStripStatusLabel8.ForeColor = System.Drawing.Color.DarkGray;
+            this.toolStripStatusLabel8.Name = "toolStripStatusLabel8";
+            resources.ApplyResources(this.toolStripStatusLabel8, "toolStripStatusLabel8");
             // 
             // SocketProxy_Form
             // 
@@ -1171,6 +1200,8 @@
             this.tpData.ResumeLayout(false);
             this.tlpSocketProxy_Data.ResumeLayout(false);
             this.tcSocketProxy_Log.ResumeLayout(false);
+            this.tpAuth.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvAuth)).EndInit();
             this.tpLog.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLogList)).EndInit();
             this.tcClientInfo.ResumeLayout(false);
@@ -1178,8 +1209,6 @@
             this.tlpSocketProxy.ResumeLayout(false);
             this.tlpSocketProxy.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cProxyChart)).EndInit();
-            this.tpAuth.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvAuth)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1294,5 +1323,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cAuthTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn cAuthResult;
+        private System.Windows.Forms.Timer tCheckAccountOnLine;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel8;
+        private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount;
+        private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount_CNT;
     }
 }

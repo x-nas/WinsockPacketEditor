@@ -100,6 +100,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否在线
+
+        protected bool isonline;
+
+        public bool IsOnLine
+        {
+            get { return isonline; }
+            set { isonline = value; }
+        }
+
+        #endregion
+
         #region//Proxy_AccountInfo
 
         public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
@@ -112,6 +124,7 @@ namespace WPELibrary.Lib
             this.isexpiry = IsExpiry;
             this.expirytime = ExpiryTime;
             this.createtime = CreateTime;
+            this.isonline = false;
         }
 
         #endregion

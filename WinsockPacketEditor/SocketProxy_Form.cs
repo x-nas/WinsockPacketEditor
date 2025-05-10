@@ -646,6 +646,11 @@ namespace WinsockPacketEditor
             this.ShowProxyChart();
         }
 
+        private void tCheckAccountOnLine_Tick(object sender, EventArgs e)
+        {
+            Socket_Cache.ProxyAccount.ResetProxyAccount_Online();
+        }
+
         #endregion
 
         #region//清空数据
@@ -1054,12 +1059,14 @@ namespace WinsockPacketEditor
                 ulong ProxyTCP_CNT = Socket_Cache.SocketProxy.ProxyTCP_CNT;
                 ulong ProxyUDP_CNT = Socket_Cache.SocketProxy.ProxyUDP_CNT;
                 ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
+                int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount();
 
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();
                 this.tlProxyUDP_CNT.Text = ProxyUDP_CNT.ToString();
                 this.tlProxyCache_CNT.Text = Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count.ToString();
                 this.tlProxyLinks_CNT.Text = Socket_Cache.SocketProxyList.lstProxyTCP.Count.ToString();
+                this.tlProxyAccount_CNT.Text = ProxyAccountOnLine.ToString() + "/" + Socket_Cache.ProxyAccount.lstProxyAccount.Count.ToString();
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
             }
             catch (Exception ex)
@@ -1118,6 +1125,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
     }
 }

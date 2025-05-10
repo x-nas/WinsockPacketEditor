@@ -13,6 +13,7 @@ namespace WPELibrary
         {
             InitializeComponent();
             this.InitDGV();
+            this.ShowProxyAccountInfo();
         }        
 
         private void InitDGV()
@@ -108,8 +109,15 @@ namespace WPELibrary
 
         private void tTimer_Tick(object sender, EventArgs e)
         {
-            this.tsslAccountEnable_CNT.Text = Socket_Operation.GetEnableProxyAccountCount().ToString();
+            this.ShowProxyAccountInfo();
+        }
+
+        private void ShowProxyAccountInfo()
+        {            
             this.tsslAccount_CNT.Text = Socket_Cache.ProxyAccount.lstProxyAccount.Count.ToString();
+            this.tsslAccountEnable_CNT.Text = Socket_Operation.GetEnableProxyAccountCount().ToString();
+            this.tsslAccountOnLine_CNT.Text = Socket_Operation.GetOnLineProxyAccountCount().ToString();
+            this.tsslAccountExpiry_CNT.Text = Socket_Operation.GetExpiryProxyAccountCount().ToString();
             this.dgvAccountList.Refresh();
         }
 
