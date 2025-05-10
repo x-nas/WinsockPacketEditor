@@ -117,37 +117,309 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="ssProxyAccount.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="cAccountID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIsEnable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cUserName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cLoginIP.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIsOnLine.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cCreateTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIsExpiry.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cExpiryTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="tTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>162, 17</value>
-  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>784, 461</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountList.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit.Name" xml:space="preserve">
+    <value>tsslSplit</value>
+  </data>
+  <data name="ssProxyAccount.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 436</value>
+  </data>
+  <data name="tlpAccountList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>784, 436</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpAccountList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAccountList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpAccountList.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpAccountButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tsslSplit2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="&gt;&gt;cCreateTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="bAccount_New.Text" xml:space="preserve">
+    <value>新 建</value>
+  </data>
+  <data name="bAccount_New.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;cUserName.Name" xml:space="preserve">
+    <value>cUserName</value>
+  </data>
+  <data name="tlpAccountList.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="bDelete.Text" xml:space="preserve">
+    <value>删 除</value>
+  </data>
+  <data name="tsslSplit2.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tlpProxyAccountList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tsslAccountEnable_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tsslSplit.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="tsslAccount.Text" xml:space="preserve">
+    <value>账户总数:</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountList.Parent" xml:space="preserve">
+    <value>tlpAccountList</value>
+  </data>
+  <data name="tsslAccount_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="&gt;&gt;bAccount_New.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpProxyAccountList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>784, 461</value>
+  </data>
+  <data name="tsslSplit1.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="cIsEnable.HeaderText" xml:space="preserve">
+    <value>是否启用</value>
+  </data>
+  <data name="tsslSplit.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="dgvAccountList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>658, 430</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bAccount_New.Name" xml:space="preserve">
+    <value>bAccount_New</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tsslAccountExpiry_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cExpiryTime.HeaderText" xml:space="preserve">
+    <value>过期时间</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_AccountListForm</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Name" xml:space="preserve">
+    <value>bUpdate</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountList.Name" xml:space="preserve">
+    <value>tlpAccountList</value>
+  </data>
+  <data name="cIsExpiry.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="tlpProxyAccountList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tsslSplit2.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="bAccount_New.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 148</value>
+  </data>
+  <data name="ssProxyAccount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>778, 22</value>
+  </data>
+  <data name="&gt;&gt;bDelete.Name" xml:space="preserve">
+    <value>bDelete</value>
+  </data>
+  <data name="dgvAccountList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;tsslAccount_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
+  <data name="cIsOnLine.HeaderText" xml:space="preserve">
+    <value>是否在线</value>
+  </data>
+  <data name="bUpdate.Text" xml:space="preserve">
+    <value>编 辑</value>
+  </data>
+  <data name="bDelete.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;cLoginIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cIsEnable.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="tlpProxyAccountList.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tsslSplit.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="dgvAccountList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tsslSplit1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="&gt;&gt;tsslAccount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpProxyAccountList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ssProxyAccount.Parent" xml:space="preserve">
+    <value>tlpProxyAccountList</value>
+  </data>
+  <data name="tsslAccountEnable_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="&gt;&gt;bDelete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountEnable_CNT.Name" xml:space="preserve">
+    <value>tsslAccountEnable_CNT</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>账号管理</value>
+  </data>
+  <data name="tsslAccountOnLine_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="tlpAccountList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAccountList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpAccountButton" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,120" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;bAccount_New.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccountList.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="tlpAccountButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;bDelete.Parent" xml:space="preserve">
+    <value>tlpAccountButton</value>
+  </data>
+  <data name="bDelete.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountOnLine.Name" xml:space="preserve">
+    <value>tsslAccountOnLine</value>
+  </data>
+  <data name="&gt;&gt;cIsEnable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="bUpdate.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountExpiry_CNT.Name" xml:space="preserve">
+    <value>tsslAccountExpiry_CNT</value>
+  </data>
+  <data name="tsslAccountOnLine_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="bUpdate.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;bAccount_New.Parent" xml:space="preserve">
+    <value>tlpAccountButton</value>
+  </data>
+  <data name="&gt;&gt;cLoginIP.Name" xml:space="preserve">
+    <value>cLoginIP</value>
+  </data>
+  <data name="bAccount_New.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccountList.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tsslAccountOnLine_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Parent" xml:space="preserve">
+    <value>tlpAccountButton</value>
+  </data>
+  <data name="tlpAccountButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="bDelete.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 258</value>
+  </data>
+  <data name="&gt;&gt;bUpdate.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpProxyAccountList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssProxyAccount" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpAccountList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;ssProxyAccount.Name" xml:space="preserve">
+    <value>ssProxyAccount</value>
+  </data>
+  <data name="&gt;&gt;cIsEnable.Name" xml:space="preserve">
+    <value>cIsEnable</value>
+  </data>
+  <data name="tlpAccountButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="cAccountID.HeaderText" xml:space="preserve">
+    <value>序号</value>
+  </data>
+  <data name="ssProxyAccount.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cCreateTime.HeaderText" xml:space="preserve">
+    <value>开通时间</value>
+  </data>
+  <data name="&gt;&gt;cUserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpAccountButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 436</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAAAAAAAEAIAAoIAQAZgAAAICAAAABACAAKAgBAI4gBABAQAAAAQAgAChCAAC2KAUAMDAAAAEA
@@ -6320,4 +6592,250 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
+  <data name="&gt;&gt;cExpiryTime.Name" xml:space="preserve">
+    <value>cExpiryTime</value>
+  </data>
+  <data name="tsslSplit1.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="&gt;&gt;ssProxyAccount.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bUpdate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 203</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountButton.Name" xml:space="preserve">
+    <value>tlpAccountButton</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountEnable.Name" xml:space="preserve">
+    <value>tsslAccountEnable</value>
+  </data>
+  <data name="bDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="tlpAccountList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tsslAccountEnable_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cIsExpiry.HeaderText" xml:space="preserve">
+    <value>是否过期</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit2.Name" xml:space="preserve">
+    <value>tsslSplit2</value>
+  </data>
+  <data name="&gt;&gt;tsslAccount_CNT.Name" xml:space="preserve">
+    <value>tsslAccount_CNT</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccountList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cAccountID.Width" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="&gt;&gt;cExpiryTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountExpiry.Name" xml:space="preserve">
+    <value>tsslAccountExpiry</value>
+  </data>
+  <data name="ssProxyAccount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountList.Parent" xml:space="preserve">
+    <value>tlpProxyAccountList</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpAccountButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bDelete" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bUpdate" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bAccount_New" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,10,Percent,100,Absolute,10" /&gt;&lt;Rows Styles="Percent,50,Absolute,35,Absolute,20,Absolute,35,Absolute,20,Absolute,35,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="cExpiryTime.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountEnable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tsslAccount_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="tsslAccountEnable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="&gt;&gt;tsslSplit1.Name" xml:space="preserve">
+    <value>tsslSplit1</value>
+  </data>
+  <data name="&gt;&gt;ssProxyAccount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tsslAccountExpiry.Text" xml:space="preserve">
+    <value>过期:</value>
+  </data>
+  <data name="&gt;&gt;tsslAccount.Name" xml:space="preserve">
+    <value>tsslAccount</value>
+  </data>
+  <data name="&gt;&gt;bDelete.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cUserName.HeaderText" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountOnLine_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="bAccount_New.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;cAccountID.Name" xml:space="preserve">
+    <value>cAccountID</value>
+  </data>
+  <data name="tsslAccountExpiry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountOnLine_CNT.Name" xml:space="preserve">
+    <value>tsslAccountOnLine_CNT</value>
+  </data>
+  <data name="&gt;&gt;cIsOnLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tsslAccountOnLine.Size" type="System.Drawing.Size, System.Drawing">
+    <value>35, 17</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountList.Name" xml:space="preserve">
+    <value>dgvAccountList</value>
+  </data>
+  <data name="dgvAccountList.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyAccountList.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cCreateTime.Name" xml:space="preserve">
+    <value>cCreateTime</value>
+  </data>
+  <data name="&gt;&gt;cIsOnLine.Name" xml:space="preserve">
+    <value>cIsOnLine</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountList.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cIsOnLine.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="tsslAccount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountEnable_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cLoginIP.HeaderText" xml:space="preserve">
+    <value>登录 IP</value>
+  </data>
+  <data name="tlpAccountButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>664, 0</value>
+  </data>
+  <data name="tlpProxyAccountList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpAccountButton.RowCount" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;cIsExpiry.Name" xml:space="preserve">
+    <value>cIsExpiry</value>
+  </data>
+  <data name="tlpAccountList.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tsslAccountEnable.Text" xml:space="preserve">
+    <value>启用:</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccountList.Name" xml:space="preserve">
+    <value>tlpProxyAccountList</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountExpiry_CNT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tsslAccountExpiry_CNT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="ssProxyAccount.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tTimer.Name" xml:space="preserve">
+    <value>tTimer</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountButton.Parent" xml:space="preserve">
+    <value>tlpAccountList</value>
+  </data>
+  <data name="&gt;&gt;cAccountID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountOnLine.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIsExpiry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cCreateTime.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="bUpdate.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="tsslAccountOnLine.Text" xml:space="preserve">
+    <value>在线:</value>
+  </data>
+  <data name="tsslAccount_CNT.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tsslAccountExpiry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cUserName.Width" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="tsslAccountExpiry_CNT.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <metadata name="cUserName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cExpiryTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cIsEnable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cIsExpiry.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cIsOnLine.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cAccountID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ssProxyAccount.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="cLoginIP.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="tTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>162, 17</value>
+  </metadata>
+  <metadata name="cCreateTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

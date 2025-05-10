@@ -117,16 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tlProxyTotal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>76, 17</value>
-  </data>
-  <data name="tlProxyTotal.Text" xml:space="preserve">
-    <value>Total Proxy:</value>
-  </data>
   <data name="gbSystemProxy.Text" xml:space="preserve">
     <value>[ Sys Proxy ]</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="cbEnable_SystemProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>11, 27</value>
   </data>
@@ -161,37 +155,34 @@
     <value>[ Auth Setting ]</value>
   </data>
   <data name="gbAuthSet.Text" xml:space="preserve">
-    <value>Authentication </value>
-  </data>
-  <data name="txtAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>380, 11</value>
-  </data>
-  <data name="lAuth_PassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>304, 11</value>
-  </data>
-  <data name="lAuth_PassWord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 23</value>
-  </data>
-  <data name="lAuth_PassWord.Text" xml:space="preserve">
-    <value>PassWord:</value>
+    <value>Proxy Authentication</value>
   </data>
   <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 23</value>
+    <value>152, 21</value>
   </data>
   <data name="cbEnable_Auth.Text" xml:space="preserve">
-    <value>Enable</value>
+    <value>Enable Authentication</value>
   </data>
-  <data name="lAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>75, 11</value>
+  <data name="lAuthType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>161, 12</value>
   </data>
-  <data name="lAuth_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 23</value>
+  <data name="lAuthType.Size" type="System.Drawing.Size, System.Drawing">
+    <value>69, 21</value>
   </data>
-  <data name="lAuth_UserName.Text" xml:space="preserve">
-    <value>UserName:</value>
+  <data name="lAuthType.Text" xml:space="preserve">
+    <value>Auth Type:</value>
   </data>
-  <data name="txtAuth_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 11</value>
+  <data name="cbbAuthType.Items" xml:space="preserve">
+    <value>Username/Password</value>
+  </data>
+  <data name="cbbAuthType.Location" type="System.Drawing.Point, System.Drawing">
+    <value>233, 9</value>
+  </data>
+  <data name="bAccount.Location" type="System.Drawing.Point, System.Drawing">
+    <value>353, 9</value>
+  </data>
+  <data name="bAccount.Text" xml:space="preserve">
+    <value>Account</value>
   </data>
   <data name="tpListSet.Text" xml:space="preserve">
     <value>[ List Settings ]</value>
@@ -319,7 +310,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAXgBAQF4AQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAYgBAQGIAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -400,18 +391,6 @@
   <data name="tpProxyList.Text" xml:space="preserve">
     <value>[ Proxy List ]</value>
   </data>
-  <data name="tlProxyCache.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 17</value>
-  </data>
-  <data name="tlProxyCache.Text" xml:space="preserve">
-    <value>Cache:</value>
-  </data>
-  <data name="tlProxyLinks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>82, 17</value>
-  </data>
-  <data name="tlProxyLinks.Text" xml:space="preserve">
-    <value>Connections:</value>
-  </data>
   <data name="tpData.Text" xml:space="preserve">
     <value>[ Proxy Data ]</value>
   </data>
@@ -427,13 +406,37 @@
   <data name="hbData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
     <value>Select All</value>
   </data>
+  <data name="tpAuth.Text" xml:space="preserve">
+    <value>[ Auth Info ]</value>
+  </data>
+  <data name="cAuthID.HeaderText" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cAuthID.Width" type="System.Int32, mscorlib">
+    <value>27</value>
+  </data>
+  <data name="cAuthTime.HeaderText" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="cAuthTime.Width" type="System.Int32, mscorlib">
+    <value>42</value>
+  </data>
+  <data name="cIPAddress.HeaderText" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="cIPAddress.Width" type="System.Int32, mscorlib">
+    <value>77</value>
+  </data>
+  <data name="cAuthResult.HeaderText" xml:space="preserve">
+    <value>Auth Info</value>
+  </data>
   <data name="tpLog.Text" xml:space="preserve">
     <value>[ Proxy Log ]</value>
   </data>
   <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cLogID.Width" type="System.Int32, mscorlib">
     <value>27</value>
   </data>
@@ -454,6 +457,30 @@
   </data>
   <data name="tpClientList.Text" xml:space="preserve">
     <value>[ Client List ]</value>
+  </data>
+  <data name="tlProxyTotal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 17</value>
+  </data>
+  <data name="tlProxyTotal.Text" xml:space="preserve">
+    <value>Total Proxy:</value>
+  </data>
+  <data name="tlProxyCache.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 17</value>
+  </data>
+  <data name="tlProxyCache.Text" xml:space="preserve">
+    <value>Cache:</value>
+  </data>
+  <data name="tlProxyAccount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 17</value>
+  </data>
+  <data name="tlProxyAccount.Text" xml:space="preserve">
+    <value>Online:</value>
+  </data>
+  <data name="tlProxyLinks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>82, 17</value>
+  </data>
+  <data name="tlProxyLinks.Text" xml:space="preserve">
+    <value>Connections:</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

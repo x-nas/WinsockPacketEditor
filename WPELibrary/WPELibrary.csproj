@@ -286,8 +286,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Proxy_AccountForm.en-US.resx">
+      <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountForm.resx">
       <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountListForm.en-US.resx">
+      <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountListForm.resx">
       <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>

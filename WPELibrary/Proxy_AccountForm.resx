@@ -117,4 +117,421 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpProxyAccount.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbIsEnable.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cbIsEnable.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cbIsEnable.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="cbIsEnable.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="cbIsEnable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 27</value>
+  </data>
+  <data name="cbIsEnable.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="cbIsEnable.Text" xml:space="preserve">
+    <value>启用</value>
+  </data>
+  <data name="&gt;&gt;cbIsEnable.Name" xml:space="preserve">
+    <value>cbIsEnable</value>
+  </data>
+  <data name="&gt;&gt;cbIsEnable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbIsEnable.Parent" xml:space="preserve">
+    <value>tlpProxyAccount</value>
+  </data>
+  <data name="&gt;&gt;cbIsEnable.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="bSave.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bSave.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 10</value>
+  </data>
+  <data name="bSave.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="bSave.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="bSave.Text" xml:space="preserve">
+    <value>保 存</value>
+  </data>
+  <data name="&gt;&gt;bSave.Name" xml:space="preserve">
+    <value>bSave</value>
+  </data>
+  <data name="&gt;&gt;bSave.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSave.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bSave.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bCancel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>220, 10</value>
+  </data>
+  <data name="bCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 29</value>
+  </data>
+  <data name="bCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bCancel.Text" xml:space="preserve">
+    <value>取 消</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Name" xml:space="preserve">
+    <value>bCancel</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;bCancel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 211</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 50</value>
+  </data>
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpProxyAccount</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSave" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCancel" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,100,Absolute,50,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="Percent,50,Absolute,35,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpAccountInfo.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="txtPassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtPassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>135, 29</value>
+  </data>
+  <data name="txtPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtPassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="txtPassWord.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="txtPassWord.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtPassWord.Name" xml:space="preserve">
+    <value>txtPassWord</value>
+  </data>
+  <data name="&gt;&gt;txtPassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtPassWord.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;txtPassWord.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lPassWord.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lPassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lPassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>51, 32</value>
+  </data>
+  <data name="lPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lPassWord.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lPassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 23</value>
+  </data>
+  <data name="lPassWord.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lPassWord.Text" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="&gt;&gt;lPassWord.Name" xml:space="preserve">
+    <value>lPassWord</value>
+  </data>
+  <data name="&gt;&gt;lPassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lPassWord.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;lPassWord.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lUserName.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lUserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lUserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>51, 3</value>
+  </data>
+  <data name="lUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lUserName.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lUserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 23</value>
+  </data>
+  <data name="lUserName.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lUserName.Text" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="&gt;&gt;lUserName.Name" xml:space="preserve">
+    <value>lUserName</value>
+  </data>
+  <data name="&gt;&gt;lUserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lUserName.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;lUserName.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="txtUserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtUserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>135, 0</value>
+  </data>
+  <data name="txtUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtUserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="txtUserName.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="txtUserName.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtUserName.Name" xml:space="preserve">
+    <value>txtUserName</value>
+  </data>
+  <data name="&gt;&gt;txtUserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtUserName.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;txtUserName.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbIsExpiry.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbIsExpiry.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>51, 61</value>
+  </data>
+  <data name="cbIsExpiry.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="cbIsExpiry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 27</value>
+  </data>
+  <data name="cbIsExpiry.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="cbIsExpiry.Text" xml:space="preserve">
+    <value>到期时间</value>
+  </data>
+  <data name="cbIsExpiry.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopLeft</value>
+  </data>
+  <data name="&gt;&gt;cbIsExpiry.Name" xml:space="preserve">
+    <value>cbIsExpiry</value>
+  </data>
+  <data name="&gt;&gt;cbIsExpiry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbIsExpiry.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;cbIsExpiry.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="dtpExpiryTime.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>135, 58</value>
+  </data>
+  <data name="dtpExpiryTime.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="dtpExpiryTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="dtpExpiryTime.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;dtpExpiryTime.Name" xml:space="preserve">
+    <value>dtpExpiryTime</value>
+  </data>
+  <data name="&gt;&gt;dtpExpiryTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DateTimePicker, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dtpExpiryTime.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;dtpExpiryTime.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpAccountInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpAccountInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 33</value>
+  </data>
+  <data name="tlpAccountInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAccountInfo.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tlpAccountInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 178</value>
+  </data>
+  <data name="tlpAccountInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountInfo.Name" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountInfo.Parent" xml:space="preserve">
+    <value>tlpProxyAccount</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountInfo.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpAccountInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtPassWord" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lPassWord" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUserName" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtUserName" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsExpiry" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dtpExpiryTime" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,200,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpProxyAccount.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxyAccount.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpProxyAccount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpProxyAccount.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpProxyAccount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 261</value>
+  </data>
+  <data name="tlpProxyAccount.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccount.Name" xml:space="preserve">
+    <value>tlpProxyAccount</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccount.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyAccount.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyAccount.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbIsEnable" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpAccountInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>384, 261</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>账号</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_AccountForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>
