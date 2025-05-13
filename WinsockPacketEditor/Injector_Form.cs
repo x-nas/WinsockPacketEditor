@@ -21,7 +21,7 @@ namespace WinsockPacketEditor
 
         public Injector_Form()
         {            
-            InitializeComponent();
+            InitializeComponent();            
 
             this.rtbLog.Clear();
             this.InitToolTip();
@@ -133,6 +133,7 @@ namespace WinsockPacketEditor
         {
             try
             {
+                string channelName = "WPE64";
                 ProcessID = Program.PID;
                 ProcessPath = Program.PATH;
                 ProcessName = Program.PNAME;
@@ -149,13 +150,15 @@ namespace WinsockPacketEditor
                     ShowLog(DateTime.Now.ToString("G"));
                     ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_7), ProcessName));
 
+                    Socket_Cache.InjectParameters ipParameter = Socket_Operation.CreateInjectParameters(Properties.Settings.Default.DefaultLanguage);
+
                     if (ProcessID > -1)
                     {
-                        RemoteHooking.Inject(ProcessID, injectionLibrary_x86, injectionLibrary_x64, Properties.Settings.Default.DefaultLanguage);
+                        RemoteHooking.Inject(ProcessID, injectionLibrary_x86, injectionLibrary_x64, channelName, ipParameter);
                     }
                     else
                     {
-                        RemoteHooking.CreateAndInject(ProcessPath, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out this.ProcessID, Properties.Settings.Default.DefaultLanguage);
+                        RemoteHooking.CreateAndInject(ProcessPath, string.Empty, 0, injectionLibrary_x86, injectionLibrary_x64, out this.ProcessID, channelName, ipParameter);
                     }
 
                     int targetPlat = Socket_Operation.IsWin64Process(ProcessID) ? 64 : 32;
@@ -173,7 +176,7 @@ namespace WinsockPacketEditor
                 ShowLog(string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_102), Properties.Settings.Default.WPE64_URL));
             }
 
-            this.rtbLog.ScrollToCaret();
+            this.rtbLog.ScrollToCaret();            
         }
 
         #endregion                

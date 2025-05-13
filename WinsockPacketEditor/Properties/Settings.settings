@@ -17,5 +17,17 @@
     <Setting Name="WPE64_DLL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">WPELibrary.dll</Value>
     </Setting>
+    <Setting Name="Remote_IsEnable" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Remote_UserName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="Remote_PassWord" Type="System.String" Scope="User">
+      <Value Profile="(Default)">123</Value>
+    </Setting>
+    <Setting Name="Remote_Port" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">88</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

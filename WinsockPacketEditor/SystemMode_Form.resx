@@ -136,10 +136,10 @@
     <value>NoControl</value>
   </data>
   <data name="bProcess_Start.Location" type="System.Drawing.Point, System.Drawing">
-    <value>154, 3</value>
+    <value>152, 3</value>
   </data>
   <data name="bProcess_Start.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 46</value>
+    <value>114, 44</value>
   </data>
   <data name="bProcess_Start.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -169,10 +169,10 @@
     <value>NoControl</value>
   </data>
   <data name="bProxy_Start.Location" type="System.Drawing.Point, System.Drawing">
-    <value>19, 3</value>
+    <value>17, 3</value>
   </data>
   <data name="bProxy_Start.Size" type="System.Drawing.Size, System.Drawing">
-    <value>114, 46</value>
+    <value>114, 44</value>
   </data>
   <data name="bProxy_Start.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -205,7 +205,7 @@
     <value>1</value>
   </data>
   <data name="tlpModeSelect.Size" type="System.Drawing.Size, System.Drawing">
-    <value>287, 52</value>
+    <value>284, 50</value>
   </data>
   <data name="tlpModeSelect.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -247,7 +247,7 @@
     <value>None</value>
   </data>
   <data name="tsmiChinese.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 22</value>
+    <value>186, 22</value>
   </data>
   <data name="tsmiChinese.Text" xml:space="preserve">
     <value>中文</value>
@@ -255,7 +255,7 @@
   <data name="tsmiEnglish.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
+        vAAADrwBlbxySQAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
         m4KCdtGsUYOZRZZp81/+qexsK8nLCjOSoO3MbErOpltXIe7i6X2+6VhpkNHFs/Od932eH+fsfO+nEB9H
         97P3yLEHoEpboLZ3QFV2prWtHTn7+xH3XIdVlKfFNWvsZXzMSJYMsshUUTOAlFGFkc5ulF54B7WlDapi
         LvQ3YHolwywZZJGpcu1+tPd9AM4exuyVM7jV9xmqvFfMjyTU9mewBopHvB7JpCRLBllkKlUuT7ipFTvq
@@ -273,7 +273,7 @@
     <value>None</value>
   </data>
   <data name="tsmiEnglish.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 22</value>
+    <value>186, 22</value>
   </data>
   <data name="tsmiEnglish.Text" xml:space="preserve">
     <value>English</value>
@@ -294,7 +294,7 @@
     <value>0, 0</value>
   </data>
   <data name="msSystem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>287, 25</value>
+    <value>284, 25</value>
   </data>
   <data name="msSystem.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -314,6 +314,390 @@
   <data name="&gt;&gt;msSystem.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="tlpRemoteMGT.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cbIsRemote.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbIsRemote.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbIsRemote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="cbIsRemote.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="cbIsRemote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>266, 27</value>
+  </data>
+  <data name="cbIsRemote.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbIsRemote.Text" xml:space="preserve">
+    <value>启用远程管理</value>
+  </data>
+  <data name="&gt;&gt;cbIsRemote.Name" xml:space="preserve">
+    <value>cbIsRemote</value>
+  </data>
+  <data name="&gt;&gt;cbIsRemote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbIsRemote.Parent" xml:space="preserve">
+    <value>tlpRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;cbIsRemote.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpRemoteInfo.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nudRemote_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudRemote_Port.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudRemote_Port.Location" type="System.Drawing.Point, System.Drawing">
+    <value>121, 58</value>
+  </data>
+  <data name="nudRemote_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudRemote_Port.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="nudRemote_Port.TabIndex" type="System.Int32, mscorlib">
+    <value>66</value>
+  </data>
+  <data name="nudRemote_Port.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudRemote_Port.Name" xml:space="preserve">
+    <value>nudRemote_Port</value>
+  </data>
+  <data name="&gt;&gt;nudRemote_Port.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudRemote_Port.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;nudRemote_Port.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lRemote_Port.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lRemote_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRemote_Port.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lRemote_Port.Location" type="System.Drawing.Point, System.Drawing">
+    <value>53, 61</value>
+  </data>
+  <data name="lRemote_Port.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_Port.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_Port.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 23</value>
+  </data>
+  <data name="lRemote_Port.TabIndex" type="System.Int32, mscorlib">
+    <value>65</value>
+  </data>
+  <data name="lRemote_Port.Text" xml:space="preserve">
+    <value>端口号:</value>
+  </data>
+  <data name="lRemote_Port.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
+  </data>
+  <data name="&gt;&gt;lRemote_Port.Name" xml:space="preserve">
+    <value>lRemote_Port</value>
+  </data>
+  <data name="&gt;&gt;lRemote_Port.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lRemote_Port.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;lRemote_Port.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="txtRemote_PassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtRemote_PassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>121, 29</value>
+  </data>
+  <data name="txtRemote_PassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtRemote_PassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="txtRemote_PassWord.TabIndex" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
+  <data name="txtRemote_PassWord.WordWrap" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_PassWord.Name" xml:space="preserve">
+    <value>txtRemote_PassWord</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_PassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_PassWord.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_PassWord.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lRemote_PassWord.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lRemote_PassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRemote_PassWord.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lRemote_PassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>53, 32</value>
+  </data>
+  <data name="lRemote_PassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_PassWord.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_PassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 23</value>
+  </data>
+  <data name="lRemote_PassWord.TabIndex" type="System.Int32, mscorlib">
+    <value>63</value>
+  </data>
+  <data name="lRemote_PassWord.Text" xml:space="preserve">
+    <value>密码:</value>
+  </data>
+  <data name="lRemote_PassWord.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
+  </data>
+  <data name="&gt;&gt;lRemote_PassWord.Name" xml:space="preserve">
+    <value>lRemote_PassWord</value>
+  </data>
+  <data name="&gt;&gt;lRemote_PassWord.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lRemote_PassWord.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;lRemote_PassWord.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="txtRemote_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtRemote_UserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>121, 0</value>
+  </data>
+  <data name="txtRemote_UserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtRemote_UserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 23</value>
+  </data>
+  <data name="txtRemote_UserName.TabIndex" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_UserName.Name" xml:space="preserve">
+    <value>txtRemote_UserName</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_UserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_UserName.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;txtRemote_UserName.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="lRemote_UserName.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lRemote_UserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRemote_UserName.Location" type="System.Drawing.Point, System.Drawing">
+    <value>53, 3</value>
+  </data>
+  <data name="lRemote_UserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_UserName.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemote_UserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>65, 23</value>
+  </data>
+  <data name="lRemote_UserName.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lRemote_UserName.Text" xml:space="preserve">
+    <value>管理账号:</value>
+  </data>
+  <data name="lRemote_UserName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
+  </data>
+  <data name="&gt;&gt;lRemote_UserName.Name" xml:space="preserve">
+    <value>lRemote_UserName</value>
+  </data>
+  <data name="&gt;&gt;lRemote_UserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lRemote_UserName.Parent" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;lRemote_UserName.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="tlpRemoteInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpRemoteInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 33</value>
+  </data>
+  <data name="tlpRemoteInfo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpRemoteInfo.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpRemoteInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>272, 98</value>
+  </data>
+  <data name="tlpRemoteInfo.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteInfo.Name" xml:space="preserve">
+    <value>tlpRemoteInfo</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteInfo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteInfo.Parent" xml:space="preserve">
+    <value>tlpRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteInfo.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpRemoteInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudRemote_Port" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_Port" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtRemote_PassWord" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_PassWord" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtRemote_UserName" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_UserName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="lRemoteURL.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lRemoteURL.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRemoteURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 134</value>
+  </data>
+  <data name="lRemoteURL.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemoteURL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>266, 17</value>
+  </data>
+  <data name="lRemoteURL.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lRemoteURL.Text" xml:space="preserve">
+    <value>RemoteURL</value>
+  </data>
+  <data name="lRemoteURL.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lRemoteURL.Name" xml:space="preserve">
+    <value>lRemoteURL</value>
+  </data>
+  <data name="&gt;&gt;lRemoteURL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lRemoteURL.Parent" xml:space="preserve">
+    <value>tlpRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;lRemoteURL.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpRemoteMGT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpRemoteMGT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 16</value>
+  </data>
+  <data name="tlpRemoteMGT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpRemoteMGT.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpRemoteMGT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>272, 154</value>
+  </data>
+  <data name="tlpRemoteMGT.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteMGT.Name" xml:space="preserve">
+    <value>tlpRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteMGT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteMGT.Parent" xml:space="preserve">
+    <value>gbRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteMGT.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpRemoteMGT.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbIsRemote" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpRemoteInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lRemoteURL" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbRemoteMGT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbRemoteMGT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 85</value>
+  </data>
+  <data name="gbRemoteMGT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbRemoteMGT.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="gbRemoteMGT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>278, 173</value>
+  </data>
+  <data name="gbRemoteMGT.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;gbRemoteMGT.Name" xml:space="preserve">
+    <value>gbRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;gbRemoteMGT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbRemoteMGT.Parent" xml:space="preserve">
+    <value>tlpSystemMode</value>
+  </data>
+  <data name="&gt;&gt;gbRemoteMGT.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="tlpSystemMode.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -327,7 +711,7 @@
     <value>4</value>
   </data>
   <data name="tlpSystemMode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>287, 97</value>
+    <value>284, 261</value>
   </data>
   <data name="tlpSystemMode.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -345,7 +729,7 @@
     <value>0</value>
   </data>
   <data name="tlpSystemMode.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpModeSelect" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="msSystem" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,Percent,100,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpModeSelect" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="msSystem" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbRemoteMGT" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,Absolute,50,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -357,7 +741,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>287, 97</value>
+    <value>284, 261</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>

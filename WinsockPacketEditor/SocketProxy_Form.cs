@@ -14,9 +14,9 @@ namespace WinsockPacketEditor
     public partial class SocketProxy_Form : Form
     {
         private Socket_Form socketForm;
-        private static Socket SocketServer;
+        private static Socket SocketServer;        
 
-        #region//窗体加载
+        #region//窗体事件
 
         public SocketProxy_Form(Socket_Form socketForm)
         {
@@ -25,7 +25,24 @@ namespace WinsockPacketEditor
                 InitializeComponent();
 
                 this.socketForm = socketForm;
-                this.InitSocketDGV();                
+                this.InitSocketDGV();
+
+                this.InitForm();
+                this.LoadConfigs_Parameter();
+
+                Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Proxy);
+
+                Socket_Cache.InvokeAction = action =>
+                {
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(action);
+                    }
+                    else
+                    {
+                        action();
+                    }
+                };
             }
             catch (Exception ex)
             {
@@ -33,14 +50,15 @@ namespace WinsockPacketEditor
             }            
         }
 
-        #endregion
-
-        #region//窗体事件
-
         private void SocketProxy_Form_Load(object sender, EventArgs e)
         {
-            this.InitForm();
-            this.LoadConfigs_Parameter();
+            this.InitProxyIPAppoint();
+            this.ProxyIP_Appoint_Changed();
+            this.EnableAuth_Changed();
+            this.LogList_AutoClear_Changed();
+            this.EnableEXTHttp_Changed();
+            this.EnableEXTHttps_Changed();
+
             Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
         }
 
@@ -55,6 +73,7 @@ namespace WinsockPacketEditor
             {
                 this.SaveConfigs_Parameter();
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB();
+                Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Proxy);
 
                 if (this.cbEnable_SystemProxy.Checked)
                 { 
@@ -114,16 +133,8 @@ namespace WinsockPacketEditor
 
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
-                this.cbbAuthType.SelectedIndex = 0;
+                this.cbbAuthType.SelectedIndex = 0;                                
 
-                this.InitProxyIPAppoint();
-
-                this.ProxyIP_Appoint_Changed();
-                this.EnableAuth_Changed();
-                this.LogList_AutoClear_Changed();
-                this.Enable_EXTHttp_Changed();
-                this.Enable_EXTHttps_Changed();                
-                
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
                 this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00", "0.00");
             }
@@ -168,14 +179,7 @@ namespace WinsockPacketEditor
 
         private void ProxyIP_Appoint_Changed()
         {
-            try
-            {
-                this.cbbProxyIP_Appoint.Enabled = !this.cbProxyIP_Auto.Checked;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            this.cbbProxyIP_Appoint.Enabled = !this.cbProxyIP_Auto.Checked;
         }
 
         #endregion
@@ -219,10 +223,10 @@ namespace WinsockPacketEditor
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Proxy_AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
-                this.cbEnable_EXTHttp.Checked = Socket_Cache.SocketProxy.Enable_EXTHttp;
+                this.cbEnableEXTHttp.Checked = Socket_Cache.SocketProxy.Enable_EXTHttp;
                 this.txtEXTHttpIP.Text = Socket_Cache.SocketProxy.EXTHttpIP;
                 this.txtEXTHttpPort.Text = Socket_Cache.SocketProxy.EXTHttpPort.ToString();
-                this.cbEnable_EXTHttps.Checked = Socket_Cache.SocketProxy.Enable_EXTHttps;
+                this.cbEnableEXTHttps.Checked = Socket_Cache.SocketProxy.Enable_EXTHttps;
                 this.txtEXTHttpsIP.Text = Socket_Cache.SocketProxy.EXTHttpsIP;
                 this.txtEXTHttpsPort.Text = Socket_Cache.SocketProxy.EXTHttpsPort.ToString();
                 this.txtAppointHttpPort.Text = Socket_Cache.SocketProxy.AppointHttpPort;
@@ -256,16 +260,16 @@ namespace WinsockPacketEditor
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SocketProxy.Enable_EXTHttp = this.cbEnable_EXTHttp.Checked;
+                Socket_Cache.SocketProxy.Enable_EXTHttp = this.cbEnableEXTHttp.Checked;
                 Socket_Cache.SocketProxy.EXTHttpIP = this.txtEXTHttpIP.Text.Trim();
                 Socket_Cache.SocketProxy.EXTHttpPort = ushort.Parse(this.txtEXTHttpPort.Text.Trim());
-                Socket_Cache.SocketProxy.Enable_EXTHttps = this.cbEnable_EXTHttps.Checked;
+                Socket_Cache.SocketProxy.Enable_EXTHttps = this.cbEnableEXTHttps.Checked;
                 Socket_Cache.SocketProxy.EXTHttpsIP = this.txtEXTHttpsIP.Text.Trim();
                 Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
                 Socket_Cache.SocketProxy.AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
                 Socket_Cache.SocketProxy.AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
 
-                Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
+                Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;                
 
                 Socket_Operation.SaveConfigs_SocketProxy();                
             }
@@ -323,25 +327,25 @@ namespace WinsockPacketEditor
 
         private void cbEnableHttpProxy_CheckedChanged(object sender, EventArgs e)
         {
-            this.Enable_EXTHttp_Changed();
+            this.EnableEXTHttp_Changed();
         }
 
-        private void Enable_EXTHttp_Changed()
+        private void EnableEXTHttp_Changed()
         {
-            this.txtEXTHttpIP.Enabled = this.txtEXTHttpPort.Enabled = this.txtAppointHttpPort.Enabled = this.cbEnable_EXTHttp.Checked;
+            this.txtEXTHttpIP.Enabled = this.txtEXTHttpPort.Enabled = this.txtAppointHttpPort.Enabled = this.cbEnableEXTHttp.Checked;
         }
 
         private void cbEnableHttpsProxy_CheckedChanged(object sender, EventArgs e)
         {
-            this.Enable_EXTHttps_Changed();
+            this.EnableEXTHttps_Changed();
         }
 
-        private void Enable_EXTHttps_Changed()
+        private void EnableEXTHttps_Changed()
         {
-            this.txtEXTHttpsIP.Enabled = this.txtEXTHttpsPort.Enabled = this.txtAppointHttpsPort.Enabled = this.cbEnable_EXTHttps.Checked;
+            this.txtEXTHttpsIP.Enabled = this.txtEXTHttpsPort.Enabled = this.txtAppointHttpsPort.Enabled = this.cbEnableEXTHttps.Checked;
         }
 
-        #endregion
+        #endregion        
 
         #region//开始代理
 
@@ -363,7 +367,7 @@ namespace WinsockPacketEditor
                 if (SocketServer == null)
                 {
                     InitializeServerSocket();
-                }
+                }                
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));                
             }
@@ -377,10 +381,12 @@ namespace WinsockPacketEditor
         {
             this.bStart.Enabled = !starting;
             this.bStop.Enabled = starting;
+
+            this.cbEnable_Auth.Enabled = !starting;
+            this.cbSpeedMode.Enabled = !starting;
+
             this.tpProxySet.Enabled = !starting;
-            this.cbEnable_Auth.Enabled = !starting;            
-            this.tpExternalProxy.Enabled = !starting;
-            this.tpSystemSet.Enabled = !starting;
+            this.tpExternalProxy.Enabled = !starting;            
         }
 
         private void InitializeServerSocket()
@@ -434,12 +440,12 @@ namespace WinsockPacketEditor
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_169));
                 }
 
-                if (this.cbEnable_EXTHttp.Checked)
+                if (this.cbEnableEXTHttp.Checked)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_170));
                 }
 
-                if (this.cbEnable_EXTHttps.Checked)
+                if (this.cbEnableEXTHttps.Checked)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_171));
                 }
@@ -506,7 +512,7 @@ namespace WinsockPacketEditor
                     return false;
                 }                
 
-                if (this.cbEnable_EXTHttp.Checked)
+                if (this.cbEnableEXTHttp.Checked)
                 {
                     string HttpIP = this.txtEXTHttpIP.Text.Trim();
                     ushort HttpPort = ushort.Parse(this.txtEXTHttpPort.Text.Trim());
@@ -528,7 +534,7 @@ namespace WinsockPacketEditor
                     }                    
                 }
 
-                if (this.cbEnable_EXTHttps.Checked)
+                if (this.cbEnableEXTHttps.Checked)
                 {
                     string HttpsIP = this.txtEXTHttpsIP.Text.Trim();
                     ushort HttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
@@ -548,7 +554,7 @@ namespace WinsockPacketEditor
                     {
                         return false;
                     }
-                }
+                }                
             }
             catch (Exception ex)
             {
@@ -1125,6 +1131,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion
+        #endregion        
     }
 }

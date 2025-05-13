@@ -186,7 +186,14 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_174 = { "换包数据不完整!", "The change packet data is incomplete!" };
         public static string[] MutiLan_175 = { "正在加载滤镜数据: {0}%", "Loading Filter data: {0}%" };
         public static string[] MutiLan_176 = { "账号信息设置错误!", "Account information setting error!" };
-        public static string[] MutiLan_177 = { "该用户名已存在!", "This UserName has already exists!" };        
+        public static string[] MutiLan_177 = { "该用户名已存在!", "This UserName has already exists!" };
+        public static string[] MutiLan_178 = { "远程管理已启用：{0}", "Remote MGT enabled: {0}" };
+        public static string[] MutiLan_179 = { "远程管理启动失败: 请使用管理员权限启动 {0}", "Remote MGT startup failed: please use admin to start {0}" };
+        public static string[] MutiLan_180 = { "管理账号密码不能为空!", "The Username and Password cannot be Empty!" };
+        public static string[] MutiLan_181 = { "添加账号失败!", "Failed to Add account!" };
+        public static string[] MutiLan_182 = { "删除账号失败!", "Failed to Delete account!" };
+        public static string[] MutiLan_183 = { "添加账号成功!", "Account added successfully!" };
+        public static string[] MutiLan_184 = { "删除账号成功!", "Account deleted successfully!" };
 
         #endregion
 

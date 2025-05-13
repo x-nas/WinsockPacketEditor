@@ -10,8 +10,7 @@ namespace WinsockPacketEditor
     {
         public static int PID = -1;
         public static string PNAME = string.Empty;
-        public static string PATH = string.Empty;
-        public static Socket_Cache.SystemMode Mode = new Socket_Cache.SystemMode();
+        public static string PATH = string.Empty;        
 
         #region//主函数
 
@@ -40,23 +39,25 @@ namespace WinsockPacketEditor
 
                     if (systemMode_Form.ShowDialog() == DialogResult.OK)
                     {
-                        switch (Mode)
+                        switch (Socket_Cache.SelectMode)
                         { 
                             case Socket_Cache.SystemMode.Proxy:
 
-                                Socket_Form socket_Form = new Socket_Form(Properties.Settings.Default.DefaultLanguage);
+                                Socket_Cache.InjectParameters ipParameter = Socket_Operation.CreateInjectParameters(Properties.Settings.Default.DefaultLanguage);
+
+                                Socket_Form socket_Form = new Socket_Form(ipParameter);
                                 socket_Form.Show();
 
                                 Application.Run(new SocketProxy_Form(socket_Form));
 
                                 break;
 
-                            case Socket_Cache.SystemMode.Process:
-
+                            case Socket_Cache.SystemMode.Process:        
+                                
                                 Application.Run(new Injector_Form());
 
                                 break;
-                        }
+                        }                        
                     }
                 }
                 else
@@ -86,25 +87,6 @@ namespace WinsockPacketEditor
             }            
         }
 
-        #endregion
-
-        #region//保存默认语言
-
-        public static void SaveDefaultLanguage(string lang)
-        {
-            try
-            {
-                MultiLanguage.SetDefaultLanguage(lang);
-
-                Properties.Settings.Default.DefaultLanguage = lang;
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                string sError = ex.Message;
-            }
-        }
-
-        #endregion
+        #endregion        
     }
 }

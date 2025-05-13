@@ -84,8 +84,8 @@
             this.txtEXTHttpsPort = new System.Windows.Forms.TextBox();
             this.txtEXTHttpsIP = new System.Windows.Forms.TextBox();
             this.txtEXTHttpPort = new System.Windows.Forms.TextBox();
-            this.cbEnable_EXTHttps = new System.Windows.Forms.CheckBox();
-            this.cbEnable_EXTHttp = new System.Windows.Forms.CheckBox();
+            this.cbEnableEXTHttps = new System.Windows.Forms.CheckBox();
+            this.cbEnableEXTHttp = new System.Windows.Forms.CheckBox();
             this.txtEXTHttpIP = new System.Windows.Forms.TextBox();
             this.lHttpProxy = new System.Windows.Forms.Label();
             this.lHttpPort = new System.Windows.Forms.Label();
@@ -95,7 +95,7 @@
             this.tpSystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.gbWorkMode = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpSpeedMode = new System.Windows.Forms.TableLayoutPanel();
             this.cbSpeedMode = new System.Windows.Forms.CheckBox();
             this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
             this.bCleanUp = new System.Windows.Forms.Button();
@@ -182,7 +182,7 @@
             this.tpSystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
             this.gbWorkMode.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tlpSpeedMode.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpButton_Start.SuspendLayout();
             this.tpProxyList.SuspendLayout();
@@ -504,8 +504,8 @@
             this.tlpExternalProxy.Controls.Add(this.txtEXTHttpsPort, 3, 2);
             this.tlpExternalProxy.Controls.Add(this.txtEXTHttpsIP, 1, 2);
             this.tlpExternalProxy.Controls.Add(this.txtEXTHttpPort, 3, 1);
-            this.tlpExternalProxy.Controls.Add(this.cbEnable_EXTHttps, 0, 2);
-            this.tlpExternalProxy.Controls.Add(this.cbEnable_EXTHttp, 0, 1);
+            this.tlpExternalProxy.Controls.Add(this.cbEnableEXTHttps, 0, 2);
+            this.tlpExternalProxy.Controls.Add(this.cbEnableEXTHttp, 0, 1);
             this.tlpExternalProxy.Controls.Add(this.txtEXTHttpIP, 1, 1);
             this.tlpExternalProxy.Controls.Add(this.lHttpProxy, 2, 1);
             this.tlpExternalProxy.Controls.Add(this.lHttpPort, 4, 1);
@@ -537,19 +537,19 @@
             resources.ApplyResources(this.txtEXTHttpPort, "txtEXTHttpPort");
             this.txtEXTHttpPort.Name = "txtEXTHttpPort";
             // 
-            // cbEnable_EXTHttps
+            // cbEnableEXTHttps
             // 
-            resources.ApplyResources(this.cbEnable_EXTHttps, "cbEnable_EXTHttps");
-            this.cbEnable_EXTHttps.Name = "cbEnable_EXTHttps";
-            this.cbEnable_EXTHttps.UseVisualStyleBackColor = true;
-            this.cbEnable_EXTHttps.CheckedChanged += new System.EventHandler(this.cbEnableHttpsProxy_CheckedChanged);
+            resources.ApplyResources(this.cbEnableEXTHttps, "cbEnableEXTHttps");
+            this.cbEnableEXTHttps.Name = "cbEnableEXTHttps";
+            this.cbEnableEXTHttps.UseVisualStyleBackColor = true;
+            this.cbEnableEXTHttps.CheckedChanged += new System.EventHandler(this.cbEnableHttpsProxy_CheckedChanged);
             // 
-            // cbEnable_EXTHttp
+            // cbEnableEXTHttp
             // 
-            resources.ApplyResources(this.cbEnable_EXTHttp, "cbEnable_EXTHttp");
-            this.cbEnable_EXTHttp.Name = "cbEnable_EXTHttp";
-            this.cbEnable_EXTHttp.UseVisualStyleBackColor = true;
-            this.cbEnable_EXTHttp.CheckedChanged += new System.EventHandler(this.cbEnableHttpProxy_CheckedChanged);
+            resources.ApplyResources(this.cbEnableEXTHttp, "cbEnableEXTHttp");
+            this.cbEnableEXTHttp.Name = "cbEnableEXTHttp";
+            this.cbEnableEXTHttp.UseVisualStyleBackColor = true;
+            this.cbEnableEXTHttp.CheckedChanged += new System.EventHandler(this.cbEnableHttpProxy_CheckedChanged);
             // 
             // txtEXTHttpIP
             // 
@@ -599,16 +599,16 @@
             // 
             // gbWorkMode
             // 
-            this.gbWorkMode.Controls.Add(this.tableLayoutPanel1);
+            this.gbWorkMode.Controls.Add(this.tlpSpeedMode);
             resources.ApplyResources(this.gbWorkMode, "gbWorkMode");
             this.gbWorkMode.Name = "gbWorkMode";
             this.gbWorkMode.TabStop = false;
             // 
-            // tableLayoutPanel1
+            // tlpSpeedMode
             // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.cbSpeedMode, 0, 1);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            resources.ApplyResources(this.tlpSpeedMode, "tlpSpeedMode");
+            this.tlpSpeedMode.Controls.Add(this.cbSpeedMode, 0, 1);
+            this.tlpSpeedMode.Name = "tlpSpeedMode";
             // 
             // cbSpeedMode
             // 
@@ -1190,8 +1190,8 @@
             this.tpSystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
             this.gbWorkMode.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.tlpSpeedMode.ResumeLayout(false);
+            this.tlpSpeedMode.PerformLayout();
             this.tlpButton.ResumeLayout(false);
             this.tlpButton_Start.ResumeLayout(false);
             this.tpProxyList.ResumeLayout(false);
@@ -1282,8 +1282,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cLogContent;
         private System.Windows.Forms.TabPage tpExternalProxy;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy;
-        private System.Windows.Forms.CheckBox cbEnable_EXTHttps;
-        private System.Windows.Forms.CheckBox cbEnable_EXTHttp;
+        private System.Windows.Forms.CheckBox cbEnableEXTHttps;
+        private System.Windows.Forms.CheckBox cbEnableEXTHttp;
         private System.Windows.Forms.Label lHttpsProxy;
         private System.Windows.Forms.TextBox txtEXTHttpsPort;
         private System.Windows.Forms.TextBox txtEXTHttpsIP;
@@ -1300,7 +1300,7 @@
         private System.Windows.Forms.TabPage tpSystemSet;
         private System.Windows.Forms.TableLayoutPanel tlpSystemSet;
         private System.Windows.Forms.GroupBox gbWorkMode;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tlpSpeedMode;
         private System.Windows.Forms.CheckBox cbSpeedMode;
         private System.Windows.Forms.Label lAuthType;
         private System.Windows.Forms.ComboBox cbbAuthType;

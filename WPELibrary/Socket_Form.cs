@@ -22,18 +22,26 @@ namespace WPELibrary
 
         #region//加载窗体
 
-        public Socket_Form(string sLanguage)
+        public Socket_Form(Socket_Cache.InjectParameters ipParameter)
         {
             try
             {
-                MultiLanguage.SetDefaultLanguage(sLanguage);
+                string SelectLanguage = ipParameter.Language;
+                MultiLanguage.SetDefaultLanguage(SelectLanguage);
+
                 InitializeComponent();
                 this.InitSocketDGV();
+
+                Socket_Cache.SelectMode = ipParameter.SelectMode;
+                Socket_Cache.IsRemote = ipParameter.IsRemote;
+                Socket_Cache.Remote_URL = ipParameter.Remote_URL;
+                Socket_Cache.Remote_UserName = ipParameter.Remote_UserName;
+                Socket_Cache.Remote_PassWord = ipParameter.Remote_PassWord;
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
-            }
+            }            
         }
 
         #endregion
@@ -48,6 +56,7 @@ namespace WPELibrary
             this.LoadConfigs_Parameter();
             Socket_Operation.LoadSystemList();
             Socket_Operation.RegisterHotKey();
+            Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Process);
         }
 
         private void DLL_Form_FormClosed(object sender, FormClosedEventArgs e)
@@ -109,6 +118,7 @@ namespace WPELibrary
                 this.niWPE.Visible = false;
                 Socket_Operation.SaveSystemList();
                 Socket_Operation.UnregisterHotKey();
+                Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Process);
             }
             catch (Exception ex)
             {

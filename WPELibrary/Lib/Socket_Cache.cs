@@ -24,16 +24,24 @@ namespace WPELibrary.Lib
     public static class Socket_Cache
     {
         public static string WPE = "Winsock Packet Editor x64";
+        public static Socket_Cache.SystemMode SelectMode = new Socket_Cache.SystemMode();
         public static IntPtr MainHandle = IntPtr.Zero;
         public static int SystemSocket = 0;
         public static bool ShowDebug = false;
+        public static bool IsRemote = false;
+        public static string Remote_URL, Remote_UserName, Remote_PassWord;
+        public static ushort Remote_Port;
+        public static IDisposable WebServer;
+
+        public static Action<Action> InvokeAction { get; set; }
 
         #region//结构定义
 
         public enum SystemMode
-        { 
-            Process = 0,
-            Proxy = 1,
+        {
+            None = 0,
+            Process = 1,
+            Proxy = 2,
         }        
 
         public enum PWType
@@ -67,6 +75,23 @@ namespace WPELibrary.Lib
             Proxy,
         }
 
+        [Serializable]
+
+        public class InjectParameters
+        {
+            public Socket_Cache.SystemMode SelectMode { get; set; }
+
+            public string Language { get; set; }
+
+            public bool IsRemote { get; set; }
+
+            public string Remote_URL { get; set; }
+
+            public string Remote_UserName { get; set; }
+
+            public string Remote_PassWord { get; set; }
+        }
+
         #endregion                
 
         #region//代理
@@ -78,7 +103,7 @@ namespace WPELibrary.Lib
             public static IPAddress ProxyTCP_IP = IPAddress.Any;
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
             public static bool SpeedMode;
-            public static bool IsListening = false;
+            public static bool IsListening = false;            
             public static bool ProxyIP_Auto;
             public static bool Enable_SOCKS5, Enable_Auth;
             public static bool Enable_EXTHttp, Enable_EXTHttps;
@@ -1037,8 +1062,31 @@ namespace WPELibrary.Lib
         #region//代理账号
 
         public static class ProxyAccount
-        {
-            public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();            
+        {            
+            public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
+
+            #region//验证远程管理的账号密码
+
+            public static bool IsValidAdmin(string username, string password)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    if (Socket_Cache.Remote_UserName.Equals(username) && Socket_Cache.Remote_PassWord.Equals(password))
+                    {
+                        bReturn = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            #endregion
 
             #region//检测代理账号是否已存在
 
@@ -1127,20 +1175,26 @@ namespace WPELibrary.Lib
 
             #region//新增代理账号
 
-            public static void AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
             {
                 try
                 {
                     if (AID != Guid.Empty && !string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(PassWord))
                     {
-                        Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
-                        Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
+                        if (!Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
+                        {
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                            Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
+                            return true;
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+
+                return false;
             }
 
             #endregion
@@ -1196,13 +1250,49 @@ namespace WPELibrary.Lib
                 {
                     if (AIndex > -1 && AIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
                     {
-                        Socket_Cache.ProxyAccount.lstProxyAccount.RemoveAt(AIndex);
+                        if (Socket_Cache.InvokeAction != null)
+                        {
+                            Socket_Cache.InvokeAction(() =>
+                            {
+                                Socket_Cache.ProxyAccount.lstProxyAccount.RemoveAt(AIndex);
+                            });
+                        }                        
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            public static bool DeleteProxyAccount_ByAccountID(Guid AccountID)
+            {
+                try
+                {
+                    if (AccountID != null)
+                    {
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AccountID);
+
+                        if (pai != null)
+                        {
+                            if (Socket_Cache.InvokeAction != null)
+                            {
+                                Socket_Cache.InvokeAction(() =>
+                                {
+                                    Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
+                                });
+                            }
+                            
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
             }
 
             #endregion
@@ -1213,7 +1303,13 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    Socket_Cache.ProxyAccount.lstProxyAccount.Add(pai);
+                    if (Socket_Cache.InvokeAction != null)
+                    {
+                        Socket_Cache.InvokeAction(() =>
+                        {
+                            Socket_Cache.ProxyAccount.lstProxyAccount.Add(pai);
+                        });
+                    }                       
                 }
                 catch (Exception ex)
                 {

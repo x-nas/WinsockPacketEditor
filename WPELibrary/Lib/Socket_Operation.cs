@@ -21,6 +21,7 @@ using EasyHook;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
+using Microsoft.Owin.Hosting;
 
 namespace WPELibrary.Lib
 {   
@@ -63,6 +64,31 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//创建传递参数
+
+        public static Socket_Cache.InjectParameters CreateInjectParameters(string SelectLanguage)
+        {
+            Socket_Cache.InjectParameters ipParameter = new Socket_Cache.InjectParameters();
+
+            try
+            {
+                ipParameter.SelectMode = Socket_Cache.SelectMode;
+                ipParameter.Language = SelectLanguage;
+                ipParameter.IsRemote = Socket_Cache.IsRemote;
+                ipParameter.Remote_URL = Socket_Cache.Remote_URL;
+                ipParameter.Remote_UserName = Socket_Cache.Remote_UserName;
+                ipParameter.Remote_PassWord = Socket_Cache.Remote_PassWord;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return ipParameter;
         }
 
         #endregion
@@ -173,6 +199,64 @@ namespace WPELibrary.Lib
             }
 
             return bReturn;
+        }
+
+        #endregion
+
+        #region//启动远程管理
+
+        public static void StartRemoteMGT(Socket_Cache.SystemMode FromMode)
+        {
+            try
+            {
+                if (FromMode == Socket_Cache.SelectMode)
+                {
+                    if (Socket_Cache.IsRemote)
+                    {
+                        if (!string.IsNullOrEmpty(Socket_Cache.Remote_URL) &&
+                            !string.IsNullOrEmpty(Socket_Cache.Remote_UserName) &&
+                            !string.IsNullOrEmpty(Socket_Cache.Remote_PassWord))
+                        {
+                            string sLog = string.Empty;
+
+                            try
+                            {
+                                Socket_Cache.WebServer = WebApp.Start<Socket_Web>(Socket_Cache.Remote_URL);
+
+                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Socket_Cache.Remote_URL);
+                            }
+                            catch
+                            {
+                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);                                
+                            }
+
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                        }
+                    }
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void StopRemoteMGT(Socket_Cache.SystemMode FromMode)
+        {
+            try
+            {
+                if (FromMode == Socket_Cache.SelectMode)
+                {
+                    if (Socket_Cache.WebServer != null)
+                    {
+                        Socket_Cache.WebServer.Dispose();
+                    }
+                }                         
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -2943,7 +3027,7 @@ namespace WPELibrary.Lib
                 Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort = Socket_Cache.SocketProxy.AppointHttpPort;
                 Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort;
 
-                Properties.Settings.Default.ProxyConfig_SpeedMode = Socket_Cache.SocketProxy.SpeedMode;
+                Properties.Settings.Default.ProxyConfig_SpeedMode = Socket_Cache.SocketProxy.SpeedMode;                                
 
                 Properties.Settings.Default.Save();
             }
@@ -3037,7 +3121,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.SocketProxy.AppointHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort;
                 Socket_Cache.SocketProxy.AppointHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort;
 
-                Socket_Cache.SocketProxy.SpeedMode = Properties.Settings.Default.ProxyConfig_SpeedMode;
+                Socket_Cache.SocketProxy.SpeedMode = Properties.Settings.Default.ProxyConfig_SpeedMode;                
 
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }

@@ -18,16 +18,16 @@ namespace WPELibrary.Lib
         #region//EasyHook
 
         public WinSockHook()
-        { 
-            //
-        }
-
-        public WinSockHook(RemoteHooking.IContext InContext, String InChannelName)
         {
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, String InArg)
+        public WinSockHook(RemoteHooking.IContext InContext, string ChannelName, Socket_Cache.InjectParameters ipParameter)
+        {
+            //
+        }
+
+        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName, Socket_Cache.InjectParameters ipParameter)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace WPELibrary.Lib
 
                 Application.EnableVisualStyles();                
                 Application.SetCompatibleTextRenderingDefault(false);                
-                Application.Run(new Socket_Form(InArg));                
+                Application.Run(new Socket_Form(ipParameter));                
             }
             catch (Exception ex)
             {
