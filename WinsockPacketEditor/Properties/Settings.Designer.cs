@@ -112,7 +112,7 @@ namespace WinsockPacketEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("88")]
+        [global::System.Configuration.DefaultSettingValueAttribute("89")]
         public ushort Remote_Port {
             get {
                 return ((ushort)(this["Remote_Port"]));

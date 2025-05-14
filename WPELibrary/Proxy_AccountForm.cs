@@ -80,7 +80,7 @@ namespace WPELibrary
 
                 if (this.AccountIndex > -1)
                 {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountIndex(this.AccountIndex, IsEnable, UserName, Password, IsExpiry, ExpiryTime);                    
+                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountIndex(this.AccountIndex, IsEnable, Password, IsExpiry, ExpiryTime);                    
                 }
                 else
                 {

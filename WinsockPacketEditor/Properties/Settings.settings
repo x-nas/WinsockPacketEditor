@@ -27,7 +27,7 @@
       <Value Profile="(Default)">123</Value>
     </Setting>
     <Setting Name="Remote_Port" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">88</Value>
+      <Value Profile="(Default)">89</Value>
     </Setting>
   </Settings>
 </SettingsFile>

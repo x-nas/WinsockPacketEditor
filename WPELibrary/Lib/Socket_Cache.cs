@@ -25,13 +25,15 @@ namespace WPELibrary.Lib
     {
         public static string WPE = "Winsock Packet Editor x64";
         public static Socket_Cache.SystemMode SelectMode = new Socket_Cache.SystemMode();
+        public static DateTime StartTime;
         public static IntPtr MainHandle = IntPtr.Zero;
         public static int SystemSocket = 0;
         public static bool ShowDebug = false;
-        public static bool IsRemote = false;
+        public static bool IsRemote = false;        
         public static string Remote_URL, Remote_UserName, Remote_PassWord;
         public static ushort Remote_Port;
         public static IDisposable WebServer;
+        public static PerformanceCounter cpuCounter;
 
         public static Action<Action> InvokeAction { get; set; }
 
@@ -116,6 +118,9 @@ namespace WPELibrary.Lib
             public static long Total_Response = 0;
             public static int MaxChartPoint = 100;
             public const long MaxNetworkSpeed = 100000;
+            public static string ProxyOnLineInfo = string.Empty;
+            public static string ProxyBytesInfo = string.Empty;
+            public static string ProxySpeedInfo = string.Empty;            
 
             public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
             public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);         
@@ -1201,14 +1206,13 @@ namespace WPELibrary.Lib
 
             #region//更新代理账号
 
-            public static void UpdateProxyAccount_ByAccountIndex(int AIndex, bool IsEnable, string UserName, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            public static void UpdateProxyAccount_ByAccountIndex(int AIndex, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
             {
                 try
                 {
                     if (AIndex > -1)
                     {
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsEnable = IsEnable;
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].UserName = UserName;
+                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsEnable = IsEnable;                        
                         Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].PassWord = PassWord;
                         Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsExpiry = IsExpiry;
                         Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].ExpiryTime = ExpiryTime;
@@ -1218,6 +1222,33 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            public static bool UpdateProxyAccount_ByAccountID(Guid AID, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+
+                        if (pai != null)
+                        {
+                            pai.IsEnable = IsEnable;                            
+                            pai.PassWord = PassWord;
+                            pai.IsExpiry = IsExpiry;
+                            pai.ExpiryTime = ExpiryTime;
+
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
             }
 
             #endregion
@@ -1293,6 +1324,32 @@ namespace WPELibrary.Lib
                 }
 
                 return false;
+            }
+
+            #endregion
+
+            #region//查找代理账号
+
+            public static Proxy_AccountInfo GetProxyAccount_ByAccountID(Guid AccountID)
+            {
+                try
+                {
+                    if (AccountID != null)
+                    {
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AccountID);
+
+                        if (pai != null)
+                        {
+                            return pai;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
             }
 
             #endregion
@@ -1400,8 +1457,10 @@ namespace WPELibrary.Lib
             public static long TotalPackets = 0;
             public static long Total_SendBytes = 0;
             public static long Total_RecvBytes = 0;
-            public static bool SpeedMode;
+            public static bool SpeedMode;            
             public static byte[] bByteBuff = new byte[0];
+            public static string InjectProcess = string.Empty;
+            public static string SocketBytesInfo = string.Empty;
             public static bool Support_WS1, Support_WS2, Support_MsWS;
             public static bool HookWS1_Send, HookWS1_SendTo, HookWS1_Recv, HookWS1_RecvFrom;
             public static bool HookWS2_Send, HookWS2_SendTo, HookWS2_Recv, HookWS2_RecvFrom;

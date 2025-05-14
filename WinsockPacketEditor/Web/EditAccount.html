@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑账号</title>    
+    <style>
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        tr.selected {
+            background-color: #87CEEB;
+            font-weight: bold;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin: 0 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h2>>> 编辑账号</h2>
+
+    <form id="AccountInfo">
+        <table>
+            <tr>
+                <td class="text-left"><label for="isEnable">是否启用:</label></td>
+                <td class="text-left"><input type="checkbox" id="isEnable" name="isEnable"></td>
+            </tr>
+            <tr>
+                <td class="text-left"><label for="username">用户名:</label></td>
+                <td class="text-left"><input type="text" id="username" name="username" required readonly></td>
+            </tr>
+            <tr>
+                <td class="text-left"><label for="password">密码:</label></td>
+                <td class="text-left"><input type="password" id="password" name="password" required></td>
+            </tr>
+            <tr>
+                <td class="text-left"><label for="isExpiry">是否过期:</label></td>
+                <td class="text-left"><input type="checkbox" id="isExpiry" name="isExpiry"></td>
+            </tr>
+            <tr>
+                <td class="text-left"><label for="expiryTime">过期时间:</label></td>
+                <td class="text-left"><input type="datetime-local" id="expiryTime" name="expiryTime" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button type="button" onclick="saveChanges()" style="margin-right: 50px;">保存</button>
+                    <button type="button" onclick="window.close()">取消</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+    <script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const AID = urlParams.get('AID');
+
+        // 填充表单数据
+        async function loadAccountData() {
+            try {
+                const response = await fetch(`./api/ProxyAccount/GetProxyAccountByID?AID=${AID}`);
+                const data = await response.json();
+                document.getElementById('isEnable').checked = data.IsEnable;
+                document.getElementById('username').value = data.UserName;
+                document.getElementById('password').value = data.PassWord;                
+                document.getElementById('isExpiry').checked = data.IsExpiry;
+                document.getElementById('expiryTime').value = formatDate(new Date(data.ExpiryTime));
+            } catch (error) {
+                alert('加载数据失败: ' + error.message);
+            }
+        }
+
+        // 保存修改
+        async function saveChanges()
+        {
+            const isEnable = document.getElementById('isEnable').checked;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;            
+            const isExpiry = document.getElementById('isExpiry').checked;
+            const expiryTime = document.getElementById('expiryTime').value;
+
+            try
+            {
+                const response = await fetch('./api/ProxyAccount/UpdateProxyAccount', 
+                {
+                    method: 'POST',
+                    headers:
+                    {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        AID: AID,
+                        IsEnable: isEnable,
+                        UserName: username,
+                        PassWord: password,                        
+                        IsExpiry: isExpiry,
+                        ExpiryTime: expiryTime
+                    })
+                });
+
+                if (response.ok)
+                {
+                    alert('账号信息已更新!');
+                    if (window.opener && window.opener.fetchData)
+                    {
+                        window.opener.fetchData();
+                    }
+                    window.close();                  
+                }
+                else
+                {
+                    const errorData = await response.json();
+                    alert(errorData.Message);
+                }
+            }
+            catch (error)
+            {
+                alert('网络故障: ' + error.message);
+            }
+        }
+
+        // 格式化日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+       
+        loadAccountData();
+
+    </script>
+</body>
+</html>

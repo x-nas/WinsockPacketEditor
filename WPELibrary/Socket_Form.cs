@@ -32,6 +32,7 @@ namespace WPELibrary
                 InitializeComponent();
                 this.InitSocketDGV();
 
+                Socket_Cache.StartTime = DateTime.Now;
                 Socket_Cache.SelectMode = ipParameter.SelectMode;
                 Socket_Cache.IsRemote = ipParameter.IsRemote;
                 Socket_Cache.Remote_URL = ipParameter.Remote_URL;
@@ -186,6 +187,7 @@ namespace WPELibrary
                 this.cbbExtraction.SelectedIndex = 0;
 
                 this.InitFilterActionColor();
+                Socket_Operation.InitCPUAndMemoryCounter();
 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
 
@@ -830,8 +832,7 @@ namespace WPELibrary
             try
             {
                 this.tlTotal_CNT.Text = Socket_Cache.SocketPacket.TotalPackets.ToString();
-                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
+                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();                
                 this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
                 this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
                 this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
@@ -842,6 +843,9 @@ namespace WPELibrary
                 this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
                 this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
+
+                Socket_Cache.SocketPacket.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
+                this.tsslTotalBytes.Text = Socket_Cache.SocketPacket.SocketBytesInfo;
             }
             catch (Exception ex)
             {

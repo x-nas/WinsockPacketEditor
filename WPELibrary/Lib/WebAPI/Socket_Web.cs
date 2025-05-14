@@ -8,8 +8,9 @@ using System.Text;
 using System;
 using System.Reflection;
 using Microsoft.Owin;
+using System.IO;
 
-namespace WPELibrary.Lib
+namespace WPELibrary.Lib.WebAPI
 {
     public class Socket_Web
     {
@@ -45,7 +46,7 @@ namespace WPELibrary.Lib
                     }
 
                     context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    context.Response.Headers.Add("WWW-Authenticate", new[] { "Basic realm=\"MyApp\"" });
+                    context.Response.Headers.Add("WWW-Authenticate", new[] { "Basic realm=\"WPE x64\"" });
                 });
 
                 #endregion
@@ -66,6 +67,18 @@ namespace WPELibrary.Lib
 
                 #endregion
 
+                #region//静态文件
+
+                var staticFileOptions = new StaticFileOptions
+                {
+                    FileSystem = new PhysicalFileSystem(@".\Web"),
+                    ServeUnknownFileTypes = true
+                };
+
+                app.UseStaticFiles(staticFileOptions);
+
+                #endregion
+
                 #region//默认文档
 
                 var defaultFileOptions = new DefaultFilesOptions
@@ -75,11 +88,28 @@ namespace WPELibrary.Lib
 
                 app.UseDefaultFiles(defaultFileOptions);
 
+                #endregion
+
+                #region//处理默认路径
+
                 app.Use(async (context, next) =>
                 {
                     if (context.Request.Path == new PathString("/"))
                     {
-                        context.Response.Redirect("/index.html");
+                        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "index.html");
+
+                        if (File.Exists(filePath))
+                        {
+                            context.Response.ContentType = "text/html";
+                            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                            {
+                                await fileStream.CopyToAsync(context.Response.Body);
+                            }
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        }
                     }
                     else
                     {
@@ -89,16 +119,34 @@ namespace WPELibrary.Lib
 
                 #endregion
 
-                #region//静态文件
+                #region//处理 ProxyAccount 路径
 
-                var staticFileOptions = new StaticFileOptions
+                app.Use(async (context, next) =>
                 {
-                    FileSystem = new PhysicalFileSystem(@".\Web")
-                };
+                    if (context.Request.Path == new PathString("/ProxyAccount"))
+                    {
+                        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "ProxyAccount.html");
 
-                app.UseStaticFiles(staticFileOptions);
+                        if (File.Exists(filePath))
+                        {
+                            context.Response.ContentType = "text/html";
+                            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                            {
+                                await fileStream.CopyToAsync(context.Response.Body);
+                            }
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        }
+                    }
+                    else
+                    {
+                        await next.Invoke();
+                    }
+                });
 
-                #endregion
+                #endregion                
             }
             catch (Exception ex)
             {

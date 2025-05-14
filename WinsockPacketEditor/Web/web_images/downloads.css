@@ -1,0 +1,29 @@
+﻿.release-downloads {
+    margin-top: 10px;
+    margin-right: 0px;
+    margin-left: 0px;
+    width: 310px;
+    font-size: 14px;
+    border-top: 1px solid #D6D5D5;
+}
+
+.release-downloads-noad {
+    width: 100%;
+}
+
+.release-downloads li {
+    display: block;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #D6D5D5;
+}
+
+.release-downloads li {
+    margin: 0px;
+}
+
+.filesize {
+    float: right;
+    padding-left: 10px;
+    color: #6d6d6d;
+}

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Web.Http;
 
-namespace WPELibrary.Lib
+namespace WPELibrary.Lib.WebAPI
 {
-    [RoutePrefix("api")]
+    [RoutePrefix("api/ProxyAccount")]
 
-    public class Socket_WebController : ApiController
+    public class ProxyAccount_Controller : ApiController
     {
         #region//获取代理账号列表
 
@@ -17,6 +16,18 @@ namespace WPELibrary.Lib
         public IEnumerable<Proxy_AccountInfo> GetProxyAccountList()
         {
             return Socket_Cache.ProxyAccount.lstProxyAccount;
+        }
+
+        #endregion
+
+        #region//获取代理账号
+
+        [HttpGet]
+        [Route("GetProxyAccountByID")]
+
+        public Proxy_AccountInfo GetProxyAccountByID(Guid AID)
+        {
+            return Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);
         }
 
         #endregion
@@ -69,6 +80,25 @@ namespace WPELibrary.Lib
             {
                 return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_182));
             }
+        }
+
+        #endregion
+
+        #region//更新代理账号
+
+        [HttpPost]
+        [Route("UpdateProxyAccount")]
+
+        public IHttpActionResult UpdateProxyAccount([FromBody] Proxy_AccountInfo pai)
+        {
+            if (pai.ExpiryTime == null)
+            {
+                pai.ExpiryTime = DateTime.Now;
+            }
+
+            bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, pai.IsEnable, pai.PassWord, pai.IsExpiry, pai.ExpiryTime);
+
+            return Ok();
         }
 
         #endregion

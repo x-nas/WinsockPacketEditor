@@ -194,6 +194,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_182 = { "删除账号失败!", "Failed to Delete account!" };
         public static string[] MutiLan_183 = { "添加账号成功!", "Account added successfully!" };
         public static string[] MutiLan_184 = { "删除账号成功!", "Account deleted successfully!" };
+        public static string[] MutiLan_185 = { "代理模式", "Proxy Mode" };
+        public static string[] MutiLan_186 = { "注入模式", "Injection Mode" };
+        public static string[] MutiLan_187 = { "极速模式", "Speed Mode" };
+        public static string[] MutiLan_188 = { "普通模式", "Normal Mode" };        
 
         #endregion
 

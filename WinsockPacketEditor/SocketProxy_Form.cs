@@ -1066,14 +1066,17 @@ namespace WinsockPacketEditor
                 ulong ProxyUDP_CNT = Socket_Cache.SocketProxy.ProxyUDP_CNT;
                 ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
                 int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount();
-
+                Socket_Cache.SocketProxy.ProxyOnLineInfo = ProxyAccountOnLine.ToString() + "/" + Socket_Cache.ProxyAccount.lstProxyAccount.Count.ToString();
+                Socket_Cache.SocketProxy.ProxyBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
+                
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();
                 this.tlProxyUDP_CNT.Text = ProxyUDP_CNT.ToString();
                 this.tlProxyCache_CNT.Text = Socket_Cache.SocketProxyQueue.qSocket_ProxyData.Count.ToString();
                 this.tlProxyLinks_CNT.Text = Socket_Cache.SocketProxyList.lstProxyTCP.Count.ToString();
-                this.tlProxyAccount_CNT.Text = ProxyAccountOnLine.ToString() + "/" + Socket_Cache.ProxyAccount.lstProxyAccount.Count.ToString();
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
+                this.tlProxyAccount_CNT.Text = Socket_Cache.SocketProxy.ProxyOnLineInfo;
+                this.tsslTotalBytes.Text = Socket_Cache.SocketProxy.ProxyBytesInfo;
+                this.tsslProxySpeed.Text = Socket_Cache.SocketProxy.ProxySpeedInfo;
             }
             catch (Exception ex)
             {
@@ -1122,7 +1125,7 @@ namespace WinsockPacketEditor
                     }
                     sProxy_Downlink.Points.AddY(dChartProxySpeed_Downlink);
 
-                    this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), (dProxySpeed_Uplink / 1024).ToString("0.00"), (dProxySpeed_Downlink / 1024).ToString("0.00"));                    
+                    Socket_Cache.SocketProxy.ProxySpeedInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), (dProxySpeed_Uplink / 1024).ToString("0.00"), (dProxySpeed_Downlink / 1024).ToString("0.00"));
                 });
             }
             catch (Exception ex)

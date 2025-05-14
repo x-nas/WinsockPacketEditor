@@ -103,6 +103,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.119.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
     </Reference>
@@ -156,8 +157,11 @@
     <Compile Include="Lib\NativeMethods\WSock32.cs" />
     <Compile Include="Lib\Socket_Send.cs" />
     <Compile Include="Lib\Socket_SendInfo.cs" />
-    <Compile Include="Lib\Socket_Web.cs" />
-    <Compile Include="Lib\Socket_WebController.cs" />
+    <Compile Include="Lib\WebAPI\SocketInfo_Controller.cs" />
+    <Compile Include="Lib\WebAPI\Socket_Web.cs" />
+    <Compile Include="Lib\WebAPI\ProxyInfo_Controller.cs" />
+    <Compile Include="Lib\WebAPI\ProxyAccount_Controller.cs" />
+    <Compile Include="Lib\WebAPI\SystemInfo_Controller.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

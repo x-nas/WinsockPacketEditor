@@ -22,6 +22,8 @@ using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Net.Http;
 using Microsoft.Owin.Hosting;
+using WPELibrary.Lib.WebAPI;
+using System.Management;
 
 namespace WPELibrary.Lib
 {   
@@ -258,6 +260,62 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+        #endregion
+
+        #region//获取CPU和内存使用率
+
+        public static async void InitCPUAndMemoryCounter()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    Socket_Cache.cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                    Socket_Cache.cpuCounter.NextValue();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });            
+        }
+
+        public static string[] GetCPUAndMemory()
+        {
+            string[] sReturn = new string[2];
+
+            try
+            {
+                if (Socket_Cache.cpuCounter != null)
+                {
+                    // 获取CPU使用率
+                    float cpuUsage = Socket_Cache.cpuCounter.NextValue();
+                    sReturn[0] = $"{cpuUsage:F2}%";
+
+                    // 获取内存使用率
+                    string query = "SELECT TotalVisibleMemorySize, FreePhysicalMemory FROM Win32_OperatingSystem";
+                    using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(query))
+                    {
+                        foreach (ManagementObject obj in searcher.Get())
+                        {
+                            ulong totalMemory = Convert.ToUInt64(obj["TotalVisibleMemorySize"]) / 1024; // MB
+                            ulong freeMemory = Convert.ToUInt64(obj["FreePhysicalMemory"]) / 1024; // MB
+                            ulong usedMemory = totalMemory - freeMemory;
+                            float memoryUsagePercent = (float)usedMemory / totalMemory * 100;
+
+                            sReturn[1] = $"{memoryUsagePercent:F1}%";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
+        }        
 
         #endregion
 
@@ -1306,6 +1364,60 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//获取系统运行模式名称
+
+        public static string GetSystemModeName()
+        {
+            string sReturn = string.Empty;
+            
+            try
+            {
+                switch (Socket_Cache.SelectMode)
+                {
+                    case Socket_Cache.SystemMode.Proxy:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_185);
+                        break;
+
+                    case Socket_Cache.SystemMode.Process:
+                        sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_186);
+                        break;                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            return sReturn;
+        }
+
+        #endregion
+
+        #region//获取工作模式名称
+
+        public static string GetWorkModeName(bool IsSpeedMode)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                if (IsSpeedMode)
+                {
+                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_187);
+                }
+                else
+                {
+                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_188);
+                }                    
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            return sReturn;
+        }
+
+        #endregion
+
         #region//获取当前进程的格式化名称
 
         public static string GetProcessName()
@@ -1315,7 +1427,9 @@ namespace WPELibrary.Lib
             try
             {
                 Process pProcess = Process.GetCurrentProcess();
-                sReturn = string.Format("{0}{1} [{2}]", MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20), pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());
+                Socket_Cache.SocketPacket.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, RemoteHooking.GetCurrentProcessId());
+
+                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + Socket_Cache.SocketPacket.InjectProcess;
             }
             catch (Exception ex)
             {

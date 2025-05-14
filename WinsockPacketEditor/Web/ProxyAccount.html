@@ -1,0 +1,345 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=420, initial-scale=1">
+    <link rel="icon" href="./web_images/wpe.ico" />
+    <link rel="stylesheet" type="text/css" href="./web_images/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/print.css" media="print">
+    <link rel="stylesheet" type="text/css" href="./web_images/downloads.css" media="all">
+    <script src="./web_images/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="./web_images/script.js" type="text/javascript"></script>
+
+    <title>Winsock Packet Editor</title>
+
+    <style>
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        tr.selected {
+            background-color: #87CEEB;
+            font-weight: bold;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        input[type="checkbox"] {
+            margin: 0 10px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #0056b3;
+            }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+    </style>
+
+</head>
+
+<body style="padding: 0px 0px 154px;">
+    <div id="container" style="height: auto !important; min-height: 0px !important;">
+        <div class="inner" style="height: auto !important;">
+            <div id="header-container"></div>
+            <section id="main_content" style="height: auto !important;">
+
+                <h2>>> 账号管理</h2>
+                
+                <form id="AccountInfo">
+                    <table>
+                        <tr>
+                            <td class="text-left"><label for="isEnable">启用:</label></td>
+                            <td class="text-left"><input type="checkbox" id="isEnable" name="isEnable"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><label for="username">用户名:</label></td>
+                            <td class="text-left"><input type="text" id="username" name="username" required></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><label for="password">密码:</label></td>
+                            <td class="text-left"><input type="password" id="password" name="password" required></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><label for="isExpiry">是否过期:</label></td>
+                            <td class="text-left"><input type="checkbox" id="isExpiry" name="isExpiry"></td>
+                        </tr>
+                        <tr>
+                            <td class="text-left"><label for="expiryTime">过期时间:</label></td>
+                            <td class="text-left"><input type="datetime-local" id="expiryTime" name="expiryTime" required></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <button type="submit">新增</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+                <br />
+
+                <div id="data"></div>
+
+            </section>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script>
+
+        //获取账号列表
+        function fetchData()
+        {            
+            fetch('./api/ProxyAccount/GetProxyAccountList')
+                .then(response => response.json())
+                .then(data => {
+                    displayData(data);
+                });                
+        }                
+
+        //显示账号列表
+        function displayData(data)
+        {
+            const dataDiv = document.getElementById('data');
+            const table = document.createElement('table');
+
+            const headerRow = document.createElement('tr');
+            const headers = ['序号', '启用', '用户名', '登录 IP', '在线', '开通时间', '是否过期', '过期时间', '操作'];
+
+            headers.forEach(headerText =>
+            {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                th.style.textAlign = 'center';              
+                headerRow.appendChild(th);
+            });
+
+            table.appendChild(headerRow);
+
+            data.forEach((item, index) =>
+            {
+                const row = document.createElement('tr');
+                const cells = [
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td')
+                ];
+
+                cells[0].textContent = index + 1;
+                cells[1].textContent = item.IsEnable ? "✔" : "×";
+                cells[2].textContent = item.UserName;
+                cells[3].textContent = item.LoginIP;
+                cells[4].textContent = item.IsOnLine ? "✔" : "×";
+                cells[5].textContent = formatDate(new Date(item.CreateTime));
+                cells[6].textContent = item.IsExpiry ? "✔" : "×";
+                cells[7].textContent = formatDate(new Date(item.ExpiryTime));
+
+                const editButton = document.createElement('button');
+                editButton.textContent = '编辑';
+                editButton.style.marginBottom = '10px';
+                editButton.addEventListener('click', () => {
+                    editAccount(item);
+                });
+                cells[8].appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '删除';
+                deleteButton.addEventListener('click', () =>
+                {
+                    if (confirm(`确定要删除此账号吗？用户名: ${item.UserName}`)) {
+                        deleteAccount(item.AID);
+                    }
+                });
+                cells[8].appendChild(deleteButton);
+
+                cells.forEach(cell =>
+                {
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+
+                table.appendChild(row);
+            });
+
+            dataDiv.innerHTML = '';
+            dataDiv.appendChild(table);
+        }
+
+        //格式化显示日期
+        function formatDate(date)
+        {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        //初始化过期时间
+        async function setExpiryTime()
+        {
+            try
+            {
+                const now = new Date();
+                const nowString = now.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+
+                const [date, time] = nowString.split(', ');
+                const [month, day, year] = date.split('/');
+                const [hours, minutes] = time.split(':');
+                const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
+
+                document.getElementById('expiryTime').value = formattedDate;
+            }
+            catch (error)
+            {
+                console.error('Error setting expiry time:', error);
+            }
+        }        
+
+        //新增账号
+        document.getElementById('AccountInfo').addEventListener('submit', async (e) =>
+        {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const isEnable = document.getElementById('isEnable').checked;
+            const isExpiry = document.getElementById('isExpiry').checked;
+            const expiryTime = document.getElementById('expiryTime').value;
+
+            const newAccount =
+            {
+                UserName: username,
+                PassWord: password,
+                IsEnable: isEnable,
+                IsExpiry: isExpiry,
+                ExpiryTime: expiryTime
+            };
+
+            try {
+                const response = await fetch('./api//ProxyAccount/AddProxyAccount',
+                    {
+                        method: 'POST',
+
+                        headers:
+                        {
+                            'Content-Type': 'application/json'
+                        },
+
+                        body: JSON.stringify(newAccount)
+                    });
+
+                if (response.ok)
+                {
+                    const OKData = await response.json();
+                    alert(OKData);
+                    fetchData();
+                }
+                else
+                {
+                    const errorData = await response.json();
+                    alert(errorData.Message);
+                }
+            }
+            catch (error)
+            {
+                alert(error.Message);
+            }
+        });
+
+        //删除账号
+        async function deleteAccount(AID)
+        {
+            try
+            {
+                const response = await fetch('./api//ProxyAccount/DeleteProxyAccount',
+                    {
+                        method: 'POST',
+                        headers:
+                        {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(AID)
+                    });
+
+                if (response.ok)
+                {
+                    fetchData();
+                }
+                else
+                {
+                    const errorData = await response.json();
+                    alert(errorData.Message);
+                }
+            }
+            catch (error)
+            {
+                alert(error.message);
+            }
+        }
+
+        //修改账号
+        function editAccount(item)
+        {
+            const popup = window.open(`EditAccount.html?AID=${item.AID}`, 'Edit Account', 'width=500,height=500');            
+        }
+
+        setExpiryTime();
+        fetchData();
+
+    </script>
+
+</body>
+</html>

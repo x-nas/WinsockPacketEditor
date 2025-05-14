@@ -1,326 +1,279 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Winsock Packet Editor</title>
-    <link rel="icon" href="wpe.ico" />
-    <style>
+<html>
 
-        table 
-        {
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=420, initial-scale=1">
+    <link rel="icon" href="./web_images/wpe.ico" />
+    <link rel="stylesheet" type="text/css" href="./web_images/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/print.css" media="print">
+    <link rel="stylesheet" type="text/css" href="./web_images/downloads.css" media="all">
+    <script src="./web_images/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="./web_images/script.js" type="text/javascript"></script>
+
+    <title>Winsock Packet Editor</title>
+
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin-top: 10px;
         }
 
-        tr.selected 
-        {
-            background-color: #87CEEB;
-            font-weight: bold;
-        }
-
-        th, td 
-        {
+        th, td {
             border: 1px solid #ddd;
             padding: 8px;
-            text-align: center;
-        }
-
-        th 
-        {
-            background-color: #f2f2f2;
-        }
-
-        label 
-        {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="password"],
-        input[type="datetime-local"] 
-        {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        input[type="checkbox"] 
-        {
-            margin: 0 10px;
-        }
-
-        button 
-        {
-            padding: 8px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-            button:hover 
-            {
-                background-color: #0056b3;
-            }
-
-        .text-left {
             text-align: left;
         }
 
-        .text-right {
-            text-align: right;
+        th {
+            background-color: #f2f2f2;
         }
-            
+
     </style>
 </head>
-<body>
-    <h1>代理模式 - 账号管理</h1>
 
-    <form id="AccountInfo">
-        <table>
-            <tr>
-                <td class="text-right"><label for="isEnable">是否启用:</label></td>
-                <td class="text-left"><input type="checkbox" id="isEnable" name="isEnable"></td>
-            </tr>
-            <tr>
-                <td class="text-right"><label for="username">用户名:</label></td>
-                <td><input type="text" id="username" name="username" required></td>
-            </tr>
-            <tr>
-                <td class="text-right"><label for="password">密码:</label></td>
-                <td><input type="password" id="password" name="password" required></td>
-            </tr>
-            <tr>
-                <td class="text-right"><label for="isExpiry">是否过期:</label></td>
-                <td class="text-left"><input type="checkbox" id="isExpiry" name="isExpiry"></td>
-            </tr>
-            <tr>
-                <td class="text-right"><label for="expiryTime">过期时间:</label></td>
-                <td><input type="datetime-local" id="expiryTime" name="expiryTime" required></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="text-align: center;">
-                    <button type="submit">新增</button>                    
-                </td>                
-            </tr>
-        </table>
-    </form>
+<body style="padding: 0px 0px 154px;">
+    <div id="container" style="height: auto !important; min-height: 0px !important;">
+        <div class="inner" style="height: auto !important;">
+            <div id="header-container"></div>
+            <section id="main_content" style="height: auto !important;">
+
+                <h2>>> 系统监控</h2>                
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="bold">服务器</th>
+                            <th><span id="SelectMode"></span></th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>
+                            <img src="./images/cpu.png" style="vertical-align: middle;">
+                        </td>
+                        <td>
+                            <span id="CPU" class="bold">0%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="./images/mem.png" style="vertical-align: middle;">
+                        </td>
+                        <td>
+                            <span id="MEM" class="bold">0%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img src="./images/Time.png" style="vertical-align: middle;">
+                        </td>
+                        <td>
+                            <span id="ServerUptime"></span>
+                        </td>
+                    </tr>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="bold">封包数据</th>
+                            <th><span id="SocketWorkMode"></span> - <span id="SocketProcess"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>封包总数</td>
+                            <td><span id="SocketTotal" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>滤镜执行</td>
+                            <td><span id="SocketFilter" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>缓存区</td>
+                            <td><span id="SocketCache" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>过滤</td>
+                            <td><span id="SocketLeach" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>发送</td>
+                            <td><span id="SocketSend" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>接收</td>
+                            <td><span id="SocketRecv" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>发送到</td>
+                            <td><span id="SocketSendTo" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>接收自</td>
+                            <td><span id="SocketRecvFrom" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>WSA发送</td>
+                            <td><span id="SocketWSASend" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>WSA接收</td>
+                            <td><span id="SocketWSARecv" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>WSA发送到</td>
+                            <td><span id="SocketWSASendTo" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>WSA接收自</td>
+                            <td><span id="SocketWSARecvFrom" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>流量</td>
+                            <td><span id="SocketBytes">0</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="bold">代理数据</th>
+                            <th><span id="ProxyWorkMode"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>代理总数</td>
+                            <td><span id="ProxyTotal" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>TCP</td>
+                            <td><span id="ProxyTCP" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>UDP</td>
+                            <td><span id="ProxyUDP" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>缓存区</td>
+                            <td><span id="ProxyCache" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>在线</td>
+                            <td><span id="ProxyOnLine" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>链接数</td>
+                            <td><span id="ProxyLinks" class="bold">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>速率</td>
+                            <td><span id="ProxySpeed">0</span></td>
+                        </tr>
+                        <tr>
+                            <td>流量</td>
+                            <td><span id="ProxyBytes">0</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </section>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
 
     <script>
-        const now = new Date();
-        const nowString = now.toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+        let startTime;
 
-        const [date, time] = nowString.split(', ');
-        const [month, day, year] = date.split('/');
-        const [hours, minutes] = time.split(':');
-        const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
-
-        document.getElementById('expiryTime').value = formattedDate;
-    </script>
-
-    <br />
-
-    <div id="data"></div>
-
-    <script>
-
-        //获取账号列表
-        async function fetchData()
+        function fetchData()
         {
-            try
+            if (!startTime)
             {
-                const response = await fetch('./api/GetProxyAccountList');
-                const data = await response.json();
-                displayData(data);
-            }
-            catch (error)
-            {
-                console.error('Error fetching data:', error);
-            }
-        }
-
-        //显示账号列表
-        function displayData(data)
-        {
-            const dataDiv = document.getElementById('data');
-            const table = document.createElement('table');
-
-            const headerRow = document.createElement('tr');
-            const headers = ['序号', '是否启用', '用户名', '登录 IP', '是否在线', '开通时间', '是否过期', '过期时间', '操作'];
-
-            headers.forEach(headerText =>
-            {
-                const th = document.createElement('th');
-                th.textContent = headerText;
-                headerRow.appendChild(th);
-            });
-
-            table.appendChild(headerRow);
-
-            data.forEach((item, index) =>
-            {
-                const row = document.createElement('tr');
-                const cells = [
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td'),
-                    document.createElement('td')
-                ];
-
-                cells[0].textContent = index + 1;
-                cells[1].textContent = item.IsEnable ? "✔" : "×";
-                cells[2].textContent = item.UserName;
-                cells[3].textContent = item.LoginIP;
-                cells[4].textContent = item.IsOnLine ? "✔" : "×";
-                cells[5].textContent = formatDate(new Date(item.CreateTime));
-                cells[6].textContent = item.IsExpiry ? "✔" : "×";
-                cells[7].textContent = formatDate(new Date(item.ExpiryTime));
-
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = '删除';
-                deleteButton.addEventListener('click', () =>
-                {
-                    if (confirm(`确定要删除此账号吗？用户名: ${item.UserName}`))
+                fetch('/api/SystemInfo/GetStartTime')
+                    .then(response => response.json())
+                    .then(data =>
                     {
-                        deleteAccount(item.AID);
-                    }
-                });
-                cells[8].appendChild(deleteButton);
-
-                cells.forEach(cell => row.appendChild(cell));
-                table.appendChild(row);
-
-                row.addEventListener('click', () => selectRow(row, item));
-            });
-
-            dataDiv.innerHTML = '';
-            dataDiv.appendChild(table);
-        }
-
-        //格式化显示日期
-        function formatDate(date)
-        {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-
-            return `${year}-${month}-${day} ${hours}:${minutes}`;
-        }
-
-        // 选中行并填充编辑区域
-        function selectRow(row, item)
-        {            
-            const previousRow = document.querySelector('tr.selected');
-
-            if (previousRow)
-            {
-                previousRow.classList.remove('selected');
-            }
-
-            row.classList.add('selected');
-
-            document.getElementById('isEnable').checked = item.IsEnable;
-            document.getElementById('username').value = item.UserName;
-            document.getElementById('password').value = item.PassWord;            
-            document.getElementById('isExpiry').checked = item.IsExpiry;
-            document.getElementById('expiryTime').value = formatDate(new Date(item.ExpiryTime));
-        }
-
-        //新增账号
-        document.getElementById('AccountInfo').addEventListener('submit', async (e) =>
-        {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const isEnable = document.getElementById('isEnable').checked;
-            const isExpiry = document.getElementById('isExpiry').checked;
-            const expiryTime = document.getElementById('expiryTime').value;
-
-            const newAccount =
-            {
-                UserName: username,
-                PassWord: password,
-                IsEnable: isEnable,
-                IsExpiry: isExpiry,
-                ExpiryTime: expiryTime
-            };
-
-            try
-            {
-                const response = await fetch('./api/AddProxyAccount',
-                {
-                    method: 'POST',
-
-                    headers:
-                    {
-                        'Content-Type': 'application/json'
-                    },
-
-                    body: JSON.stringify(newAccount)
-                });
-
-                if (response.ok)
-                {
-                    const OKData = await response.json();
-                    alert(OKData);                    
-                    fetchData();
-                }
-                else
-                {
-                    const errorData = await response.json();
-                    alert(errorData.Message);
-                }
-            }
-            catch (error)
-            {
-                alert(error.Message);
-            }
-        });
-
-        // 删除账号
-        async function deleteAccount(AID)
-        {
-            try
-            {
-                const response = await fetch('./api/DeleteProxyAccount',
-                    {
-                        method: 'POST',
-                        headers:
-                        {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(AID)
+                        startTime = new Date(data);
+                        updateUptime();
+                        setInterval(updateUptime, 1000);
                     });
+            }
 
-                if (response.ok)
-                {                    
-                    fetchData();
-                }
-                else
+            fetch('/api/SystemInfo/GetCPUAndMemory')
+                .then(response => response.json())
+                .then(data =>
                 {
-                    const errorData = await response.json();
-                    alert(errorData.Message);
-                }
-            }
-            catch (error)
-            {
-                alert(error.message);
-            }
+                    document.getElementById('CPU').textContent = data[0];
+                    document.getElementById('MEM').textContent = data[1];
+                })
+
+            fetch('/api/SystemInfo/GetSelectMode')
+                .then(response => response.json())
+                .then(data =>
+                {
+                    document.getElementById('SelectMode').textContent = data;
+                })
+
+            fetch('/api/ProxyInfo/GetProxyInfo')
+                .then(response => response.json())
+                .then(data =>
+                {
+                    document.getElementById('ProxyWorkMode').textContent = data[0];
+                    document.getElementById('ProxyTotal').textContent = data[1];
+                    document.getElementById('ProxyTCP').textContent = data[2];
+                    document.getElementById('ProxyUDP').textContent = data[3];
+                    document.getElementById('ProxyCache').textContent = data[4];
+                    document.getElementById('ProxyOnLine').textContent = data[5];
+                    document.getElementById('ProxyLinks').textContent = data[6];
+                    document.getElementById('ProxySpeed').textContent = data[7];
+                    document.getElementById('ProxyBytes').textContent = data[8];
+                })
+
+            fetch('/api/SocketInfo/GetSocketInfo')
+                .then(response => response.json())
+                .then(data =>
+                {
+                    document.getElementById('SocketProcess').textContent = data[0];
+                    document.getElementById('SocketWorkMode').textContent = data[1];
+                    document.getElementById('SocketTotal').textContent = data[2];
+                    document.getElementById('SocketFilter').textContent = data[3];
+                    document.getElementById('SocketCache').textContent = data[4];
+                    document.getElementById('SocketLeach').textContent = data[5];
+                    document.getElementById('SocketSend').textContent = data[6];
+                    document.getElementById('SocketRecv').textContent = data[7];
+                    document.getElementById('SocketSendTo').textContent = data[8];
+                    document.getElementById('SocketRecvFrom').textContent = data[9];
+                    document.getElementById('SocketWSASend').textContent = data[10];
+                    document.getElementById('SocketWSARecv').textContent = data[11];
+                    document.getElementById('SocketWSASendTo').textContent = data[12];
+                    document.getElementById('SocketWSARecvFrom').textContent = data[13];
+                    document.getElementById('SocketBytes').textContent = data[14];                    
+                })
         }
 
-        fetchData();
+        function updateUptime()
+        {
+            const now = new Date();
+            const uptime = now - startTime;
+            const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((uptime % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((uptime % (1000 * 60)) / 1000);
+            document.getElementById('ServerUptime').textContent = ` ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
+        }
+
+        window.onload = fetchData;
+        setInterval(fetchData, 5000);
 
     </script>
 
