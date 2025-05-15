@@ -413,9 +413,6 @@
   <data name="lRemote_Port.Text" xml:space="preserve">
     <value>端口号:</value>
   </data>
-  <data name="lRemote_Port.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopRight</value>
-  </data>
   <data name="&gt;&gt;lRemote_Port.Name" xml:space="preserve">
     <value>lRemote_Port</value>
   </data>
@@ -485,9 +482,6 @@
   <data name="lRemote_PassWord.Text" xml:space="preserve">
     <value>密码:</value>
   </data>
-  <data name="lRemote_PassWord.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopRight</value>
-  </data>
   <data name="&gt;&gt;lRemote_PassWord.Name" xml:space="preserve">
     <value>lRemote_PassWord</value>
   </data>
@@ -550,9 +544,6 @@
   </data>
   <data name="lRemote_UserName.Text" xml:space="preserve">
     <value>管理账号:</value>
-  </data>
-  <data name="lRemote_UserName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>TopRight</value>
   </data>
   <data name="&gt;&gt;lRemote_UserName.Name" xml:space="preserve">
     <value>lRemote_UserName</value>
@@ -621,7 +612,7 @@
     <value>RemoteURL</value>
   </data>
   <data name="lRemoteURL.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+    <value>MiddleCenter</value>
   </data>
   <data name="&gt;&gt;lRemoteURL.Name" xml:space="preserve">
     <value>lRemoteURL</value>

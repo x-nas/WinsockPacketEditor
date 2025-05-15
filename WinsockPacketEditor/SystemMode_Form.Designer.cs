@@ -202,6 +202,7 @@
             resources.ApplyResources(this.lRemoteURL, "lRemoteURL");
             this.lRemoteURL.Name = "lRemoteURL";
             this.lRemoteURL.TabStop = true;
+            this.lRemoteURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lRemoteURL_LinkClicked);
             // 
             // SystemMode_Form
             // 

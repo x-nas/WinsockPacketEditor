@@ -199,6 +199,11 @@ namespace WinsockPacketEditor
             return sReturn;
         }
 
+        private void lRemoteURL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(this.lRemoteURL.Text);
+        }
+
         #endregion
 
         #region//保存参数配置
