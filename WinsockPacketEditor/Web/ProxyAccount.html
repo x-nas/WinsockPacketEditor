@@ -113,7 +113,7 @@
                         </tr>
                         <tr>
                             <td colspan="2" style="text-align: center;">
-                                <button type="submit">新增</button>
+                                <button type="submit" id="addButton">新增</button>
                             </td>
                         </tr>
                     </table>
@@ -173,15 +173,33 @@
                     document.createElement('td'),
                     document.createElement('td'),
                     document.createElement('td')
-                ];
+                ];                
 
                 cells[0].textContent = index + 1;
-                cells[1].textContent = item.IsEnable ? "✔" : "×";
+
+                const enableCheckbox = document.createElement('input');
+                enableCheckbox.type = 'checkbox';
+                enableCheckbox.readOnly = true;
+                enableCheckbox.checked = item.IsEnable;
+                cells[1].appendChild(enableCheckbox);
+
                 cells[2].textContent = item.UserName;
                 cells[3].textContent = item.LoginIP;
-                cells[4].textContent = item.IsOnLine ? "✔" : "×";
+
+                const loginIPCheckbox = document.createElement('input');
+                loginIPCheckbox.type = 'checkbox';
+                loginIPCheckbox.readOnly = true;
+                loginIPCheckbox.checked = item.IsOnLine;
+                cells[4].appendChild(loginIPCheckbox);
+
                 cells[5].textContent = formatDate(new Date(item.CreateTime));
-                cells[6].textContent = item.IsExpiry ? "✔" : "×";
+
+                const expiryCheckbox = document.createElement('input');
+                expiryCheckbox.type = 'checkbox';
+                expiryCheckbox.readOnly = true;
+                expiryCheckbox.checked = item.IsExpiry;
+                cells[6].appendChild(expiryCheckbox);
+
                 cells[7].textContent = formatDate(new Date(item.ExpiryTime));
 
                 const editButton = document.createElement('button');
@@ -285,6 +303,13 @@
                 {
                     const OKData = await response.json();
                     alert(OKData);
+
+                    document.getElementById('isEnable').checked = false;
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('isExpiry').checked = false;
+
+                    setExpiryTime()
                     fetchData();
                 }
                 else
@@ -334,7 +359,7 @@
         function editAccount(item)
         {
             const popup = window.open(`EditAccount.html?AID=${item.AID}`, 'Edit Account', 'width=500,height=500');            
-        }
+        }        
 
         setExpiryTime();
         fetchData();

@@ -30,6 +30,19 @@ namespace WPELibrary
                 MultiLanguage.SetDefaultLanguage(SelectLanguage);
 
                 InitializeComponent();
+
+                Socket_Cache.InvokeAction = action =>
+                {
+                    if (this.InvokeRequired)
+                    {
+                        this.Invoke(action);
+                    }
+                    else
+                    {
+                        action();
+                    }
+                };
+
                 this.InitSocketDGV();
 
                 Socket_Cache.StartTime = DateTime.Now;
@@ -57,6 +70,7 @@ namespace WPELibrary
             this.LoadConfigs_Parameter();
             Socket_Operation.LoadSystemList();
             Socket_Operation.RegisterHotKey();
+            Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
             Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Process);
         }
 
@@ -119,6 +133,7 @@ namespace WPELibrary
                 this.niWPE.Visible = false;
                 Socket_Operation.SaveSystemList();
                 Socket_Operation.UnregisterHotKey();
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(Socket_Cache.SystemMode.Process);
                 Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Process);
             }
             catch (Exception ex)

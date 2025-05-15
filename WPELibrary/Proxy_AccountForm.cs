@@ -7,17 +7,17 @@ namespace WPELibrary
 {
     public partial class Proxy_AccountForm : Form
     {
-        private int AccountIndex = -1;
+        private Guid SelectAID;
 
         #region//初始化
 
-        public Proxy_AccountForm(int AccountIndex)
+        public Proxy_AccountForm(Guid AID)
         {
             InitializeComponent();
 
-            if (AccountIndex > -1)
+            if (AID != null)
             { 
-                this.AccountIndex = AccountIndex;
+                this.SelectAID = AID;
             }
 
             this.InitForm();
@@ -27,29 +27,35 @@ namespace WPELibrary
         {
             try
             {
-                if (this.AccountIndex > -1 && this.AccountIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
-                {
-                    bool IsEnable = Socket_Cache.ProxyAccount.lstProxyAccount[this.AccountIndex].IsEnable;
-                    string UserName = Socket_Cache.ProxyAccount.lstProxyAccount[this.AccountIndex].UserName;
-                    string PassWord = Socket_Cache.ProxyAccount.lstProxyAccount[this.AccountIndex].PassWord;
-                    bool IsExpiry = Socket_Cache.ProxyAccount.lstProxyAccount[this.AccountIndex].IsExpiry;
-                    DateTime ExpiryTime = Socket_Cache.ProxyAccount.lstProxyAccount[this.AccountIndex].ExpiryTime;
-
-                    this.cbIsEnable.Checked = IsEnable;
-                    this.txtUserName.Text = UserName;
-                    this.txtPassWord.Text = PassWord;
-                    this.cbIsExpiry.Checked = IsExpiry;
-                    this.dtpExpiryTime.Value = ExpiryTime;
-
-                    this.txtUserName.Enabled = false;
-                }
-                else
+                if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
                     this.dtpExpiryTime.Value = DateTime.Now;
                     this.txtUserName.Enabled = true;
                 }
+                else
+                {
+                    Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(this.SelectAID);
 
-                this.IsEnable_CheckedChanged();
+                    if (pai != null)
+                    {
+                        this.Text += " - " + pai.AID.ToString().ToUpper();
+
+                        bool IsEnable = pai.IsEnable;
+                        string UserName = pai.UserName;
+                        string PassWord = pai.PassWord;
+                        bool IsExpiry = pai.IsExpiry;
+                        DateTime ExpiryTime = pai.ExpiryTime;
+
+                        this.cbIsEnable.Checked = IsEnable;
+                        this.txtUserName.Text = UserName;
+                        this.txtPassWord.Text = PassWord;
+                        this.cbIsExpiry.Checked = IsExpiry;
+                        this.dtpExpiryTime.Value = ExpiryTime;
+
+                        this.txtUserName.Enabled = false;
+                    }                    
+                }
+
                 this.ExpiryTime_CheckedChanged();
             }
             catch (Exception ex)
@@ -78,11 +84,7 @@ namespace WPELibrary
                 bool IsExpiry = this.cbIsExpiry.Checked;
                 DateTime ExpiryTime = this.dtpExpiryTime.Value;
 
-                if (this.AccountIndex > -1)
-                {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountIndex(this.AccountIndex, IsEnable, Password, IsExpiry, ExpiryTime);                    
-                }
-                else
+                if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
                     if (Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
                     {
@@ -91,6 +93,12 @@ namespace WPELibrary
                     }
 
                     Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, Password, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
+
+                }
+                else
+                {
+                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, Password, IsExpiry, ExpiryTime);
+                    
                 }
 
                 this.Close();
@@ -134,20 +142,6 @@ namespace WPELibrary
         private void bCancel_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-
-        #endregion
-
-        #region//启用
-
-        private void cbIsEnable_CheckedChanged(object sender, EventArgs e)
-        {
-            this.IsEnable_CheckedChanged();
-        }
-
-        private void IsEnable_CheckedChanged()
-        { 
-            this.tlpAccountInfo.Enabled = this.cbIsEnable.Checked;
         }
 
         #endregion        

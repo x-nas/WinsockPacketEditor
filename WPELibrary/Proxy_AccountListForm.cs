@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
@@ -11,10 +12,21 @@ namespace WPELibrary
 
         public Proxy_AccountListForm()
         {
-            InitializeComponent();
+            InitializeComponent();            
+
             this.InitDGV();
-            this.ShowProxyAccountInfo();
-        }        
+            this.ShowProxyAccountInfo();            
+        }
+
+        private void Proxy_AccountListForm_Load(object sender, EventArgs e)
+        {
+            Socket_Cache.ProxyAccount.IsShow = true;
+        }
+
+        private void Proxy_AccountListForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Socket_Cache.ProxyAccount.IsShow = false;
+        }
 
         private void InitDGV()
         {
@@ -52,24 +64,24 @@ namespace WPELibrary
 
         private void bAccount_New_Click(object sender, EventArgs e)
         {
-            Socket_Operation.ShowProxyAccountForm(-1);
+            Socket_Operation.ShowProxyAccountForm(Guid.Empty);
         }
 
         #endregion
 
         #region//编辑
 
-        private void bUpdate_Click(object sender, EventArgs e)
+        private void dgvAccountList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentCell != null)
+                if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentRow != null)
                 {
-                    int SelectedIndex = dgvAccountList.CurrentCell.RowIndex;
+                    Guid AID = (Guid)dgvAccountList.Rows[dgvAccountList.CurrentRow.Index].Cells["cAID"].Value;
 
-                    if (SelectedIndex > -1)
+                    if (AID != null && AID != Guid.Empty)
                     {
-                        Socket_Operation.ShowProxyAccountForm(SelectedIndex);                        
+                        Socket_Operation.ShowProxyAccountForm(AID);
                     }
                 }
             }
@@ -77,7 +89,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
@@ -89,11 +101,12 @@ namespace WPELibrary
             {
                 if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentCell != null)
                 {
-                    int SelectedIndex = dgvAccountList.CurrentCell.RowIndex;
+                    Guid[] glAID = this.GetSelectedAID();
 
-                    if (SelectedIndex > -1)
+                    if (glAID.Length > 0)
                     {
-                        Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountIndex_Dialog(SelectedIndex);                        
+                        Socket_Cache.ProxyAccount.DeleteProxyAccount_Dialog(glAID);
+                        this.Search_UserName();
                     }
                 }
             }
@@ -101,6 +114,123 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//导出
+
+        private void bExport_Click(object sender, EventArgs e)
+        {
+            Guid[] glAID = this.GetSelectedAID();
+
+            if (glAID.Length > 0)
+            {
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, glAID);
+            }            
+        }
+
+        #endregion
+
+        #region//导入
+
+        private void bImport_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.ProxyAccount.LoadProxyAccountList_Dialog();
+        }
+
+        #endregion
+
+        #region//查找 - 用户名
+
+        private void bSearch_UserName_Click(object sender, EventArgs e)
+        {
+            this.Search_UserName();
+        }
+
+        private void Search_UserName()
+        {
+            try
+            {
+                string UserName = this.txtSearch_UserName.Text.Trim();
+
+                if (string.IsNullOrEmpty(UserName))
+                {
+                    this.dgvAccountList.DataSource = Socket_Cache.ProxyAccount.lstProxyAccount;
+                }
+                else
+                {
+                    BindingList<Proxy_AccountInfo> pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByUserName(UserName);
+                    this.dgvAccountList.DataSource = pai;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//查找 - 状态
+
+        private void cbIs_CheckedChanged(object sender, EventArgs e)
+        {
+            this.Search_State();
+        }
+
+        private void cbbSearch_State_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.Search_State();
+        }
+
+        private void Search_State()
+        {
+            try
+            {
+                if (this.cbbSearch_State.SelectedIndex == 0)
+                {
+                    this.dgvAccountList.DataSource = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsEnable(this.cbIs.Checked);                 
+                }
+                else if (this.cbbSearch_State.SelectedIndex == 1)
+                {
+                    this.dgvAccountList.DataSource = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsOnLine(this.cbIs.Checked);
+                }
+                else if (this.cbbSearch_State.SelectedIndex == 2)
+                {
+                    this.dgvAccountList.DataSource = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsExpiry(this.cbIs.Checked);
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
+
+        #region//获取所有选中的账号ID
+
+        private Guid[] GetSelectedAID()
+        {
+            Guid[] glAID = new Guid[dgvAccountList.Rows.Count];
+
+            int index = 0;
+            for (int i = 0; i < dgvAccountList.Rows.Count; i++)
+            {
+                if (dgvAccountList.Rows[i].Selected)
+                {
+                    glAID[index] = (Guid)dgvAccountList.Rows[i].Cells["cAID"].Value;
+                    index++;
+                }
+            }
+
+            if (index < glAID.Length)
+            {
+                Array.Resize(ref glAID, index);
+            }
+
+            return glAID;
         }
 
         #endregion
@@ -121,6 +251,7 @@ namespace WPELibrary
             this.dgvAccountList.Refresh();
         }
 
-        #endregion
+
+        #endregion        
     }
 }

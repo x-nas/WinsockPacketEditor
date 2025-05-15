@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                InitializeComponent();
+                InitializeComponent();                
 
                 this.socketForm = socketForm;
                 this.InitSocketDGV();
@@ -30,19 +30,7 @@ namespace WinsockPacketEditor
                 this.InitForm();
                 this.LoadConfigs_Parameter();
 
-                Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Proxy);
-
-                Socket_Cache.InvokeAction = action =>
-                {
-                    if (this.InvokeRequired)
-                    {
-                        this.Invoke(action);
-                    }
-                    else
-                    {
-                        action();
-                    }
-                };
+                Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Proxy);                
             }
             catch (Exception ex)
             {
@@ -57,9 +45,7 @@ namespace WinsockPacketEditor
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
             this.EnableEXTHttp_Changed();
-            this.EnableEXTHttps_Changed();
-
-            Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
+            this.EnableEXTHttps_Changed();            
         }
 
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -72,7 +58,7 @@ namespace WinsockPacketEditor
             try
             {
                 this.SaveConfigs_Parameter();
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB();
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(Socket_Cache.SystemMode.Proxy);
                 Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Proxy);
 
                 if (this.cbEnable_SystemProxy.Checked)

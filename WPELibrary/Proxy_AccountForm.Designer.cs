@@ -59,7 +59,6 @@
             resources.ApplyResources(this.cbIsEnable, "cbIsEnable");
             this.cbIsEnable.Name = "cbIsEnable";
             this.cbIsEnable.UseVisualStyleBackColor = true;
-            this.cbIsEnable.CheckedChanged += new System.EventHandler(this.cbIsEnable_CheckedChanged);
             // 
             // tlpButton
             // 

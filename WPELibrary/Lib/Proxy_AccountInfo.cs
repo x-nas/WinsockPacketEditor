@@ -114,6 +114,11 @@ namespace WPELibrary.Lib
 
         #region//Proxy_AccountInfo
 
+        public Proxy_AccountInfo()
+        {
+            //
+        }
+
         public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
         {
             this.aid = AID;

@@ -2946,8 +2946,11 @@ namespace WPELibrary.Lib
         {
             try
             {
-                Proxy_AccountListForm palForm = new Proxy_AccountListForm();
-                palForm.Show();
+                if (!Socket_Cache.ProxyAccount.IsShow)
+                {
+                    Proxy_AccountListForm palForm = new Proxy_AccountListForm();
+                    palForm.Show();
+                }                
             }
             catch (Exception ex)
             {
@@ -2955,11 +2958,11 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static void ShowProxyAccountForm(int AccountIndex)
+        public static void ShowProxyAccountForm(Guid AID)
         {
             try
             {
-                Proxy_AccountForm paForm = new Proxy_AccountForm(AccountIndex);
+                Proxy_AccountForm paForm = new Proxy_AccountForm(AID);
                 paForm.ShowDialog();
             }
             catch (Exception ex)

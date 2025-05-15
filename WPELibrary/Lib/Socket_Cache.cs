@@ -56,6 +56,8 @@ namespace WPELibrary.Lib
             SendList_Export = 5,
             SendCollection_Import = 6,
             SendCollection_Export = 7,
+            ProxyAccount_Import = 8,
+            ProxyAccount_Export = 9,
         }
 
         public enum ListAction
@@ -1067,7 +1069,9 @@ namespace WPELibrary.Lib
         #region//代理账号
 
         public static class ProxyAccount
-        {            
+        {
+            public static bool IsShow = false;
+            public static string AESKey = string.Empty;
             public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
 
             #region//验证远程管理的账号密码
@@ -1190,6 +1194,7 @@ namespace WPELibrary.Lib
                         {
                             Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
                             Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
+
                             return true;
                         }
                     }
@@ -1204,25 +1209,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//更新代理账号
-
-            public static void UpdateProxyAccount_ByAccountIndex(int AIndex, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
-            {
-                try
-                {
-                    if (AIndex > -1)
-                    {
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsEnable = IsEnable;                        
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].PassWord = PassWord;
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].IsExpiry = IsExpiry;
-                        Socket_Cache.ProxyAccount.lstProxyAccount[AIndex].ExpiryTime = ExpiryTime;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
+            #region//更新代理账号            
 
             public static bool UpdateProxyAccount_ByAccountID(Guid AID, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
             {
@@ -1255,17 +1242,23 @@ namespace WPELibrary.Lib
 
             #region//删除代理账号
 
-            public static void DeleteProxyAccount_ByAccountIndex_Dialog(int AIndex)
+            public static void DeleteProxyAccount_Dialog(Guid[] glAID)
             {
                 try
                 {
-                    if (AIndex > -1 && AIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
+                    if (glAID.Length > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountIndex(AIndex);
+                            foreach (Guid AID in glAID)
+                            {
+                                if (AID != null)
+                                {
+                                    Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountID(AID);
+                                }
+                            }
                         }
                     }
                 }
@@ -1273,36 +1266,15 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
+            }            
 
-            public static void DeleteProxyAccount_ByAccountIndex(int AIndex)
+            public static bool DeleteProxyAccount_ByAccountID(Guid AID)
             {
                 try
                 {
-                    if (AIndex > -1 && AIndex < Socket_Cache.ProxyAccount.lstProxyAccount.Count)
+                    if (AID != null)
                     {
-                        if (Socket_Cache.InvokeAction != null)
-                        {
-                            Socket_Cache.InvokeAction(() =>
-                            {
-                                Socket_Cache.ProxyAccount.lstProxyAccount.RemoveAt(AIndex);
-                            });
-                        }                        
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static bool DeleteProxyAccount_ByAccountID(Guid AccountID)
-            {
-                try
-                {
-                    if (AccountID != null)
-                    {
-                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AccountID);
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
 
                         if (pai != null)
                         {
@@ -1330,19 +1302,90 @@ namespace WPELibrary.Lib
 
             #region//查找代理账号
 
-            public static Proxy_AccountInfo GetProxyAccount_ByAccountID(Guid AccountID)
+            public static Proxy_AccountInfo GetProxyAccount_ByAccountID(Guid AID)
             {
                 try
                 {
-                    if (AccountID != null)
+                    if (AID != null)
                     {
-                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AccountID);
+                        Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
 
                         if (pai != null)
                         {
                             return pai;
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByUserName(string UserName)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(UserName))
+                    {
+                        BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                            (lstProxyAccount.Where(account => account.UserName.Contains(UserName)).ToList());
+
+                        return pai;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsEnable(bool IsEnable)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.IsEnable == IsEnable).ToList());
+
+                    return pai;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsOnLine(bool IsOnLine)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.IsOnLine == IsOnLine).ToList());
+
+                    return pai;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsExpiry(bool IsExpiry)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.IsExpiry == IsExpiry).ToList());
+
+                    return pai;
                 }
                 catch (Exception ex)
                 {
@@ -1397,16 +1440,19 @@ namespace WPELibrary.Lib
 
             #region//保存代理账号列表到数据库
 
-            public static void SaveProxyAccountList_ToDB()
+            public static void SaveProxyAccountList_ToDB(Socket_Cache.SystemMode FromMode)
             {
                 try
                 {
-                    Socket_Cache.DataBase.DeleteTable_ProxyAccount();
-
-                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    if (Socket_Cache.SelectMode == FromMode)
                     {
-                        Socket_Cache.DataBase.InsertTable_ProxyAccount(pai);
-                    }
+                        Socket_Cache.DataBase.DeleteTable_ProxyAccount();
+
+                        foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                        {
+                            Socket_Cache.DataBase.InsertTable_ProxyAccount(pai);
+                        }
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -1436,6 +1482,394 @@ namespace WPELibrary.Lib
                         DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);                        
 
                         Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存代理账号列表到文件（对话框）
+
+            public static void SaveProxyAccountList_Dialog(string FileName, Guid[] glAID)
+            {
+                try
+                {
+                    if (Socket_Cache.ProxyAccount.lstProxyAccount.Count > 0)
+                    {
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+                        sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_189) + "（*.pa）|*.pa";
+
+                        if (!string.IsNullOrEmpty(FileName))
+                        {
+                            sfdSaveFile.FileName = FileName;
+                        }
+
+                        sfdSaveFile.RestoreDirectory = true;
+
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.ProxyAccount_Export);
+                            pwForm.ShowDialog();
+
+                            string FilePath = sfdSaveFile.FileName;
+
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                SaveProxyAccountList(FilePath, glAID, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_190), FilePath);
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void SaveProxyAccountList(string FilePath, Guid[] glAID, bool DoEncrypt)
+            {
+                try
+                {
+                    SaveProxyAccountList_ToXDocument(FilePath, glAID);
+
+                    if (DoEncrypt)
+                    {
+                        string sPassword = Socket_Cache.ProxyAccount.AESKey;
+
+                        if (!string.IsNullOrEmpty(sPassword))
+                        {
+                            Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void SaveProxyAccountList_ToXDocument(string FilePath, Guid[] glAID)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeProxyAccountList = new XElement("ProxyAccountList");
+                    xdoc.Add(xeProxyAccountList);
+
+                    if (Socket_Cache.ProxyAccount.lstProxyAccount.Count > 0)
+                    {
+                        foreach (Guid AID in glAID)
+                        { 
+                            Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);
+
+                            if (pai != null)
+                            {
+                                XElement xeProxyAccount =
+                                    new XElement("ProxyAccount",
+                                    new XElement("IsEnable", pai.IsEnable.ToString()),
+                                    new XElement("AID", pai.AID.ToString().ToUpper()),
+                                    new XElement("UserName", pai.UserName),
+                                    new XElement("PassWord", pai.PassWord),
+                                    new XElement("LoginIP", pai.LoginIP),
+                                    new XElement("IsOnLine", pai.IsOnLine.ToString()),
+                                    new XElement("IsExpiry", pai.IsExpiry),
+                                    new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
+                                    new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                    );
+
+                                xeProxyAccountList.Add(xeProxyAccount);
+                            }
+                        }
+                    }
+
+                    xdoc.Save(FilePath);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从文件加载代理账号列表（对话框）
+
+            public static void LoadProxyAccountList_Dialog()
+            {
+                try
+                {
+                    OpenFileDialog ofdLoadFile = new OpenFileDialog();
+
+                    ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_189) + " (*.pa)|*.pa|INI Files (*.ini)|*.ini";
+                    ofdLoadFile.RestoreDirectory = true;
+
+                    if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string FilePath = ofdLoadFile.FileName;
+
+                        if (!string.IsNullOrEmpty(FilePath))
+                        {
+                            LoadProxyAccountList(FilePath, true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadProxyAccountList(string FilePath, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        string fileExtension = Path.GetExtension(FilePath);
+
+                        if (!string.IsNullOrEmpty(fileExtension))
+                        {                            
+                            if (fileExtension.Equals(".ini"))
+                            {
+                                LoadProxyAccountList_FromInIFile(FilePath);
+                            }
+                            else
+                            {
+                                #region//LoadProxyAccountList_FromXDocument
+
+                                XDocument xdoc = new XDocument();
+
+                                bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+
+                                if (bEncrypt)
+                                {
+                                    if (LoadFromUser)
+                                    {
+                                        Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.ProxyAccount_Import);
+                                        pwForm.ShowDialog();
+                                    }
+
+                                    xdoc = Socket_Operation.DecryptXMLFile(FilePath, Socket_Cache.ProxyAccount.AESKey);
+                                }
+                                else
+                                {
+                                    xdoc = XDocument.Load(FilePath);
+                                }
+
+                                if (xdoc == null)
+                                {
+                                    string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+
+                                    if (LoadFromUser)
+                                    {
+                                        Socket_Operation.ShowMessageBox(sError);
+                                    }
+                                    else
+                                    {
+                                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sError);
+                                    }
+                                }
+                                else
+                                {
+                                    LoadProxyAccountList_FromXDocument(xdoc);
+
+                                    if (bEncrypt)
+                                    {
+                                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_192));
+                                    }
+                                    else
+                                    {
+                                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_191));
+                                    }
+                                }
+
+                                #endregion
+                            }
+                        }                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadProxyAccountList_FromXDocument(XDocument xdoc)
+            {
+                try
+                {
+                    foreach (XElement xeProxyAccount in xdoc.Root.Elements())
+                    {
+                        bool IsEnable = false;
+                        if (xeProxyAccount.Element("IsEnable") != null)
+                        {
+                            IsEnable = bool.Parse(xeProxyAccount.Element("IsEnable").Value);
+                        }
+
+                        Guid AID = Guid.NewGuid();
+
+                        string UserName = string.Empty;
+                        if (xeProxyAccount.Element("UserName") != null)
+                        {
+                            UserName = xeProxyAccount.Element("UserName").Value;
+                        }
+
+                        string PassWord = string.Empty;
+                        if (xeProxyAccount.Element("PassWord") != null)
+                        {
+                            PassWord = xeProxyAccount.Element("PassWord").Value;
+                        }
+
+                        string LoginIP = string.Empty;
+                        if (xeProxyAccount.Element("LoginIP") != null)
+                        {
+                            LoginIP = xeProxyAccount.Element("LoginIP").Value;
+                        }
+
+                        bool IsOnLine = false;
+                        if (xeProxyAccount.Element("IsOnLine") != null)
+                        {
+                            IsOnLine = bool.Parse(xeProxyAccount.Element("IsOnLine").Value);
+                        }
+
+                        bool IsExpiry = false;
+                        if (xeProxyAccount.Element("IsExpiry") != null)
+                        {
+                            IsExpiry = bool.Parse(xeProxyAccount.Element("IsExpiry").Value);
+                        }
+
+                        DateTime ExpiryTime = DateTime.Now;
+                        if (xeProxyAccount.Element("ExpiryTime") != null)
+                        {
+                            ExpiryTime = DateTime.Parse(xeProxyAccount.Element("ExpiryTime").Value);
+                        }
+
+                        DateTime CreateTime = DateTime.Now;
+                        if (xeProxyAccount.Element("CreateTime") != null)
+                        {
+                            CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
+                        }
+
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+
+                        if (!bOK)
+                        {
+                            string FailLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_193), UserName);
+                            Socket_Operation.DoLog_Proxy("Import Proxy Account", FailLog);
+                        }
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadProxyAccountList_FromInIFile(string filePath)
+            {
+                try
+                {
+                    string[] lines = File.ReadAllLines(filePath);
+
+                    Proxy_AccountInfo pai = null;
+                    foreach (string line in lines)
+                    {
+                        string trimmedLine = line.Trim();
+                        if (trimmedLine.StartsWith("[User"))
+                        {
+                            if (pai != null)
+                            {
+                                Socket_Cache.ProxyAccount.AddProxyAccount_FromIniFile(pai);
+                            }
+
+                            pai = new Proxy_AccountInfo();
+                        }
+                        else if (trimmedLine.Contains("="))
+                        {
+                            string[] parts = trimmedLine.Split(new char[] { '=' }, 2);
+                            string key = parts[0].Trim();
+                            string value = parts[1].Trim();
+
+                            switch (key)
+                            {
+                                case "Enable":
+                                    pai.IsEnable = Convert.ToBoolean(int.Parse(value));
+                                    break;
+
+                                case "UserName":
+                                    pai.UserName = value;
+                                    break;
+
+                                case "Password":
+                                    pai.PassWord = value;
+                                    break;
+
+                                case "AutoDisable":
+                                    pai.IsExpiry = Convert.ToBoolean(int.Parse(value));
+                                    break;
+
+                                case "DisableDateTime":
+                                    pai.ExpiryTime = DateTime.Parse(value);
+                                    break;
+                            }
+                        }
+                    }
+
+                    if (pai != null)
+                    {
+                        Socket_Cache.ProxyAccount.AddProxyAccount_FromIniFile(pai);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
+            }
+
+            private static void AddProxyAccount_FromIniFile(Proxy_AccountInfo pai)
+            {
+                try
+                {
+                    if (pai != null)
+                    {
+                        if (pai.AID == null || pai.AID == Guid.Empty)
+                        {
+                            pai.AID = Guid.NewGuid();
+                        }
+
+                        if (pai.ExpiryTime == DateTime.MinValue)
+                        {
+                            pai.ExpiryTime = DateTime.Now;
+                        }                        
+
+                        if (pai.CreateTime == DateTime.MinValue)
+                        {
+                            pai.CreateTime = DateTime.Now;
+                        }
+
+                        if (string.IsNullOrEmpty(pai.LoginIP))
+                        {
+                            pai.LoginIP = string.Empty;
+                        }
+
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginIP, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
+
+                        if (!bOK)
+                        {
+                            string FailLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_193), pai.UserName);
+                            Socket_Operation.DoLog_Proxy("Import Proxy Account", FailLog);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -3740,14 +4174,17 @@ namespace WPELibrary.Lib
                                         break;
 
                                     case Filter.FilterAction.Intercept:
+                                        bDoFilter = true;
                                         bBreak = true;
                                         break;
 
                                     case Filter.FilterAction.NoModify_Display:
+                                        bDoFilter = true;
                                         bBreak = true;
                                         break;
 
                                     case Filter.FilterAction.NoModify_NoDisplay:
+                                        bDoFilter = true;
                                         bBreak = true;
                                         break;
                                 }

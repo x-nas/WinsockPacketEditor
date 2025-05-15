@@ -197,7 +197,12 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_185 = { "代理模式", "Proxy Mode" };
         public static string[] MutiLan_186 = { "注入模式", "Injection Mode" };
         public static string[] MutiLan_187 = { "极速模式", "Speed Mode" };
-        public static string[] MutiLan_188 = { "普通模式", "Normal Mode" };        
+        public static string[] MutiLan_188 = { "普通模式", "Normal Mode" };
+        public static string[] MutiLan_189 = { "代理账号列表文件", "Proxy Account List file" };
+        public static string[] MutiLan_190 = { "代理账号列表保存完毕 {0}", "The Proxy Account List saved {0}" };
+        public static string[] MutiLan_191 = { "加载代理账号列表成功! [未加密]", "Load Proxy Account list successful! [Unencrypted]" };
+        public static string[] MutiLan_192 = { "加载代理账号列表成功! [已加密]", "Load Proxy Account list successful! [Encrypted]" };
+        public static string[] MutiLan_193 = { "导入账号失败！用户名：{0}", "Import account failed! Username: {0}" };
 
         #endregion
 

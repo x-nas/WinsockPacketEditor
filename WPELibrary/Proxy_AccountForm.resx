@@ -136,7 +136,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="cbIsEnable.Size" type="System.Drawing.Size, System.Drawing">
-    <value>378, 27</value>
+    <value>428, 27</value>
   </data>
   <data name="cbIsEnable.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -163,7 +163,7 @@
     <value>Fill</value>
   </data>
   <data name="bSave.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 10</value>
+    <value>95, 10</value>
   </data>
   <data name="bSave.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 29</value>
@@ -190,7 +190,7 @@
     <value>Fill</value>
   </data>
   <data name="bCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>220, 10</value>
+    <value>245, 10</value>
   </data>
   <data name="bCancel.Size" type="System.Drawing.Size, System.Drawing">
     <value>94, 29</value>
@@ -226,7 +226,7 @@
     <value>3</value>
   </data>
   <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 50</value>
+    <value>434, 50</value>
   </data>
   <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -253,7 +253,7 @@
     <value>Fill</value>
   </data>
   <data name="txtPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>135, 29</value>
+    <value>160, 29</value>
   </data>
   <data name="txtPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -286,7 +286,7 @@
     <value>Fill</value>
   </data>
   <data name="lPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>51, 32</value>
+    <value>76, 32</value>
   </data>
   <data name="lPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -322,7 +322,7 @@
     <value>Fill</value>
   </data>
   <data name="lUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>51, 3</value>
+    <value>76, 3</value>
   </data>
   <data name="lUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -355,7 +355,7 @@
     <value>Fill</value>
   </data>
   <data name="txtUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>135, 0</value>
+    <value>160, 0</value>
   </data>
   <data name="txtUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -388,7 +388,7 @@
     <value>Fill</value>
   </data>
   <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>51, 61</value>
+    <value>76, 61</value>
   </data>
   <data name="cbIsExpiry.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -421,7 +421,7 @@
     <value>Fill</value>
   </data>
   <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>135, 58</value>
+    <value>160, 58</value>
   </data>
   <data name="dtpExpiryTime.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -457,7 +457,7 @@
     <value>5</value>
   </data>
   <data name="tlpAccountInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 178</value>
+    <value>434, 178</value>
   </data>
   <data name="tlpAccountInfo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -490,7 +490,7 @@
     <value>3</value>
   </data>
   <data name="tlpProxyAccount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 261</value>
+    <value>434, 261</value>
   </data>
   <data name="tlpProxyAccount.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -517,7 +517,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>384, 261</value>
+    <value>434, 261</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>

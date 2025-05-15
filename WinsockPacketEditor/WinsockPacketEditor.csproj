@@ -14,6 +14,8 @@
     <Deterministic>false</Deterministic>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>\\X-NAS\home\Drive\程序源代码\封包拦截器\程序发布\发布\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -35,8 +37,6 @@
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -370,6 +370,12 @@
     <FileAssociation Include=".fp">
       <Visible>False</Visible>
       <Description>WPE64 Filter List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".pa">
+      <Visible>False</Visible>
+      <Description>WPE64 ProxyAccount List File</Description>
       <Progid>WPE64</Progid>
       <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
     </FileAssociation>
