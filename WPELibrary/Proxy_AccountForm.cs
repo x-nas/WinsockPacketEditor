@@ -42,7 +42,7 @@ namespace WPELibrary
 
                         bool IsEnable = pai.IsEnable;
                         string UserName = pai.UserName;
-                        string PassWord = pai.PassWord;
+                        string PassWord = Socket_Operation.PassWord_Decrypt(pai.PassWord);
                         bool IsExpiry = pai.IsExpiry;
                         DateTime ExpiryTime = pai.ExpiryTime;
 
@@ -60,7 +60,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -80,7 +80,8 @@ namespace WPELibrary
 
                 bool IsEnable = this.cbIsEnable.Checked;
                 string UserName = this.txtUserName.Text.Trim();
-                string Password = this.txtPassWord.Text.Trim();
+                string PassWord = this.txtPassWord.Text.Trim();
+                PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
                 bool IsExpiry = this.cbIsExpiry.Checked;
                 DateTime ExpiryTime = this.dtpExpiryTime.Value;
 
@@ -90,15 +91,13 @@ namespace WPELibrary
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                         return;
-                    }
+                    }                    
 
-                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, Password, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
-
+                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
                 }
                 else
                 {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, Password, IsExpiry, ExpiryTime);
-                    
+                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, PassWord, IsExpiry, ExpiryTime);                    
                 }
 
                 this.Close();

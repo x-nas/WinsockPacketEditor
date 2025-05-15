@@ -103,16 +103,21 @@
     <script>
 
         const urlParams = new URLSearchParams(window.location.search);
-        const AID = urlParams.get('AID');
+        const AID = urlParams.get('AID');        
 
         // 填充表单数据
         async function loadAccountData() {
             try {
                 const response = await fetch(`./api/ProxyAccount/GetProxyAccountByID?AID=${AID}`);
                 const data = await response.json();
+
                 document.getElementById('isEnable').checked = data.IsEnable;
                 document.getElementById('username').value = data.UserName;
-                document.getElementById('password').value = data.PassWord;                
+
+                const passwordResponse = await fetch(`./api/ProxyAccount/GetPassWordDecrypt?PassWord=${data.PassWord}`);
+                const decryptedPassword = await passwordResponse.json();
+                document.getElementById('password').value = decryptedPassword;
+
                 document.getElementById('isExpiry').checked = data.IsExpiry;
                 document.getElementById('expiryTime').value = formatDate(new Date(data.ExpiryTime));
             } catch (error) {
@@ -177,7 +182,7 @@
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
+        }       
        
         loadAccountData();
 

@@ -42,12 +42,12 @@
             this.tlpRemoteMGT = new System.Windows.Forms.TableLayoutPanel();
             this.cbIsRemote = new System.Windows.Forms.CheckBox();
             this.tlpRemoteInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.lRemote_UserName = new System.Windows.Forms.Label();
-            this.txtRemote_UserName = new System.Windows.Forms.TextBox();
-            this.lRemote_PassWord = new System.Windows.Forms.Label();
-            this.txtRemote_PassWord = new System.Windows.Forms.TextBox();
-            this.lRemote_Port = new System.Windows.Forms.Label();
             this.nudRemote_Port = new System.Windows.Forms.NumericUpDown();
+            this.lRemote_Port = new System.Windows.Forms.Label();
+            this.txtRemote_PassWord = new System.Windows.Forms.TextBox();
+            this.lRemote_PassWord = new System.Windows.Forms.Label();
+            this.txtRemote_UserName = new System.Windows.Forms.TextBox();
+            this.lRemote_UserName = new System.Windows.Forms.Label();
             this.lRemoteURL = new System.Windows.Forms.LinkLabel();
             this.tlpSystemMode.SuspendLayout();
             this.tlpModeSelect.SuspendLayout();
@@ -156,32 +156,6 @@
             this.tlpRemoteInfo.Controls.Add(this.lRemote_UserName, 1, 0);
             this.tlpRemoteInfo.Name = "tlpRemoteInfo";
             // 
-            // lRemote_UserName
-            // 
-            resources.ApplyResources(this.lRemote_UserName, "lRemote_UserName");
-            this.lRemote_UserName.Name = "lRemote_UserName";
-            // 
-            // txtRemote_UserName
-            // 
-            resources.ApplyResources(this.txtRemote_UserName, "txtRemote_UserName");
-            this.txtRemote_UserName.Name = "txtRemote_UserName";
-            // 
-            // lRemote_PassWord
-            // 
-            resources.ApplyResources(this.lRemote_PassWord, "lRemote_PassWord");
-            this.lRemote_PassWord.Name = "lRemote_PassWord";
-            // 
-            // txtRemote_PassWord
-            // 
-            resources.ApplyResources(this.txtRemote_PassWord, "txtRemote_PassWord");
-            this.txtRemote_PassWord.Name = "txtRemote_PassWord";
-            this.txtRemote_PassWord.UseSystemPasswordChar = true;
-            // 
-            // lRemote_Port
-            // 
-            resources.ApplyResources(this.lRemote_Port, "lRemote_Port");
-            this.lRemote_Port.Name = "lRemote_Port";
-            // 
             // nudRemote_Port
             // 
             resources.ApplyResources(this.nudRemote_Port, "nudRemote_Port");
@@ -196,6 +170,32 @@
             0,
             0,
             0});
+            // 
+            // lRemote_Port
+            // 
+            resources.ApplyResources(this.lRemote_Port, "lRemote_Port");
+            this.lRemote_Port.Name = "lRemote_Port";
+            // 
+            // txtRemote_PassWord
+            // 
+            resources.ApplyResources(this.txtRemote_PassWord, "txtRemote_PassWord");
+            this.txtRemote_PassWord.Name = "txtRemote_PassWord";
+            this.txtRemote_PassWord.UseSystemPasswordChar = true;
+            // 
+            // lRemote_PassWord
+            // 
+            resources.ApplyResources(this.lRemote_PassWord, "lRemote_PassWord");
+            this.lRemote_PassWord.Name = "lRemote_PassWord";
+            // 
+            // txtRemote_UserName
+            // 
+            resources.ApplyResources(this.txtRemote_UserName, "txtRemote_UserName");
+            this.txtRemote_UserName.Name = "txtRemote_UserName";
+            // 
+            // lRemote_UserName
+            // 
+            resources.ApplyResources(this.lRemote_UserName, "lRemote_UserName");
+            this.lRemote_UserName.Name = "lRemote_UserName";
             // 
             // lRemoteURL
             // 

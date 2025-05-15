@@ -128,31 +128,31 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="txtPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 29</value>
+    <value>170, 29</value>
   </data>
   <data name="lPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>42, 32</value>
+    <value>67, 32</value>
   </data>
   <data name="lPassWord.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 23</value>
   </data>
   <data name="lPassWord.Text" xml:space="preserve">
-    <value>Password</value>
+    <value>PassWord</value>
   </data>
   <data name="lUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>42, 3</value>
+    <value>67, 3</value>
   </data>
   <data name="lUserName.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 23</value>
   </data>
   <data name="lUserName.Text" xml:space="preserve">
-    <value>Username</value>
+    <value>UserName</value>
   </data>
   <data name="txtUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 0</value>
+    <value>170, 0</value>
   </data>
   <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>42, 61</value>
+    <value>67, 61</value>
   </data>
   <data name="cbIsExpiry.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 27</value>
@@ -161,7 +161,7 @@
     <value>Expiry Time</value>
   </data>
   <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>145, 58</value>
+    <value>170, 58</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Account</value>

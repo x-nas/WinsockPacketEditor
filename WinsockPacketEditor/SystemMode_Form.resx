@@ -247,7 +247,7 @@
     <value>None</value>
   </data>
   <data name="tsmiChinese.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 22</value>
+    <value>123, 22</value>
   </data>
   <data name="tsmiChinese.Text" xml:space="preserve">
     <value>中文</value>
@@ -273,7 +273,7 @@
     <value>None</value>
   </data>
   <data name="tsmiEnglish.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 22</value>
+    <value>123, 22</value>
   </data>
   <data name="tsmiEnglish.Text" xml:space="preserve">
     <value>English</value>

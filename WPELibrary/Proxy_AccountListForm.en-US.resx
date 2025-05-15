@@ -147,19 +147,19 @@
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cAccountID.Width" type="System.Int32, mscorlib">
-    <value>27</value>
+    <value>33</value>
   </data>
   <data name="cIsEnable.HeaderText" xml:space="preserve">
     <value>Enable</value>
   </data>
   <data name="cIsEnable.Width" type="System.Int32, mscorlib">
-    <value>53</value>
+    <value>59</value>
   </data>
   <data name="cUserName.HeaderText" xml:space="preserve">
     <value>UserName</value>
   </data>
   <data name="cUserName.Width" type="System.Int32, mscorlib">
-    <value>76</value>
+    <value>82</value>
   </data>
   <data name="cLoginIP.HeaderText" xml:space="preserve">
     <value>Login IP</value>
@@ -168,34 +168,64 @@
     <value>OnLine</value>
   </data>
   <data name="cIsOnLine.Width" type="System.Int32, mscorlib">
-    <value>54</value>
+    <value>60</value>
   </data>
   <data name="cCreateTime.HeaderText" xml:space="preserve">
     <value>Create Time</value>
   </data>
   <data name="cCreateTime.Width" type="System.Int32, mscorlib">
-    <value>84</value>
+    <value>90</value>
   </data>
   <data name="cIsExpiry.HeaderText" xml:space="preserve">
     <value>Expiry</value>
   </data>
   <data name="cIsExpiry.Width" type="System.Int32, mscorlib">
-    <value>49</value>
+    <value>55</value>
   </data>
   <data name="cExpiryTime.HeaderText" xml:space="preserve">
     <value>Expiry Time</value>
   </data>
   <data name="cExpiryTime.Width" type="System.Int32, mscorlib">
-    <value>81</value>
+    <value>87</value>
   </data>
   <data name="bDelete.Text" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="bUpdate.Text" xml:space="preserve">
-    <value>Edit</value>
+    <value>Delete (&amp;D)</value>
   </data>
   <data name="bAccount_New.Text" xml:space="preserve">
-    <value>New</value>
+    <value>New (&amp;N)</value>
+  </data>
+  <data name="bExport.Text" xml:space="preserve">
+    <value>Export (&amp;E)</value>
+  </data>
+  <data name="bImport.Text" xml:space="preserve">
+    <value>Import (&amp;I)</value>
+  </data>
+  <data name="gbSearch_UserName.Text" xml:space="preserve">
+    <value>[ Search - UserName ]</value>
+  </data>
+  <data name="bSearch_UserName.Text" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="gbSearch_State.Text" xml:space="preserve">
+    <value>[ Search - State ]</value>
+  </data>
+  <data name="cbbSearch_State.Items" xml:space="preserve">
+    <value>Enable</value>
+  </data>
+  <data name="cbbSearch_State.Items1" xml:space="preserve">
+    <value>OnLine</value>
+  </data>
+  <data name="cbbSearch_State.Items2" xml:space="preserve">
+    <value>Expiry</value>
+  </data>
+  <data name="cbbSearch_State.Location" type="System.Drawing.Point, System.Drawing">
+    <value>89, 7</value>
+  </data>
+  <data name="cbIs.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 21</value>
+  </data>
+  <data name="cbIs.Text" xml:space="preserve">
+    <value>Yes / No</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -261,9 +261,6 @@
   <data name="cAID.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="cAID.Width" type="System.Int32, mscorlib">
-    <value>41</value>
-  </data>
   <metadata name="cIsEnable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -667,7 +664,7 @@
     <value>过期</value>
   </data>
   <data name="cbbSearch_State.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 7</value>
+    <value>75, 7</value>
   </data>
   <data name="cbbSearch_State.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -700,13 +697,13 @@
     <value>8, 10</value>
   </data>
   <data name="cbIs.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
+    <value>64, 21</value>
   </data>
   <data name="cbIs.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
   </data>
   <data name="cbIs.Text" xml:space="preserve">
-    <value>是否:</value>
+    <value>是 / 否</value>
   </data>
   <data name="&gt;&gt;cbIs.Name" xml:space="preserve">
     <value>cbIs</value>
@@ -7105,12 +7102,6 @@
   <data name="&gt;&gt;tsslAccountExpiry_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tTimer.Name" xml:space="preserve">
-    <value>tTimer</value>
-  </data>
-  <data name="&gt;&gt;tTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cAccountID.Name" xml:space="preserve">
     <value>cAccountID</value>
   </data>
@@ -7164,6 +7155,12 @@
   </data>
   <data name="&gt;&gt;cExpiryTime.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tTimer.Name" xml:space="preserve">
+    <value>tTimer</value>
+  </data>
+  <data name="&gt;&gt;tTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Proxy_AccountListForm</value>

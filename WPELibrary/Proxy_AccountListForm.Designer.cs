@@ -52,6 +52,15 @@
             this.tsslAccountExpiry_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.dgvAccountList = new System.Windows.Forms.DataGridView();
+            this.cAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLoginIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIsOnLine = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cCreateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIsExpiry = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.cExpiryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tlpAccountButton = new System.Windows.Forms.TableLayoutPanel();
             this.bDelete = new System.Windows.Forms.Button();
             this.bAccount_New = new System.Windows.Forms.Button();
@@ -64,18 +73,9 @@
             this.bSearch_UserName = new System.Windows.Forms.Button();
             this.gbSearch_State = new System.Windows.Forms.GroupBox();
             this.tlpSearch_State = new System.Windows.Forms.TableLayoutPanel();
-            this.tTimer = new System.Windows.Forms.Timer(this.components);
             this.cbbSearch_State = new System.Windows.Forms.ComboBox();
             this.cbIs = new System.Windows.Forms.CheckBox();
-            this.cAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLoginIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsOnLine = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cCreateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsExpiry = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cExpiryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tTimer = new System.Windows.Forms.Timer(this.components);
             this.tlpProxyAccountList.SuspendLayout();
             this.ssProxyAccount.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
@@ -225,115 +225,6 @@
             this.dgvAccountList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAccountList_CellDoubleClick);
             this.dgvAccountList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAccountList_CellFormatting);
             // 
-            // tlpAccountButton
-            // 
-            resources.ApplyResources(this.tlpAccountButton, "tlpAccountButton");
-            this.tlpAccountButton.Controls.Add(this.bDelete, 1, 3);
-            this.tlpAccountButton.Controls.Add(this.bAccount_New, 1, 1);
-            this.tlpAccountButton.Controls.Add(this.bExport, 1, 5);
-            this.tlpAccountButton.Controls.Add(this.bImport, 1, 7);
-            this.tlpAccountButton.Name = "tlpAccountButton";
-            // 
-            // bDelete
-            // 
-            resources.ApplyResources(this.bDelete, "bDelete");
-            this.bDelete.Name = "bDelete";
-            this.bDelete.UseVisualStyleBackColor = true;
-            this.bDelete.Click += new System.EventHandler(this.bDelete_Click);
-            // 
-            // bAccount_New
-            // 
-            resources.ApplyResources(this.bAccount_New, "bAccount_New");
-            this.bAccount_New.Name = "bAccount_New";
-            this.bAccount_New.UseVisualStyleBackColor = true;
-            this.bAccount_New.Click += new System.EventHandler(this.bAccount_New_Click);
-            // 
-            // bExport
-            // 
-            resources.ApplyResources(this.bExport, "bExport");
-            this.bExport.Name = "bExport";
-            this.bExport.UseVisualStyleBackColor = true;
-            this.bExport.Click += new System.EventHandler(this.bExport_Click);
-            // 
-            // bImport
-            // 
-            resources.ApplyResources(this.bImport, "bImport");
-            this.bImport.Name = "bImport";
-            this.bImport.UseVisualStyleBackColor = true;
-            this.bImport.Click += new System.EventHandler(this.bImport_Click);
-            // 
-            // tlpSearchAccount
-            // 
-            resources.ApplyResources(this.tlpSearchAccount, "tlpSearchAccount");
-            this.tlpSearchAccount.Controls.Add(this.gbSearch_UserName, 0, 0);
-            this.tlpSearchAccount.Controls.Add(this.gbSearch_State, 1, 0);
-            this.tlpSearchAccount.Name = "tlpSearchAccount";
-            // 
-            // gbSearch_UserName
-            // 
-            this.gbSearch_UserName.Controls.Add(this.tlpSearch_UserName);
-            resources.ApplyResources(this.gbSearch_UserName, "gbSearch_UserName");
-            this.gbSearch_UserName.Name = "gbSearch_UserName";
-            this.gbSearch_UserName.TabStop = false;
-            // 
-            // tlpSearch_UserName
-            // 
-            resources.ApplyResources(this.tlpSearch_UserName, "tlpSearch_UserName");
-            this.tlpSearch_UserName.Controls.Add(this.txtSearch_UserName, 1, 1);
-            this.tlpSearch_UserName.Controls.Add(this.bSearch_UserName, 3, 1);
-            this.tlpSearch_UserName.Name = "tlpSearch_UserName";
-            // 
-            // txtSearch_UserName
-            // 
-            resources.ApplyResources(this.txtSearch_UserName, "txtSearch_UserName");
-            this.txtSearch_UserName.Name = "txtSearch_UserName";
-            // 
-            // bSearch_UserName
-            // 
-            resources.ApplyResources(this.bSearch_UserName, "bSearch_UserName");
-            this.bSearch_UserName.Name = "bSearch_UserName";
-            this.bSearch_UserName.UseVisualStyleBackColor = true;
-            this.bSearch_UserName.Click += new System.EventHandler(this.bSearch_UserName_Click);
-            // 
-            // gbSearch_State
-            // 
-            this.gbSearch_State.Controls.Add(this.tlpSearch_State);
-            resources.ApplyResources(this.gbSearch_State, "gbSearch_State");
-            this.gbSearch_State.Name = "gbSearch_State";
-            this.gbSearch_State.TabStop = false;
-            // 
-            // tlpSearch_State
-            // 
-            resources.ApplyResources(this.tlpSearch_State, "tlpSearch_State");
-            this.tlpSearch_State.Controls.Add(this.cbbSearch_State, 2, 1);
-            this.tlpSearch_State.Controls.Add(this.cbIs, 1, 1);
-            this.tlpSearch_State.Name = "tlpSearch_State";
-            // 
-            // tTimer
-            // 
-            this.tTimer.Enabled = true;
-            this.tTimer.Interval = 1000;
-            this.tTimer.Tick += new System.EventHandler(this.tTimer_Tick);
-            // 
-            // cbbSearch_State
-            // 
-            resources.ApplyResources(this.cbbSearch_State, "cbbSearch_State");
-            this.cbbSearch_State.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbSearch_State.FormattingEnabled = true;
-            this.cbbSearch_State.Items.AddRange(new object[] {
-            resources.GetString("cbbSearch_State.Items"),
-            resources.GetString("cbbSearch_State.Items1"),
-            resources.GetString("cbbSearch_State.Items2")});
-            this.cbbSearch_State.Name = "cbbSearch_State";
-            this.cbbSearch_State.SelectedIndexChanged += new System.EventHandler(this.cbbSearch_State_SelectedIndexChanged);
-            // 
-            // cbIs
-            // 
-            resources.ApplyResources(this.cbIs, "cbIs");
-            this.cbIs.Name = "cbIs";
-            this.cbIs.UseVisualStyleBackColor = true;
-            this.cbIs.CheckedChanged += new System.EventHandler(this.cbIs_CheckedChanged);
-            // 
             // cAccountID
             // 
             this.cAccountID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
@@ -431,6 +322,115 @@
             this.cExpiryTime.ReadOnly = true;
             this.cExpiryTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cExpiryTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // tlpAccountButton
+            // 
+            resources.ApplyResources(this.tlpAccountButton, "tlpAccountButton");
+            this.tlpAccountButton.Controls.Add(this.bDelete, 1, 3);
+            this.tlpAccountButton.Controls.Add(this.bAccount_New, 1, 1);
+            this.tlpAccountButton.Controls.Add(this.bExport, 1, 5);
+            this.tlpAccountButton.Controls.Add(this.bImport, 1, 7);
+            this.tlpAccountButton.Name = "tlpAccountButton";
+            // 
+            // bDelete
+            // 
+            resources.ApplyResources(this.bDelete, "bDelete");
+            this.bDelete.Name = "bDelete";
+            this.bDelete.UseVisualStyleBackColor = true;
+            this.bDelete.Click += new System.EventHandler(this.bDelete_Click);
+            // 
+            // bAccount_New
+            // 
+            resources.ApplyResources(this.bAccount_New, "bAccount_New");
+            this.bAccount_New.Name = "bAccount_New";
+            this.bAccount_New.UseVisualStyleBackColor = true;
+            this.bAccount_New.Click += new System.EventHandler(this.bAccount_New_Click);
+            // 
+            // bExport
+            // 
+            resources.ApplyResources(this.bExport, "bExport");
+            this.bExport.Name = "bExport";
+            this.bExport.UseVisualStyleBackColor = true;
+            this.bExport.Click += new System.EventHandler(this.bExport_Click);
+            // 
+            // bImport
+            // 
+            resources.ApplyResources(this.bImport, "bImport");
+            this.bImport.Name = "bImport";
+            this.bImport.UseVisualStyleBackColor = true;
+            this.bImport.Click += new System.EventHandler(this.bImport_Click);
+            // 
+            // tlpSearchAccount
+            // 
+            resources.ApplyResources(this.tlpSearchAccount, "tlpSearchAccount");
+            this.tlpSearchAccount.Controls.Add(this.gbSearch_UserName, 0, 0);
+            this.tlpSearchAccount.Controls.Add(this.gbSearch_State, 1, 0);
+            this.tlpSearchAccount.Name = "tlpSearchAccount";
+            // 
+            // gbSearch_UserName
+            // 
+            this.gbSearch_UserName.Controls.Add(this.tlpSearch_UserName);
+            resources.ApplyResources(this.gbSearch_UserName, "gbSearch_UserName");
+            this.gbSearch_UserName.Name = "gbSearch_UserName";
+            this.gbSearch_UserName.TabStop = false;
+            // 
+            // tlpSearch_UserName
+            // 
+            resources.ApplyResources(this.tlpSearch_UserName, "tlpSearch_UserName");
+            this.tlpSearch_UserName.Controls.Add(this.txtSearch_UserName, 1, 1);
+            this.tlpSearch_UserName.Controls.Add(this.bSearch_UserName, 3, 1);
+            this.tlpSearch_UserName.Name = "tlpSearch_UserName";
+            // 
+            // txtSearch_UserName
+            // 
+            resources.ApplyResources(this.txtSearch_UserName, "txtSearch_UserName");
+            this.txtSearch_UserName.Name = "txtSearch_UserName";
+            // 
+            // bSearch_UserName
+            // 
+            resources.ApplyResources(this.bSearch_UserName, "bSearch_UserName");
+            this.bSearch_UserName.Name = "bSearch_UserName";
+            this.bSearch_UserName.UseVisualStyleBackColor = true;
+            this.bSearch_UserName.Click += new System.EventHandler(this.bSearch_UserName_Click);
+            // 
+            // gbSearch_State
+            // 
+            this.gbSearch_State.Controls.Add(this.tlpSearch_State);
+            resources.ApplyResources(this.gbSearch_State, "gbSearch_State");
+            this.gbSearch_State.Name = "gbSearch_State";
+            this.gbSearch_State.TabStop = false;
+            // 
+            // tlpSearch_State
+            // 
+            resources.ApplyResources(this.tlpSearch_State, "tlpSearch_State");
+            this.tlpSearch_State.Controls.Add(this.cbbSearch_State, 2, 1);
+            this.tlpSearch_State.Controls.Add(this.cbIs, 1, 1);
+            this.tlpSearch_State.Name = "tlpSearch_State";
+            // 
+            // cbbSearch_State
+            // 
+            resources.ApplyResources(this.cbbSearch_State, "cbbSearch_State");
+            this.cbbSearch_State.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbSearch_State.FormattingEnabled = true;
+            this.cbbSearch_State.Items.AddRange(new object[] {
+            resources.GetString("cbbSearch_State.Items"),
+            resources.GetString("cbbSearch_State.Items1"),
+            resources.GetString("cbbSearch_State.Items2")});
+            this.cbbSearch_State.Name = "cbbSearch_State";
+            this.cbbSearch_State.SelectedIndexChanged += new System.EventHandler(this.cbbSearch_State_SelectedIndexChanged);
+            // 
+            // cbIs
+            // 
+            resources.ApplyResources(this.cbIs, "cbIs");
+            this.cbIs.Name = "cbIs";
+            this.cbIs.UseVisualStyleBackColor = true;
+            this.cbIs.CheckedChanged += new System.EventHandler(this.cbIs_CheckedChanged);
+            // 
+            // tTimer
+            // 
+            this.tTimer.Enabled = true;
+            this.tTimer.Interval = 1000;
+            this.tTimer.Tick += new System.EventHandler(this.tTimer_Tick);
             // 
             // Proxy_AccountListForm
             // 

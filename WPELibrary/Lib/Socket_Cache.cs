@@ -1125,12 +1125,14 @@ namespace WPELibrary.Lib
 
             public static bool CheckUserNameAndPassWord(string UserName, string PassWord, out Guid AccountID)
             {
-                AccountID = Guid.Empty;
+                AccountID = Guid.Empty;                                
 
                 try
                 {
                     foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
                     {
+                        PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
+
                         if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.PassWord.Equals(PassWord))
                         {
                             if (pai.IsExpiry)
@@ -1145,7 +1147,7 @@ namespace WPELibrary.Lib
                             {
                                 AccountID = pai.AID;
                                 return true;
-                            }                                
+                            }
                         }
                     }
                 }
@@ -1221,7 +1223,7 @@ namespace WPELibrary.Lib
 
                         if (pai != null)
                         {
-                            pai.IsEnable = IsEnable;                            
+                            pai.IsEnable = IsEnable;
                             pai.PassWord = PassWord;
                             pai.IsExpiry = IsExpiry;
                             pai.ExpiryTime = ExpiryTime;

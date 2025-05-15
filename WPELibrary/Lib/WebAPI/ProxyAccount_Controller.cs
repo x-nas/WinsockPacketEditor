@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
@@ -32,33 +33,55 @@ namespace WPELibrary.Lib.WebAPI
 
         #endregion
 
+        #region//获取解密后的密码
+
+        [HttpGet]
+        [Route("GetPassWordDecrypt")]
+
+        public string GetPassWordDecrypt(string PassWord)
+        {
+            return Socket_Operation.PassWord_Decrypt(PassWord);
+        }
+
+        #endregion
+
         #region//新增代理账号
 
         [HttpPost]
         [Route("AddProxyAccount")]
 
         public IHttpActionResult AddProxyAccount([FromBody] Proxy_AccountInfo pai)
-        {  
-            if (Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(pai.UserName))
+        {
+            try
             {
-                return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
+                if (Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(pai.UserName))
+                {
+                    return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
+                }
+
+                if (pai.ExpiryTime == null)
+                {
+                    pai.ExpiryTime = DateTime.Now;
+                }
+
+                pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+                bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
+
+                if (bOK)
+                {
+                    return Ok(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_183));
+                }
+                else
+                {
+                    return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_181));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            if (pai.ExpiryTime == null)
-            {
-                pai.ExpiryTime = DateTime.Now;
-            }
-
-            bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
-
-            if (bOK)
-            {
-                return Ok(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_183));
-            }
-            else
-            {
-                return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_181));
-            }
+            return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_181));
         }
 
         #endregion
@@ -96,6 +119,7 @@ namespace WPELibrary.Lib.WebAPI
                 pai.ExpiryTime = DateTime.Now;
             }
 
+            pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
             bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, pai.IsEnable, pai.PassWord, pai.IsExpiry, pai.ExpiryTime);
 
             return Ok();

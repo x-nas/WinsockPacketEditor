@@ -241,16 +241,16 @@
   <data name="txtEXTHttpPort.Location" type="System.Drawing.Point, System.Drawing">
     <value>377, 7</value>
   </data>
-  <data name="cbEnable_EXTHttps.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbEnableEXTHttps.Size" type="System.Drawing.Size, System.Drawing">
     <value>205, 23</value>
   </data>
-  <data name="cbEnable_EXTHttps.Text" xml:space="preserve">
+  <data name="cbEnableEXTHttps.Text" xml:space="preserve">
     <value>Enable - External HTTPS Proxy:</value>
   </data>
-  <data name="cbEnable_EXTHttp.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbEnableEXTHttp.Size" type="System.Drawing.Size, System.Drawing">
     <value>205, 23</value>
   </data>
-  <data name="cbEnable_EXTHttp.Text" xml:space="preserve">
+  <data name="cbEnableEXTHttp.Text" xml:space="preserve">
     <value>Enable - External HTTP Proxy:</value>
   </data>
   <data name="txtEXTHttpIP.Location" type="System.Drawing.Point, System.Drawing">
@@ -310,7 +310,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAYgBAQGIAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAZABAQGQAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
