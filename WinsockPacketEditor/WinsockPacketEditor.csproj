@@ -337,6 +337,12 @@
     <Content Include="Web\web_images\wpe.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\copy.png" />
     <None Include="Resources\cut.png" />
     <Content Include="Resources\enUS.png" />
