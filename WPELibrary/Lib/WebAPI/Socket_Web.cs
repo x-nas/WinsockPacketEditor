@@ -147,6 +147,35 @@ namespace WPELibrary.Lib.WebAPI
                 });
 
                 #endregion                
+
+                #region//处理 SystemLog 路径
+
+                app.Use(async (context, next) =>
+                {
+                    if (context.Request.Path == new PathString("/SystemLog"))
+                    {
+                        var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "SystemLog.html");
+
+                        if (File.Exists(filePath))
+                        {
+                            context.Response.ContentType = "text/html";
+                            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                            {
+                                await fileStream.CopyToAsync(context.Response.Body);
+                            }
+                        }
+                        else
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        }
+                    }
+                    else
+                    {
+                        await next.Invoke();
+                    }
+                });
+
+                #endregion                                
             }
             catch (Exception ex)
             {

@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=420, initial-scale=1">
+    <link rel="icon" href="./web_images/wpe.ico" />
+    <link rel="stylesheet" type="text/css" href="./web_images/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/github-dark.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="./web_images/print.css" media="print">
+    <link rel="stylesheet" type="text/css" href="./web_images/downloads.css" media="all">
+    <script src="./web_images/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script src="./web_images/script.js" type="text/javascript"></script>
+
+    <title>Winsock Packet Editor</title>
+
+    <style>
+        .bold {
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button-container {
+            margin-bottom: 10px;
+        }
+
+            .button-container button {
+                margin-right: 10px;
+                padding: 5px 10px;
+                cursor: pointer;
+                background-color: #f9f9f9;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+                .button-container button.active {
+                    background-color: #4CAF50;
+                    color: white;
+                    border-color: #4CAF50;
+                }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body style="padding: 0px 0px 154px;">
+    <div id="container" style="height: auto !important; min-height: 0px !important;">
+        <div class="inner" style="height: auto !important;">
+            <div id="header-container"></div>
+            <section id="main_content" style="height: auto !important;">
+
+                <h2>>> 运行日志</h2>
+
+                <div class="button-container">
+                    <button id="socketLogButton" class="active">查看封包日志</button>
+                    <button id="proxyLogButton">查看代理日志</button>
+                    <button id="authLogButton">查看认证日志</button>
+                </div>
+
+                <div id="SocketLog" class="log-content">
+                    <div id="SocketLogContent"></div>
+                </div>
+
+                <div id="ProxyLog" class="log-content hidden">
+                    <div id="ProxyLogContent"></div>
+                </div>
+
+                <div id="AuthLog" class="log-content hidden">
+                    <div id="AuthLogContent"></div>
+                </div>
+
+            </section>
+
+            <div id="footer-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // 获取运行日志
+        function fetchData() {
+
+            fetch('./api/SocketInfo/GetSocketLogList')
+                .then(response => response.json())
+                .then(data => {
+                    displaySocketLog(data);
+                });
+
+            fetch('./api/ProxyInfo/GetProxyLogList')
+                .then(response => response.json())
+                .then(data => {
+                    displayProxyLog(data);
+                });
+
+            fetch('./api/ProxyInfo/GetProxyAuthList')
+                .then(response => response.json())
+                .then(data => {
+                    displayAuthLog(data);
+                });
+        }
+
+        // 显示封包日志
+        function displaySocketLog(data) {
+            const dataDiv = document.getElementById('SocketLogContent');
+            const table = document.createElement('table');
+
+            const headerRow = document.createElement('tr');
+            const headers = ['序号', '记录时间', '模块', '日志内容'];
+
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                th.style.textAlign = 'center';
+                headerRow.appendChild(th);
+            });
+
+            table.appendChild(headerRow);
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const cells = [
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td')
+                ];
+
+                cells[0].textContent = index + 1;
+                cells[1].textContent = item.LogTime;
+                cells[2].textContent = item.FuncName;
+                cells[3].textContent = item.LogContent;
+
+                cells.forEach(cell => {
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+
+                table.appendChild(row);
+            });
+
+            dataDiv.innerHTML = '';
+            dataDiv.appendChild(table);
+        }
+
+        // 显示代理日志
+        function displayProxyLog(data) {
+            const dataDiv = document.getElementById('ProxyLogContent');
+            const table = document.createElement('table');
+
+            const headerRow = document.createElement('tr');
+            const headers = ['序号', '记录时间', '模块', '日志内容'];
+
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                th.style.textAlign = 'center';
+                headerRow.appendChild(th);
+            });
+
+            table.appendChild(headerRow);
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const cells = [
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td')
+                ];
+
+                cells[0].textContent = index + 1;
+                cells[1].textContent = item.LogTime;
+                cells[2].textContent = item.FuncName;
+                cells[3].textContent = item.LogContent;
+
+                cells.forEach(cell => {
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+
+                table.appendChild(row);
+            });
+
+            dataDiv.innerHTML = '';
+            dataDiv.appendChild(table);
+        }
+
+        // 显示认证日志
+        function displayAuthLog(data) {
+            const dataDiv = document.getElementById('AuthLogContent');
+            const table = document.createElement('table');
+
+            const headerRow = document.createElement('tr');
+            const headers = ['序号', '记录时间', 'IP地址', '账号', '认证结果'];
+
+            headers.forEach(headerText => {
+                const th = document.createElement('th');
+                th.textContent = headerText;
+                th.style.textAlign = 'center';
+                headerRow.appendChild(th);
+            });
+
+            table.appendChild(headerRow);
+
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const cells = [
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td'),
+                    document.createElement('td')
+                ];
+
+                cells[0].textContent = index + 1;
+                cells[1].textContent = formatDate(new Date(item.AuthTime));
+                cells[2].textContent = item.IPAddress;
+                cells[3].textContent = item.UserName;
+
+                const img = document.createElement('img');
+                if (item.AuthResult) {
+                    img.src = './images/pass.png';
+                } else {
+                    img.src = './images/fail.png';
+                }
+                cells[4].appendChild(img);
+
+                cells.forEach(cell => {
+                    cell.style.textAlign = 'center';
+                    row.appendChild(cell);
+                });
+
+                table.appendChild(row);
+            });
+
+            dataDiv.innerHTML = '';
+            dataDiv.appendChild(table);
+        }
+
+        // 格式化显示日期
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}`;
+        }
+
+        // 切换显示日志
+        function switchLogDisplay(socketLogVisible, proxyLogVisible, authLogVisible)
+        {
+            const socketLogDiv = document.getElementById('SocketLog');
+            const proxyLogDiv = document.getElementById('ProxyLog');
+            const authLogDiv = document.getElementById('AuthLog');
+            const socketLogButton = document.getElementById('socketLogButton');
+            const proxyLogButton = document.getElementById('proxyLogButton');
+            const authLogButton = document.getElementById('authLogButton');
+
+            socketLogDiv.style.display = socketLogVisible ? 'block' : 'none';
+            proxyLogDiv.style.display = proxyLogVisible ? 'block' : 'none';
+            authLogDiv.style.display = authLogVisible ? 'block' : 'none';
+
+            socketLogButton.classList.toggle('active', socketLogVisible);
+            proxyLogButton.classList.toggle('active', proxyLogVisible);
+            authLogButton.classList.toggle('active', authLogVisible);
+        }
+
+        // 初始化按钮事件
+        document.getElementById('socketLogButton').addEventListener('click', () => {
+            switchLogDisplay(true, false, false);
+        });
+
+        document.getElementById('proxyLogButton').addEventListener('click', () => {
+            switchLogDisplay(false, true, false);
+        });
+
+        document.getElementById('authLogButton').addEventListener('click', () => {
+            switchLogDisplay(false, false, true);
+        });
+
+        window.onload = () => {
+            fetchData();
+            switchLogDisplay(true, false, false);
+        };
+
+        setInterval(fetchData, 5000);
+    </script>
+
+</body>
+</html>

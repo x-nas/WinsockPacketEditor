@@ -260,6 +260,8 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\pass.png" />
+    <None Include="Resources\fail.png" />
     <None Include="Resources\Stop.png" />
     <None Include="Resources\Start.png" />
     <None Include="Resources\Compare.png" />

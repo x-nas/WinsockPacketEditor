@@ -35,9 +35,110 @@ namespace WPELibrary.Lib
         public static bool bDoLog_HookTime = true;
         public static DataTable ProcessTable;
         public static DataTable dtSearchFrom = new DataTable();
-        public static DataTable dtPacketFormat = new DataTable();        
-        private static readonly Dictionary<char, string> encryptionMap = new Dictionary<char, string>();
-        private static readonly Dictionary<string, char> decryptionMap = new Dictionary<string, char>();
+        public static DataTable dtPacketFormat = new DataTable();
+
+        #region//密码字典
+
+        private static readonly Dictionary<char, string> encryptionMap = new Dictionary<char, string>
+        {
+            {'!', "966"},
+            {'"', "965"},
+            {'#', "964"},
+            {'$', "963"},
+            {'%', "962"},
+            {'^', "961"},
+            {'&', "960"},
+            {'*', "959"},
+            {'(', "958"},
+            {')', "957"},
+            {'+', "956"},
+            {',', "955"},
+            {'-', "954"},
+            {'.', "953"},
+            {'/', "952"},
+            {'0', "951"},
+            {'1', "950"},
+            {'2', "949"},
+            {'3', "948"},
+            {'4', "947"},
+            {'5', "946"},
+            {'6', "945"},
+            {'7', "944"},
+            {'8', "943"},
+            {'9', "942"},
+            {':', "941"},
+            {';', "940"},
+            {'<', "939"},
+            {'=', "938"},
+            {'>', "937"},
+            {'?', "936"},
+            {'@', "935"},
+            {'A', "934"},
+            {'B', "933"},
+            {'C', "932"},
+            {'D', "931"},
+            {'E', "930"},
+            {'F', "929"},
+            {'G', "928"},
+            {'H', "927"},
+            {'I', "926"},
+            {'J', "925"},
+            {'K', "924"},
+            {'L', "923"},
+            {'M', "922"},
+            {'N', "921"},
+            {'O', "920"},
+            {'P', "919"},
+            {'Q', "918"},
+            {'R', "917"},
+            {'S', "916"},
+            {'T', "915"},
+            {'U', "914"},
+            {'V', "913"},
+            {'W', "912"},
+            {'X', "911"},
+            {'Y', "910"},
+            {'Z', "909"},
+            {'[', "908"},
+            {'\\', "907"},
+            {']', "906"},
+            {'_', "904"},
+            {'`', "903"},
+            {'a', "902"},
+            {'b', "901"},
+            {'c', "900"},
+            {'d', "899"},
+            {'e', "898"},
+            {'f', "897"},
+            {'g', "896"},
+            {'h', "895"},
+            {'i', "894"},
+            {'j', "893"},
+            {'k', "892"},
+            {'l', "891"},
+            {'m', "890"},
+            {'n', "889"},
+            {'o', "888"},
+            {'p', "887"},
+            {'q', "886"},
+            {'r', "885"},
+            {'s', "884"},
+            {'t', "883"},
+            {'u', "882"},
+            {'v', "881"},
+            {'w', "880"},
+            {'x', "879"},
+            {'y', "878"},
+            {'z', "877"},
+            {'{', "876"},
+            {'|', "875"},
+            {'}', "874"},
+            {'~', "873"}
+        };
+
+        private static readonly Dictionary<string, char> decryptionMap = encryptionMap.ToDictionary(kv => kv.Value, kv => kv.Key);
+
+        #endregion
 
         #region//判断是否为64位的进程
 
@@ -446,133 +547,12 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//密码字典
-
-        public static void InitPassWordEncryptor()
-        {
-            try
-            {
-                // 添加数字映射
-                encryptionMap.Add('0', "951");
-                encryptionMap.Add('1', "950");
-                encryptionMap.Add('2', "949");
-                encryptionMap.Add('3', "948");
-                encryptionMap.Add('4', "947");
-                encryptionMap.Add('5', "946");
-                encryptionMap.Add('6', "945");
-                encryptionMap.Add('7', "944");
-                encryptionMap.Add('8', "943");
-                encryptionMap.Add('9', "942");
-
-                // 添加小写字母映射
-                encryptionMap.Add('a', "902");
-                encryptionMap.Add('b', "901");
-                encryptionMap.Add('c', "900");
-                encryptionMap.Add('d', "899");
-                encryptionMap.Add('e', "898");
-                encryptionMap.Add('f', "897");
-                encryptionMap.Add('g', "896");
-                encryptionMap.Add('h', "895");
-                encryptionMap.Add('i', "894");
-                encryptionMap.Add('j', "893");
-                encryptionMap.Add('k', "892");
-                encryptionMap.Add('l', "891");
-                encryptionMap.Add('m', "890");
-                encryptionMap.Add('n', "889");
-                encryptionMap.Add('o', "888");
-                encryptionMap.Add('p', "887");
-                encryptionMap.Add('q', "886");
-                encryptionMap.Add('r', "885");
-                encryptionMap.Add('s', "884");
-                encryptionMap.Add('t', "883");
-                encryptionMap.Add('u', "882");
-                encryptionMap.Add('v', "881");
-                encryptionMap.Add('w', "880");
-                encryptionMap.Add('x', "879");
-                encryptionMap.Add('y', "878");
-                encryptionMap.Add('z', "877");
-
-                // 添加大写字母映射
-                encryptionMap.Add('A', "934");
-                encryptionMap.Add('B', "933");
-                encryptionMap.Add('C', "932");
-                encryptionMap.Add('D', "931");
-                encryptionMap.Add('E', "930");
-                encryptionMap.Add('F', "929");
-                encryptionMap.Add('G', "928");
-                encryptionMap.Add('H', "927");
-                encryptionMap.Add('I', "926");
-                encryptionMap.Add('J', "925");
-                encryptionMap.Add('K', "924");
-                encryptionMap.Add('L', "923");
-                encryptionMap.Add('M', "922");
-                encryptionMap.Add('N', "921");
-                encryptionMap.Add('O', "920");
-                encryptionMap.Add('P', "919");
-                encryptionMap.Add('Q', "918");
-                encryptionMap.Add('R', "917");
-                encryptionMap.Add('S', "916");
-                encryptionMap.Add('T', "915");
-                encryptionMap.Add('U', "914");
-                encryptionMap.Add('V', "913");
-                encryptionMap.Add('W', "912");
-                encryptionMap.Add('X', "911");
-                encryptionMap.Add('Y', "910");
-                encryptionMap.Add('Z', "909");
-
-                // 添加符号映射
-                encryptionMap.Add('~', "873");
-                encryptionMap.Add('!', "966");
-                encryptionMap.Add('@', "935");
-                encryptionMap.Add('#', "964");
-                encryptionMap.Add('$', "963");
-                encryptionMap.Add('%', "962");
-                encryptionMap.Add('^', "961");
-                encryptionMap.Add('&', "960");
-                encryptionMap.Add('*', "959");
-                encryptionMap.Add('(', "958");
-                encryptionMap.Add(')', "957");
-                encryptionMap.Add('_', "904");
-                encryptionMap.Add('+', "956");
-                encryptionMap.Add('{', "876");
-                encryptionMap.Add('}', "874");
-                encryptionMap.Add('|', "875");
-                encryptionMap.Add(';', "940");
-                encryptionMap.Add(':', "941");
-                encryptionMap.Add('"', "965");
-                encryptionMap.Add('<', "939");
-                encryptionMap.Add('>', "937");
-                encryptionMap.Add('?', "936");
-                encryptionMap.Add('`', "903");
-                encryptionMap.Add('-', "954");
-                encryptionMap.Add('=', "938");
-                encryptionMap.Add('[', "908");
-                encryptionMap.Add(']', "906");
-                encryptionMap.Add('\\', "907");
-                encryptionMap.Add(',', "955");
-                encryptionMap.Add('.', "953");
-                encryptionMap.Add('/', "952");
-               
-                foreach (var pair in encryptionMap)
-                {
-                    decryptionMap.Add(pair.Value, pair.Key);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }
+        #region//密码字典        
 
         public static string PassWord_Encrypt(string plainText)
         {
             try
             {
-                if (Socket_Operation.encryptionMap.Count == 0 || Socket_Operation.decryptionMap.Count == 0)
-                {
-                    Socket_Operation.InitPassWordEncryptor();
-                }
-
                 if (string.IsNullOrEmpty(plainText))
                 {
                     return string.Empty;
@@ -605,11 +585,6 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (Socket_Operation.encryptionMap.Count == 0 || Socket_Operation.decryptionMap.Count == 0)
-                {
-                    Socket_Operation.InitPassWordEncryptor();
-                }
-
                 if (string.IsNullOrEmpty(encryptedText))
                 {
                     return string.Empty;

@@ -359,7 +359,7 @@ namespace WPELibrary.Lib
                         else
                         {
                             IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
-                            Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), false);
+                            Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), string.Empty, false);
                         }
                     }
                     else
@@ -394,11 +394,11 @@ namespace WPELibrary.Lib
 
                         string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
                         string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
-                                                
+
                         bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
-                        
+
                         IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
-                        Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), bAuthOK);
+                        Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), sUserName, bAuthOK);
 
                         Span<byte> bAuth = stackalloc byte[2];
                         if (bAuthOK)
@@ -796,11 +796,11 @@ namespace WPELibrary.Lib
 
             #region//记录代理认证结果            
 
-            public static void AuthResult_ToList(string IPAddress, bool AuthResult)
+            public static void AuthResult_ToList(string IPAddress, string UserName, bool AuthResult)
             {
                 try
                 {
-                    Proxy_AuthInfo pai = new Proxy_AuthInfo(IPAddress, AuthResult, DateTime.Now);
+                    Proxy_AuthInfo pai = new Proxy_AuthInfo(IPAddress, UserName, AuthResult, DateTime.Now);
                     RecProxyAuth?.Invoke(pai);
                 }
                 catch (Exception ex)
@@ -1121,7 +1121,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//检测用户名和密码是否正确（不区分大小写）
+            #region//检测用户名和密码是否正确（区分大小写）
 
             public static bool CheckUserNameAndPassWord(string UserName, string PassWord, out Guid AccountID)
             {
@@ -1129,11 +1129,11 @@ namespace WPELibrary.Lib
 
                 try
                 {
+                    string pwEncrypt = Socket_Operation.PassWord_Encrypt(PassWord);
+
                     foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
                     {
-                        PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
-
-                        if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.PassWord.Equals(PassWord))
+                        if (pai.IsEnable && pai.UserName.Equals(UserName) && pai.PassWord.Equals(pwEncrypt))
                         {
                             if (pai.IsExpiry)
                             {
@@ -1160,6 +1160,30 @@ namespace WPELibrary.Lib
             }
 
             #endregion
+
+            #region//获取认证结果对应的图标
+
+            public static Image GetImg_ByAuthResult(bool AuthResult)
+            {
+                try
+                {
+                    if (AuthResult)
+                    {
+                        return Properties.Resources.pass;
+                    }
+                    else
+                    {
+                        return Properties.Resources.fail;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return null;
+                }
+            }
+
+            #endregion            
 
             #region//设置代理账号的在线情况
 
@@ -1438,7 +1462,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
+            #endregion            
 
             #region//保存代理账号列表到数据库
 

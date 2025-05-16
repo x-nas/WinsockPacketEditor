@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
 {
@@ -47,6 +48,18 @@ namespace WPELibrary.Lib.WebAPI
             SocketInfo[14] = SocketBytes;            
 
             return Ok(SocketInfo);
+        }
+
+        #endregion
+
+        #region//获取封包日志
+
+        [HttpGet]
+        [Route("GetSocketLogList")]
+
+        public IEnumerable<Socket_LogInfo> GetSocketLogList()
+        {
+            return Socket_Cache.LogList.lstSocketLog;
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
 {
@@ -6,7 +7,7 @@ namespace WPELibrary.Lib.WebAPI
 
     public class ProxyInfo_Controller : ApiController
     {
-        #region//获取代理信息
+        #region//获取代理数据
 
         [HttpGet]
         [Route("GetProxyInfo")]
@@ -35,6 +36,30 @@ namespace WPELibrary.Lib.WebAPI
             ProxyInfo[8] = ProxyBytes;
 
             return Ok(ProxyInfo);
+        }
+
+        #endregion
+
+        #region//获取认证日志
+
+        [HttpGet]
+        [Route("GetProxyAuthList")]
+
+        public IEnumerable<Proxy_AuthInfo> GetProxyAuthList()
+        {
+            return Socket_Cache.SocketProxy.lstProxyAuth;
+        }
+
+        #endregion
+
+        #region//获取代理日志
+
+        [HttpGet]
+        [Route("GetProxyLogList")]
+
+        public IEnumerable<Socket_LogInfo> GetProxyLogList()
+        {
+            return Socket_Cache.LogList.lstProxyLog;
         }
 
         #endregion

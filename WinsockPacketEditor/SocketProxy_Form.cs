@@ -930,14 +930,19 @@ namespace WinsockPacketEditor
                 {
                     dgvAuth.Invoke(new MethodInvoker(delegate
                     {
-                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress);
+                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.UserName == pai.UserName);
 
                         if (paiItem != null)
                         {
-                            Socket_Cache.SocketProxy.lstProxyAuth.Remove(paiItem);
+                            paiItem.AuthResult = pai.AuthResult;
+                            paiItem.AuthTime = pai.AuthTime;
                         }
-
-                        Socket_Cache.SocketProxy.lstProxyAuth.Add(pai);
+                        else
+                        {
+                            Socket_Cache.SocketProxy.lstProxyAuth.Add(pai);
+                        }
+                        
+                        this.dgvAuth.Refresh();
 
                     }));
                 }
@@ -959,15 +964,7 @@ namespace WinsockPacketEditor
                 }
                 else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)
                 {
-                    if (Convert.ToBoolean(e.Value))
-                    {
-                        e.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146);
-                    }
-                    else
-                    {
-                        e.Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147);
-                    }
-                        
+                    e.Value = Socket_Cache.ProxyAccount.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
                     e.FormattingApplied = true;
                 }
             }
