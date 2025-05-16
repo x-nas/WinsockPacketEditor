@@ -24,6 +24,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            display: none;
         }
 
         th, td {
@@ -36,6 +37,24 @@
             background-color: #f2f2f2;
         }
 
+        .button-container {
+            margin-bottom: 10px;
+        }
+
+            .button-container button {
+                margin-right: 10px;
+                padding: 5px 10px;
+                cursor: pointer;
+                background-color: #f9f9f9;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+                .button-container button.active {
+                    background-color: #4CAF50;
+                    color: white;
+                    border-color: #4CAF50;
+                }
     </style>
 </head>
 
@@ -45,9 +64,15 @@
             <div id="header-container"></div>
             <section id="main_content" style="height: auto !important;">
 
-                <h2>>> 系统监控</h2>                
+                <h2>>> 系统监控</h2>
 
-                <table>
+                <div class="button-container">
+                    <button id="btnSystem" class="active">查看服务器状态</button>
+                    <button id="btnSocket">查看封包数据</button>
+                    <button id="btnProxy">查看代理数据</button>
+                </div>
+
+                <table id="systemTable">
                     <thead>
                         <tr>
                             <th class="bold">服务器</th>
@@ -80,7 +105,7 @@
                     </tr>
                 </table>
 
-                <table>
+                <table id="socketTable">
                     <thead>
                         <tr>
                             <th class="bold">封包数据</th>
@@ -143,7 +168,7 @@
                     </tbody>
                 </table>
 
-                <table>
+                <table id="proxyTable">
                     <thead>
                         <tr>
                             <th class="bold">代理数据</th>
@@ -195,14 +220,11 @@
     <script>
         let startTime;
 
-        function fetchData()
-        {
-            if (!startTime)
-            {
+        function fetchData() {
+            if (!startTime) {
                 fetch('/api/SystemInfo/GetStartTime')
                     .then(response => response.json())
-                    .then(data =>
-                    {
+                    .then(data => {
                         startTime = new Date(data);
                         updateUptime();
                         setInterval(updateUptime, 1000);
@@ -211,23 +233,20 @@
 
             fetch('/api/SystemInfo/GetCPUAndMemory')
                 .then(response => response.json())
-                .then(data =>
-                {
+                .then(data => {
                     document.getElementById('CPU').textContent = data[0];
                     document.getElementById('MEM').textContent = data[1];
                 })
 
             fetch('/api/SystemInfo/GetSelectMode')
                 .then(response => response.json())
-                .then(data =>
-                {
+                .then(data => {
                     document.getElementById('SelectMode').textContent = data;
                 })
 
             fetch('/api/ProxyInfo/GetProxyInfo')
                 .then(response => response.json())
-                .then(data =>
-                {
+                .then(data => {
                     document.getElementById('ProxyWorkMode').textContent = data[0];
                     document.getElementById('ProxyTotal').textContent = data[1];
                     document.getElementById('ProxyTCP').textContent = data[2];
@@ -241,8 +260,7 @@
 
             fetch('/api/SocketInfo/GetSocketInfo')
                 .then(response => response.json())
-                .then(data =>
-                {
+                .then(data => {
                     document.getElementById('SocketProcess').textContent = data[0];
                     document.getElementById('SocketWorkMode').textContent = data[1];
                     document.getElementById('SocketTotal').textContent = data[2];
@@ -257,12 +275,11 @@
                     document.getElementById('SocketWSARecv').textContent = data[11];
                     document.getElementById('SocketWSASendTo').textContent = data[12];
                     document.getElementById('SocketWSARecvFrom').textContent = data[13];
-                    document.getElementById('SocketBytes').textContent = data[14];                    
+                    document.getElementById('SocketBytes').textContent = data[14];
                 })
         }
 
-        function updateUptime()
-        {
+        function updateUptime() {
             const now = new Date();
             const uptime = now - startTime;
             const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
@@ -272,9 +289,41 @@
             document.getElementById('ServerUptime').textContent = ` ${days} 天 ${hours} 小时 ${minutes} 分 ${seconds} 秒`;
         }
 
-        window.onload = fetchData;
-        setInterval(fetchData, 5000);
+        document.getElementById('btnSystem').addEventListener('click', () => {
+            switchTableDisplay(true, false, false);
+        });
 
+        document.getElementById('btnSocket').addEventListener('click', () => {
+            switchTableDisplay(false, true, false);
+        });
+
+        document.getElementById('btnProxy').addEventListener('click', () => {
+            switchTableDisplay(false, false, true);
+        });
+
+        function switchTableDisplay(systemVisible, socketVisible, proxyVisible) {
+            const systemTable = document.getElementById('systemTable');
+            const socketTable = document.getElementById('socketTable');
+            const proxyTable = document.getElementById('proxyTable');
+            const btnSystem = document.getElementById('btnSystem');
+            const btnSocket = document.getElementById('btnSocket');
+            const btnProxy = document.getElementById('btnProxy');
+
+            systemTable.style.display = systemVisible ? 'table' : 'none';
+            socketTable.style.display = socketVisible ? 'table' : 'none';
+            proxyTable.style.display = proxyVisible ? 'table' : 'none';
+
+            btnSystem.classList.toggle('active', systemVisible);
+            btnSocket.classList.toggle('active', socketVisible);
+            btnProxy.classList.toggle('active', proxyVisible);
+        }
+
+        window.onload = () => {
+            fetchData();
+            switchTableDisplay(true, false, false);
+        };
+
+        setInterval(fetchData, 5000);
     </script>
 
 </body>
