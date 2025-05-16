@@ -203,6 +203,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_191 = { "加载代理账号列表成功! [未加密]", "Load Proxy Account list successful! [Unencrypted]" };
         public static string[] MutiLan_192 = { "加载代理账号列表成功! [已加密]", "Load Proxy Account list successful! [Encrypted]" };
         public static string[] MutiLan_193 = { "导入账号失败！用户名：{0}", "Import account failed! Username: {0}" };
+        public static string[] MutiLan_194 = { "更新账号成功!", "Account Update successfully!" };
+        public static string[] MutiLan_195 = { "更新账号失败!", "Failed to Update Account!" };
 
         #endregion
 

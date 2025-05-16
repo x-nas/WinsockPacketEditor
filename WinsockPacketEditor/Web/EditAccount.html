@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编辑账号</title>    
+    <title>编辑账号</title>
+    
     <style>
 
         table {
@@ -64,7 +65,9 @@
         .text-right {
             text-align: right;
         }
+
     </style>
+
 </head>
 <body>
     <h2>>> 编辑账号</h2>
@@ -106,8 +109,10 @@
         const AID = urlParams.get('AID');        
 
         // 填充表单数据
-        async function loadAccountData() {
-            try {
+        async function loadAccountData()
+        {
+            try
+            {
                 const response = await fetch(`./api/ProxyAccount/GetProxyAccountByID?AID=${AID}`);
                 const data = await response.json();
 
@@ -120,8 +125,10 @@
 
                 document.getElementById('isExpiry').checked = data.IsExpiry;
                 document.getElementById('expiryTime').value = formatDate(new Date(data.ExpiryTime));
-            } catch (error) {
-                alert('加载数据失败: ' + error.message);
+            }
+            catch (error)
+            {
+                alert(error.message);
             }
         }
 
@@ -155,11 +162,14 @@
 
                 if (response.ok)
                 {
-                    alert('账号信息已更新!');
+                    const OKData = await response.json();
+                    alert(OKData);
+                    
                     if (window.opener && window.opener.fetchData)
                     {
                         window.opener.fetchData();
                     }
+
                     window.close();                  
                 }
                 else
@@ -170,19 +180,20 @@
             }
             catch (error)
             {
-                alert('网络故障: ' + error.message);
+                alert(error.message);
             }
         }
 
         // 格式化日期
-        function formatDate(date) {
+        function formatDate(date)
+        {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const day = String(date.getDate()).padStart(2, '0');
             const hours = String(date.getHours()).padStart(2, '0');
             const minutes = String(date.getMinutes()).padStart(2, '0');
             return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }       
+        }
        
         loadAccountData();
 

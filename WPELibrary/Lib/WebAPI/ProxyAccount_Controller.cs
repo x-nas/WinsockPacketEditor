@@ -122,7 +122,14 @@ namespace WPELibrary.Lib.WebAPI
             pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
             bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, pai.IsEnable, pai.PassWord, pai.IsExpiry, pai.ExpiryTime);
 
-            return Ok();
+            if (bOK)
+            {
+                return Ok(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_194));
+            }
+            else
+            {
+                return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_195));
+            }            
         }
 
         #endregion

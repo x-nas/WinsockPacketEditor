@@ -136,7 +136,8 @@
         {            
             fetch('./api/ProxyAccount/GetProxyAccountList')
                 .then(response => response.json())
-                .then(data => {
+                .then(data =>
+                {
                     displayData(data);
                 });                
         }                
@@ -206,7 +207,7 @@
                 editButton.textContent = '编辑';
                 editButton.style.marginBottom = '10px';
                 editButton.addEventListener('click', () => {
-                    editAccount(item);
+                    editAccount(item.AID);
                 });
                 cells[8].appendChild(editButton);
 
@@ -356,9 +357,9 @@
         }
 
         //修改账号
-        function editAccount(item)
+        function editAccount(AID)
         {
-            const popup = window.open(`EditAccount.html?AID=${item.AID}`, 'Edit Account', 'width=500,height=500');            
+            const popup = window.open(`EditAccount.html?AID=${AID}`, 'Edit Account', 'width=500,height=500');            
         }        
 
         setExpiryTime();
