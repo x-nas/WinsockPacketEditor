@@ -176,7 +176,7 @@ namespace WinsockPacketEditor
             }
 
             this.tlpRemoteInfo.Enabled = !this.cbIsRemote.Checked;
-            this.lRemoteURL.Visible = this.cbIsRemote.Checked;
+            this.lRemoteMGT.Visible = this.lRemoteURL.Visible = this.cbIsRemote.Checked;          
         }
 
         private string GetRemoteURL()

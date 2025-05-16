@@ -48,7 +48,9 @@
             this.lRemote_PassWord = new System.Windows.Forms.Label();
             this.txtRemote_UserName = new System.Windows.Forms.TextBox();
             this.lRemote_UserName = new System.Windows.Forms.Label();
+            this.tlpRemoteURL = new System.Windows.Forms.TableLayoutPanel();
             this.lRemoteURL = new System.Windows.Forms.LinkLabel();
+            this.lRemoteMGT = new System.Windows.Forms.Label();
             this.tlpSystemMode.SuspendLayout();
             this.tlpModeSelect.SuspendLayout();
             this.msSystem.SuspendLayout();
@@ -56,6 +58,7 @@
             this.tlpRemoteMGT.SuspendLayout();
             this.tlpRemoteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRemote_Port)).BeginInit();
+            this.tlpRemoteURL.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSystemMode
@@ -135,7 +138,7 @@
             resources.ApplyResources(this.tlpRemoteMGT, "tlpRemoteMGT");
             this.tlpRemoteMGT.Controls.Add(this.cbIsRemote, 0, 0);
             this.tlpRemoteMGT.Controls.Add(this.tlpRemoteInfo, 0, 1);
-            this.tlpRemoteMGT.Controls.Add(this.lRemoteURL, 0, 2);
+            this.tlpRemoteMGT.Controls.Add(this.tlpRemoteURL, 0, 2);
             this.tlpRemoteMGT.Name = "tlpRemoteMGT";
             // 
             // cbIsRemote
@@ -197,12 +200,24 @@
             resources.ApplyResources(this.lRemote_UserName, "lRemote_UserName");
             this.lRemote_UserName.Name = "lRemote_UserName";
             // 
+            // tlpRemoteURL
+            // 
+            resources.ApplyResources(this.tlpRemoteURL, "tlpRemoteURL");
+            this.tlpRemoteURL.Controls.Add(this.lRemoteURL, 1, 0);
+            this.tlpRemoteURL.Controls.Add(this.lRemoteMGT, 0, 0);
+            this.tlpRemoteURL.Name = "tlpRemoteURL";
+            // 
             // lRemoteURL
             // 
             resources.ApplyResources(this.lRemoteURL, "lRemoteURL");
             this.lRemoteURL.Name = "lRemoteURL";
             this.lRemoteURL.TabStop = true;
             this.lRemoteURL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lRemoteURL_LinkClicked);
+            // 
+            // lRemoteMGT
+            // 
+            resources.ApplyResources(this.lRemoteMGT, "lRemoteMGT");
+            this.lRemoteMGT.Name = "lRemoteMGT";
             // 
             // SystemMode_Form
             // 
@@ -228,6 +243,8 @@
             this.tlpRemoteInfo.ResumeLayout(false);
             this.tlpRemoteInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRemote_Port)).EndInit();
+            this.tlpRemoteURL.ResumeLayout(false);
+            this.tlpRemoteURL.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -253,6 +270,8 @@
         private System.Windows.Forms.TextBox txtRemote_PassWord;
         private System.Windows.Forms.Label lRemote_Port;
         private System.Windows.Forms.NumericUpDown nudRemote_Port;
+        private System.Windows.Forms.TableLayoutPanel tlpRemoteURL;
         private System.Windows.Forms.LinkLabel lRemoteURL;
+        private System.Windows.Forms.Label lRemoteMGT;
     }
 }

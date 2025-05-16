@@ -570,7 +570,7 @@
     <value>4</value>
   </data>
   <data name="tlpRemoteInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>272, 98</value>
+    <value>272, 91</value>
   </data>
   <data name="tlpRemoteInfo.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -590,29 +590,35 @@
   <data name="tlpRemoteInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudRemote_Port" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_Port" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtRemote_PassWord" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_PassWord" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtRemote_UserName" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lRemote_UserName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
+  <data name="tlpRemoteURL.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
   <data name="lRemoteURL.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="lRemoteURL.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
+  <data name="lRemoteURL.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="lRemoteURL.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 134</value>
+    <value>92, 3</value>
   </data>
   <data name="lRemoteURL.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="lRemoteURL.Size" type="System.Drawing.Size, System.Drawing">
-    <value>266, 17</value>
+    <value>177, 24</value>
   </data>
   <data name="lRemoteURL.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="lRemoteURL.Text" xml:space="preserve">
     <value>RemoteURL</value>
   </data>
   <data name="lRemoteURL.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+    <value>MiddleLeft</value>
   </data>
   <data name="&gt;&gt;lRemoteURL.Name" xml:space="preserve">
     <value>lRemoteURL</value>
@@ -621,10 +627,82 @@
     <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lRemoteURL.Parent" xml:space="preserve">
-    <value>tlpRemoteMGT</value>
+    <value>tlpRemoteURL</value>
   </data>
   <data name="&gt;&gt;lRemoteURL.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lRemoteMGT.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lRemoteMGT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRemoteMGT.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lRemoteMGT.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lRemoteMGT.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lRemoteMGT.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 24</value>
+  </data>
+  <data name="lRemoteMGT.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lRemoteMGT.Text" xml:space="preserve">
+    <value>远程管理网址:</value>
+  </data>
+  <data name="lRemoteMGT.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lRemoteMGT.Name" xml:space="preserve">
+    <value>lRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;lRemoteMGT.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lRemoteMGT.Parent" xml:space="preserve">
+    <value>tlpRemoteURL</value>
+  </data>
+  <data name="&gt;&gt;lRemoteMGT.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpRemoteURL.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpRemoteURL.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 124</value>
+  </data>
+  <data name="tlpRemoteURL.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpRemoteURL.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpRemoteURL.Size" type="System.Drawing.Size, System.Drawing">
+    <value>272, 30</value>
+  </data>
+  <data name="tlpRemoteURL.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteURL.Name" xml:space="preserve">
+    <value>tlpRemoteURL</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteURL.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteURL.Parent" xml:space="preserve">
+    <value>tlpRemoteMGT</value>
+  </data>
+  <data name="&gt;&gt;tlpRemoteURL.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpRemoteURL.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lRemoteURL" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lRemoteMGT" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpRemoteMGT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -657,7 +735,7 @@
     <value>0</value>
   </data>
   <data name="tlpRemoteMGT.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbIsRemote" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpRemoteInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lRemoteURL" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbIsRemote" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpRemoteInfo" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpRemoteURL" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,30" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbRemoteMGT.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

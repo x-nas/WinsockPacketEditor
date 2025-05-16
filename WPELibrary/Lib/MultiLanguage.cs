@@ -155,7 +155,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_143 = { "停止 SOCKS5 代理!", "Stop SOCKS5 proxy!" };
         public static string[] MutiLan_144 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
         public static string[] MutiLan_145 = { "不支持的 SOCKS 协议版本: {0}", "Unsupported SOCKS protocol version: {0}" };
-        //public static string[] MutiLan_146 = { "通过!", "Passed!" };
+        //public static string[] MutiLan_146 = { "远程管理网址:", "Remote MGT:" };
         //public static string[] MutiLan_147 = { "失败!", "Failed!" };
         public static string[] MutiLan_148 = { "启用系统代理", "Enable system proxy" };
         public static string[] MutiLan_149 = { "关闭系统代理", "Disable system proxy" };
