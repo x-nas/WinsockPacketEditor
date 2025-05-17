@@ -102,6 +102,7 @@ namespace WinsockPacketEditor
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Injector_Form";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Injector_Form_FormClosing);
             this.tlpInjectorForm.ResumeLayout(false);
             this.tlpProcessInject.ResumeLayout(false);
             this.tlpProcessInject.PerformLayout();

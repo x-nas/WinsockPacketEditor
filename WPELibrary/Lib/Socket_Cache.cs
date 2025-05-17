@@ -23,98 +23,292 @@ namespace WPELibrary.Lib
 {
     public static class Socket_Cache
     {
-        public static string WPE = "Winsock Packet Editor x64";
-        public static Socket_Cache.SystemMode SelectMode = new Socket_Cache.SystemMode();
-        public static DateTime StartTime;
-        public static IntPtr MainHandle = IntPtr.Zero;
-        public static int SystemSocket = 0;
-        public static bool ShowDebug = false;
-        public static bool IsRemote = false;        
-        public static string Remote_URL, Remote_UserName, Remote_PassWord;
-        public static ushort Remote_Port;
-        public static IDisposable WebServer;
-        public static PerformanceCounter cpuCounter;
+        #region//系统
 
-        public static Action<Action> InvokeAction { get; set; }
-
-        #region//结构定义
-
-        public enum SystemMode
+        public static class System
         {
-            None = 0,
-            Process = 1,
-            Proxy = 2,
-        }        
+            public static string DefaultLanguage = "zh-CN";
+            public static string LastInjection = string.Empty;
+            public static string WPE64_URL = "https://www.wpe64.com";
+            public static string WPE64_IP = "http://101.132.222.195";
+            public static string WPE64_DLL = "WPELibrary.dll";
+            public static string WPE = "Winsock Packet Editor x64";
+            public static Socket_Cache.System.SystemMode StartMode = SystemMode.None;
+            public static DateTime StartTime = DateTime.Now;
+            public static IntPtr MainHandle = IntPtr.Zero;
+            public static int SystemSocket = 0;
+            public static bool ShowDebug = false;
+            public static bool IsRemote = false;
+            public static string Remote_URL, Remote_UserName, Remote_PassWord;
+            public static ushort Remote_Port = 89;
+            public static IDisposable WebServer;
+            public static PerformanceCounter cpuCounter;
 
-        public enum PWType
-        {
-            FilterList_Import = 0,
-            FilterList_Export = 1,
-            RobotList_Import = 2,
-            RobotList_Export = 3,
-            SendList_Import = 4,
-            SendList_Export = 5,
-            SendCollection_Import = 6,
-            SendCollection_Export = 7,
-            ProxyAccount_Import = 8,
-            ProxyAccount_Export = 9,
+            public static Action<Action> InvokeAction { get; set; }
+
+            #region//结构定义
+
+            public enum SystemMode
+            {
+                None = 0,
+                Process = 1,
+                Proxy = 2,
+            }
+
+            public enum PWType
+            {
+                FilterList_Import = 0,
+                FilterList_Export = 1,
+                RobotList_Import = 2,
+                RobotList_Export = 3,
+                SendList_Import = 4,
+                SendList_Export = 5,
+                SendCollection_Import = 6,
+                SendCollection_Export = 7,
+                ProxyAccount_Import = 8,
+                ProxyAccount_Export = 9,
+            }
+
+            public enum ListAction
+            {
+                Top = 0,
+                Up = 1,
+                Down = 2,
+                Bottom = 3,
+                Copy = 4,
+                Export = 5,
+                Delete = 6,
+                CleanUp = 7,
+                Import = 8,
+            }
+
+            public enum LogType
+            {
+                Socket,
+                Proxy,
+            }            
+
+            #endregion
+
+            #region//保存系统配置到数据库
+
+            public static void SaveSystemConfig_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.DeleteTable_SystemConfig();
+                    Socket_Cache.DataBase.InsertTable_SystemConfig();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载系统配置
+
+            public static void LoadSystemConfig_FromDB()
+            {
+                try
+                {
+                    DataTable SystemConfig = Socket_Cache.DataBase.SelectTable_SystemConfig();
+
+                    if (SystemConfig.Rows.Count > 0)
+                    {
+                        Socket_Cache.System.DefaultLanguage = SystemConfig.Rows[0]["SystemConfig_DefaultLanguage"].ToString();
+                        Socket_Cache.System.LastInjection = SystemConfig.Rows[0]["SystemConfig_LastInjection"].ToString();
+                        Socket_Cache.System.StartMode = Socket_Cache.System.GetSystemMode_ByString(SystemConfig.Rows[0]["SystemConfig_StartMode"].ToString());
+                        Socket_Cache.System.IsRemote = Convert.ToBoolean(SystemConfig.Rows[0]["SystemConfig_Remote_IsEnable"]);
+                        Socket_Cache.System.Remote_UserName = SystemConfig.Rows[0]["SystemConfig_Remote_UserName"].ToString();
+                        Socket_Cache.System.Remote_PassWord = SystemConfig.Rows[0]["SystemConfig_Remote_PassWord"].ToString();
+                        Socket_Cache.System.Remote_Port = ushort.Parse(SystemConfig.Rows[0]["SystemConfig_Remote_Port"].ToString());
+                        Socket_Cache.System.Remote_URL = SystemConfig.Rows[0]["SystemConfig_Remote_URL"].ToString();
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存注入进程名称到数据库
+
+            public static void SaveSystemConfig_LastInjection_ToDB()
+            {
+                try
+                {
+                    Socket_Cache.DataBase.UpdateTable_SystemConfig_LastInjection();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion            
+
+            #region//保存运行配置到数据库
+
+            public static void SaveRunConfig_ToDB(Socket_Cache.System.SystemMode FromMode)
+            {
+                try
+                {
+                    if (Socket_Cache.System.StartMode.Equals(FromMode))
+                    {
+                        Socket_Cache.DataBase.DeleteTable_RunConfig();
+                        Socket_Cache.DataBase.InsertTable_RunConfig();
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载运行配置
+
+            public static void LoadRunConfig_FromDB()
+            {
+                try
+                {
+                    DataTable RunConfig = Socket_Cache.DataBase.SelectTable_RunConfig();
+
+                    if (RunConfig.Rows.Count > 0)
+                    {
+                        Socket_Cache.SocketProxy.ProxyIP_Auto = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ProxyIP_Auto"]);
+                        Socket_Cache.SocketProxy.Enable_SOCKS5 = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EnableSOCKS5"]);
+                        Socket_Cache.SocketProxy.ProxyPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ProxyPort"].ToString());
+                        Socket_Cache.SocketProxy.Enable_Auth = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EnableAuth"]);
+                        Socket_Cache.SocketProxy.NoRecord = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ProxyList_NoRecord"]);
+                        Socket_Cache.SocketProxy.DelClosed = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ClientList_DelClosed"]);
+                        Socket_Cache.LogList.Proxy_AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
+                        Socket_Cache.LogList.Proxy_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
+                        Socket_Cache.LogList.Proxy_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
+                        Socket_Cache.SocketProxy.Enable_EXTHttp = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EXTProxy_EnableHttp"]);
+                        Socket_Cache.SocketProxy.EXTHttpIP = RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpIP"].ToString();
+                        Socket_Cache.SocketProxy.EXTHttpPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpPort"].ToString());
+                        Socket_Cache.SocketProxy.AppointHttpPort = RunConfig.Rows[0]["ProxyConfig_EXTProxy_AppointHttpPort"].ToString();
+                        Socket_Cache.SocketProxy.Enable_EXTHttps = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EXTProxy_EnableHttps"]);
+                        Socket_Cache.SocketProxy.EXTHttpsIP = RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpsIP"].ToString();
+                        Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpsPort"].ToString());
+                        Socket_Cache.SocketProxy.AppointHttpsPort = RunConfig.Rows[0]["ProxyConfig_EXTProxy_AppointHttpsPort"].ToString();
+                        Socket_Cache.SocketProxy.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_SpeedMode"]);
+
+                        Socket_Cache.SocketPacket.CheckNotShow = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckNotShow"]);
+                        Socket_Cache.SocketPacket.CheckSocket = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSocket"]);
+                        Socket_Cache.SocketPacket.CheckSocket_Value = RunConfig.Rows[0]["InjectionConfig_CheckSocket_Value"].ToString();
+                        Socket_Cache.SocketPacket.CheckIP = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckIP"]);
+                        Socket_Cache.SocketPacket.CheckIP_Value = RunConfig.Rows[0]["InjectionConfig_CheckIP_Value"].ToString();
+                        Socket_Cache.SocketPacket.CheckPort = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckPort"]);
+                        Socket_Cache.SocketPacket.CheckPort_Value = RunConfig.Rows[0]["InjectionConfig_CheckPort_Value"].ToString();
+                        Socket_Cache.SocketPacket.CheckHead = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckHead"]);
+                        Socket_Cache.SocketPacket.CheckHead_Value = RunConfig.Rows[0]["InjectionConfig_CheckHead_Value"].ToString();
+                        Socket_Cache.SocketPacket.CheckData = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckData"]);
+                        Socket_Cache.SocketPacket.CheckData_Value = RunConfig.Rows[0]["InjectionConfig_CheckData_Value"].ToString();
+                        Socket_Cache.SocketPacket.CheckSize = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSize"]);
+                        Socket_Cache.SocketPacket.CheckLength_Value = RunConfig.Rows[0]["InjectionConfig_CheckLength_Value"].ToString();
+                        Socket_Cache.SocketPacket.HookWS1_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_Send"]);
+                        Socket_Cache.SocketPacket.HookWS1_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_SendTo"]);
+                        Socket_Cache.SocketPacket.HookWS1_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_Recv"]);
+                        Socket_Cache.SocketPacket.HookWS1_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_RecvFrom"]);
+                        Socket_Cache.SocketPacket.HookWS2_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_Send"]);
+                        Socket_Cache.SocketPacket.HookWS2_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_SendTo"]);
+                        Socket_Cache.SocketPacket.HookWS2_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_Recv"]);
+                        Socket_Cache.SocketPacket.HookWS2_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS2_RecvFrom"]);
+                        Socket_Cache.SocketPacket.HookWSA_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_Send"]);
+                        Socket_Cache.SocketPacket.HookWSA_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_SendTo"]);
+                        Socket_Cache.SocketPacket.HookWSA_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_Recv"]);
+                        Socket_Cache.SocketPacket.HookWSA_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_RecvFrom"]);
+                        Socket_Cache.SocketList.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoRoll"]);
+                        Socket_Cache.SocketList.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoClear"]);
+                        Socket_Cache.SocketList.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoClear_Value"]);
+                        Socket_Cache.LogList.Socket_AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoRoll"]);
+                        Socket_Cache.LogList.Socket_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear"]);
+                        Socket_Cache.LogList.Socket_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear_Value"]);
+                        Socket_Cache.SocketPacket.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SpeedMode"]);
+                        Socket_Cache.Filter.FilterExecute = Socket_Cache.FilterList.GetFilterListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_FilterExecute"].ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//获取启动模式
+
+            public static Socket_Cache.System.SystemMode GetSystemMode_ByString(string smMode)
+            {
+                Socket_Cache.System.SystemMode systemMode = Socket_Cache.System.SystemMode.None;
+
+                try
+                {
+                    systemMode = (Socket_Cache.System.SystemMode)Enum.Parse(typeof(Socket_Cache.System.SystemMode), smMode);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return systemMode;
+            }
+
+            #endregion          
+
+            #region//保存系统列表到数据库
+
+            public static void SaveSystemList_ToDB()
+            {
+                Socket_Cache.FilterList.SaveFilterList_ToDB();
+                Socket_Cache.SendList.SaveSendList_ToDB();
+                Socket_Cache.RobotList.SaveRobotList_ToDB();
+            }
+
+            #endregion
+
+            #region//从数据库加载系统列表
+
+            public static void LoadSystemList_FromDB()
+            {
+                Task.Run(() =>
+                {
+                    Socket_Cache.FilterList.LoadFilterList_FromDB();
+                    Socket_Cache.SendList.LoadSendList_FromDB();
+                    Socket_Cache.RobotList.LoadRobotList_FromDB();
+                });
+            }
+
+            #endregion
         }
 
-        public enum ListAction
-        {
-            Top = 0,
-            Up = 1,
-            Down = 2,
-            Bottom = 3,
-            Copy = 4,
-            Export = 5,
-            Delete = 6,
-            CleanUp = 7,
-            Import = 8,
-        }
-
-        public enum LogType
-        {
-            Socket,
-            Proxy,
-        }
-
-        [Serializable]
-
-        public class InjectParameters
-        {
-            public Socket_Cache.SystemMode SelectMode { get; set; }
-
-            public string Language { get; set; }
-
-            public bool IsRemote { get; set; }
-
-            public string Remote_URL { get; set; }
-
-            public string Remote_UserName { get; set; }
-
-            public string Remote_PassWord { get; set; }
-        }
-
-        #endregion                
+        #endregion
 
         #region//代理
 
         public static class SocketProxy
-        {
+        {  
             public static ulong ProxyTotal_CNT, ProxyTCP_CNT, ProxyUDP_CNT;
             public static int ProxySpeed_Uplink, ProxySpeed_Downlink;
             public static IPAddress ProxyTCP_IP = IPAddress.Any;
             public static IPAddress ProxyUDP_IP = IPAddress.Any;
-            public static bool SpeedMode;
+            public static bool NoRecord = true, DelClosed = true;
+            public static bool SpeedMode = false;
             public static bool IsListening = false;            
-            public static bool ProxyIP_Auto;
-            public static bool Enable_SOCKS5, Enable_Auth;
-            public static bool Enable_EXTHttp, Enable_EXTHttps;
-            public static string EXTHttpIP, EXTHttpsIP;
-            public static ushort EXTHttpPort, EXTHttpsPort;
-            public static string AppointHttpPort, AppointHttpsPort;            
-            public static ushort ProxyPort;
+            public static bool ProxyIP_Auto = true;
+            public static bool Enable_SOCKS5 = true, Enable_Auth = true;
+            public static bool Enable_EXTHttp = false, Enable_EXTHttps = false;
+            public static string EXTHttpIP = "127.0.0.1", EXTHttpsIP = "127.0.0.1";
+            public static ushort EXTHttpPort = 8889, EXTHttpsPort = 8889;
+            public static string AppointHttpPort = "80,8080", AppointHttpsPort = "443,8443";            
+            public static ushort ProxyPort = 1080;
             public static int UDPCloseTime = 60;
             public static long Total_Request = 0;
             public static long Total_Response = 0;
@@ -992,8 +1186,6 @@ namespace WPELibrary.Lib
 
         public static class SocketProxyList
         {
-            public static bool NoRecord, DelClosed;
-
             public static BindingList<Socket_ProxyTCP> lstProxyTCP = new BindingList<Socket_ProxyTCP>();
             public delegate void ProxyTCPReceived(Socket_ProxyTCP spc);
             public static event ProxyTCPReceived RecProxyTCP;
@@ -1082,7 +1274,7 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    if (Socket_Cache.Remote_UserName.Equals(username) && Socket_Cache.Remote_PassWord.Equals(password))
+                    if (Socket_Cache.System.Remote_UserName.Equals(username) && Socket_Cache.System.Remote_PassWord.Equals(password))
                     {
                         bReturn = true;
                     }
@@ -1304,9 +1496,9 @@ namespace WPELibrary.Lib
 
                         if (pai != null)
                         {
-                            if (Socket_Cache.InvokeAction != null)
+                            if (Socket_Cache.System.InvokeAction != null)
                             {
-                                Socket_Cache.InvokeAction(() =>
+                                Socket_Cache.System.InvokeAction(() =>
                                 {
                                     Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
                                 });
@@ -1429,9 +1621,9 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (Socket_Cache.InvokeAction != null)
+                    if (Socket_Cache.System.InvokeAction != null)
                     {
-                        Socket_Cache.InvokeAction(() =>
+                        Socket_Cache.System.InvokeAction(() =>
                         {
                             Socket_Cache.ProxyAccount.lstProxyAccount.Add(pai);
                         });
@@ -1466,11 +1658,11 @@ namespace WPELibrary.Lib
 
             #region//保存代理账号列表到数据库
 
-            public static void SaveProxyAccountList_ToDB(Socket_Cache.SystemMode FromMode)
+            public static void SaveProxyAccountList_ToDB(Socket_Cache.System.SystemMode FromMode)
             {
                 try
                 {
-                    if (Socket_Cache.SelectMode == FromMode)
+                    if (Socket_Cache.System.StartMode == FromMode)
                     {
                         Socket_Cache.DataBase.DeleteTable_ProxyAccount();
 
@@ -1538,7 +1730,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.ProxyAccount_Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.ProxyAccount_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -1682,7 +1874,7 @@ namespace WPELibrary.Lib
                                 {
                                     if (LoadFromUser)
                                     {
-                                        Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.ProxyAccount_Import);
+                                        Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.ProxyAccount_Import);
                                         pwForm.ShowDialog();
                                     }
 
@@ -1922,10 +2114,10 @@ namespace WPELibrary.Lib
             public static string InjectProcess = string.Empty;
             public static string SocketBytesInfo = string.Empty;
             public static bool Support_WS1, Support_WS2, Support_MsWS;
-            public static bool HookWS1_Send, HookWS1_SendTo, HookWS1_Recv, HookWS1_RecvFrom;
-            public static bool HookWS2_Send, HookWS2_SendTo, HookWS2_Recv, HookWS2_RecvFrom;
-            public static bool HookWSA_Send, HookWSA_SendTo, HookWSA_Recv, HookWSA_RecvFrom;
-            public static bool CheckNotShow, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
+            public static bool HookWS1_Send = true, HookWS1_SendTo = true, HookWS1_Recv = true, HookWS1_RecvFrom = true;
+            public static bool HookWS2_Send = true, HookWS2_SendTo = true, HookWS2_Recv = true, HookWS2_RecvFrom = true;
+            public static bool HookWSA_Send = true, HookWSA_SendTo = true, HookWSA_Recv = true, HookWSA_RecvFrom = true;
+            public static bool CheckNotShow = true, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
             private static readonly Image SentImage = Properties.Resources.sent;
             private static readonly Image ReceivedImage = Properties.Resources.received;
@@ -2247,9 +2439,9 @@ namespace WPELibrary.Lib
         public static class SocketList
         {
             public static bool DoSearch;
-            public static bool AutoRoll;
-            public static bool AutoClear;
-            public static decimal AutoClear_Value;
+            public static bool AutoRoll = false;
+            public static bool AutoClear = true;
+            public static decimal AutoClear_Value = 5000;
             public static int Select_Index = -1, Search_Index = -1;
             public static FindOptions FindOptions = new FindOptions();
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
@@ -2466,7 +2658,7 @@ namespace WPELibrary.Lib
 
             #region//日志入队列
 
-            public static void LogToQueue(Socket_Cache.LogType logType, string sFuncName, string sLogContent)
+            public static void LogToQueue(Socket_Cache.System.LogType logType, string sFuncName, string sLogContent)
             {
                 try
                 {
@@ -2474,11 +2666,11 @@ namespace WPELibrary.Lib
 
                     switch (logType)
                     {
-                        case LogType.Socket:
+                        case Socket_Cache.System.LogType.Socket:
                             qSocket_Log.Enqueue(sli);
                             break;
 
-                        case LogType.Proxy:
+                        case Socket_Cache.System.LogType.Proxy:
                             qProxy_Log.Enqueue(sli);
                             break;
                     }
@@ -2493,13 +2685,13 @@ namespace WPELibrary.Lib
 
             #region//清除队列数据
 
-            public static void ResetLogQueue(Socket_Cache.LogType logType)
+            public static void ResetLogQueue(Socket_Cache.System.LogType logType)
             {
                 try
                 {
                     switch (logType)
                     {
-                        case LogType.Socket:
+                        case Socket_Cache.System.LogType.Socket:
 
                             while (!qSocket_Log.IsEmpty)
                             {
@@ -2508,7 +2700,7 @@ namespace WPELibrary.Lib
 
                             break;
 
-                        case LogType.Proxy:
+                        case Socket_Cache.System.LogType.Proxy:
 
                             while (!qProxy_Log.IsEmpty)
                             {
@@ -2533,8 +2725,8 @@ namespace WPELibrary.Lib
 
         public static class LogList
         {
-            public static bool AutoRoll, Proxy_AutoRoll, AutoClear, Proxy_AutoClear;
-            public static decimal AutoClear_Value, Proxy_AutoClear_Value;
+            public static bool Socket_AutoRoll = false, Proxy_AutoRoll = false, Socket_AutoClear = true, Proxy_AutoClear = true;
+            public static decimal Socket_AutoClear_Value = 5000, Proxy_AutoClear_Value = 5000;
             public static BindingList<Socket_LogInfo> lstSocketLog = new BindingList<Socket_LogInfo>();
             public static BindingList<Socket_LogInfo> lstProxyLog = new BindingList<Socket_LogInfo>();
 
@@ -2546,11 +2738,11 @@ namespace WPELibrary.Lib
 
             #region//日志入列表
 
-            public static void LogToList(Socket_Cache.LogType logType)
+            public static void LogToList(Socket_Cache.System.LogType logType)
             {
                 switch (logType)
                 {
-                    case LogType.Socket:
+                    case Socket_Cache.System.LogType.Socket:
 
                         if (LogQueue.qSocket_Log.TryDequeue(out Socket_LogInfo sliSocket))
                         {
@@ -2559,7 +2751,7 @@ namespace WPELibrary.Lib
 
                         break;
 
-                    case LogType.Proxy:
+                    case Socket_Cache.System.LogType.Proxy:
 
                         if (LogQueue.qProxy_Log.TryDequeue(out Socket_LogInfo sliProxy))
                         {
@@ -2574,15 +2766,15 @@ namespace WPELibrary.Lib
 
             #region//清除列表数据
 
-            public static void ResetLogList(Socket_Cache.LogType logType)
+            public static void ResetLogList(Socket_Cache.System.LogType logType)
             {
                 switch (logType)
                 {
-                    case LogType.Socket:
+                    case Socket_Cache.System.LogType.Socket:
                         lstSocketLog.Clear();
                         break;
 
-                    case LogType.Proxy:
+                    case Socket_Cache.System.LogType.Proxy:
                         lstProxyLog.Clear();
                         break;
                 }
@@ -2658,6 +2850,7 @@ namespace WPELibrary.Lib
         {
             public static long FilterExecute_CNT = 0;            
             public static int FilterSize_MaxLen = 500;
+            public static Socket_Cache.Filter.Execute FilterExecute = Socket_Cache.Filter.Execute.Sequence;
             public static readonly Color FilterActionForeColor_Replace = Color.Black;
             public static readonly Color FilterActionBackColor_Replace = Color.Goldenrod;
             public static readonly Color FilterActionForeColor_Intercept = Color.White;
@@ -2667,7 +2860,13 @@ namespace WPELibrary.Lib
             public static readonly Color FilterActionForeColor_Other = Color.LimeGreen;
             public static readonly Color FilterActionBackColor_Other = Color.FromArgb(30, 30, 30);
 
-            #region//定义结构        
+            #region//定义结构
+
+            public enum Execute
+            {
+                Priority,
+                Sequence,
+            }
 
             public enum FilterMode
             {
@@ -3932,16 +4131,8 @@ namespace WPELibrary.Lib
         #region//滤镜列表
 
         public static class FilterList
-        {
-            public enum Execute
-            {
-                Priority,
-                Sequence,
-            }
-            
+        {  
             public static string AESKey = string.Empty;
-            public static Execute FilterList_Execute;            
-
             public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
             public delegate void SocketFilterReceived(Socket_FilterInfo sfi);
             public static event SocketFilterReceived RecSocketFilter;
@@ -4016,17 +4207,17 @@ namespace WPELibrary.Lib
 
             #region//获取滤镜列表执行模式
 
-            public static Socket_Cache.FilterList.Execute GetFilterListExecute_ByString(string sFLExecute)
+            public static Socket_Cache.Filter.Execute GetFilterListExecute_ByString(string sFLExecute)
             {
-                Socket_Cache.FilterList.Execute FLExecute = new Socket_Cache.FilterList.Execute();
+                Socket_Cache.Filter.Execute FLExecute = new Socket_Cache.Filter.Execute();
 
                 try
                 {
-                    FLExecute = (Socket_Cache.FilterList.Execute)Enum.Parse(typeof(Socket_Cache.FilterList.Execute), sFLExecute);
+                    FLExecute = (Socket_Cache.Filter.Execute)Enum.Parse(typeof(Socket_Cache.Filter.Execute), sFLExecute);
                 }
                 catch (Exception ex)
                 {
-                    FLExecute = Socket_Cache.FilterList.Execute.Priority;
+                    FLExecute = Socket_Cache.Filter.Execute.Priority;
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
@@ -4037,7 +4228,7 @@ namespace WPELibrary.Lib
 
             #region//滤镜列表的列表操作
 
-            public static int UpdateFilterList_ByListAction(Socket_Cache.ListAction listAction, int iFIndex)
+            public static int UpdateFilterList_ByListAction(Socket_Cache.System.ListAction listAction, int iFIndex)
             {
                 int iReturn = -1;
 
@@ -4048,7 +4239,7 @@ namespace WPELibrary.Lib
 
                     switch (listAction)
                     {
-                        case Socket_Cache.ListAction.Top:
+                        case Socket_Cache.System.ListAction.Top:
                             if (iFIndex > 0)
                             {
                                 Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
@@ -4057,7 +4248,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Up:
+                        case Socket_Cache.System.ListAction.Up:
                             if (iFIndex > 0)
                             {
                                 Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
@@ -4066,7 +4257,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Down:
+                        case Socket_Cache.System.ListAction.Down:
                             if (iFIndex < iFilterListCount - 1)
                             {
                                 Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
@@ -4075,7 +4266,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Bottom:
+                        case Socket_Cache.System.ListAction.Bottom:
                             if (iFIndex < iFilterListCount - 1)
                             {
                                 Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
@@ -4084,18 +4275,18 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Copy:
+                        case Socket_Cache.System.ListAction.Copy:
                             Socket_Cache.Filter.CopyFilter_ByFilterIndex(iFIndex);
                             iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
                             break;
 
-                        case Socket_Cache.ListAction.Export:
+                        case Socket_Cache.System.ListAction.Export:
                             string sFName = Socket_Cache.FilterList.lstFilter[iFIndex].FName;
                             Socket_Cache.FilterList.SaveFilterList_Dialog(sFName, iFIndex);
                             iReturn = iFIndex;
                             break;
 
-                        case Socket_Cache.ListAction.Delete:
+                        case Socket_Cache.System.ListAction.Delete:
                             Socket_Cache.Filter.DeleteFilter_ByFilterIndex_Dialog(iFIndex);
                             break;
                     }
@@ -4171,7 +4362,7 @@ namespace WPELibrary.Lib
                                         {
                                             bNewBuffer = bufferSpan.ToArray();
 
-                                            if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                            if (Socket_Cache.Filter.FilterExecute == Socket_Cache.Filter.Execute.Priority)
                                             {
                                                 bBreak = true;
                                             }
@@ -4187,7 +4378,7 @@ namespace WPELibrary.Lib
                                         {
                                             bDoFilter = true;
 
-                                            if (Socket_Cache.FilterList.FilterList_Execute == Execute.Priority)
+                                            if (Socket_Cache.Filter.FilterExecute == Socket_Cache.Filter.Execute.Priority)
                                             {
                                                 bBreak = true;
                                             }
@@ -4386,7 +4577,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Export);                            
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.FilterList_Export);                            
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -4560,7 +4751,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.FilterList_Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.FilterList_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -5596,7 +5787,7 @@ namespace WPELibrary.Lib
 
             #region//机器人列表的列表操作
 
-            public static int UpdateRobotList_ByListAction(Socket_Cache.ListAction listAction, int iRIndex)
+            public static int UpdateRobotList_ByListAction(Socket_Cache.System.ListAction listAction, int iRIndex)
             {
                 int iReturn = -1;
 
@@ -5607,7 +5798,7 @@ namespace WPELibrary.Lib
 
                     switch (listAction)
                     {
-                        case Socket_Cache.ListAction.Top:
+                        case Socket_Cache.System.ListAction.Top:
                             if (iRIndex > 0)
                             {
                                 Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
@@ -5616,7 +5807,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Up:
+                        case Socket_Cache.System.ListAction.Up:
                             if (iRIndex > 0)
                             {
                                 Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
@@ -5625,7 +5816,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Down:
+                        case Socket_Cache.System.ListAction.Down:
                             if (iRIndex < iRobotListCount - 1)
                             {
                                 Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
@@ -5634,7 +5825,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Bottom:
+                        case Socket_Cache.System.ListAction.Bottom:
                             if (iRIndex < iRobotListCount - 1)
                             {
                                 Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
@@ -5643,18 +5834,18 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Copy:
+                        case Socket_Cache.System.ListAction.Copy:
                             Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
                             iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
                             break;
 
-                        case Socket_Cache.ListAction.Export:
+                        case Socket_Cache.System.ListAction.Export:
                             string sRName = Socket_Cache.RobotList.lstRobot[iRIndex].RName;
                             Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, iRIndex);
                             iReturn = iRIndex;
                             break;
 
-                        case Socket_Cache.ListAction.Delete:
+                        case Socket_Cache.System.ListAction.Delete:
                             Socket_Cache.Robot.DeleteRobot_ByRobotIndex_Dialog(iRIndex);                            
                             break;
                     }
@@ -5768,7 +5959,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.RobotList_Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.RobotList_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -5881,7 +6072,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.RobotList_Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.RobotList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -6102,7 +6293,7 @@ namespace WPELibrary.Lib
 
             #region//发送集的列表操作
 
-            public static int UpdateSendCollection_ByListAction(DataTable dtSendCollection, Socket_Cache.ListAction listAction, int iSIndex)
+            public static int UpdateSendCollection_ByListAction(DataTable dtSendCollection, Socket_Cache.System.ListAction listAction, int iSIndex)
             {
                 int iReturn = -1;
 
@@ -6118,7 +6309,7 @@ namespace WPELibrary.Lib
 
                     switch (listAction)
                     {
-                        case Socket_Cache.ListAction.Top:
+                        case Socket_Cache.System.ListAction.Top:
                             if (iSIndex > 0 && iSIndex < iSendCollectionCount)
                             {
                                 dtSendCollection.Rows.RemoveAt(iSIndex);
@@ -6127,7 +6318,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Up:
+                        case Socket_Cache.System.ListAction.Up:
                             if (iSIndex > 0 && iSIndex < iSendCollectionCount)
                             {
                                 dtSendCollection.Rows.RemoveAt(iSIndex);
@@ -6136,7 +6327,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Down:
+                        case Socket_Cache.System.ListAction.Down:
                             if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
                             {
                                 dtSendCollection.Rows.RemoveAt(iSIndex);
@@ -6145,7 +6336,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Bottom:
+                        case Socket_Cache.System.ListAction.Bottom:
                             if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
                             {
                                 dtSendCollection.Rows.RemoveAt(iSIndex);
@@ -6154,25 +6345,25 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Delete:
+                        case Socket_Cache.System.ListAction.Delete:
                             if (iSIndex > -1 && iSIndex < iSendCollectionCount)
                             {
                                 dtSendCollection.Rows.RemoveAt(iSIndex);
                             }                            
                             break;
 
-                        case Socket_Cache.ListAction.Export:
+                        case Socket_Cache.System.ListAction.Export:
                             if (iSendCollectionCount > 0)
                             {
                                 Socket_Cache.Send.SaveSendCollection_Dialog(string.Empty, dtSendCollection);
                             }                            
                             break;
 
-                        case Socket_Cache.ListAction.Import:
+                        case Socket_Cache.System.ListAction.Import:
                             Socket_Cache.Send.LoadSendCollection_Dialog(dtSendCollection);
                             break;
 
-                        case Socket_Cache.ListAction.CleanUp:
+                        case Socket_Cache.System.ListAction.CleanUp:
                             if (iSendCollectionCount > 0)
                             {
                                 DialogResult dia = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
@@ -6498,7 +6689,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.SendList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -6623,7 +6814,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendCollection_Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.SendCollection_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -6805,7 +6996,7 @@ namespace WPELibrary.Lib
 
             #region//发送列表的列表操作
 
-            public static int UpdateSendList_ByListAction(Socket_Cache.ListAction listAction, int iSIndex)
+            public static int UpdateSendList_ByListAction(Socket_Cache.System.ListAction listAction, int iSIndex)
             {
                 int iReturn = -1;
 
@@ -6816,7 +7007,7 @@ namespace WPELibrary.Lib
 
                     switch (listAction)
                     {
-                        case Socket_Cache.ListAction.Top:
+                        case Socket_Cache.System.ListAction.Top:
                             if (iSIndex > 0)
                             {
                                 Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
@@ -6825,7 +7016,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Up:
+                        case Socket_Cache.System.ListAction.Up:
                             if (iSIndex > 0)
                             {
                                 Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
@@ -6834,7 +7025,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Down:
+                        case Socket_Cache.System.ListAction.Down:
                             if (iSIndex < iSendListCount - 1)
                             {
                                 Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
@@ -6843,7 +7034,7 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Bottom:
+                        case Socket_Cache.System.ListAction.Bottom:
                             if (iSIndex < iSendListCount - 1)
                             {
                                 Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
@@ -6852,18 +7043,18 @@ namespace WPELibrary.Lib
                             }
                             break;
 
-                        case Socket_Cache.ListAction.Copy:
+                        case Socket_Cache.System.ListAction.Copy:
                             Socket_Cache.Send.CopySend_BySendIndex(iSIndex);
                             iReturn = Socket_Cache.SendList.lstSend.Count - 1;
                             break;
 
-                        case Socket_Cache.ListAction.Export:
+                        case Socket_Cache.System.ListAction.Export:
                             string sSName = Socket_Cache.SendList.lstSend[iSIndex].SName;
                             Socket_Cache.SendList.SaveSendList_Dialog(sSName, iSIndex);
                             iReturn = iSIndex;
                             break;
 
-                        case Socket_Cache.ListAction.Delete:
+                        case Socket_Cache.System.ListAction.Delete:
                             Socket_Cache.Send.DeleteSend_BySendIndex_Dialog(iSIndex);
                             break;
                     }
@@ -6994,7 +7185,7 @@ namespace WPELibrary.Lib
 
                         if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                         {
-                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Export);
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.SendList_Export);
                             pwForm.ShowDialog();
 
                             string FilePath = sfdSaveFile.FileName;
@@ -7162,7 +7353,7 @@ namespace WPELibrary.Lib
                         {
                             if (LoadFromUser)
                             {
-                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.PWType.SendList_Import);
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.SendList_Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -7303,15 +7494,503 @@ namespace WPELibrary.Lib
 
         public static class DataBase
         {
-            private static string conStr = "Data Source=|DataDirectory|\\WPE64.db;Version=3;";
+            private static string dbPath = @"C:\WPE64Cache";
+            private static string dbName = Socket_Operation.AssemblyVersion + ".db";
+            private static string conStr = string.Format("Data Source={0}\\{1};Version=3;", dbPath, dbName);
+
+            #region//初始化
 
             public static void InitDB()
             {
+                Socket_Cache.DataBase.InitdbPath();
+
+                Socket_Cache.DataBase.CreateTable_SystemConfig();
+                Socket_Cache.DataBase.CreateTable_RunConfig();
                 Socket_Cache.DataBase.CreateTable_Filter();
                 Socket_Cache.DataBase.CreateTable_Send();
                 Socket_Cache.DataBase.CreateTable_Robot();
                 Socket_Cache.DataBase.CreateTable_ProxyAccount();
             }
+
+            private static void InitdbPath()
+            {
+                try
+                {
+                    if (!Directory.Exists(dbPath))
+                    {
+                        Directory.CreateDirectory(dbPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                                
+            }
+
+            #endregion
+
+            #region//系统配置表
+
+            private static bool CreateTable_SystemConfig()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS SystemConfig (";
+                        sql += "SystemConfig_DefaultLanguage TEXT,";//系统设置 - 默认语言
+                        sql += "SystemConfig_LastInjection TEXT,";//系统设置 - 上次注入进程名称
+                        sql += "SystemConfig_StartMode INTEGER DEFAULT 0,";//系统设置 - 启动模式
+                        sql += "SystemConfig_Remote_IsEnable BOOLEAN DEFAULT 0,";//系统设置 - 启用远程管理
+                        sql += "SystemConfig_Remote_UserName TEXT,";//系统设置 - 远程管理账号
+                        sql += "SystemConfig_Remote_PassWord TEXT,";//系统设置 - 远程管理密码
+                        sql += "SystemConfig_Remote_Port INTEGER,";//系统设置 - 远程管理端口                    
+                        sql += "SystemConfig_Remote_URL TEXT";//系统设置 - 远程管理网址
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_SystemConfig()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM SystemConfig;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_SystemConfig()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM SystemConfig;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_SystemConfig()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "INSERT INTO SystemConfig (";
+                        sql += "SystemConfig_DefaultLanguage,";
+                        sql += "SystemConfig_LastInjection,";
+                        sql += "SystemConfig_StartMode,";
+                        sql += "SystemConfig_Remote_IsEnable,";
+                        sql += "SystemConfig_Remote_UserName,";
+                        sql += "SystemConfig_Remote_PassWord,";
+                        sql += "SystemConfig_Remote_Port,";
+                        sql += "SystemConfig_Remote_URL";
+                        sql += ") VALUES (";
+                        sql += "@SystemConfig_DefaultLanguage,";
+                        sql += "@SystemConfig_LastInjection,";
+                        sql += "@SystemConfig_StartMode,";
+                        sql += "@SystemConfig_Remote_IsEnable,";
+                        sql += "@SystemConfig_Remote_UserName,";
+                        sql += "@SystemConfig_Remote_PassWord,";
+                        sql += "@SystemConfig_Remote_Port,";
+                        sql += "@SystemConfig_Remote_URL";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@SystemConfig_DefaultLanguage", Socket_Cache.System.DefaultLanguage);
+                            cmd.Parameters.AddWithValue("@SystemConfig_LastInjection", Socket_Cache.System.LastInjection);
+                            cmd.Parameters.AddWithValue("@SystemConfig_StartMode", Socket_Cache.System.StartMode);
+                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_IsEnable", Socket_Cache.System.IsRemote);
+                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_UserName", Socket_Cache.System.Remote_UserName);
+                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_PassWord", Socket_Cache.System.Remote_PassWord);
+                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_Port", Socket_Cache.System.Remote_Port);
+                            cmd.Parameters.AddWithValue("@SystemConfig_Remote_URL", Socket_Cache.System.Remote_URL);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void UpdateTable_SystemConfig_LastInjection()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "UPDATE SystemConfig SET SystemConfig_LastInjection = @LastInjection;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@LastInjection", Socket_Cache.System.LastInjection);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }            
+
+            #endregion
+
+            #region//运行配置表
+
+            private static bool CreateTable_RunConfig()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS RunConfig (";
+                        
+                        sql += "ProxyConfig_ProxyIP_Auto BOOLEAN DEFAULT 1,";//代理模式 - 自动检测IP
+                        sql += "ProxyConfig_EnableSOCKS5 BOOLEAN DEFAULT 1,";//代理模式 - 启用SOCKS5代理
+                        sql += "ProxyConfig_ProxyPort INTEGER DEFAULT 1080,";//代理模式 - 代理端口
+                        sql += "ProxyConfig_EnableAuth BOOLEAN DEFAULT 1,";//代理模式 - 启用代理认证
+                        sql += "ProxyConfig_ProxyList_NoRecord BOOLEAN DEFAULT 1,";//代理模式 - 不记录数据
+                        sql += "ProxyConfig_ClientList_DelClosed BOOLEAN DEFAULT 1,";//代理模式 - 清理关闭的链接
+                        sql += "ProxyConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
+                        sql += "ProxyConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
+                        sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值
+                        sql += "ProxyConfig_EXTProxy_EnableHttp BOOLEAN DEFAULT 0,";//代理模式 - 启用外部HTTP代理
+                        sql += "ProxyConfig_EXTProxy_HttpIP TEXT,";//代理模式 - 外部HTTP代理IP
+                        sql += "ProxyConfig_EXTProxy_HttpPort INTEGER DEFAULT 8889,";//代理模式 - 外部HTTP代理端口
+                        sql += "ProxyConfig_EXTProxy_AppointHttpPort TEXT,";//代理模式 - 外部HTTP代理指定端口
+                        sql += "ProxyConfig_EXTProxy_EnableHttps BOOLEAN DEFAULT 0,";//代理模式 - 启用外部HTTP(S)代理
+                        sql += "ProxyConfig_EXTProxy_HttpsIP TEXT,";//代理模式 - 外部HTTP(S)代理IP
+                        sql += "ProxyConfig_EXTProxy_HttpsPort INTEGER DEFAULT 8889,";//代理模式 - 外部HTTP(S)代理端口
+                        sql += "ProxyConfig_EXTProxy_AppointHttpsPort TEXT,";//代理模式 - 外部HTTP(S)代理指定端口
+                        sql += "ProxyConfig_SpeedMode BOOLEAN DEFAULT 0,";//代理模式 - 极速模式
+
+                        sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//注入模式 - 过滤设置不显示
+                        sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//注入模式 - 过滤套接字
+                        sql += "InjectionConfig_CheckSocket_Value TEXT,";//注入模式 - 过滤套接字内容
+                        sql += "InjectionConfig_CheckIP BOOLEAN DEFAULT 0,";//注入模式 - 过滤IP
+                        sql += "InjectionConfig_CheckIP_Value TEXT,";//注入模式 - 过滤IP内容
+                        sql += "InjectionConfig_CheckPort BOOLEAN DEFAULT 0,";//注入模式 - 过滤端口
+                        sql += "InjectionConfig_CheckPort_Value TEXT,";//注入模式 - 过滤端口内容
+                        sql += "InjectionConfig_CheckHead BOOLEAN DEFAULT 0,";//注入模式 - 过滤包头
+                        sql += "InjectionConfig_CheckHead_Value TEXT,";//注入模式 - 过滤包头内容
+                        sql += "InjectionConfig_CheckData BOOLEAN DEFAULT 0,";//注入模式 - 过滤数据
+                        sql += "InjectionConfig_CheckData_Value TEXT,";//注入模式 - 过滤数据内容
+                        sql += "InjectionConfig_CheckSize BOOLEAN DEFAULT 0,";//注入模式 - 过滤长度
+                        sql += "InjectionConfig_CheckLength_Value TEXT,";//注入模式 - 过滤长度内容
+                        sql += "InjectionConfig_HookWS1_Send BOOLEAN DEFAULT 1,";//注入模式 - 发送1.1
+                        sql += "InjectionConfig_HookWS1_SendTo BOOLEAN DEFAULT 1,";//注入模式 - 发送到1.1
+                        sql += "InjectionConfig_HookWS1_Recv BOOLEAN DEFAULT 1,";//注入模式 - 接收1.1
+                        sql += "InjectionConfig_HookWS1_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - 接收自1.1
+                        sql += "InjectionConfig_HookWS2_Send BOOLEAN DEFAULT 1,";//注入模式 - 发送
+                        sql += "InjectionConfig_HookWS2_SendTo BOOLEAN DEFAULT 1,";//注入模式 - 发送到
+                        sql += "InjectionConfig_HookWS2_Recv BOOLEAN DEFAULT 1,";//注入模式 - 接收
+                        sql += "InjectionConfig_HookWS2_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - 接收自
+                        sql += "InjectionConfig_HookWSA_Send BOOLEAN DEFAULT 1,";//注入模式 - WSA 发送
+                        sql += "InjectionConfig_HookWSA_SendTo BOOLEAN DEFAULT 1,";//注入模式 - WSA 发送到
+                        sql += "InjectionConfig_HookWSA_Recv BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收
+                        sql += "InjectionConfig_HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收自
+                        sql += "InjectionConfig_SocketList_AutoRoll BOOLEAN DEFAULT 0,";//注入模式 - 封包列表自动滚动
+                        sql += "InjectionConfig_SocketList_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 封包列表自动清理
+                        sql += "InjectionConfig_SocketList_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 封包列表自动清理数值
+                        sql += "InjectionConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//注入模式 - 日志列表自动滚动
+                        sql += "InjectionConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 日志列表自动清理
+                        sql += "InjectionConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 日志列表自动清理数值
+                        sql += "InjectionConfig_SpeedMode BOOLEAN DEFAULT 0,";//注入模式 - 极速模式
+                        sql += "InjectionConfig_FilterExecute INTEGER DEFAULT 1";//注入模式 - 滤镜执行模式
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_RunConfig()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM RunConfig;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_RunConfig()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM RunConfig;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_RunConfig()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "INSERT INTO RunConfig (";                       
+                        sql += "ProxyConfig_ProxyIP_Auto,";
+                        sql += "ProxyConfig_EnableSOCKS5,";
+                        sql += "ProxyConfig_ProxyPort,";
+                        sql += "ProxyConfig_EnableAuth,";
+                        sql += "ProxyConfig_ProxyList_NoRecord,";
+                        sql += "ProxyConfig_ClientList_DelClosed,";
+                        sql += "ProxyConfig_LogList_AutoRoll,";
+                        sql += "ProxyConfig_LogList_AutoClear,";
+                        sql += "ProxyConfig_LogList_AutoClear_Value,";
+                        sql += "ProxyConfig_EXTProxy_EnableHttp,";
+                        sql += "ProxyConfig_EXTProxy_HttpIP,";
+                        sql += "ProxyConfig_EXTProxy_HttpPort,";
+                        sql += "ProxyConfig_EXTProxy_AppointHttpPort,";
+                        sql += "ProxyConfig_EXTProxy_EnableHttps,";
+                        sql += "ProxyConfig_EXTProxy_HttpsIP,";
+                        sql += "ProxyConfig_EXTProxy_HttpsPort,";
+                        sql += "ProxyConfig_EXTProxy_AppointHttpsPort,";
+                        sql += "ProxyConfig_SpeedMode,";
+                        sql += "InjectionConfig_CheckNotShow,";
+                        sql += "InjectionConfig_CheckSocket,";
+                        sql += "InjectionConfig_CheckSocket_Value,";
+                        sql += "InjectionConfig_CheckIP,";
+                        sql += "InjectionConfig_CheckIP_Value,";
+                        sql += "InjectionConfig_CheckPort,";
+                        sql += "InjectionConfig_CheckPort_Value,";
+                        sql += "InjectionConfig_CheckHead,";
+                        sql += "InjectionConfig_CheckHead_Value,";
+                        sql += "InjectionConfig_CheckData,";
+                        sql += "InjectionConfig_CheckData_Value,";
+                        sql += "InjectionConfig_CheckSize,";
+                        sql += "InjectionConfig_CheckLength_Value,";
+                        sql += "InjectionConfig_HookWS1_Send,";
+                        sql += "InjectionConfig_HookWS1_SendTo,";
+                        sql += "InjectionConfig_HookWS1_Recv,";
+                        sql += "InjectionConfig_HookWS1_RecvFrom,";
+                        sql += "InjectionConfig_HookWS2_Send,";
+                        sql += "InjectionConfig_HookWS2_SendTo,";
+                        sql += "InjectionConfig_HookWS2_Recv,";
+                        sql += "InjectionConfig_HookWS2_RecvFrom,";
+                        sql += "InjectionConfig_HookWSA_Send,";
+                        sql += "InjectionConfig_HookWSA_SendTo,";
+                        sql += "InjectionConfig_HookWSA_Recv,";
+                        sql += "InjectionConfig_HookWSA_RecvFrom,";
+                        sql += "InjectionConfig_SocketList_AutoRoll,";
+                        sql += "InjectionConfig_SocketList_AutoClear,";
+                        sql += "InjectionConfig_SocketList_AutoClear_Value,";
+                        sql += "InjectionConfig_LogList_AutoRoll,";
+                        sql += "InjectionConfig_LogList_AutoClear,";
+                        sql += "InjectionConfig_LogList_AutoClear_Value,";
+                        sql += "InjectionConfig_SpeedMode,";
+                        sql += "InjectionConfig_FilterExecute";
+                        sql += ") VALUES (";                  
+                        sql += "@ProxyConfig_ProxyIP_Auto,";
+                        sql += "@ProxyConfig_EnableSOCKS5,";
+                        sql += "@ProxyConfig_ProxyPort,";
+                        sql += "@ProxyConfig_EnableAuth,";
+                        sql += "@ProxyConfig_ProxyList_NoRecord,";
+                        sql += "@ProxyConfig_ClientList_DelClosed,";
+                        sql += "@ProxyConfig_LogList_AutoRoll,";
+                        sql += "@ProxyConfig_LogList_AutoClear,";
+                        sql += "@ProxyConfig_LogList_AutoClear_Value,";
+                        sql += "@ProxyConfig_EXTProxy_EnableHttp,";
+                        sql += "@ProxyConfig_EXTProxy_HttpIP,";
+                        sql += "@ProxyConfig_EXTProxy_HttpPort,";
+                        sql += "@ProxyConfig_EXTProxy_AppointHttpPort,";
+                        sql += "@ProxyConfig_EXTProxy_EnableHttps,";
+                        sql += "@ProxyConfig_EXTProxy_HttpsIP,";
+                        sql += "@ProxyConfig_EXTProxy_HttpsPort,";
+                        sql += "@ProxyConfig_EXTProxy_AppointHttpsPort,";
+                        sql += "@ProxyConfig_SpeedMode,";
+                        sql += "@InjectionConfig_CheckNotShow,";
+                        sql += "@InjectionConfig_CheckSocket,";
+                        sql += "@InjectionConfig_CheckSocket_Value,";
+                        sql += "@InjectionConfig_CheckIP,";
+                        sql += "@InjectionConfig_CheckIP_Value,";
+                        sql += "@InjectionConfig_CheckPort,";
+                        sql += "@InjectionConfig_CheckPort_Value,";
+                        sql += "@InjectionConfig_CheckHead,";
+                        sql += "@InjectionConfig_CheckHead_Value,";
+                        sql += "@InjectionConfig_CheckData,";
+                        sql += "@InjectionConfig_CheckData_Value,";
+                        sql += "@InjectionConfig_CheckSize,";
+                        sql += "@InjectionConfig_CheckLength_Value,";
+                        sql += "@InjectionConfig_HookWS1_Send,";
+                        sql += "@InjectionConfig_HookWS1_SendTo,";
+                        sql += "@InjectionConfig_HookWS1_Recv,";
+                        sql += "@InjectionConfig_HookWS1_RecvFrom,";
+                        sql += "@InjectionConfig_HookWS2_Send,";
+                        sql += "@InjectionConfig_HookWS2_SendTo,";
+                        sql += "@InjectionConfig_HookWS2_Recv,";
+                        sql += "@InjectionConfig_HookWS2_RecvFrom,";
+                        sql += "@InjectionConfig_HookWSA_Send,";
+                        sql += "@InjectionConfig_HookWSA_SendTo,";
+                        sql += "@InjectionConfig_HookWSA_Recv,";
+                        sql += "@InjectionConfig_HookWSA_RecvFrom,";
+                        sql += "@InjectionConfig_SocketList_AutoRoll,";
+                        sql += "@InjectionConfig_SocketList_AutoClear,";
+                        sql += "@InjectionConfig_SocketList_AutoClear_Value,";
+                        sql += "@InjectionConfig_LogList_AutoRoll,";
+                        sql += "@InjectionConfig_LogList_AutoClear,";
+                        sql += "@InjectionConfig_LogList_AutoClear_Value,";
+                        sql += "@InjectionConfig_SpeedMode,";
+                        sql += "@InjectionConfig_FilterExecute";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {                           
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyIP_Auto", Socket_Cache.SocketProxy.ProxyIP_Auto);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EnableSOCKS5", Socket_Cache.SocketProxy.Enable_SOCKS5);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyPort", Socket_Cache.SocketProxy.ProxyPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EnableAuth", Socket_Cache.SocketProxy.Enable_Auth);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ProxyList_NoRecord", Socket_Cache.SocketProxy.NoRecord);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ClientList_DelClosed", Socket_Cache.SocketProxy.DelClosed);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", Socket_Cache.LogList.Proxy_AutoRoll);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_EnableHttp", Socket_Cache.SocketProxy.Enable_EXTHttp);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpIP", Socket_Cache.SocketProxy.EXTHttpIP);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpPort", Socket_Cache.SocketProxy.EXTHttpPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_AppointHttpPort", Socket_Cache.SocketProxy.AppointHttpPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_EnableHttps", Socket_Cache.SocketProxy.Enable_EXTHttps);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpsIP", Socket_Cache.SocketProxy.EXTHttpsIP);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpsPort", Socket_Cache.SocketProxy.EXTHttpsPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_AppointHttpsPort", Socket_Cache.SocketProxy.AppointHttpsPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_SpeedMode", Socket_Cache.SocketProxy.SpeedMode);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckNotShow", Socket_Cache.SocketPacket.CheckNotShow);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket", Socket_Cache.SocketPacket.CheckSocket);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket_Value", Socket_Cache.SocketPacket.CheckSocket_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckIP", Socket_Cache.SocketPacket.CheckIP);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckIP_Value", Socket_Cache.SocketPacket.CheckIP_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckPort", Socket_Cache.SocketPacket.CheckPort);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckPort_Value", Socket_Cache.SocketPacket.CheckPort_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckHead", Socket_Cache.SocketPacket.CheckHead);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckHead_Value", Socket_Cache.SocketPacket.CheckHead_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckData", Socket_Cache.SocketPacket.CheckData);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckData_Value", Socket_Cache.SocketPacket.CheckData_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSize", Socket_Cache.SocketPacket.CheckSize);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckLength_Value", Socket_Cache.SocketPacket.CheckLength_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_Send", Socket_Cache.SocketPacket.HookWS1_Send);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_SendTo", Socket_Cache.SocketPacket.HookWS1_SendTo);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_Recv", Socket_Cache.SocketPacket.HookWS1_Recv);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_RecvFrom", Socket_Cache.SocketPacket.HookWS1_RecvFrom);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_Send", Socket_Cache.SocketPacket.HookWS2_Send);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_SendTo", Socket_Cache.SocketPacket.HookWS2_SendTo);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_Recv", Socket_Cache.SocketPacket.HookWS2_Recv);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWS2_RecvFrom", Socket_Cache.SocketPacket.HookWS2_RecvFrom);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_Send", Socket_Cache.SocketPacket.HookWSA_Send);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_SendTo", Socket_Cache.SocketPacket.HookWSA_SendTo);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_Recv", Socket_Cache.SocketPacket.HookWSA_Recv);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_RecvFrom", Socket_Cache.SocketPacket.HookWSA_RecvFrom);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoRoll", Socket_Cache.SocketList.AutoRoll);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoClear", Socket_Cache.SocketList.AutoClear);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoClear_Value", Socket_Cache.SocketList.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoRoll", Socket_Cache.LogList.Socket_AutoRoll);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear", Socket_Cache.LogList.Socket_AutoClear);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Socket_AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_SpeedMode", Socket_Cache.SocketPacket.SpeedMode);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_FilterExecute", Socket_Cache.Filter.FilterExecute);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
 
             #region//滤镜列表
 

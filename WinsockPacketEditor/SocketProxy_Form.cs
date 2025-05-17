@@ -13,6 +13,7 @@ namespace WinsockPacketEditor
 {
     public partial class SocketProxy_Form : Form
     {
+        private readonly Socket_Cache.System.SystemMode RunMode = Socket_Cache.System.SystemMode.Proxy;
         private Socket_Form socketForm;
         private static Socket SocketServer;        
 
@@ -22,15 +23,16 @@ namespace WinsockPacketEditor
         {
             try
             {
-                InitializeComponent();                
+                Socket_Cache.System.LoadSystemConfig_FromDB();
+                MultiLanguage.SetDefaultLanguage(Socket_Cache.System.DefaultLanguage);
+
+                InitializeComponent();
 
                 this.socketForm = socketForm;
                 this.InitSocketDGV();
 
                 this.InitForm();
-                this.LoadConfigs_Parameter();
-
-                Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Proxy);                
+                this.LoadConfigs_Parameter();                                
             }
             catch (Exception ex)
             {
@@ -45,7 +47,7 @@ namespace WinsockPacketEditor
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
             this.EnableEXTHttp_Changed();
-            this.EnableEXTHttps_Changed();            
+            this.EnableEXTHttps_Changed();
         }
 
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -57,19 +59,21 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.SaveConfigs_Parameter();
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(Socket_Cache.SystemMode.Proxy);
-                Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Proxy);
-
-                if (this.cbEnable_SystemProxy.Checked)
-                { 
-                    Socket_Operation.StopSystemProxy();
-                }
-
                 if (this.socketForm != null)
                 {
                     this.socketForm.ExitMainForm();
                 }
+
+                if (this.cbEnable_SystemProxy.Checked)
+                {
+                    Socket_Operation.StopSystemProxy();
+                }
+
+                this.SaveConfigs_Parameter();
+
+                Socket_Operation.StopRemoteMGT(this.RunMode);
+                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
@@ -115,7 +119,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                this.Text = Socket_Cache.WPE + " - " + Socket_Operation.AssemblyVersion;
+                this.Text = Socket_Cache.System.WPE + " - " + Socket_Operation.AssemblyVersion;
 
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
@@ -189,21 +193,21 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//加载系统参数
+        #region//加载本页面的运行配置
 
         private void LoadConfigs_Parameter()
         {
             try
-            {                
-                Socket_Operation.LoadConfigs_SocketProxy();
+            {
+                Socket_Cache.System.LoadRunConfig_FromDB();
 
                 this.cbProxyIP_Auto.Checked = Socket_Cache.SocketProxy.ProxyIP_Auto;            
                 this.cbEnable_SOCKS5.Checked = Socket_Cache.SocketProxy.Enable_SOCKS5;
                 this.nudProxyPort.Value = Socket_Cache.SocketProxy.ProxyPort;
                 this.cbEnable_Auth.Checked = Socket_Cache.SocketProxy.Enable_Auth;                
 
-                this.cbNoRecordData.Checked = Socket_Cache.SocketProxyList.NoRecord;
-                this.cbDeleteClosed.Checked = Socket_Cache.SocketProxyList.DelClosed;
+                this.cbNoRecordData.Checked = Socket_Cache.SocketProxy.NoRecord;
+                this.cbDeleteClosed.Checked = Socket_Cache.SocketProxy.DelClosed;
 
                 this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Proxy_AutoRoll;
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Proxy_AutoClear;
@@ -219,6 +223,8 @@ namespace WinsockPacketEditor
                 this.txtAppointHttpsPort.Text = Socket_Cache.SocketProxy.AppointHttpsPort;
 
                 this.cbSpeedMode.Checked = Socket_Cache.SocketProxy.SpeedMode;
+
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
@@ -228,7 +234,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//保存系统参数
+        #region//保存本页面的运行配置
 
         private void SaveConfigs_Parameter()
         {
@@ -239,8 +245,8 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.ProxyPort = ((ushort)this.nudProxyPort.Value);
                 Socket_Cache.SocketProxy.Enable_Auth = this.cbEnable_Auth.Checked;                
 
-                Socket_Cache.SocketProxyList.NoRecord = this.cbNoRecordData.Checked;
-                Socket_Cache.SocketProxyList.DelClosed = this.cbDeleteClosed.Checked;
+                Socket_Cache.SocketProxy.NoRecord = this.cbNoRecordData.Checked;
+                Socket_Cache.SocketProxy.DelClosed = this.cbDeleteClosed.Checked;
 
                 Socket_Cache.LogList.Proxy_AutoRoll = this.cbLogList_AutoRoll.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
@@ -255,9 +261,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
                 Socket_Cache.SocketProxy.AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
 
-                Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;                
-
-                Socket_Operation.SaveConfigs_SocketProxy();                
+                Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
             }
             catch (Exception ex)
             {
@@ -611,7 +615,7 @@ namespace WinsockPacketEditor
 
                 if (Socket_Cache.LogQueue.qProxy_Log.Count > 0)
                 {
-                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Proxy);
+                    Socket_Cache.LogList.LogToList(Socket_Cache.System.LogType.Proxy);
 
                     if (this.cbLogList_AutoRoll.Checked && !this.dgvLogList.IsDisposed)
                     {
@@ -688,8 +692,8 @@ namespace WinsockPacketEditor
 
         private void CleanUp_LogList()
         {
-            Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.LogType.Proxy);
-            Socket_Cache.LogList.ResetLogList(Socket_Cache.LogType.Proxy);
+            Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.System.LogType.Proxy);
+            Socket_Cache.LogList.ResetLogList(Socket_Cache.System.LogType.Proxy);
             this.dgvLogList.Rows.Clear();
         }
 

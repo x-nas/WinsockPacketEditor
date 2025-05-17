@@ -22,12 +22,12 @@ namespace WPELibrary.Lib
             //
         }
 
-        public WinSockHook(RemoteHooking.IContext InContext, string ChannelName, Socket_Cache.InjectParameters ipParameter)
+        public WinSockHook(RemoteHooking.IContext InContext, string ChannelName)
         {
             //
         }
 
-        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName, Socket_Cache.InjectParameters ipParameter)
+        public unsafe void Run(RemoteHooking.IContext InContext, string ChannelName)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace WPELibrary.Lib
 
                 Application.EnableVisualStyles();                
                 Application.SetCompatibleTextRenderingDefault(false);                
-                Application.Run(new Socket_Form(ipParameter));                
+                Application.Run(new Socket_Form());                
             }
             catch (Exception ex)
             {

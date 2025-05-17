@@ -194,11 +194,6 @@
     <Compile Include="Lib\MultiLanguage.cs" />
     <Compile Include="Lib\Socket_FilterInfo.cs" />
     <Compile Include="Lib\Socket_LogInfo.cs" />
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
     <Compile Include="Socket_FindForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -330,10 +325,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Proxy_AccountForm.en-US.resx">

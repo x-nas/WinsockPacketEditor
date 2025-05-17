@@ -8,11 +8,11 @@ namespace WPELibrary
     public partial class Socket_PasswordFrom : Form
     {
         private string SocketList_Password = string.Empty;
-        private readonly Socket_Cache.PWType PWType;
+        private readonly Socket_Cache.System.PWType PWType;
 
         #region//初始化
 
-        public Socket_PasswordFrom(Socket_Cache.PWType PWType)
+        public Socket_PasswordFrom(Socket_Cache.System.PWType PWType)
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
             InitializeComponent();
@@ -30,20 +30,20 @@ namespace WPELibrary
 
                 switch (PWType)
                 {
-                    case Socket_Cache.PWType.FilterList_Import:
-                    case Socket_Cache.PWType.RobotList_Import:
-                    case Socket_Cache.PWType.SendList_Import:
-                    case Socket_Cache.PWType.SendCollection_Import:
-                    case Socket_Cache.PWType.ProxyAccount_Import:
+                    case Socket_Cache.System.PWType.FilterList_Import:
+                    case Socket_Cache.System.PWType.RobotList_Import:
+                    case Socket_Cache.System.PWType.SendList_Import:
+                    case Socket_Cache.System.PWType.SendCollection_Import:
+                    case Socket_Cache.System.PWType.ProxyAccount_Import:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_90);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_91);
                         break;
 
-                    case Socket_Cache.PWType.FilterList_Export:
-                    case Socket_Cache.PWType.RobotList_Export:
-                    case Socket_Cache.PWType.SendList_Export:
-                    case Socket_Cache.PWType.SendCollection_Export:
-                    case Socket_Cache.PWType.ProxyAccount_Export:
+                    case Socket_Cache.System.PWType.FilterList_Export:
+                    case Socket_Cache.System.PWType.RobotList_Export:
+                    case Socket_Cache.System.PWType.SendList_Export:
+                    case Socket_Cache.System.PWType.SendCollection_Export:
+                    case Socket_Cache.System.PWType.ProxyAccount_Export:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
                         break;
@@ -62,28 +62,28 @@ namespace WPELibrary
         {
             switch (PWType)
             {
-                case Socket_Cache.PWType.FilterList_Import:
-                case Socket_Cache.PWType.FilterList_Export:
+                case Socket_Cache.System.PWType.FilterList_Import:
+                case Socket_Cache.System.PWType.FilterList_Export:
                     Socket_Cache.FilterList.AESKey = SocketList_Password;
                     break;
 
-                case Socket_Cache.PWType.RobotList_Import:
-                case Socket_Cache.PWType.RobotList_Export:
+                case Socket_Cache.System.PWType.RobotList_Import:
+                case Socket_Cache.System.PWType.RobotList_Export:
                     Socket_Cache.RobotList.AESKey = SocketList_Password;
                     break;
 
-                case Socket_Cache.PWType.SendList_Import:
-                case Socket_Cache.PWType.SendList_Export:
+                case Socket_Cache.System.PWType.SendList_Import:
+                case Socket_Cache.System.PWType.SendList_Export:
                     Socket_Cache.SendList.AESKey = SocketList_Password;
                     break;
 
-                case Socket_Cache.PWType.SendCollection_Import:
-                case Socket_Cache.PWType.SendCollection_Export:
+                case Socket_Cache.System.PWType.SendCollection_Import:
+                case Socket_Cache.System.PWType.SendCollection_Export:
                     Socket_Cache.Send.AESKey = SocketList_Password;
                     break;
 
-                case Socket_Cache.PWType.ProxyAccount_Import:
-                case Socket_Cache.PWType.ProxyAccount_Export:
+                case Socket_Cache.System.PWType.ProxyAccount_Import:
+                case Socket_Cache.System.PWType.ProxyAccount_Export:
                     Socket_Cache.ProxyAccount.AESKey = SocketList_Password;
                     break;
             }

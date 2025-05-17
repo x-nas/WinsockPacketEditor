@@ -74,7 +74,7 @@ namespace WPELibrary
                 this.SendName = Socket_Cache.SendList.lstSend[this.SendIndex].SName;
                 this.txtSendName.Text = this.SendName;
                 this.cbSystemSocket.Checked = Socket_Cache.SendList.lstSend[this.SendIndex].SSystemSocket;
-                this.lSystemSocket.Text = Socket_Cache.SystemSocket.ToString();
+                this.lSystemSocket.Text = Socket_Cache.System.SystemSocket.ToString();
                 this.nudLoop_CNT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopCNT;
                 this.nudLoop_INT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopINT;
                 this.dtSendCollection = Socket_Cache.SendList.lstSend[this.SendIndex].SCollection.Copy();
@@ -295,7 +295,7 @@ namespace WPELibrary
             {
                 if (this.cbSystemSocket.Checked)
                 {
-                    if (Socket_Cache.SystemSocket <= 0)
+                    if (Socket_Cache.System.SystemSocket <= 0)
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_49));
                         return false;
@@ -332,35 +332,35 @@ namespace WPELibrary
                 switch (sItemText)
                 {
                     case "cmsSendList_Top":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Top, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Top, iSIndex);
                         break;
 
                     case "cmsSendList_Up":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Up, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Up, iSIndex);
                         break;
 
                     case "cmsSendList_Down":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Down, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Down, iSIndex);
                         break;
 
                     case "cmsSendList_Bottom":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Bottom, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Bottom, iSIndex);
                         break;
 
                     case "cmsSendList_Delete":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Delete, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Delete, iSIndex);
                         break;
 
                     case "cmsSendList_Export":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Export, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Export, iSIndex);
                         break;
 
                     case "cmsSendList_Import":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.Import, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Import, iSIndex);
                         break;
 
                     case "cmsSendList_CleanUp":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.ListAction.CleanUp, iSIndex);
+                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.CleanUp, iSIndex);
                         break;
                 }
 

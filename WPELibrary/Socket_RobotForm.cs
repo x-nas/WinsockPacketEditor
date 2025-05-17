@@ -311,7 +311,7 @@ namespace WPELibrary
 
         #region//指令集的列表操作
 
-        public int UpdateInstruction_ByListAction(Socket_Cache.ListAction listAction, int InstructionIndex)
+        public int UpdateInstruction_ByListAction(Socket_Cache.System.ListAction listAction, int InstructionIndex)
         {
             int iReturn = -1;
 
@@ -323,7 +323,7 @@ namespace WPELibrary
 
                 switch (listAction)
                 {
-                    case Socket_Cache.ListAction.Top:
+                    case Socket_Cache.System.ListAction.Top:
 
                         if (InstructionIndex > 0)
                         {
@@ -334,7 +334,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.ListAction.Up:
+                    case Socket_Cache.System.ListAction.Up:
 
                         if (InstructionIndex > 0)
                         {
@@ -345,7 +345,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.ListAction.Down:
+                    case Socket_Cache.System.ListAction.Down:
 
                         if (InstructionIndex < iInstructionCount - 1)
                         {
@@ -356,7 +356,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.ListAction.Bottom:
+                    case Socket_Cache.System.ListAction.Bottom:
 
                         if (InstructionIndex < iInstructionCount - 1)
                         {
@@ -367,13 +367,13 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.ListAction.Delete:
+                    case Socket_Cache.System.ListAction.Delete:
 
                         this.dtRobotInstruction.Rows.RemoveAt(InstructionIndex);                        
 
                         break;
 
-                    case Socket_Cache.ListAction.CleanUp:
+                    case Socket_Cache.System.ListAction.CleanUp:
 
                         this.dtRobotInstruction.Clear();
 
@@ -409,27 +409,27 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsRobotInstruction_Top":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.Top, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Top, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Up":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.Up, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Up, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Down":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.Down, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Down, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Bottom":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.Bottom, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Bottom, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Delete":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.Delete, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Delete, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_CleanUp":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.ListAction.CleanUp, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.CleanUp, iInstructionIndex);
                                 break;
                         }
 

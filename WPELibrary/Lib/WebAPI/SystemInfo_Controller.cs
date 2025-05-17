@@ -25,7 +25,7 @@ namespace WPELibrary.Lib.WebAPI
 
         public IHttpActionResult GetStartTime()
         {  
-            return Ok(Socket_Cache.StartTime);
+            return Ok(Socket_Cache.System.StartTime);
         }
 
         #endregion

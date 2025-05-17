@@ -16,22 +16,23 @@ namespace WPELibrary
 {
     public partial class Socket_Form : Form
     {
+        private readonly Socket_Cache.System.SystemMode RunMode = Socket_Cache.System.SystemMode.Process;
         private bool bWakeUp = true;
         private readonly ToolTip tt = new ToolTip();
         private readonly WinSockHook ws = new WinSockHook();
 
         #region//加载窗体
 
-        public Socket_Form(Socket_Cache.InjectParameters ipParameter)
+        public Socket_Form()
         {
             try
             {
-                string SelectLanguage = ipParameter.Language;
-                MultiLanguage.SetDefaultLanguage(SelectLanguage);
+                Socket_Cache.System.LoadSystemConfig_FromDB();
+                MultiLanguage.SetDefaultLanguage(Socket_Cache.System.DefaultLanguage);                
 
                 InitializeComponent();
 
-                Socket_Cache.InvokeAction = action =>
+                Socket_Cache.System.InvokeAction = action =>
                 {
                     if (this.InvokeRequired)
                     {
@@ -43,14 +44,7 @@ namespace WPELibrary
                     }
                 };
 
-                this.InitSocketDGV();
-
-                Socket_Cache.StartTime = DateTime.Now;
-                Socket_Cache.SelectMode = ipParameter.SelectMode;
-                Socket_Cache.IsRemote = ipParameter.IsRemote;
-                Socket_Cache.Remote_URL = ipParameter.Remote_URL;
-                Socket_Cache.Remote_UserName = ipParameter.Remote_UserName;
-                Socket_Cache.Remote_PassWord = ipParameter.Remote_PassWord;
+                this.InitSocketDGV();                
             }
             catch (Exception ex)
             {
@@ -66,15 +60,16 @@ namespace WPELibrary
         {
             this.InitSocketForm();
             this.InitHexBox_XOR();
-
             this.LoadConfigs_Parameter();
-            Socket_Operation.LoadSystemList();
+            
             Socket_Operation.RegisterHotKey();
+            Socket_Operation.StartRemoteMGT();
+
+            Socket_Cache.System.LoadSystemList_FromDB();
             Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
-            Socket_Operation.StartRemoteMGT(Socket_Cache.SystemMode.Process);
         }
 
-        private void DLL_Form_FormClosed(object sender, FormClosedEventArgs e)
+        private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             this.ExitMainForm();
         }
@@ -131,10 +126,12 @@ namespace WPELibrary
 
                 this.SaveConfigs_Parameter();
                 this.niWPE.Visible = false;
-                Socket_Operation.SaveSystemList();
+                
                 Socket_Operation.UnregisterHotKey();
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(Socket_Cache.SystemMode.Process);
-                Socket_Operation.StopRemoteMGT(Socket_Cache.SystemMode.Process);
+                Socket_Operation.StopRemoteMGT(this.RunMode);
+                Socket_Cache.System.SaveSystemList_ToDB();
+                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);                
             }
             catch (Exception ex)
             {
@@ -176,7 +173,7 @@ namespace WPELibrary
         {
             try
             {
-                this.Text = Socket_Cache.WPE + " - " + Socket_Operation.AssemblyVersion;
+                this.Text = Socket_Cache.System.WPE + " - " + Socket_Operation.AssemblyVersion;
 
                 tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
                 tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
@@ -184,10 +181,10 @@ namespace WPELibrary
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
-                Socket_Cache.MainHandle = this.Handle;
+                Socket_Cache.System.MainHandle = this.Handle;
                 string sProcessName = Socket_Operation.GetProcessName();
                 this.tsslProcessName.Text = sProcessName;
-                this.niWPE.Text = Socket_Cache.WPE + "\r\n" + sProcessName;
+                this.niWPE.Text = Socket_Cache.System.WPE + "\r\n" + sProcessName;
                 
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
@@ -268,13 +265,13 @@ namespace WPELibrary
 
         #endregion        
 
-        #region//加载系统参数
+        #region//加载本界面的运行配置
 
         private void LoadConfigs_Parameter()
         {
             try
             {
-                Socket_Operation.LoadConfigs_SocketPacket();
+                Socket_Cache.System.LoadRunConfig_FromDB();
 
                 cbHookWS1_Send.Checked = Socket_Cache.SocketPacket.HookWS1_Send;
                 cbHookWS1_SendTo.Checked = Socket_Cache.SocketPacket.HookWS1_SendTo;
@@ -317,23 +314,25 @@ namespace WPELibrary
                 this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
                 this.SocketList_AutoClearChange();
 
-                this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.AutoRoll;
-                this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.AutoClear;
-                this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.AutoClear_Value;
+                this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Socket_AutoRoll;
+                this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Socket_AutoClear;
+                this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Socket_AutoClear_Value;
                 this.LogList_AutoClearChange();                
 
                 this.cbWorkingMode_Speed.Checked = Socket_Cache.SocketPacket.SpeedMode;
 
-                switch (Socket_Cache.FilterList.FilterList_Execute)
+                switch (Socket_Cache.Filter.FilterExecute)
                 {
-                    case Socket_Cache.FilterList.Execute.Priority:
+                    case Socket_Cache.Filter.Execute.Priority:
                         this.rbFilterSet_Priority.Checked = true;
                         break;
 
-                    case Socket_Cache.FilterList.Execute.Sequence:
+                    case Socket_Cache.Filter.Execute.Sequence:
                         this.rbFilterSet_Sequence.Checked = true;
                         break;
-                }                
+                }
+
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
@@ -343,7 +342,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//保存系统参数
+        #region//保存本页面运行配置
 
         private void SaveConfigs_Parameter()
         {
@@ -381,22 +380,20 @@ namespace WPELibrary
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
                 Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
 
-                Socket_Cache.LogList.AutoRoll = this.cbLogList_AutoRoll.Checked;
-                Socket_Cache.LogList.AutoClear = this.cbLogList_AutoClear.Checked;
-                Socket_Cache.LogList.AutoClear_Value = this.nudLogList_AutoClearValue.Value;                
+                Socket_Cache.LogList.Socket_AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Socket_Cache.LogList.Socket_AutoClear = this.cbLogList_AutoClear.Checked;
+                Socket_Cache.LogList.Socket_AutoClear_Value = this.nudLogList_AutoClearValue.Value;                
 
                 Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;            
 
                 if (this.rbFilterSet_Priority.Checked)
                 {
-                    Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Priority;
+                    Socket_Cache.Filter.FilterExecute = Socket_Cache.Filter.Execute.Priority;
                 }
                 else
                 {
-                    Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.Execute.Sequence;
+                    Socket_Cache.Filter.FilterExecute = Socket_Cache.Filter.Execute.Sequence;
                 }
-
-                Socket_Operation.SaveConfigs_SocketPacket();
             }
             catch (Exception ex)
             {
@@ -671,8 +668,8 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.LogType.Socket);
-                Socket_Cache.LogList.ResetLogList(Socket_Cache.LogType.Socket);
+                Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.System.LogType.Socket);
+                Socket_Cache.LogList.ResetLogList(Socket_Cache.System.LogType.Socket);
                 this.dgvLogList.Rows.Clear();             
             }
             catch (Exception ex)
@@ -881,7 +878,7 @@ namespace WPELibrary
 
                 if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
                 {
-                    Socket_Cache.LogList.LogToList(Socket_Cache.LogType.Socket);
+                    Socket_Cache.LogList.LogToList(Socket_Cache.System.LogType.Socket);
                     this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
                     this.AutoCleanUp_LogList();
                 }
@@ -1449,7 +1446,7 @@ namespace WPELibrary
 
                         if (Socket_Cache.SocketList.Select_Index > -1)
                         {
-                            Socket_Cache.SystemSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
+                            Socket_Cache.System.SystemSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
                         }
 
                         break;                        
@@ -1520,31 +1517,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsFilterList_Top":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Top, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Top, iFIndex);
                                 break;
 
                             case "cmsFilterList_Up":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Up, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Up, iFIndex);
                                 break;
 
                             case "cmsFilterList_Down":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Down, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Down, iFIndex);
                                 break;
 
                             case "cmsFilterList_Bottom":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Bottom, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Bottom, iFIndex);
                                 break;
 
                             case "cmsFilterList_Copy":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Copy, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Copy, iFIndex);
                                 break;
 
                             case "cmsFilterList_Export":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Export, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Export, iFIndex);
                                 break;
 
                             case "cmsFilterList_Delete":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.ListAction.Delete, iFIndex);
+                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Delete, iFIndex);
                                 break;
                         }
 
@@ -1584,31 +1581,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsSendList_Top":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Top, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Top, iSIndex);
                                 break;
 
                             case "cmsSendList_Up":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Up, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Up, iSIndex);
                                 break;
 
                             case "cmsSendList_Down":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Down, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Down, iSIndex);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Bottom, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Bottom, iSIndex);
                                 break;
 
                             case "cmsSendList_Copy":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Copy, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Copy, iSIndex);
                                 break;
 
                             case "cmsSendList_Export":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Export, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Export, iSIndex);
                                 break;
 
                             case "cmsSendList_Delete":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.ListAction.Delete, iSIndex);
+                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Delete, iSIndex);
                                 break;
                         }
 
@@ -1648,31 +1645,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsRobotList_Top":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Top, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Top, iRIndex);
                                 break;
 
                             case "cmsRobotList_Up":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Up, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Up, iRIndex);
                                 break;
 
                             case "cmsRobotList_Down":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Down, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Down, iRIndex);
                                 break;
 
                             case "cmsRobotList_Bottom":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Bottom, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Bottom, iRIndex);
                                 break;
 
                             case "cmsRobotList_Copy":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Copy, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Copy, iRIndex);
                                 break;
 
                             case "cmsRobotList_Export":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Export, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Export, iRIndex);
                                 break;
 
                             case "cmsRobotList_Delete":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.ListAction.Delete, iRIndex);
+                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Delete, iRIndex);
                                 break;
                         }
 

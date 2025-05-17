@@ -32,6 +32,7 @@ namespace WinsockPacketEditor
                 System.Security.Principal.WindowsPrincipal principal = new System.Security.Principal.WindowsPrincipal(identity);
 
                 Socket_Cache.DataBase.InitDB();
+                Socket_Cache.System.LoadSystemConfig_FromDB();
 
                 if (principal.IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
                 {
@@ -39,20 +40,18 @@ namespace WinsockPacketEditor
 
                     if (systemMode_Form.ShowDialog() == DialogResult.OK)
                     {
-                        switch (Socket_Cache.SelectMode)
+                        switch (Socket_Cache.System.StartMode)
                         { 
-                            case Socket_Cache.SystemMode.Proxy:
+                            case Socket_Cache.System.SystemMode.Proxy:                                
 
-                                Socket_Cache.InjectParameters ipParameter = Socket_Operation.CreateInjectParameters(Properties.Settings.Default.DefaultLanguage);
-
-                                Socket_Form socket_Form = new Socket_Form(ipParameter);
+                                Socket_Form socket_Form = new Socket_Form();
                                 socket_Form.Show();
 
                                 Application.Run(new SocketProxy_Form(socket_Form));
 
                                 break;
 
-                            case Socket_Cache.SystemMode.Process:        
+                            case Socket_Cache.System.SystemMode.Process:        
                                 
                                 Application.Run(new Injector_Form());
 

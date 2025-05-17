@@ -171,32 +171,7 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        #endregion
-
-        #region//创建传递参数
-
-        public static Socket_Cache.InjectParameters CreateInjectParameters(string SelectLanguage)
-        {
-            Socket_Cache.InjectParameters ipParameter = new Socket_Cache.InjectParameters();
-
-            try
-            {
-                ipParameter.SelectMode = Socket_Cache.SelectMode;
-                ipParameter.Language = SelectLanguage;
-                ipParameter.IsRemote = Socket_Cache.IsRemote;
-                ipParameter.Remote_URL = Socket_Cache.Remote_URL;
-                ipParameter.Remote_UserName = Socket_Cache.Remote_UserName;
-                ipParameter.Remote_PassWord = Socket_Cache.Remote_PassWord;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return ipParameter;
-        }
-
-        #endregion
+        #endregion        
 
         #region//程序集特性访问器
 
@@ -306,39 +281,36 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        #endregion
+        #endregion        
 
         #region//启动远程管理
 
-        public static void StartRemoteMGT(Socket_Cache.SystemMode FromMode)
+        public static void StartRemoteMGT()
         {
             try
             {
-                if (FromMode == Socket_Cache.SelectMode)
+                if (Socket_Cache.System.IsRemote)
                 {
-                    if (Socket_Cache.IsRemote)
+                    if (!string.IsNullOrEmpty(Socket_Cache.System.Remote_URL) &&
+                        !string.IsNullOrEmpty(Socket_Cache.System.Remote_UserName) &&
+                        !string.IsNullOrEmpty(Socket_Cache.System.Remote_PassWord))
                     {
-                        if (!string.IsNullOrEmpty(Socket_Cache.Remote_URL) &&
-                            !string.IsNullOrEmpty(Socket_Cache.Remote_UserName) &&
-                            !string.IsNullOrEmpty(Socket_Cache.Remote_PassWord))
+                        string sLog = string.Empty;
+
+                        try
                         {
-                            string sLog = string.Empty;
+                            Socket_Cache.System.WebServer = WebApp.Start<Socket_Web>(Socket_Cache.System.Remote_URL);
 
-                            try
-                            {
-                                Socket_Cache.WebServer = WebApp.Start<Socket_Web>(Socket_Cache.Remote_URL);
-
-                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Socket_Cache.Remote_URL);
-                            }
-                            catch
-                            {
-                                sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);                                
-                            }
-
-                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                            sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Socket_Cache.System.Remote_URL);
                         }
+                        catch
+                        {
+                            sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_179), Process.GetCurrentProcess().ProcessName);
+                        }
+
+                        Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -346,15 +318,15 @@ namespace WPELibrary.Lib
             }
         }
 
-        public static void StopRemoteMGT(Socket_Cache.SystemMode FromMode)
+        public static void StopRemoteMGT(Socket_Cache.System.SystemMode FromMode)
         {
             try
             {
-                if (FromMode == Socket_Cache.SelectMode)
+                if (FromMode == Socket_Cache.System.StartMode)
                 {
-                    if (Socket_Cache.WebServer != null)
+                    if (Socket_Cache.System.WebServer != null)
                     {
-                        Socket_Cache.WebServer.Dispose();
+                        Socket_Cache.System.WebServer.Dispose();
                     }
                 }                         
             }
@@ -374,8 +346,8 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    Socket_Cache.cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-                    Socket_Cache.cpuCounter.NextValue();
+                    Socket_Cache.System.cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                    Socket_Cache.System.cpuCounter.NextValue();
                 }
                 catch (Exception ex)
                 {
@@ -390,10 +362,10 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (Socket_Cache.cpuCounter != null)
+                if (Socket_Cache.System.cpuCounter != null)
                 {
                     // 获取CPU使用率
-                    float cpuUsage = Socket_Cache.cpuCounter.NextValue();
+                    float cpuUsage = Socket_Cache.System.cpuCounter.NextValue();
                     sReturn[0] = $"{cpuUsage:F2}%";
 
                     // 获取内存使用率
@@ -1550,13 +1522,13 @@ namespace WPELibrary.Lib
             
             try
             {
-                switch (Socket_Cache.SelectMode)
+                switch (Socket_Cache.System.StartMode)
                 {
-                    case Socket_Cache.SystemMode.Proxy:
+                    case Socket_Cache.System.SystemMode.Proxy:
                         sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_185);
                         break;
 
-                    case Socket_Cache.SystemMode.Process:
+                    case Socket_Cache.System.SystemMode.Process:
                         sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_186);
                         break;                    
                 }
@@ -3223,7 +3195,7 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (Socket_Cache.MainHandle != IntPtr.Zero)
+                if (Socket_Cache.System.MainHandle != IntPtr.Zero)
                 {
                     int KeyControl = (int)User32.KeyModifiers.MOD_CONTROL;
                     int KeyAlt = (int)User32.KeyModifiers.MOD_ALT;
@@ -3231,7 +3203,7 @@ namespace WPELibrary.Lib
 
                     for (int i = 9001; i < 9013; i++)
                     {
-                        bool bOK = User32.RegisterHotKey(Socket_Cache.MainHandle, i, KeyControl | KeyAlt, iKeyCode);
+                        bool bOK = User32.RegisterHotKey(Socket_Cache.System.MainHandle, i, KeyControl | KeyAlt, iKeyCode);
 
                         if (!bOK)
                         {
@@ -3254,11 +3226,11 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (Socket_Cache.MainHandle != IntPtr.Zero)
+                if (Socket_Cache.System.MainHandle != IntPtr.Zero)
                 {
                     for (int i = 9001; i < 9013; i++)
                     {
-                        User32.UnregisterHotKey(Socket_Cache.MainHandle, i);
+                        User32.UnregisterHotKey(Socket_Cache.System.MainHandle, i);
                     }
                 }
             }
@@ -3266,214 +3238,6 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        #endregion
-
-        #region//保存系统列表数据
-
-        public static void SaveSystemList()
-        {
-            Socket_Cache.FilterList.SaveFilterList_ToDB();
-            Socket_Cache.SendList.SaveSendList_ToDB();
-            Socket_Cache.RobotList.SaveRobotList_ToDB();
-        }
-
-        #endregion
-
-        #region//加载系统列表数据
-
-        public static void LoadSystemList()
-        {
-            Task.Run(() =>
-            {
-                Socket_Cache.FilterList.LoadFilterList_FromDB();
-                Socket_Cache.SendList.LoadSendList_FromDB();
-                Socket_Cache.RobotList.LoadRobotList_FromDB();
-            });            
-        }
-
-        #endregion
-
-        #region//保存系统设置
-
-        public static void SaveConfigs_SocketProxy()
-        {
-            try
-            {
-                Properties.Settings.Default.ProxyConfig_ProxyIP_Auto = Socket_Cache.SocketProxy.ProxyIP_Auto;                
-                Properties.Settings.Default.ProxyConfig_EnableSOCKS5 = Socket_Cache.SocketProxy.Enable_SOCKS5;
-                Properties.Settings.Default.ProxyConfig_ProxyPort = Socket_Cache.SocketProxy.ProxyPort;
-                Properties.Settings.Default.ProxyConfig_EnableAuth = Socket_Cache.SocketProxy.Enable_Auth;                
-
-                Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord = Socket_Cache.SocketProxyList.NoRecord;
-                Properties.Settings.Default.ProxyConfig_ClientList_DelClosed = Socket_Cache.SocketProxyList.DelClosed;
-
-                Properties.Settings.Default.ProxyConfig_LogList_AutoRoll = Socket_Cache.LogList.Proxy_AutoRoll;
-                Properties.Settings.Default.ProxyConfig_LogList_AutoClear = Socket_Cache.LogList.Proxy_AutoClear;
-                Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
-
-                Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttp =Socket_Cache.SocketProxy.Enable_EXTHttp;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpIP = Socket_Cache.SocketProxy.EXTHttpIP;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpPort = Socket_Cache.SocketProxy.EXTHttpPort;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps = Socket_Cache.SocketProxy.Enable_EXTHttps;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP = Socket_Cache.SocketProxy.EXTHttpsIP;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort = Socket_Cache.SocketProxy.EXTHttpsPort;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort = Socket_Cache.SocketProxy.AppointHttpPort;
-                Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort = Socket_Cache.SocketProxy.AppointHttpsPort;
-
-                Properties.Settings.Default.ProxyConfig_SpeedMode = Socket_Cache.SocketProxy.SpeedMode;                                
-
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static bool SaveConfigs_SocketPacket()
-        {
-            bool bReturn = true;
-
-            try
-            {
-                Properties.Settings.Default.FilterConfig_CheckNotShow = Socket_Cache.SocketPacket.CheckNotShow;
-                Properties.Settings.Default.FilterConfig_CheckSocket = Socket_Cache.SocketPacket.CheckSocket;
-                Properties.Settings.Default.FilterConfig_CheckIP = Socket_Cache.SocketPacket.CheckIP;
-                Properties.Settings.Default.FilterConfig_CheckPort = Socket_Cache.SocketPacket.CheckPort;
-                Properties.Settings.Default.FilterConfig_CheckHead = Socket_Cache.SocketPacket.CheckHead;
-                Properties.Settings.Default.FilterConfig_CheckData = Socket_Cache.SocketPacket.CheckData;
-                Properties.Settings.Default.FilterConfig_CheckSize = Socket_Cache.SocketPacket.CheckSize;
-
-                Properties.Settings.Default.FilterConfig_CheckSocket_Value = Socket_Cache.SocketPacket.CheckSocket_Value;
-                Properties.Settings.Default.FilterConfig_CheckLength_Value = Socket_Cache.SocketPacket.CheckLength_Value;
-                Properties.Settings.Default.FilterConfig_CheckIP_Value = Socket_Cache.SocketPacket.CheckIP_Value;
-                Properties.Settings.Default.FilterConfig_CheckPort_Value = Socket_Cache.SocketPacket.CheckPort_Value;
-                Properties.Settings.Default.FilterConfig_CheckHead_Value = Socket_Cache.SocketPacket.CheckHead_Value;
-                Properties.Settings.Default.FilterConfig_CheckData_Value = Socket_Cache.SocketPacket.CheckData_Value;
-
-                Properties.Settings.Default.HookConfig_HookWS1_Send = Socket_Cache.SocketPacket.HookWS1_Send;
-                Properties.Settings.Default.HookConfig_HookWS1_SendTo = Socket_Cache.SocketPacket.HookWS1_SendTo;
-                Properties.Settings.Default.HookConfig_HookWS1_Recv = Socket_Cache.SocketPacket.HookWS1_Recv;
-                Properties.Settings.Default.HookConfig_HookWS1_RecvFrom = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
-                Properties.Settings.Default.HookConfig_HookWS2_Send = Socket_Cache.SocketPacket.HookWS2_Send;
-                Properties.Settings.Default.HookConfig_HookWS2_SendTo = Socket_Cache.SocketPacket.HookWS2_SendTo;
-                Properties.Settings.Default.HookConfig_HookWS2_Recv = Socket_Cache.SocketPacket.HookWS2_Recv;
-                Properties.Settings.Default.HookConfig_HookWS2_RecvFrom = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
-                Properties.Settings.Default.HookConfig_HookWSA_Send = Socket_Cache.SocketPacket.HookWSA_Send;
-                Properties.Settings.Default.HookConfig_HookWSA_SendTo = Socket_Cache.SocketPacket.HookWSA_SendTo;
-                Properties.Settings.Default.HookConfig_HookWSA_Recv = Socket_Cache.SocketPacket.HookWSA_Recv;
-                Properties.Settings.Default.HookConfig_HookWSA_RecvFrom = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
-
-                Properties.Settings.Default.ListConfig_SocketList_AutoRoll = Socket_Cache.SocketList.AutoRoll;
-                Properties.Settings.Default.ListConfig_SocketList_AutoClear = Socket_Cache.SocketList.AutoClear;
-                Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value = Socket_Cache.SocketList.AutoClear_Value;
-                Properties.Settings.Default.ListConfig_LogList_AutoRoll = Socket_Cache.LogList.AutoRoll;
-                Properties.Settings.Default.ListConfig_LogList_AutoClear = Socket_Cache.LogList.AutoClear;
-                Properties.Settings.Default.ListConfig_LogList_AutoClear_Value = Socket_Cache.LogList.AutoClear_Value;
-
-                Properties.Settings.Default.SystemConfig_SpeedMode = Socket_Cache.SocketPacket.SpeedMode;
-                Properties.Settings.Default.SystemConfig_FilterList_Execute = Socket_Cache.FilterList.FilterList_Execute.ToString();
-
-                Properties.Settings.Default.Save();
-            }
-            catch (Exception ex)
-            {
-                bReturn = false;
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
-
-        #region//加载系统设置
-
-        public static void LoadConfigs_SocketProxy()
-        {
-            try
-            {
-                Socket_Cache.SocketProxy.ProxyIP_Auto = Properties.Settings.Default.ProxyConfig_ProxyIP_Auto;                
-                Socket_Cache.SocketProxy.Enable_SOCKS5 = Properties.Settings.Default.ProxyConfig_EnableSOCKS5;
-                Socket_Cache.SocketProxy.ProxyPort = Properties.Settings.Default.ProxyConfig_ProxyPort;
-                Socket_Cache.SocketProxy.Enable_Auth = Properties.Settings.Default.ProxyConfig_EnableAuth;                
-
-                Socket_Cache.SocketProxyList.NoRecord = Properties.Settings.Default.ProxyConfig_ProxyList_NoRecord;
-                Socket_Cache.SocketProxyList.DelClosed = Properties.Settings.Default.ProxyConfig_ClientList_DelClosed;
-
-                Socket_Cache.LogList.Proxy_AutoRoll = Properties.Settings.Default.ProxyConfig_LogList_AutoRoll;
-                Socket_Cache.LogList.Proxy_AutoClear = Properties.Settings.Default.ProxyConfig_LogList_AutoClear;
-                Socket_Cache.LogList.Proxy_AutoClear_Value = Properties.Settings.Default.ProxyConfig_LogList_AutoClear_Value;
-
-                Socket_Cache.SocketProxy.Enable_EXTHttp = Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttp;
-                Socket_Cache.SocketProxy.EXTHttpIP = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpIP;
-                Socket_Cache.SocketProxy.EXTHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpPort;
-                Socket_Cache.SocketProxy.Enable_EXTHttps = Properties.Settings.Default.ProxyConfig_EXTProxy_EnableHttps;
-                Socket_Cache.SocketProxy.EXTHttpsIP = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsIP;
-                Socket_Cache.SocketProxy.EXTHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_HttpsPort;
-                Socket_Cache.SocketProxy.AppointHttpPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpPort;
-                Socket_Cache.SocketProxy.AppointHttpsPort = Properties.Settings.Default.ProxyConfig_EXTProxy_AppointHttpsPort;
-
-                Socket_Cache.SocketProxy.SpeedMode = Properties.Settings.Default.ProxyConfig_SpeedMode;                
-
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static void LoadConfigs_SocketPacket()
-        {
-            try
-            {
-                Socket_Cache.SocketPacket.CheckNotShow = Properties.Settings.Default.FilterConfig_CheckNotShow;
-                Socket_Cache.SocketPacket.CheckSocket = Properties.Settings.Default.FilterConfig_CheckSocket;
-                Socket_Cache.SocketPacket.CheckIP = Properties.Settings.Default.FilterConfig_CheckIP;
-                Socket_Cache.SocketPacket.CheckPort = Properties.Settings.Default.FilterConfig_CheckPort;
-                Socket_Cache.SocketPacket.CheckHead = Properties.Settings.Default.FilterConfig_CheckHead;
-                Socket_Cache.SocketPacket.CheckData = Properties.Settings.Default.FilterConfig_CheckData;
-                Socket_Cache.SocketPacket.CheckSize = Properties.Settings.Default.FilterConfig_CheckSize;
-
-                Socket_Cache.SocketPacket.CheckSocket_Value = Properties.Settings.Default.FilterConfig_CheckSocket_Value;
-                Socket_Cache.SocketPacket.CheckLength_Value = Properties.Settings.Default.FilterConfig_CheckLength_Value;
-                Socket_Cache.SocketPacket.CheckIP_Value = Properties.Settings.Default.FilterConfig_CheckIP_Value;
-                Socket_Cache.SocketPacket.CheckPort_Value = Properties.Settings.Default.FilterConfig_CheckPort_Value;
-                Socket_Cache.SocketPacket.CheckHead_Value = Properties.Settings.Default.FilterConfig_CheckHead_Value;
-                Socket_Cache.SocketPacket.CheckData_Value = Properties.Settings.Default.FilterConfig_CheckData_Value;             
-
-                Socket_Cache.SocketPacket.HookWS1_Send = Properties.Settings.Default.HookConfig_HookWS1_Send;
-                Socket_Cache.SocketPacket.HookWS1_SendTo = Properties.Settings.Default.HookConfig_HookWS1_SendTo;
-                Socket_Cache.SocketPacket.HookWS1_Recv = Properties.Settings.Default.HookConfig_HookWS1_Recv;
-                Socket_Cache.SocketPacket.HookWS1_RecvFrom = Properties.Settings.Default.HookConfig_HookWS1_RecvFrom;
-                Socket_Cache.SocketPacket.HookWS2_Send = Properties.Settings.Default.HookConfig_HookWS2_Send;
-                Socket_Cache.SocketPacket.HookWS2_SendTo = Properties.Settings.Default.HookConfig_HookWS2_SendTo;
-                Socket_Cache.SocketPacket.HookWS2_Recv = Properties.Settings.Default.HookConfig_HookWS2_Recv;
-                Socket_Cache.SocketPacket.HookWS2_RecvFrom = Properties.Settings.Default.HookConfig_HookWS2_RecvFrom;
-                Socket_Cache.SocketPacket.HookWSA_Send = Properties.Settings.Default.HookConfig_HookWSA_Send;
-                Socket_Cache.SocketPacket.HookWSA_SendTo = Properties.Settings.Default.HookConfig_HookWSA_SendTo;
-                Socket_Cache.SocketPacket.HookWSA_Recv = Properties.Settings.Default.HookConfig_HookWSA_Recv;
-                Socket_Cache.SocketPacket.HookWSA_RecvFrom = Properties.Settings.Default.HookConfig_HookWSA_RecvFrom;            
-
-                Socket_Cache.SocketList.AutoRoll = Properties.Settings.Default.ListConfig_SocketList_AutoRoll;
-                Socket_Cache.SocketList.AutoClear = Properties.Settings.Default.ListConfig_SocketList_AutoClear;
-                Socket_Cache.SocketList.AutoClear_Value = Properties.Settings.Default.ListConfig_SocketList_AutoClear_Value;
-                Socket_Cache.LogList.AutoRoll = Properties.Settings.Default.ListConfig_LogList_AutoRoll;
-                Socket_Cache.LogList.AutoClear = Properties.Settings.Default.ListConfig_LogList_AutoClear;
-                Socket_Cache.LogList.AutoClear_Value = Properties.Settings.Default.ListConfig_LogList_AutoClear_Value;                
-
-                Socket_Cache.SocketPacket.SpeedMode = Properties.Settings.Default.SystemConfig_SpeedMode;
-                Socket_Cache.FilterList.FilterList_Execute = Socket_Cache.FilterList.GetFilterListExecute_ByString(Properties.Settings.Default.SystemConfig_FilterList_Execute);
-
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
-            }
-            catch (Exception ex)
-            {                
-                DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
         }
 
         #endregion
@@ -3632,7 +3396,7 @@ namespace WPELibrary.Lib
             {
                 if (bDoLog)
                 {
-                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.LogType.Socket, sFuncName, sLogContent);
+                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.System.LogType.Socket, sFuncName, sLogContent);
                 }
             });                                
         }
@@ -3643,7 +3407,7 @@ namespace WPELibrary.Lib
             {
                 if (bDoLog)
                 {
-                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.LogType.Proxy, sFuncName, sLogContent);
+                    Socket_Cache.LogQueue.LogToQueue(Socket_Cache.System.LogType.Proxy, sFuncName, sLogContent);
                 }
             });            
         }

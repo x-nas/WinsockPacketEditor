@@ -108,7 +108,7 @@ namespace WPELibrary.Lib
             {
                 if (this.SystemSocket)
                 {
-                    if (Socket_Cache.SystemSocket <= 0)
+                    if (Socket_Cache.System.SystemSocket <= 0)
                     {
                         Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_49));
                         return;
@@ -133,7 +133,7 @@ namespace WPELibrary.Lib
 
                             if (this.SystemSocket)
                             {
-                                Socket = Socket_Cache.SystemSocket;
+                                Socket = Socket_Cache.System.SystemSocket;
                             }
 
                             if (Socket > 0)
