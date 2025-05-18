@@ -258,6 +258,7 @@ namespace WPELibrary
             this.dgvFilterNormal.RowTemplate.DefaultCellStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dgvFilterNormal.RowTemplate.Height = 30;
             this.dgvFilterNormal.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            this.dgvFilterNormal.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterNormal_KeyDown);
             // 
             // cmsDGV
             // 
@@ -374,6 +375,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvFilterAdvanced_Modify_FromPosition.RowTemplate.Height = 30;
             this.dgvFilterAdvanced_Modify_FromPosition.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            this.dgvFilterAdvanced_Modify_FromPosition.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterAdvanced_Modify_FromPosition_KeyDown);
             // 
             // dgvFilterAdvanced_Search
             // 
@@ -420,6 +422,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Search.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvFilterAdvanced_Search.RowTemplate.Height = 30;
             this.dgvFilterAdvanced_Search.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            this.dgvFilterAdvanced_Search.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterAdvanced_Search_KeyDown);
             // 
             // dgvFilterAdvanced_Modify_FromHead
             // 
@@ -466,6 +469,7 @@ namespace WPELibrary
             this.dgvFilterAdvanced_Modify_FromHead.RowTemplate.DefaultCellStyle.Padding = new System.Windows.Forms.Padding(3);
             this.dgvFilterAdvanced_Modify_FromHead.RowTemplate.Height = 30;
             this.dgvFilterAdvanced_Modify_FromHead.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.DGV_CellFormatting);
+            this.dgvFilterAdvanced_Modify_FromHead.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgvFilterAdvanced_Modify_FromHead_KeyDown);
             // 
             // tlpFilterParameter
             // 

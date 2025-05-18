@@ -816,6 +816,42 @@ namespace WPELibrary
 
         #region//粘贴数据（异步）
 
+        private void dgvFilterNormal_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string sClipboardText = Clipboard.GetText().Trim();
+                this.PastePacketData(dgvFilterNormal, sClipboardText);
+            }
+        }
+
+        private void dgvFilterAdvanced_Search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string sClipboardText = Clipboard.GetText().Trim();
+                this.PastePacketData(dgvFilterAdvanced_Search, sClipboardText);
+            }
+        }
+
+        private void dgvFilterAdvanced_Modify_FromHead_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string sClipboardText = Clipboard.GetText().Trim();
+                this.PastePacketData(dgvFilterAdvanced_Modify_FromHead, sClipboardText);
+            }
+        }
+
+        private void dgvFilterAdvanced_Modify_FromPosition_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                string sClipboardText = Clipboard.GetText().Trim();
+                this.PastePacketData(dgvFilterAdvanced_Modify_FromPosition, sClipboardText);
+            }
+        }
+
         private async void PastePacketData(DataGridView dgv, string sData)
         {
             this.bFilterButton_Save.Enabled = false;
