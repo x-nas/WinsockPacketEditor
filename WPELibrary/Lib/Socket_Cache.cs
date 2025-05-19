@@ -1261,9 +1261,10 @@ namespace WPELibrary.Lib
         #region//代理账号
 
         public static class ProxyAccount
-        {
+        {            
             public static bool IsShow = false;
             public static string AESKey = string.Empty;
+            public static string CCProxy_HTML = string.Empty;
             public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
 
             #region//验证远程管理的账号密码
@@ -1456,6 +1457,38 @@ namespace WPELibrary.Lib
                 return false;
             }
 
+            public static bool UpdateProxyAccount_ByUserName(string UserName, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(UserName))
+                    {
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.UserName == UserName);
+
+                        if (pai != null)
+                        {
+                            pai.IsEnable = IsEnable;
+
+                            if (!string.IsNullOrEmpty(PassWord))
+                            {
+                                pai.PassWord = PassWord;
+                            }
+                            
+                            pai.IsExpiry = IsExpiry;
+                            pai.ExpiryTime = ExpiryTime;
+
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
             #endregion
 
             #region//删除代理账号
@@ -1504,6 +1537,36 @@ namespace WPELibrary.Lib
                                 });
                             }
                             
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            public static bool DeleteProxyAccount_ByUserName(string UserName)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(UserName))
+                    {
+                        var pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.UserName == UserName);
+
+                        if (pai != null)
+                        {
+                            if (Socket_Cache.System.InvokeAction != null)
+                            {
+                                Socket_Cache.System.InvokeAction(() =>
+                                {
+                                    Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
+                                });
+                            }
+
                             return true;
                         }
                     }

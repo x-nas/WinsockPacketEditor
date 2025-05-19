@@ -2,7 +2,7 @@
 
 namespace WPELibrary.Lib.WebAPI
 {
-    [RoutePrefix("api/SystemInfo")]
+    [RoutePrefix("SystemInfo")]
 
     public class SystemInfo_Controller : ApiController
     {

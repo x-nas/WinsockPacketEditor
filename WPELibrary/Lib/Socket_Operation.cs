@@ -300,6 +300,7 @@ namespace WPELibrary.Lib
                         try
                         {
                             Socket_Cache.System.WebServer = WebApp.Start<Socket_Web>(Socket_Cache.System.Remote_URL);
+                            Socket_Operation.InitCCProxy_HTML();
 
                             sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_178), Socket_Cache.System.Remote_URL);
                         }
@@ -1074,7 +1075,54 @@ namespace WPELibrary.Lib
             return uReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//字符串 1 转 True
+
+        public static bool StringToBool(string bString)
+        {
+            bool bReturn = false;
+
+            try
+            {
+                if (bString.Equals("1"))
+                {
+                    bReturn = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            return bReturn;
+        }
+
+        #endregion
+
+        #region//字符串转DateTime
+
+        public static DateTime StringToDateTime(string sDate, string sTime)
+        {
+            DateTime dtReturn = DateTime.MinValue;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(sDate) && !string.IsNullOrEmpty(sTime))
+                {
+                    string dateTimeStr = $"{sDate} {sTime}";
+
+                    dtReturn = DateTime.ParseExact(dateTimeStr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return dtReturn;
+        }
+
+        #endregion
 
         #endregion
 
@@ -1509,6 +1557,20 @@ namespace WPELibrary.Lib
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//初始化CCProxy模板
+
+        public static void InitCCProxy_HTML()
+        {
+            var filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web", "CCProxy", "cn_acclistadmin.htm");
+
+            if (File.Exists(filePath))
+            {
+                Socket_Cache.ProxyAccount.CCProxy_HTML = File.ReadAllText(filePath, Encoding.UTF8);
             }
         }
 

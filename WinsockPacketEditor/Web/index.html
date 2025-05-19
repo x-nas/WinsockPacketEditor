@@ -222,7 +222,7 @@
 
         function fetchData() {
             if (!startTime) {
-                fetch('/api/SystemInfo/GetStartTime')
+                fetch('./SystemInfo/GetStartTime')
                     .then(response => response.json())
                     .then(data => {
                         startTime = new Date(data);
@@ -231,20 +231,20 @@
                     });
             }
 
-            fetch('/api/SystemInfo/GetCPUAndMemory')
+            fetch('./SystemInfo/GetCPUAndMemory')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('CPU').textContent = data[0];
                     document.getElementById('MEM').textContent = data[1];
                 })
 
-            fetch('/api/SystemInfo/GetSelectMode')
+            fetch('./SystemInfo/GetSelectMode')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('SelectMode').textContent = data;
                 })
 
-            fetch('/api/ProxyInfo/GetProxyInfo')
+            fetch('./ProxyInfo/GetProxyInfo')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('ProxyWorkMode').textContent = data[0];
@@ -258,7 +258,7 @@
                     document.getElementById('ProxyBytes').textContent = data[8];
                 })
 
-            fetch('/api/SocketInfo/GetSocketInfo')
+            fetch('./SocketInfo/GetSocketInfo')
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('SocketProcess').textContent = data[0];

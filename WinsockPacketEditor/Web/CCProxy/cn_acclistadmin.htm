@@ -1,0 +1,124 @@
+<!-- header -->
+<html><head><title>CCProxy Account Manager</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+body,td {font-family: "arial"; font-size: 9pt;}
+.button {  font-family: "Arial", "Helvetica", "sans-serif"; font-size: 9px; font-style: _italic; height: 18px; width: 50px}
+.editbox {font-family: "Arial", "Helvetica", "sans-serif"; font-size: 9px; height: 16px;}
+</style></head><body>
+<h3 align="center">CCProxy 帐号管理</h3>
+<table width="100%" border="1" cellspacing="0" cellpadding="0" id="t$userid">
+  <tr align="center"> 
+    <td nowrap width="0">&nbsp; </td>
+    <td nowrap width="0">&nbsp; </td>
+    <td nowrap width="0">用户名</td>
+    <td nowrap width="0" align="center">允许</td>
+    <td nowrap width="0" align="center">密码</td>
+    <td nowrap width="0" align="center">IP 地址</td>
+    <td nowrap width="0">MAC 地址</td>
+    <td nowrap width="0" colspan="2">连接数</td>
+    <td nowrap width="0" colspan="2">带宽</td>
+    <td nowrap width="0">自动过期</td>
+  </tr>
+  <form name="form" method="post" action="account">
+    <tr align="center"> 
+      <td nowrap width="0"> 
+        <input type="submit" name="add" value="增加" class="button">
+      </td>
+      <td nowrap width="0">&nbsp;</td>
+      <td nowrap width="0"> 
+        <input type="text" name="username" size="12" value="" class="editbox">
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="enable" value="1" checked>
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="usepassword" value="1" $checkusepassword>
+        <input type="text" name="password" size="8" value="" class="editbox">
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="useipaddress" value="1" $checkuseipaddress>
+        <input type="text" name="ipaddress" size="12" value="" class="editbox">
+      </td>
+      <td nowrap width="0"> 
+        <input type="checkbox" name="usemacaddress" value="1" $checkusemacaddress>
+        <input type="text" name="macaddress" size="12" value="" class="editbox">
+      </td>
+      <td nowrap width="0"> 
+        <input type="text" name="connection" size="4" value="-1" class="editbox">
+      </td>
+      <td nowrap width="0">&nbsp;</td>
+      <td nowrap width="0"> 
+        <input type="text" name="bandwidth" size="4" value="-1" class="editbox">
+      </td>
+      <td nowrap width="0">&nbsp;</td>
+      <td nowrap width="0"> 
+        <input type="checkbox" name="autodisable" value="1" $checkautodisable>
+        <input type="text" name="disabledate" size="10" value="$disabledate" class="editbox">
+        <input type="text" name="disabletime" size="8" value="$disabletime" class="editbox">
+      </td>
+    </tr>
+  </form>
+  <!-- body -->
+  <form name="form" method="post" action="account">
+    <input type=hidden name="userid" value="$username">
+    <tr align="center"> 
+      <td nowrap width="0"> 
+        <input type="submit" name="edit" value="编辑" class="button">
+      </td>
+      <td nowrap width="0"> 
+        <input type="submit" name="delete" value="删除" class="button">
+      </td>
+      <td nowrap width="0"> 
+        <input type="text" name="username" size="12" value="$username" class="editbox">
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="enable" value="1" $checkenable>
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="usepassword" value="1" $checkusepassword>
+        <input type="text" name="password" size="8" value="$password" class="editbox">
+      </td>
+      <td nowrap width="0" align="center"> 
+        <input type="checkbox" name="useipaddress" value="1" $checkuseipaddress>
+        <input type="text" name="ipaddress" size="12" value="$ipaddress" class="editbox">
+      </td>
+      <td nowrap width="0"> 
+        <input type="checkbox" name="usemacaddress" value="1" $checkusemacaddress>
+        <input type="text" name="macaddress" size="12" value="$macaddress" class="editbox">
+      </td>
+      <td nowrap width="0"> 
+        <input type="text" name="connection" size="4" value="$connection" class="editbox">
+        </td>
+      <td nowrap width="0">$activeconn</td>
+      <td nowrap width="0"> 
+        <input type="text" name="bandwidth" size="4" value="$bandwidth" class="editbox">
+      </td>
+      <td nowrap width="0">$curbandwidth </td>
+      <td nowrap width="0"> 
+        <input type="checkbox" name="autodisable" value="1" $checkautodisable>
+        <input type="text" name="disabledate" size="10" value="$disabledate" class="editbox">
+        <input type="text" name="disabletime" size="8" value="$disabletime" class="editbox">
+      </td>
+    </tr>
+  </form>
+  <!-- tail -->
+</table>
+<form name="form" method="post" action="account">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td nowrap> 管理员密码
+<input type="text" name="adminpassword" size="8" value="$adminpassword" class="editbox">
+        <input type="submit" name="changeadminpassword" value="修改" class="button">
+        <input type="submit" name="refresh" value="刷新" class="button">
+        <input type="submit" name="logout" value="退出" class="button">
+      </td>
+    </tr>
+  </table>
+</form>
+<p>总连接数/总帐号数- $totalconn/$totaluser<br>
+  在线总连接数/在线总帐号数- $totalactiveconn/$totalactiveuser<br>
+  总带宽- $totalbandwidth<br>
+  服务器时间: $disabledate $disabletime</p>
+</body>
+</html>

@@ -134,7 +134,7 @@
         //获取账号列表
         function fetchData()
         {            
-            fetch('./api/ProxyAccount/GetProxyAccountList')
+            fetch('./ProxyAccount/GetProxyAccountList')
                 .then(response => response.json())
                 .then(data =>
                 {
@@ -288,7 +288,7 @@
             };
 
             try {
-                const response = await fetch('./api//ProxyAccount/AddProxyAccount',
+                const response = await fetch('./ProxyAccount/AddProxyAccount',
                     {
                         method: 'POST',
 
@@ -330,7 +330,7 @@
         {
             try
             {
-                const response = await fetch('./api//ProxyAccount/DeleteProxyAccount',
+                const response = await fetch('./ProxyAccount/DeleteProxyAccount',
                     {
                         method: 'POST',
                         headers:

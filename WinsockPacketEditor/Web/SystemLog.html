@@ -98,19 +98,19 @@
         // 获取运行日志
         function fetchData() {
 
-            fetch('./api/SocketInfo/GetSocketLogList')
+            fetch('./SocketInfo/GetSocketLogList')
                 .then(response => response.json())
                 .then(data => {
                     displaySocketLog(data);
                 });
 
-            fetch('./api/ProxyInfo/GetProxyLogList')
+            fetch('./ProxyInfo/GetProxyLogList')
                 .then(response => response.json())
                 .then(data => {
                     displayProxyLog(data);
                 });
 
-            fetch('./api/ProxyInfo/GetProxyAuthList')
+            fetch('./ProxyInfo/GetProxyAuthList')
                 .then(response => response.json())
                 .then(data => {
                     displayAuthLog(data);

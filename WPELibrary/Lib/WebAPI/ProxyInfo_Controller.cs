@@ -3,7 +3,7 @@ using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
 {
-    [RoutePrefix("api/ProxyInfo")]
+    [RoutePrefix("ProxyInfo")]
 
     public class ProxyInfo_Controller : ApiController
     {

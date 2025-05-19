@@ -51,17 +51,10 @@ namespace WPELibrary.Lib.WebAPI
 
                 #endregion
 
-                #region//Web API
+                #region//设置 Web API 路由
 
                 var config = new HttpConfiguration();
-
-                config.MapHttpAttributeRoutes();
-
-                config.Routes.MapHttpRoute(
-                    name: "DefaultApi",
-                    routeTemplate: "api/{controller}/{id}",
-                    defaults: new { id = RouteParameter.Optional }
-                );
+                config.MapHttpAttributeRoutes();               
 
                 app.UseWebApi(config);
 
@@ -71,7 +64,7 @@ namespace WPELibrary.Lib.WebAPI
 
                 var staticFileOptions = new StaticFileOptions
                 {
-                    FileSystem = new PhysicalFileSystem(@".\Web"),
+                    FileSystem = new PhysicalFileSystem(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Web")),
                     ServeUnknownFileTypes = true
                 };
 
@@ -175,7 +168,112 @@ namespace WPELibrary.Lib.WebAPI
                     }
                 });
 
-                #endregion                                
+                #endregion                                                
+
+                #region//处理 Account 路径
+
+                app.Use(async (context, next) =>
+                {
+                    if (context.Request.Path == new PathString("/account"))
+                    {
+                        if (context.Request.Method == "GET")
+                        {
+                            string sReturn = WebAPI.CCProxy_Controller.QueryUserAll();
+
+                            if (!string.IsNullOrEmpty(sReturn))
+                            {
+                                context.Response.ContentType = "text/html; charset=utf-8";
+                                await context.Response.WriteAsync(sReturn);
+                            }
+                        }
+                        else if (context.Request.Method == "POST")
+                        {
+                            context.Response.StatusCode = 200;
+                            context.Response.ContentType = "application/json";
+
+                            var body = await context.Request.ReadFormAsync();
+
+                            bool IsAdd = false;
+                            if (body["add"] != null)
+                            {
+                                IsAdd = Socket_Operation.StringToBool(body["add"].ToString());
+                            }
+
+                            bool IsDel = false;
+                            if (body["delete"] != null)
+                            {
+                                IsDel = Socket_Operation.StringToBool(body["delete"].ToString());
+                            }
+
+                            bool IsEdit = false;
+                            if (body["edit"] != null)
+                            {
+                                IsEdit = Socket_Operation.StringToBool(body["edit"].ToString());
+                            }
+
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo();
+
+                            if (body["enable"] != null)
+                            {
+                                pai.IsEnable = Socket_Operation.StringToBool(body["enable"].ToString());
+                            }
+
+                            if (body["username"] != null)
+                            {
+                                pai.UserName = body["username"].ToString();
+                            }
+
+                            if (body["password"] != null)
+                            {
+                                pai.PassWord = body["password"].ToString();
+                            }
+
+                            if (body["autodisable"] != null)
+                            {
+                                pai.IsExpiry = Socket_Operation.StringToBool(body["autodisable"].ToString());
+                            }
+
+                            if (body["disabledate"] != null && body["disabletime"] != null)
+                            {
+                                pai.ExpiryTime = Socket_Operation.StringToDateTime(body["disabledate"].ToString(), body["disabletime"].ToString());
+                            }
+
+                            if (IsAdd)
+                            {
+                                if (WebAPI.CCProxy_Controller.AddUser(pai))
+                                {
+                                    await context.Response.WriteAsync("1");
+                                }
+                            }
+
+                            if (IsDel)
+                            {
+                                if (body["userid"] != null)
+                                {
+                                    string UserName = body["userid"].ToString();
+                                    if (WebAPI.CCProxy_Controller.DelUser(UserName))
+                                    {
+                                        await context.Response.WriteAsync("1");
+                                    }
+                                }
+                            }
+
+                            if (IsEdit)
+                            {
+                                if (WebAPI.CCProxy_Controller.UserUpdate(pai))
+                                {
+                                    await context.Response.WriteAsync("1");
+                                }
+                            }
+                        }                        
+                    }
+                    else
+                    {                        
+                        await next();
+                    }
+                });
+
+                #endregion                
             }
             catch (Exception ex)
             {

@@ -3,7 +3,7 @@ using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
 {
-    [RoutePrefix("api/SocketInfo")]
+    [RoutePrefix("SocketInfo")]
 
     public class SocketInfo_Controller : ApiController
     {

@@ -157,6 +157,7 @@
     <Compile Include="Lib\NativeMethods\WSock32.cs" />
     <Compile Include="Lib\Socket_Send.cs" />
     <Compile Include="Lib\Socket_SendInfo.cs" />
+    <Compile Include="Lib\WebAPI\CCProxy_Controller.cs" />
     <Compile Include="Lib\WebAPI\SocketInfo_Controller.cs" />
     <Compile Include="Lib\WebAPI\Socket_Web.cs" />
     <Compile Include="Lib\WebAPI\ProxyInfo_Controller.cs" />

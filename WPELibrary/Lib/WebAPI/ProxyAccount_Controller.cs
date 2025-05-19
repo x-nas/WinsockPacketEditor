@@ -5,7 +5,7 @@ using System.Web.Http;
 
 namespace WPELibrary.Lib.WebAPI
 {
-    [RoutePrefix("api/ProxyAccount")]
+    [RoutePrefix("ProxyAccount")]
 
     public class ProxyAccount_Controller : ApiController
     {

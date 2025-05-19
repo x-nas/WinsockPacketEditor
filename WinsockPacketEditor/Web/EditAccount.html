@@ -113,13 +113,13 @@
         {
             try
             {
-                const response = await fetch(`./api/ProxyAccount/GetProxyAccountByID?AID=${AID}`);
+                const response = await fetch(`./ProxyAccount/GetProxyAccountByID?AID=${AID}`);
                 const data = await response.json();
 
                 document.getElementById('isEnable').checked = data.IsEnable;
                 document.getElementById('username').value = data.UserName;
 
-                const passwordResponse = await fetch(`./api/ProxyAccount/GetPassWordDecrypt?PassWord=${data.PassWord}`);
+                const passwordResponse = await fetch(`./ProxyAccount/GetPassWordDecrypt?PassWord=${data.PassWord}`);
                 const decryptedPassword = await passwordResponse.json();
                 document.getElementById('password').value = decryptedPassword;
 
@@ -143,7 +143,7 @@
 
             try
             {
-                const response = await fetch('./api/ProxyAccount/UpdateProxyAccount', 
+                const response = await fetch('./ProxyAccount/UpdateProxyAccount', 
                 {
                     method: 'POST',
                     headers:
