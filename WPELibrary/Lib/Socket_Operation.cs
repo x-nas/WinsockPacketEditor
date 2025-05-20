@@ -24,7 +24,6 @@ using System.Net.Http;
 using Microsoft.Owin.Hosting;
 using WPELibrary.Lib.WebAPI;
 using System.Management;
-using System.Collections;
 
 namespace WPELibrary.Lib
 {   
@@ -2517,15 +2516,16 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//获取列表中的选中项信息
+        #region//获取列表中的选中的项
 
+        //滤镜列表
         public static List<Socket_FilterInfo> GetSelectedFilter(DataGridView dgvFilterList)
         {
             List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
 
             try
             {
-                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)                
+                for (int i = 0; i < dgvFilterList.Rows.Count; i++)                
                 {
                     if (dgvFilterList.Rows[i].Selected)
                     {
@@ -2535,33 +2535,79 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return new List<Socket_FilterInfo>();
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
 
             return sfiList;
-        }        
+        }
 
-        public static Guid[] GetDGVSelectedGUID(DataGridView dgv)
+        //发送列表
+        public static List<Socket_SendInfo> GetSelectedSend(DataGridView dgvSendList)
         {
+            List<Socket_SendInfo> ssiList = new List<Socket_SendInfo>();
+
             try
             {
-                List<Guid> selectedGUIDs = new List<Guid>();
-
-                for (int i = 0; i < dgv.Rows.Count; i++)
+                for (int i = 0; i < dgvSendList.Rows.Count; i++)
                 {
-                    if (dgv.Rows[i].Selected)
+                    if (dgvSendList.Rows[i].Selected)
                     {
-                        selectedGUIDs.Add((Guid)dgv.Rows[i].Cells["cAID"].Value);
+                        ssiList.Add(Socket_Cache.SendList.lstSend[i]);
                     }
                 }
-                return selectedGUIDs.ToArray();
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return new Guid[0];
             }
+
+            return ssiList;
+        }
+
+        //机器人列表
+        public static List<Socket_RobotInfo> GetSelectedRobot(DataGridView dgvRobotList)
+        {
+            List<Socket_RobotInfo> sriList = new List<Socket_RobotInfo>();
+
+            try
+            {
+                for (int i = 0; i < dgvRobotList.Rows.Count; i++)
+                {
+                    if (dgvRobotList.Rows[i].Selected)
+                    {
+                        sriList.Add(Socket_Cache.RobotList.lstRobot[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sriList;
+        }
+
+        //代理账号列表
+        public static List<Proxy_AccountInfo> GetSelectedProxyAccount(DataGridView dgvProxyAccount)
+        {
+            List<Proxy_AccountInfo> paiList = new List<Proxy_AccountInfo>();
+
+            try
+            {
+                for (int i = 0; i < dgvProxyAccount.Rows.Count; i++)
+                {
+                    if (dgvProxyAccount.Rows[i].Selected)
+                    {
+                        paiList.Add(Socket_Cache.ProxyAccount.lstProxyAccount[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return paiList;
         }
 
         #endregion

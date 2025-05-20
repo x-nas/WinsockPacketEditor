@@ -11,7 +11,6 @@ using System.Text;
 using WPELibrary.Lib.NativeMethods;
 using System.Data;
 using System.Threading;
-using System.Security.Cryptography;
 using System.Collections.Generic;
 
 namespace WPELibrary
@@ -1511,8 +1510,6 @@ namespace WPELibrary
             {
                 if (dgvFilterList.Rows.Count > 0)
                 {
-                    int iIndex = 0;
-
                     List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
                     if (sfiList.Count > 0)
@@ -1552,7 +1549,7 @@ namespace WPELibrary
 
                         foreach (Socket_FilterInfo sfi in sfiList)
                         {
-                            iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
+                            int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
 
                             if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
                             {                                
@@ -1582,47 +1579,52 @@ namespace WPELibrary
             {
                 if (dgvSendList.Rows.Count > 0)
                 {
-                    int iIndex = 0;
-                    int iSIndex = this.dgvSendList.CurrentRow.Index;
+                    List<Socket_SendInfo> ssiList = Socket_Operation.GetSelectedSend(this.dgvSendList);
 
-                    if (iSIndex > -1)
+                    if (ssiList.Count > 0)
                     {
                         switch (sItemText)
                         {
                             case "cmsSendList_Top":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Top, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Top, ssiList);
                                 break;
 
                             case "cmsSendList_Up":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Up, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Up, ssiList);
                                 break;
 
                             case "cmsSendList_Down":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Down, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Down, ssiList);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Bottom, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Bottom, ssiList);
                                 break;
 
                             case "cmsSendList_Copy":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Copy, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Copy, ssiList);
                                 break;
 
                             case "cmsSendList_Export":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Export, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Export, ssiList);
                                 break;
 
                             case "cmsSendList_Delete":
-                                iIndex = Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Delete, iSIndex);
+                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Delete, ssiList);
                                 break;
                         }
 
-                        if (iIndex > -1 && iIndex < dgvSendList.RowCount)
+                        this.dgvSendList.ClearSelection();
+
+                        foreach (Socket_SendInfo ssi in ssiList)
                         {
-                            this.dgvSendList.ClearSelection();
-                            this.dgvSendList.Rows[iIndex].Selected = true;
-                            this.dgvSendList.CurrentCell = this.dgvSendList.Rows[iIndex].Cells[0];
+                            int iIndex = Socket_Cache.SendList.lstSend.IndexOf(ssi);
+
+                            if (iIndex > -1 && iIndex < dgvSendList.RowCount)
+                            {
+                                this.dgvSendList.Rows[iIndex].Selected = true;
+                                dgvSendList.FirstDisplayedScrollingRowIndex = iIndex;
+                            }
                         }
                     }
                 }
@@ -1646,47 +1648,52 @@ namespace WPELibrary
             {
                 if (dgvRobotList.Rows.Count > 0)
                 {
-                    int iIndex = 0;
-                    int iRIndex = this.dgvRobotList.CurrentRow.Index;
+                    List<Socket_RobotInfo> sriList = Socket_Operation.GetSelectedRobot(this.dgvRobotList);
 
-                    if (iRIndex > -1)
+                    if (sriList.Count > 0)
                     {
                         switch (sItemText)
                         {
                             case "cmsRobotList_Top":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Top, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Top, sriList);
                                 break;
 
                             case "cmsRobotList_Up":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Up, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Up, sriList);
                                 break;
 
                             case "cmsRobotList_Down":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Down, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Down, sriList);
                                 break;
 
                             case "cmsRobotList_Bottom":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Bottom, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Bottom, sriList);
                                 break;
 
                             case "cmsRobotList_Copy":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Copy, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Copy, sriList);
                                 break;
 
                             case "cmsRobotList_Export":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Export, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Export, sriList);
                                 break;
 
                             case "cmsRobotList_Delete":
-                                iIndex = Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Delete, iRIndex);
+                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Delete, sriList);
                                 break;
                         }
 
-                        if (iIndex > -1 && iIndex < dgvRobotList.RowCount)
+                        this.dgvRobotList.ClearSelection();
+
+                        foreach (Socket_RobotInfo sri in sriList)
                         {
-                            this.dgvRobotList.ClearSelection();
-                            this.dgvRobotList.Rows[iIndex].Selected = true;
-                            this.dgvRobotList.CurrentCell = this.dgvRobotList.Rows[iIndex].Cells[0];
+                            int iIndex = Socket_Cache.RobotList.lstRobot.IndexOf(sri);
+
+                            if (iIndex > -1 && iIndex < dgvRobotList.RowCount)
+                            {
+                                this.dgvRobotList.Rows[iIndex].Selected = true;
+                                this.dgvRobotList.FirstDisplayedScrollingRowIndex = iIndex;
+                            }
                         }
                     }
                 }
@@ -1789,14 +1796,13 @@ namespace WPELibrary
         {
             try
             {
-                List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
-
-                if (Socket_Cache.FilterList.lstFilter != null)
+                if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
+                    List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
                     sfiList.AddRange(Socket_Cache.FilterList.lstFilter);
-                }
 
-                Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, sfiList);
+                    Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, sfiList);
+                }
             }
             catch (Exception ex)
             {
@@ -1824,13 +1830,18 @@ namespace WPELibrary
         {
             try
             {
-                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++) 
+                if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(i, true);
-                }
+                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
-                this.dgvFilterList.Refresh();
-                this.dgvSocketList.Focus();
+                    foreach (Socket_FilterInfo sfi in sfiList) 
+                    {
+                        sfi.IsEnable = true;
+                    }
+
+                    this.dgvFilterList.Refresh();
+                    this.dgvSocketList.Focus();
+                }
             }
             catch (Exception ex)
             {
@@ -1842,13 +1853,18 @@ namespace WPELibrary
         {
             try
             {
-                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)
+                if (Socket_Cache.FilterList.lstFilter.Count > 0)
                 {
-                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(i, false);
-                }
+                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
-                this.dgvFilterList.Refresh();
-                this.dgvSocketList.Focus();
+                    foreach (Socket_FilterInfo sfi in sfiList)
+                    {
+                        sfi.IsEnable = false;
+                    }
+
+                    this.dgvFilterList.Refresh();
+                    this.dgvSocketList.Focus();
+                }
             }
             catch (Exception ex)
             {
@@ -1911,9 +1927,19 @@ namespace WPELibrary
 
         private void tsSendList_Save_Click(object sender, EventArgs e)
         {
-            if (dgvSendList.Rows.Count > 0)
+            try
             {
-                Socket_Cache.SendList.SaveSendList_Dialog(string.Empty, -1);
+                if (Socket_Cache.SendList.lstSend.Count > 0)
+                {
+                    List<Socket_SendInfo> ssiList = new List<Socket_SendInfo>();
+                    ssiList.AddRange(Socket_Cache.SendList.lstSend);
+
+                    Socket_Cache.SendList.SaveSendList_Dialog(string.Empty, ssiList);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1939,6 +1965,9 @@ namespace WPELibrary
         private void tsSendList_Add_Click(object sender, EventArgs e)
         {
             Socket_Cache.Send.AddSend_New();
+
+            this.dgvSendList.ClearSelection();
+            this.dgvSendList.CurrentCell = this.dgvSendList.Rows[this.dgvSendList.Rows.Count - 1].Cells[0];
         }
 
         private void tsSendList_CleanUp_Click(object sender, EventArgs e)
@@ -2055,9 +2084,19 @@ namespace WPELibrary
 
         private void tsRobotList_Save_Click(object sender, EventArgs e)
         {
-            if (dgvRobotList.Rows.Count > 0)
+            try
             {
-                Socket_Cache.RobotList.SaveRobotList_Dialog(string.Empty, -1);
+                if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                {
+                    List<Socket_RobotInfo> sriList = new List<Socket_RobotInfo>();
+                    sriList.AddRange(Socket_Cache.RobotList.lstRobot);
+
+                    Socket_Cache.RobotList.SaveRobotList_Dialog(string.Empty, sriList);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2083,6 +2122,9 @@ namespace WPELibrary
         private void tsRobotList_Add_Click(object sender, EventArgs e)
         {
             Socket_Cache.Robot.AddRobot_New();
+
+            this.dgvRobotList.ClearSelection();
+            this.dgvRobotList.CurrentCell = this.dgvRobotList.Rows[this.dgvRobotList.Rows.Count - 1].Cells[0];
         }
 
         private void tsRobotList_CleanUp_Click(object sender, EventArgs e)

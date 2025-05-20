@@ -2675,7 +2675,6 @@ namespace WPELibrary
             this.cName});
             this.dgvSendList.ContextMenuStrip = this.cmsSendList;
             resources.ApplyResources(this.dgvSendList, "dgvSendList");
-            this.dgvSendList.MultiSelect = false;
             this.dgvSendList.Name = "dgvSendList";
             this.dgvSendList.RowHeadersVisible = false;
             this.dgvSendList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;
@@ -2904,7 +2903,6 @@ namespace WPELibrary
             this.cRName});
             this.dgvRobotList.ContextMenuStrip = this.cmsRobotList;
             resources.ApplyResources(this.dgvRobotList, "dgvRobotList");
-            this.dgvRobotList.MultiSelect = false;
             this.dgvRobotList.Name = "dgvRobotList";
             this.dgvRobotList.RowHeadersVisible = false;
             this.dgvRobotList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.SystemColors.Window;

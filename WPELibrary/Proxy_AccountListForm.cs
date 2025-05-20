@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
@@ -101,11 +102,11 @@ namespace WPELibrary
             {
                 if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentCell != null)
                 {
-                    Guid[] glAID = Socket_Operation.GetDGVSelectedGUID(this.dgvAccountList);
+                    List<Proxy_AccountInfo> paiList = Socket_Operation.GetSelectedProxyAccount(this.dgvAccountList);
 
-                    if (glAID.Length > 0)
+                    if (paiList.Count > 0)
                     {
-                        Socket_Cache.ProxyAccount.DeleteProxyAccount_Dialog(glAID);
+                        Socket_Cache.ProxyAccount.DeleteProxyAccount_Dialog(paiList);
                         this.Search_UserName();
                     }
                 }
@@ -122,12 +123,19 @@ namespace WPELibrary
 
         private void bExport_Click(object sender, EventArgs e)
         {
-            Guid[] glAID = Socket_Operation.GetDGVSelectedGUID(this.dgvAccountList);
-
-            if (glAID.Length > 0)
+            try
             {
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, glAID);
-            }            
+                List<Proxy_AccountInfo> paiList = Socket_Operation.GetSelectedProxyAccount(this.dgvAccountList);
+
+                if (paiList.Count > 0)
+                {
+                    Socket_Cache.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, paiList);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion

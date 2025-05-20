@@ -1493,22 +1493,19 @@ namespace WPELibrary.Lib
 
             #region//删除代理账号
 
-            public static void DeleteProxyAccount_Dialog(Guid[] glAID)
+            public static void DeleteProxyAccount_Dialog(List<Proxy_AccountInfo> paiList)
             {
                 try
                 {
-                    if (glAID.Length > 0)
+                    if (paiList.Count > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            foreach (Guid AID in glAID)
+                            foreach (Proxy_AccountInfo pai in paiList)
                             {
-                                if (AID != null)
-                                {
-                                    Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountID(AID);
-                                }
+                                Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
                             }
                         }
                     }
@@ -1775,7 +1772,7 @@ namespace WPELibrary.Lib
 
             #region//保存代理账号列表到文件（对话框）
 
-            public static void SaveProxyAccountList_Dialog(string FileName, Guid[] glAID)
+            public static void SaveProxyAccountList_Dialog(string FileName, List<Proxy_AccountInfo> paiList)
             {
                 try
                 {
@@ -1800,7 +1797,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveProxyAccountList(FilePath, glAID, true);
+                                SaveProxyAccountList(FilePath, paiList, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_190), FilePath);
                                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
@@ -1814,11 +1811,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void SaveProxyAccountList(string FilePath, Guid[] glAID, bool DoEncrypt)
+            private static void SaveProxyAccountList(string FilePath, List<Proxy_AccountInfo> paiList, bool DoEncrypt)
             {
                 try
                 {
-                    SaveProxyAccountList_ToXDocument(FilePath, glAID);
+                    SaveProxyAccountList_ToXDocument(FilePath, paiList);
 
                     if (DoEncrypt)
                     {
@@ -1836,7 +1833,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveProxyAccountList_ToXDocument(string FilePath, Guid[] glAID)
+            private static void SaveProxyAccountList_ToXDocument(string FilePath, List<Proxy_AccountInfo> paiList)
             {
                 try
                 {
@@ -1848,31 +1845,23 @@ namespace WPELibrary.Lib
                     XElement xeProxyAccountList = new XElement("ProxyAccountList");
                     xdoc.Add(xeProxyAccountList);
 
-                    if (Socket_Cache.ProxyAccount.lstProxyAccount.Count > 0)
+                    foreach (Proxy_AccountInfo pai in paiList)
                     {
-                        foreach (Guid AID in glAID)
-                        { 
-                            Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);
+                        XElement xeProxyAccount =
+                                new XElement("ProxyAccount",
+                                new XElement("IsEnable", pai.IsEnable.ToString()),
+                                new XElement("AID", pai.AID.ToString().ToUpper()),
+                                new XElement("UserName", pai.UserName),
+                                new XElement("PassWord", pai.PassWord),
+                                new XElement("LoginIP", pai.LoginIP),
+                                new XElement("IsOnLine", pai.IsOnLine.ToString()),
+                                new XElement("IsExpiry", pai.IsExpiry),
+                                new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
+                                new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
+                                );
 
-                            if (pai != null)
-                            {
-                                XElement xeProxyAccount =
-                                    new XElement("ProxyAccount",
-                                    new XElement("IsEnable", pai.IsEnable.ToString()),
-                                    new XElement("AID", pai.AID.ToString().ToUpper()),
-                                    new XElement("UserName", pai.UserName),
-                                    new XElement("PassWord", pai.PassWord),
-                                    new XElement("LoginIP", pai.LoginIP),
-                                    new XElement("IsOnLine", pai.IsOnLine.ToString()),
-                                    new XElement("IsExpiry", pai.IsExpiry),
-                                    new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
-                                    new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
-                                    );
-
-                                xeProxyAccountList.Add(xeProxyAccount);
-                            }
-                        }
-                    }
+                        xeProxyAccountList.Add(xeProxyAccount);
+                    }                   
 
                     xdoc.Save(FilePath);
                 }
@@ -3180,7 +3169,7 @@ namespace WPELibrary.Lib
 
             #region//删除滤镜
 
-            public static void DeleteFilter_ByFilter_Dialog(List<Socket_FilterInfo> sfiList)
+            public static void DeleteFilter_Dialog(List<Socket_FilterInfo> sfiList)
             {
                 try
                 {
@@ -3190,7 +3179,10 @@ namespace WPELibrary.Lib
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            Socket_Cache.Filter.DeleteFilter_ByFilter(sfiList);
+                            foreach (Socket_FilterInfo sfi in sfiList)
+                            {
+                                Socket_Cache.FilterList.lstFilter.Remove(sfi);
+                            }
                         }
                     }
                 }
@@ -3198,91 +3190,13 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
-
-            private static void DeleteFilter_ByFilter(List<Socket_FilterInfo> sfiList)
-            {
-                try
-                {
-                    foreach (Socket_FilterInfo sfi in sfiList)
-                    {
-                        Socket_Cache.FilterList.lstFilter.Remove(sfi);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
+            }            
 
             #endregion
 
             #region//复制滤镜
 
-            public static void CopyFilter_ByFilterIndex(int iFIndex)
-            {
-                try
-                {
-                    bool IsEnable = false;
-                    Guid FID = Guid.NewGuid();
-                    string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.FilterList.lstFilter[iFIndex].FName);
-                    bool bAppointHeader = Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader;
-                    string HeaderContent = Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent;
-                    bool bAppointSocket = Socket_Cache.FilterList.lstFilter[iFIndex].AppointSocket;
-                    decimal SocketContent = Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent;
-                    bool bAppointLength = Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength;
-                    string LengthContent = Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent;
-                    bool bAppointPort = Socket_Cache.FilterList.lstFilter[iFIndex].AppointPort;
-                    decimal PortContent = Socket_Cache.FilterList.lstFilter[iFIndex].PortContent;
-                    Socket_Cache.Filter.FilterMode FMode = Socket_Cache.FilterList.lstFilter[iFIndex].FMode;
-                    Socket_Cache.Filter.FilterAction FAction = Socket_Cache.FilterList.lstFilter[iFIndex].FAction;
-                    bool IsExecute = Socket_Cache.FilterList.lstFilter[iFIndex].IsExecute;
-                    Socket_Cache.Filter.FilterExecuteType FEType = Socket_Cache.FilterList.lstFilter[iFIndex].FEType;
-                    Guid SID = Socket_Cache.FilterList.lstFilter[iFIndex].SID;
-                    Guid RID = Socket_Cache.FilterList.lstFilter[iFIndex].RID;
-                    Socket_Cache.Filter.FilterFunction FFunction = Socket_Cache.FilterList.lstFilter[iFIndex].FFunction;
-                    Socket_Cache.Filter.FilterStartFrom FStartFrom = Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom;
-                    bool IsProgressionDone = false;
-                    decimal ProgressionStep = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep;
-                    string ProgressionPosition = Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition;
-                    int ProgressionCount = 0;
-                    string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
-                    string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
-
-                    Socket_Cache.Filter.AddFilter(
-                        IsEnable,
-                        FID,
-                        FName,
-                        bAppointHeader,
-                        HeaderContent,
-                        bAppointSocket,
-                        SocketContent,
-                        bAppointLength,
-                        LengthContent,
-                        bAppointPort,
-                        PortContent,
-                        FMode,
-                        FAction,
-                        IsExecute,
-                        FEType,
-                        SID,
-                        RID,
-                        FFunction,
-                        FStartFrom,
-                        IsProgressionDone,
-                        ProgressionStep,
-                        ProgressionPosition,
-                        ProgressionCount,
-                        FSearch,
-                        FModify);
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void CopyFilter_ByFilter(Socket_FilterInfo sfi)
+            public static void CopyFilter(Socket_FilterInfo sfi)
             {
                 try
                 {
@@ -4358,8 +4272,6 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    int iFilterListCount = Socket_Cache.FilterList.lstFilter.Count;
-
                     switch (listAction)
                     {
                         case Socket_Cache.System.ListAction.Top:
@@ -4397,7 +4309,7 @@ namespace WPELibrary.Lib
                             {
                                 int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
 
-                                if (iIndex > -1 && iIndex < iFilterListCount - 1)
+                                if (iIndex > -1 && iIndex < Socket_Cache.FilterList.lstFilter.Count - 1)
                                 {
                                     Socket_Cache.FilterList.lstFilter.Remove(sfi);
                                     Socket_Cache.FilterList.lstFilter.Insert(iIndex + 1, sfi);
@@ -4420,7 +4332,7 @@ namespace WPELibrary.Lib
 
                             foreach (Socket_FilterInfo sfi in sfiList)
                             {
-                                Socket_Cache.Filter.CopyFilter_ByFilter(sfi);
+                                Socket_Cache.Filter.CopyFilter(sfi);
                             }                            
 
                             break;
@@ -4434,7 +4346,7 @@ namespace WPELibrary.Lib
 
                         case Socket_Cache.System.ListAction.Delete:
 
-                            Socket_Cache.Filter.DeleteFilter_ByFilter_Dialog(sfiList);
+                            Socket_Cache.Filter.DeleteFilter_Dialog(sfiList);
 
                             break;
                     }
@@ -4778,63 +4690,60 @@ namespace WPELibrary.Lib
                     XElement xeRoot = new XElement("FilterList");
                     xdoc.Add(xeRoot);
 
-                    if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                    foreach (Socket_FilterInfo sfi in sfiList)
                     {
-                        foreach (Socket_FilterInfo sfi in sfiList)
-                        {
-                            string sIsEnable = sfi.IsEnable.ToString();
-                            string sFID = sfi.FID.ToString().ToUpper();
-                            string sFName = sfi.FName;
-                            string sFAppointHeader = sfi.AppointHeader.ToString();
-                            string sFHeaderContent = sfi.HeaderContent;
-                            string sFAppointSocket = sfi.AppointSocket.ToString();
-                            string sFSocketContent = sfi.SocketContent.ToString();
-                            string sFAppointLength = sfi.AppointLength.ToString();
-                            string sFLengthContent = sfi.LengthContent.ToString();
-                            string sFAppointPort = sfi.AppointPort.ToString();
-                            string sFPortContent = sfi.PortContent.ToString();
-                            string sFMode = ((int)sfi.FMode).ToString();
-                            string sFAction = ((int)sfi.FAction).ToString();
-                            string sIsExecute = sfi.IsExecute.ToString();
-                            string sFEType = ((int)sfi.FEType).ToString();
-                            string sSID = sfi.SID.ToString().ToUpper();
-                            string sRID = sfi.RID.ToString().ToUpper();
-                            string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction);
-                            string sFStartFrom = ((int)sfi.FStartFrom).ToString();
-                            string sFProgressionStep = sfi.ProgressionStep.ToString();
-                            string sFProgressionPosition = sfi.ProgressionPosition;
-                            string sFSearch = sfi.FSearch;
-                            string sFModify = sfi.FModify;
+                        string sIsEnable = sfi.IsEnable.ToString();
+                        string sFID = sfi.FID.ToString().ToUpper();
+                        string sFName = sfi.FName;
+                        string sFAppointHeader = sfi.AppointHeader.ToString();
+                        string sFHeaderContent = sfi.HeaderContent;
+                        string sFAppointSocket = sfi.AppointSocket.ToString();
+                        string sFSocketContent = sfi.SocketContent.ToString();
+                        string sFAppointLength = sfi.AppointLength.ToString();
+                        string sFLengthContent = sfi.LengthContent.ToString();
+                        string sFAppointPort = sfi.AppointPort.ToString();
+                        string sFPortContent = sfi.PortContent.ToString();
+                        string sFMode = ((int)sfi.FMode).ToString();
+                        string sFAction = ((int)sfi.FAction).ToString();
+                        string sIsExecute = sfi.IsExecute.ToString();
+                        string sFEType = ((int)sfi.FEType).ToString();
+                        string sSID = sfi.SID.ToString().ToUpper();
+                        string sRID = sfi.RID.ToString().ToUpper();
+                        string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction);
+                        string sFStartFrom = ((int)sfi.FStartFrom).ToString();
+                        string sFProgressionStep = sfi.ProgressionStep.ToString();
+                        string sFProgressionPosition = sfi.ProgressionPosition;
+                        string sFSearch = sfi.FSearch;
+                        string sFModify = sfi.FModify;
 
-                            XElement xeFilter =
-                                new XElement("Filter",
-                                new XElement("IsEnable", sIsEnable),
-                                new XElement("ID", sFID),
-                                new XElement("Name", sFName),
-                                new XElement("AppointHeader", sFAppointHeader),
-                                new XElement("HeaderContent", sFHeaderContent),
-                                new XElement("AppointSocket", sFAppointSocket),
-                                new XElement("SocketContent", sFSocketContent),
-                                new XElement("AppointLength", sFAppointLength),
-                                new XElement("LengthContent", sFLengthContent),
-                                new XElement("AppointPort", sFAppointPort),
-                                new XElement("PortContent", sFPortContent),
-                                new XElement("Mode", sFMode),
-                                new XElement("Action", sFAction),
-                                new XElement("IsExecute", sIsExecute),
-                                new XElement("ExecuteType", sFEType),
-                                new XElement("SendID", sSID),
-                                new XElement("RobotID", sRID),
-                                new XElement("Function", sFFunction),
-                                new XElement("StartFrom", sFStartFrom),
-                                new XElement("ProgressionStep", sFProgressionStep),
-                                new XElement("ProgressionPosition", sFProgressionPosition),
-                                new XElement("Search", sFSearch),
-                                new XElement("Modify", sFModify)
-                                );
+                        XElement xeFilter =
+                            new XElement("Filter",
+                            new XElement("IsEnable", sIsEnable),
+                            new XElement("ID", sFID),
+                            new XElement("Name", sFName),
+                            new XElement("AppointHeader", sFAppointHeader),
+                            new XElement("HeaderContent", sFHeaderContent),
+                            new XElement("AppointSocket", sFAppointSocket),
+                            new XElement("SocketContent", sFSocketContent),
+                            new XElement("AppointLength", sFAppointLength),
+                            new XElement("LengthContent", sFLengthContent),
+                            new XElement("AppointPort", sFAppointPort),
+                            new XElement("PortContent", sFPortContent),
+                            new XElement("Mode", sFMode),
+                            new XElement("Action", sFAction),
+                            new XElement("IsExecute", sIsExecute),
+                            new XElement("ExecuteType", sFEType),
+                            new XElement("SendID", sSID),
+                            new XElement("RobotID", sRID),
+                            new XElement("Function", sFFunction),
+                            new XElement("StartFrom", sFStartFrom),
+                            new XElement("ProgressionStep", sFProgressionStep),
+                            new XElement("ProgressionPosition", sFProgressionPosition),
+                            new XElement("Search", sFSearch),
+                            new XElement("Modify", sFModify)
+                            );
 
-                            xeRoot.Add(xeFilter);
-                        }                   
+                        xeRoot.Add(xeFilter);
                     }
 
                     xdoc.Save(FilePath);
@@ -5248,59 +5157,42 @@ namespace WPELibrary.Lib
 
             #region//复制机器人
 
-            public static int CopyRobot_ByRobotIndex(int RIndex)
+            public static void CopyRobot(Socket_RobotInfo sri)
             {
-                int iReturn = -1;
-
                 try
                 {
                     bool IsEnable = false;
                     Guid RID_New = Guid.NewGuid();
-                    string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.RobotList.lstRobot[RIndex].RName);
-                    DataTable RInstruction_Copy = Socket_Cache.RobotList.lstRobot[RIndex].RInstruction.Copy();
+                    string RName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), sri.RName);
+                    DataTable RInstruction_Copy = sri.RInstruction.Copy();
 
                     Socket_Cache.Robot.AddRobot(IsEnable, RID_New, RName_Copy, RInstruction_Copy);
-                    iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion
 
             #region//删除机器人
 
-            public static void DeleteRobot_ByRobotIndex_Dialog(int RIndex)
+            public static void DeleteRobot_Dialog(List<Socket_RobotInfo> sriList)
             {
                 try
                 {
-                    if (RIndex > -1)
+                    if (sriList.Count > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            Socket_Cache.Robot.DeleteRobot_ByRobotIndex(RIndex);
+                            foreach (Socket_RobotInfo sri in sriList)
+                            {
+                                Socket_Cache.RobotList.lstRobot.Remove(sri);                                
+                            }                            
                         }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void DeleteRobot_ByRobotIndex(int RIndex)
-            {
-                try
-                {
-                    if (RIndex > -1)
-                    {
-                        Socket_Cache.RobotList.lstRobot.RemoveAt(RIndex);
                     }
                 }
                 catch (Exception ex)
@@ -5924,66 +5816,86 @@ namespace WPELibrary.Lib
 
             #region//机器人列表的列表操作
 
-            public static int UpdateRobotList_ByListAction(Socket_Cache.System.ListAction listAction, int iRIndex)
+            public static void UpdateRobotList_ByListAction(Socket_Cache.System.ListAction listAction, List<Socket_RobotInfo> sriList)
             {
-                int iReturn = -1;
-
                 try
                 {
-                    int iRobotListCount = Socket_Cache.RobotList.lstRobot.Count;
-                    Socket_RobotInfo sri = Socket_Cache.RobotList.lstRobot[iRIndex];
-
                     switch (listAction)
                     {
                         case Socket_Cache.System.ListAction.Top:
-                            if (iRIndex > 0)
+
+                            sriList.Reverse();
+
+                            foreach (Socket_RobotInfo sri in sriList)
                             {
-                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Remove(sri);
                                 Socket_Cache.RobotList.lstRobot.Insert(0, sri);
-                                iReturn = 0;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Up:
-                            if (iRIndex > 0)
+
+                            foreach (Socket_RobotInfo sri in sriList)
                             {
-                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
-                                Socket_Cache.RobotList.lstRobot.Insert(iRIndex - 1, sri);
-                                iReturn = iRIndex - 1;
+                                int iIndex = Socket_Cache.RobotList.lstRobot.IndexOf(sri);
+
+                                if (iIndex > 0)
+                                {
+                                    Socket_Cache.RobotList.lstRobot.Remove(sri);
+                                    Socket_Cache.RobotList.lstRobot.Insert(iIndex - 1, sri);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Down:
-                            if (iRIndex < iRobotListCount - 1)
+
+                            sriList.Reverse();
+
+                            foreach (Socket_RobotInfo sri in sriList)
                             {
-                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
-                                Socket_Cache.RobotList.lstRobot.Insert(iRIndex + 1, sri);
-                                iReturn = iRIndex + 1;
+                                int iIndex = Socket_Cache.RobotList.lstRobot.IndexOf(sri);
+
+                                if (iIndex > -1 && iIndex < Socket_Cache.RobotList.lstRobot.Count - 1)
+                                {
+                                    Socket_Cache.RobotList.lstRobot.Remove(sri);
+                                    Socket_Cache.RobotList.lstRobot.Insert(iIndex + 1, sri);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Bottom:
-                            if (iRIndex < iRobotListCount - 1)
+
+                            foreach (Socket_RobotInfo sri in sriList)
                             {
-                                Socket_Cache.RobotList.lstRobot.RemoveAt(iRIndex);
+                                Socket_Cache.RobotList.lstRobot.Remove(sri);
                                 Socket_Cache.RobotList.lstRobot.Add(sri);
-                                iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Copy:
-                            Socket_Cache.Robot.CopyRobot_ByRobotIndex(iRIndex);
-                            iReturn = Socket_Cache.RobotList.lstRobot.Count - 1;
+
+                            foreach (Socket_RobotInfo sri in sriList)
+                            {
+                                Socket_Cache.Robot.CopyRobot(sri);
+                            }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Export:
-                            string sRName = Socket_Cache.RobotList.lstRobot[iRIndex].RName;
-                            Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, iRIndex);
-                            iReturn = iRIndex;
+
+                            string sRName = sriList[0].RName;
+                            Socket_Cache.RobotList.SaveRobotList_Dialog(sRName, sriList);
+
                             break;
 
                         case Socket_Cache.System.ListAction.Delete:
-                            Socket_Cache.Robot.DeleteRobot_ByRobotIndex_Dialog(iRIndex);                            
+
+                            Socket_Cache.Robot.DeleteRobot_Dialog(sriList);
+                            
                             break;
                     }
                 }
@@ -5991,8 +5903,6 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion                        
@@ -6190,7 +6100,7 @@ namespace WPELibrary.Lib
 
             #region//保存机器人列表到文件（对话框）
 
-            public static void SaveRobotList_Dialog(string FileName, int RobotIndex)
+            public static void SaveRobotList_Dialog(string FileName, List<Socket_RobotInfo> sriList)
             {
                 try
                 {
@@ -6216,7 +6126,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveRobotList(FilePath, RobotIndex, true);
+                                SaveRobotList(FilePath, sriList, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_154), FilePath);
                                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -6230,11 +6140,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void SaveRobotList(string FilePath, int RobotIndex, bool DoEncrypt)
+            public static void SaveRobotList(string FilePath, List<Socket_RobotInfo> sriList, bool DoEncrypt)
             {
                 try
                 {
-                    SaveRobotList_ToXDocument(FilePath, RobotIndex);
+                    SaveRobotList_ToXDocument(FilePath, sriList);
 
                     if (DoEncrypt)
                     {
@@ -6252,7 +6162,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveRobotList_ToXDocument(string FilePath, int RobotIndex)
+            private static void SaveRobotList_ToXDocument(string FilePath, List<Socket_RobotInfo> sriList)
             {
                 try
                 {
@@ -6264,47 +6174,35 @@ namespace WPELibrary.Lib
                     XElement xeRoot = new XElement("RobotList");
                     xdoc.Add(xeRoot);
 
-                    if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                    foreach (Socket_RobotInfo sri in sriList)
                     {
-                        int Start = 0;
-                        int End = Socket_Cache.RobotList.lstRobot.Count;
+                        string IsEnable = sri.IsEnable.ToString();
+                        string sRID = sri.RID.ToString().ToUpper();
+                        string sRName = sri.RName;
+                        DataTable dtRInstruction = sri.RInstruction;
 
-                        if (RobotIndex > -1 && RobotIndex < End)
+                        XElement xeRobot =
+                            new XElement("Robot",
+                            new XElement("IsEnable", IsEnable),
+                            new XElement("ID", sRID),
+                            new XElement("Name", sRName)
+                            );
+
+                        if (dtRInstruction.Rows.Count > 0)
                         {
-                            Start = RobotIndex;
-                            End = RobotIndex + 1;
-                        }
+                            XElement xeInstruction = new XElement("Instructions");
 
-                        for (int i = Start; i < End; i++)
-                        {
-                            string IsEnable = Socket_Cache.RobotList.lstRobot[i].IsEnable.ToString();
-                            string sRID = Socket_Cache.RobotList.lstRobot[i].RID.ToString().ToUpper();
-                            string sRName = Socket_Cache.RobotList.lstRobot[i].RName;
-                            DataTable dtRInstruction = Socket_Cache.RobotList.lstRobot[i].RInstruction;
-
-                            XElement xeRobot =
-                                new XElement("Robot",
-                                new XElement("IsEnable", IsEnable),
-                                new XElement("ID", sRID),
-                                new XElement("Name", sRName)
-                                );
-
-                            if (dtRInstruction.Rows.Count > 0)
+                            foreach (DataRow row in dtRInstruction.Rows)
                             {
-                                XElement xeInstruction = new XElement("Instructions");
-
-                                foreach (DataRow row in dtRInstruction.Rows)
-                                {
-                                    XElement xeInst = new XElement("Inst", new XAttribute("Type", row[0].ToString()), row[1].ToString());
-                                    xeInstruction.Add(xeInst);
-                                }
-
-                                xeRobot.Add(xeInstruction);
+                                XElement xeInst = new XElement("Inst", new XAttribute("Type", row[0].ToString()), row[1].ToString());
+                                xeInstruction.Add(xeInst);
                             }
 
-                            xeRoot.Add(xeRobot);
+                            xeRobot.Add(xeInstruction);
                         }
-                    }
+
+                        xeRoot.Add(xeRobot);
+                    }                    
 
                     xdoc.Save(FilePath);
                 }
@@ -6618,47 +6516,45 @@ namespace WPELibrary.Lib
 
             #region//复制发送
 
-            public static int CopySend_BySendIndex(int SIndex)
+            public static void CopySend(Socket_SendInfo ssi)
             {
-                int iReturn = -1;
-
                 try
                 {
                     bool IsEnable_Copy = false;
                     Guid SID_New = Guid.NewGuid();
-                    string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), Socket_Cache.SendList.lstSend[SIndex].SName);
-                    bool SSystemSocket_Copy = Socket_Cache.SendList.lstSend[SIndex].SSystemSocket;                
-                    int SLoopCNT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopCNT;
-                    int SLoopINT_Copy = Socket_Cache.SendList.lstSend[SIndex].SLoopINT;
-                    DataTable SCollection_Copy = Socket_Cache.SendList.lstSend[SIndex].SCollection.Copy();
-                    string SNotes_Copy = Socket_Cache.SendList.lstSend[SIndex].SNotes;
+                    string SName_Copy = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), ssi.SName);
+                    bool SSystemSocket_Copy = ssi.SSystemSocket;                
+                    int SLoopCNT_Copy = ssi.SLoopCNT;
+                    int SLoopINT_Copy = ssi.SLoopINT;
+                    DataTable SCollection_Copy = ssi.SCollection.Copy();
+                    string SNotes_Copy = ssi.SNotes;
 
                     Socket_Cache.Send.AddSend(IsEnable_Copy, SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
-                    iReturn = Socket_Cache.SendList.lstSend.Count - 1;
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion
 
             #region//删除发送
 
-            public static void DeleteSend_BySendIndex_Dialog(int SIndex)
+            public static void DeleteSend_Dialog(List<Socket_SendInfo> ssiList)
             {
                 try
                 {
-                    if (SIndex > -1)
+                    if (ssiList.Count > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            Socket_Cache.Send.DeleteSend_BySendIndex(SIndex);
+                            foreach (Socket_SendInfo ssi in ssiList)
+                            {
+                                Socket_Cache.SendList.lstSend.Remove(ssi);
+                            }                            
                         }
                     }
                 }
@@ -6666,22 +6562,7 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
-
-            public static void DeleteSend_BySendIndex(int SIndex)
-            {
-                try
-                {
-                    if (SIndex > -1)
-                    {
-                        Socket_Cache.SendList.lstSend.RemoveAt(SIndex);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
+            }            
 
             #endregion
 
@@ -7133,66 +7014,86 @@ namespace WPELibrary.Lib
 
             #region//发送列表的列表操作
 
-            public static int UpdateSendList_ByListAction(Socket_Cache.System.ListAction listAction, int iSIndex)
+            public static void UpdateSendList_ByListAction(Socket_Cache.System.ListAction listAction, List<Socket_SendInfo> ssiList)
             {
-                int iReturn = -1;
-
                 try
                 {
-                    int iSendListCount = Socket_Cache.SendList.lstSend.Count;
-                    Socket_SendInfo ssi = Socket_Cache.SendList.lstSend[iSIndex];
-
                     switch (listAction)
                     {
                         case Socket_Cache.System.ListAction.Top:
-                            if (iSIndex > 0)
+
+                            ssiList.Reverse();
+
+                            foreach (Socket_SendInfo ssi in ssiList)
                             {
-                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Remove(ssi);
                                 Socket_Cache.SendList.lstSend.Insert(0, ssi);
-                                iReturn = 0;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Up:
-                            if (iSIndex > 0)
+
+                            foreach (Socket_SendInfo ssi in ssiList)
                             {
-                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
-                                Socket_Cache.SendList.lstSend.Insert(iSIndex - 1, ssi);
-                                iReturn = iSIndex - 1;
+                                int iIndex = Socket_Cache.SendList.lstSend.IndexOf(ssi);
+
+                                if (iIndex > 0)
+                                {
+                                    Socket_Cache.SendList.lstSend.Remove(ssi);
+                                    Socket_Cache.SendList.lstSend.Insert(iIndex - 1, ssi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Down:
-                            if (iSIndex < iSendListCount - 1)
+
+                            ssiList.Reverse();
+
+                            foreach (Socket_SendInfo ssi in ssiList)
                             {
-                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
-                                Socket_Cache.SendList.lstSend.Insert(iSIndex + 1, ssi);
-                                iReturn = iSIndex + 1;
+                                int iIndex = Socket_Cache.SendList.lstSend.IndexOf(ssi);
+
+                                if (iIndex > -1 && iIndex < Socket_Cache.SendList.lstSend.Count - 1)
+                                {
+                                    Socket_Cache.SendList.lstSend.Remove(ssi);
+                                    Socket_Cache.SendList.lstSend.Insert(iIndex + 1, ssi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Bottom:
-                            if (iSIndex < iSendListCount - 1)
+
+                            foreach (Socket_SendInfo ssi in ssiList)
                             {
-                                Socket_Cache.SendList.lstSend.RemoveAt(iSIndex);
+                                Socket_Cache.SendList.lstSend.Remove(ssi);
                                 Socket_Cache.SendList.lstSend.Add(ssi);
-                                iReturn = Socket_Cache.SendList.lstSend.Count - 1;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Copy:
-                            Socket_Cache.Send.CopySend_BySendIndex(iSIndex);
-                            iReturn = Socket_Cache.SendList.lstSend.Count - 1;
+
+                            foreach (Socket_SendInfo ssi in ssiList)
+                            {
+                                Socket_Cache.Send.CopySend(ssi);
+                            }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Export:
-                            string sSName = Socket_Cache.SendList.lstSend[iSIndex].SName;
-                            Socket_Cache.SendList.SaveSendList_Dialog(sSName, iSIndex);
-                            iReturn = iSIndex;
+
+                            string sSName = ssiList[0].SName;
+                            Socket_Cache.SendList.SaveSendList_Dialog(sSName, ssiList);
+
                             break;
 
                         case Socket_Cache.System.ListAction.Delete:
-                            Socket_Cache.Send.DeleteSend_BySendIndex_Dialog(iSIndex);
+
+                            Socket_Cache.Send.DeleteSend_Dialog(ssiList);
+
                             break;
                     }
                 }
@@ -7200,8 +7101,6 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion                        
@@ -7303,7 +7202,7 @@ namespace WPELibrary.Lib
 
             #region//保存发送列表到文件（对话框）
 
-            public static void SaveSendList_Dialog(string FileName, int SendIndex)
+            public static void SaveSendList_Dialog(string FileName, List<Socket_SendInfo> ssiList)
             {
                 try
                 {
@@ -7329,7 +7228,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveSendList(FilePath, SendIndex, true);
+                                SaveSendList(FilePath, ssiList, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_160), FilePath);
                                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -7343,11 +7242,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveSendList(string FilePath, int SendPacketIndex, bool DoEncrypt)
+            private static void SaveSendList(string FilePath, List<Socket_SendInfo> ssiList, bool DoEncrypt)
             {
                 try
                 {
-                    SaveSendList_ToXDocument(FilePath, SendPacketIndex);
+                    SaveSendList_ToXDocument(FilePath, ssiList);
 
                     if (DoEncrypt)
                     {
@@ -7365,7 +7264,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveSendList_ToXDocument(string FilePath, int SendIndex)
+            private static void SaveSendList_ToXDocument(string FilePath, List<Socket_SendInfo> ssiList)
             {
                 try
                 {
@@ -7377,66 +7276,54 @@ namespace WPELibrary.Lib
                     XElement xeRoot = new XElement("SendList");
                     xdoc.Add(xeRoot);
 
-                    if (Socket_Cache.SendList.lstSend.Count > 0)
+                    foreach (Socket_SendInfo ssi in ssiList)
                     {
-                        int Start = 0;
-                        int End = Socket_Cache.SendList.lstSend.Count;
+                        string IsEnable = ssi.IsEnable.ToString();
+                        string SID = ssi.SID.ToString().ToUpper();
+                        string SName = ssi.SName;
+                        string SSystemSocket = ssi.SSystemSocket.ToString();
+                        string LoopCNT = ssi.SLoopCNT.ToString();
+                        string LoopINT = ssi.SLoopINT.ToString();
+                        DataTable SCollection = ssi.SCollection;
+                        string SNotes = ssi.SNotes;
 
-                        if (SendIndex > -1 && SendIndex < End)
+                        XElement xeSend =
+                            new XElement("Send",
+                            new XElement("IsEnable", IsEnable),
+                            new XElement("ID", SID),
+                            new XElement("Name", SName),
+                            new XElement("SystemSocket", SSystemSocket),
+                            new XElement("LoopCNT", LoopCNT),
+                            new XElement("LoopINT", LoopINT),
+                            new XElement("Notes", SNotes)
+                            );
+
+                        if (SCollection.Rows.Count > 0)
                         {
-                            Start = SendIndex;
-                            End = SendIndex + 1;
-                        }
+                            XElement xeCollection = new XElement("SendCollection");
 
-                        for (int i = Start; i < End; i++)
-                        {
-                            string IsEnable = Socket_Cache.SendList.lstSend[i].IsEnable.ToString();
-                            string SID = Socket_Cache.SendList.lstSend[i].SID.ToString().ToUpper();
-                            string SName = Socket_Cache.SendList.lstSend[i].SName;
-                            string SSystemSocket = Socket_Cache.SendList.lstSend[i].SSystemSocket.ToString();                       
-                            string LoopCNT = Socket_Cache.SendList.lstSend[i].SLoopCNT.ToString();
-                            string LoopINT = Socket_Cache.SendList.lstSend[i].SLoopINT.ToString();
-                            DataTable SCollection = Socket_Cache.SendList.lstSend[i].SCollection;
-                            string SNotes = Socket_Cache.SendList.lstSend[i].SNotes;
-
-                            XElement xeSend =
-                                new XElement("Send",
-                                new XElement("IsEnable", IsEnable),
-                                new XElement("ID", SID),
-                                new XElement("Name", SName),
-                                new XElement("SystemSocket", SSystemSocket),                            
-                                new XElement("LoopCNT", LoopCNT),
-                                new XElement("LoopINT", LoopINT),
-                                new XElement("Notes", SNotes)
-                                );
-
-                            if (SCollection.Rows.Count > 0)
+                            foreach (DataRow row in SCollection.Rows)
                             {
-                                XElement xeCollection = new XElement("SendCollection");
+                                string sSocket = row["Socket"].ToString();
+                                string sType = row["Type"].ToString();
+                                string sIPTo = row["IPTo"].ToString();
+                                string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
 
-                                foreach (DataRow row in SCollection.Rows)
-                                {
-                                    string sSocket = row["Socket"].ToString();
-                                    string sType = row["Type"].ToString();
-                                    string sIPTo = row["IPTo"].ToString();
-                                    string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
+                                XElement xeColl =
+                                    new XElement("Collection",
+                                    new XElement("Socket", sSocket),
+                                    new XElement("Type", sType),
+                                    new XElement("IPTo", sIPTo),
+                                    new XElement("Buffer", sBuffer)
+                                    );
 
-                                    XElement xeColl =
-                                        new XElement("Collection",
-                                        new XElement("Socket", sSocket),
-                                        new XElement("Type", sType),
-                                        new XElement("IPTo", sIPTo),
-                                        new XElement("Buffer", sBuffer)
-                                        );
-
-                                    xeCollection.Add(xeColl);
-                                }
-
-                                xeSend.Add(xeCollection);
+                                xeCollection.Add(xeColl);
                             }
 
-                            xeRoot.Add(xeSend);
+                            xeSend.Add(xeCollection);
                         }
+
+                        xeRoot.Add(xeSend);
                     }
 
                     xdoc.Save(FilePath);
