@@ -101,7 +101,7 @@ namespace WPELibrary
             {
                 if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentCell != null)
                 {
-                    Guid[] glAID = this.GetSelectedAID();
+                    Guid[] glAID = Socket_Operation.GetDGVSelectedGUID(this.dgvAccountList);
 
                     if (glAID.Length > 0)
                     {
@@ -122,7 +122,7 @@ namespace WPELibrary
 
         private void bExport_Click(object sender, EventArgs e)
         {
-            Guid[] glAID = this.GetSelectedAID();
+            Guid[] glAID = Socket_Operation.GetDGVSelectedGUID(this.dgvAccountList);
 
             if (glAID.Length > 0)
             {
@@ -207,33 +207,7 @@ namespace WPELibrary
             }            
         }
 
-        #endregion
-
-        #region//获取所有选中的账号ID
-
-        private Guid[] GetSelectedAID()
-        {
-            Guid[] glAID = new Guid[dgvAccountList.Rows.Count];
-
-            int index = 0;
-            for (int i = 0; i < dgvAccountList.Rows.Count; i++)
-            {
-                if (dgvAccountList.Rows[i].Selected)
-                {
-                    glAID[index] = (Guid)dgvAccountList.Rows[i].Cells["cAID"].Value;
-                    index++;
-                }
-            }
-
-            if (index < glAID.Length)
-            {
-                Array.Resize(ref glAID, index);
-            }
-
-            return glAID;
-        }
-
-        #endregion
+        #endregion        
 
         #region//计时器
 

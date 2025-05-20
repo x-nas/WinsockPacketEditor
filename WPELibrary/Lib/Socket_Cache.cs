@@ -3180,17 +3180,17 @@ namespace WPELibrary.Lib
 
             #region//删除滤镜
 
-            public static void DeleteFilter_ByFilterIndex_Dialog(int FIndex)
+            public static void DeleteFilter_ByFilter_Dialog(List<Socket_FilterInfo> sfiList)
             {
                 try
                 {
-                    if (FIndex > -1)
+                    if (sfiList.Count > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            Socket_Cache.Filter.DeleteFilter_ByFilterIndex(FIndex);
+                            Socket_Cache.Filter.DeleteFilter_ByFilter(sfiList);
                         }
                     }
                 }
@@ -3200,13 +3200,13 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void DeleteFilter_ByFilterIndex(int FIndex)
+            private static void DeleteFilter_ByFilter(List<Socket_FilterInfo> sfiList)
             {
                 try
                 {
-                    if (FIndex > -1)
+                    foreach (Socket_FilterInfo sfi in sfiList)
                     {
-                        Socket_Cache.FilterList.lstFilter.RemoveAt(FIndex);
+                        Socket_Cache.FilterList.lstFilter.Remove(sfi);
                     }
                 }
                 catch (Exception ex)
@@ -3248,6 +3248,69 @@ namespace WPELibrary.Lib
                     int ProgressionCount = 0;
                     string FSearch = Socket_Cache.FilterList.lstFilter[iFIndex].FSearch;
                     string FModify = Socket_Cache.FilterList.lstFilter[iFIndex].FModify;
+
+                    Socket_Cache.Filter.AddFilter(
+                        IsEnable,
+                        FID,
+                        FName,
+                        bAppointHeader,
+                        HeaderContent,
+                        bAppointSocket,
+                        SocketContent,
+                        bAppointLength,
+                        LengthContent,
+                        bAppointPort,
+                        PortContent,
+                        FMode,
+                        FAction,
+                        IsExecute,
+                        FEType,
+                        SID,
+                        RID,
+                        FFunction,
+                        FStartFrom,
+                        IsProgressionDone,
+                        ProgressionStep,
+                        ProgressionPosition,
+                        ProgressionCount,
+                        FSearch,
+                        FModify);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void CopyFilter_ByFilter(Socket_FilterInfo sfi)
+            {
+                try
+                {
+                    bool IsEnable = false;
+                    Guid FID = Guid.NewGuid();
+                    string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_62), sfi.FName);
+                    bool bAppointHeader = sfi.AppointHeader;
+                    string HeaderContent = sfi.HeaderContent;
+                    bool bAppointSocket = sfi.AppointSocket;
+                    decimal SocketContent = sfi.SocketContent;
+                    bool bAppointLength = sfi.AppointLength;
+                    string LengthContent = sfi.LengthContent;
+                    bool bAppointPort = sfi.AppointPort;
+                    decimal PortContent = sfi.PortContent;
+                    Socket_Cache.Filter.FilterMode FMode = sfi.FMode;
+                    Socket_Cache.Filter.FilterAction FAction = sfi.FAction;
+                    bool IsExecute = sfi.IsExecute;
+                    Socket_Cache.Filter.FilterExecuteType FEType = sfi.FEType;
+                    Guid SID = sfi.SID;
+                    Guid RID = sfi.RID;
+                    Socket_Cache.Filter.FilterFunction FFunction = sfi.FFunction;
+                    Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
+                    bool IsProgressionDone = false;
+                    decimal ProgressionStep = sfi.ProgressionStep;
+                    string ProgressionPosition = sfi.ProgressionPosition;
+                    int ProgressionCount = 0;
+                    string FSearch = sfi.FSearch;
+                    string FModify = sfi.FModify;
 
                     Socket_Cache.Filter.AddFilter(
                         IsEnable,
@@ -4291,66 +4354,88 @@ namespace WPELibrary.Lib
 
             #region//滤镜列表的列表操作
 
-            public static int UpdateFilterList_ByListAction(Socket_Cache.System.ListAction listAction, int iFIndex)
+            public static void UpdateFilterList_ByListAction(Socket_Cache.System.ListAction listAction, List<Socket_FilterInfo> sfiList)
             {
-                int iReturn = -1;
-
                 try
                 {
                     int iFilterListCount = Socket_Cache.FilterList.lstFilter.Count;
-                    Socket_FilterInfo sfi = Socket_Cache.FilterList.lstFilter[iFIndex];
 
                     switch (listAction)
                     {
                         case Socket_Cache.System.ListAction.Top:
-                            if (iFIndex > 0)
+
+                            sfiList.Reverse();
+
+                            foreach (Socket_FilterInfo sfi in sfiList)
                             {
-                                Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                                Socket_Cache.FilterList.lstFilter.Remove(sfi);
                                 Socket_Cache.FilterList.lstFilter.Insert(0, sfi);
-                                iReturn = 0;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Up:
-                            if (iFIndex > 0)
+
+                            foreach (Socket_FilterInfo sfi in sfiList)
                             {
-                                Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                                Socket_Cache.FilterList.lstFilter.Insert(iFIndex - 1, sfi);
-                                iReturn = iFIndex - 1;
+                                int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
+
+                                if (iIndex > 0)
+                                {
+                                    Socket_Cache.FilterList.lstFilter.Remove(sfi);
+                                    Socket_Cache.FilterList.lstFilter.Insert(iIndex - 1, sfi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Down:
-                            if (iFIndex < iFilterListCount - 1)
+
+                            sfiList.Reverse();
+
+                            foreach (Socket_FilterInfo sfi in sfiList)
                             {
-                                Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
-                                Socket_Cache.FilterList.lstFilter.Insert(iFIndex + 1, sfi);
-                                iReturn = iFIndex + 1;
+                                int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
+
+                                if (iIndex > -1 && iIndex < iFilterListCount - 1)
+                                {
+                                    Socket_Cache.FilterList.lstFilter.Remove(sfi);
+                                    Socket_Cache.FilterList.lstFilter.Insert(iIndex + 1, sfi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Bottom:
-                            if (iFIndex < iFilterListCount - 1)
+
+                            foreach (Socket_FilterInfo sfi in sfiList)
                             {
-                                Socket_Cache.FilterList.lstFilter.RemoveAt(iFIndex);
+                                Socket_Cache.FilterList.lstFilter.Remove(sfi);
                                 Socket_Cache.FilterList.lstFilter.Add(sfi);
-                                iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Copy:
-                            Socket_Cache.Filter.CopyFilter_ByFilterIndex(iFIndex);
-                            iReturn = Socket_Cache.FilterList.lstFilter.Count - 1;
+
+                            foreach (Socket_FilterInfo sfi in sfiList)
+                            {
+                                Socket_Cache.Filter.CopyFilter_ByFilter(sfi);
+                            }                            
+
                             break;
 
                         case Socket_Cache.System.ListAction.Export:
-                            string sFName = Socket_Cache.FilterList.lstFilter[iFIndex].FName;
-                            Socket_Cache.FilterList.SaveFilterList_Dialog(sFName, iFIndex);
-                            iReturn = iFIndex;
+
+                            string sFName = sfiList[0].FName;
+                            Socket_Cache.FilterList.SaveFilterList_Dialog(sFName, sfiList);
+
                             break;
 
                         case Socket_Cache.System.ListAction.Delete:
-                            Socket_Cache.Filter.DeleteFilter_ByFilterIndex_Dialog(iFIndex);
+
+                            Socket_Cache.Filter.DeleteFilter_ByFilter_Dialog(sfiList);
+
                             break;
                     }
                 }
@@ -4358,8 +4443,6 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion                        
@@ -4621,7 +4704,7 @@ namespace WPELibrary.Lib
 
             #region//保存滤镜列表到文件（对话框）
 
-            public static void SaveFilterList_Dialog(string FileName, int FilterIndex)
+            public static void SaveFilterList_Dialog(string FileName, List<Socket_FilterInfo> sfiList)
             {
                 try
                 {
@@ -4647,7 +4730,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveFilterList(FilePath, FilterIndex, true);
+                                SaveFilterList(FilePath, sfiList, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), FilePath);
                                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
@@ -4661,11 +4744,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveFilterList(string FilePath, int FilterIndex, bool DoEncrypt)
+            private static void SaveFilterList(string FilePath, List<Socket_FilterInfo> sfiList, bool DoEncrypt)
             {
                 try
                 {
-                    SaveFilterList_ToXDocument(FilePath, FilterIndex);
+                    SaveFilterList_ToXDocument(FilePath, sfiList);
 
                     if (DoEncrypt)
                     {
@@ -4683,7 +4766,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveFilterList_ToXDocument(string FilePath, int FilterIndex)
+            private static void SaveFilterList_ToXDocument(string FilePath, List<Socket_FilterInfo> sfiList)
             {
                 try
                 {
@@ -4697,40 +4780,31 @@ namespace WPELibrary.Lib
 
                     if (Socket_Cache.FilterList.lstFilter.Count > 0)
                     {
-                        int Start = 0;
-                        int End = Socket_Cache.FilterList.lstFilter.Count;
-
-                        if (FilterIndex > -1 && FilterIndex < End)
+                        foreach (Socket_FilterInfo sfi in sfiList)
                         {
-                            Start = FilterIndex;
-                            End = FilterIndex + 1;
-                        }
-
-                        for (int i = Start; i < End; i++)
-                        {
-                            string sIsEnable = Socket_Cache.FilterList.lstFilter[i].IsEnable.ToString();
-                            string sFID = Socket_Cache.FilterList.lstFilter[i].FID.ToString().ToUpper();
-                            string sFName = Socket_Cache.FilterList.lstFilter[i].FName;
-                            string sFAppointHeader = Socket_Cache.FilterList.lstFilter[i].AppointHeader.ToString();
-                            string sFHeaderContent = Socket_Cache.FilterList.lstFilter[i].HeaderContent;
-                            string sFAppointSocket = Socket_Cache.FilterList.lstFilter[i].AppointSocket.ToString();
-                            string sFSocketContent = Socket_Cache.FilterList.lstFilter[i].SocketContent.ToString();
-                            string sFAppointLength = Socket_Cache.FilterList.lstFilter[i].AppointLength.ToString();
-                            string sFLengthContent = Socket_Cache.FilterList.lstFilter[i].LengthContent.ToString();
-                            string sFAppointPort = Socket_Cache.FilterList.lstFilter[i].AppointPort.ToString();
-                            string sFPortContent = Socket_Cache.FilterList.lstFilter[i].PortContent.ToString();
-                            string sFMode = ((int)Socket_Cache.FilterList.lstFilter[i].FMode).ToString();
-                            string sFAction = ((int)Socket_Cache.FilterList.lstFilter[i].FAction).ToString();
-                            string sIsExecute = Socket_Cache.FilterList.lstFilter[i].IsExecute.ToString();
-                            string sFEType = ((int)Socket_Cache.FilterList.lstFilter[i].FEType).ToString();
-                            string sSID = Socket_Cache.FilterList.lstFilter[i].SID.ToString().ToUpper();
-                            string sRID = Socket_Cache.FilterList.lstFilter[i].RID.ToString().ToUpper();
-                            string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(Socket_Cache.FilterList.lstFilter[i].FFunction);
-                            string sFStartFrom = ((int)Socket_Cache.FilterList.lstFilter[i].FStartFrom).ToString();
-                            string sFProgressionStep = Socket_Cache.FilterList.lstFilter[i].ProgressionStep.ToString();
-                            string sFProgressionPosition = Socket_Cache.FilterList.lstFilter[i].ProgressionPosition;
-                            string sFSearch = Socket_Cache.FilterList.lstFilter[i].FSearch;
-                            string sFModify = Socket_Cache.FilterList.lstFilter[i].FModify;
+                            string sIsEnable = sfi.IsEnable.ToString();
+                            string sFID = sfi.FID.ToString().ToUpper();
+                            string sFName = sfi.FName;
+                            string sFAppointHeader = sfi.AppointHeader.ToString();
+                            string sFHeaderContent = sfi.HeaderContent;
+                            string sFAppointSocket = sfi.AppointSocket.ToString();
+                            string sFSocketContent = sfi.SocketContent.ToString();
+                            string sFAppointLength = sfi.AppointLength.ToString();
+                            string sFLengthContent = sfi.LengthContent.ToString();
+                            string sFAppointPort = sfi.AppointPort.ToString();
+                            string sFPortContent = sfi.PortContent.ToString();
+                            string sFMode = ((int)sfi.FMode).ToString();
+                            string sFAction = ((int)sfi.FAction).ToString();
+                            string sIsExecute = sfi.IsExecute.ToString();
+                            string sFEType = ((int)sfi.FEType).ToString();
+                            string sSID = sfi.SID.ToString().ToUpper();
+                            string sRID = sfi.RID.ToString().ToUpper();
+                            string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction);
+                            string sFStartFrom = ((int)sfi.FStartFrom).ToString();
+                            string sFProgressionStep = sfi.ProgressionStep.ToString();
+                            string sFProgressionPosition = sfi.ProgressionPosition;
+                            string sFSearch = sfi.FSearch;
+                            string sFModify = sfi.FModify;
 
                             XElement xeFilter =
                                 new XElement("Filter",
@@ -4760,7 +4834,7 @@ namespace WPELibrary.Lib
                                 );
 
                             xeRoot.Add(xeFilter);
-                        }
+                        }                   
                     }
 
                     xdoc.Save(FilePath);

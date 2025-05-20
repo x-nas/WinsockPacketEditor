@@ -24,6 +24,7 @@ using System.Net.Http;
 using Microsoft.Owin.Hosting;
 using WPELibrary.Lib.WebAPI;
 using System.Management;
+using System.Collections;
 
 namespace WPELibrary.Lib
 {   
@@ -2514,7 +2515,56 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//获取列表中的选中项信息
+
+        public static List<Socket_FilterInfo> GetSelectedFilter(DataGridView dgvFilterList)
+        {
+            List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
+
+            try
+            {
+                for (int i = 0; i < Socket_Cache.FilterList.lstFilter.Count; i++)                
+                {
+                    if (dgvFilterList.Rows[i].Selected)
+                    {
+                        sfiList.Add(Socket_Cache.FilterList.lstFilter[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return new List<Socket_FilterInfo>();
+            }
+
+            return sfiList;
+        }        
+
+        public static Guid[] GetDGVSelectedGUID(DataGridView dgv)
+        {
+            try
+            {
+                List<Guid> selectedGUIDs = new List<Guid>();
+
+                for (int i = 0; i < dgv.Rows.Count; i++)
+                {
+                    if (dgv.Rows[i].Selected)
+                    {
+                        selectedGUIDs.Add((Guid)dgv.Rows[i].Cells["cAID"].Value);
+                    }
+                }
+                return selectedGUIDs.ToArray();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return new Guid[0];
+            }
+        }
+
+        #endregion
 
         #region//数据对比
 

@@ -11,6 +11,8 @@ using System.Text;
 using WPELibrary.Lib.NativeMethods;
 using System.Data;
 using System.Threading;
+using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace WPELibrary
 {
@@ -1510,47 +1512,54 @@ namespace WPELibrary
                 if (dgvFilterList.Rows.Count > 0)
                 {
                     int iIndex = 0;
-                    int iFIndex = this.dgvFilterList.CurrentRow.Index;
 
-                    if (iFIndex > -1)
+                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
+
+                    if (sfiList.Count > 0)
                     {
                         switch (sItemText)
                         {
                             case "cmsFilterList_Top":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Top, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Top, sfiList);
                                 break;
 
                             case "cmsFilterList_Up":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Up, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Up, sfiList);
                                 break;
 
                             case "cmsFilterList_Down":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Down, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Down, sfiList);
                                 break;
 
                             case "cmsFilterList_Bottom":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Bottom, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Bottom, sfiList);
                                 break;
 
                             case "cmsFilterList_Copy":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Copy, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Copy, sfiList);
                                 break;
 
                             case "cmsFilterList_Export":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Export, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Export, sfiList);
                                 break;
 
                             case "cmsFilterList_Delete":
-                                iIndex = Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Delete, iFIndex);
+                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Delete, sfiList);
                                 break;
                         }
 
-                        if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
+                        this.dgvFilterList.ClearSelection();
+
+                        foreach (Socket_FilterInfo sfi in sfiList)
                         {
-                            this.dgvFilterList.ClearSelection();
-                            this.dgvFilterList.Rows[iIndex].Selected = true;
-                            this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[iIndex].Cells[0];
-                        }                       
+                            iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
+
+                            if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
+                            {                                
+                                this.dgvFilterList.Rows[iIndex].Selected = true;
+                                dgvFilterList.FirstDisplayedScrollingRowIndex = iIndex;
+                            }
+                        }             
                     }
                 }
             }
@@ -1778,15 +1787,29 @@ namespace WPELibrary
 
         private void tsFilterList_Save_Click(object sender, EventArgs e)
         {
-            if (dgvFilterList.Rows.Count > 0)
+            try
             {
-                Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, -1);
+                List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
+
+                if (Socket_Cache.FilterList.lstFilter != null)
+                {
+                    sfiList.AddRange(Socket_Cache.FilterList.lstFilter);
+                }
+
+                Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, sfiList);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
         private void tsFilterList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.Filter.AddFilter_New();            
+            Socket_Cache.Filter.AddFilter_New();
+
+            this.dgvFilterList.ClearSelection();
+            this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[this.dgvFilterList.Rows.Count - 1].Cells[0];
         }
 
         private void tsFilterList_CleanUp_Click(object sender, EventArgs e)
