@@ -40,6 +40,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//滤镜已执行次数
+
+        protected int executioncount;
+
+        public int ExecutionCount
+        {
+            get { return executioncount; }
+            set { executioncount = value; }
+        }
+
+        #endregion
+
         #region//指定包头
 
         protected bool appointheader;
@@ -319,7 +331,7 @@ namespace WPELibrary.Lib
         {
             this.isenable = IsEnable;
             this.fid = FID;            
-            this.fname = FName;
+            this.fname = FName;        
             this.appointheader = AppointHeader;
             this.headercontent = HeaderContent;
             this.appointsocket = AppointSocket;
@@ -341,7 +353,9 @@ namespace WPELibrary.Lib
             this.progressionposition = ProgressionPosition;
             this.progressioncount = ProgressionCount;
             this.fsearch = FSearch;          
-            this.fmodify = FModify;         
+            this.fmodify = FModify;
+            
+            this.executioncount = 0;
         }
 
         #endregion

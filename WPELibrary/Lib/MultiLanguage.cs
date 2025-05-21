@@ -155,8 +155,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_143 = { "停止 SOCKS5 代理!", "Stop SOCKS5 proxy!" };
         public static string[] MutiLan_144 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
         public static string[] MutiLan_145 = { "不支持的 SOCKS 协议版本: {0}", "Unsupported SOCKS protocol version: {0}" };
-        //public static string[] MutiLan_146 = { "远程管理网址:", "Remote MGT:" };
-        //public static string[] MutiLan_147 = { "失败!", "Failed!" };
+        public static string[] MutiLan_146 = { "封包长度", "Packet Length" };
+        public static string[] MutiLan_147 = { "封包套接字", "Packet Socket" };
         public static string[] MutiLan_148 = { "启用系统代理", "Enable system proxy" };
         public static string[] MutiLan_149 = { "关闭系统代理", "Disable system proxy" };
         public static string[] MutiLan_150 = { "封包列表保存完毕 {0}", "The Socket List saved {0}" };
@@ -205,6 +205,8 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_193 = { "导入账号失败！用户名：{0}", "Import account failed! Username: {0}" };
         public static string[] MutiLan_194 = { "更新账号成功!", "Account Update successfully!" };
         public static string[] MutiLan_195 = { "更新账号失败!", "Failed to Update Account!" };
+        public static string[] MutiLan_196 = { "计数", "Count" };
+        public static string[] MutiLan_197 = { "执行滤镜", "Filter Execution" };
 
         #endregion
 

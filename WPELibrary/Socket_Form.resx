@@ -122,7 +122,7 @@
     <value>1</value>
   </data>
   <metadata name="ssSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>233, 97</value>
+    <value>1494, 17</value>
   </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ssSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -3650,6 +3650,225 @@
   <data name="&gt;&gt;tpPacketData.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="tlpPacketStatistics.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="dgvPacketStatistics.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 33</value>
+  </data>
+  <data name="dgvPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>834, 166</value>
+  </data>
+  <data name="dgvPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;dgvPacketStatistics.Name" xml:space="preserve">
+    <value>dgvPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;dgvPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvPacketStatistics.Parent" xml:space="preserve">
+    <value>tlpPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;dgvPacketStatistics.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cbbPacketStatistics.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbbPacketStatistics.Items" xml:space="preserve">
+    <value>封包 - 长度</value>
+  </data>
+  <data name="cbbPacketStatistics.Items1" xml:space="preserve">
+    <value>封包 - 套接字</value>
+  </data>
+  <data name="cbbPacketStatistics.Items2" xml:space="preserve">
+    <value>滤镜 - 生效次数</value>
+  </data>
+  <data name="cbbPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 3</value>
+  </data>
+  <data name="cbbPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>669, 25</value>
+  </data>
+  <data name="cbbPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cbbPacketStatistics.Name" xml:space="preserve">
+    <value>cbbPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;cbbPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbbPacketStatistics.Parent" xml:space="preserve">
+    <value>tlpPacketStatistics_Button</value>
+  </data>
+  <data name="&gt;&gt;cbbPacketStatistics.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bPacketStatistics.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>741, 1</value>
+  </data>
+  <data name="bPacketStatistics.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>1, 1, 1, 1</value>
+  </data>
+  <data name="bPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>98, 28</value>
+  </data>
+  <data name="bPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="bPacketStatistics.Text" xml:space="preserve">
+    <value>执 行 (&amp;E)</value>
+  </data>
+  <data name="&gt;&gt;bPacketStatistics.Name" xml:space="preserve">
+    <value>bPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;bPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bPacketStatistics.Parent" xml:space="preserve">
+    <value>tlpPacketStatistics_Button</value>
+  </data>
+  <data name="&gt;&gt;bPacketStatistics.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lPacketStatistics.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lPacketStatistics.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="lPacketStatistics.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 24</value>
+  </data>
+  <data name="lPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="lPacketStatistics.Text" xml:space="preserve">
+    <value>按照维度:</value>
+  </data>
+  <data name="lPacketStatistics.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lPacketStatistics.Name" xml:space="preserve">
+    <value>lPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;lPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lPacketStatistics.Parent" xml:space="preserve">
+    <value>tlpPacketStatistics_Button</value>
+  </data>
+  <data name="&gt;&gt;lPacketStatistics.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>840, 30</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics_Button.Name" xml:space="preserve">
+    <value>tlpPacketStatistics_Button</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics_Button.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics_Button.Parent" xml:space="preserve">
+    <value>tlpPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics_Button.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpPacketStatistics_Button.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbPacketStatistics" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bPacketStatistics" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lPacketStatistics" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpPacketStatistics.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpPacketStatistics.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpPacketStatistics.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>840, 202</value>
+  </data>
+  <data name="tlpPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics.Name" xml:space="preserve">
+    <value>tlpPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics.Parent" xml:space="preserve">
+    <value>tpPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketStatistics.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpPacketStatistics.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvPacketStatistics" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketStatistics_Button" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tpPacketStatistics.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpPacketStatistics.Size" type="System.Drawing.Size, System.Drawing">
+    <value>840, 202</value>
+  </data>
+  <data name="tpPacketStatistics.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="tpPacketStatistics.Text" xml:space="preserve">
+    <value>[ 封包统计 ]</value>
+  </data>
+  <data name="&gt;&gt;tpPacketStatistics.Name" xml:space="preserve">
+    <value>tpPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;tpPacketStatistics.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tpPacketStatistics.Parent" xml:space="preserve">
+    <value>tcPacketInfo</value>
+  </data>
+  <data name="&gt;&gt;tpPacketStatistics.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="tlpComparison.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
@@ -4101,7 +4320,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpComparison.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="tlpPacketInfo_XOR.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
@@ -4437,7 +4656,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpXOR.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpPacketInfo_Encoding.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -5643,13 +5862,13 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpEncoding.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="tlpExtraction.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <metadata name="cmsExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 97</value>
+    <value>1278, 17</value>
   </metadata>
   <data name="cmsExtraction_Export.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 22</value>
@@ -5874,7 +6093,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpExtraction.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <metadata name="cLogID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -5988,7 +6207,7 @@
     <value>tcPacketInfo</value>
   </data>
   <data name="&gt;&gt;tpSystemLog.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -6469,7 +6688,7 @@
     <value>0</value>
   </data>
   <metadata name="tsSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>136, 97</value>
+    <value>1397, 17</value>
   </metadata>
   <data name="tsSendList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -6982,7 +7201,7 @@
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketInfo" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tcAutomation" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,230,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <metadata name="ssProcessInfo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>342, 97</value>
+    <value>1603, 17</value>
   </metadata>
   <data name="ssProcessInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -7090,7 +7309,7 @@
     <value>17, 17</value>
   </metadata>
   <metadata name="niWPE.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>461, 97</value>
+    <value>1722, 17</value>
   </metadata>
   <metadata name="cmsIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1085, 17</value>
@@ -13337,16 +13556,16 @@
     <value>122, 17</value>
   </metadata>
   <metadata name="ofdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>536, 97</value>
+    <value>1797, 17</value>
   </metadata>
   <metadata name="sfdExtraction.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>652, 97</value>
+    <value>1913, 17</value>
   </metadata>
   <metadata name="bgwSendList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>766, 97</value>
+    <value>2027, 17</value>
   </metadata>
   <metadata name="bgwRobotList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>878, 97</value>
+    <value>2139, 17</value>
   </metadata>
   <metadata name="bgwSearch.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>982, 17</value>
@@ -13369,6 +13588,9 @@
   <data name="dataGridViewImageColumn4.HeaderText" xml:space="preserve">
     <value>图标</value>
   </data>
+  <metadata name="bgwPacketStatistics.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>2258, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -20575,6 +20797,12 @@
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn4.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bgwPacketStatistics.Name" xml:space="preserve">
+    <value>bgwPacketStatistics</value>
+  </data>
+  <data name="&gt;&gt;bgwPacketStatistics.Type" xml:space="preserve">
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_Form</value>

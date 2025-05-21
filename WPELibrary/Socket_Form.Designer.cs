@@ -48,6 +48,8 @@ namespace WPELibrary
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpSocketForm = new System.Windows.Forms.TableLayoutPanel();
             this.ssSocketList = new System.Windows.Forms.StatusStrip();
             this.tlTotal = new System.Windows.Forms.ToolStripStatusLabel();
@@ -213,6 +215,13 @@ namespace WPELibrary
             this.cmsHexBox_Comparison_B = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss5 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_SelectAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tpPacketStatistics = new System.Windows.Forms.TabPage();
+            this.tlpPacketStatistics = new System.Windows.Forms.TableLayoutPanel();
+            this.dgvPacketStatistics = new System.Windows.Forms.DataGridView();
+            this.tlpPacketStatistics_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.cbbPacketStatistics = new System.Windows.Forms.ComboBox();
+            this.bPacketStatistics = new System.Windows.Forms.Button();
+            this.lPacketStatistics = new System.Windows.Forms.Label();
             this.tpComparison = new System.Windows.Forms.TabPage();
             this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
             this.tlpComparison_Button = new System.Windows.Forms.TableLayoutPanel();
@@ -401,6 +410,7 @@ namespace WPELibrary
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn3 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn4 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.bgwPacketStatistics = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -447,6 +457,10 @@ namespace WPELibrary
             this.tlpPacketData.SuspendLayout();
             this.tlpHexBox.SuspendLayout();
             this.cmsHexBox.SuspendLayout();
+            this.tpPacketStatistics.SuspendLayout();
+            this.tlpPacketStatistics.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketStatistics)).BeginInit();
+            this.tlpPacketStatistics_Button.SuspendLayout();
             this.tpComparison.SuspendLayout();
             this.tlpComparison.SuspendLayout();
             this.tlpComparison_Button.SuspendLayout();
@@ -1612,6 +1626,7 @@ namespace WPELibrary
             // tcPacketInfo
             // 
             this.tcPacketInfo.Controls.Add(this.tpPacketData);
+            this.tcPacketInfo.Controls.Add(this.tpPacketStatistics);
             this.tcPacketInfo.Controls.Add(this.tpComparison);
             this.tcPacketInfo.Controls.Add(this.tpXOR);
             this.tcPacketInfo.Controls.Add(this.tpEncoding);
@@ -1761,6 +1776,83 @@ namespace WPELibrary
             this.cmsHexBox_SelectAll.Image = global::WPELibrary.Properties.Resources.SelectAll;
             resources.ApplyResources(this.cmsHexBox_SelectAll, "cmsHexBox_SelectAll");
             this.cmsHexBox_SelectAll.Name = "cmsHexBox_SelectAll";
+            // 
+            // tpPacketStatistics
+            // 
+            this.tpPacketStatistics.BackColor = System.Drawing.SystemColors.Control;
+            this.tpPacketStatistics.Controls.Add(this.tlpPacketStatistics);
+            resources.ApplyResources(this.tpPacketStatistics, "tpPacketStatistics");
+            this.tpPacketStatistics.Name = "tpPacketStatistics";
+            // 
+            // tlpPacketStatistics
+            // 
+            resources.ApplyResources(this.tlpPacketStatistics, "tlpPacketStatistics");
+            this.tlpPacketStatistics.Controls.Add(this.dgvPacketStatistics, 0, 1);
+            this.tlpPacketStatistics.Controls.Add(this.tlpPacketStatistics_Button, 0, 0);
+            this.tlpPacketStatistics.Name = "tlpPacketStatistics";
+            // 
+            // dgvPacketStatistics
+            // 
+            this.dgvPacketStatistics.AllowUserToAddRows = false;
+            this.dgvPacketStatistics.AllowUserToDeleteRows = false;
+            this.dgvPacketStatistics.AllowUserToResizeColumns = false;
+            this.dgvPacketStatistics.AllowUserToResizeRows = false;
+            this.dgvPacketStatistics.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dgvPacketStatistics.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPacketStatistics.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            this.dgvPacketStatistics.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvPacketStatistics.DefaultCellStyle = dataGridViewCellStyle11;
+            resources.ApplyResources(this.dgvPacketStatistics, "dgvPacketStatistics");
+            this.dgvPacketStatistics.MultiSelect = false;
+            this.dgvPacketStatistics.Name = "dgvPacketStatistics";
+            this.dgvPacketStatistics.RowHeadersVisible = false;
+            this.dgvPacketStatistics.RowTemplate.Height = 23;
+            this.dgvPacketStatistics.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            // 
+            // tlpPacketStatistics_Button
+            // 
+            resources.ApplyResources(this.tlpPacketStatistics_Button, "tlpPacketStatistics_Button");
+            this.tlpPacketStatistics_Button.Controls.Add(this.cbbPacketStatistics, 1, 0);
+            this.tlpPacketStatistics_Button.Controls.Add(this.bPacketStatistics, 2, 0);
+            this.tlpPacketStatistics_Button.Controls.Add(this.lPacketStatistics, 0, 0);
+            this.tlpPacketStatistics_Button.Name = "tlpPacketStatistics_Button";
+            // 
+            // cbbPacketStatistics
+            // 
+            resources.ApplyResources(this.cbbPacketStatistics, "cbbPacketStatistics");
+            this.cbbPacketStatistics.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbPacketStatistics.FormattingEnabled = true;
+            this.cbbPacketStatistics.Items.AddRange(new object[] {
+            resources.GetString("cbbPacketStatistics.Items"),
+            resources.GetString("cbbPacketStatistics.Items1"),
+            resources.GetString("cbbPacketStatistics.Items2")});
+            this.cbbPacketStatistics.Name = "cbbPacketStatistics";
+            // 
+            // bPacketStatistics
+            // 
+            resources.ApplyResources(this.bPacketStatistics, "bPacketStatistics");
+            this.bPacketStatistics.Name = "bPacketStatistics";
+            this.bPacketStatistics.UseVisualStyleBackColor = true;
+            this.bPacketStatistics.Click += new System.EventHandler(this.bPacketStatistics_Click);
+            // 
+            // lPacketStatistics
+            // 
+            resources.ApplyResources(this.lPacketStatistics, "lPacketStatistics");
+            this.lPacketStatistics.Name = "lPacketStatistics";
             // 
             // tpComparison
             // 
@@ -2319,14 +2411,14 @@ namespace WPELibrary
             this.dgvLogList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -2347,8 +2439,8 @@ namespace WPELibrary
             // 
             // cLogID
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle13;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -2356,8 +2448,8 @@ namespace WPELibrary
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle14;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -2365,8 +2457,8 @@ namespace WPELibrary
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle15;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -2462,10 +2554,10 @@ namespace WPELibrary
             // 
             this.cIsCheck.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cIsCheck.DataPropertyName = "IsEnable";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle14.NullValue = false;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle16.NullValue = false;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsCheck.DefaultCellStyle = dataGridViewCellStyle16;
             this.cIsCheck.FalseValue = "false";
             resources.ApplyResources(this.cIsCheck, "cIsCheck");
             this.cIsCheck.Name = "cIsCheck";
@@ -2688,10 +2780,10 @@ namespace WPELibrary
             // 
             this.cIsEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cIsEnable.DataPropertyName = "IsEnable";
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle15.NullValue = false;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIsEnable.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle17.NullValue = false;
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIsEnable.DefaultCellStyle = dataGridViewCellStyle17;
             this.cIsEnable.FalseValue = "false";
             resources.ApplyResources(this.cIsEnable, "cIsEnable");
             this.cIsEnable.Name = "cIsEnable";
@@ -2916,10 +3008,10 @@ namespace WPELibrary
             // 
             this.cRIsEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cRIsEnable.DataPropertyName = "IsEnable";
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.NullValue = false;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cRIsEnable.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle18.NullValue = false;
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cRIsEnable.DefaultCellStyle = dataGridViewCellStyle18;
             this.cRIsEnable.FalseValue = "false";
             resources.ApplyResources(this.cRIsEnable, "cRIsEnable");
             this.cRIsEnable.Name = "cRIsEnable";
@@ -3244,10 +3336,10 @@ namespace WPELibrary
             // 
             // dataGridViewImageColumn1
             // 
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.NullValue = null;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle19.NullValue = null;
+            dataGridViewCellStyle19.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewImageColumn1.DefaultCellStyle = dataGridViewCellStyle19;
             resources.ApplyResources(this.dataGridViewImageColumn1, "dataGridViewImageColumn1");
             this.dataGridViewImageColumn1.Image = global::WPELibrary.Properties.Resources.sent;
             this.dataGridViewImageColumn1.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -3281,6 +3373,11 @@ namespace WPELibrary
             this.dataGridViewImageColumn4.Name = "dataGridViewImageColumn4";
             this.dataGridViewImageColumn4.ReadOnly = true;
             this.dataGridViewImageColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // bgwPacketStatistics
+            // 
+            this.bgwPacketStatistics.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketStatistics_DoWork);
+            this.bgwPacketStatistics.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwPacketStatistics_RunWorkerCompleted);
             // 
             // Socket_Form
             // 
@@ -3351,6 +3448,11 @@ namespace WPELibrary
             this.tlpPacketData.ResumeLayout(false);
             this.tlpHexBox.ResumeLayout(false);
             this.cmsHexBox.ResumeLayout(false);
+            this.tpPacketStatistics.ResumeLayout(false);
+            this.tlpPacketStatistics.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvPacketStatistics)).EndInit();
+            this.tlpPacketStatistics_Button.ResumeLayout(false);
+            this.tlpPacketStatistics_Button.PerformLayout();
             this.tpComparison.ResumeLayout(false);
             this.tlpComparison.ResumeLayout(false);
             this.tlpComparison.PerformLayout();
@@ -3761,5 +3863,13 @@ namespace WPELibrary
         private System.Windows.Forms.DataGridViewTextBoxColumn cFName;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn3;
         private System.Windows.Forms.DataGridViewImageColumn dataGridViewImageColumn4;
+        private System.Windows.Forms.TabPage tpPacketStatistics;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketStatistics;
+        private System.Windows.Forms.DataGridView dgvPacketStatistics;
+        private System.ComponentModel.BackgroundWorker bgwPacketStatistics;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketStatistics_Button;
+        private System.Windows.Forms.ComboBox cbbPacketStatistics;
+        private System.Windows.Forms.Button bPacketStatistics;
+        private System.Windows.Forms.Label lPacketStatistics;
     }
 }

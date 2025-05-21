@@ -779,7 +779,7 @@ namespace WPELibrary
                 this.cmsIcon_StopHook.Enabled = true;
 
                 this.SaveConfigs_Parameter();
-                Socket_Cache.FilterList.InitFilterList_ProgressionCount();
+                Socket_Cache.FilterList.InitFilterList_Count();
 
                 ws.StartHook();
 
@@ -1217,6 +1217,53 @@ namespace WPELibrary
         }
 
         #endregion        
+
+        #region//显示封包统计（异步）
+
+        private void bPacketStatistics_Click(object sender, EventArgs e)
+        {
+            if (!this.bgwPacketStatistics.IsBusy)
+            {
+                this.bgwPacketStatistics.RunWorkerAsync();
+            }
+        }
+
+        private void bgwPacketStatistics_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                if (this.cbbPacketStatistics.SelectedIndex == 0)
+                {
+                    e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketLen();
+                }
+                else if (this.cbbPacketStatistics.SelectedIndex == 1)
+                {
+                    e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketSocket();
+                }
+                else if (this.cbbPacketStatistics.SelectedIndex == 2)
+                {
+                    e.Result = Socket_Cache.SocketList.StatisticalFilterList_ByExecutionCount();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void bgwPacketStatistics_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                this.dgvPacketStatistics.DataSource = e.Result;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
 
         #region//封包编辑器菜单
 
@@ -2732,6 +2779,8 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
+
 
         #endregion        
     }

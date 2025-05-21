@@ -1,23 +1,23 @@
-﻿using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
-using System.Reflection;
-using Be.Windows.Forms;
-using System.Diagnostics;
+﻿using Be.Windows.Forms;
+using System;
 using System.Collections.Concurrent;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using System.IO;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
-using System.Text;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
-using System.Globalization;
-using System.Data.SQLite;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace WPELibrary.Lib
 {
@@ -2570,7 +2570,122 @@ namespace WPELibrary.Lib
                 }
 
                 return iResult;
-            }            
+            }
+
+            #endregion
+
+            #region//封包列表统计
+
+            public static DataTable StatisticalSocketList_ByPacketLen()
+            { 
+                DataTable dtReturn = new DataTable();
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_146), typeof(int));
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+
+                try
+                {
+                    Dictionary<int, int> packetLenCount = new Dictionary<int, int>();
+
+                    foreach (Socket_PacketInfo packetInfo in lstRecPacket)
+                    {
+                        int packetLen = packetInfo.PacketLen;
+
+                        if (packetLenCount.ContainsKey(packetLen))
+                        {
+                            packetLenCount[packetLen]++;
+                        }
+                        else
+                        {
+                            packetLenCount.Add(packetLen, 1);
+                        }
+                    }
+
+                    Dictionary<int, int> sortedByKeyAsc = Socket_Operation.SortDictionaryByKey(packetLenCount, ascending: true);
+
+                    foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
+                    {
+                        DataRow row = dtReturn.NewRow();
+                        row[0] = kvp.Key;
+                        row[1] = kvp.Value;
+                        dtReturn.Rows.Add(row);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable StatisticalSocketList_ByPacketSocket()
+            {
+                DataTable dtReturn = new DataTable();
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_147), typeof(int));
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+
+                try
+                {
+                    Dictionary<int, int> packetLenCount = new Dictionary<int, int>();
+
+                    foreach (Socket_PacketInfo packetInfo in lstRecPacket)
+                    {
+                        int packetLen = packetInfo.PacketSocket;
+
+                        if (packetLenCount.ContainsKey(packetLen))
+                        {
+                            packetLenCount[packetLen]++;
+                        }
+                        else
+                        {
+                            packetLenCount.Add(packetLen, 1);
+                        }
+                    }
+
+                    Dictionary<int, int> sortedByKeyAsc = Socket_Operation.SortDictionaryByKey(packetLenCount, ascending: true);
+
+                    foreach (KeyValuePair<int, int> kvp in sortedByKeyAsc)
+                    {
+                        DataRow row = dtReturn.NewRow();
+                        row[0] = kvp.Key;
+                        row[1] = kvp.Value;
+                        dtReturn.Rows.Add(row);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static DataTable StatisticalFilterList_ByExecutionCount()
+            {
+                DataTable dtReturn = new DataTable();
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_197), typeof(string));
+                dtReturn.Columns.Add(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_196), typeof(int));
+
+                try
+                {
+                    foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
+                    {
+                        if (sfi.ExecutionCount > 0)
+                        {
+                            DataRow row = dtReturn.NewRow();
+                            row[0] = sfi.FName;
+                            row[1] = sfi.ExecutionCount;
+                            dtReturn.Rows.Add(row);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
 
             #endregion
 
@@ -4193,14 +4308,15 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//初始化所有滤镜的递进次数
+            #region//初始化滤镜列表的计数
 
-            public static void InitFilterList_ProgressionCount()
+            public static void InitFilterList_Count()
             {
                 try
                 {
                     foreach (Socket_FilterInfo sfi in lstFilter)
                     {
+                        sfi.ExecutionCount = 0;
                         sfi.ProgressionCount = 0;
                     }
                 }
@@ -4471,6 +4587,7 @@ namespace WPELibrary.Lib
 
                             if (bDoFilter)
                             {
+                                sfi.ExecutionCount++;
                                 Socket_Cache.Filter.FilterExecute_CNT++;
 
                                 if (sfi.IsExecute)

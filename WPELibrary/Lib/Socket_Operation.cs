@@ -2786,6 +2786,46 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//对字典进行排序
+
+        public static Dictionary<int, int> SortDictionaryByKey(Dictionary<int, int> dictionary, bool ascending = true)
+        {
+            Dictionary<int, int> dReturn = new Dictionary<int, int>();
+
+            try
+            {
+                dReturn = ascending
+                ? dictionary.OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value)
+                : dictionary.OrderByDescending(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+
+            return dReturn;
+        }
+
+        public static Dictionary<int, int> SortDictionaryByValue(Dictionary<int, int> dictionary, bool ascending = true)
+        {
+            Dictionary<int, int> dReturn = new Dictionary<int, int>();
+
+            try
+            {
+                dReturn = ascending
+                ? dictionary.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value)
+                : dictionary.OrderByDescending(pair => pair.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return dReturn;
+        }
+
+        #endregion
+
         #region//支持取消的等待（异步）
 
         public static async Task DoSleepAsync(int MilliSecond, CancellationToken cancellationToken)
