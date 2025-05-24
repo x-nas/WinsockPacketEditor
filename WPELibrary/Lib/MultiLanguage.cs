@@ -56,7 +56,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_44 = { "请正确设置递进位置", "Please set the progressive position correctly" };
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
-        public static string[] MutiLan_47 = { "递进设置错误", "Progressive setting error" };
+        public static string[] MutiLan_47 = { "递进位置设置错误", "Progressive position setting error" };
         public static string[] MutiLan_48 = { "发送列表 - [ 序号 {0} ] - {1}", "Send List - [ ID {0} ] - {1}" };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜 {0}", "Filter {0}" };

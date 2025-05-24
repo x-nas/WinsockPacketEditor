@@ -117,13 +117,14 @@ namespace WPELibrary
             this.nudSendType_Times = new System.Windows.Forms.NumericUpDown();
             this.gbSendStep = new System.Windows.Forms.GroupBox();
             this.tlpSendStepSet = new System.Windows.Forms.TableLayoutPanel();
-            this.cbSendStep = new System.Windows.Forms.CheckBox();
-            this.lSendStep_Position = new System.Windows.Forms.Label();
-            this.lSendStep_Len_Value = new System.Windows.Forms.Label();
-            this.nudSendStep_Len = new System.Windows.Forms.NumericUpDown();
-            this.lSendStep_Len = new System.Windows.Forms.Label();
-            this.lSendStep_Position_Value = new System.Windows.Forms.Label();
-            this.nudSendStep_Position = new System.Windows.Forms.NumericUpDown();
+            this.lProgressionCarry = new System.Windows.Forms.Label();
+            this.nudProgressionCarry = new System.Windows.Forms.NumericUpDown();
+            this.cbProgressionCarry = new System.Windows.Forms.CheckBox();
+            this.cbProgressionPosition = new System.Windows.Forms.CheckBox();
+            this.lProgressionPosition = new System.Windows.Forms.Label();
+            this.nudProgressionStep = new System.Windows.Forms.NumericUpDown();
+            this.lProgressionContinuous = new System.Windows.Forms.Label();
+            this.nudProgressionPosition = new System.Windows.Forms.NumericUpDown();
             this.tlpButtons = new System.Windows.Forms.TableLayoutPanel();
             this.bSave = new System.Windows.Forms.Button();
             this.bClose = new System.Windows.Forms.Button();
@@ -149,8 +150,9 @@ namespace WPELibrary
             ((System.ComponentModel.ISupportInitialize)(this.nudSendType_Times)).BeginInit();
             this.gbSendStep.SuspendLayout();
             this.tlpSendStepSet.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Position)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionCarry)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionStep)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionPosition)).BeginInit();
             this.tlpButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -814,78 +816,99 @@ namespace WPELibrary
             // tlpSendStepSet
             // 
             resources.ApplyResources(this.tlpSendStepSet, "tlpSendStepSet");
-            this.tlpSendStepSet.Controls.Add(this.cbSendStep, 0, 0);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position, 1, 0);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len_Value, 3, 1);
-            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Len, 2, 1);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Len, 1, 1);
-            this.tlpSendStepSet.Controls.Add(this.lSendStep_Position_Value, 3, 0);
-            this.tlpSendStepSet.Controls.Add(this.nudSendStep_Position, 2, 0);
+            this.tlpSendStepSet.Controls.Add(this.lProgressionCarry, 2, 2);
+            this.tlpSendStepSet.Controls.Add(this.nudProgressionCarry, 1, 2);
+            this.tlpSendStepSet.Controls.Add(this.cbProgressionCarry, 0, 2);
+            this.tlpSendStepSet.Controls.Add(this.cbProgressionPosition, 0, 0);
+            this.tlpSendStepSet.Controls.Add(this.lProgressionPosition, 2, 0);
+            this.tlpSendStepSet.Controls.Add(this.nudProgressionStep, 1, 1);
+            this.tlpSendStepSet.Controls.Add(this.lProgressionContinuous, 2, 1);
+            this.tlpSendStepSet.Controls.Add(this.nudProgressionPosition, 1, 0);
             this.tlpSendStepSet.Name = "tlpSendStepSet";
             // 
-            // cbSendStep
+            // lProgressionCarry
             // 
-            resources.ApplyResources(this.cbSendStep, "cbSendStep");
-            this.cbSendStep.Name = "cbSendStep";
-            this.cbSendStep.UseVisualStyleBackColor = true;
-            this.cbSendStep.CheckedChanged += new System.EventHandler(this.cbSendStep_CheckedChanged);
+            resources.ApplyResources(this.lProgressionCarry, "lProgressionCarry");
+            this.lProgressionCarry.Name = "lProgressionCarry";
             // 
-            // lSendStep_Position
+            // nudProgressionCarry
             // 
-            resources.ApplyResources(this.lSendStep_Position, "lSendStep_Position");
-            this.lSendStep_Position.Name = "lSendStep_Position";
+            resources.ApplyResources(this.nudProgressionCarry, "nudProgressionCarry");
+            this.nudProgressionCarry.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.nudProgressionCarry.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudProgressionCarry.Name = "nudProgressionCarry";
+            this.nudProgressionCarry.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
-            // lSendStep_Len_Value
+            // cbProgressionCarry
             // 
-            resources.ApplyResources(this.lSendStep_Len_Value, "lSendStep_Len_Value");
-            this.lSendStep_Len_Value.Name = "lSendStep_Len_Value";
+            resources.ApplyResources(this.cbProgressionCarry, "cbProgressionCarry");
+            this.cbProgressionCarry.Name = "cbProgressionCarry";
+            this.cbProgressionCarry.UseVisualStyleBackColor = true;
+            this.cbProgressionCarry.CheckedChanged += new System.EventHandler(this.cbProgressionCarry_CheckedChanged);
             // 
-            // nudSendStep_Len
+            // cbProgressionPosition
             // 
-            resources.ApplyResources(this.nudSendStep_Len, "nudSendStep_Len");
-            this.nudSendStep_Len.Maximum = new decimal(new int[] {
+            resources.ApplyResources(this.cbProgressionPosition, "cbProgressionPosition");
+            this.cbProgressionPosition.Name = "cbProgressionPosition";
+            this.cbProgressionPosition.UseVisualStyleBackColor = true;
+            this.cbProgressionPosition.CheckedChanged += new System.EventHandler(this.cbProgressionPosition_CheckedChanged);
+            // 
+            // lProgressionPosition
+            // 
+            resources.ApplyResources(this.lProgressionPosition, "lProgressionPosition");
+            this.lProgressionPosition.Name = "lProgressionPosition";
+            // 
+            // nudProgressionStep
+            // 
+            resources.ApplyResources(this.nudProgressionStep, "nudProgressionStep");
+            this.nudProgressionStep.Maximum = new decimal(new int[] {
             255,
             0,
             0,
             0});
-            this.nudSendStep_Len.Minimum = new decimal(new int[] {
+            this.nudProgressionStep.Minimum = new decimal(new int[] {
             255,
             0,
             0,
             -2147483648});
-            this.nudSendStep_Len.Name = "nudSendStep_Len";
-            this.nudSendStep_Len.Value = new decimal(new int[] {
+            this.nudProgressionStep.Name = "nudProgressionStep";
+            this.nudProgressionStep.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudSendStep_Len.ValueChanged += new System.EventHandler(this.nudStepLen_ValueChanged);
             // 
-            // lSendStep_Len
+            // lProgressionContinuous
             // 
-            resources.ApplyResources(this.lSendStep_Len, "lSendStep_Len");
-            this.lSendStep_Len.Name = "lSendStep_Len";
+            resources.ApplyResources(this.lProgressionContinuous, "lProgressionContinuous");
+            this.lProgressionContinuous.Name = "lProgressionContinuous";
             // 
-            // lSendStep_Position_Value
+            // nudProgressionPosition
             // 
-            resources.ApplyResources(this.lSendStep_Position_Value, "lSendStep_Position_Value");
-            this.lSendStep_Position_Value.Name = "lSendStep_Position_Value";
-            // 
-            // nudSendStep_Position
-            // 
-            resources.ApplyResources(this.nudSendStep_Position, "nudSendStep_Position");
-            this.nudSendStep_Position.Maximum = new decimal(new int[] {
-            99999,
+            resources.ApplyResources(this.nudProgressionPosition, "nudProgressionPosition");
+            this.nudProgressionPosition.Maximum = new decimal(new int[] {
+            999999,
             0,
             0,
             0});
-            this.nudSendStep_Position.Name = "nudSendStep_Position";
-            this.nudSendStep_Position.Value = new decimal(new int[] {
+            this.nudProgressionPosition.Name = "nudProgressionPosition";
+            this.nudProgressionPosition.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.nudSendStep_Position.ValueChanged += new System.EventHandler(this.nudStepIndex_ValueChanged);
             // 
             // tlpButtons
             // 
@@ -967,8 +990,9 @@ namespace WPELibrary
             this.gbSendStep.ResumeLayout(false);
             this.tlpSendStepSet.ResumeLayout(false);
             this.tlpSendStepSet.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Len)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSendStep_Position)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionCarry)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionStep)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionPosition)).EndInit();
             this.tlpButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -1065,15 +1089,16 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudSendType_Interval;
         private System.Windows.Forms.NumericUpDown nudSendType_Times;
         private System.Windows.Forms.TableLayoutPanel tlpSendStepSet;
-        private System.Windows.Forms.CheckBox cbSendStep;
-        private System.Windows.Forms.Label lSendStep_Position;
-        private System.Windows.Forms.Label lSendStep_Len_Value;
-        private System.Windows.Forms.NumericUpDown nudSendStep_Len;
-        private System.Windows.Forms.Label lSendStep_Len;
-        private System.Windows.Forms.Label lSendStep_Position_Value;
-        private System.Windows.Forms.NumericUpDown nudSendStep_Position;
+        private System.Windows.Forms.CheckBox cbProgressionPosition;
+        private System.Windows.Forms.Label lProgressionPosition;
+        private System.Windows.Forms.NumericUpDown nudProgressionStep;
+        private System.Windows.Forms.Label lProgressionContinuous;
+        private System.Windows.Forms.NumericUpDown nudProgressionPosition;
         private System.Windows.Forms.RadioButton rbSendType_Times;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
         private System.Windows.Forms.ToolStripComboBox tscbSendList;
+        private System.Windows.Forms.CheckBox cbProgressionCarry;
+        private System.Windows.Forms.NumericUpDown nudProgressionCarry;
+        private System.Windows.Forms.Label lProgressionCarry;
     }
 }

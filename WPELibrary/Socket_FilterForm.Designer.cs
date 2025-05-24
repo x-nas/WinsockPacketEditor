@@ -71,8 +71,12 @@ namespace WPELibrary
             this.tlpFilterParameter = new System.Windows.Forms.TableLayoutPanel();
             this.gbProgression = new System.Windows.Forms.GroupBox();
             this.tlpProgression = new System.Windows.Forms.TableLayoutPanel();
-            this.nudProgressionStep = new System.Windows.Forms.NumericUpDown();
+            this.nudProgressionCarry = new System.Windows.Forms.NumericUpDown();
             this.lProgressionStep = new System.Windows.Forms.Label();
+            this.nudProgressionStep = new System.Windows.Forms.NumericUpDown();
+            this.lProgressionCarry = new System.Windows.Forms.Label();
+            this.cbProgressionContinuous = new System.Windows.Forms.CheckBox();
+            this.cbProgressionCarry = new System.Windows.Forms.CheckBox();
             this.gbFilterAppoint = new System.Windows.Forms.GroupBox();
             this.tlpFilterAppoint = new System.Windows.Forms.TableLayoutPanel();
             this.tlpFilterAppoint_Socket = new System.Windows.Forms.TableLayoutPanel();
@@ -137,6 +141,7 @@ namespace WPELibrary
             this.tlpFilterParameter.SuspendLayout();
             this.gbProgression.SuspendLayout();
             this.tlpProgression.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionCarry)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudProgressionStep)).BeginInit();
             this.gbFilterAppoint.SuspendLayout();
             this.tlpFilterAppoint.SuspendLayout();
@@ -493,9 +498,38 @@ namespace WPELibrary
             // tlpProgression
             // 
             resources.ApplyResources(this.tlpProgression, "tlpProgression");
+            this.tlpProgression.Controls.Add(this.nudProgressionCarry, 1, 1);
+            this.tlpProgression.Controls.Add(this.lProgressionStep, 2, 0);
             this.tlpProgression.Controls.Add(this.nudProgressionStep, 1, 0);
-            this.tlpProgression.Controls.Add(this.lProgressionStep, 0, 0);
+            this.tlpProgression.Controls.Add(this.lProgressionCarry, 2, 1);
+            this.tlpProgression.Controls.Add(this.cbProgressionContinuous, 0, 0);
+            this.tlpProgression.Controls.Add(this.cbProgressionCarry, 0, 1);
             this.tlpProgression.Name = "tlpProgression";
+            // 
+            // nudProgressionCarry
+            // 
+            resources.ApplyResources(this.nudProgressionCarry, "nudProgressionCarry");
+            this.nudProgressionCarry.Maximum = new decimal(new int[] {
+            999999,
+            0,
+            0,
+            0});
+            this.nudProgressionCarry.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudProgressionCarry.Name = "nudProgressionCarry";
+            this.nudProgressionCarry.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lProgressionStep
+            // 
+            resources.ApplyResources(this.lProgressionStep, "lProgressionStep");
+            this.lProgressionStep.Name = "lProgressionStep";
             // 
             // nudProgressionStep
             // 
@@ -517,10 +551,23 @@ namespace WPELibrary
             0,
             0});
             // 
-            // lProgressionStep
+            // lProgressionCarry
             // 
-            resources.ApplyResources(this.lProgressionStep, "lProgressionStep");
-            this.lProgressionStep.Name = "lProgressionStep";
+            resources.ApplyResources(this.lProgressionCarry, "lProgressionCarry");
+            this.lProgressionCarry.Name = "lProgressionCarry";
+            // 
+            // cbProgressionContinuous
+            // 
+            resources.ApplyResources(this.cbProgressionContinuous, "cbProgressionContinuous");
+            this.cbProgressionContinuous.Name = "cbProgressionContinuous";
+            this.cbProgressionContinuous.UseVisualStyleBackColor = true;
+            // 
+            // cbProgressionCarry
+            // 
+            resources.ApplyResources(this.cbProgressionCarry, "cbProgressionCarry");
+            this.cbProgressionCarry.Name = "cbProgressionCarry";
+            this.cbProgressionCarry.UseVisualStyleBackColor = true;
+            this.cbProgressionCarry.CheckedChanged += new System.EventHandler(this.cbProgressionCarry_CheckedChanged);
             // 
             // gbFilterAppoint
             // 
@@ -941,6 +988,7 @@ namespace WPELibrary
             this.gbProgression.ResumeLayout(false);
             this.tlpProgression.ResumeLayout(false);
             this.tlpProgression.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProgressionCarry)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudProgressionStep)).EndInit();
             this.gbFilterAppoint.ResumeLayout(false);
             this.tlpFilterAppoint.ResumeLayout(false);
@@ -1033,7 +1081,7 @@ namespace WPELibrary
         private System.Windows.Forms.GroupBox gbProgression;
         private System.Windows.Forms.TableLayoutPanel tlpProgression;
         private System.Windows.Forms.NumericUpDown nudProgressionStep;
-        private System.Windows.Forms.Label lProgressionStep;
+        private System.Windows.Forms.Label lProgressionCarry;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Progression_Enable;
         private System.Windows.Forms.ToolStripMenuItem cmsDGV_Progression_Disable;
@@ -1054,5 +1102,9 @@ namespace WPELibrary
         private System.Windows.Forms.NumericUpDown nudFilter_SocketContent;
         private System.Windows.Forms.NumericUpDown nudFilter_LengthContent_To;
         private System.Windows.Forms.Label lAppointLengthSplit;
+        private System.Windows.Forms.CheckBox cbProgressionContinuous;
+        private System.Windows.Forms.CheckBox cbProgressionCarry;
+        private System.Windows.Forms.NumericUpDown nudProgressionCarry;
+        private System.Windows.Forms.Label lProgressionStep;
     }
 }

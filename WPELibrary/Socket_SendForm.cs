@@ -46,8 +46,9 @@ namespace WPELibrary
             this.bSendStop.Enabled = false;
 
             this.InitHexBox();
-            this.InitSendInfo();
-            this.InitSendParameters();
+            this.InitSendInfo();            
+            this.SendTypeChanged();
+            this.ProgressionPositionChange();
         }
 
         private void Socket_SendForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -106,87 +107,44 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void InitSendParameters()
-        {
-            try
-            {  
-                this.SendTypeChanged();
-                this.SendStepChanged();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         #endregion
 
-        #region//显示递进数据
+        #region//递进设置
 
-        private void cbSendStep_CheckedChanged(object sender, EventArgs e)
+        private void cbProgressionPosition_CheckedChanged(object sender, EventArgs e)
         {
-            this.SendStepChanged();
+            this.ProgressionPositionChange();
         }
 
-        private void SendStepChanged()
+        private void ProgressionPositionChange()
         {
-            try
+            if (this.cbProgressionPosition.Checked)
             {
-                if (this.cbSendStep.Checked)
-                {
-                    this.nudSendStep_Position.Enabled = true;
-                    this.nudSendStep_Len.Enabled = true;
-                }
-                else
-                {
-                    this.nudSendStep_Position.Enabled = false;
-                    this.nudSendStep_Len.Enabled = false;
-                }
+                this.cbProgressionCarry.Enabled = true;
+                this.nudProgressionPosition.Enabled = true;
+                this.nudProgressionStep.Enabled = true;
+
+                this.ProgressionCarryChange();
             }
-            catch (Exception ex)
+            else
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+                this.cbProgressionCarry.Enabled = false;
+                this.nudProgressionPosition.Enabled = false;
+                this.nudProgressionStep.Enabled = false;
+                this.nudProgressionCarry.Enabled = false;
+            }          
         }
 
-        private void nudStepIndex_ValueChanged(object sender, EventArgs e)
+        private void cbProgressionCarry_CheckedChanged(object sender, EventArgs e)
         {
-            this.ShowStepValue();
+            this.ProgressionCarryChange();
         }
 
-        private void nudStepLen_ValueChanged(object sender, EventArgs e)
+        private void ProgressionCarryChange()
         {
-            this.ShowStepValue();
-        }
-
-        private void ShowStepValue()
-        {
-            string sStepHex = string.Empty;
-            string sStepHex_New = string.Empty;
-
-            try
-            {
-                int iStepPosition = (int)this.nudSendStep_Position.Value;                
-                int iStepLen = (int)this.nudSendStep_Len.Value;
-
-                if (hbPacketData.ByteProvider != null && hbPacketData.ByteProvider.Length > iStepPosition)
-                {
-                    byte bStepBuffer = hbPacketData.ByteProvider.ReadByte(iStepPosition);
-                    byte bStepBuffer_New = Socket_Operation.GetStepByte(bStepBuffer, iStepLen);
-
-                    sStepHex = bStepBuffer.ToString("X2");
-                    sStepHex_New = bStepBuffer_New.ToString("X2");
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            this.lSendStep_Position_Value.Text = sStepHex;
-            this.lSendStep_Len_Value.Text = sStepHex_New;
+            this.nudProgressionCarry.Enabled = this.cbProgressionCarry.Checked;
         }
 
         #endregion        
@@ -244,9 +202,11 @@ namespace WPELibrary
                     return false;
                 }
 
-                if (this.cbSendStep.Checked)
+                if (this.cbProgressionPosition.Checked)
                 {
-                    if (this.lSendStep_Position_Value.Text.Equals("") || this.lSendStep_Len_Value.Text.Equals(""))
+                    int iProgressionPosition = (int)this.nudProgressionPosition.Value;
+
+                    if (iProgressionPosition >= hbPacketData.ByteProvider.Length)
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_47));
                         return false;
@@ -304,10 +264,8 @@ namespace WPELibrary
             try
             {
                 int iSocket = (int)this.nudSendSocket_Socket.Value;
-
                 int iSend_Interval = (int)this.nudSendType_Interval.Value;
                 int iSend_Times = (int)this.nudSendType_Times.Value;
-
                 string sIPFrom = this.txtIPFrom.Text.Trim();
                 string sIPTo = this.txtIPTo.Text.Trim();
 
@@ -316,14 +274,16 @@ namespace WPELibrary
 
                 if (this.rbSendType_Continuously.Checked)
                 {
+                    int iSendCount = 0;
                     while (!bgwSendPacket.CancellationPending)
                     {
-                        this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
+                        this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff, iSendCount);
+                        iSendCount++;
 
                         if (iSend_Interval > 0)
                         {
                             Socket_Operation.DoSleepAsync(iSend_Interval, this.cts.Token).Wait();
-                        }                        
+                        }
                     }
                 }
                 else
@@ -336,7 +296,7 @@ namespace WPELibrary
                         }
                         else
                         {
-                            this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff);
+                            this.DoSendPacket(iSocket, sIPFrom, sIPTo, bBuff, i);
 
                             if (iSend_Interval > 0)
                             {
@@ -372,16 +332,43 @@ namespace WPELibrary
             }
         }
 
-        private void DoSendPacket(int iSocket, string sIPFrom, string sIPTo, byte[] bSendBuff)
+        private void DoSendPacket(int iSocket, string sIPFrom, string sIPTo, byte[] bSendBuff, int SendCount)
         {
             try
             {
-                if (this.cbSendStep.Checked)
+                if (this.cbProgressionPosition.Checked)
                 {
-                    int iStepIndex = (int)this.nudSendStep_Position.Value;
-                    int iStepLen = (int)this.nudSendStep_Len.Value;
+                    int iCarryCount = 0;
+                    int iIndex = (int)this.nudProgressionPosition.Value;
+                    int iStep = (int)this.nudProgressionStep.Value;
 
-                    bSendBuff = Socket_Operation.GetStepBytes(bSendBuff, iStepIndex, iStepLen);
+                    byte bValue = bSendBuff[iIndex];
+                    bValue = Socket_Operation.GetStepByte(bValue, iStep, out iCarryCount);
+                    bSendBuff[iIndex] = bValue;
+
+                    if (this.cbProgressionCarry.Checked && iCarryCount > 0)
+                    {
+                        for (int i = 0; i < this.nudProgressionCarry.Value; i++)
+                        {
+                            int iIndexPre = iIndex - (i + 1);
+
+                            if (iIndexPre > -1)
+                            {
+                                byte bValuePrev = bSendBuff[iIndexPre];
+                                bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
+                                bSendBuff[iIndexPre] = bValuePrev;
+
+                                if (iCarryCount == 0)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
                 }
 
                 bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sIPFrom, sIPTo, bSendBuff);
@@ -637,7 +624,7 @@ namespace WPELibrary
             try
             {
                 int iSelectIndex = (int)hbPacketData.SelectionStart;
-                this.nudSendStep_Position.Value = iSelectIndex;                  
+                this.nudProgressionPosition.Value = iSelectIndex;                  
 
                 string sPacketDataPosition = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_24), hbPacketData.CurrentLine, hbPacketData.CurrentPositionInLine, iSelectIndex);
 
@@ -910,6 +897,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
 
 
         #endregion

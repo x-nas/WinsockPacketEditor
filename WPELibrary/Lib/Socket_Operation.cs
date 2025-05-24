@@ -2130,42 +2130,18 @@ namespace WPELibrary.Lib
 
         #endregion        
 
-        #region//获取指定步长的Byte
+        #region//获取指定步长的 Byte
 
-        public static byte GetStepByte(byte bStepByte, int iStepLen)
+        public static byte GetStepByte(byte bStepByte, int iStepLen, out int iCarryCount)
         {
             int iStepValue = bStepByte + iStepLen;
-
+            iCarryCount = iStepValue / 256;          
             iStepValue = (iStepValue % 256 + 256) % 256;
 
             return (byte)iStepValue;
         }
 
-        #endregion
-
-        #region//获取递进后的Byte[]
-
-        public static byte[] GetStepBytes(byte[] bStepBuffer, int iStepPosition, int iStepLen)
-        {
-            byte[] bReturn = null;
-
-            try
-            {
-                byte bStepByte = bStepBuffer[iStepPosition];
-
-                bStepBuffer[iStepPosition] = Socket_Operation.GetStepByte(bStepByte, iStepLen);
-
-                bReturn = bStepBuffer;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #region//获取字节长度对应的字符串
 

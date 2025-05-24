@@ -257,31 +257,34 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSendSocket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 74</value>
+    <value>268, 84</value>
   </data>
   <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>81, 30</value>
+    <value>78, 21</value>
   </data>
   <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 21</value>
+    <value>190, 21</value>
+  </data>
+  <data name="lSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 24</value>
   </data>
   <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 21</value>
+    <value>72, 15</value>
   </data>
   <data name="lSendSocket_Len.Text" xml:space="preserve">
     <value>Length:</value>
   </data>
   <data name="lSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 21</value>
+    <value>72, 15</value>
   </data>
   <data name="lSendSocket_Socket.Text" xml:space="preserve">
     <value>Use Socket:</value>
   </data>
   <data name="nudSendSocket_Socket.Location" type="System.Drawing.Point, System.Drawing">
-    <value>81, 3</value>
+    <value>78, 0</value>
   </data>
   <data name="nudSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>184, 21</value>
+    <value>190, 21</value>
   </data>
   <data name="gbSendType.Text" xml:space="preserve">
     <value>[ Send ]</value>
@@ -290,82 +293,122 @@
     <value>3, 17</value>
   </data>
   <data name="tlpSendType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>361, 74</value>
+    <value>361, 84</value>
   </data>
   <data name="rbSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
+    <value>90, 19</value>
   </data>
   <data name="rbSendType_Times.Text" xml:space="preserve">
     <value>Send:</value>
   </data>
+  <data name="rbSendType_Continuously.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 28</value>
+  </data>
   <data name="rbSendType_Continuously.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 21</value>
+    <value>90, 19</value>
   </data>
   <data name="rbSendType_Continuously.Text" xml:space="preserve">
-    <value>continuous:</value>
+    <value>Continuous:</value>
+  </data>
+  <data name="lSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 19</value>
   </data>
   <data name="lSendType_Times.Text" xml:space="preserve">
     <value>Times</value>
+  </data>
+  <data name="lSendType_Int.Location" type="System.Drawing.Point, System.Drawing">
+    <value>284, 28</value>
+  </data>
+  <data name="lSendType_Int.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 19</value>
   </data>
   <data name="lSendType_Int.Text" xml:space="preserve">
     <value>Delay (ms)</value>
   </data>
   <data name="nudSendType_Interval.Location" type="System.Drawing.Point, System.Drawing">
-    <value>97, 30</value>
+    <value>96, 25</value>
   </data>
   <data name="nudSendType_Interval.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 21</value>
+    <value>185, 21</value>
   </data>
   <data name="nudSendType_Times.Location" type="System.Drawing.Point, System.Drawing">
-    <value>97, 3</value>
+    <value>96, 0</value>
   </data>
   <data name="nudSendType_Times.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 21</value>
+    <value>185, 21</value>
   </data>
   <data name="gbSendStep.Text" xml:space="preserve">
-    <value>[ Progressively ]</value>
+    <value>[ Progression ]</value>
   </data>
   <data name="tlpSendStepSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpSendStepSet.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>269, 74</value>
+    <value>269, 84</value>
   </data>
-  <data name="cbSendStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 21</value>
+  <data name="lProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>215, 52</value>
   </data>
-  <data name="cbSendStep.Text" xml:space="preserve">
-    <value>Enable</value>
+  <data name="lProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 19</value>
   </data>
-  <data name="lSendStep_Position.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 3</value>
+  <data name="lProgressionCarry.Text" xml:space="preserve">
+    <value>Digit</value>
   </data>
-  <data name="lSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
+  <data name="nudProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>74, 49</value>
   </data>
-  <data name="lSendStep_Position.Text" xml:space="preserve">
-    <value>Position:</value>
+  <data name="nudProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 21</value>
   </data>
-  <data name="nudSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 30</value>
+  <data name="cbProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 52</value>
   </data>
-  <data name="nudSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+  <data name="cbProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 19</value>
   </data>
-  <data name="lSendStep_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 30</value>
+  <data name="cbProgressionCarry.Text" xml:space="preserve">
+    <value>Carry:</value>
   </data>
-  <data name="lSendStep_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 21</value>
+  <data name="cbProgressionPosition.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 19</value>
   </data>
-  <data name="lSendStep_Len.Text" xml:space="preserve">
-    <value>Step:</value>
+  <data name="cbProgressionPosition.Text" xml:space="preserve">
+    <value>Enable:</value>
   </data>
-  <data name="nudSendStep_Position.Location" type="System.Drawing.Point, System.Drawing">
-    <value>134, 3</value>
+  <data name="lProgressionPosition.Location" type="System.Drawing.Point, System.Drawing">
+    <value>215, 3</value>
   </data>
-  <data name="nudSendStep_Position.Size" type="System.Drawing.Size, System.Drawing">
-    <value>92, 21</value>
+  <data name="lProgressionPosition.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 19</value>
+  </data>
+  <data name="lProgressionPosition.Text" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>74, 25</value>
+  </data>
+  <data name="nudProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 21</value>
+  </data>
+  <data name="lProgressionContinuous.Location" type="System.Drawing.Point, System.Drawing">
+    <value>215, 28</value>
+  </data>
+  <data name="lProgressionContinuous.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 18</value>
+  </data>
+  <data name="lProgressionContinuous.Text" xml:space="preserve">
+    <value>Step</value>
+  </data>
+  <data name="nudProgressionPosition.Location" type="System.Drawing.Point, System.Drawing">
+    <value>74, 0</value>
+  </data>
+  <data name="nudProgressionPosition.Size" type="System.Drawing.Size, System.Drawing">
+    <value>138, 21</value>
   </data>
   <data name="bSave.Text" xml:space="preserve">
     <value>Save (&amp;S)</value>

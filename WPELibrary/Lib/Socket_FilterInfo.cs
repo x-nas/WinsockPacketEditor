@@ -240,6 +240,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否连续递进
+
+        protected bool isprogressioncontinuous;
+
+        public bool IsProgressionContinuous
+        {
+            get { return isprogressioncontinuous; }
+            set { isprogressioncontinuous = value; }
+        }
+
+        #endregion
+
         #region//递进步长
 
         protected decimal progressionstep;
@@ -248,6 +260,30 @@ namespace WPELibrary.Lib
         {
             get { return progressionstep; }
             set { progressionstep = value; }
+        }
+
+        #endregion
+
+        #region//是否进位递进
+
+        protected bool isprogressioncarry;
+
+        public bool IsProgressionCarry
+        {
+            get { return isprogressioncarry; }
+            set { isprogressioncarry = value; }
+        }
+
+        #endregion
+
+        #region//进位位数
+
+        protected decimal progressioncarrynumber;
+
+        public decimal ProgressionCarryNumber
+        {
+            get { return progressioncarrynumber; }
+            set { progressioncarrynumber = value; }
         }
 
         #endregion
@@ -323,7 +359,10 @@ namespace WPELibrary.Lib
             Socket_Cache.Filter.FilterFunction FFunction, 
             Socket_Cache.Filter.FilterStartFrom FStartFrom,
             bool IsProgressionDone,
+            bool IsProgressionContinuous,
             decimal ProgressionStep,
+            bool IsProgressionCarry,
+            decimal ProgressionCarryNumber,
             string ProgressionPosition,
             int ProgressionCount,
             string FSearch, 
@@ -349,7 +388,10 @@ namespace WPELibrary.Lib
             this.ffunction = FFunction;
             this.fstartfrom = FStartFrom;
             this.isprogressiondone = IsProgressionDone;
+            this.isprogressioncontinuous = IsProgressionContinuous;
             this.progressionstep = ProgressionStep;
+            this.isprogressioncarry = IsProgressionCarry;
+            this.progressioncarrynumber = ProgressionCarryNumber;
             this.progressionposition = ProgressionPosition;
             this.progressioncount = ProgressionCount;
             this.fsearch = FSearch;          

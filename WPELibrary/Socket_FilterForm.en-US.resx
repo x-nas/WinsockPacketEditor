@@ -230,14 +230,41 @@
   <data name="tlpProgression.Size" type="System.Drawing.Size, System.Drawing">
     <value>210, 63</value>
   </data>
-  <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 3</value>
+  <data name="nudProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 30</value>
+  </data>
+  <data name="lProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>153, 6</value>
   </data>
   <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 17</value>
+    <value>51, 21</value>
   </data>
   <data name="lProgressionStep.Text" xml:space="preserve">
-    <value>Step Value</value>
+    <value>Step</value>
+  </data>
+  <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 3</value>
+  </data>
+  <data name="lProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>153, 33</value>
+  </data>
+  <data name="lProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 21</value>
+  </data>
+  <data name="lProgressionCarry.Text" xml:space="preserve">
+    <value>Digit</value>
+  </data>
+  <data name="cbProgressionContinuous.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 21</value>
+  </data>
+  <data name="cbProgressionContinuous.Text" xml:space="preserve">
+    <value>Cont.</value>
+  </data>
+  <data name="cbProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 21</value>
+  </data>
+  <data name="cbProgressionCarry.Text" xml:space="preserve">
+    <value>Carry.</value>
   </data>
   <data name="gbFilterAppoint.Size" type="System.Drawing.Size, System.Drawing">
     <value>303, 85</value>

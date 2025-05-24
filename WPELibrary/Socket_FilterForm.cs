@@ -15,6 +15,7 @@ namespace WPELibrary
         private decimal FilterSocketContent = 1;        
         private decimal FilterPortContent = 1;
         private decimal FilterProgressionStep = 1;
+        private decimal FilterProgressionCarryNumber = 1;
         private string FilterName = string.Empty;
         private string FilterHeaderContent = string.Empty;
         private string FilterLengthContent = string.Empty;
@@ -26,6 +27,8 @@ namespace WPELibrary
         private bool FilterAppointSocket = false;
         private bool FilterAppointLength = false;
         private bool FilterAppointPort = false;
+        private bool IsProgressionContinuous = false;
+        private bool IsProgressionCarry = false;
         private Socket_Cache.Filter.FilterMode FilterMode;
         private Socket_Cache.Filter.FilterAction FilterAction;
         private Socket_Cache.Filter.FilterExecuteType FilterExecuteType;
@@ -100,7 +103,10 @@ namespace WPELibrary
                 this.RID = Socket_Cache.FilterList.lstFilter[FilterIndex].RID;
                 this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
                 this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
+                this.IsProgressionContinuous = Socket_Cache.FilterList.lstFilter[FilterIndex].IsProgressionContinuous;                
                 this.FilterProgressionStep = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionStep;
+                this.IsProgressionCarry = Socket_Cache.FilterList.lstFilter[FilterIndex].IsProgressionCarry;
+                this.FilterProgressionCarryNumber = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionCarryNumber;
                 this.FilterProgressionPosition = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionPosition;
                 this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
                 this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;
@@ -207,7 +213,11 @@ namespace WPELibrary
                 this.nudFilter_PortContent.Value = FilterPortContent;
                 this.FilterAppointPortChange();
 
+                this.cbProgressionContinuous.Checked = IsProgressionContinuous;
                 this.nudProgressionStep.Value = FilterProgressionStep;
+                this.cbProgressionCarry.Checked = IsProgressionCarry;
+                this.nudProgressionCarry.Value = FilterProgressionCarryNumber;
+                this.ProgressionCarryChange();
 
                 this.txtFilterName.Text = FilterName;
                 this.cbFilterFunction_Send.Checked = FilterFunction.Send;
@@ -672,6 +682,27 @@ namespace WPELibrary
 
         #endregion
 
+        #region//递进
+
+        private void cbProgressionCarry_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ProgressionCarryChange();
+        }
+
+        private void ProgressionCarryChange()
+        {
+            try
+            {
+                this.nudProgressionCarry.Enabled = this.cbProgressionCarry.Checked;
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示滤镜内容（异步）
 
         private void bgwFilterInfo_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -1112,10 +1143,11 @@ namespace WPELibrary
                     string sLengthContent_New = string.Empty;
                     decimal dSocketContent_New = 0;                    
                     decimal dPortContent_New = 0;
-                    decimal dProgressionStep_New = 0;                    
-                    int iProgressionCount = 0;                    
-                    bool bIsExecute;
-                    bool bAppointHeader, bAppointSocket, bAppointLength, bAppointPort;
+                    decimal dProgressionStep_New = 1;
+                    decimal dProgressionCarryNumber_New = 1;
+                    int iProgressionCount_New = 0;                    
+                    bool bIsExecute_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
+                    bool bAppointHeader_New, bAppointSocket_New, bAppointLength_New, bAppointPort_New;
                     StringBuilder sbProgression = new StringBuilder();
                     StringBuilder sbSearch = new StringBuilder();
                     StringBuilder sbModify = new StringBuilder();
@@ -1128,17 +1160,20 @@ namespace WPELibrary
                     Socket_Cache.Filter.FilterFunction FilterFunction_New;
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
 
-                    bIsExecute = this.cbFilterAction_Execute.Checked;
-                    bAppointHeader = this.cbFilter_AppointHeader.Checked;
-                    bAppointSocket = this.cbFilter_AppointSocket.Checked;
-                    bAppointLength = this.cbFilter_AppointLength.Checked;
-                    bAppointPort = this.cbFilter_AppointPort.Checked;
+                    bIsExecute_New = this.cbFilterAction_Execute.Checked;
+                    bAppointHeader_New = this.cbFilter_AppointHeader.Checked;
+                    bAppointSocket_New = this.cbFilter_AppointSocket.Checked;
+                    bAppointLength_New = this.cbFilter_AppointLength.Checked;
+                    bAppointPort_New = this.cbFilter_AppointPort.Checked;
+                    bIsProgressionContinuous_New = this.cbProgressionContinuous.Checked;
+                    bIsProgressionCarry_New = this.cbProgressionCarry.Checked;
 
                     sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
                     sLengthContent_New = this.nudFilter_LengthContent_From.Value.ToString() + "-" + this.nudFilter_LengthContent_To.Value.ToString();
                     dSocketContent_New = this.nudFilter_SocketContent.Value;                    
                     dPortContent_New = this.nudFilter_PortContent.Value;
-                    dProgressionStep_New = this.nudProgressionStep.Value;                    
+                    dProgressionStep_New = this.nudProgressionStep.Value;
+                    dProgressionCarryNumber_New = this.nudProgressionCarry.Value;
 
                     if (rbFilterMode_Normal.Checked)
                     {
@@ -1336,25 +1371,28 @@ namespace WPELibrary
                     Socket_Cache.Filter.UpdateFilter_ByFilterIndex(
                         this.FilterIndex,
                         sFName_New,
-                        bAppointHeader,
+                        bAppointHeader_New,
                         sHeaderContent_New,
-                        bAppointSocket,
+                        bAppointSocket_New,
                         dSocketContent_New,
-                        bAppointLength,
+                        bAppointLength_New,
                         sLengthContent_New,
-                        bAppointPort,
+                        bAppointPort_New,
                         dPortContent_New,
                         FilterMode_New,
                         FilterAction_New,
-                        bIsExecute,
+                        bIsExecute_New,
                         FilterExecuteType_New,
                         SID_New,
                         RID_New,
                         FilterFunction_New,
                         FilterStartFrom_New,
+                        bIsProgressionContinuous_New,
                         dProgressionStep_New,
+                        bIsProgressionCarry_New,
+                        dProgressionCarryNumber_New,
                         sProgression_New,
-                        iProgressionCount,
+                        iProgressionCount_New,
                         sSearch_New,
                         sModify_New);
 

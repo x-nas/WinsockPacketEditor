@@ -579,17 +579,83 @@
   <data name="tlpProgression.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
+  <data name="nudProgressionCarry.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 30</value>
+  </data>
+  <data name="nudProgressionCarry.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="nudProgressionCarry.TabIndex" type="System.Int32, mscorlib">
+    <value>39</value>
+  </data>
+  <data name="nudProgressionCarry.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudProgressionCarry.Name" xml:space="preserve">
+    <value>nudProgressionCarry</value>
+  </data>
+  <data name="&gt;&gt;nudProgressionCarry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudProgressionCarry.Parent" xml:space="preserve">
+    <value>tlpProgression</value>
+  </data>
+  <data name="&gt;&gt;nudProgressionCarry.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lProgressionStep.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lProgressionStep.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lProgressionStep.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
+    <value>167, 6</value>
+  </data>
+  <data name="lProgressionStep.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 21</value>
+  </data>
+  <data name="lProgressionStep.TabIndex" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <data name="lProgressionStep.Text" xml:space="preserve">
+    <value>步长</value>
+  </data>
+  <data name="&gt;&gt;lProgressionStep.Name" xml:space="preserve">
+    <value>lProgressionStep</value>
+  </data>
+  <data name="&gt;&gt;lProgressionStep.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lProgressionStep.Parent" xml:space="preserve">
+    <value>tlpProgression</value>
+  </data>
+  <data name="&gt;&gt;lProgressionStep.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="nudProgressionStep.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="nudProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 3</value>
+    <value>84, 3</value>
   </data>
   <data name="nudProgressionStep.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="nudProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
+    <value>80, 23</value>
   </data>
   <data name="nudProgressionStep.TabIndex" type="System.Int32, mscorlib">
     <value>34</value>
@@ -607,46 +673,103 @@
     <value>tlpProgression</value>
   </data>
   <data name="&gt;&gt;nudProgressionStep.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>2</value>
   </data>
-  <data name="lProgressionStep.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lProgressionCarry.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lProgressionStep.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lProgressionCarry.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lProgressionStep.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="lProgressionCarry.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lProgressionStep.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 6</value>
+  <data name="lProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>167, 33</value>
   </data>
-  <data name="lProgressionStep.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lProgressionCarry.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="lProgressionStep.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 17</value>
+  <data name="lProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>50, 21</value>
   </data>
-  <data name="lProgressionStep.TabIndex" type="System.Int32, mscorlib">
+  <data name="lProgressionCarry.TabIndex" type="System.Int32, mscorlib">
     <value>35</value>
   </data>
-  <data name="lProgressionStep.Text" xml:space="preserve">
-    <value>递进步长</value>
+  <data name="lProgressionCarry.Text" xml:space="preserve">
+    <value>位数</value>
   </data>
-  <data name="lProgressionStep.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
+  <data name="&gt;&gt;lProgressionCarry.Name" xml:space="preserve">
+    <value>lProgressionCarry</value>
   </data>
-  <data name="&gt;&gt;lProgressionStep.Name" xml:space="preserve">
-    <value>lProgressionStep</value>
-  </data>
-  <data name="&gt;&gt;lProgressionStep.Type" xml:space="preserve">
+  <data name="&gt;&gt;lProgressionCarry.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lProgressionStep.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lProgressionCarry.Parent" xml:space="preserve">
     <value>tlpProgression</value>
   </data>
-  <data name="&gt;&gt;lProgressionStep.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;lProgressionCarry.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="cbProgressionContinuous.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbProgressionContinuous.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbProgressionContinuous.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="cbProgressionContinuous.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cbProgressionContinuous.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="cbProgressionContinuous.Text" xml:space="preserve">
+    <value>连续递进</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionContinuous.Name" xml:space="preserve">
+    <value>cbProgressionContinuous</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionContinuous.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionContinuous.Parent" xml:space="preserve">
+    <value>tlpProgression</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionContinuous.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="cbProgressionCarry.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbProgressionCarry.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbProgressionCarry.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 33</value>
+  </data>
+  <data name="cbProgressionCarry.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 21</value>
+  </data>
+  <data name="cbProgressionCarry.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="cbProgressionCarry.Text" xml:space="preserve">
+    <value>进位递进</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionCarry.Name" xml:space="preserve">
+    <value>cbProgressionCarry</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionCarry.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionCarry.Parent" xml:space="preserve">
+    <value>tlpProgression</value>
+  </data>
+  <data name="&gt;&gt;cbProgressionCarry.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="tlpProgression.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -661,7 +784,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tlpProgression.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpProgression.Size" type="System.Drawing.Size, System.Drawing">
     <value>223, 63</value>
@@ -682,7 +805,7 @@
     <value>0</value>
   </data>
   <data name="tlpProgression.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudProgressionStep" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lProgressionStep" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudProgressionCarry" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lProgressionStep" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="nudProgressionStep" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lProgressionCarry" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbProgressionContinuous" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbProgressionCarry" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbProgression.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

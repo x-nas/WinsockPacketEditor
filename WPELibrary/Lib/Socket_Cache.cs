@@ -3107,7 +3107,7 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FilterFunction = new Socket_Cache.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                     Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
 
-                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                    Socket_Cache.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, string.Empty, string.Empty);
                 }
                 catch (Exception ex)
                 {
@@ -3141,7 +3141,7 @@ namespace WPELibrary.Lib
 
                         string sFSearch = Socket_Cache.Filter.GetFilterString_ByBytes(bBuffer);
 
-                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                        Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, sFSearch, string.Empty);
                     }
                 }
                 catch (Exception ex)
@@ -3171,7 +3171,10 @@ namespace WPELibrary.Lib
                 Socket_Cache.Filter.FilterFunction FilterFunction,
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom,
                 bool IsProgressionDone,
+                bool IsProgressionContinuous,
                 decimal ProgressionStep,
+                bool IsProgressionCarry,
+                decimal ProgressionCarryNumber,
                 string ProgressionPosition,
                 int ProgressionCount,
                 string FSearch,
@@ -3202,7 +3205,10 @@ namespace WPELibrary.Lib
                         FilterFunction,
                         FilterStartFrom,
                         IsProgressionDone,
+                        IsProgressionContinuous,
                         ProgressionStep,
+                        IsProgressionCarry,
+                        ProgressionCarryNumber,
                         ProgressionPosition,
                         ProgressionCount,
                         FSearch,
@@ -3240,7 +3246,10 @@ namespace WPELibrary.Lib
                 Guid RID,
                 Socket_Cache.Filter.FilterFunction FilterFunction,
                 Socket_Cache.Filter.FilterStartFrom FilterStartFrom,
+                bool IsProgressionContinuous,
                 decimal ProgressionStep,
+                bool IsProgressionCarry,
+                decimal ProgressionCarryNumber,
                 string ProgressionPosition,
                 int ProgressionCount,
                 string FSearch,
@@ -3267,7 +3276,10 @@ namespace WPELibrary.Lib
                         Socket_Cache.FilterList.lstFilter[iFIndex].RID = RID;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FFunction = FilterFunction;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom = FilterStartFrom;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].IsProgressionContinuous = IsProgressionContinuous;
                         Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep = ProgressionStep;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].IsProgressionCarry = IsProgressionCarry;
+                        Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionCarryNumber = ProgressionCarryNumber;
                         Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition = ProgressionPosition;
                         Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionCount = ProgressionCount;
                         Socket_Cache.FilterList.lstFilter[iFIndex].FSearch = FSearch;
@@ -3335,7 +3347,10 @@ namespace WPELibrary.Lib
                     Socket_Cache.Filter.FilterFunction FFunction = sfi.FFunction;
                     Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
                     bool IsProgressionDone = false;
+                    bool IsProgressionContinuous = sfi.IsProgressionContinuous;
                     decimal ProgressionStep = sfi.ProgressionStep;
+                    bool IsProgressionCarry = sfi.IsProgressionCarry;
+                    decimal ProgressionCarryNumber = sfi.ProgressionCarryNumber;
                     string ProgressionPosition = sfi.ProgressionPosition;
                     int ProgressionCount = 0;
                     string FSearch = sfi.FSearch;
@@ -3362,7 +3377,10 @@ namespace WPELibrary.Lib
                         FFunction,
                         FStartFrom,
                         IsProgressionDone,
+                        IsProgressionContinuous,
                         ProgressionStep,
+                        IsProgressionCarry,
+                        ProgressionCarryNumber,
                         ProgressionPosition,
                         ProgressionCount,
                         FSearch,
@@ -4114,6 +4132,7 @@ namespace WPELibrary.Lib
 
                     if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
                     {
+                        int iCarryCount = 0;
                         int iStep = ((int)sfi.ProgressionStep);
                         string[] slProgression = sfi.ProgressionPosition.Split(',');
 
@@ -4122,8 +4141,32 @@ namespace WPELibrary.Lib
                             if (!string.IsNullOrEmpty(sProgression) && int.TryParse(sProgression, out int iIndex) && iIndex >= 0 && iIndex < bufferSpan.Length)
                             {
                                 byte bValue = bufferSpan[iIndex];
-                                bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
+                                bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1), out iCarryCount);
                                 bufferSpan[iIndex] = bValue;
+
+                                if (sfi.IsProgressionCarry && iCarryCount > 0)
+                                {
+                                    for (int i = 0; i < sfi.ProgressionCarryNumber; i ++)
+                                    {
+                                        int iIndexPre = iIndex - (i + 1);
+
+                                        if (iIndexPre > -1)
+                                        {
+                                            byte bValuePrev = bufferSpan[iIndexPre];
+                                            bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
+                                            bufferSpan[iIndexPre] = bValuePrev;
+
+                                            if (iCarryCount == 0)
+                                            {
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
 
                                 sfi.IsProgressionDone = true;                            
                             }
@@ -4190,6 +4233,7 @@ namespace WPELibrary.Lib
 
                     if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
                     {
+                        int iCarryCount = 0;
                         int iStep = ((int)sfi.ProgressionStep);
                         string[] slProgression = sfi.ProgressionPosition.Split(',');
 
@@ -4205,8 +4249,32 @@ namespace WPELibrary.Lib
                                 if (iIndex > -1 && iIndex < bufferSpan.Length)
                                 {
                                     byte bValue = bufferSpan[iIndex];
-                                    bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1));
+                                    bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1), out iCarryCount);
                                     bufferSpan[iIndex] = bValue;
+
+                                    if (sfi.IsProgressionCarry && iCarryCount > 0)
+                                    {
+                                        for (int i = 0; i < sfi.ProgressionCarryNumber; i++)
+                                        {
+                                            int iIndexPre = iIndex - (i + 1);
+
+                                            if (iIndexPre > -1)
+                                            {
+                                                byte bValuePrev = bufferSpan[iIndexPre];
+                                                bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
+                                                bufferSpan[iIndexPre] = bValuePrev;
+
+                                                if (iCarryCount == 0)
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
 
                                     sfi.IsProgressionDone = true;
                                 }
@@ -4527,7 +4595,7 @@ namespace WPELibrary.Lib
                                             bDoFilter = true;
                                         }
 
-                                        if (sfi.IsProgressionDone)
+                                        if (sfi.IsProgressionDone && sfi.IsProgressionContinuous)
                                         {
                                             sfi.ProgressionCount++;
                                         }
@@ -4689,7 +4757,10 @@ namespace WPELibrary.Lib
                         Socket_Cache.Filter.FilterFunction FilterFunction = Socket_Cache.Filter.GetFilterFunction_ByString(dataRow["Function"].ToString());
                         Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString());
                         bool IsProgressionDone = false;
+                        bool IsProgressionContinuous = Convert.ToBoolean(dataRow["IsProgressionContinuous"]);
                         decimal FProgressionStep = Convert.ToDecimal(dataRow["ProgressionStep"]);
+                        bool IsProgressionCarry = Convert.ToBoolean(dataRow["IsProgressionCarry"]);
+                        decimal ProgressionCarryNumber = Convert.ToDecimal(dataRow["ProgressionCarryNumber"]);
                         string FProgressionPosition = dataRow["ProgressionPosition"].ToString();
                         int ProgressionCount = 0;
                         string FSearch = dataRow["Search"].ToString();
@@ -4716,7 +4787,10 @@ namespace WPELibrary.Lib
                             FilterFunction,
                             FilterStartFrom,
                             IsProgressionDone,
+                            IsProgressionContinuous,
                             FProgressionStep,
+                            IsProgressionCarry,
+                            ProgressionCarryNumber,
                             FProgressionPosition,
                             ProgressionCount,
                             FSearch,
@@ -4828,7 +4902,10 @@ namespace WPELibrary.Lib
                         string sRID = sfi.RID.ToString().ToUpper();
                         string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction);
                         string sFStartFrom = ((int)sfi.FStartFrom).ToString();
+                        string sIsProgressionContinuous = sfi.IsProgressionContinuous.ToString();
                         string sFProgressionStep = sfi.ProgressionStep.ToString();
+                        string sIsProgressionCarry = sfi.IsProgressionCarry.ToString();
+                        string sFProgressionCarryNumber = sfi.ProgressionCarryNumber.ToString();
                         string sFProgressionPosition = sfi.ProgressionPosition;
                         string sFSearch = sfi.FSearch;
                         string sFModify = sfi.FModify;
@@ -4854,7 +4931,10 @@ namespace WPELibrary.Lib
                             new XElement("RobotID", sRID),
                             new XElement("Function", sFFunction),
                             new XElement("StartFrom", sFStartFrom),
+                            new XElement("IsProgressionContinuous", sIsProgressionContinuous),
                             new XElement("ProgressionStep", sFProgressionStep),
+                            new XElement("IsProgressionCarry", sIsProgressionCarry),
+                            new XElement("ProgressionCarryNumber", sFProgressionCarryNumber),
                             new XElement("ProgressionPosition", sFProgressionPosition),
                             new XElement("Search", sFSearch),
                             new XElement("Modify", sFModify)
@@ -5085,10 +5165,28 @@ namespace WPELibrary.Lib
 
                         bool IsProgressionDone = false;
 
+                        bool bIsProgressionContinuous = false;
+                        if (xeFilter.Element("IsProgressionContinuous") != null)
+                        {
+                            bIsProgressionContinuous = bool.Parse(xeFilter.Element("IsProgressionContinuous").Value);
+                        }
+
                         decimal dFProgressionStep = 1;
                         if (xeFilter.Element("ProgressionStep") != null)
                         {
                             dFProgressionStep = decimal.Parse(xeFilter.Element("ProgressionStep").Value);
+                        }
+
+                        bool bIsProgressionCarry = false;
+                        if (xeFilter.Element("IsProgressionCarry") != null)
+                        {
+                            bIsProgressionCarry = bool.Parse(xeFilter.Element("IsProgressionCarry").Value);
+                        }
+
+                        decimal dFProgressionCarryNumber = 1;
+                        if (xeFilter.Element("ProgressionCarryNumber") != null)
+                        {
+                            dFProgressionCarryNumber = decimal.Parse(xeFilter.Element("ProgressionCarryNumber").Value);
                         }
 
                         string sFProgressionPosition = string.Empty;
@@ -5131,8 +5229,11 @@ namespace WPELibrary.Lib
                             gRID, 
                             FilterFunction, 
                             FilterStartFrom, 
-                            IsProgressionDone, 
-                            dFProgressionStep, 
+                            IsProgressionDone,
+                            bIsProgressionContinuous,
+                            dFProgressionStep,
+                            bIsProgressionCarry,
+                            dFProgressionCarryNumber,
                             sFProgressionPosition, 
                             iProgressionCount, 
                             sFSearch, 
@@ -8163,7 +8264,10 @@ namespace WPELibrary.Lib
                         sql += "Robot_GUID TEXT NOT NULL,";
                         sql += "Function TEXT NOT NULL,";
                         sql += "StartFrom INTEGER DEFAULT 0,";
+                        sql += "IsProgressionContinuous BOOLEAN DEFAULT 0,";
                         sql += "ProgressionStep INTEGER DEFAULT 1,";
+                        sql += "IsProgressionCarry BOOLEAN DEFAULT 0,";
+                        sql += "ProgressionCarryNumber INTEGER DEFAULT 1,";
                         sql += "ProgressionPosition TEXT,";
                         sql += "Search TEXT,";
                         sql += "Modify TEXT";
@@ -8257,7 +8361,10 @@ namespace WPELibrary.Lib
                         sql += "Robot_GUID,";
                         sql += "Function,";
                         sql += "StartFrom,";
+                        sql += "IsProgressionContinuous,";
                         sql += "ProgressionStep,";
+                        sql += "IsProgressionCarry,";
+                        sql += "ProgressionCarryNumber,";
                         sql += "ProgressionPosition,";
                         sql += "Search,";
                         sql += "Modify";
@@ -8281,7 +8388,10 @@ namespace WPELibrary.Lib
                         sql += "@Robot_GUID,";
                         sql += "@Function,";
                         sql += "@StartFrom,";
+                        sql += "@IsProgressionContinuous,";
                         sql += "@ProgressionStep,";
+                        sql += "@IsProgressionCarry,";
+                        sql += "@ProgressionCarryNumber,";
                         sql += "@ProgressionPosition,";
                         sql += "@Search,";
                         sql += "@Modify";
@@ -8308,7 +8418,10 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@Robot_GUID", sfi.RID.ToString().ToUpper());
                             cmd.Parameters.AddWithValue("@Function", Socket_Cache.Filter.GetFilterFunctionString(sfi.FFunction));
                             cmd.Parameters.AddWithValue("@StartFrom", sfi.FStartFrom);
+                            cmd.Parameters.AddWithValue("@IsProgressionContinuous", sfi.IsProgressionContinuous);
                             cmd.Parameters.AddWithValue("@ProgressionStep", sfi.ProgressionStep);
+                            cmd.Parameters.AddWithValue("@IsProgressionCarry", sfi.IsProgressionCarry);
+                            cmd.Parameters.AddWithValue("@ProgressionCarryNumber", sfi.ProgressionCarryNumber);
                             cmd.Parameters.AddWithValue("@ProgressionPosition", sfi.ProgressionPosition);
                             cmd.Parameters.AddWithValue("@Search", sfi.FSearch);
                             cmd.Parameters.AddWithValue("@Modify", sfi.FModify);
