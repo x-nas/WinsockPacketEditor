@@ -69,10 +69,12 @@ namespace WinsockPacketEditor
                     Socket_Operation.StopSystemProxy();
                 }
 
+                
+
                 this.SaveConfigs_Parameter();
 
                 Socket_Operation.StopRemoteMGT(this.RunMode);
-                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
+                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);                
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
             }
             catch (Exception ex)

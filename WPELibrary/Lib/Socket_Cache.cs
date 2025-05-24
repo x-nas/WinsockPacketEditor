@@ -385,14 +385,7 @@ namespace WPELibrary.Lib
             {
                 Uplink = 0,
                 Downlink = 1,
-            }
-
-            public struct IPAddressAndPort
-            {
-                public IPAddress IPAddress { get; set; }
-
-                public ushort Port { get; set; }
-            }
+            }            
 
             #endregion
 
@@ -638,16 +631,16 @@ namespace WPELibrary.Lib
                             ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                             ReadOnlySpan<byte> bServerTCP_IP = Socket_Cache.SocketProxy.ProxyTCP_IP.GetAddressBytes();
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
+                                                        
+                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS, out string AddressString);
                             
-                            string sIPString = Socket_Operation.GetIP_ByAddressType(spc.AddressType, bADDRESS);
-                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS);
-                            ushort uPort = ((ushort)epServer.Port);                            
-
-                            spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
                             spc.ServerSocket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                            spc.ServerAddress = Socket_Operation.GetServerAddress(sIPString, uPort, spc);                            
-                            spc.ClientAddress = Socket_Operation.GetClientAddress(sIPString, uPort, spc);
                             spc.ServerEndPoint = epServer;
+
+                            ushort uPort = ((ushort)epServer.Port);
+                            spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);                            
+                            spc.ServerAddress = Socket_Operation.GetServerAddress(spc.DomainType, AddressString, uPort);                            
+                            spc.ClientAddress = Socket_Operation.GetClientAddress(spc.ClientSocket, AddressString, uPort);                            
 
                             switch (spc.CommandType)
                             {
@@ -666,16 +659,32 @@ namespace WPELibrary.Lib
                                                     IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpIP), Socket_Cache.SocketProxy.EXTHttpPort);
                                                     spc.ServerSocket.Connect(HttpProxyEP);
 
-                                                    if (Socket_Operation.CheckHttpProxyState(spc, sIPString, uPort))
-                                                    {
-                                                        spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                        spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));                                                        
-                                                    }
-                                                    else
+                                                    byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
+                                                    spc.ServerSocket.Send(handshakeRequest);
+
+                                                    byte[] handshakeResponse = new byte[2];
+                                                    spc.ServerSocket.Receive(handshakeResponse);
+
+                                                    if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
                                                     {
                                                         Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        return;
                                                     }
+
+                                                    spc.ServerSocket.Send(bData.ToArray());
+
+                                                    byte[] connectResponse = new byte[10];
+                                                    spc.ServerSocket.Receive(connectResponse);
+
+                                                    if (connectResponse[1] != 0x00)
+                                                    {
+                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        return;
+                                                    }
+
+                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
                                                 }
                                                 else
                                                 {
@@ -703,16 +712,32 @@ namespace WPELibrary.Lib
                                                     IPEndPoint HttpsProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpsIP), Socket_Cache.SocketProxy.EXTHttpsPort);
                                                     spc.ServerSocket.Connect(HttpsProxyEP);
 
-                                                    if (Socket_Operation.CheckHttpProxyState(spc, sIPString, uPort))
-                                                    {
-                                                        spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                        spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));                                                        
-                                                    }
-                                                    else
+                                                    byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
+                                                    spc.ServerSocket.Send(handshakeRequest);
+
+                                                    byte[] handshakeResponse = new byte[2];
+                                                    spc.ServerSocket.Receive(handshakeResponse);
+
+                                                    if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
                                                     {
                                                         Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        return;
                                                     }
+
+                                                    spc.ServerSocket.Send(bData.ToArray());
+
+                                                    byte[] connectResponse = new byte[10];
+                                                    spc.ServerSocket.Receive(connectResponse);
+
+                                                    if (connectResponse[1] != 0x00)
+                                                    {
+                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        return;
+                                                    }
+
+                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
                                                 }
                                                 else
                                                 {
@@ -940,7 +965,7 @@ namespace WPELibrary.Lib
                                 spu.ClientUDP_EndPoint = remoteEndPoint;
 
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                                IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS);
+                                IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
 
                                 ReadOnlySpan<byte> bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
                                 if (!bUDP_Data.IsEmpty)

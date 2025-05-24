@@ -72,6 +72,7 @@ namespace WPELibrary
 
         private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
+            this.SaveConfigs_Parameter();
             this.ExitMainForm();
         }
 
@@ -123,9 +124,7 @@ namespace WPELibrary
         {
             try
             {
-                ws.ExitHook();
-
-                this.SaveConfigs_Parameter();
+                ws.ExitHook();                
                 this.niWPE.Visible = false;
                 
                 Socket_Operation.UnregisterHotKey();

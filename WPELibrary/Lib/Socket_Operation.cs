@@ -1,29 +1,29 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using System.Reflection;
+﻿using EasyHook;
+using Microsoft.Owin.Hosting;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Diagnostics;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Net;
+using System.Net.Http;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
-using System.Drawing;
 using WPELibrary.Lib.NativeMethods;
-using EasyHook;
-using Microsoft.Win32;
-using System.Collections.Generic;
-using System.Net.Http;
-using Microsoft.Owin.Hosting;
 using WPELibrary.Lib.WebAPI;
-using System.Management;
 
 namespace WPELibrary.Lib
 {   
@@ -1437,66 +1437,7 @@ namespace WPELibrary.Lib
             return bReturn;
         }
 
-        #endregion
-
-        #region//判断 Http 外部代理连接状态
-
-        public static bool CheckHttpProxyState(Socket_ProxyTCP spi, string targetAddress, ushort targetPort)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                ReadOnlySpan<byte> bRequest = Socket_Operation.BuildHttpProxyRequest(targetAddress, targetPort);
-                if (!bRequest.IsEmpty)
-                {
-                    Socket_Operation.SendTCPData(spi.ServerSocket, bRequest);                    
-
-                    Span<byte> buffer = stackalloc byte[4096];
-                    int bytesRead = spi.ServerSocket.Receive(buffer.ToArray());
-
-                    if (bytesRead > 0)
-                    {
-                        ReadOnlySpan<byte> responseBytes = buffer.Slice(0, bytesRead);
-                        string response = Encoding.UTF8.GetString(responseBytes.ToArray());
-
-                        if (response.StartsWith("HTTP/1.1 200"))
-                        {
-                            bReturn = true;
-                        }
-                    }
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        private static ReadOnlySpan<byte> BuildHttpProxyRequest(string targetAddress, ushort targetPort)
-        {
-            ReadOnlySpan<byte> bReturn = default;
-
-            try
-            {
-                StringBuilder requestBuilder = new StringBuilder();
-                requestBuilder.Append($"CONNECT {targetAddress}:{targetPort} HTTP/1.1\r\n");
-                requestBuilder.Append($"Host: {targetAddress}:{targetPort}\r\n");
-                requestBuilder.Append("Proxy-Connection: Keep-Alive\r\n\r\n");
-
-                bReturn = Encoding.UTF8.GetBytes(requestBuilder.ToString());
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;
-        }
-
-        #endregion
+        #endregion        
 
         #region//初始化滤镜的显示列
 
@@ -1952,94 +1893,75 @@ namespace WPELibrary.Lib
             }            
 
             return ipAddres;
-        }
+        }        
 
-        public static string GetIP_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
-        { 
-            string sReturn = string.Empty;
-
-            try
-            {
-                Socket_Cache.SocketProxy.IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
-                sReturn = result.IPAddress.ToString();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return sReturn;
-        }
-
-        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
+        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
         {
             IPEndPoint epReturn = null;
+            AddressString = string.Empty;
 
             try
             {
-                Socket_Cache.SocketProxy.IPAddressAndPort result = ExtractIPAddressAndPort(addressType, bData);
-                epReturn = new IPEndPoint(result.IPAddress, result.Port);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+                IPAddress ip = IPAddress.Any;
+                ushort port = 0;
 
-            return epReturn;
-        }
-
-        public static Socket_Cache.SocketProxy.IPAddressAndPort ExtractIPAddressAndPort(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData)
-        {
-            IPAddress ip = IPAddress.Any;
-            ushort port = 0;
-
-            try
-            {
                 switch (addressType)
                 {
                     case Socket_Cache.SocketProxy.AddressType.IPV4:
+
                         ip = new IPAddress(bData.Slice(0, 4).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(4, 2));
+
+                        AddressString = ip.ToString();
+
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
+
                         byte length = bData[0];
                         ReadOnlySpan<byte> domainBytes = bData.Slice(1, length);
-                        string sIPString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
+                        AddressString = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, domainBytes);
 
-                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(sIPString);
+                        Socket_Cache.SocketProxy.AddressType atType = Socket_Operation.GetAddressType_ByString(AddressString);
 
                         switch (atType)
                         {
                             case Socket_Cache.SocketProxy.AddressType.IPV4:
-                                ip = IPAddress.Parse(sIPString);
+                                ip = IPAddress.Parse(AddressString);
                                 break;
 
                             case Socket_Cache.SocketProxy.AddressType.IPV6:
-                                ip = IPAddress.Parse(sIPString);
+                                ip = IPAddress.Parse(AddressString);
                                 break;
 
                             case Socket_Cache.SocketProxy.AddressType.Domain:
-                                ip = Dns.GetHostEntry(sIPString).AddressList[0];
+                                ip = Dns.GetHostEntry(AddressString).AddressList[0];
                                 break;
                         }
 
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(1 + length, 2));
+
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPV6:
+
                         ip = new IPAddress(bData.Slice(0, 16).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(16, 2));
+
+                        AddressString = ip.ToString();
+
                         break;
                 }
+
+                epReturn = new IPEndPoint(ip, port);
             }
             catch (Exception ex)
-            {
+            {                
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return new Socket_Cache.SocketProxy.IPAddressAndPort { IPAddress = ip, Port = port };
-        }
+            return epReturn;
+        }        
 
         #endregion
 
@@ -2437,24 +2359,24 @@ namespace WPELibrary.Lib
 
         #region//获取远端地址
 
-        public static string GetServerAddress(string IP, ushort Port, Socket_ProxyTCP spc)
+        public static string GetServerAddress(Socket_Cache.SocketProxy.DomainType dtType, string Address, ushort Port)
         {
             string sReturn = string.Empty;
 
             try
             {
-                switch (spc.DomainType)
+                switch (dtType)
                 {
                     case Socket_Cache.SocketProxy.DomainType.Socket:
-                        sReturn = "socket://" + IP + ": " + Port;
+                        sReturn = "socket://" + Address + ": " + Port;
                         break;
 
                     case Socket_Cache.SocketProxy.DomainType.Http:
-                        sReturn = "http://" + IP;
+                        sReturn = "http://" + Address + ": " + Port; ;
                         break;
 
                     case Socket_Cache.SocketProxy.DomainType.Https:
-                        sReturn = "https://" + IP;
+                        sReturn = "https://" + Address + ": " + Port; ;
                         break;
                 }
             }
@@ -2470,16 +2392,19 @@ namespace WPELibrary.Lib
 
         #region//获取客户端地址
 
-        public static string GetClientAddress(string IP, ushort Port, Socket_ProxyTCP spi)
+        public static string GetClientAddress(Socket ClientSocket, string Address, ushort Port)
         {
             string sReturn = string.Empty;
 
             try
             {
-                if (spi.ClientSocket != null && spi.ClientSocket.RemoteEndPoint != null)
+                if (ClientSocket != null)
                 {
-                    int ClientPort = ((IPEndPoint)spi.ClientSocket.RemoteEndPoint).Port;
-                    sReturn = IP + ": " + Port + " [" + ClientPort + "]";
+                    if (ClientSocket.RemoteEndPoint != null)
+                    {
+                        int ClientPort = ((IPEndPoint)ClientSocket.RemoteEndPoint).Port;
+                        sReturn = Address + ": " + Port + " [" + ClientPort + "]";
+                    }                    
                 }                
             }
             catch (Exception ex)
