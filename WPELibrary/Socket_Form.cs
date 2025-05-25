@@ -1157,23 +1157,31 @@ namespace WPELibrary
 
         private void bgwSearch_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            if (e.Error == null && !e.Cancelled)
+            try
             {
-                int iSearchResultIndex = (int)e.Result;
-
-                if (iSearchResultIndex >= 0)
+                if (e.Error == null && !e.Cancelled && e.Result != null)
                 {
-                    this.dgvSocketList.Rows[iSearchResultIndex].Selected = true;
-                    this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iSearchResultIndex].Cells[0];
-                    Socket_Cache.SocketList.Search_Index = iSearchResultIndex;
+                    if (int.TryParse(e.Result.ToString(), out int iSearchResultIndex))
+                    {
+                        if (iSearchResultIndex >= 0)
+                        {
+                            this.dgvSocketList.Rows[iSearchResultIndex].Selected = true;
+                            this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iSearchResultIndex].Cells[0];
+                            Socket_Cache.SocketList.Search_Index = iSearchResultIndex;
 
-                    this.HexBox_FindNext();
-                }
-                else
-                {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
+                            this.HexBox_FindNext();
+                        }
+                        else
+                        {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
+                        }
+                    }                    
                 }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
         }
 
         #endregion        
