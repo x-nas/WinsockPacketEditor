@@ -164,6 +164,12 @@
   <data name="cLoginIP.HeaderText" xml:space="preserve">
     <value>Login IP</value>
   </data>
+  <data name="cLoginIP.Width" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="cIPLocation.HeaderText" xml:space="preserve">
+    <value>IP Location</value>
+  </data>
   <data name="cIsOnLine.HeaderText" xml:space="preserve">
     <value>OnLine</value>
   </data>

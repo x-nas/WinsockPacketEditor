@@ -285,6 +285,15 @@
   <data name="cLoginIP.HeaderText" xml:space="preserve">
     <value>登录 IP</value>
   </data>
+  <data name="cLoginIP.Width" type="System.Int32, mscorlib">
+    <value>59</value>
+  </data>
+  <metadata name="cIPLocation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIPLocation.HeaderText" xml:space="preserve">
+    <value>IP 所属地</value>
+  </data>
   <metadata name="cIsOnLine.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -7130,6 +7139,12 @@
     <value>cLoginIP</value>
   </data>
   <data name="&gt;&gt;cLoginIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIPLocation.Name" xml:space="preserve">
+    <value>cIPLocation</value>
+  </data>
+  <data name="&gt;&gt;cIPLocation.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cIsOnLine.Name" xml:space="preserve">

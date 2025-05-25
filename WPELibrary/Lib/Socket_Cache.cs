@@ -989,7 +989,7 @@ namespace WPELibrary.Lib
             public static void AuthResult_ToList(string IPAddress, string UserName, bool AuthResult)
             {
                 try
-                {
+                {                    
                     Proxy_AuthInfo pai = new Proxy_AuthInfo(IPAddress, UserName, AuthResult, DateTime.Now);
                     RecProxyAuth?.Invoke(pai);
                 }
@@ -1003,7 +1003,7 @@ namespace WPELibrary.Lib
 
             #region//记录登录端IP地址
 
-            public static void RecordLoginIP(Guid AccountID, string IPAddress)
+            public static async void RecordLoginIP(Guid AccountID, string IPAddress)
             {
                 try
                 {
@@ -1013,7 +1013,11 @@ namespace WPELibrary.Lib
 
                         if (paiItem != null)
                         {
-                            paiItem.LoginIP = IPAddress;
+                            if (paiItem.LoginIP != IPAddress)
+                            {
+                                paiItem.LoginIP = IPAddress;
+                                paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                            }                            
                         }
                     }
                 }
@@ -8800,6 +8804,7 @@ namespace WPELibrary.Lib
                         sql += "UserName TEXT NOT NULL UNIQUE,";
                         sql += "PassWord TEXT NOT NULL,";
                         sql += "LoginIP TEXT,";
+                        sql += "IPLocation TEXT,";
                         sql += "IsExpiry BOOLEAN DEFAULT 0,";
                         sql += "ExpiryTime TIMESTAMP,";                        
                         sql += "CreateTime TIMESTAMP";
@@ -8879,6 +8884,7 @@ namespace WPELibrary.Lib
                         sql += "UserName,";
                         sql += "PassWord,";
                         sql += "LoginIP,";
+                        sql += "IPLocation,";
                         sql += "IsExpiry,";
                         sql += "ExpiryTime,";
                         sql += "CreateTime";
@@ -8900,6 +8906,7 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@UserName", pai.UserName);
                             cmd.Parameters.AddWithValue("@PassWord", pai.PassWord);
                             cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
+                            cmd.Parameters.AddWithValue("@IPLocation", pai.IPLocation);
                             cmd.Parameters.AddWithValue("@IsExpiry", pai.IsExpiry);
                             cmd.Parameters.AddWithValue("@ExpiryTime", pai.ExpiryTime);
                             cmd.Parameters.AddWithValue("@CreateTime", pai.CreateTime);

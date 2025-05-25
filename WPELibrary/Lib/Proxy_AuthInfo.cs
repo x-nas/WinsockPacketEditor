@@ -18,7 +18,7 @@ namespace WPELibrary.Lib
 
         public Proxy_AuthInfo(string ipAddress, string userName, bool authResult, DateTime authTime)
         {
-            this.IPAddress = ipAddress;
+            this.IPAddress = ipAddress;        
             this.UserName = userName;
             this.AuthResult = authResult;
             this.AuthTime = authTime;

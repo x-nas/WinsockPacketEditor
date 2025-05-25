@@ -64,6 +64,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//IP所在地
+
+        protected string iplocation;
+
+        public string IPLocation
+        {
+            get { return iplocation; }
+            set { iplocation = value; }
+        }
+
+        #endregion
+
         #region//是否过期
 
         protected bool isexpiry;

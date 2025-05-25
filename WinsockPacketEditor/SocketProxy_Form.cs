@@ -1,13 +1,13 @@
-﻿using System;
-using System.Net.Sockets;
+﻿using Be.Windows.Forms;
+using System;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
-using Be.Windows.Forms;
-using WPELibrary;
 using System.Windows.Forms.DataVisualization.Charting;
-using System.Linq;
+using WPELibrary;
+using WPELibrary.Lib;
 
 namespace WinsockPacketEditor
 {
@@ -941,7 +941,7 @@ namespace WinsockPacketEditor
                         {
                             Socket_Cache.SocketProxy.lstProxyAuth.Add(pai);
                         }
-                        
+
                         this.dgvAuth.Refresh();
 
                     }));
@@ -951,7 +951,7 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         private void dgvAuth_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {

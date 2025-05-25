@@ -1,6 +1,8 @@
 ﻿using EasyHook;
+using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -1961,6 +1963,67 @@ namespace WPELibrary.Lib
             }
 
             return epReturn;
+        }
+
+        public static async Task<string> GetIPLocation(string ipAddress)
+        {
+            string sReturn = string.Empty;
+
+            try
+            {
+                if (!string.IsNullOrEmpty(ipAddress))
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        string API_URL = API_URL = "http://ip-api.com/json/{0}?lang=zh-CN";
+                        string url = string.Format(API_URL, ipAddress);
+
+                        HttpResponseMessage response = await client.GetAsync(url);
+                        response.EnsureSuccessStatusCode();
+                        string IPLocation = await response.Content.ReadAsStringAsync();
+
+                        JObject locationData = JObject.Parse(IPLocation);
+
+                        string status = locationData["status"]?.ToString();
+
+                        if (status.Equals("success"))
+                        {
+                            string country = locationData["country"]?.ToString();
+                            string region = locationData["regionName"]?.ToString();
+                            string city = locationData["city"]?.ToString();
+                            string isp = locationData["isp"]?.ToString();
+
+                            sReturn = $"{country} {region} {city} {isp}";
+                        }
+                        else
+                        { 
+                            string message = locationData["message"]?.ToString();
+
+                            switch(message)
+                            {
+                                case "invalid query":
+                                    sReturn = "未知IP地址";
+                                    break;
+                                case "private range":
+                                    sReturn = "本地局域网";
+                                    break;
+                                case "reserved range":
+                                    sReturn = "保留IP地址";
+                                    break;
+                                default:
+                                    sReturn = message;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sReturn;
         }        
 
         #endregion

@@ -31,12 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Proxy_AccountListForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpProxyAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.ssProxyAccount = new System.Windows.Forms.StatusStrip();
             this.tsslAccount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -57,6 +58,7 @@
             this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLoginIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIsOnLine = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cCreateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIsExpiry = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -200,6 +202,7 @@
             this.cIsEnable,
             this.cUserName,
             this.cLoginIP,
+            this.cIPLocation,
             this.cIsOnLine,
             this.cCreateTime,
             this.cIsExpiry,
@@ -207,19 +210,19 @@
             resources.ApplyResources(this.dgvAccountList, "dgvAccountList");
             this.dgvAccountList.Name = "dgvAccountList";
             this.dgvAccountList.ReadOnly = true;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(3);
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
-            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle8;
             this.dgvAccountList.RowTemplate.Height = 23;
             this.dgvAccountList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAccountList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAccountList_CellDoubleClick);
@@ -271,7 +274,7 @@
             // 
             // cLoginIP
             // 
-            this.cLoginIP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cLoginIP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cLoginIP.DataPropertyName = "LoginIP";
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -281,6 +284,19 @@
             this.cLoginIP.ReadOnly = true;
             this.cLoginIP.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cLoginIP.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPLocation
+            // 
+            this.cIPLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cIPLocation.DataPropertyName = "IPLocation";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPLocation.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.cIPLocation, "cIPLocation");
+            this.cIPLocation.Name = "cIPLocation";
+            this.cIPLocation.ReadOnly = true;
+            this.cIPLocation.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPLocation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cIsOnLine
             // 
@@ -295,9 +311,9 @@
             // 
             this.cCreateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cCreateTime.DataPropertyName = "CreateTime";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cCreateTime.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cCreateTime.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cCreateTime, "cCreateTime");
             this.cCreateTime.Name = "cCreateTime";
             this.cCreateTime.ReadOnly = true;
@@ -497,6 +513,7 @@
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsEnable;
         private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLoginIP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIPLocation;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsOnLine;
         private System.Windows.Forms.DataGridViewTextBoxColumn cCreateTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsExpiry;

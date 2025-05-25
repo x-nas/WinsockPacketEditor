@@ -832,6 +832,7 @@
             // 
             // cAuthTime
             // 
+            this.cAuthTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cAuthTime.DataPropertyName = "AuthTime";
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -844,6 +845,7 @@
             // 
             // cIPAddress
             // 
+            this.cIPAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cIPAddress.DataPropertyName = "IPAddress";
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
@@ -856,9 +858,9 @@
             // 
             // cUserName
             // 
-            this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cUserName.DataPropertyName = "UserName";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.cUserName.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.cUserName, "cUserName");
@@ -869,9 +871,9 @@
             // 
             // cAuthResult
             // 
-            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cAuthResult.DataPropertyName = "AuthResult";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle6.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle6.NullValue")));
             dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.cAuthResult.DefaultCellStyle = dataGridViewCellStyle6;
@@ -1348,11 +1350,6 @@
         private System.Windows.Forms.ToolStripStatusLabel tlSplit5;
         private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount;
         private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount_CNT;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cAuthID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cAuthTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIPAddress;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
-        private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy;
         private System.Windows.Forms.GroupBox gbExternalProxy_Enable;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Enable;
@@ -1366,5 +1363,10 @@
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_AppointPort;
         private System.Windows.Forms.CheckBox cbExternalProxy_AppointPort;
         private System.Windows.Forms.TextBox txtExternalProxy_AppointPort;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cAuthID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cAuthTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIPAddress;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
+        private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
     }
 }
