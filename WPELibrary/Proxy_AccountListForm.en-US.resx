@@ -194,6 +194,12 @@
   <data name="cExpiryTime.Width" type="System.Int32, mscorlib">
     <value>87</value>
   </data>
+  <data name="cmsAccountList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>153, 26</value>
+  </data>
+  <data name="cmsAccountList_LoginInfo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>152, 22</value>
+  </data>
   <data name="bDelete.Text" xml:space="preserve">
     <value>Delete (&amp;D)</value>
   </data>

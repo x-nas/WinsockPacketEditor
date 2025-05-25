@@ -180,6 +180,12 @@
     <Compile Include="Proxy_AccountListForm.Designer.cs">
       <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Proxy_AccountLoginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountLoginForm.Designer.cs">
+      <DependentUpon>Proxy_AccountLoginForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Socket_CompareForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -339,6 +345,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountListForm.resx">
       <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountLoginForm.en-US.resx">
+      <DependentUpon>Proxy_AccountLoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountLoginForm.resx">
+      <DependentUpon>Proxy_AccountLoginForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_CompareForm.en-US.resx">
       <DependentUpon>Socket_CompareForm.cs</DependentUpon>

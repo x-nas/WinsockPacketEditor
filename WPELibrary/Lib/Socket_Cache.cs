@@ -1017,6 +1017,15 @@ namespace WPELibrary.Lib
                             {
                                 paiItem.LoginIP = IPAddress;
                                 paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+
+                                Socket_Cache.ProxyAccount.SaveProxyAccount_LoginInfo_ToDB(paiItem);
+                            }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(paiItem.IPLocation))
+                                {
+                                    paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                }
                             }                            
                         }
                     }
@@ -1354,6 +1363,33 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//通过GUID获取账号的用户名
+
+            public static string GetUserName_ByAccountID(Guid AccountID)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    {
+                        if (pai.AID.Equals(AccountID))
+                        {
+                            sReturn = pai.UserName;
+                            break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
             #region//获取认证结果对应的图标
 
             public static Image GetImg_ByAuthResult(bool AuthResult)
@@ -1403,7 +1439,7 @@ namespace WPELibrary.Lib
 
             #region//新增代理账号
 
-            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
             {
                 try
                 {
@@ -1411,7 +1447,7 @@ namespace WPELibrary.Lib
                     {
                         if (!Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
                         {
-                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
                             Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
 
                             return true;
@@ -1489,7 +1525,7 @@ namespace WPELibrary.Lib
                 return false;
             }
 
-            #endregion
+            #endregion            
 
             #region//删除代理账号
 
@@ -1716,6 +1752,45 @@ namespace WPELibrary.Lib
 
             #endregion            
 
+            #region//保存登录信息到数据库
+
+            public static void SaveProxyAccount_LoginInfo_ToDB(Proxy_AccountInfo pai)
+            {
+                try
+                {
+                    Socket_Cache.DataBase.InsertOrUpdateTable_ProxyAccount_LoginInfo(pai);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载登录信息
+
+            public static DataTable LoadProxyAccount_LoginInfo_FromDB(Guid AID)
+            {
+                DataTable dtReturn = null;
+
+                try
+                {
+                    if (AID != Guid.Empty)
+                    {
+                        dtReturn = Socket_Cache.DataBase.SelectTable_ProxyAccount_LoginInfo(AID);
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            #endregion
+
             #region//保存代理账号列表到数据库
 
             public static void SaveProxyAccountList_ToDB(Socket_Cache.System.SystemMode FromMode)
@@ -1730,6 +1805,8 @@ namespace WPELibrary.Lib
                         {
                             Socket_Cache.DataBase.InsertTable_ProxyAccount(pai);
                         }
+
+                        Socket_Cache.DataBase.DeleteTable_ProxyAccount_LoginInfo();
                     }                    
                 }
                 catch (Exception ex)
@@ -1755,11 +1832,12 @@ namespace WPELibrary.Lib
                         string UserName = dataRow["UserName"].ToString();
                         string PassWord = dataRow["PassWord"].ToString();
                         string LoginIP = dataRow["LoginIP"].ToString();
+                        string IPLocation = dataRow["IPLocation"].ToString();
                         bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
                         DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
                         DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);                        
 
-                        Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                        Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
                     }
                 }
                 catch (Exception ex)
@@ -1854,6 +1932,7 @@ namespace WPELibrary.Lib
                                 new XElement("UserName", pai.UserName),
                                 new XElement("PassWord", pai.PassWord),
                                 new XElement("LoginIP", pai.LoginIP),
+                                new XElement("IPLocation", pai.IPLocation),
                                 new XElement("IsOnLine", pai.IsOnLine.ToString()),
                                 new XElement("IsExpiry", pai.IsExpiry),
                                 new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
@@ -2007,6 +2086,12 @@ namespace WPELibrary.Lib
                             LoginIP = xeProxyAccount.Element("LoginIP").Value;
                         }
 
+                        string IPLocation = string.Empty;
+                        if (xeProxyAccount.Element("IPLocation") != null)
+                        {
+                            IPLocation = xeProxyAccount.Element("IPLocation").Value;
+                        }
+
                         bool IsOnLine = false;
                         if (xeProxyAccount.Element("IsOnLine") != null)
                         {
@@ -2031,7 +2116,7 @@ namespace WPELibrary.Lib
                             CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IsExpiry, ExpiryTime, CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         if (!bOK)
                         {
@@ -2133,7 +2218,7 @@ namespace WPELibrary.Lib
                             pai.LoginIP = string.Empty;
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginIP, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginIP, pai.IPLocation, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
 
                         if (!bOK)
                         {
@@ -7751,7 +7836,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.DataBase.CreateTable_Filter();
                 Socket_Cache.DataBase.CreateTable_Send();
                 Socket_Cache.DataBase.CreateTable_Robot();
-                Socket_Cache.DataBase.CreateTable_ProxyAccount();
+                Socket_Cache.DataBase.CreateTable_ProxyAccount();                
             }
 
             private static void InitdbPath()
@@ -8810,6 +8895,15 @@ namespace WPELibrary.Lib
                         sql += "CreateTime TIMESTAMP";
                         sql += ");";
 
+                        sql += "CREATE TABLE IF NOT EXISTS ProxyAccount_LoginInfo (";
+                        sql += "GUID TEXT NOT NULL,";
+                        sql += "LoginTime TIMESTAMP,";
+                        sql += "LoginIP TEXT,";
+                        sql += "IPLocation TEXT,";
+                        sql += "FOREIGN KEY (GUID) REFERENCES ProxyAccount(GUID),";
+                        sql += "UNIQUE (GUID, LoginIP)";
+                        sql += ");";
+
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
                             conn.Open();
@@ -8851,6 +8945,33 @@ namespace WPELibrary.Lib
                 return dtReturn;
             }
 
+            public static DataTable SelectTable_ProxyAccount_LoginInfo(Guid guid)
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ProxyAccount_LoginInfo WHERE GUID = @GUID;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@GUID", guid.ToString().ToUpper());
+
+                            SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
             public static void DeleteTable_ProxyAccount()
             {
                 try
@@ -8861,6 +8982,52 @@ namespace WPELibrary.Lib
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DeleteTable_ProxyAccount_LoginInfo()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM ProxyAccount_LoginInfo WHERE GUID NOT IN (SELECT GUID FROM ProxyAccount);";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void UpdateTable_ProxyAccount_LoginInfo(Guid guid, string LoginIP)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "UPDATE ProxyAccount_LoginInfo SET LoginTime = @LoginTime WHERE GUID = @guid AND LoginIP = @LoginIP;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@LoginTime", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@guid", guid);
+                            cmd.Parameters.AddWithValue("@LoginIP", LoginIP);
+
                             conn.Open();
                             cmd.ExecuteNonQuery();
                         }
@@ -8923,7 +9090,42 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
+            public static void InsertOrUpdateTable_ProxyAccount_LoginInfo(Proxy_AccountInfo pai)
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = "INSERT INTO ProxyAccount_LoginInfo (GUID, LoginTime, LoginIP, IPLocation)";
+                            sql += "VALUES (@GUID, @LoginTime, @LoginIP, @IPLocation)";
+                            sql += "ON CONFLICT(GUID, LoginIP)";
+                            sql += "DO UPDATE SET LoginTime = @LoginTime;";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
+                            {
+                                cmd.Parameters.AddWithValue("@GUID", pai.AID.ToString().ToUpper());
+                                cmd.Parameters.AddWithValue("@LoginTime", DateTime.Now);
+                                cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
+                                cmd.Parameters.AddWithValue("@IPLocation", pai.IPLocation);
+
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }            
+
+            #endregion            
         }
 
         #endregion

@@ -63,6 +63,8 @@
             this.cCreateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIsExpiry = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cExpiryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsAccountList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsAccountList_LoginInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpAccountButton = new System.Windows.Forms.TableLayoutPanel();
             this.bDelete = new System.Windows.Forms.Button();
             this.bAccount_New = new System.Windows.Forms.Button();
@@ -82,6 +84,7 @@
             this.ssProxyAccount.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccountList)).BeginInit();
+            this.cmsAccountList.SuspendLayout();
             this.tlpAccountButton.SuspendLayout();
             this.tlpSearchAccount.SuspendLayout();
             this.gbSearch_UserName.SuspendLayout();
@@ -207,6 +210,7 @@
             this.cCreateTime,
             this.cIsExpiry,
             this.cExpiryTime});
+            this.dgvAccountList.ContextMenuStrip = this.cmsAccountList;
             resources.ApplyResources(this.dgvAccountList, "dgvAccountList");
             this.dgvAccountList.Name = "dgvAccountList";
             this.dgvAccountList.ReadOnly = true;
@@ -339,6 +343,20 @@
             this.cExpiryTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cExpiryTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cmsAccountList
+            // 
+            this.cmsAccountList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsAccountList_LoginInfo});
+            this.cmsAccountList.Name = "cmsAccountList";
+            resources.ApplyResources(this.cmsAccountList, "cmsAccountList");
+            this.cmsAccountList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsAccountList_ItemClicked);
+            // 
+            // cmsAccountList_LoginInfo
+            // 
+            this.cmsAccountList_LoginInfo.Image = global::WPELibrary.Properties.Resources.Show;
+            resources.ApplyResources(this.cmsAccountList_LoginInfo, "cmsAccountList_LoginInfo");
+            this.cmsAccountList_LoginInfo.Name = "cmsAccountList_LoginInfo";
+            // 
             // tlpAccountButton
             // 
             resources.ApplyResources(this.tlpAccountButton, "tlpAccountButton");
@@ -464,6 +482,7 @@
             this.ssProxyAccount.PerformLayout();
             this.tlpAccountList.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccountList)).EndInit();
+            this.cmsAccountList.ResumeLayout(false);
             this.tlpAccountButton.ResumeLayout(false);
             this.tlpSearchAccount.ResumeLayout(false);
             this.gbSearch_UserName.ResumeLayout(false);
@@ -518,5 +537,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cCreateTime;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsExpiry;
         private System.Windows.Forms.DataGridViewTextBoxColumn cExpiryTime;
+        private System.Windows.Forms.ContextMenuStrip cmsAccountList;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_LoginInfo;
     }
 }

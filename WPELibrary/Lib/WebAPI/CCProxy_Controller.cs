@@ -74,7 +74,7 @@ namespace WPELibrary.Lib.WebAPI
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
 
-                return Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
+                return Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, string.Empty, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
             }
             catch (Exception ex)
             {

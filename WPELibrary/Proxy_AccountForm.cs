@@ -38,7 +38,7 @@ namespace WPELibrary
 
                     if (pai != null)
                     {
-                        this.Text += " - " + pai.AID.ToString().ToUpper();
+                        this.Text += " - " + Socket_Cache.ProxyAccount.GetUserName_ByAccountID(this.SelectAID);
 
                         bool IsEnable = pai.IsEnable;
                         string UserName = pai.UserName;
@@ -93,7 +93,7 @@ namespace WPELibrary
                         return;
                     }                    
 
-                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
+                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, string.Empty, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
                 }
                 else
                 {

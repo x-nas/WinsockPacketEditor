@@ -3288,6 +3288,26 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//显示账号登录信息窗体（对话框）
+
+        public static void ShowAccountLoginForm(Guid AID)
+        {
+            try
+            {
+                if (AID != null && AID != Guid.Empty)
+                {
+                    Proxy_AccountLoginForm palForm = new Proxy_AccountLoginForm(AID);
+                    palForm.ShowDialog();
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示滤镜窗体（对话框）
 
         public static void ShowFilterForm_Dialog(int FIndex)

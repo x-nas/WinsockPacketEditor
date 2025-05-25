@@ -234,6 +234,41 @@ namespace WPELibrary
         }
 
 
-        #endregion        
+        #endregion
+
+        #region//右键菜单
+
+        private void cmsAccountList_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsAccountList.Close();
+
+            try
+            {
+                if (dgvAccountList.Rows.Count > 0)
+                {
+                    if (dgvAccountList.SelectedRows.Count > 0 && dgvAccountList.CurrentCell != null)
+                    {
+                        List<Proxy_AccountInfo> paiList = Socket_Operation.GetSelectedProxyAccount(this.dgvAccountList);
+
+                        if (paiList.Count > 0)
+                        {
+                            switch (sItemText)
+                            {
+                                case "cmsAccountList_LoginInfo":
+                                    Socket_Operation.ShowAccountLoginForm(paiList[0].AID);
+                                    break;                                
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

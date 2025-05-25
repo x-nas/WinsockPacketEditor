@@ -64,7 +64,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//IP所在地
+        #region//IP所属地
 
         protected string iplocation;
 
@@ -131,13 +131,14 @@ namespace WPELibrary.Lib
             //
         }
 
-        public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
+        public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
         {
             this.aid = AID;
             this.isenable = IsEnable;
             this.username = UserName;
             this.password = PassWord;
             this.loginip = LoginIP;
+            this.iplocation = IPLocation;
             this.isexpiry = IsExpiry;
             this.expirytime = ExpiryTime;
             this.createtime = CreateTime;
