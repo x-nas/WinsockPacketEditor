@@ -190,16 +190,12 @@ namespace WPELibrary.Lib
                         Socket_Cache.LogList.Proxy_AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
                         Socket_Cache.LogList.Proxy_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
                         Socket_Cache.LogList.Proxy_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
-                        Socket_Cache.SocketProxy.Enable_EXTHttp = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EXTProxy_EnableHttp"]);
-                        Socket_Cache.SocketProxy.EXTHttpIP = RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpIP"].ToString();
-                        Socket_Cache.SocketProxy.EXTHttpPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpPort"].ToString());
-                        Socket_Cache.SocketProxy.AppointHttpPort = RunConfig.Rows[0]["ProxyConfig_EXTProxy_AppointHttpPort"].ToString();
-                        Socket_Cache.SocketProxy.Enable_EXTHttps = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EXTProxy_EnableHttps"]);
-                        Socket_Cache.SocketProxy.EXTHttpsIP = RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpsIP"].ToString();
-                        Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_EXTProxy_HttpsPort"].ToString());
-                        Socket_Cache.SocketProxy.AppointHttpsPort = RunConfig.Rows[0]["ProxyConfig_EXTProxy_AppointHttpsPort"].ToString();
+                        Socket_Cache.SocketProxy.Enable_ExternalProxy = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy"]);
+                        Socket_Cache.SocketProxy.ExternalProxy_IP = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_IP"].ToString();
+                        Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ExternalProxy_Port"].ToString());                                                
+                        Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy_AppointPort"]);
+                        Socket_Cache.SocketProxy.ExternalProxy_AppointPort = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_AppointPort"].ToString();                        
                         Socket_Cache.SocketProxy.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_SpeedMode"]);
-
                         Socket_Cache.SocketPacket.CheckNotShow = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckNotShow"]);
                         Socket_Cache.SocketPacket.CheckSocket = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSocket"]);
                         Socket_Cache.SocketPacket.CheckSocket_Value = RunConfig.Rows[0]["InjectionConfig_CheckSocket_Value"].ToString();
@@ -304,10 +300,10 @@ namespace WPELibrary.Lib
             public static bool IsListening = false;            
             public static bool ProxyIP_Auto = true;
             public static bool Enable_SOCKS5 = true, Enable_Auth = true;
-            public static bool Enable_EXTHttp = false, Enable_EXTHttps = false;
-            public static string EXTHttpIP = "127.0.0.1", EXTHttpsIP = "127.0.0.1";
-            public static ushort EXTHttpPort = 8889, EXTHttpsPort = 8889;
-            public static string AppointHttpPort = "80,8080", AppointHttpsPort = "443,8443";            
+            public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false;
+            public static string ExternalProxy_IP = "127.0.0.1";
+            public static ushort ExternalProxy_Port = 8889;
+            public static string ExternalProxy_AppointPort = "80,8080,443,8443";            
             public static ushort ProxyPort = 1080;
             public static int UDPCloseTime = 60;
             public static long Total_Request = 0;
@@ -359,6 +355,7 @@ namespace WPELibrary.Lib
                 Socket = 0,
                 Http = 1,
                 Https = 2,
+                External = 3,
             }
 
             public enum CommandType : byte
@@ -632,12 +629,11 @@ namespace WPELibrary.Lib
                             ReadOnlySpan<byte> bServerTCP_IP = Socket_Cache.SocketProxy.ProxyTCP_IP.GetAddressBytes();
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
                                                         
-                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS, out string AddressString);
-                            
+                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS, out string AddressString);                            
                             spc.ServerSocket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                             spc.ServerEndPoint = epServer;
-
                             ushort uPort = ((ushort)epServer.Port);
+
                             spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);                            
                             spc.ServerAddress = Socket_Operation.GetServerAddress(spc.DomainType, AddressString, uPort);                            
                             spc.ClientAddress = Socket_Operation.GetClientAddress(spc.ClientSocket, AddressString, uPort);                            
@@ -650,51 +646,59 @@ namespace WPELibrary.Lib
 
                                     switch (spc.DomainType)
                                     {
+                                        case Socket_Cache.SocketProxy.DomainType.External:
+
+                                            try
+                                            {
+                                                IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.ExternalProxy_IP), Socket_Cache.SocketProxy.ExternalProxy_Port);
+                                                spc.ServerSocket.Connect(HttpProxyEP);
+
+                                                byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
+                                                spc.ServerSocket.Send(handshakeRequest);
+
+                                                byte[] handshakeResponse = new byte[2];
+                                                spc.ServerSocket.Receive(handshakeResponse);
+
+                                                if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
+                                                {
+                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    return;
+                                                }
+
+                                                spc.ServerSocket.Send(bData.ToArray());
+
+                                                byte[] connectResponse = new byte[10];
+                                                spc.ServerSocket.Receive(connectResponse);
+
+                                                if (connectResponse[1] != 0x00)
+                                                {
+                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    return;
+                                                }
+
+                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+
+                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
+                                            }
+                                            catch (SocketException)
+                                            {
+                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                            }                                            
+
+                                            break;
+
                                         case Socket_Cache.SocketProxy.DomainType.Http:
 
                                             try
                                             {
-                                                if (Socket_Cache.SocketProxy.Enable_EXTHttp)
-                                                {
-                                                    IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpIP), Socket_Cache.SocketProxy.EXTHttpPort);
-                                                    spc.ServerSocket.Connect(HttpProxyEP);
+                                                spc.ServerSocket.Connect(spc.ServerEndPoint);
+                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
-                                                    byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
-                                                    spc.ServerSocket.Send(handshakeRequest);
-
-                                                    byte[] handshakeResponse = new byte[2];
-                                                    spc.ServerSocket.Receive(handshakeResponse);
-
-                                                    if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
-                                                    {
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                        return;
-                                                    }
-
-                                                    spc.ServerSocket.Send(bData.ToArray());
-
-                                                    byte[] connectResponse = new byte[10];
-                                                    spc.ServerSocket.Receive(connectResponse);
-
-                                                    if (connectResponse[1] != 0x00)
-                                                    {
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                        return;
-                                                    }
-
-                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-                                                }
-                                                else
-                                                {
-                                                    spc.ServerSocket.Connect(spc.ServerEndPoint);
-                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-
-                                                    Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
-                                                }                                                
+                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
                                             }
                                             catch (SocketException)
                                             {
@@ -707,46 +711,11 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                if (Socket_Cache.SocketProxy.Enable_EXTHttps)
-                                                {
-                                                    IPEndPoint HttpsProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.EXTHttpsIP), Socket_Cache.SocketProxy.EXTHttpsPort);
-                                                    spc.ServerSocket.Connect(HttpsProxyEP);
-
-                                                    byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
-                                                    spc.ServerSocket.Send(handshakeRequest);
-
-                                                    byte[] handshakeResponse = new byte[2];
-                                                    spc.ServerSocket.Receive(handshakeResponse);
-
-                                                    if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
-                                                    {
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                        return;
-                                                    }
-
-                                                    spc.ServerSocket.Send(bData.ToArray());
-
-                                                    byte[] connectResponse = new byte[10];
-                                                    spc.ServerSocket.Receive(connectResponse);
-
-                                                    if (connectResponse[1] != 0x00)
-                                                    {
-                                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                        return;
-                                                    }
-
-                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-                                                }
-                                                else
-                                                {
-                                                    spc.ServerSocket.Connect(spc.ServerEndPoint);
-                                                    spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                    spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-                                                    Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
-                                                }
+                                                spc.ServerSocket.Connect(spc.ServerEndPoint);
+                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
                                             }
                                             catch (SocketException)
                                             {
@@ -844,21 +813,19 @@ namespace WPELibrary.Lib
                         switch (spc.DomainType)
                         {
                             case Socket_Cache.SocketProxy.DomainType.Http:
-
-                                enableProxyQueue = !Socket_Cache.SocketProxy.Enable_EXTHttp;
-
+                                enableProxyQueue = true;
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.Https:
-
-                                enableProxyQueue = !Socket_Cache.SocketProxy.Enable_EXTHttps;
-
+                                enableProxyQueue = true;
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.Socket:
-
                                 enableProxyQueue = true;
+                                break;
 
+                            case Socket_Cache.SocketProxy.DomainType.External:
+                                enableProxyQueue = true;
                                 break;
                         }
 
@@ -898,14 +865,18 @@ namespace WPELibrary.Lib
                             switch (spc.DomainType)
                             {
                                 case Socket_Cache.SocketProxy.DomainType.Http:
-                                    enableProxyQueue = !Socket_Cache.SocketProxy.Enable_EXTHttp;
+                                    enableProxyQueue = true;
                                     break;
 
                                 case Socket_Cache.SocketProxy.DomainType.Https:
-                                    enableProxyQueue = !Socket_Cache.SocketProxy.Enable_EXTHttps;
+                                    enableProxyQueue = true;
                                     break;
 
                                 case Socket_Cache.SocketProxy.DomainType.Socket:
+                                    enableProxyQueue = true;
+                                    break;
+
+                                case Socket_Cache.SocketProxy.DomainType.External:
                                     enableProxyQueue = true;
                                     break;
                             }
@@ -7973,16 +7944,12 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
                         sql += "ProxyConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
                         sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值
-                        sql += "ProxyConfig_EXTProxy_EnableHttp BOOLEAN DEFAULT 0,";//代理模式 - 启用外部HTTP代理
-                        sql += "ProxyConfig_EXTProxy_HttpIP TEXT,";//代理模式 - 外部HTTP代理IP
-                        sql += "ProxyConfig_EXTProxy_HttpPort INTEGER DEFAULT 8889,";//代理模式 - 外部HTTP代理端口
-                        sql += "ProxyConfig_EXTProxy_AppointHttpPort TEXT,";//代理模式 - 外部HTTP代理指定端口
-                        sql += "ProxyConfig_EXTProxy_EnableHttps BOOLEAN DEFAULT 0,";//代理模式 - 启用外部HTTP(S)代理
-                        sql += "ProxyConfig_EXTProxy_HttpsIP TEXT,";//代理模式 - 外部HTTP(S)代理IP
-                        sql += "ProxyConfig_EXTProxy_HttpsPort INTEGER DEFAULT 8889,";//代理模式 - 外部HTTP(S)代理端口
-                        sql += "ProxyConfig_EXTProxy_AppointHttpsPort TEXT,";//代理模式 - 外部HTTP(S)代理指定端口
+                        sql += "ProxyConfig_Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
+                        sql += "ProxyConfig_ExternalProxy_IP TEXT,";//代理模式 - 外部代理IP
+                        sql += "ProxyConfig_ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
+                        sql += "ProxyConfig_Enable_ExternalProxy_AppointPort BOOLEAN DEFAULT 0,";//代理模式 - 启用指定代理端口
+                        sql += "ProxyConfig_ExternalProxy_AppointPort TEXT,";//代理模式 - 指定代理端口
                         sql += "ProxyConfig_SpeedMode BOOLEAN DEFAULT 0,";//代理模式 - 极速模式
-
                         sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//注入模式 - 过滤设置不显示
                         sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//注入模式 - 过滤套接字
                         sql += "InjectionConfig_CheckSocket_Value TEXT,";//注入模式 - 过滤套接字内容
@@ -8096,14 +8063,11 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_LogList_AutoRoll,";
                         sql += "ProxyConfig_LogList_AutoClear,";
                         sql += "ProxyConfig_LogList_AutoClear_Value,";
-                        sql += "ProxyConfig_EXTProxy_EnableHttp,";
-                        sql += "ProxyConfig_EXTProxy_HttpIP,";
-                        sql += "ProxyConfig_EXTProxy_HttpPort,";
-                        sql += "ProxyConfig_EXTProxy_AppointHttpPort,";
-                        sql += "ProxyConfig_EXTProxy_EnableHttps,";
-                        sql += "ProxyConfig_EXTProxy_HttpsIP,";
-                        sql += "ProxyConfig_EXTProxy_HttpsPort,";
-                        sql += "ProxyConfig_EXTProxy_AppointHttpsPort,";
+                        sql += "ProxyConfig_Enable_ExternalProxy,";
+                        sql += "ProxyConfig_ExternalProxy_IP,";
+                        sql += "ProxyConfig_ExternalProxy_Port,";                    
+                        sql += "ProxyConfig_Enable_ExternalProxy_AppointPort,";
+                        sql += "ProxyConfig_ExternalProxy_AppointPort,";
                         sql += "ProxyConfig_SpeedMode,";
                         sql += "InjectionConfig_CheckNotShow,";
                         sql += "InjectionConfig_CheckSocket,";
@@ -8148,14 +8112,11 @@ namespace WPELibrary.Lib
                         sql += "@ProxyConfig_LogList_AutoRoll,";
                         sql += "@ProxyConfig_LogList_AutoClear,";
                         sql += "@ProxyConfig_LogList_AutoClear_Value,";
-                        sql += "@ProxyConfig_EXTProxy_EnableHttp,";
-                        sql += "@ProxyConfig_EXTProxy_HttpIP,";
-                        sql += "@ProxyConfig_EXTProxy_HttpPort,";
-                        sql += "@ProxyConfig_EXTProxy_AppointHttpPort,";
-                        sql += "@ProxyConfig_EXTProxy_EnableHttps,";
-                        sql += "@ProxyConfig_EXTProxy_HttpsIP,";
-                        sql += "@ProxyConfig_EXTProxy_HttpsPort,";
-                        sql += "@ProxyConfig_EXTProxy_AppointHttpsPort,";
+                        sql += "@ProxyConfig_Enable_ExternalProxy,";
+                        sql += "@ProxyConfig_ExternalProxy_IP,";
+                        sql += "@ProxyConfig_ExternalProxy_Port,";                    
+                        sql += "@ProxyConfig_Enable_ExternalProxy_AppointPort,";
+                        sql += "@ProxyConfig_ExternalProxy_AppointPort,";
                         sql += "@ProxyConfig_SpeedMode,";
                         sql += "@InjectionConfig_CheckNotShow,";
                         sql += "@InjectionConfig_CheckSocket,";
@@ -8203,14 +8164,11 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", Socket_Cache.LogList.Proxy_AutoRoll);
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear);
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_EnableHttp", Socket_Cache.SocketProxy.Enable_EXTHttp);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpIP", Socket_Cache.SocketProxy.EXTHttpIP);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpPort", Socket_Cache.SocketProxy.EXTHttpPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_AppointHttpPort", Socket_Cache.SocketProxy.AppointHttpPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_EnableHttps", Socket_Cache.SocketProxy.Enable_EXTHttps);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpsIP", Socket_Cache.SocketProxy.EXTHttpsIP);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_HttpsPort", Socket_Cache.SocketProxy.EXTHttpsPort);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_EXTProxy_AppointHttpsPort", Socket_Cache.SocketProxy.AppointHttpsPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy", Socket_Cache.SocketProxy.Enable_ExternalProxy);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_IP", Socket_Cache.SocketProxy.ExternalProxy_IP);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port);                          
+                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy_AppointPort", Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_AppointPort", Socket_Cache.SocketProxy.ExternalProxy_AppointPort);
                             cmd.Parameters.AddWithValue("@ProxyConfig_SpeedMode", Socket_Cache.SocketProxy.SpeedMode);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckNotShow", Socket_Cache.SocketPacket.CheckNotShow);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket", Socket_Cache.SocketPacket.CheckSocket);

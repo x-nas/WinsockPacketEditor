@@ -46,8 +46,8 @@ namespace WinsockPacketEditor
             this.ProxyIP_Appoint_Changed();
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
-            this.EnableEXTHttp_Changed();
-            this.EnableEXTHttps_Changed();
+            this.ExternalProxy_Enable_Changed();
+            this.ExternalProxy_AppointPort_Changed();        
         }
 
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -125,7 +125,8 @@ namespace WinsockPacketEditor
 
                 this.tSocketProxy.Enabled = true;
                 this.tCheckProxyState.Enabled = true;
-                this.cbbAuthType.SelectedIndex = 0;                                
+                this.cbbAuthType.SelectedIndex = 0;
+                this.cbbProxyProtocol.SelectedIndex = 0;
 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
                 this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00", "0.00");
@@ -215,14 +216,11 @@ namespace WinsockPacketEditor
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Proxy_AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
-                this.cbEnableEXTHttp.Checked = Socket_Cache.SocketProxy.Enable_EXTHttp;
-                this.txtEXTHttpIP.Text = Socket_Cache.SocketProxy.EXTHttpIP;
-                this.txtEXTHttpPort.Text = Socket_Cache.SocketProxy.EXTHttpPort.ToString();
-                this.cbEnableEXTHttps.Checked = Socket_Cache.SocketProxy.Enable_EXTHttps;
-                this.txtEXTHttpsIP.Text = Socket_Cache.SocketProxy.EXTHttpsIP;
-                this.txtEXTHttpsPort.Text = Socket_Cache.SocketProxy.EXTHttpsPort.ToString();
-                this.txtAppointHttpPort.Text = Socket_Cache.SocketProxy.AppointHttpPort;
-                this.txtAppointHttpsPort.Text = Socket_Cache.SocketProxy.AppointHttpsPort;
+                this.cbExternalProxy_Enable.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy;
+                this.txtExternalProxy_IP.Text = Socket_Cache.SocketProxy.ExternalProxy_IP;
+                this.txtExternalProxy_Port.Text = Socket_Cache.SocketProxy.ExternalProxy_Port.ToString();
+                this.cbExternalProxy_AppointPort.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort;
+                this.txtExternalProxy_AppointPort.Text = Socket_Cache.SocketProxy.ExternalProxy_AppointPort;
 
                 this.cbSpeedMode.Checked = Socket_Cache.SocketProxy.SpeedMode;
 
@@ -254,14 +252,11 @@ namespace WinsockPacketEditor
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SocketProxy.Enable_EXTHttp = this.cbEnableEXTHttp.Checked;
-                Socket_Cache.SocketProxy.EXTHttpIP = this.txtEXTHttpIP.Text.Trim();
-                Socket_Cache.SocketProxy.EXTHttpPort = ushort.Parse(this.txtEXTHttpPort.Text.Trim());
-                Socket_Cache.SocketProxy.Enable_EXTHttps = this.cbEnableEXTHttps.Checked;
-                Socket_Cache.SocketProxy.EXTHttpsIP = this.txtEXTHttpsIP.Text.Trim();
-                Socket_Cache.SocketProxy.EXTHttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
-                Socket_Cache.SocketProxy.AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
-                Socket_Cache.SocketProxy.AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
+                Socket_Cache.SocketProxy.Enable_ExternalProxy = this.cbExternalProxy_Enable.Checked;
+                Socket_Cache.SocketProxy.ExternalProxy_IP = this.txtExternalProxy_IP.Text.Trim();
+                Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
+                Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort = this.cbExternalProxy_AppointPort.Checked;
+                Socket_Cache.SocketProxy.ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
 
                 Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
             }
@@ -315,29 +310,29 @@ namespace WinsockPacketEditor
 
         #endregion        
 
-        #region//外部代理设置
+        #region//外部代理
 
-        private void cbEnableHttpProxy_CheckedChanged(object sender, EventArgs e)
+        private void cbExternalProxy_Enable_CheckedChanged(object sender, EventArgs e)
         {
-            this.EnableEXTHttp_Changed();
+            this.ExternalProxy_Enable_Changed();
         }
 
-        private void EnableEXTHttp_Changed()
-        {
-            this.txtEXTHttpIP.Enabled = this.txtEXTHttpPort.Enabled = this.txtAppointHttpPort.Enabled = this.cbEnableEXTHttp.Checked;
+        private void ExternalProxy_Enable_Changed()
+        { 
+            this.cbbProxyProtocol.Enabled = this.gbExternalProxy_Address.Enabled = this.gbExternalProxy_AppointPort.Enabled = this.cbExternalProxy_Enable.Checked;
         }
 
-        private void cbEnableHttpsProxy_CheckedChanged(object sender, EventArgs e)
+        private void cbExternalProxy_AppointPort_CheckedChanged(object sender, EventArgs e)
         {
-            this.EnableEXTHttps_Changed();
+            this.ExternalProxy_AppointPort_Changed();
         }
 
-        private void EnableEXTHttps_Changed()
-        {
-            this.txtEXTHttpsIP.Enabled = this.txtEXTHttpsPort.Enabled = this.txtAppointHttpsPort.Enabled = this.cbEnableEXTHttps.Checked;
+        private void ExternalProxy_AppointPort_Changed()
+        { 
+            this.txtExternalProxy_AppointPort.Enabled = this.cbExternalProxy_AppointPort.Checked;
         }
 
-        #endregion        
+        #endregion
 
         #region//开始代理
 
@@ -432,14 +427,9 @@ namespace WinsockPacketEditor
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_169));
                 }
 
-                if (this.cbEnableEXTHttp.Checked)
+                if (this.cbExternalProxy_Enable.Checked)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_170));
-                }
-
-                if (this.cbEnableEXTHttps.Checked)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_171));
                 }
             }
             catch (Exception ex)
@@ -504,11 +494,11 @@ namespace WinsockPacketEditor
                     return false;
                 }                
 
-                if (this.cbEnableEXTHttp.Checked)
+                if (this.cbExternalProxy_Enable.Checked)
                 {
-                    string HttpIP = this.txtEXTHttpIP.Text.Trim();
-                    ushort HttpPort = ushort.Parse(this.txtEXTHttpPort.Text.Trim());
-                    string AppointHttpPort = this.txtAppointHttpPort.Text.Trim();
+                    string HttpIP = this.txtExternalProxy_IP.Text.Trim();
+                    ushort HttpPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
+                    string AppointHttpPort = this.txtExternalProxy_AppointPort.Text.Trim();
 
                     if (string.IsNullOrEmpty(HttpIP) || HttpPort < 1)
                     {
@@ -526,27 +516,31 @@ namespace WinsockPacketEditor
                     }                    
                 }
 
-                if (this.cbEnableEXTHttps.Checked)
+                if (this.cbExternalProxy_Enable.Checked)
                 {
-                    string HttpsIP = this.txtEXTHttpsIP.Text.Trim();
-                    ushort HttpsPort = ushort.Parse(this.txtEXTHttpsPort.Text.Trim());
-                    string AppointHttpsPort = this.txtAppointHttpsPort.Text.Trim();
+                    string ExternalProxyIP = this.txtExternalProxy_IP.Text.Trim();
+                    ushort ExternalProxyPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());                    
 
-                    if (string.IsNullOrEmpty(HttpsIP) || HttpsPort < 1)
+                    if (string.IsNullOrEmpty(ExternalProxyIP) || ExternalProxyPort < 1)
                     {
                         return false;
                     }
 
-                    if (!Socket_Operation.IsIPv4(HttpsIP))
+                    if (!Socket_Operation.IsIPv4(ExternalProxyIP))
                     {
                         return false;
-                    }
+                    }                    
+                }
 
-                    if (string.IsNullOrEmpty(AppointHttpsPort))
+                if (this.cbExternalProxy_AppointPort.Checked)
+                {
+                    string ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
+
+                    if (string.IsNullOrEmpty(ExternalProxy_AppointPort))
                     {
                         return false;
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -1122,6 +1116,7 @@ namespace WinsockPacketEditor
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
 
         #endregion        
     }

@@ -2155,6 +2155,23 @@ namespace WPELibrary.Lib
         {
             try
             {
+                if (Socket_Cache.SocketProxy.Enable_ExternalProxy)
+                {
+                    if (Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort && !string.IsNullOrEmpty(Socket_Cache.SocketProxy.ExternalProxy_AppointPort))
+                    {
+                        HashSet<string> ExternalProxyPorts = new HashSet<string>(Socket_Cache.SocketProxy.ExternalProxy_AppointPort.Split(','));
+
+                        if (ExternalProxyPorts.Contains(Port.ToString()))
+                        {
+                            return Socket_Cache.SocketProxy.DomainType.External;
+                        }
+                    }
+                    else
+                    {
+                        return Socket_Cache.SocketProxy.DomainType.External;
+                    }                    
+                }
+
                 if (Port == 80 || Port == 8080)
                 {
                     return Socket_Cache.SocketProxy.DomainType.Http;
@@ -2162,24 +2179,6 @@ namespace WPELibrary.Lib
                 else if (Port == 443 || Port == 8443)
                 {
                     return Socket_Cache.SocketProxy.DomainType.Https;
-                }
-
-                if (Socket_Cache.SocketProxy.Enable_EXTHttp && !string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpPort))
-                {
-                    HashSet<string> httpPorts = new HashSet<string>(Socket_Cache.SocketProxy.AppointHttpPort.Split(','));
-                    if (httpPorts.Contains(Port.ToString()))
-                    {
-                        return Socket_Cache.SocketProxy.DomainType.Http;
-                    }
-                }                
-
-                if (Socket_Cache.SocketProxy.Enable_EXTHttps && !string.IsNullOrEmpty(Socket_Cache.SocketProxy.AppointHttpsPort))
-                {
-                    HashSet<string> httpsPorts = new HashSet<string>(Socket_Cache.SocketProxy.AppointHttpsPort.Split(','));
-                    if (httpsPorts.Contains(Port.ToString()))
-                    {
-                        return Socket_Cache.SocketProxy.DomainType.Https;
-                    }
                 }
             }
             catch (Exception ex)
@@ -2372,11 +2371,15 @@ namespace WPELibrary.Lib
                         break;
 
                     case Socket_Cache.SocketProxy.DomainType.Http:
-                        sReturn = "http://" + Address + ": " + Port; ;
+                        sReturn = "http://" + Address + ": " + Port;
                         break;
 
                     case Socket_Cache.SocketProxy.DomainType.Https:
-                        sReturn = "https://" + Address + ": " + Port; ;
+                        sReturn = "https://" + Address + ": " + Port;
+                        break;
+
+                    case Socket_Cache.SocketProxy.DomainType.External:
+                        sReturn = "SOCKS5://" + Address + ": " + Port;
                         break;
                 }
             }

@@ -1279,379 +1279,388 @@
     <value>2</value>
   </data>
   <data name="tlpExternalProxy.ColumnCount" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="lHttpsProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lHttpsProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lHttpsProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lHttpsProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 34</value>
-  </data>
-  <data name="lHttpsProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="lHttpsProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 27</value>
-  </data>
-  <data name="lHttpsProxy.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="lHttpsProxy.Text" xml:space="preserve">
-    <value>:</value>
-  </data>
-  <data name="lHttpsProxy.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;lHttpsProxy.Name" xml:space="preserve">
-    <value>lHttpsProxy</value>
-  </data>
-  <data name="&gt;&gt;lHttpsProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lHttpsProxy.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;lHttpsProxy.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="txtEXTHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtEXTHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>332, 36</value>
-  </data>
-  <data name="txtEXTHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
-  </data>
-  <data name="txtEXTHttpsPort.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="txtEXTHttpsPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsPort.Name" xml:space="preserve">
-    <value>txtEXTHttpsPort</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsPort.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsPort.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="txtEXTHttpsIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtEXTHttpsIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>169, 36</value>
-  </data>
-  <data name="txtEXTHttpsIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
-  </data>
-  <data name="txtEXTHttpsIP.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsIP.Name" xml:space="preserve">
-    <value>txtEXTHttpsIP</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsIP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsIP.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpsIP.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="txtEXTHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtEXTHttpPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>332, 7</value>
-  </data>
-  <data name="txtEXTHttpPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 23</value>
-  </data>
-  <data name="txtEXTHttpPort.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="txtEXTHttpPort.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpPort.Name" xml:space="preserve">
-    <value>txtEXTHttpPort</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpPort.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpPort.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="cbEnableEXTHttps.AutoSize" type="System.Boolean, mscorlib">
+  <data name="tlpExternalProxy_AppointPort.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbExternalProxy_AppointPort.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="cbEnableEXTHttps.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbExternalProxy_AppointPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbEnableEXTHttps.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbExternalProxy_AppointPort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbEnableEXTHttps.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 36</value>
+  <data name="cbExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
   </data>
-  <data name="cbEnableEXTHttps.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 23</value>
+  <data name="cbExternalProxy_AppointPort.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 0, 0</value>
   </data>
-  <data name="cbEnableEXTHttps.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="cbExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 23</value>
   </data>
-  <data name="cbEnableEXTHttps.Text" xml:space="preserve">
-    <value>启用 - 外部 HTTPS 代理:</value>
+  <data name="cbExternalProxy_AppointPort.TabIndex" type="System.Int32, mscorlib">
+    <value>19</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttps.Name" xml:space="preserve">
-    <value>cbEnableEXTHttps</value>
+  <data name="cbExternalProxy_AppointPort.Text" xml:space="preserve">
+    <value>启用</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttps.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbExternalProxy_AppointPort.Name" xml:space="preserve">
+    <value>cbExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;cbExternalProxy_AppointPort.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttps.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
+  <data name="&gt;&gt;cbExternalProxy_AppointPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_AppointPort</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttps.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="cbEnableEXTHttp.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="cbEnableEXTHttp.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="cbEnableEXTHttp.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="cbEnableEXTHttp.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 7</value>
-  </data>
-  <data name="cbEnableEXTHttp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>160, 23</value>
-  </data>
-  <data name="cbEnableEXTHttp.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;cbExternalProxy_AppointPort.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cbEnableEXTHttp.Text" xml:space="preserve">
-    <value>启用 - 外部 HTTP 代理:</value>
+  <data name="txtExternalProxy_AppointPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttp.Name" xml:space="preserve">
-    <value>cbEnableEXTHttp</value>
+  <data name="txtExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>63, 9</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttp.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>322, 23</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttp.Parent" xml:space="preserve">
+  <data name="txtExternalProxy_AppointPort.TabIndex" type="System.Int32, mscorlib">
+    <value>18</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_AppointPort.Name" xml:space="preserve">
+    <value>txtExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_AppointPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_AppointPort.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_AppointPort.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>388, 42</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy_AppointPort.Name" xml:space="preserve">
+    <value>tlpExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy_AppointPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy_AppointPort.Parent" xml:space="preserve">
+    <value>gbExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy_AppointPort.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpExternalProxy_AppointPort.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbExternalProxy_AppointPort" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtExternalProxy_AppointPort" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>383, 3</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>394, 64</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="gbExternalProxy_AppointPort.Text" xml:space="preserve">
+    <value>指定端口</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_AppointPort.Name" xml:space="preserve">
+    <value>gbExternalProxy_AppointPort</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_AppointPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_AppointPort.Parent" xml:space="preserve">
     <value>tlpExternalProxy</value>
   </data>
-  <data name="&gt;&gt;cbEnableEXTHttp.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbExternalProxy_AppointPort.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpExternalProxy_Address.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="txtExternalProxy_IP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtExternalProxy_IP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
+  </data>
+  <data name="txtExternalProxy_IP.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 23</value>
+  </data>
+  <data name="txtExternalProxy_IP.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="txtExternalProxy_IP.Text" xml:space="preserve">
+    <value>127.0.0.1</value>
+  </data>
+  <data name="txtExternalProxy_IP.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_IP.Name" xml:space="preserve">
+    <value>txtExternalProxy_IP</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_IP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_IP.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_Address</value>
+  </data>
+  <data name="&gt;&gt;txtExternalProxy_IP.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="txtExternalProxy_Port.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtExternalProxy_Port.Location" type="System.Drawing.Point, System.Drawing">
+    <value>123, 9</value>
+  </data>
+  <data name="txtExternalProxy_Port.Size" type="System.Drawing.Size, System.Drawing">
+    <value>54, 23</value>
+  </data>
+  <data name="txtExternalProxy_Port.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="txtEXTHttpIP.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="txtExternalProxy_Port.Text" xml:space="preserve">
+    <value>8889</value>
   </data>
-  <data name="txtEXTHttpIP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>169, 7</value>
+  <data name="txtExternalProxy_Port.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
-  <data name="txtEXTHttpIP.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
+  <data name="&gt;&gt;txtExternalProxy_Port.Name" xml:space="preserve">
+    <value>txtExternalProxy_Port</value>
   </data>
-  <data name="txtEXTHttpIP.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpIP.Name" xml:space="preserve">
-    <value>txtEXTHttpIP</value>
-  </data>
-  <data name="&gt;&gt;txtEXTHttpIP.Type" xml:space="preserve">
+  <data name="&gt;&gt;txtExternalProxy_Port.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;txtEXTHttpIP.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
+  <data name="&gt;&gt;txtExternalProxy_Port.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_Address</value>
   </data>
-  <data name="&gt;&gt;txtEXTHttpIP.ZOrder" xml:space="preserve">
-    <value>6</value>
+  <data name="&gt;&gt;txtExternalProxy_Port.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="lHttpProxy.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lHttpProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpExternalProxy_Address.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lHttpProxy.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="tlpExternalProxy_Address.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
   </data>
-  <data name="lHttpProxy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>317, 5</value>
+  <data name="tlpExternalProxy_Address.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
-  <data name="lHttpProxy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>1, 1, 1, 1</value>
-  </data>
-  <data name="lHttpProxy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 27</value>
-  </data>
-  <data name="lHttpProxy.TabIndex" type="System.Int32, mscorlib">
+  <data name="tlpExternalProxy_Address.RowCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="lHttpProxy.Text" xml:space="preserve">
-    <value>:</value>
+  <data name="tlpExternalProxy_Address.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 42</value>
   </data>
-  <data name="lHttpProxy.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="tlpExternalProxy_Address.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;lHttpProxy.Name" xml:space="preserve">
-    <value>lHttpProxy</value>
+  <data name="&gt;&gt;tlpExternalProxy_Address.Name" xml:space="preserve">
+    <value>tlpExternalProxy_Address</value>
   </data>
-  <data name="&gt;&gt;lHttpProxy.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tlpExternalProxy_Address.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lHttpProxy.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tlpExternalProxy_Address.Parent" xml:space="preserve">
+    <value>gbExternalProxy_Address</value>
+  </data>
+  <data name="&gt;&gt;tlpExternalProxy_Address.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpExternalProxy_Address.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtExternalProxy_IP" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtExternalProxy_Port" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,120,Absolute,60,Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbExternalProxy_Address.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbExternalProxy_Address.Location" type="System.Drawing.Point, System.Drawing">
+    <value>183, 3</value>
+  </data>
+  <data name="gbExternalProxy_Address.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
+  </data>
+  <data name="gbExternalProxy_Address.Size" type="System.Drawing.Size, System.Drawing">
+    <value>194, 64</value>
+  </data>
+  <data name="gbExternalProxy_Address.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="gbExternalProxy_Address.Text" xml:space="preserve">
+    <value>代理地址</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_Address.Name" xml:space="preserve">
+    <value>gbExternalProxy_Address</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_Address.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_Address.Parent" xml:space="preserve">
     <value>tlpExternalProxy</value>
   </data>
-  <data name="&gt;&gt;lHttpProxy.ZOrder" xml:space="preserve">
-    <value>7</value>
+  <data name="&gt;&gt;gbExternalProxy_Address.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="lHttpPort.AutoSize" type="System.Boolean, mscorlib">
+  <data name="tlpExternalProxy_Enable.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="cbbProxyProtocol.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbbProxyProtocol.Items" xml:space="preserve">
+    <value>SOCKS5</value>
+  </data>
+  <data name="cbbProxyProtocol.Location" type="System.Drawing.Point, System.Drawing">
+    <value>57, 7</value>
+  </data>
+  <data name="cbbProxyProtocol.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="cbbProxyProtocol.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 25</value>
+  </data>
+  <data name="cbbProxyProtocol.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyProtocol.Name" xml:space="preserve">
+    <value>cbbProxyProtocol</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyProtocol.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyProtocol.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_Enable</value>
+  </data>
+  <data name="&gt;&gt;cbbProxyProtocol.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbExternalProxy_Enable.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbExternalProxy_Enable.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lHttpPort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbExternalProxy_Enable.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lHttpPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>412, 7</value>
+  <data name="cbExternalProxy_Enable.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 10</value>
   </data>
-  <data name="lHttpPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="cbExternalProxy_Enable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>51, 21</value>
   </data>
-  <data name="lHttpPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
+  <data name="cbExternalProxy_Enable.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="lHttpPort.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
+  <data name="cbExternalProxy_Enable.Text" xml:space="preserve">
+    <value>启用</value>
   </data>
-  <data name="lHttpPort.Text" xml:space="preserve">
-    <value>指定端口:</value>
+  <data name="&gt;&gt;cbExternalProxy_Enable.Name" xml:space="preserve">
+    <value>cbExternalProxy_Enable</value>
   </data>
-  <data name="lHttpPort.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;cbExternalProxy_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lHttpPort.Name" xml:space="preserve">
-    <value>lHttpPort</value>
+  <data name="&gt;&gt;cbExternalProxy_Enable.Parent" xml:space="preserve">
+    <value>tlpExternalProxy_Enable</value>
   </data>
-  <data name="&gt;&gt;lHttpPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cbExternalProxy_Enable.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
-  <data name="&gt;&gt;lHttpPort.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;lHttpPort.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="lHttpsPort.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpExternalProxy_Enable.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lHttpsPort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="tlpExternalProxy_Enable.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
   </data>
-  <data name="lHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>412, 36</value>
+  <data name="tlpExternalProxy_Enable.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
-  <data name="lHttpsPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="tlpExternalProxy_Enable.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="lHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 23</value>
+  <data name="tlpExternalProxy_Enable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 42</value>
   </data>
-  <data name="lHttpsPort.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+  <data name="tlpExternalProxy_Enable.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="lHttpsPort.Text" xml:space="preserve">
-    <value>指定端口:</value>
+  <data name="&gt;&gt;tlpExternalProxy_Enable.Name" xml:space="preserve">
+    <value>tlpExternalProxy_Enable</value>
   </data>
-  <data name="lHttpsPort.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;tlpExternalProxy_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lHttpsPort.Name" xml:space="preserve">
-    <value>lHttpsPort</value>
+  <data name="&gt;&gt;tlpExternalProxy_Enable.Parent" xml:space="preserve">
+    <value>gbExternalProxy_Enable</value>
   </data>
-  <data name="&gt;&gt;lHttpsPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tlpExternalProxy_Enable.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;lHttpsPort.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
+  <data name="tlpExternalProxy_Enable.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbProxyProtocol" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbExternalProxy_Enable" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="&gt;&gt;lHttpsPort.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="txtAppointHttpPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbExternalProxy_Enable.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="txtAppointHttpPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>477, 7</value>
+  <data name="gbExternalProxy_Enable.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
-  <data name="txtAppointHttpPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
+  <data name="gbExternalProxy_Enable.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 0</value>
   </data>
-  <data name="txtAppointHttpPort.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
+  <data name="gbExternalProxy_Enable.Size" type="System.Drawing.Size, System.Drawing">
+    <value>174, 64</value>
   </data>
-  <data name="&gt;&gt;txtAppointHttpPort.Name" xml:space="preserve">
-    <value>txtAppointHttpPort</value>
+  <data name="gbExternalProxy_Enable.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="&gt;&gt;txtAppointHttpPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="gbExternalProxy_Enable.Text" xml:space="preserve">
+    <value>代理协议</value>
   </data>
-  <data name="&gt;&gt;txtAppointHttpPort.Parent" xml:space="preserve">
+  <data name="&gt;&gt;gbExternalProxy_Enable.Name" xml:space="preserve">
+    <value>gbExternalProxy_Enable</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_Enable.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbExternalProxy_Enable.Parent" xml:space="preserve">
     <value>tlpExternalProxy</value>
   </data>
-  <data name="&gt;&gt;txtAppointHttpPort.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="txtAppointHttpsPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtAppointHttpsPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>477, 36</value>
-  </data>
-  <data name="txtAppointHttpsPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>144, 23</value>
-  </data>
-  <data name="txtAppointHttpsPort.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="&gt;&gt;txtAppointHttpsPort.Name" xml:space="preserve">
-    <value>txtAppointHttpsPort</value>
-  </data>
-  <data name="&gt;&gt;txtAppointHttpsPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtAppointHttpsPort.Parent" xml:space="preserve">
-    <value>tlpExternalProxy</value>
-  </data>
-  <data name="&gt;&gt;txtAppointHttpsPort.ZOrder" xml:space="preserve">
-    <value>11</value>
+  <data name="&gt;&gt;gbExternalProxy_Enable.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="tlpExternalProxy.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1663,7 +1672,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpExternalProxy.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="tlpExternalProxy.Size" type="System.Drawing.Size, System.Drawing">
     <value>780, 67</value>
@@ -1684,7 +1693,7 @@
     <value>0</value>
   </data>
   <data name="tlpExternalProxy.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHttpsProxy" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsPort" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpsIP" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpPort" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="cbEnableEXTHttps" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbEnableEXTHttp" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtEXTHttpIP" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lHttpProxy" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lHttpPort" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="lHttpsPort" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="txtAppointHttpPort" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txtAppointHttpsPort" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,150,AutoSize,0,Absolute,80,AutoSize,0,Absolute,150,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbExternalProxy_AppointPort" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbExternalProxy_Address" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbExternalProxy_Enable" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,180,Absolute,200,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -2134,7 +2143,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAfQBAwH0AQMBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAATgBBAE4AQQBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
