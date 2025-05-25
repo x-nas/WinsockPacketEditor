@@ -8894,6 +8894,7 @@ namespace WPELibrary.Lib
                         sql += "@UserName,";
                         sql += "@PassWord,";
                         sql += "@LoginIP,";
+                        sql += "@IPLocation,";
                         sql += "@IsExpiry,";
                         sql += "@ExpiryTime,";
                         sql += "@CreateTime";
