@@ -655,7 +655,7 @@ namespace WPELibrary
             {
                 Socket_Cache.SocketQueue.ResetSocketQueue();
                 Socket_Cache.SocketList.lstRecPacket.Clear();
-                Socket_Cache.SocketList.Select_Index = -1;
+                Socket_Cache.SocketList.spiSelect = null;
                 this.dgvSocketList.Rows.Clear();                
             }
             catch(Exception ex)
@@ -1139,13 +1139,14 @@ namespace WPELibrary
                         {
                             this.Invoke(new MethodInvoker(() =>
                             {
+                                this.dgvSocketList.ClearSelection();
                                 this.rbFromIndex.Checked = true;
                                 this.hbPacketData.SelectionStart = 0;
                                 Socket_Cache.SocketList.Search_Index = 0;
                             }));
                         }
 
-                        e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);
+                        e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);                        
                     }
                 }
             }
@@ -1166,10 +1167,10 @@ namespace WPELibrary
                         if (iSearchResultIndex >= 0)
                         {
                             this.dgvSocketList.Rows[iSearchResultIndex].Selected = true;
-                            this.dgvSocketList.CurrentCell = dgvSocketList.Rows[iSearchResultIndex].Cells[0];
-                            Socket_Cache.SocketList.Search_Index = iSearchResultIndex;
+                            this.dgvSocketList.CurrentCell = this.dgvSocketList.Rows[iSearchResultIndex].Cells[0];
+                            this.dgvSocketList.FirstDisplayedScrollingRowIndex = iSearchResultIndex;
 
-                            this.HexBox_FindNext();
+                            this.HexBox_FindNext();                            
                         }
                         else
                         {
@@ -1197,23 +1198,17 @@ namespace WPELibrary
         {
             try
             {
-                if (dgvSocketList.SelectedRows.Count > 0 && dgvSocketList.CurrentCell != null)
+                if (this.dgvSocketList.SelectedRows.Count > 0)
                 {
-                    Socket_Cache.SocketList.Select_Index = Socket_Cache.SocketList.Search_Index = dgvSocketList.CurrentCell.RowIndex;
+                    int iSelectIndex = this.dgvSocketList.SelectedRows[0].Index;
 
-                    if (Socket_Cache.SocketList.Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.SocketList.lstRecPacket.Count)
                     {
-                        byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer;
+                        Socket_Cache.SocketList.Search_Index = iSelectIndex;
+                        Socket_Cache.SocketList.spiSelect = Socket_Cache.SocketList.lstRecPacket[iSelectIndex];
 
-                        if (bSelected != null)
-                        {
-                            DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
-                            hbPacketData.ByteProvider = dbp;
-                        }
-                        else
-                        {
-                            hbPacketData.ByteProvider = null;
-                        }
+                        DynamicByteProvider dbp = new DynamicByteProvider(Socket_Cache.SocketList.spiSelect.PacketBuffer);
+                        hbPacketData.ByteProvider = dbp;
                     }
                 }
             }
@@ -1283,7 +1278,7 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SocketList.Select_Index > -1 && Socket_Cache.SocketList.Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                if (Socket_Cache.SocketList.spiSelect != null)
                 {
                     if (this.cmsHexBox_tscbSendList.SelectedItem != null)
                     {
@@ -1293,9 +1288,9 @@ namespace WPELibrary
 
                         if (SCollection != null)
                         {
-                            int iSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
-                            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketType;
-                            string sIPTo = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketTo;
+                            int iSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;
+                            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.spiSelect.PacketType;
+                            string sIPTo = Socket_Cache.SocketList.spiSelect.PacketTo;
 
                             byte[] bBuffer = null;
 
@@ -1306,7 +1301,7 @@ namespace WPELibrary
                             }
                             else
                             {
-                                bBuffer = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer;
+                                bBuffer = Socket_Cache.SocketList.spiSelect.PacketBuffer;
                             }
 
                             Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPTo, bBuffer);
@@ -1328,14 +1323,14 @@ namespace WPELibrary
             this.cmsHexBox.Close();
 
             try
-            {
-                if (Socket_Cache.SocketList.Select_Index > -1)
+            {                
+                if (Socket_Cache.SocketList.spiSelect != null)
                 {
                     switch (sItemText)
                     {
                         case "cmsHexBox_Send":
 
-                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
+                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.spiSelect);
 
                             break;
 
@@ -1346,11 +1341,11 @@ namespace WPELibrary
                                 this.hbPacketData.CopyHex();
 
                                 byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, bBuffer);
+                                Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, bBuffer);
                             }
                             else
                             {
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, null);
+                                Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, null);
                             }
 
                             break;
@@ -1477,73 +1472,56 @@ namespace WPELibrary
 
             try
             {
-                switch (sItemText)
+                if (Socket_Cache.SocketList.spiSelect != null)
                 {
-                    case "cmsSocketList_Send":
+                    switch (sItemText)
+                    {
+                        case "cmsSocketList_Send":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.Select_Index);
-                        }
+                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.spiSelect);
 
-                        break;                  
+                            break;
 
-                    case "cmsSocketList_FilterList":
+                        case "cmsSocketList_FilterList":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            Socket_Cache.Filter.AddFilter_BySocketListIndex(Socket_Cache.SocketList.Select_Index, null);
-                        }
+                            Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, null);
 
-                        break;
+                            break;
 
-                    case "cmsSocketList_SystemSocket":
+                        case "cmsSocketList_SystemSocket":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            Socket_Cache.System.SystemSocket = Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketSocket;
-                        }
+                            Socket_Cache.System.SystemSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;
 
-                        break;                        
+                            break;
 
-                    case "cmsSocketList_ShowModified":
+                        case "cmsSocketList_ShowModified":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            Socket_Operation.ShowSocketCompareForm(Socket_Cache.SocketList.Select_Index);
-                        }
+                            Socket_Operation.ShowSocketCompareForm(Socket_Cache.SocketList.spiSelect);
 
-                        break;
+                            break;
 
-                    case "cmsSocketList_ToExcel":
+                        case "cmsSocketList_ToExcel":
 
-                        if (dgvSocketList.Rows.Count > 0)
-                        {
-                            Socket_Cache.SocketList.SaveSocketList_Dialog();
-                        }
+                            if (dgvSocketList.Rows.Count > 0)
+                            {
+                                Socket_Cache.SocketList.SaveSocketList_Dialog();
+                            }
 
-                        break;
+                            break;
 
-                    case "cmsSocketList_Comparison_A":
+                        case "cmsSocketList_Comparison_A":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer);
-                            this.rtbComparison_A.Text = sPacketHex;
-                        }
+                            this.rtbComparison_A.Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.spiSelect.PacketBuffer);
 
-                        break;
+                            break;
 
-                    case "cmsSocketList_Comparison_B":
+                        case "cmsSocketList_Comparison_B":
 
-                        if (Socket_Cache.SocketList.Select_Index > -1)
-                        {
-                            string sPacketHex = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.lstRecPacket[Socket_Cache.SocketList.Select_Index].PacketBuffer);
-                            this.rtbComparison_B.Text = sPacketHex;
-                        }
+                            this.rtbComparison_B.Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.spiSelect.PacketBuffer);
 
-                        break;
-                }
+                            break;
+                    }
+                }                
             }
             catch (Exception ex)
             {

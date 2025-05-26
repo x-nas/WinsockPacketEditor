@@ -155,7 +155,7 @@ namespace WPELibrary.Lib
 
                                 case Socket_Cache.Robot.InstructionType.SendSocketList:
 
-                                    Socket_Cache.SocketList.SendSocketList_ByIndex(Socket_Cache.SocketList.Select_Index);
+                                    Socket_Cache.SocketList.SendSocketList_BySelect();
 
                                     break;
 

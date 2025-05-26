@@ -41,7 +41,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_29 = { "两个数据相同!", "The two data are the same!" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "发送: {0}  接收: {1}", "Sent: {0} Received: {1}" };
-        public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
+        //public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
@@ -145,7 +145,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_133 = { "快捷键: Ctrl + Alt + {0} 注册失败!", "HotKey: Ctrl + Alt + {0} registration failed!" };
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
-        public static string[] MutiLan_136 = { "查看数据修改 - 序号 [{0}]", "Show Data Modify - ID [{0}]" };
+        //public static string[] MutiLan_136 = { "查看数据修改 - 序号 [{0}]", "Show Data Modify - ID [{0}]" };
         public static string[] MutiLan_137 = { "代理IP地址: TCP [{0}] UDP [{1}]", "Proxy IP: TCP [{0}] UDP [{1}]" };
         public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
         public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };

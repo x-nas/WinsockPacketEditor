@@ -2485,6 +2485,29 @@ namespace WPELibrary.Lib
 
         #region//获取列表中的选中的项
 
+        //封包列表
+        public static List<Socket_PacketInfo> GetSelectedPacket(DataGridView dgvSocketList)
+        {
+            List<Socket_PacketInfo> spiList = new List<Socket_PacketInfo>();
+
+            try
+            {
+                for (int i = 0; i < dgvSocketList.Rows.Count; i++)
+                {
+                    if (dgvSocketList.Rows[i].Selected)
+                    {
+                        spiList.Add(Socket_Cache.SocketList.lstRecPacket[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return spiList;
+        }
+
         //滤镜列表
         public static List<Socket_FilterInfo> GetSelectedFilter(DataGridView dgvFilterList)
         {
@@ -3200,13 +3223,13 @@ namespace WPELibrary.Lib
 
         #region//显示发送窗体
 
-        public static void ShowSendForm(int iSLIndex)
+        public static void ShowSendForm(Socket_PacketInfo spi)
         {
             try
             {
-                if (iSLIndex > -1)
+                if (spi != null)
                 {
-                    Socket_SendForm ssForm = new Socket_SendForm(iSLIndex);
+                    Socket_SendForm ssForm = new Socket_SendForm(spi);
                     ssForm.Show();
                 }
             }
@@ -3220,13 +3243,13 @@ namespace WPELibrary.Lib
 
         #region//显示数据对比窗体
 
-        public static void ShowSocketCompareForm(int SelectIndex)
+        public static void ShowSocketCompareForm(Socket_PacketInfo spi)
         {
             try
             {
-                if (SelectIndex > -1)
+                if (spi != null)
                 {
-                    Socket_CompareForm compareForm = new Socket_CompareForm(SelectIndex);
+                    Socket_CompareForm compareForm = new Socket_CompareForm(spi);
                     compareForm.ShowDialog();
                 }
             }

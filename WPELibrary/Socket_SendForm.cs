@@ -10,23 +10,25 @@ namespace WPELibrary
 {
     public partial class Socket_SendForm : Form
     {
-        private int Select_Index = 0;        
+        private Socket_PacketInfo SPI;
         private int Send_CNT = 0;
         private int Send_Success = 0;
-        private int Send_Fail = 0;
-        private Socket_Cache.SocketPacket.PacketType Send_PacketType;
+        private int Send_Fail = 0;        
         private CancellationTokenSource cts;
 
         #region//窗体加载
 
-        public Socket_SendForm(int iSelectIndex)
+        public Socket_SendForm(Socket_PacketInfo spi)
         {
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);                
                 InitializeComponent();
 
-                this.Select_Index = iSelectIndex;                
+                if (spi != null)
+                { 
+                    this.SPI = spi;
+                }  
             }
             catch (Exception ex)
             {
@@ -40,8 +42,6 @@ namespace WPELibrary
 
         private void Socket_SendForm_Load(object sender, EventArgs e)
         {
-            this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), this.Select_Index + 1);
-
             this.bSend.Enabled = true;
             this.bSendStop.Enabled = false;
 
@@ -60,17 +60,15 @@ namespace WPELibrary
         {
             try
             {  
-                this.Send_PacketType = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketType;            
+                this.txtPacketTime.Text = this.SPI.PacketTime.ToString("HH: mm: ss: fffffff");              
+                this.txtPacketType.Text = Socket_Cache.SocketPacket.GetName_ByPacketType(this.SPI.PacketType);
 
-                this.txtPacketTime.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTime.ToString("HH: mm: ss: fffffff");              
-                this.txtPacketType.Text = Socket_Cache.SocketPacket.GetName_ByPacketType(Send_PacketType);
-
-                this.txtIPFrom.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketFrom;
-                this.txtIPTo.Text = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketTo;
-                this.pbSocketType.Image = Socket_Cache.SocketPacket.GetImg_ByPacketType(Send_PacketType);
+                this.txtIPFrom.Text = this.SPI.PacketFrom;
+                this.txtIPTo.Text = this.SPI.PacketTo;
+                this.pbSocketType.Image = Socket_Cache.SocketPacket.GetImg_ByPacketType(this.SPI.PacketType);
                 
                 this.nudSendSocket_Len.Value = hbPacketData.ByteProvider.Length;
-                this.nudSendSocket_Socket.Value = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketSocket;
+                this.nudSendSocket_Socket.Value = this.SPI.PacketSocket;
             }
             catch (Exception ex)
             {
@@ -82,26 +80,21 @@ namespace WPELibrary
         {
             try
             {
-                if (Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
-                {
-                    byte[] bSelected = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;
+                DynamicByteProvider dbp = new DynamicByteProvider(this.SPI.PacketBuffer);
+                dbp.Changed += new EventHandler(ByteProvider_Changed);
+                dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
+                hbPacketData.ByteProvider = dbp;
 
-                    DynamicByteProvider dbp = new DynamicByteProvider(bSelected);
-                    dbp.Changed += new EventHandler(ByteProvider_Changed);
-                    dbp.LengthChanged += new EventHandler(ByteProvider_LengthChanged);
-                    hbPacketData.ByteProvider = dbp;
+                DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
+                EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
+                tscbEncoding.Items.Add(defConverter);
+                tscbEncoding.Items.Add(ebcdicConverter);
+                tscbEncoding.SelectedIndex = 0;
+                tscbPerLine.SelectedIndex = 1;
 
-                    DefaultByteCharConverter defConverter = new DefaultByteCharConverter();
-                    EbcdicByteCharProvider ebcdicConverter = new EbcdicByteCharProvider();
-                    tscbEncoding.Items.Add(defConverter);
-                    tscbEncoding.Items.Add(ebcdicConverter);
-                    tscbEncoding.SelectedIndex = 0;
-                    tscbPerLine.SelectedIndex = 1;
-
-                    this.HexBox_LinePositionChanged();
-                    this.HexBox_UpdatePacketLen();
-                    this.HexBox_ManageAbility();
-                }
+                this.HexBox_LinePositionChanged();
+                this.HexBox_UpdatePacketLen();
+                this.HexBox_ManageAbility();
             }
             catch (Exception ex)
             {
@@ -163,21 +156,7 @@ namespace WPELibrary
 
         private void SendTypeChanged()
         {
-            try
-            {
-                if (this.rbSendType_Continuously.Checked)
-                {
-                    this.nudSendType_Times.Enabled = false;
-                }
-                else
-                {
-                    this.nudSendType_Times.Enabled = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            this.nudSendType_Times.Enabled = !this.rbSendType_Continuously.Checked;            
         }
 
         #endregion        
@@ -371,7 +350,7 @@ namespace WPELibrary
                     }
                 }
 
-                bool bSendOK = Socket_Operation.SendPacket(iSocket, Send_PacketType, sIPFrom, sIPTo, bSendBuff);
+                bool bSendOK = Socket_Operation.SendPacket(iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bSendBuff);
 
                 if (bSendOK)
                 {
@@ -438,12 +417,9 @@ namespace WPELibrary
                         Span<byte> bufferSpan = bNewBuff.AsSpan();
                         string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Socket_Cache.SocketPacket.PacketData_MaxLen);
 
-                        if (Select_Index >= 0 && Select_Index < Socket_Cache.SocketList.lstRecPacket.Count)
-                        {
-                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer = bNewBuff;
-                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketData = sNewPacketData_Hex;
-                            Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketLen = iNewLen;
-                        }
+                        this.SPI.PacketBuffer = bNewBuff;
+                        this.SPI.PacketData = sNewPacketData_Hex;
+                        this.SPI.PacketLen = iNewLen;
 
                         dbp.ApplyChanges();
                     }                    
@@ -505,7 +481,7 @@ namespace WPELibrary
                             bBuffer = dbp.Bytes.ToArray();
                         }                        
 
-                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.Send_PacketType, sIPTo, bBuffer);                      
+                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.SPI.PacketType, sIPTo, bBuffer);                      
                     }                                       
 
                     this.cmsHexBox.Close();
@@ -531,19 +507,16 @@ namespace WPELibrary
                 {  
                     case "cmsHexBox_FilterList":
 
-                        if (Select_Index > -1)
+                        if (this.hbPacketData.CanCopy())
                         {
-                            if (this.hbPacketData.CanCopy())
-                            {
-                                this.hbPacketData.CopyHex();
+                            this.hbPacketData.CopyHex();
 
-                                byte[] bBufferCopy = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBufferCopy);
-                            }
-                            else
-                            {
-                                Socket_Cache.Filter.AddFilter_BySocketListIndex(Select_Index, bBuffer);
-                            }
+                            byte[] bBufferCopy = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
+                            Socket_Cache.Filter.AddFilter_ByPacketInfo(this.SPI, bBufferCopy);
+                        }
+                        else
+                        {
+                            Socket_Cache.Filter.AddFilter_ByPacketInfo(this.SPI, bBuffer);
                         }
 
                         break;
@@ -793,8 +766,6 @@ namespace WPELibrary
             this.hbPacketData.PasteHex();
         }
 
-
-
         #endregion
 
         #region//查找
@@ -897,8 +868,6 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-
 
         #endregion
 

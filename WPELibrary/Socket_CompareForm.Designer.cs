@@ -60,6 +60,7 @@
             // 
             // hbModifiedData
             // 
+            resources.ApplyResources(this.hbModifiedData, "hbModifiedData");
             // 
             // 
             // 
@@ -72,7 +73,6 @@
             this.hbModifiedData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
             this.hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbModifiedData.ColumnInfoVisible = true;
-            resources.ApplyResources(this.hbModifiedData, "hbModifiedData");
             this.hbModifiedData.LineInfoVisible = true;
             this.hbModifiedData.Name = "hbModifiedData";
             this.hbModifiedData.ReadOnly = true;
@@ -92,6 +92,7 @@
             // 
             // hbRawData
             // 
+            resources.ApplyResources(this.hbRawData, "hbRawData");
             // 
             // 
             // 
@@ -104,7 +105,6 @@
             this.hbRawData.BuiltInContextMenu.SelectAllMenuItemImage = global::WPELibrary.Properties.Resources.SelectAll;
             this.hbRawData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbRawData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbRawData.ColumnInfoVisible = true;
-            resources.ApplyResources(this.hbRawData, "hbRawData");
             this.hbRawData.LineInfoVisible = true;
             this.hbRawData.Name = "hbRawData";
             this.hbRawData.ReadOnly = true;
@@ -114,15 +114,15 @@
             // 
             // pCompare
             // 
+            resources.ApplyResources(this.pCompare, "pCompare");
             this.pCompare.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pCompare.Controls.Add(this.rtbCompare);
-            resources.ApplyResources(this.pCompare, "pCompare");
             this.pCompare.Name = "pCompare";
             // 
             // rtbCompare
             // 
-            this.rtbCompare.BorderStyle = System.Windows.Forms.BorderStyle.None;
             resources.ApplyResources(this.rtbCompare, "rtbCompare");
+            this.rtbCompare.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbCompare.Name = "rtbCompare";
             this.rtbCompare.ReadOnly = true;
             // 
@@ -134,7 +134,6 @@
             this.DoubleBuffered = true;
             this.Name = "Socket_CompareForm";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.Socket_CompareForm_Load);
             this.tlpSocketCompare.ResumeLayout(false);
             this.tlpPacketData.ResumeLayout(false);
             this.tlpPacketData.PerformLayout();

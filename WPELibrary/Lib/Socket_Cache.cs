@@ -2579,8 +2579,9 @@ namespace WPELibrary.Lib
             public static bool AutoRoll = false;
             public static bool AutoClear = true;
             public static decimal AutoClear_Value = 5000;
-            public static int Select_Index = -1, Search_Index = -1;
+            public static int Search_Index = -1;
             public static FindOptions FindOptions = new FindOptions();
+            public static Socket_PacketInfo spiSelect;
             public static BindingList<Socket_PacketInfo> lstRecPacket = new BindingList<Socket_PacketInfo>();
             public delegate void SocketPacketReceived(Socket_PacketInfo si);
             public static event SocketPacketReceived RecSocketPacket;
@@ -2774,19 +2775,19 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//发送封包列表中的封包
+            #region//发送封包列表中当前选中的封包
 
-            public static void SendSocketList_ByIndex(int Index)
+            public static void SendSocketList_BySelect()
             {
                 try
                 {
-                    if (Index > -1 && Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                    if (Socket_Cache.SocketList.spiSelect != null)
                     {
-                        int Socket = Socket_Cache.SocketList.lstRecPacket[Index].PacketSocket;
-                        Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Index].PacketType;
-                        string From = Socket_Cache.SocketList.lstRecPacket[Index].PacketFrom;
-                        string To = Socket_Cache.SocketList.lstRecPacket[Index].PacketTo;
-                        byte[] bBuffer = Socket_Cache.SocketList.lstRecPacket[Index].PacketBuffer;
+                        int Socket = Socket_Cache.SocketList.spiSelect.PacketSocket;
+                        Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.spiSelect.PacketType;
+                        string From = Socket_Cache.SocketList.spiSelect.PacketFrom;
+                        string To = Socket_Cache.SocketList.spiSelect.PacketTo;
+                        byte[] bBuffer = Socket_Cache.SocketList.spiSelect.PacketBuffer;
 
                         Socket_Operation.SendPacket(Socket, ptType, From, To, bBuffer);
                     }
@@ -3200,22 +3201,20 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddFilter_BySocketListIndex(int iSLIndex, byte[] bBuffer)
+            public static void AddFilter_ByPacketInfo(Socket_PacketInfo spi, byte[] bBuffer)
             {
                 try
                 {
-                    if (SocketList.lstRecPacket.Count > 0 && iSLIndex >= 0)
+                    if (spi != null)
                     {
-                        Guid FID = Guid.NewGuid();
-                        int iIndex = iSLIndex + 1;
-                        string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + iIndex.ToString() + "]";
-                        Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketType;
-
                         if (bBuffer == null || bBuffer.Length == 0)
                         {
-                            bBuffer = Socket_Cache.SocketList.lstRecPacket[iSLIndex].PacketBuffer;
+                            bBuffer = spi.PacketBuffer;
                         }
 
+                        Guid FID = Guid.NewGuid();                     
+                        string sFName = Process.GetCurrentProcess().ProcessName.Trim() + " [" + bBuffer.Length + "]";
+                        Socket_Cache.SocketPacket.PacketType ptType = spi.PacketType;
                         Socket_Cache.Filter.FilterMode FilterMode = Socket_Cache.Filter.FilterMode.Normal;
                         Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.Filter.FilterAction.Replace;
                         Socket_Cache.Filter.FilterExecuteType FilterExecuteType = new Socket_Cache.Filter.FilterExecuteType();
@@ -3223,7 +3222,6 @@ namespace WPELibrary.Lib
                         Guid RID = Guid.Empty;
                         Socket_Cache.Filter.FilterFunction FilterFunction = Socket_Cache.Filter.GetFilterFunction_ByPacketType(ptType);
                         Socket_Cache.Filter.FilterStartFrom FilterStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
-
                         string sFSearch = Socket_Cache.Filter.GetFilterString_ByBytes(bBuffer);
 
                         Socket_Cache.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, sFSearch, string.Empty);

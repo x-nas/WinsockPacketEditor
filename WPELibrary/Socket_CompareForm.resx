@@ -117,302 +117,77 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpSocketCompare.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpPacketData.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="hbModifiedData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
-    <value>复制</value>
-  </data>
-  <data name="hbModifiedData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
-    <value>剪切</value>
-  </data>
-  <data name="hbModifiedData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
-    <value>粘贴</value>
-  </data>
-  <data name="hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
-    <value>全选</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="hbModifiedData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="hbModifiedData.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
   <data name="hbModifiedData.Location" type="System.Drawing.Point, System.Drawing">
     <value>470, 33</value>
-  </data>
-  <data name="hbModifiedData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>461, 240</value>
-  </data>
-  <data name="hbModifiedData.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;hbModifiedData.Name" xml:space="preserve">
-    <value>hbModifiedData</value>
-  </data>
-  <data name="&gt;&gt;hbModifiedData.Type" xml:space="preserve">
-    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;hbModifiedData.Parent" xml:space="preserve">
-    <value>tlpPacketData</value>
-  </data>
-  <data name="&gt;&gt;hbModifiedData.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lModifiedData.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lModifiedData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lModifiedData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>470, 3</value>
-  </data>
-  <data name="lModifiedData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lModifiedData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>461, 24</value>
-  </data>
-  <data name="lModifiedData.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="lModifiedData.Text" xml:space="preserve">
-    <value>修改后数据</value>
-  </data>
-  <data name="lModifiedData.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;lModifiedData.Name" xml:space="preserve">
-    <value>lModifiedData</value>
-  </data>
-  <data name="&gt;&gt;lModifiedData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lModifiedData.Parent" xml:space="preserve">
-    <value>tlpPacketData</value>
-  </data>
-  <data name="&gt;&gt;lModifiedData.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lRawData.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lRawData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="lRawData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="lRawData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="lRawData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>461, 24</value>
-  </data>
-  <data name="lRawData.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="lRawData.Text" xml:space="preserve">
-    <value>原始数据</value>
-  </data>
-  <data name="lRawData.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;lRawData.Name" xml:space="preserve">
-    <value>lRawData</value>
-  </data>
-  <data name="&gt;&gt;lRawData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lRawData.Parent" xml:space="preserve">
-    <value>tlpPacketData</value>
-  </data>
-  <data name="&gt;&gt;lRawData.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="hbRawData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
-    <value>复制</value>
-  </data>
-  <data name="hbRawData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
-    <value>剪切</value>
-  </data>
-  <data name="hbRawData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
-    <value>粘贴</value>
-  </data>
-  <data name="hbRawData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
-    <value>全选</value>
-  </data>
-  <data name="hbRawData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="hbRawData.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt</value>
-  </data>
-  <data name="hbRawData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 33</value>
-  </data>
-  <data name="hbRawData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>461, 240</value>
-  </data>
-  <data name="hbRawData.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;hbRawData.Name" xml:space="preserve">
-    <value>hbRawData</value>
-  </data>
-  <data name="&gt;&gt;hbRawData.Type" xml:space="preserve">
-    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;hbRawData.Parent" xml:space="preserve">
-    <value>tlpPacketData</value>
-  </data>
-  <data name="&gt;&gt;hbRawData.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="tlpPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpPacketData.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpPacketData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpPacketData.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 276</value>
-  </data>
-  <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpPacketData.Name" xml:space="preserve">
-    <value>tlpPacketData</value>
-  </data>
-  <data name="&gt;&gt;tlpPacketData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpPacketData.Parent" xml:space="preserve">
-    <value>tlpSocketCompare</value>
-  </data>
-  <data name="&gt;&gt;tlpPacketData.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpPacketData.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hbModifiedData" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lModifiedData" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lRawData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbRawData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="rtbCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="rtbCompare.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
-  <data name="rtbCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>920, 174</value>
-  </data>
-  <data name="rtbCompare.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
   </data>
   <data name="rtbCompare.Text" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;rtbCompare.Name" xml:space="preserve">
-    <value>rtbCompare</value>
+  <data name="&gt;&gt;hbModifiedData.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
-  <data name="&gt;&gt;rtbCompare.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;tlpSocketCompare.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
-  <data name="&gt;&gt;rtbCompare.Parent" xml:space="preserve">
-    <value>pCompare</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpSocketCompare.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
-  <data name="&gt;&gt;rtbCompare.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="pCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpPacketData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="pCompare.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 276</value>
+  <data name="&gt;&gt;tlpSocketCompare.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="pCompare.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 0, 3, 3</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="pCompare.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="&gt;&gt;hbModifiedData.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="pCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>928, 182</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="lRawData.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="pCompare.TabIndex" type="System.Int32, mscorlib">
+  <data name="lRawData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;pCompare.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lModifiedData.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="&gt;&gt;pCompare.Name" xml:space="preserve">
     <value>pCompare</value>
   </data>
-  <data name="&gt;&gt;pCompare.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;pCompare.Parent" xml:space="preserve">
-    <value>tlpSocketCompare</value>
-  </data>
-  <data name="&gt;&gt;pCompare.ZOrder" xml:space="preserve">
+  <data name="pCompare.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="tlpSocketCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpSocketCompare.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpSocketCompare.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="tlpSocketCompare.RowCount" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;lRawData.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="tlpSocketCompare.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 461</value>
   </data>
   <data name="tlpSocketCompare.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;tlpSocketCompare.Name" xml:space="preserve">
-    <value>tlpSocketCompare</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketCompare.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketCompare.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;tlpSocketCompare.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tlpPacketData.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpSocketCompare.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pCompare" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,60,Percent,40,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="pCompare.Size" type="System.Drawing.Size, System.Drawing">
+    <value>928, 182</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
+  <data name="tlpPacketData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>934, 461</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
   </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="tlpPacketData.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6586,16 +6361,241 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterParent</value>
+  <data name="tlpPacketData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="hbModifiedData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="lModifiedData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>470, 3</value>
+  </data>
+  <data name="&gt;&gt;hbModifiedData.Parent" xml:space="preserve">
+    <value>tlpPacketData</value>
+  </data>
+  <data name="&gt;&gt;lModifiedData.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpPacketData.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="hbModifiedData" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lModifiedData" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lRawData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="hbRawData" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;hbRawData.Type" xml:space="preserve">
+    <value>Be.Windows.Forms.HexBox, Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="hbRawData.BuiltInContextMenu.PasteMenuItemText" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="&gt;&gt;pCompare.Parent" xml:space="preserve">
+    <value>tlpSocketCompare</value>
+  </data>
+  <data name="&gt;&gt;pCompare.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="rtbCompare.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="lModifiedData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbModifiedData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>461, 240</value>
+  </data>
+  <data name="&gt;&gt;lRawData.Name" xml:space="preserve">
+    <value>lRawData</value>
+  </data>
+  <data name="&gt;&gt;lRawData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lRawData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="hbModifiedData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="hbModifiedData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lRawData.Text" xml:space="preserve">
+    <value>原始数据</value>
+  </data>
+  <data name="tlpSocketCompare.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="hbRawData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbRawData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>461, 240</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>数据修改</value>
+    <value>查看数据修改</value>
+  </data>
+  <data name="&gt;&gt;lModifiedData.Parent" xml:space="preserve">
+    <value>tlpPacketData</value>
+  </data>
+  <data name="&gt;&gt;hbModifiedData.Name" xml:space="preserve">
+    <value>hbModifiedData</value>
+  </data>
+  <data name="rtbCompare.Size" type="System.Drawing.Size, System.Drawing">
+    <value>920, 174</value>
+  </data>
+  <data name="hbRawData.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="lRawData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>461, 24</value>
+  </data>
+  <data name="rtbCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbRawData.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="pCompare.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 276</value>
+  </data>
+  <data name="&gt;&gt;rtbCompare.Name" xml:space="preserve">
+    <value>rtbCompare</value>
+  </data>
+  <data name="&gt;&gt;hbRawData.Parent" xml:space="preserve">
+    <value>tlpPacketData</value>
+  </data>
+  <data name="lModifiedData.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="pCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="hbModifiedData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="lRawData.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>934, 461</value>
+  </data>
+  <data name="lRawData.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="hbRawData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketData.Name" xml:space="preserve">
+    <value>tlpPacketData</value>
+  </data>
+  <data name="tlpPacketData.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lModifiedData.Text" xml:space="preserve">
+    <value>修改后数据</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="&gt;&gt;rtbCompare.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketCompare.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lRawData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="hbRawData.BuiltInContextMenu.CopyMenuItemText" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="&gt;&gt;lModifiedData.Name" xml:space="preserve">
+    <value>lModifiedData</value>
+  </data>
+  <data name="hbRawData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 33</value>
+  </data>
+  <data name="tlpSocketCompare.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="rtbCompare.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="tlpSocketCompare.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketData" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pCompare" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,60,Percent,40,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpPacketData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>934, 276</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Socket_CompareForm</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlpSocketCompare.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
   </data>
+  <data name="hbModifiedData.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt</value>
+  </data>
+  <data name="lModifiedData.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tlpSocketCompare.Size" type="System.Drawing.Size, System.Drawing">
+    <value>934, 461</value>
+  </data>
+  <data name="&gt;&gt;lModifiedData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lModifiedData.Size" type="System.Drawing.Size, System.Drawing">
+    <value>461, 24</value>
+  </data>
+  <data name="&gt;&gt;hbRawData.Name" xml:space="preserve">
+    <value>hbRawData</value>
+  </data>
+  <data name="tlpSocketCompare.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;rtbCompare.Parent" xml:space="preserve">
+    <value>pCompare</value>
+  </data>
+  <data name="lModifiedData.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;lRawData.Parent" xml:space="preserve">
+    <value>tlpPacketData</value>
+  </data>
+  <data name="hbModifiedData.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tlpPacketData.Parent" xml:space="preserve">
+    <value>tlpSocketCompare</value>
+  </data>
+  <data name="hbRawData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="&gt;&gt;hbRawData.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="pCompare.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="pCompare.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;rtbCompare.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="hbModifiedData.BuiltInContextMenu.CutMenuItemText" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="&gt;&gt;tlpSocketCompare.Name" xml:space="preserve">
+    <value>tlpSocketCompare</value>
+  </data>
+  <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

@@ -260,22 +260,22 @@
     <value>268, 84</value>
   </data>
   <data name="nudSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>78, 21</value>
+    <value>78, 24</value>
   </data>
   <data name="nudSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 21</value>
   </data>
   <data name="lSendSocket_Len.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 24</value>
+    <value>3, 27</value>
   </data>
   <data name="lSendSocket_Len.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 15</value>
+    <value>72, 18</value>
   </data>
   <data name="lSendSocket_Len.Text" xml:space="preserve">
     <value>Length:</value>
   </data>
   <data name="lSendSocket_Socket.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 15</value>
+    <value>72, 18</value>
   </data>
   <data name="lSendSocket_Socket.Text" xml:space="preserve">
     <value>Use Socket:</value>
@@ -342,10 +342,6 @@
   </data>
   <data name="tlpSendStepSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpSendStepSet.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
   </data>
   <data name="tlpSendStepSet.Size" type="System.Drawing.Size, System.Drawing">
     <value>269, 84</value>

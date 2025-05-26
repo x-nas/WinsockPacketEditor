@@ -8,28 +8,18 @@ namespace WPELibrary
 {
     public partial class Socket_CompareForm : Form
     {
-        private int Select_Index = -1;
-        private byte[] bRawBuffer;
-        private byte[] bModifiedBuffer;
+        private readonly Socket_PacketInfo SPI;      
 
         #region//窗体加载
 
-        public Socket_CompareForm(int SelectIndex)
+        public Socket_CompareForm(Socket_PacketInfo spi)
         {
             InitializeComponent();
-            this.Select_Index = SelectIndex;
-        }
 
-        private void Socket_CompareForm_Load(object sender, EventArgs e)
-        {
-            if (this.Select_Index > -1)
-            {
+            if (spi != null)
+            { 
+                this.SPI = spi;
                 this.InitForm();
-            }
-            else
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
-                this.Close();
             }
         }
 
@@ -41,28 +31,23 @@ namespace WPELibrary
         {
             try
             {
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_136), Select_Index + 1);
-
                 this.rtbCompare.Clear();
-                this.rtbCompare.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
+                this.rtbCompare.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);      
 
-                this.bRawBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].RawBuffer;
-                this.bModifiedBuffer = Socket_Cache.SocketList.lstRecPacket[Select_Index].PacketBuffer;                
+                string sRawData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.SPI.RawBuffer);
+                string sModifiedData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.SPI.PacketBuffer);                
 
-                string sRawData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bRawBuffer);
-                string sModifiedData = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, this.bModifiedBuffer);                
+                this.lRawData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_134), this.SPI.RawBuffer.Length);
+                this.lModifiedData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_135), this.SPI.PacketBuffer.Length);
 
-                this.lRawData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_134), bRawBuffer.Length);
-                this.lModifiedData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_135), bModifiedBuffer.Length);
-
-                if (bRawBuffer.Length > 0)
+                if (this.SPI.RawBuffer.Length > 0)
                 {
-                    hbRawData.ByteProvider = new DynamicByteProvider(bRawBuffer);
+                    hbRawData.ByteProvider = new DynamicByteProvider(this.SPI.RawBuffer);
                 }
 
-                if (bModifiedBuffer.Length > 0)
+                if (this.SPI.PacketBuffer.Length > 0)
                 {
-                    hbModifiedData.ByteProvider = new DynamicByteProvider(bModifiedBuffer);
+                    hbModifiedData.ByteProvider = new DynamicByteProvider(this.SPI.PacketBuffer);
                 }
 
                 this.rtbCompare.Rtf = await Socket_Operation.CompareData(this.Font, sRawData, sModifiedData);
