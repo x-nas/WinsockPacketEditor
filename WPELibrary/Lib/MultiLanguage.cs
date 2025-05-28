@@ -41,7 +41,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_29 = { "两个数据相同!", "The two data are the same!" };
         public static string[] MutiLan_30 = { "请正确设置查找内容！", "Please set the Find content correctly!" };
         public static string[] MutiLan_31 = { "发送: {0}  接收: {1}", "Sent: {0} Received: {1}" };
-        //public static string[] MutiLan_32 = { "发送 - [{0}]", "Send - [{0}]" };
+        public static string[] MutiLan_32 = { "页数：{0} / {1}", "Page：{0} / {1}" };
         public static string[] MutiLan_33 = { "文本 A  ( 长度 {0} )", "Text A  ( Length {0} )" };
         public static string[] MutiLan_34 = { "文本 B  ( 长度 {0} )", "Text B  ( Length {0} )" };
         public static string[] MutiLan_35 = { "加载系统配置成功！", "Load System Config successful!" };
@@ -57,7 +57,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_45 = { "套接字设置错误", "Socket setting error" };
         public static string[] MutiLan_46 = { "封包数据错误", "Packet data error" };
         public static string[] MutiLan_47 = { "递进位置设置错误", "Progressive position setting error" };
-        public static string[] MutiLan_48 = { "发送列表 - [ 序号 {0} ] - {1}", "Send List - [ ID {0} ] - {1}" };
+        public static string[] MutiLan_48 = { "发送列表 - {0}", "Send List - {0}" };
         public static string[] MutiLan_49 = { "请正确设置套接字", "Please set the socket correctly" };
         public static string[] MutiLan_50 = { "滤镜 {0}", "Filter {0}" };
         public static string[] MutiLan_51 = { "[{0}] {1} | [{2}] 封包长度: {3}", "[{0}] {1} | [{2}] Packet Length: {3}" };
@@ -145,7 +145,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_133 = { "快捷键: Ctrl + Alt + {0} 注册失败!", "HotKey: Ctrl + Alt + {0} registration failed!" };
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
-        //public static string[] MutiLan_136 = { "查看数据修改 - 序号 [{0}]", "Show Data Modify - ID [{0}]" };
+        public static string[] MutiLan_136 = { "账号 - 创建于 [ {0} ]", "Account - Created on [ {0} ]" };
         public static string[] MutiLan_137 = { "代理IP地址: TCP [{0}] UDP [{1}]", "Proxy IP: TCP [{0}] UDP [{1}]" };
         public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
         public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };
@@ -180,7 +180,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_168 = { "加载发送集成功! [已加密]", "Load send collection successful! [Encrypted]" };
         public static string[] MutiLan_169 = { "已启用身份认证！", "Identity authentication enabled!" };
         public static string[] MutiLan_170 = { "已启用外部 SOCKS5 代理！", "External SOCKS5 proxy enabled!" };
-        //public static string[] MutiLan_171 = { "已启用外部 HTTPS 代理！", "External HTTPS proxy enabled!" };
+        public static string[] MutiLan_171 = { "已选中 ( {0} ) 个账号！", "Selected ( {0} ) accounts!" };
         public static string[] MutiLan_172 = { "上行: {0} KB/s 下行: {1} KB/s", "Uplink: {0} KB/s Downlink: {1} KB/s" };
         public static string[] MutiLan_173 = { "换包", "Change" };
         public static string[] MutiLan_174 = { "换包数据不完整!", "The change packet data is incomplete!" };

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using WPELibrary;
@@ -67,14 +68,12 @@ namespace WinsockPacketEditor
                 if (this.cbEnable_SystemProxy.Checked)
                 {
                     Socket_Operation.StopSystemProxy();
-                }
-
-                
+                }                
 
                 this.SaveConfigs_Parameter();
 
                 Socket_Operation.StopRemoteMGT(this.RunMode);
-                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);                
+                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
             }
             catch (Exception ex)
@@ -124,7 +123,7 @@ namespace WinsockPacketEditor
                 this.Text = Socket_Cache.System.WPE + " - " + Socket_Operation.AssemblyVersion;
 
                 this.tSocketProxy.Enabled = true;
-                this.tCheckProxyState.Enabled = true;
+                this.tShowProxyState.Enabled = true;
                 this.cbbAuthType.SelectedIndex = 0;
                 this.cbbProxyProtocol.SelectedIndex = 0;
 
@@ -630,17 +629,17 @@ namespace WinsockPacketEditor
             }
         }
 
-        private void tCheckProxyState_Tick(object sender, EventArgs e)
+        private void tShowProxyState_Tick(object sender, EventArgs e)
         {
-            this.CheckProxyTCP();
-            this.CheckProxyUDP();
             this.ShowProxyInfo();
-            this.ShowProxyChart();
+            this.ShowProxyChart();            
         }
 
-        private void tCheckAccountOnLine_Tick(object sender, EventArgs e)
+        private void tUpdateProxyState_Tick(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyAccount.ResetProxyAccount_Online();
+            this.UpdateProxyTCP();
+            Socket_Cache.SocketProxy.UpdateProxyUDP();
+            Socket_Cache.ProxyAccount.UpdateOnlineStatus();
         }
 
         #endregion
@@ -740,67 +739,47 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//清理 TCP 和 UDP 端口
+        #region//更新 TCP 状态（异步）
 
-        private void CheckProxyTCP()
+        private async void UpdateProxyTCP()
         {
-            try
+            await Task.Run(() =>
             {
-                foreach (Socket_ProxyTCP spi in Socket_Cache.SocketProxyList.lstProxyTCP)
+                try
                 {
-                    if (spi.ClientSocket == null)
+                    foreach (Socket_ProxyTCP spi in Socket_Cache.SocketProxyList.lstProxyTCP)
                     {
-                        TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spi.ClientAddress);
-
-                        if (ClientNode != null)
+                        if (spi.ClientSocket == null)
                         {
-                            if (!IsDisposed)
+                            TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spi.ClientAddress);
+
+                            if (ClientNode != null)
                             {
-                                tvProxyInfo.BeginInvoke(new MethodInvoker(delegate
+                                if (!IsDisposed)
                                 {
-                                    if (this.cbDeleteClosed.Checked)
+                                    tvProxyInfo.BeginInvoke(new MethodInvoker(delegate
                                     {
-                                        ClientNode.Remove();
-                                    }
-                                    else
-                                    {
-                                        ClientNode.ImageIndex = 6;
-                                        ClientNode.SelectedImageIndex = 6;
-                                    }
-                                }));
+                                        if (this.cbDeleteClosed.Checked)
+                                        {
+                                            ClientNode.Remove();
+                                        }
+                                        else
+                                        {
+                                            ClientNode.ImageIndex = 6;
+                                            ClientNode.SelectedImageIndex = 6;
+                                        }
+                                    }));
+                                }
                             }
                         }
                     }
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void CheckProxyUDP()
-        {
-            try
-            {
-                DateTime dtNow = DateTime.Now;
-                foreach (Socket_ProxyUDP spu in Socket_Cache.SocketProxyList.lstProxyUDP)
-                {
-                    if (spu.ClientUDP != null && spu.ClientUDP_Time != null)
-                    {
-                        TimeSpan timeSpan = dtNow - spu.ClientUDP_Time;
-                        if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
-                        {
-                            spu.CloseUDPClient();
-                        }
-                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });            
+        }                
 
         #endregion        
 
@@ -1048,7 +1027,7 @@ namespace WinsockPacketEditor
                 ulong ProxyTCP_CNT = Socket_Cache.SocketProxy.ProxyTCP_CNT;
                 ulong ProxyUDP_CNT = Socket_Cache.SocketProxy.ProxyUDP_CNT;
                 ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
-                int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount();
+                int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount(Socket_Cache.ProxyAccount.lstProxyAccount);
                 Socket_Cache.SocketProxy.ProxyOnLineInfo = ProxyAccountOnLine.ToString() + "/" + Socket_Cache.ProxyAccount.lstProxyAccount.Count.ToString();
                 Socket_Cache.SocketProxy.ProxyBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
                 
@@ -1117,6 +1096,44 @@ namespace WinsockPacketEditor
             }
         }
 
+
+        #endregion
+
+        #region//封包编辑器右键菜单
+
+        private void cmsHexBox_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            this.cmsHexBox.Close();
+
+            try
+            {
+                switch (sItemText)
+                {                    
+                    case "cmsHexBox_CopyHex":
+
+                        this.hbData.CopyHex();
+
+                        break;
+
+                    case "cmsHexBox_Copy":
+
+                        this.hbData.Copy();
+
+                        break;              
+
+                    case "cmsHexBox_SelectAll":
+
+                        this.hbData.SelectAll();
+
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
 
         #endregion        
     }

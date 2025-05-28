@@ -124,7 +124,12 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//Socket_PacketInfo        
+        #region//Socket_PacketInfo
+
+        public Socket_PacketInfo()
+        { 
+            //
+        }
 
         public Socket_PacketInfo(DateTime pTime, int pSocket, Socket_Cache.SocketPacket.PacketType pType, string pFrom, string pTo, byte[] pRawBuffer, byte[] pBuffer, int pLen, Socket_Cache.Filter.FilterAction pAction)
         {  

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Windows.Forms;
-using System.Reflection;
-using WPELibrary.Lib;
+﻿using Be.Windows.Forms;
 using EasyHook;
-using Be.Windows.Forms;
-using System.Linq;
-using System.IO;
-using System.Xml.Linq;
-using System.Text;
-using WPELibrary.Lib.NativeMethods;
-using System.Data;
-using System.Threading;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
+using WPELibrary.Lib;
+using WPELibrary.Lib.NativeMethods;
 
 namespace WPELibrary
 {
@@ -1284,12 +1284,13 @@ namespace WPELibrary
                     {
                         Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
                         Guid SID = item.SID;
-                        DataTable SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+                        BindingList<Socket_PacketInfo> SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
 
                         if (SCollection != null)
                         {
                             int iSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;
                             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.spiSelect.PacketType;
+                            string sIPFrom = Socket_Cache.SocketList.spiSelect.PacketFrom;
                             string sIPTo = Socket_Cache.SocketList.spiSelect.PacketTo;
 
                             byte[] bBuffer = null;
@@ -1304,7 +1305,7 @@ namespace WPELibrary
                                 bBuffer = Socket_Cache.SocketList.spiSelect.PacketBuffer;
                             }
 
-                            Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPTo, bBuffer);
+                            Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
                         }
 
                         this.cmsHexBox.Close();
@@ -1448,12 +1449,11 @@ namespace WPELibrary
                     Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
 
-                    for (int i = 0; i < dgvSocketList.Rows.Count; i++)
+                    List<Socket_PacketInfo> spiList = Socket_Operation.GetSelectedSocket(this.dgvSocketList);
+
+                    if (spiList.Count > 0)
                     {
-                        if (dgvSocketList.Rows[i].Selected)
-                        {
-                            Socket_Cache.Send.AddSendCollection_ByIndex(SID, i);
-                        }
+                        Socket_Cache.Send.AddSendCollection_ByPacketInfo(SID, spiList);
                     }
 
                     this.cmsSocketList.Close();
@@ -1936,9 +1936,9 @@ namespace WPELibrary
                 {
                     int SIndex = e.RowIndex;
 
-                    if (SIndex > -1)
+                    if (SIndex > -1 && SIndex < Socket_Cache.SendList.lstSend.Count)
                     {
-                        Socket_Operation.ShowSendListForm_Dialog(SIndex);
+                        Socket_Operation.ShowSendListForm_Dialog(Socket_Cache.SendList.lstSend[SIndex]);
                     }
                 }
             }

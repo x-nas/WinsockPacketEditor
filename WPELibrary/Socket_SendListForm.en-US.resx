@@ -231,7 +231,16 @@
     <value>Data</value>
   </data>
   <data name="cmsSendCollection.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 210</value>
+    <value>177, 238</value>
+  </data>
+  <data name="cmsSendList_Send.Size" type="System.Drawing.Size, System.Drawing">
+    <value>176, 22</value>
+  </data>
+  <data name="cmsSendList_Send.Text" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>173, 6</value>
   </data>
   <data name="cmsSendList_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>176, 22</value>

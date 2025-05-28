@@ -117,110 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpAccountLogin.ColumnCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;cLoginTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <metadata name="cID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cID.HeaderText" xml:space="preserve">
-    <value>序号</value>
-  </data>
-  <data name="cID.Width" type="System.Int32, mscorlib">
-    <value>38</value>
-  </data>
-  <metadata name="cLoginTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cLoginTime.HeaderText" xml:space="preserve">
-    <value>登录时间</value>
-  </data>
-  <data name="cLoginTime.Width" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <metadata name="cLoginIP.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="cLoginIP.HeaderText" xml:space="preserve">
-    <value>登录IP</value>
-  </data>
-  <data name="cLoginIP.Width" type="System.Int32, mscorlib">
-    <value>49</value>
-  </data>
-  <metadata name="cIPLocation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <data name="cIPLocation.HeaderText" xml:space="preserve">
     <value>IP 所属地</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="dgvAccountLogin.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="dgvAccountLogin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
   <data name="dgvAccountLogin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 455</value>
+    <value>478, 255</value>
   </data>
-  <data name="dgvAccountLogin.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="cLoginIP.Width" type="System.Int32, mscorlib">
+    <value>49</value>
   </data>
-  <data name="&gt;&gt;dgvAccountLogin.Name" xml:space="preserve">
-    <value>dgvAccountLogin</value>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>484, 261</value>
   </data>
-  <data name="&gt;&gt;dgvAccountLogin.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;dgvAccountLogin.Parent" xml:space="preserve">
-    <value>tlpAccountLogin</value>
-  </data>
-  <data name="&gt;&gt;dgvAccountLogin.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpAccountLogin.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tlpAccountLogin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="tlpAccountLogin.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tlpAccountLogin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>584, 461</value>
-  </data>
-  <data name="tlpAccountLogin.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountLogin.Name" xml:space="preserve">
-    <value>tlpAccountLogin</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountLogin.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountLogin.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_AccountLoginForm</value>
   </data>
   <data name="&gt;&gt;tlpAccountLogin.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpAccountLogin.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAccountLogin" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="&gt;&gt;tlpAccountLogin.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
+  <data name="&gt;&gt;dgvAccountLogin.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>584, 461</value>
+  <data name="&gt;&gt;tlpAccountLogin.Name" xml:space="preserve">
+    <value>tlpAccountLogin</value>
   </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
+  <data name="&gt;&gt;dgvAccountLogin.Parent" xml:space="preserve">
+    <value>tlpAccountLogin</value>
+  </data>
+  <data name="tlpAccountLogin.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cLoginIP.HeaderText" xml:space="preserve">
+    <value>登录IP</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6394,40 +6330,104 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterParent</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>账号</value>
+  <data name="&gt;&gt;tlpAccountLogin.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;cID.Name" xml:space="preserve">
     <value>cID</value>
   </data>
-  <data name="&gt;&gt;cID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>账号</value>
   </data>
-  <data name="&gt;&gt;cLoginTime.Name" xml:space="preserve">
-    <value>cLoginTime</value>
-  </data>
-  <data name="&gt;&gt;cLoginTime.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cLoginIP.Name" xml:space="preserve">
-    <value>cLoginIP</value>
-  </data>
-  <data name="&gt;&gt;cLoginIP.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cIPLocation.Name" xml:space="preserve">
-    <value>cIPLocation</value>
+  <data name="cLoginTime.HeaderText" xml:space="preserve">
+    <value>登录时间</value>
   </data>
   <data name="&gt;&gt;cIPLocation.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Proxy_AccountLoginForm</value>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="tlpAccountLogin.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountLogin.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="dgvAccountLogin.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;cID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="dgvAccountLogin.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="cID.Width" type="System.Int32, mscorlib">
+    <value>38</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tlpAccountLogin.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cID.HeaderText" xml:space="preserve">
+    <value>序号</value>
+  </data>
+  <data name="tlpAccountLogin.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAccountLogin" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpAccountLogin.Size" type="System.Drawing.Size, System.Drawing">
+    <value>484, 261</value>
+  </data>
+  <data name="&gt;&gt;cIPLocation.Name" xml:space="preserve">
+    <value>cIPLocation</value>
+  </data>
+  <data name="tlpAccountLogin.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
+  </data>
+  <data name="&gt;&gt;dgvAccountLogin.Name" xml:space="preserve">
+    <value>dgvAccountLogin</value>
+  </data>
+  <data name="&gt;&gt;cLoginIP.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="cLoginTime.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <data name="&gt;&gt;cLoginIP.Name" xml:space="preserve">
+    <value>cLoginIP</value>
+  </data>
+  <data name="&gt;&gt;cLoginTime.Name" xml:space="preserve">
+    <value>cLoginTime</value>
+  </data>
+  <data name="tlpAccountLogin.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="dgvAccountLogin.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <metadata name="cLoginIP.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cIPLocation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cLoginTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

@@ -52,6 +52,18 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//登录时间
+
+        protected DateTime logintime;
+
+        public DateTime LoginTime
+        {
+            get { return logintime; }
+            set { logintime = value; }
+        }
+
+        #endregion
+
         #region//登录IP
 
         protected string loginip;
@@ -131,12 +143,13 @@ namespace WPELibrary.Lib
             //
         }
 
-        public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
+        public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, DateTime LoginTime, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
         {
             this.aid = AID;
             this.isenable = IsEnable;
             this.username = UserName;
             this.password = PassWord;
+            this.logintime = LoginTime;
             this.loginip = LoginIP;
             this.iplocation = IPLocation;
             this.isexpiry = IsExpiry;

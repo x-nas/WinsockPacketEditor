@@ -38,21 +38,19 @@ namespace WPELibrary
 
                     if (pai != null)
                     {
-                        this.Text += " - " + Socket_Cache.ProxyAccount.GetUserName_ByAccountID(this.SelectAID);
+                        this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_136), pai.CreateTime.ToString("yyyy-MM-dd HH:mm"));
+                        this.cbIsEnable.Checked = pai.IsEnable;
+                        this.txtUserName.Text = pai.UserName;
+                        this.txtPassWord.Text = Socket_Operation.PassWord_Decrypt(pai.PassWord);
+                        this.cbIsExpiry.Checked = pai.IsExpiry;
 
-                        bool IsEnable = pai.IsEnable;
-                        string UserName = pai.UserName;
-                        string PassWord = Socket_Operation.PassWord_Decrypt(pai.PassWord);
-                        bool IsExpiry = pai.IsExpiry;
-                        DateTime ExpiryTime = pai.ExpiryTime;
+                        if (pai.ExpiryTime > this.dtpExpiryTime.MaxDate)
+                        {
+                            pai.ExpiryTime = this.dtpExpiryTime.MaxDate;
+                        }
 
-                        this.cbIsEnable.Checked = IsEnable;
-                        this.txtUserName.Text = UserName;
-                        this.txtPassWord.Text = PassWord;
-                        this.cbIsExpiry.Checked = IsExpiry;
-                        this.dtpExpiryTime.Value = ExpiryTime;
-
-                        this.txtUserName.Enabled = false;
+                        this.dtpExpiryTime.Value = pai.ExpiryTime;
+                        this.txtUserName.Enabled = false;                 
                     }                    
                 }
 
@@ -83,7 +81,17 @@ namespace WPELibrary
                 string PassWord = this.txtPassWord.Text.Trim();
                 PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
                 bool IsExpiry = this.cbIsExpiry.Checked;
-                DateTime ExpiryTime = this.dtpExpiryTime.Value;
+                DateTime LoginTime = DateTime.MinValue;
+
+                DateTime ExpiryTime;
+                if (IsExpiry)
+                {
+                    ExpiryTime = this.dtpExpiryTime.Value;
+                }
+                else
+                {
+                    ExpiryTime = this.dtpExpiryTime.MaxDate;
+                }
 
                 if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
@@ -91,13 +99,13 @@ namespace WPELibrary
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                         return;
-                    }                    
+                    }
 
-                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, string.Empty, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
+                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, LoginTime, string.Empty, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
                 }
                 else
                 {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, PassWord, IsExpiry, ExpiryTime);                    
+                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, PassWord, IsExpiry, ExpiryTime);
                 }
 
                 this.Close();

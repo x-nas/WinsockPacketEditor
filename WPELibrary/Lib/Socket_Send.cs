@@ -18,7 +18,7 @@ namespace WPELibrary.Lib
         public string SendName = string.Empty;
 
         private CancellationTokenSource cts;
-        private DataTable SendCollection = new DataTable();
+        private BindingList<Socket_PacketInfo> SendCollection;
         public BackgroundWorker Worker = new BackgroundWorker();
 
         #region//初始化
@@ -42,11 +42,11 @@ namespace WPELibrary.Lib
 
         #region//启动发送
 
-        public void StartSend(string SendName, bool SystemSocket, int LoopCNT, int LoopINT, DataTable SendCollection)
+        public void StartSend(string SendName, bool SystemSocket, int LoopCNT, int LoopINT, BindingList<Socket_PacketInfo> SendCollection)
         {
             try
             {
-                if (SendCollection.Rows.Count > 0)
+                if (SendCollection.Count > 0)
                 {
                     if (!this.Worker.IsBusy)
                     {
@@ -117,7 +117,7 @@ namespace WPELibrary.Lib
 
                 for (int i = 0; i < this.LoopCNT; i++)
                 {
-                    for (int j = 0; j < SendCollection.Rows.Count; j++)
+                    foreach (Socket_PacketInfo spi in this.SendCollection)
                     {
                         if (Worker.CancellationPending)
                         {
@@ -126,11 +126,7 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            int Socket = (int)this.SendCollection.Rows[j]["Socket"];
-                            Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)this.SendCollection.Rows[j]["Type"];
-                            string sIPTo = this.SendCollection.Rows[j]["IPTo"].ToString();
-                            byte[] bBuffer = (byte[])this.SendCollection.Rows[j]["Buffer"];
-
+                            int Socket = spi.PacketSocket;
                             if (this.SystemSocket)
                             {
                                 Socket = Socket_Cache.System.SystemSocket;
@@ -138,7 +134,7 @@ namespace WPELibrary.Lib
 
                             if (Socket > 0)
                             {
-                                bool bOK = Socket_Operation.SendPacket(Socket, ptType, string.Empty, sIPTo, bBuffer);
+                                bool bOK = Socket_Operation.SendPacket(Socket, spi.PacketType, string.Empty, spi.PacketTo, spi.PacketBuffer);
 
                                 if (bOK)
                                 {
@@ -153,11 +149,11 @@ namespace WPELibrary.Lib
 
                                 if (this.LoopINT > 0)
                                 {
-                                    Worker.ReportProgress(j);
+                                    Worker.ReportProgress(i);
                                     Socket_Operation.DoSleepAsync(this.LoopINT, this.cts.Token).Wait();
                                 }
                             }
-                        }                                                
+                        }
                     }
                 }
             }

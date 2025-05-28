@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.ComponentModel;
 
 namespace WPELibrary.Lib
 {
@@ -77,11 +77,11 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//发送集合
+        #region//发送集
 
-        protected DataTable scollection;
+        protected BindingList<Socket_PacketInfo> scollection;
 
-        public DataTable SCollection
+        public BindingList<Socket_PacketInfo> SCollection
         {
             get { return scollection; }
             set { scollection = value; }
@@ -109,8 +109,8 @@ namespace WPELibrary.Lib
             string SName, 
             bool SSystemSocket, 
             int SLoopCNT, 
-            int SLoopINT, 
-            DataTable SCollection, 
+            int SLoopINT,
+            BindingList<Socket_PacketInfo> SCollection, 
             string SNotes)
         {
             this.isenable = IsEnable;

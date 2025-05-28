@@ -84,12 +84,12 @@
             // tlpAccountInfo
             // 
             resources.ApplyResources(this.tlpAccountInfo, "tlpAccountInfo");
-            this.tlpAccountInfo.Controls.Add(this.txtPassWord, 2, 2);
-            this.tlpAccountInfo.Controls.Add(this.lPassWord, 1, 2);
-            this.tlpAccountInfo.Controls.Add(this.lUserName, 1, 1);
-            this.tlpAccountInfo.Controls.Add(this.txtUserName, 2, 1);
-            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 3);
-            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 3);
+            this.tlpAccountInfo.Controls.Add(this.txtPassWord, 2, 1);
+            this.tlpAccountInfo.Controls.Add(this.lPassWord, 1, 1);
+            this.tlpAccountInfo.Controls.Add(this.lUserName, 1, 0);
+            this.tlpAccountInfo.Controls.Add(this.txtUserName, 2, 0);
+            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 2);
+            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 2);
             this.tlpAccountInfo.Name = "tlpAccountInfo";
             // 
             // txtPassWord
@@ -125,7 +125,9 @@
             // dtpExpiryTime
             // 
             resources.ApplyResources(this.dtpExpiryTime, "dtpExpiryTime");
+            this.dtpExpiryTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpExpiryTime.Name = "dtpExpiryTime";
+            this.dtpExpiryTime.ShowUpDown = true;
             // 
             // Proxy_AccountForm
             // 

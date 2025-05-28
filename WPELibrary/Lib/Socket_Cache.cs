@@ -590,8 +590,8 @@ namespace WPELibrary.Lib
                             bAuth[0] = 0x01;
                             bAuth[1] = 0x00;
 
-                            Socket_Cache.ProxyAccount.SetProxyAccount_Online(AccountID, true);
-                            Socket_Cache.SocketProxy.RecordLoginIP(AccountID, epClient.Address.ToString());
+                            Socket_Cache.ProxyAccount.SetOnline_ByAccountID(AccountID, true);
+                            Socket_Cache.ProxyAccount.RecordLoginIP_ByAccountID(AccountID, epClient.Address.ToString());
                         }
                         else
                         {
@@ -999,44 +999,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
-
-            #region//记录登录端IP地址
-
-            public static async void RecordLoginIP(Guid AccountID, string IPAddress)
-            {
-                try
-                {
-                    if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
-                    {
-                        Proxy_AccountInfo paiItem = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(item => item.AID == AccountID);
-
-                        if (paiItem != null)
-                        {
-                            if (paiItem.LoginIP != IPAddress)
-                            {
-                                paiItem.LoginIP = IPAddress;
-                                paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
-
-                                Socket_Cache.ProxyAccount.SaveProxyAccount_LoginInfo_ToDB(paiItem);
-                            }
-                            else
-                            {
-                                if (string.IsNullOrEmpty(paiItem.IPLocation))
-                                {
-                                    paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
-                                }
-                            }                            
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
+            #endregion            
 
             #region//获取客户端的名称
 
@@ -1065,6 +1028,36 @@ namespace WPELibrary.Lib
                 }
 
                 return sReturn;
+            }
+
+            #endregion
+
+            #region//更新 UDP 状态（异步）
+
+            public static async void UpdateProxyUDP()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        DateTime dtNow = DateTime.Now;
+                        foreach (Socket_ProxyUDP spu in Socket_Cache.SocketProxyList.lstProxyUDP)
+                        {
+                            if (spu.ClientUDP != null && spu.ClientUDP_Time != null)
+                            {
+                                TimeSpan timeSpan = dtNow - spu.ClientUDP_Time;
+                                if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
+                                {
+                                    spu.CloseUDPClient();
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
             }
 
             #endregion
@@ -1272,6 +1265,7 @@ namespace WPELibrary.Lib
         public static class ProxyAccount
         {            
             public static bool IsShow = false;
+            public static int OnLineTimeOut = 60;
             public static string AESKey = string.Empty;
             public static string CCProxy_HTML = string.Empty;
             public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
@@ -1361,34 +1355,7 @@ namespace WPELibrary.Lib
                 return false;
             }
 
-            #endregion
-
-            #region//通过GUID获取账号的用户名
-
-            public static string GetUserName_ByAccountID(Guid AccountID)
-            {
-                string sReturn = string.Empty;
-
-                try
-                {
-                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
-                    {
-                        if (pai.AID.Equals(AccountID))
-                        {
-                            sReturn = pai.UserName;
-                            break;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return sReturn;
-            }
-
-            #endregion
+            #endregion            
 
             #region//获取认证结果对应的图标
 
@@ -1416,16 +1383,98 @@ namespace WPELibrary.Lib
 
             #region//设置代理账号的在线情况
 
-            public static void SetProxyAccount_Online(Guid AccountID, bool IsOnline)
+            public static void SetOnline_ByAccountID(Guid AccountID, bool IsOnline)
             {
                 try
                 {
                     foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
                     {
                         if (pai.AID.Equals(AccountID))
-                        {
+                        {                            
                             pai.IsOnLine = IsOnline;
+
+                            if (IsOnline)
+                            { 
+                                pai.LoginTime = DateTime.Now;
+                            }
+
                             break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//更新所有代理账号的在线状态（异步）
+
+            public static async void UpdateOnlineStatus()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        DateTime dtNow = DateTime.Now;
+
+                        foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                        {
+                            if (pai.IsOnLine)
+                            {
+                                if (pai.LoginTime != null)
+                                {
+                                    TimeSpan timeDiff = dtNow - pai.LoginTime;
+
+                                    if (timeDiff.TotalMinutes > Socket_Cache.ProxyAccount.OnLineTimeOut)
+                                    {
+                                        pai.IsOnLine = false;
+                                    }
+                                }
+                                else
+                                {
+                                    pai.IsOnLine = false;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });                
+            }
+
+            #endregion
+
+            #region//记录代理账号的IP地址（异步）
+
+            public static async void RecordLoginIP_ByAccountID(Guid AccountID, string IPAddress)
+            {
+                try
+                {
+                    if (AccountID != Guid.Empty && !string.IsNullOrEmpty(IPAddress))
+                    {
+                        Proxy_AccountInfo paiItem = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(item => item.AID == AccountID);
+
+                        if (paiItem != null)
+                        {
+                            if (paiItem.LoginIP != IPAddress)
+                            {
+                                paiItem.LoginIP = IPAddress;
+                                paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+
+                                Socket_Cache.ProxyAccount.SaveProxyAccount_LoginInfo_ToDB(paiItem);
+                            }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(paiItem.IPLocation))
+                                {
+                                    paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                }
+                            }
                         }
                     }
                 }
@@ -1439,7 +1488,7 @@ namespace WPELibrary.Lib
 
             #region//新增代理账号
 
-            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, DateTime LoginTime, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
             {
                 try
                 {
@@ -1447,7 +1496,7 @@ namespace WPELibrary.Lib
                     {
                         if (!Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
                         {
-                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
                             Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
 
                             return true;
@@ -1529,19 +1578,19 @@ namespace WPELibrary.Lib
 
             #region//删除代理账号
 
-            public static void DeleteProxyAccount_Dialog(List<Proxy_AccountInfo> paiList)
+            public static void DeleteProxyAccount_Dialog(List<Guid> gList)
             {
                 try
                 {
-                    if (paiList.Count > 0)
+                    if (gList.Count > 0)
                     {
                         DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
 
                         if (dr.Equals(DialogResult.OK))
                         {
-                            foreach (Proxy_AccountInfo pai in paiList)
+                            foreach (Guid gAID in gList)
                             {
-                                Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
+                                Socket_Cache.ProxyAccount.DeleteProxyAccount_ByAccountID(gAID);
                             }
                         }
                     }
@@ -1649,6 +1698,10 @@ namespace WPELibrary.Lib
 
                         return pai;
                     }
+                    else
+                    { 
+                        return Socket_Cache.ProxyAccount.lstProxyAccount;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1709,6 +1762,23 @@ namespace WPELibrary.Lib
                 return null;
             }
 
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.ExpiryTime >= dtFrom && account.ExpiryTime <= dtTo).ToList());
+
+                    return pai;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
             #endregion
 
             #region//代理账号入列表
@@ -1733,22 +1803,42 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//重置代理账号的在线状态
+            #region//代理账号加时
 
-            public static void ResetProxyAccount_Online()
+            public static void ProxyAccountAddTime_Dialog(List<Guid> gList, int Hours)
             {
                 try
                 {
-                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    if (gList.Count > 0)
                     {
-                        pai.IsOnLine = false;
+                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
+
+                        if (dr.Equals(DialogResult.OK))
+                        {
+                            foreach (Guid gAID in gList)
+                            {
+                                Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(gAID);
+
+                                if (pai != null)
+                                {
+                                    if (pai.ExpiryTime >= DateTime.Now)
+                                    {
+                                        pai.ExpiryTime = pai.ExpiryTime.AddHours(Hours);
+                                    }
+                                    else
+                                    {
+                                        pai.ExpiryTime = DateTime.Now.AddHours(Hours);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }
+            }            
 
             #endregion            
 
@@ -1799,58 +1889,64 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.System.StartMode == FromMode)
                     {
-                        Socket_Cache.DataBase.DeleteTable_ProxyAccount();
-
-                        foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                        try
                         {
-                            Socket_Cache.DataBase.InsertTable_ProxyAccount(pai);
+                            Socket_Cache.DataBase.DeleteTable_ProxyAccount();
+                            Socket_Cache.DataBase.InsertTable_ProxyAccount();
+                            Socket_Cache.DataBase.DeleteTable_ProxyAccount_LoginInfo();
                         }
-
-                        Socket_Cache.DataBase.DeleteTable_ProxyAccount_LoginInfo();
-                    }                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
-
-            #region//从数据库加载代理账号列表
-
-            public static void LoadProxyAccountList_FromDB()
-            {
-                try
-                {
-                    DataTable dtProxyAccount = Socket_Cache.DataBase.SelectTable_ProxyAccount();
-
-                    foreach (DataRow dataRow in dtProxyAccount.Rows)
-                    {
-                        Guid AID = Guid.Parse(dataRow["GUID"].ToString());
-                        bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
-                        string UserName = dataRow["UserName"].ToString();
-                        string PassWord = dataRow["PassWord"].ToString();
-                        string LoginIP = dataRow["LoginIP"].ToString();
-                        string IPLocation = dataRow["IPLocation"].ToString();
-                        bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
-                        DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
-                        DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);                        
-
-                        Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                        catch (Exception ex)
+                        {
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }            
+
+            #endregion
+
+            #region//从数据库加载代理账号列表（异步）
+
+            public static async void LoadProxyAccountList_FromDB()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        DataTable dtProxyAccount = Socket_Cache.DataBase.SelectTable_ProxyAccount();
+
+                        foreach (DataRow dataRow in dtProxyAccount.Rows)
+                        {
+                            Guid AID = Guid.Parse(dataRow["GUID"].ToString());
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            string UserName = dataRow["UserName"].ToString();
+                            string PassWord = dataRow["PassWord"].ToString();
+                            DateTime LoginTime = Convert.ToDateTime(dataRow["LoginTime"]);
+                            string LoginIP = dataRow["LoginIP"].ToString();
+                            string IPLocation = dataRow["IPLocation"].ToString();
+                            bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
+                            DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
+                            DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
+
+                            Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });
             }
 
             #endregion
 
             #region//保存代理账号列表到文件（对话框）
 
-            public static void SaveProxyAccountList_Dialog(string FileName, List<Proxy_AccountInfo> paiList)
+            public static void SaveProxyAccountList_Dialog(string FileName, List<Guid> gList)
             {
                 try
                 {
@@ -1875,7 +1971,7 @@ namespace WPELibrary.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                SaveProxyAccountList(FilePath, paiList, true);
+                                SaveProxyAccountList(FilePath, gList, true);
 
                                 string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_190), FilePath);
                                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
@@ -1889,11 +1985,11 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveProxyAccountList(string FilePath, List<Proxy_AccountInfo> paiList, bool DoEncrypt)
+            private static void SaveProxyAccountList(string FilePath, List<Guid> gList, bool DoEncrypt)
             {
                 try
                 {
-                    SaveProxyAccountList_ToXDocument(FilePath, paiList);
+                    SaveProxyAccountList_ToXDocument(FilePath, gList);
 
                     if (DoEncrypt)
                     {
@@ -1911,7 +2007,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveProxyAccountList_ToXDocument(string FilePath, List<Proxy_AccountInfo> paiList)
+            private static void SaveProxyAccountList_ToXDocument(string FilePath, List<Guid> gList)
             {
                 try
                 {
@@ -1923,9 +2019,13 @@ namespace WPELibrary.Lib
                     XElement xeProxyAccountList = new XElement("ProxyAccountList");
                     xdoc.Add(xeProxyAccountList);
 
-                    foreach (Proxy_AccountInfo pai in paiList)
+                    foreach (Guid gAID in gList)
                     {
-                        XElement xeProxyAccount =
+                        Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(gAID);
+
+                        if (pai != null)
+                        {
+                            XElement xeProxyAccount =
                                 new XElement("ProxyAccount",
                                 new XElement("IsEnable", pai.IsEnable.ToString()),
                                 new XElement("AID", pai.AID.ToString().ToUpper()),
@@ -1939,7 +2039,8 @@ namespace WPELibrary.Lib
                                 new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
                                 );
 
-                        xeProxyAccountList.Add(xeProxyAccount);
+                            xeProxyAccountList.Add(xeProxyAccount);
+                        }                        
                     }                   
 
                     xdoc.Save(FilePath);
@@ -2080,6 +2181,12 @@ namespace WPELibrary.Lib
                             PassWord = xeProxyAccount.Element("PassWord").Value;
                         }
 
+                        DateTime LoginTime = DateTime.MinValue;
+                        if (xeProxyAccount.Element("LoginTime") != null)
+                        {
+                            LoginTime = DateTime.Parse(xeProxyAccount.Element("LoginTime").Value);
+                        }
+
                         string LoginIP = string.Empty;
                         if (xeProxyAccount.Element("LoginIP") != null)
                         {
@@ -2116,7 +2223,7 @@ namespace WPELibrary.Lib
                             CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
 
                         if (!bOK)
                         {
@@ -2218,7 +2325,9 @@ namespace WPELibrary.Lib
                             pai.LoginIP = string.Empty;
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginIP, pai.IPLocation, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
+                        pai.LoginTime = DateTime.MinValue;
+
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginTime, pai.LoginIP, pai.IPLocation, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
 
                         if (!bOK)
                         {
@@ -6524,34 +6633,11 @@ namespace WPELibrary.Lib
         {
             public static string AESKey = string.Empty;
 
-            #region//初始化发送集
-
-            public static DataTable InitSendCollection()
-            {
-                DataTable dtSendCollection = new DataTable();
-
-                try
-                {
-                    dtSendCollection.Columns.Add("Socket", typeof(int));
-                    dtSendCollection.Columns.Add("Type", typeof(Socket_Cache.SocketPacket.PacketType));
-                    dtSendCollection.Columns.Add("IPTo", typeof(string));                    
-                    dtSendCollection.Columns.Add("Buffer", typeof(byte[]));
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return dtSendCollection;
-            }
-
-            #endregion
-
             #region//获取发送集
 
-            public static DataTable GetSendCollection_ByGuid(Guid SID)
+            public static BindingList<Socket_PacketInfo> GetSendCollection_ByGuid(Guid SID)
             {
-                DataTable dtReturn = null;
+                BindingList<Socket_PacketInfo> sscReturn = null;
 
                 try
                 {
@@ -6571,33 +6657,27 @@ namespace WPELibrary.Lib
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return dtReturn;
+                return sscReturn;
             }
 
             #endregion
 
             #region//新增发送集
 
-            public static void AddSendCollection_ByIndex(Guid SID, int Index)
+            public static void AddSendCollection_ByPacketInfo(Guid SID, List<Socket_PacketInfo> spiList)
             {
                 try
                 {
-                    if (SID != null && SID != Guid.Empty)
+                    if (SID != null && SID != Guid.Empty && spiList.Count > 0)
                     {
-                        if (Index > -1 && Index < Socket_Cache.SocketList.lstRecPacket.Count)
+                        foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
                         {
-                            foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                            if (ssi.SID == SID)
                             {
-                                if (ssi.SID == SID)
+                                foreach (Socket_PacketInfo spi in spiList)
                                 {
-                                    DataTable SCollection = ssi.SCollection;                                 
-                                    int Socket = Socket_Cache.SocketList.lstRecPacket[Index].PacketSocket;
-                                    Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.lstRecPacket[Index].PacketType;
-                                    string IPTo = Socket_Cache.SocketList.lstRecPacket[Index].PacketTo;
-                                    byte[] Buffer = Socket_Cache.SocketList.lstRecPacket[Index].PacketBuffer;
-
-                                    Socket_Cache.Send.AddSendCollection(SCollection, Socket, ptType, IPTo, Buffer);
-                                }
+                                    Socket_Cache.Send.AddSendCollection(ssi.SCollection, spi.PacketSocket, spi.PacketType, spi.PacketFrom, spi.PacketTo, spi.PacketBuffer);
+                                }                                
                             }
                         }
                     }                    
@@ -6608,16 +6688,17 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddSendCollection(DataTable SCollection, int Socket, Socket_Cache.SocketPacket.PacketType ptType, string IPTo, byte[] Buffer)
+            public static void AddSendCollection(BindingList<Socket_PacketInfo> SCollection, int Socket, Socket_Cache.SocketPacket.PacketType ptType, string PacketFrom, string PacketTo, byte[] PacketBuffer)
             {
                 try
                 {
-                    DataRow dr = SCollection.NewRow();
-                    dr["Socket"] = Socket;
-                    dr["Type"] = ptType;
-                    dr["IPTo"] = IPTo;                    
-                    dr["Buffer"] = Buffer;
-                    SCollection.Rows.Add(dr);
+                    Socket_PacketInfo spi = new Socket_PacketInfo();
+                    spi.PacketSocket = Socket;
+                    spi.PacketType = ptType;
+                    spi.PacketFrom = PacketFrom;
+                    spi.PacketTo = PacketTo;
+                    spi.PacketBuffer = PacketBuffer;
+                    SCollection.Add(spi);
                 }
                 catch (Exception ex)
                 {
@@ -6629,85 +6710,98 @@ namespace WPELibrary.Lib
 
             #region//发送集的列表操作
 
-            public static int UpdateSendCollection_ByListAction(DataTable dtSendCollection, Socket_Cache.System.ListAction listAction, int iSIndex)
+            public static void UpdateSendCollection_ByListAction(BindingList<Socket_PacketInfo> SendCollection, Socket_Cache.System.ListAction listAction, List<Socket_PacketInfo> sscList)
             {
-                int iReturn = -1;
-
                 try
                 {
-                    int iSendCollectionCount = dtSendCollection.Rows.Count;
-
-                    DataRow dr = dtSendCollection.NewRow();
-                    if (iSIndex > -1 && iSIndex < dtSendCollection.Rows.Count)
-                    {
-                        dr.ItemArray = dtSendCollection.Rows[iSIndex].ItemArray;
-                    }
-
                     switch (listAction)
                     {
                         case Socket_Cache.System.ListAction.Top:
-                            if (iSIndex > 0 && iSIndex < iSendCollectionCount)
+
+                            sscList.Reverse();
+
+                            foreach (Socket_PacketInfo spi in sscList)
                             {
-                                dtSendCollection.Rows.RemoveAt(iSIndex);
-                                dtSendCollection.Rows.InsertAt(dr, 0);
-                                iReturn = 0;
+                                SendCollection.Remove(spi);
+                                SendCollection.Insert(0, spi);
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Up:
-                            if (iSIndex > 0 && iSIndex < iSendCollectionCount)
+
+                            foreach (Socket_PacketInfo spi in sscList)
                             {
-                                dtSendCollection.Rows.RemoveAt(iSIndex);
-                                dtSendCollection.Rows.InsertAt(dr, iSIndex - 1);
-                                iReturn = iSIndex - 1;
+                                int iIndex = SendCollection.IndexOf(spi);
+
+                                if (iIndex > 0)
+                                {
+                                    SendCollection.Remove(spi);
+                                    SendCollection.Insert(iIndex - 1, spi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Down:
-                            if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
+
+                            sscList.Reverse();
+
+                            foreach (Socket_PacketInfo spi in sscList)
                             {
-                                dtSendCollection.Rows.RemoveAt(iSIndex);
-                                dtSendCollection.Rows.InsertAt(dr, iSIndex + 1);
-                                iReturn = iSIndex + 1;
+                                int iIndex = SendCollection.IndexOf(spi);
+
+                                if (iIndex > -1 && iIndex < SendCollection.Count - 1)
+                                {
+                                    SendCollection.Remove(spi);
+                                    SendCollection.Insert(iIndex + 1, spi);
+                                }
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Bottom:
-                            if (iSIndex > -1 && iSIndex < iSendCollectionCount - 1)
+
+                            foreach (Socket_PacketInfo spi in sscList)
                             {
-                                dtSendCollection.Rows.RemoveAt(iSIndex);
-                                dtSendCollection.Rows.Add(dr);
-                                iReturn = dtSendCollection.Rows.Count - 1;
+                                SendCollection.Remove(spi);
+                                SendCollection.Add(spi);
                             }
+
                             break;
 
                         case Socket_Cache.System.ListAction.Delete:
-                            if (iSIndex > -1 && iSIndex < iSendCollectionCount)
+
+                            foreach (Socket_PacketInfo spi in sscList)
                             {
-                                dtSendCollection.Rows.RemoveAt(iSIndex);
-                            }                            
+                                SendCollection.Remove(spi);                            
+                            }
+                            
                             break;
 
                         case Socket_Cache.System.ListAction.Export:
-                            if (iSendCollectionCount > 0)
-                            {
-                                Socket_Cache.Send.SaveSendCollection_Dialog(string.Empty, dtSendCollection);
-                            }                            
+
+                            Socket_Cache.Send.SaveSendCollection_Dialog(string.Empty, SendCollection);
+            
                             break;
 
                         case Socket_Cache.System.ListAction.Import:
-                            Socket_Cache.Send.LoadSendCollection_Dialog(dtSendCollection);
+
+                            Socket_Cache.Send.LoadSendCollection_Dialog(SendCollection);
+
                             break;
 
                         case Socket_Cache.System.ListAction.CleanUp:
-                            if (iSendCollectionCount > 0)
+
+                            if (SendCollection.Count > 0)
                             {
                                 DialogResult dia = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
                                 if (dia.Equals(DialogResult.OK))
                                 {
-                                    dtSendCollection.Rows.Clear();
+                                    SendCollection.Clear();
                                 }                                
-                            }                            
+                            }
+                            
                             break;
                     }
                 }
@@ -6715,8 +6809,6 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-
-                return iReturn;
             }
 
             #endregion
@@ -6764,8 +6856,9 @@ namespace WPELibrary.Lib
                     int SLoopCNT = 1;
                     int SLoopINT = 1000;
                     string SNotes = string.Empty;
+                    BindingList<Socket_PacketInfo> SCollection = new BindingList<Socket_PacketInfo>();
 
-                    Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, Socket_Cache.Send.InitSendCollection(), SNotes);
+                    Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
                 }
                 catch (Exception ex)
                 {
@@ -6773,7 +6866,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
+            public static void AddSend(bool IsEnable, Guid SID, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<Socket_PacketInfo> SCollection, string SNotes)
             {
                 try
                 {
@@ -6793,18 +6886,18 @@ namespace WPELibrary.Lib
 
             #region//更新发送
 
-            public static void UpdateSend_BySendIndex(int SIndex, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, DataTable SCollection, string SNotes)
+            public static void UpdateSend(Socket_SendInfo ssi, string SName, bool SSystemSocket, int SLoopCNT, int SLoopINT, BindingList<Socket_PacketInfo> SCollection, string SNotes)
             {
                 try
                 {
-                    if (SIndex > -1)
+                    if (ssi != null)
                     {
-                        Socket_Cache.SendList.lstSend[SIndex].SName = SName;
-                        Socket_Cache.SendList.lstSend[SIndex].SSystemSocket = SSystemSocket;                     
-                        Socket_Cache.SendList.lstSend[SIndex].SLoopCNT = SLoopCNT;
-                        Socket_Cache.SendList.lstSend[SIndex].SLoopINT = SLoopINT;
-                        Socket_Cache.SendList.lstSend[SIndex].SCollection = SCollection.Copy();
-                        Socket_Cache.SendList.lstSend[SIndex].SNotes = SNotes;
+                        ssi.SName = SName;
+                        ssi.SSystemSocket = SSystemSocket;
+                        ssi.SLoopCNT = SLoopCNT;
+                        ssi.SLoopINT = SLoopINT;
+                        ssi.SCollection = new BindingList<Socket_PacketInfo>(SCollection.ToList());
+                        ssi.SNotes = SNotes;
                     }
                 }
                 catch (Exception ex)
@@ -6827,7 +6920,7 @@ namespace WPELibrary.Lib
                     bool SSystemSocket_Copy = ssi.SSystemSocket;                
                     int SLoopCNT_Copy = ssi.SLoopCNT;
                     int SLoopINT_Copy = ssi.SLoopINT;
-                    DataTable SCollection_Copy = ssi.SCollection.Copy();
+                    BindingList<Socket_PacketInfo> SCollection_Copy = new BindingList<Socket_PacketInfo>(ssi.SCollection.ToList());
                     string SNotes_Copy = ssi.SNotes;
 
                     Socket_Cache.Send.AddSend(IsEnable_Copy, SID_New, SName_Copy, SSystemSocket_Copy, SLoopCNT_Copy, SLoopINT_Copy, SCollection_Copy, SNotes_Copy);
@@ -6897,7 +6990,7 @@ namespace WPELibrary.Lib
 
                         if (ssi != null)
                         {
-                            if (ssi.SCollection.Rows.Count > 0)
+                            if (ssi.SCollection.Count > 0)
                             {
                                 ssReturn = new Socket_Send();
                                 ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection);
@@ -6990,11 +7083,11 @@ namespace WPELibrary.Lib
 
             #region//保存发送集（对话框）
 
-            public static void SaveSendCollection_Dialog(string FileName, DataTable SendCollection)
+            public static void SaveSendCollection_Dialog(string FileName, BindingList<Socket_PacketInfo> SendCollection)
             {
                 try
                 {
-                    if (SendCollection.Rows.Count > 0)
+                    if (SendCollection.Count > 0)
                     {
                         SaveFileDialog sfdSaveFile = new SaveFileDialog();
                         sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_114) + "（*.sc）|*.sc";
@@ -7029,7 +7122,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void SaveSendCollection(string FilePath, DataTable SendCollection, bool DoEncrypt)
+            public static void SaveSendCollection(string FilePath, BindingList<Socket_PacketInfo> SendCollection, bool DoEncrypt)
             {
                 try
                 {
@@ -7051,7 +7144,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void SaveSendCollection_ToXDocument(string FilePath, DataTable SendCollection)
+            private static void SaveSendCollection_ToXDocument(string FilePath, BindingList<Socket_PacketInfo> SendCollection)
             {
                 try
                 {
@@ -7063,26 +7156,21 @@ namespace WPELibrary.Lib
                     XElement xeRoot = new XElement("SendCollection");
                     xdoc.Add(xeRoot);
 
-                    if (SendCollection.Rows.Count > 0)
+                    foreach (Socket_PacketInfo spi in SendCollection)
                     {
-                        foreach (DataRow row in SendCollection.Rows)
-                        {
-                            string sSocket = row["Socket"].ToString();
-                            string sType = row["Type"].ToString();
-                            string sIPTo = row["IPTo"].ToString();
-                            string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
+                        string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, spi.PacketBuffer);
 
-                            XElement xeColl =
-                                new XElement("Collection",
-                                new XElement("Socket", sSocket),
-                                new XElement("Type", sType),
-                                new XElement("IPTo", sIPTo),
-                                new XElement("Buffer", sBuffer)
-                                );
+                        XElement xeColl =
+                            new XElement("Collection",
+                            new XElement("Socket", spi.PacketSocket),
+                            new XElement("Type", spi.PacketType),
+                            new XElement("IPFrom", spi.PacketFrom),
+                            new XElement("IPTo", spi.PacketTo),
+                            new XElement("Buffer", sBuffer)
+                            );
 
-                            xeRoot.Add(xeColl);
-                        }                     
-                    }                
+                        xeRoot.Add(xeColl);
+                    }
 
                     xdoc.Save(FilePath);
                 }
@@ -7096,7 +7184,7 @@ namespace WPELibrary.Lib
 
             #region//加载发送集（对话框）
 
-            public static void LoadSendCollection_Dialog(DataTable SendCollection)
+            public static void LoadSendCollection_Dialog(BindingList<Socket_PacketInfo> SendCollection)
             {
                 try
                 {
@@ -7120,7 +7208,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void LoadSendCollection(string FilePath, DataTable SendCollection, bool LoadFromUser)
+            public static void LoadSendCollection(string FilePath, BindingList<Socket_PacketInfo> SendCollection, bool LoadFromUser)
             {
                 try
                 {
@@ -7178,7 +7266,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void LoadSendCollection_FromXDocument(XDocument xdoc, DataTable SendCollection)
+            private static void LoadSendCollection_FromXDocument(XDocument xdoc, BindingList<Socket_PacketInfo> SendCollection)
             {
                 try
                 {
@@ -7204,6 +7292,12 @@ namespace WPELibrary.Lib
                                     ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeSend.Element("Type").Value);
                                 }
 
+                                string sIPFrom = string.Empty;
+                                if (xeSend.Element("IPFrom") != null)
+                                {
+                                    sIPFrom = xeSend.Element("IPFrom").Value;
+                                }
+
                                 string sIPTo = string.Empty;
                                 if (xeSend.Element("ToAddress") != null)
                                 {
@@ -7216,7 +7310,7 @@ namespace WPELibrary.Lib
                                     bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeSend.Element("Data").Value);
                                 }
 
-                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
                             }
 
                             #endregion
@@ -7241,6 +7335,12 @@ namespace WPELibrary.Lib
                                     ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
                                 }
 
+                                string sIPFrom = string.Empty;
+                                if (xeCollection.Element("IPFrom") != null)
+                                {
+                                    sIPFrom = xeCollection.Element("IPFrom").Value;
+                                }
+
                                 string sIPTo = string.Empty;
                                 if (xeCollection.Element("IPTo") != null)
                                 {
@@ -7253,7 +7353,7 @@ namespace WPELibrary.Lib
                                     bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
                                 }
 
-                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPTo, bBuffer);
+                                Socket_Cache.Send.AddSendCollection(SendCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
                             }
 
                             #endregion
@@ -7460,14 +7560,13 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//从数据库加载滤镜列表
+            #region//从数据库加载发送列表
 
             public static void LoadSendList_FromDB()
             {
                 try
                 {
                     DataTable dtSend = Socket_Cache.DataBase.SelectTable_Send();
-
                     foreach (DataRow dataRow in dtSend.Rows)
                     {
                         Guid SID = Guid.Parse(dataRow["GUID"].ToString());
@@ -7476,18 +7575,19 @@ namespace WPELibrary.Lib
                         bool SSystemSocket = Convert.ToBoolean(dataRow["SystemSocket"]);
                         int SLoopCNT = Convert.ToInt32(dataRow["LoopCNT"]);
                         int SLoopINT = Convert.ToInt32(dataRow["LoopINT"]);
-                        string SNotes = dataRow["Notes"].ToString();                        
+                        string SNotes = dataRow["Notes"].ToString();
+                        BindingList<Socket_PacketInfo> SCollection = new BindingList<Socket_PacketInfo>();
 
-                        DataTable SCollection = Socket_Cache.Send.InitSendCollection();
-                        DataTable dtCollection = Socket_Cache.DataBase.SelectTable_SendCollection(SID);
-
-                        foreach (DataRow row in dtCollection.Rows)
+                        DataTable dtSCollection = Socket_Cache.DataBase.SelectTable_SendCollection(SID);
+                        foreach (DataRow row in dtSCollection.Rows)
                         {
                             int Socket = Convert.ToInt32(row["Socket"]);
                             Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(row["Type"].ToString());
+                            string IPFrom = row["IPFrom"].ToString();
                             string IPTo = row["IPTo"].ToString();
                             byte[] Buffer = (byte[])row["Buffer"];
-                            Socket_Cache.Send.AddSendCollection(SCollection, Socket, ptType, IPTo, Buffer);
+
+                            Socket_Cache.Send.AddSendCollection(SCollection, Socket, ptType, IPFrom, IPTo, Buffer);
                         }
 
                         Socket_Cache.Send.AddSend(IsEnable, SID, SName, SSystemSocket, SLoopCNT, SLoopINT, SCollection, SNotes);
@@ -7579,42 +7679,30 @@ namespace WPELibrary.Lib
 
                     foreach (Socket_SendInfo ssi in ssiList)
                     {
-                        string IsEnable = ssi.IsEnable.ToString();
-                        string SID = ssi.SID.ToString().ToUpper();
-                        string SName = ssi.SName;
-                        string SSystemSocket = ssi.SSystemSocket.ToString();
-                        string LoopCNT = ssi.SLoopCNT.ToString();
-                        string LoopINT = ssi.SLoopINT.ToString();
-                        DataTable SCollection = ssi.SCollection;
-                        string SNotes = ssi.SNotes;
-
                         XElement xeSend =
                             new XElement("Send",
-                            new XElement("IsEnable", IsEnable),
-                            new XElement("ID", SID),
-                            new XElement("Name", SName),
-                            new XElement("SystemSocket", SSystemSocket),
-                            new XElement("LoopCNT", LoopCNT),
-                            new XElement("LoopINT", LoopINT),
-                            new XElement("Notes", SNotes)
+                            new XElement("IsEnable", ssi.IsEnable.ToString()),
+                            new XElement("ID", ssi.SID.ToString().ToUpper()),
+                            new XElement("Name", ssi.SName),
+                            new XElement("SystemSocket", ssi.SSystemSocket.ToString()),
+                            new XElement("LoopCNT", ssi.SLoopCNT.ToString()),
+                            new XElement("LoopINT", ssi.SLoopINT.ToString()),
+                            new XElement("Notes", ssi.SNotes)
                             );
 
-                        if (SCollection.Rows.Count > 0)
+                        if (ssi.SCollection.Count > 0)
                         {
                             XElement xeCollection = new XElement("SendCollection");
 
-                            foreach (DataRow row in SCollection.Rows)
+                            foreach (Socket_PacketInfo spi in ssi.SCollection)
                             {
-                                string sSocket = row["Socket"].ToString();
-                                string sType = row["Type"].ToString();
-                                string sIPTo = row["IPTo"].ToString();
-                                string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, (byte[])row["Buffer"]);
+                                string sBuffer = Socket_Operation.BytesToString(SocketPacket.EncodingFormat.Hex, spi.PacketBuffer);
 
                                 XElement xeColl =
                                     new XElement("Collection",
-                                    new XElement("Socket", sSocket),
-                                    new XElement("Type", sType),
-                                    new XElement("IPTo", sIPTo),
+                                    new XElement("Socket", spi.PacketSocket),
+                                    new XElement("Type", spi.PacketType),
+                                    new XElement("IPTo", spi.PacketTo),
                                     new XElement("Buffer", sBuffer)
                                     );
 
@@ -7767,7 +7855,7 @@ namespace WPELibrary.Lib
                             SNotes = xeSend.Element("Notes").Value;
                         }
 
-                        DataTable SCollection = Socket_Cache.Send.InitSendCollection();
+                        BindingList<Socket_PacketInfo> SCollection = new BindingList<Socket_PacketInfo>();
 
                         if (xeSend.Element("SendCollection") != null)
                         {
@@ -7785,6 +7873,12 @@ namespace WPELibrary.Lib
                                     ptType = Socket_Cache.SocketPacket.GetPacketType_ByString(xeCollection.Element("Type").Value);
                                 }
 
+                                string sIPFrom = string.Empty;
+                                if (xeCollection.Element("IPFrom") != null)
+                                {
+                                    sIPFrom = xeCollection.Element("IPFrom").Value;
+                                }
+
                                 string sIPTo = string.Empty;
                                 if (xeCollection.Element("IPTo") != null)
                                 {
@@ -7797,7 +7891,7 @@ namespace WPELibrary.Lib
                                     bBuffer = Socket_Operation.StringToBytes(SocketPacket.EncodingFormat.Hex, xeCollection.Element("Buffer").Value);
                                 }
 
-                                Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPTo, bBuffer);                                
+                                Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);                                
                             }
                         }
 
@@ -8533,6 +8627,7 @@ namespace WPELibrary.Lib
                         sql += "GUID TEXT NOT NULL,";
                         sql += "Socket INTEGER NOT NULL,";
                         sql += "Type INTEGER NOT NULL,";
+                        sql += "IPFrom TEXT NOT NULL,";
                         sql += "IPTo TEXT NOT NULL,";
                         sql += "Buffer BLOB,";
                         sql += "FOREIGN KEY (GUID) REFERENCES Send(GUID)";
@@ -8587,7 +8682,7 @@ namespace WPELibrary.Lib
                 {
                     using (SQLiteConnection conn = new SQLiteConnection(conStr))
                     {
-                        string sql = "SELECT Socket, Type, IPTo, Buffer FROM SendCollection WHERE GUID = @GUID;";
+                        string sql = "SELECT * FROM SendCollection WHERE GUID = @GUID;";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                         {
@@ -8666,18 +8761,20 @@ namespace WPELibrary.Lib
                             cmd.ExecuteNonQuery();
                         }
 
-                        foreach (DataRow row in ssi.SCollection.Rows)
+                        foreach (Socket_PacketInfo spi in ssi.SCollection)
                         {
                             sql = "INSERT INTO SendCollection (";
                             sql += "GUID,";
                             sql += "Socket,";
                             sql += "Type,";
+                            sql += "IPFrom,";
                             sql += "IPTo,";
                             sql += "Buffer";
                             sql += ") VALUES (";
                             sql += "@GUID,";
                             sql += "@Socket,";
                             sql += "@Type,";
+                            sql += "@IPFrom,";
                             sql += "@IPTo,";
                             sql += "@Buffer";
                             sql += ");";
@@ -8685,10 +8782,11 @@ namespace WPELibrary.Lib
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
                             {
                                 cmd.Parameters.AddWithValue("@GUID", ssi.SID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@Socket", Convert.ToInt32(row["Socket"]));
-                                cmd.Parameters.AddWithValue("@Type", Convert.ToInt32(row["Type"]));
-                                cmd.Parameters.AddWithValue("@IPTo", row["IPTo"].ToString());
-                                cmd.Parameters.AddWithValue("@Buffer", (byte[])row["Buffer"]);
+                                cmd.Parameters.AddWithValue("@Socket", spi.PacketSocket);
+                                cmd.Parameters.AddWithValue("@Type", spi.PacketType);
+                                cmd.Parameters.AddWithValue("@IPFrom", spi.PacketFrom);
+                                cmd.Parameters.AddWithValue("@IPTo", spi.PacketTo);
+                                cmd.Parameters.AddWithValue("@Buffer", spi.PacketBuffer);
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -8886,6 +8984,7 @@ namespace WPELibrary.Lib
                         sql += "IsEnable BOOLEAN DEFAULT 0,";
                         sql += "UserName TEXT NOT NULL UNIQUE,";
                         sql += "PassWord TEXT NOT NULL,";
+                        sql += "LoginTime TIMESTAMP,";
                         sql += "LoginIP TEXT,";
                         sql += "IPLocation TEXT,";
                         sql += "IsExpiry BOOLEAN DEFAULT 0,";
@@ -9037,48 +9136,53 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void InsertTable_ProxyAccount(Proxy_AccountInfo pai)
+            public static void InsertTable_ProxyAccount()
             {
                 try
                 {
-                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    using (SQLiteConnection conn = new SQLiteConnection(Socket_Cache.DataBase.conStr))
                     {
-                        string sql = "INSERT INTO ProxyAccount (";
-                        sql += "GUID,";
-                        sql += "IsEnable,";
-                        sql += "UserName,";
-                        sql += "PassWord,";
-                        sql += "LoginIP,";
-                        sql += "IPLocation,";
-                        sql += "IsExpiry,";
-                        sql += "ExpiryTime,";
-                        sql += "CreateTime";
-                        sql += ") VALUES (";
-                        sql += "@GUID,";
-                        sql += "@IsEnable,";
-                        sql += "@UserName,";
-                        sql += "@PassWord,";
-                        sql += "@LoginIP,";
-                        sql += "@IPLocation,";
-                        sql += "@IsExpiry,";
-                        sql += "@ExpiryTime,";
-                        sql += "@CreateTime";
-                        sql += ");";
+                        conn.Open();
 
-                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
-                            cmd.Parameters.AddWithValue("@GUID", pai.AID.ToString().ToUpper());
-                            cmd.Parameters.AddWithValue("@IsEnable", pai.IsEnable);
-                            cmd.Parameters.AddWithValue("@UserName", pai.UserName);
-                            cmd.Parameters.AddWithValue("@PassWord", pai.PassWord);
-                            cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
-                            cmd.Parameters.AddWithValue("@IPLocation", pai.IPLocation);
-                            cmd.Parameters.AddWithValue("@IsExpiry", pai.IsExpiry);
-                            cmd.Parameters.AddWithValue("@ExpiryTime", pai.ExpiryTime);
-                            cmd.Parameters.AddWithValue("@CreateTime", pai.CreateTime);
+                            string sql = "INSERT INTO ProxyAccount (" +
+                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime" +
+                                         ") VALUES (" +
+                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsExpiry, @ExpiryTime, @CreateTime" +
+                                         ");";
 
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.Add(new SQLiteParameter("@GUID", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@UserName", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@PassWord", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
+                                cmd.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
+                                cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
+
+                                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                                {
+                                    cmd.Parameters["@GUID"].Value = pai.AID.ToString().ToUpper();
+                                    cmd.Parameters["@IsEnable"].Value = pai.IsEnable;
+                                    cmd.Parameters["@UserName"].Value = pai.UserName;
+                                    cmd.Parameters["@PassWord"].Value = pai.PassWord;
+                                    cmd.Parameters["@LoginTime"].Value = pai.LoginTime;
+                                    cmd.Parameters["@LoginIP"].Value = pai.LoginIP;
+                                    cmd.Parameters["@IPLocation"].Value = pai.IPLocation;
+                                    cmd.Parameters["@IsExpiry"].Value = pai.IsExpiry;
+                                    cmd.Parameters["@ExpiryTime"].Value = pai.ExpiryTime;
+                                    cmd.Parameters["@CreateTime"].Value = pai.CreateTime;
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
                         }
                     }
                 }
@@ -9106,7 +9210,7 @@ namespace WPELibrary.Lib
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn, transaction))
                             {
                                 cmd.Parameters.AddWithValue("@GUID", pai.AID.ToString().ToUpper());
-                                cmd.Parameters.AddWithValue("@LoginTime", DateTime.Now);
+                                cmd.Parameters.AddWithValue("@LoginTime", pai.LoginTime);
                                 cmd.Parameters.AddWithValue("@LoginIP", pai.LoginIP);
                                 cmd.Parameters.AddWithValue("@IPLocation", pai.IPLocation);
 

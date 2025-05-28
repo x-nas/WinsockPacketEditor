@@ -115,6 +115,11 @@
             this.tcProxyData = new System.Windows.Forms.TabControl();
             this.tpData = new System.Windows.Forms.TabPage();
             this.hbData = new Be.Windows.Forms.HexBox();
+            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsHexBox_CopyHex = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsHexBox_Copy = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsHexBox_SelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpSocketProxy_Data = new System.Windows.Forms.TableLayoutPanel();
             this.tcSocketProxy_Log = new System.Windows.Forms.TabControl();
             this.tpAuth = new System.Windows.Forms.TabPage();
@@ -154,8 +159,8 @@
             this.tlProxyLinks_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.cProxyChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tSocketProxy = new System.Windows.Forms.Timer(this.components);
-            this.tCheckProxyState = new System.Windows.Forms.Timer(this.components);
-            this.tCheckAccountOnLine = new System.Windows.Forms.Timer(this.components);
+            this.tShowProxyState = new System.Windows.Forms.Timer(this.components);
+            this.tUpdateProxyState = new System.Windows.Forms.Timer(this.components);
             this.tlpSocketProxy_Parameter.SuspendLayout();
             this.gbSystemProxy.SuspendLayout();
             this.tlpSystemProxy.SuspendLayout();
@@ -199,6 +204,7 @@
             this.ssSocketProxySpeed.SuspendLayout();
             this.tcProxyData.SuspendLayout();
             this.tpData.SuspendLayout();
+            this.cmsHexBox.SuspendLayout();
             this.tlpSocketProxy_Data.SuspendLayout();
             this.tcSocketProxy_Log.SuspendLayout();
             this.tpAuth.SuspendLayout();
@@ -750,6 +756,7 @@
             this.hbData.BuiltInContextMenu.SelectAllMenuItemImage = global::WinsockPacketEditor.Properties.Resources.SelectAll;
             this.hbData.BuiltInContextMenu.SelectAllMenuItemText = resources.GetString("hbData.BuiltInContextMenu.SelectAllMenuItemText");
             this.hbData.ColumnInfoVisible = true;
+            this.hbData.ContextMenuStrip = this.cmsHexBox;
             resources.ApplyResources(this.hbData, "hbData");
             this.hbData.LineInfoVisible = true;
             this.hbData.Name = "hbData";
@@ -757,6 +764,40 @@
             this.hbData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
             this.hbData.StringViewVisible = true;
             this.hbData.VScrollBarVisible = true;
+            // 
+            // cmsHexBox
+            // 
+            this.cmsHexBox.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsHexBox_CopyHex,
+            this.cmsHexBox_Copy,
+            this.toolStripSeparator1,
+            this.cmsHexBox_SelectAll});
+            this.cmsHexBox.Name = "cmsHexBox";
+            resources.ApplyResources(this.cmsHexBox, "cmsHexBox");
+            this.cmsHexBox.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsHexBox_ItemClicked);
+            // 
+            // cmsHexBox_CopyHex
+            // 
+            this.cmsHexBox_CopyHex.Image = global::WinsockPacketEditor.Properties.Resources.copy;
+            resources.ApplyResources(this.cmsHexBox_CopyHex, "cmsHexBox_CopyHex");
+            this.cmsHexBox_CopyHex.Name = "cmsHexBox_CopyHex";
+            // 
+            // cmsHexBox_Copy
+            // 
+            this.cmsHexBox_Copy.Image = global::WinsockPacketEditor.Properties.Resources.copy;
+            resources.ApplyResources(this.cmsHexBox_Copy, "cmsHexBox_Copy");
+            this.cmsHexBox_Copy.Name = "cmsHexBox_Copy";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // cmsHexBox_SelectAll
+            // 
+            this.cmsHexBox_SelectAll.Image = global::WinsockPacketEditor.Properties.Resources.SelectAll;
+            resources.ApplyResources(this.cmsHexBox_SelectAll, "cmsHexBox_SelectAll");
+            this.cmsHexBox_SelectAll.Name = "cmsHexBox_SelectAll";
             // 
             // tlpSocketProxy_Data
             // 
@@ -1162,16 +1203,16 @@
             this.tSocketProxy.Interval = 50;
             this.tSocketProxy.Tick += new System.EventHandler(this.tSocketProxy_Tick);
             // 
-            // tCheckProxyState
+            // tShowProxyState
             // 
-            this.tCheckProxyState.Interval = 1000;
-            this.tCheckProxyState.Tick += new System.EventHandler(this.tCheckProxyState_Tick);
+            this.tShowProxyState.Interval = 1000;
+            this.tShowProxyState.Tick += new System.EventHandler(this.tShowProxyState_Tick);
             // 
-            // tCheckAccountOnLine
+            // tUpdateProxyState
             // 
-            this.tCheckAccountOnLine.Enabled = true;
-            this.tCheckAccountOnLine.Interval = 60000;
-            this.tCheckAccountOnLine.Tick += new System.EventHandler(this.tCheckAccountOnLine_Tick);
+            this.tUpdateProxyState.Enabled = true;
+            this.tUpdateProxyState.Interval = 60000;
+            this.tUpdateProxyState.Tick += new System.EventHandler(this.tUpdateProxyState_Tick);
             // 
             // SocketProxy_Form
             // 
@@ -1237,6 +1278,7 @@
             this.ssSocketProxySpeed.PerformLayout();
             this.tcProxyData.ResumeLayout(false);
             this.tpData.ResumeLayout(false);
+            this.cmsHexBox.ResumeLayout(false);
             this.tlpSocketProxy_Data.ResumeLayout(false);
             this.tcSocketProxy_Log.ResumeLayout(false);
             this.tpAuth.ResumeLayout(false);
@@ -1294,7 +1336,7 @@
         private System.Windows.Forms.GroupBox gbSystemProxy;
         private System.Windows.Forms.TableLayoutPanel tlpSystemProxy;
         private System.Windows.Forms.CheckBox cbEnable_SystemProxy;
-        private System.Windows.Forms.Timer tCheckProxyState;
+        private System.Windows.Forms.Timer tShowProxyState;
         private System.Windows.Forms.ToolStripStatusLabel tsslTotalBytes;
         private System.Windows.Forms.GroupBox gbProxyList;
         private System.Windows.Forms.TableLayoutPanel tlpProxyList;
@@ -1331,7 +1373,7 @@
         private System.Windows.Forms.Button bAccount;
         private System.Windows.Forms.TabPage tpAuth;
         private System.Windows.Forms.DataGridView dgvAuth;
-        private System.Windows.Forms.Timer tCheckAccountOnLine;
+        private System.Windows.Forms.Timer tUpdateProxyState;
         private System.Windows.Forms.StatusStrip ssSocketProxy;
         private System.Windows.Forms.ToolStripStatusLabel tlProxyTotal;
         private System.Windows.Forms.ToolStripStatusLabel tlProxyTotal_CNT;
@@ -1368,5 +1410,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
         private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
+        private System.Windows.Forms.ContextMenuStrip cmsHexBox;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_CopyHex;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Copy;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
     }
 }

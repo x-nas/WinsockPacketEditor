@@ -51,6 +51,7 @@
             // 
             // dgvAccountLogin
             // 
+            resources.ApplyResources(this.dgvAccountLogin, "dgvAccountLogin");
             this.dgvAccountLogin.AllowUserToAddRows = false;
             this.dgvAccountLogin.AllowUserToDeleteRows = false;
             this.dgvAccountLogin.AllowUserToResizeColumns = false;
@@ -63,7 +64,6 @@
             this.cLoginTime,
             this.cLoginIP,
             this.cIPLocation});
-            resources.ApplyResources(this.dgvAccountLogin, "dgvAccountLogin");
             this.dgvAccountLogin.Name = "dgvAccountLogin";
             this.dgvAccountLogin.RowHeadersVisible = false;
             this.dgvAccountLogin.RowTemplate.Height = 23;

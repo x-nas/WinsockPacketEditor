@@ -31,13 +31,14 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Proxy_AccountListForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpProxyAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.ssProxyAccount = new System.Windows.Forms.StatusStrip();
             this.tsslAccount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -46,31 +47,49 @@
             this.tsslAccountEnable = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslAccountEnable_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslAccountOnLine = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslAccountOnLine_CNT = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslAccountExpiry = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslAccountExpiry_CNT = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslSplit2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslAccountOnLine = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslAccountOnLine_CNT = new System.Windows.Forms.ToolStripStatusLabel();
             this.tlpAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.dgvAccountList = new System.Windows.Forms.DataGridView();
-            this.cAccountID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLoginTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLoginIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIPLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsOnLine = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.cCreateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIsExpiry = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cExpiryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsAccountList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsAccountList_LoginInfo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsAccountList_AddTime = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsAccountList_Export = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsAccountList_Clear = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpAccountButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bAddTime = new System.Windows.Forms.Button();
+            this.bSelectAll = new System.Windows.Forms.Button();
             this.bDelete = new System.Windows.Forms.Button();
             this.bAccount_New = new System.Windows.Forms.Button();
             this.bExport = new System.Windows.Forms.Button();
             this.bImport = new System.Windows.Forms.Button();
+            this.tlpAccountListButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bFirst = new System.Windows.Forms.Button();
+            this.bPrevious = new System.Windows.Forms.Button();
+            this.bNext = new System.Windows.Forms.Button();
+            this.bLast = new System.Windows.Forms.Button();
+            this.lblTotalPages = new System.Windows.Forms.Label();
+            this.cbbPageSize = new System.Windows.Forms.ComboBox();
             this.tlpSearchAccount = new System.Windows.Forms.TableLayoutPanel();
+            this.gSearch_Expire = new System.Windows.Forms.GroupBox();
+            this.tlpSearch_Expire = new System.Windows.Forms.TableLayoutPanel();
+            this.bSearch_Expire = new System.Windows.Forms.Button();
+            this.dtpExpireFrom = new System.Windows.Forms.DateTimePicker();
+            this.dtpExpireTo = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
             this.gbSearch_UserName = new System.Windows.Forms.GroupBox();
             this.tlpSearch_UserName = new System.Windows.Forms.TableLayoutPanel();
             this.txtSearch_UserName = new System.Windows.Forms.TextBox();
@@ -78,15 +97,18 @@
             this.gbSearch_State = new System.Windows.Forms.GroupBox();
             this.tlpSearch_State = new System.Windows.Forms.TableLayoutPanel();
             this.cbbSearch_State = new System.Windows.Forms.ComboBox();
-            this.cbIs = new System.Windows.Forms.CheckBox();
-            this.tTimer = new System.Windows.Forms.Timer(this.components);
+            this.bSearch_State = new System.Windows.Forms.Button();
+            this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
             this.tlpProxyAccountList.SuspendLayout();
             this.ssProxyAccount.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccountList)).BeginInit();
             this.cmsAccountList.SuspendLayout();
             this.tlpAccountButton.SuspendLayout();
+            this.tlpAccountListButton.SuspendLayout();
             this.tlpSearchAccount.SuspendLayout();
+            this.gSearch_Expire.SuspendLayout();
+            this.tlpSearch_Expire.SuspendLayout();
             this.gbSearch_UserName.SuspendLayout();
             this.tlpSearch_UserName.SuspendLayout();
             this.gbSearch_State.SuspendLayout();
@@ -96,8 +118,8 @@
             // tlpProxyAccountList
             // 
             resources.ApplyResources(this.tlpProxyAccountList, "tlpProxyAccountList");
-            this.tlpProxyAccountList.Controls.Add(this.ssProxyAccount, 0, 2);
-            this.tlpProxyAccountList.Controls.Add(this.tlpAccountList, 0, 1);
+            this.tlpProxyAccountList.Controls.Add(this.ssProxyAccount, 0, 1);
+            this.tlpProxyAccountList.Controls.Add(this.tlpAccountList, 0, 2);
             this.tlpProxyAccountList.Controls.Add(this.tlpSearchAccount, 0, 0);
             this.tlpProxyAccountList.Name = "tlpProxyAccountList";
             // 
@@ -111,12 +133,13 @@
             this.tsslAccountEnable,
             this.tsslAccountEnable_CNT,
             this.tsslSplit1,
-            this.tsslAccountOnLine,
-            this.tsslAccountOnLine_CNT,
-            this.tsslSplit2,
             this.tsslAccountExpiry,
-            this.tsslAccountExpiry_CNT});
+            this.tsslAccountExpiry_CNT,
+            this.tsslSplit2,
+            this.tsslAccountOnLine,
+            this.tsslAccountOnLine_CNT});
             this.ssProxyAccount.Name = "ssProxyAccount";
+            this.ssProxyAccount.SizingGrip = false;
             // 
             // tsslAccount
             // 
@@ -148,21 +171,6 @@
             resources.ApplyResources(this.tsslSplit1, "tsslSplit1");
             this.tsslSplit1.Name = "tsslSplit1";
             // 
-            // tsslAccountOnLine
-            // 
-            this.tsslAccountOnLine.Name = "tsslAccountOnLine";
-            resources.ApplyResources(this.tsslAccountOnLine, "tsslAccountOnLine");
-            // 
-            // tsslAccountOnLine_CNT
-            // 
-            resources.ApplyResources(this.tsslAccountOnLine_CNT, "tsslAccountOnLine_CNT");
-            this.tsslAccountOnLine_CNT.Name = "tsslAccountOnLine_CNT";
-            // 
-            // tsslSplit2
-            // 
-            resources.ApplyResources(this.tsslSplit2, "tsslSplit2");
-            this.tsslSplit2.Name = "tsslSplit2";
-            // 
             // tsslAccountExpiry
             // 
             this.tsslAccountExpiry.Name = "tsslAccountExpiry";
@@ -173,11 +181,27 @@
             resources.ApplyResources(this.tsslAccountExpiry_CNT, "tsslAccountExpiry_CNT");
             this.tsslAccountExpiry_CNT.Name = "tsslAccountExpiry_CNT";
             // 
+            // tsslSplit2
+            // 
+            resources.ApplyResources(this.tsslSplit2, "tsslSplit2");
+            this.tsslSplit2.Name = "tsslSplit2";
+            // 
+            // tsslAccountOnLine
+            // 
+            this.tsslAccountOnLine.Name = "tsslAccountOnLine";
+            resources.ApplyResources(this.tsslAccountOnLine, "tsslAccountOnLine");
+            // 
+            // tsslAccountOnLine_CNT
+            // 
+            resources.ApplyResources(this.tsslAccountOnLine_CNT, "tsslAccountOnLine_CNT");
+            this.tsslAccountOnLine_CNT.Name = "tsslAccountOnLine_CNT";
+            // 
             // tlpAccountList
             // 
             resources.ApplyResources(this.tlpAccountList, "tlpAccountList");
             this.tlpAccountList.Controls.Add(this.dgvAccountList, 0, 0);
             this.tlpAccountList.Controls.Add(this.tlpAccountButton, 1, 0);
+            this.tlpAccountList.Controls.Add(this.tlpAccountListButton, 0, 1);
             this.tlpAccountList.Name = "tlpAccountList";
             // 
             // dgvAccountList
@@ -200,49 +224,45 @@
             this.dgvAccountList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAccountList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAccountList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cAccountID,
+            this.cID,
             this.cAID,
-            this.cIsEnable,
             this.cUserName,
+            this.cLoginTime,
             this.cLoginIP,
             this.cIPLocation,
-            this.cIsOnLine,
-            this.cCreateTime,
-            this.cIsExpiry,
             this.cExpiryTime});
             this.dgvAccountList.ContextMenuStrip = this.cmsAccountList;
             resources.ApplyResources(this.dgvAccountList, "dgvAccountList");
             this.dgvAccountList.Name = "dgvAccountList";
             this.dgvAccountList.ReadOnly = true;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.Padding = new System.Windows.Forms.Padding(3);
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
-            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvAccountList.RowTemplate.Height = 23;
             this.dgvAccountList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAccountList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAccountList_CellDoubleClick);
-            this.dgvAccountList.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAccountList_CellFormatting);
             // 
-            // cAccountID
+            // cID
             // 
-            this.cAccountID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAccountID.DefaultCellStyle = dataGridViewCellStyle2;
-            resources.ApplyResources(this.cAccountID, "cAccountID");
-            this.cAccountID.Name = "cAccountID";
-            this.cAccountID.ReadOnly = true;
-            this.cAccountID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAccountID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.cID.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cID, "cID");
+            this.cID.Name = "cID";
+            this.cID.ReadOnly = true;
+            this.cID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // cAID
             // 
@@ -254,20 +274,11 @@
             this.cAID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cAID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // cIsEnable
-            // 
-            this.cIsEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cIsEnable.DataPropertyName = "IsEnable";
-            resources.ApplyResources(this.cIsEnable, "cIsEnable");
-            this.cIsEnable.Name = "cIsEnable";
-            this.cIsEnable.ReadOnly = true;
-            this.cIsEnable.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
             // cUserName
             // 
             this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cUserName.DataPropertyName = "UserName";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.cUserName.DefaultCellStyle = dataGridViewCellStyle3;
             resources.ApplyResources(this.cUserName, "cUserName");
@@ -276,13 +287,28 @@
             this.cUserName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cUserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cLoginTime
+            // 
+            this.cLoginTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cLoginTime.DataPropertyName = "LoginTime";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.Format = "g";
+            dataGridViewCellStyle4.NullValue = null;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLoginTime.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cLoginTime, "cLoginTime");
+            this.cLoginTime.Name = "cLoginTime";
+            this.cLoginTime.ReadOnly = true;
+            this.cLoginTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLoginTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // cLoginIP
             // 
             this.cLoginIP.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cLoginIP.DataPropertyName = "LoginIP";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLoginIP.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLoginIP.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.cLoginIP, "cLoginIP");
             this.cLoginIP.Name = "cLoginIP";
             this.cLoginIP.ReadOnly = true;
@@ -293,50 +319,22 @@
             // 
             this.cIPLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cIPLocation.DataPropertyName = "IPLocation";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPLocation.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPLocation.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cIPLocation, "cIPLocation");
             this.cIPLocation.Name = "cIPLocation";
             this.cIPLocation.ReadOnly = true;
             this.cIPLocation.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cIPLocation.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // cIsOnLine
-            // 
-            this.cIsOnLine.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cIsOnLine.DataPropertyName = "IsOnLine";
-            resources.ApplyResources(this.cIsOnLine, "cIsOnLine");
-            this.cIsOnLine.Name = "cIsOnLine";
-            this.cIsOnLine.ReadOnly = true;
-            this.cIsOnLine.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // cCreateTime
-            // 
-            this.cCreateTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cCreateTime.DataPropertyName = "CreateTime";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cCreateTime.DefaultCellStyle = dataGridViewCellStyle6;
-            resources.ApplyResources(this.cCreateTime, "cCreateTime");
-            this.cCreateTime.Name = "cCreateTime";
-            this.cCreateTime.ReadOnly = true;
-            this.cCreateTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cCreateTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIsExpiry
-            // 
-            this.cIsExpiry.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cIsExpiry.DataPropertyName = "IsExpiry";
-            resources.ApplyResources(this.cIsExpiry, "cIsExpiry");
-            this.cIsExpiry.Name = "cIsExpiry";
-            this.cIsExpiry.ReadOnly = true;
-            this.cIsExpiry.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
             // cExpiryTime
             // 
             this.cExpiryTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cExpiryTime.DataPropertyName = "ExpiryTime";
+            dataGridViewCellStyle7.Format = "g";
+            dataGridViewCellStyle7.NullValue = null;
+            this.cExpiryTime.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.cExpiryTime, "cExpiryTime");
             this.cExpiryTime.Name = "cExpiryTime";
             this.cExpiryTime.ReadOnly = true;
@@ -346,25 +344,80 @@
             // cmsAccountList
             // 
             this.cmsAccountList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cmsAccountList_LoginInfo});
+            this.cmsAccountList_LoginInfo,
+            this.toolStripSeparator1,
+            this.cmsAccountList_AddTime,
+            this.toolStripSeparator3,
+            this.cmsAccountList_Export,
+            this.toolStripSeparator2,
+            this.cmsAccountList_Clear});
             this.cmsAccountList.Name = "cmsAccountList";
             resources.ApplyResources(this.cmsAccountList, "cmsAccountList");
             this.cmsAccountList.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsAccountList_ItemClicked);
             // 
             // cmsAccountList_LoginInfo
             // 
-            this.cmsAccountList_LoginInfo.Image = global::WPELibrary.Properties.Resources.Show;
+            this.cmsAccountList_LoginInfo.Image = global::WPELibrary.Properties.Resources.computer;
             resources.ApplyResources(this.cmsAccountList_LoginInfo, "cmsAccountList_LoginInfo");
             this.cmsAccountList_LoginInfo.Name = "cmsAccountList_LoginInfo";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // cmsAccountList_AddTime
+            // 
+            this.cmsAccountList_AddTime.Image = global::WPELibrary.Properties.Resources.Add;
+            resources.ApplyResources(this.cmsAccountList_AddTime, "cmsAccountList_AddTime");
+            this.cmsAccountList_AddTime.Name = "cmsAccountList_AddTime";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            // 
+            // cmsAccountList_Export
+            // 
+            this.cmsAccountList_Export.Image = global::WPELibrary.Properties.Resources.save;
+            resources.ApplyResources(this.cmsAccountList_Export, "cmsAccountList_Export");
+            this.cmsAccountList_Export.Name = "cmsAccountList_Export";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
+            // cmsAccountList_Clear
+            // 
+            this.cmsAccountList_Clear.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            resources.ApplyResources(this.cmsAccountList_Clear, "cmsAccountList_Clear");
+            this.cmsAccountList_Clear.Name = "cmsAccountList_Clear";
             // 
             // tlpAccountButton
             // 
             resources.ApplyResources(this.tlpAccountButton, "tlpAccountButton");
-            this.tlpAccountButton.Controls.Add(this.bDelete, 1, 3);
-            this.tlpAccountButton.Controls.Add(this.bAccount_New, 1, 1);
-            this.tlpAccountButton.Controls.Add(this.bExport, 1, 5);
-            this.tlpAccountButton.Controls.Add(this.bImport, 1, 7);
+            this.tlpAccountButton.Controls.Add(this.bAddTime, 1, 7);
+            this.tlpAccountButton.Controls.Add(this.bSelectAll, 1, 1);
+            this.tlpAccountButton.Controls.Add(this.bDelete, 1, 5);
+            this.tlpAccountButton.Controls.Add(this.bAccount_New, 1, 3);
+            this.tlpAccountButton.Controls.Add(this.bExport, 1, 9);
+            this.tlpAccountButton.Controls.Add(this.bImport, 1, 11);
             this.tlpAccountButton.Name = "tlpAccountButton";
+            // 
+            // bAddTime
+            // 
+            resources.ApplyResources(this.bAddTime, "bAddTime");
+            this.bAddTime.Name = "bAddTime";
+            this.bAddTime.UseVisualStyleBackColor = true;
+            this.bAddTime.Click += new System.EventHandler(this.bAddTime_Click);
+            // 
+            // bSelectAll
+            // 
+            resources.ApplyResources(this.bSelectAll, "bSelectAll");
+            this.bSelectAll.Name = "bSelectAll";
+            this.bSelectAll.UseVisualStyleBackColor = true;
+            this.bSelectAll.Click += new System.EventHandler(this.bSelectAll_Click);
             // 
             // bDelete
             // 
@@ -394,12 +447,112 @@
             this.bImport.UseVisualStyleBackColor = true;
             this.bImport.Click += new System.EventHandler(this.bImport_Click);
             // 
+            // tlpAccountListButton
+            // 
+            resources.ApplyResources(this.tlpAccountListButton, "tlpAccountListButton");
+            this.tlpAccountListButton.Controls.Add(this.bFirst, 3, 0);
+            this.tlpAccountListButton.Controls.Add(this.bPrevious, 5, 0);
+            this.tlpAccountListButton.Controls.Add(this.bNext, 7, 0);
+            this.tlpAccountListButton.Controls.Add(this.bLast, 9, 0);
+            this.tlpAccountListButton.Controls.Add(this.lblTotalPages, 11, 0);
+            this.tlpAccountListButton.Controls.Add(this.cbbPageSize, 1, 0);
+            this.tlpAccountListButton.Name = "tlpAccountListButton";
+            // 
+            // bFirst
+            // 
+            resources.ApplyResources(this.bFirst, "bFirst");
+            this.bFirst.Name = "bFirst";
+            this.bFirst.UseVisualStyleBackColor = true;
+            this.bFirst.Click += new System.EventHandler(this.bFirst_Click);
+            // 
+            // bPrevious
+            // 
+            resources.ApplyResources(this.bPrevious, "bPrevious");
+            this.bPrevious.Name = "bPrevious";
+            this.bPrevious.UseVisualStyleBackColor = true;
+            this.bPrevious.Click += new System.EventHandler(this.bPrevious_Click);
+            // 
+            // bNext
+            // 
+            resources.ApplyResources(this.bNext, "bNext");
+            this.bNext.Name = "bNext";
+            this.bNext.UseVisualStyleBackColor = true;
+            this.bNext.Click += new System.EventHandler(this.bNext_Click);
+            // 
+            // bLast
+            // 
+            resources.ApplyResources(this.bLast, "bLast");
+            this.bLast.Name = "bLast";
+            this.bLast.UseVisualStyleBackColor = true;
+            this.bLast.Click += new System.EventHandler(this.bLast_Click);
+            // 
+            // lblTotalPages
+            // 
+            resources.ApplyResources(this.lblTotalPages, "lblTotalPages");
+            this.lblTotalPages.Name = "lblTotalPages";
+            // 
+            // cbbPageSize
+            // 
+            resources.ApplyResources(this.cbbPageSize, "cbbPageSize");
+            this.cbbPageSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbPageSize.FormattingEnabled = true;
+            this.cbbPageSize.Items.AddRange(new object[] {
+            resources.GetString("cbbPageSize.Items"),
+            resources.GetString("cbbPageSize.Items1"),
+            resources.GetString("cbbPageSize.Items2"),
+            resources.GetString("cbbPageSize.Items3")});
+            this.cbbPageSize.Name = "cbbPageSize";
+            this.cbbPageSize.SelectedIndexChanged += new System.EventHandler(this.cbbPageSize_SelectedIndexChanged);
+            // 
             // tlpSearchAccount
             // 
             resources.ApplyResources(this.tlpSearchAccount, "tlpSearchAccount");
+            this.tlpSearchAccount.Controls.Add(this.gSearch_Expire, 2, 0);
             this.tlpSearchAccount.Controls.Add(this.gbSearch_UserName, 0, 0);
             this.tlpSearchAccount.Controls.Add(this.gbSearch_State, 1, 0);
             this.tlpSearchAccount.Name = "tlpSearchAccount";
+            // 
+            // gSearch_Expire
+            // 
+            this.gSearch_Expire.Controls.Add(this.tlpSearch_Expire);
+            resources.ApplyResources(this.gSearch_Expire, "gSearch_Expire");
+            this.gSearch_Expire.Name = "gSearch_Expire";
+            this.gSearch_Expire.TabStop = false;
+            // 
+            // tlpSearch_Expire
+            // 
+            resources.ApplyResources(this.tlpSearch_Expire, "tlpSearch_Expire");
+            this.tlpSearch_Expire.Controls.Add(this.bSearch_Expire, 4, 1);
+            this.tlpSearch_Expire.Controls.Add(this.dtpExpireFrom, 0, 1);
+            this.tlpSearch_Expire.Controls.Add(this.dtpExpireTo, 2, 1);
+            this.tlpSearch_Expire.Controls.Add(this.label1, 1, 1);
+            this.tlpSearch_Expire.Name = "tlpSearch_Expire";
+            // 
+            // bSearch_Expire
+            // 
+            resources.ApplyResources(this.bSearch_Expire, "bSearch_Expire");
+            this.bSearch_Expire.Name = "bSearch_Expire";
+            this.bSearch_Expire.UseVisualStyleBackColor = true;
+            this.bSearch_Expire.Click += new System.EventHandler(this.bSearch_Expire_Click);
+            // 
+            // dtpExpireFrom
+            // 
+            resources.ApplyResources(this.dtpExpireFrom, "dtpExpireFrom");
+            this.dtpExpireFrom.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpExpireFrom.Name = "dtpExpireFrom";
+            this.dtpExpireFrom.ShowUpDown = true;
+            // 
+            // dtpExpireTo
+            // 
+            resources.ApplyResources(this.dtpExpireTo, "dtpExpireTo");
+            this.dtpExpireTo.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpExpireTo.Name = "dtpExpireTo";
+            this.dtpExpireTo.ShowUpDown = true;
+            // 
+            // label1
+            // 
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Name = "label1";
             // 
             // gbSearch_UserName
             // 
@@ -411,8 +564,8 @@
             // tlpSearch_UserName
             // 
             resources.ApplyResources(this.tlpSearch_UserName, "tlpSearch_UserName");
-            this.tlpSearch_UserName.Controls.Add(this.txtSearch_UserName, 1, 1);
-            this.tlpSearch_UserName.Controls.Add(this.bSearch_UserName, 3, 1);
+            this.tlpSearch_UserName.Controls.Add(this.txtSearch_UserName, 0, 1);
+            this.tlpSearch_UserName.Controls.Add(this.bSearch_UserName, 2, 1);
             this.tlpSearch_UserName.Name = "tlpSearch_UserName";
             // 
             // txtSearch_UserName
@@ -437,8 +590,8 @@
             // tlpSearch_State
             // 
             resources.ApplyResources(this.tlpSearch_State, "tlpSearch_State");
-            this.tlpSearch_State.Controls.Add(this.cbbSearch_State, 2, 1);
-            this.tlpSearch_State.Controls.Add(this.cbIs, 1, 1);
+            this.tlpSearch_State.Controls.Add(this.cbbSearch_State, 0, 1);
+            this.tlpSearch_State.Controls.Add(this.bSearch_State, 2, 1);
             this.tlpSearch_State.Name = "tlpSearch_State";
             // 
             // cbbSearch_State
@@ -449,22 +602,23 @@
             this.cbbSearch_State.Items.AddRange(new object[] {
             resources.GetString("cbbSearch_State.Items"),
             resources.GetString("cbbSearch_State.Items1"),
-            resources.GetString("cbbSearch_State.Items2")});
+            resources.GetString("cbbSearch_State.Items2"),
+            resources.GetString("cbbSearch_State.Items3"),
+            resources.GetString("cbbSearch_State.Items4"),
+            resources.GetString("cbbSearch_State.Items5")});
             this.cbbSearch_State.Name = "cbbSearch_State";
-            this.cbbSearch_State.SelectedIndexChanged += new System.EventHandler(this.cbbSearch_State_SelectedIndexChanged);
             // 
-            // cbIs
+            // bSearch_State
             // 
-            resources.ApplyResources(this.cbIs, "cbIs");
-            this.cbIs.Name = "cbIs";
-            this.cbIs.UseVisualStyleBackColor = true;
-            this.cbIs.CheckedChanged += new System.EventHandler(this.cbIs_CheckedChanged);
+            resources.ApplyResources(this.bSearch_State, "bSearch_State");
+            this.bSearch_State.Name = "bSearch_State";
+            this.bSearch_State.UseVisualStyleBackColor = true;
+            this.bSearch_State.Click += new System.EventHandler(this.bSearch_State_Click);
             // 
-            // tTimer
+            // bgwAccountList
             // 
-            this.tTimer.Enabled = true;
-            this.tTimer.Interval = 1000;
-            this.tTimer.Tick += new System.EventHandler(this.tTimer_Tick);
+            this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
+            this.bgwAccountList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwAccountList_RunWorkerCompleted);
             // 
             // Proxy_AccountListForm
             // 
@@ -484,13 +638,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvAccountList)).EndInit();
             this.cmsAccountList.ResumeLayout(false);
             this.tlpAccountButton.ResumeLayout(false);
+            this.tlpAccountListButton.ResumeLayout(false);
+            this.tlpAccountListButton.PerformLayout();
             this.tlpSearchAccount.ResumeLayout(false);
+            this.gSearch_Expire.ResumeLayout(false);
+            this.tlpSearch_Expire.ResumeLayout(false);
+            this.tlpSearch_Expire.PerformLayout();
             this.gbSearch_UserName.ResumeLayout(false);
             this.tlpSearch_UserName.ResumeLayout(false);
             this.tlpSearch_UserName.PerformLayout();
             this.gbSearch_State.ResumeLayout(false);
             this.tlpSearch_State.ResumeLayout(false);
-            this.tlpSearch_State.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -506,7 +664,6 @@
         private System.Windows.Forms.Button bDelete;
         private System.Windows.Forms.ToolStripStatusLabel tsslAccount;
         private System.Windows.Forms.ToolStripStatusLabel tsslAccount_CNT;
-        private System.Windows.Forms.Timer tTimer;
         private System.Windows.Forms.ToolStripStatusLabel tsslSplit;
         private System.Windows.Forms.ToolStripStatusLabel tsslAccountEnable;
         private System.Windows.Forms.ToolStripStatusLabel tsslAccountEnable_CNT;
@@ -526,18 +683,37 @@
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bImport;
         private System.Windows.Forms.ComboBox cbbSearch_State;
-        private System.Windows.Forms.CheckBox cbIs;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cAccountID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cAID;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsEnable;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cLoginIP;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cIPLocation;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsOnLine;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cCreateTime;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn cIsExpiry;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cExpiryTime;
         private System.Windows.Forms.ContextMenuStrip cmsAccountList;
         private System.Windows.Forms.ToolStripMenuItem cmsAccountList_LoginInfo;
+        private System.ComponentModel.BackgroundWorker bgwAccountList;
+        private System.Windows.Forms.TableLayoutPanel tlpAccountListButton;
+        private System.Windows.Forms.Button bFirst;
+        private System.Windows.Forms.Button bPrevious;
+        private System.Windows.Forms.Button bNext;
+        private System.Windows.Forms.Button bLast;
+        private System.Windows.Forms.Label lblTotalPages;
+        private System.Windows.Forms.Button bSelectAll;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_Export;
+        private System.Windows.Forms.ComboBox cbbPageSize;
+        private System.Windows.Forms.Button bSearch_State;
+        private System.Windows.Forms.GroupBox gSearch_Expire;
+        private System.Windows.Forms.TableLayoutPanel tlpSearch_Expire;
+        private System.Windows.Forms.Button bSearch_Expire;
+        private System.Windows.Forms.DateTimePicker dtpExpireFrom;
+        private System.Windows.Forms.DateTimePicker dtpExpireTo;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_Clear;
+        private System.Windows.Forms.Button bAddTime;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_AddTime;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cAID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLoginTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLoginIP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cIPLocation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cExpiryTime;
     }
 }

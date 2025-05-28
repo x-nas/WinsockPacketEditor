@@ -28,7 +28,8 @@ namespace WPELibrary
         {
             try
             {
-                this.Text += " - " + Socket_Cache.ProxyAccount.GetUserName_ByAccountID(this.AccountID);
+                string UserName = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(this.AccountID).UserName;
+                this.Text += " - " + UserName;
             }
             catch (Exception ex)
             {

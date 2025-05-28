@@ -1,10 +1,10 @@
 ﻿using EasyHook;
-using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -2256,13 +2256,13 @@ namespace WPELibrary.Lib
 
         #region//获取启用的代理账号数
 
-        public static int GetEnableProxyAccountCount()
+        public static int GetEnableProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                foreach (Proxy_AccountInfo pai in allData)
                 {
                     if (pai.IsEnable)
                     {
@@ -2281,13 +2281,13 @@ namespace WPELibrary.Lib
 
         #region//获取过期的代理账号数
 
-        public static int GetExpiryProxyAccountCount()
+        public static int GetExpiryProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                foreach (Proxy_AccountInfo pai in allData)
                 {
                     if (pai.IsEnable && pai.IsExpiry)
                     {
@@ -2309,13 +2309,13 @@ namespace WPELibrary.Lib
 
         #region//获取在线的代理账号数
 
-        public static int GetOnLineProxyAccountCount()
+        public static int GetOnLineProxyAccountCount(BindingList<Proxy_AccountInfo> allData)
         {
             int iReturn = 0;
 
             try
             {
-                foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                foreach (Proxy_AccountInfo pai in allData)
                 {
                     if (pai.IsOnLine)
                     {
@@ -2486,7 +2486,7 @@ namespace WPELibrary.Lib
         #region//获取列表中的选中的项
 
         //封包列表
-        public static List<Socket_PacketInfo> GetSelectedPacket(DataGridView dgvSocketList)
+        public static List<Socket_PacketInfo> GetSelectedSocket(DataGridView dgvSocketList)
         {
             List<Socket_PacketInfo> spiList = new List<Socket_PacketInfo>();
 
@@ -2554,6 +2554,29 @@ namespace WPELibrary.Lib
             return ssiList;
         }
 
+        //发送集列表
+        public static List<Socket_PacketInfo> GetSelectedSendCollection(DataGridView dgvSendCollection, BindingList<Socket_PacketInfo> SCollection)
+        {
+            List<Socket_PacketInfo> sscList = new List<Socket_PacketInfo>();
+
+            try
+            {
+                for (int i = 0; i < dgvSendCollection.Rows.Count; i++)
+                {
+                    if (dgvSendCollection.Rows[i].Selected)
+                    {
+                        sscList.Add(SCollection[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return sscList;
+        }
+
         //机器人列表
         public static List<Socket_RobotInfo> GetSelectedRobot(DataGridView dgvRobotList)
         {
@@ -2578,18 +2601,17 @@ namespace WPELibrary.Lib
         }
 
         //代理账号列表
-        public static List<Proxy_AccountInfo> GetSelectedProxyAccount(DataGridView dgvProxyAccount)
+        public static List<Guid> GetSelectedProxyAccount(DataGridView dgvProxyAccount)
         {
-            List<Proxy_AccountInfo> paiList = new List<Proxy_AccountInfo>();
+            List<Guid> gReturnList = new List<Guid>();
 
             try
             {
-                for (int i = 0; i < dgvProxyAccount.Rows.Count; i++)
+                DataGridViewSelectedRowCollection selectedRows = dgvProxyAccount.SelectedRows;
+
+                foreach (DataGridViewRow row in selectedRows)
                 {
-                    if (dgvProxyAccount.Rows[i].Selected)
-                    {
-                        paiList.Add(Socket_Cache.ProxyAccount.lstProxyAccount[i]);
-                    }
+                    gReturnList.Add(Guid.Parse(row.Cells["cAID"].Value.ToString()));
                 }
             }
             catch (Exception ex)
@@ -2597,7 +2619,7 @@ namespace WPELibrary.Lib
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            return paiList;
+            return gReturnList;
         }
 
         #endregion
@@ -3331,6 +3353,26 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//显示账号加时窗体（对话框）
+
+        public static void ShowAccountTimeForm(List<Guid> gList)
+        {
+            try
+            {
+                if (gList.Count > 0)
+                {
+                    Proxy_AccountTimeForm patForm = new Proxy_AccountTimeForm(gList);
+                    patForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示滤镜窗体（对话框）
 
         public static void ShowFilterForm_Dialog(int FIndex)
@@ -3356,13 +3398,13 @@ namespace WPELibrary.Lib
 
         #region//显示发送列表窗体（对话框）
 
-        public static void ShowSendListForm_Dialog(int SIndex)
+        public static void ShowSendListForm_Dialog(Socket_SendInfo ssi)
         {
             try
             {
-                if (Socket_Cache.SendList.lstSend.Count > 0)
+                if (ssi != null)
                 {
-                    Socket_SendListForm fSendListForm = new Socket_SendListForm(SIndex);
+                    Socket_SendListForm fSendListForm = new Socket_SendListForm(ssi);
                     fSendListForm.ShowDialog();
                 }
             }

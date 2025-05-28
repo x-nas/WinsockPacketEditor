@@ -289,7 +289,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAbABAQGwAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAbgBAQG4AQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -383,6 +383,30 @@
     <value>Paste</value>
   </data>
   <data name="hbData.BuiltInContextMenu.SelectAllMenuItemText" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="cmsHexBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>135, 76</value>
+  </data>
+  <data name="cmsHexBox_CopyHex.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 22</value>
+  </data>
+  <data name="cmsHexBox_CopyHex.Text" xml:space="preserve">
+    <value>Copy Hex</value>
+  </data>
+  <data name="cmsHexBox_Copy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 22</value>
+  </data>
+  <data name="cmsHexBox_Copy.Text" xml:space="preserve">
+    <value>Copy Text</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>131, 6</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 22</value>
+  </data>
+  <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
     <value>Select All</value>
   </data>
   <data name="tpAuth.Text" xml:space="preserve">

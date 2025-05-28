@@ -59,13 +59,15 @@ namespace WPELibrary.Lib.WebAPI
                     return BadRequest(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                 }
 
+                pai.LoginTime = DateTime.MinValue;
+
                 if (pai.ExpiryTime == null)
                 {
                     pai.ExpiryTime = DateTime.Now;
                 }
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
-                bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, string.Empty, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
+                bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginTime, string.Empty, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
 
                 if (bOK)
                 {

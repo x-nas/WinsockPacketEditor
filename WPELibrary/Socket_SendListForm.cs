@@ -1,43 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using WPELibrary.Lib;
-using System.Reflection;
-using System.Data;
 
 namespace WPELibrary
 {
     public partial class Socket_SendListForm : Form
     {
-        private int SendIndex = -1;
+        private Socket_SendInfo SSI;
         private string SendName = string.Empty;
-        private DataTable dtSendCollection = Socket_Cache.Send.InitSendCollection();
+        private BindingList<Socket_PacketInfo> SendCollection;
+        private Socket_PacketInfo spiSelect;
         private readonly Socket_Send ss = new Socket_Send();
 
-        #region//窗体加载
+        #region//窗体事件
 
-        public Socket_SendListForm(int SIndex)
+        public Socket_SendListForm(Socket_SendInfo ssi)
         {
             MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
             InitializeComponent();
 
-            this.SendIndex = SIndex;
-        }
+            if (ssi != null)
+            { 
+                this.SSI = ssi;
 
-        #endregion
-
-        #region//窗体事件
-
-        private void SocketSendList_Form_Load(object sender, EventArgs e)
-        {
-            if (this.SendIndex > -1)
-            {
                 this.InitSendListForm();
                 this.InitSendListDGV();
-            }
-            else
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
-                this.Close();
             }
         }
 
@@ -46,7 +37,27 @@ namespace WPELibrary
             this.ss.StopSend();
         }
 
-        #endregion
+        private void dgvSendCollection_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.dgvSendCollection.SelectedRows.Count > 0)
+                {
+                    int iSelectIndex = this.dgvSendCollection.SelectedRows[0].Index;
+
+                    if (iSelectIndex >= 0 && iSelectIndex < this.SendCollection.Count)
+                    {
+                        this.spiSelect = this.SendCollection[iSelectIndex];
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion        
 
         #region//初始化
 
@@ -55,8 +66,8 @@ namespace WPELibrary
             try
             {
                 dgvSendCollection.AutoGenerateColumns = false;
-                dgvSendCollection.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendCollection, true, null);
-                dgvSendCollection.DataSource = this.dtSendCollection;
+                dgvSendCollection.DataSource = this.SendCollection;
+                dgvSendCollection.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendCollection, true, null);                
             }
             catch (Exception ex)
             {
@@ -68,17 +79,17 @@ namespace WPELibrary
         {
             try
             {
-                string sSID = Socket_Cache.SendList.lstSend[this.SendIndex].SID.ToString().ToUpper();
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_48), (this.SendIndex + 1), sSID);
+                string sSID = this.SSI.SID.ToString().ToUpper();
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_48), sSID);
 
-                this.SendName = Socket_Cache.SendList.lstSend[this.SendIndex].SName;
+                this.SendName = this.SSI.SName;
                 this.txtSendName.Text = this.SendName;
-                this.cbSystemSocket.Checked = Socket_Cache.SendList.lstSend[this.SendIndex].SSystemSocket;
+                this.cbSystemSocket.Checked = this.SSI.SSystemSocket;
                 this.lSystemSocket.Text = Socket_Cache.System.SystemSocket.ToString();
-                this.nudLoop_CNT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopCNT;
-                this.nudLoop_INT.Value = Socket_Cache.SendList.lstSend[this.SendIndex].SLoopINT;
-                this.dtSendCollection = Socket_Cache.SendList.lstSend[this.SendIndex].SCollection.Copy();
-                this.rtbNotes.Text = Socket_Cache.SendList.lstSend[this.SendIndex].SNotes;
+                this.nudLoop_CNT.Value = this.SSI.SLoopCNT;
+                this.nudLoop_INT.Value = this.SSI.SLoopINT;
+                this.SendCollection = new BindingList<Socket_PacketInfo>(this.SSI.SCollection.ToList());
+                this.rtbNotes.Text = this.SSI.SNotes;
 
                 this.InitSend();
             }
@@ -115,18 +126,23 @@ namespace WPELibrary
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cType"].Index)
                 {
-                    Socket_Cache.SocketPacket.PacketType ptType = (Socket_Cache.SocketPacket.PacketType)this.dgvSendCollection.Rows[e.RowIndex].Cells["cType"].Value;
-                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(ptType);
+                    string sType = dgvSendCollection.Rows[e.RowIndex].Cells["cType"].Value.ToString();
+
+                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(Socket_Cache.SocketPacket.GetPacketType_ByString(sType));
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cData"].Index)
                 {
-                    e.Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, (byte[])this.dtSendCollection.Rows[e.RowIndex]["Buffer"]);
+                    byte[] buffer = (byte[])dgvSendCollection.Rows[e.RowIndex].Cells["cBuffer"].Value;
+
+                    e.Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, buffer);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cLength"].Index)
                 {
-                    e.Value = ((byte[])this.dtSendCollection.Rows[e.RowIndex]["Buffer"]).Length.ToString();
+                    byte[] buffer = (byte[])dgvSendCollection.Rows[e.RowIndex].Cells["cBuffer"].Value;
+
+                    e.Value = buffer.Length.ToString();
                     e.FormattingApplied = true;
                 }
             }
@@ -145,6 +161,7 @@ namespace WPELibrary
             try
             {
                 string SName_New = this.txtSendName.Text.Trim();
+
                 if (string.IsNullOrEmpty(SName_New))
                 {
                     Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_19));
@@ -156,7 +173,7 @@ namespace WPELibrary
                 int SLoopINT_New = ((int)this.nudLoop_INT.Value);
                 string SNotes_New = this.rtbNotes.Text.Trim();
 
-                Socket_Cache.Send.UpdateSend_BySendIndex(this.SendIndex, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.dtSendCollection, SNotes_New);
+                Socket_Cache.Send.UpdateSend(this.SSI, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.SendCollection, SNotes_New);
 
                 this.Close();
             }
@@ -183,7 +200,7 @@ namespace WPELibrary
         {
             try
             {
-                if (this.dtSendCollection.Rows.Count > 0)
+                if (this.SendCollection.Count > 0)
                 {
                     if (this.CheckSendInfo())
                     {
@@ -202,7 +219,7 @@ namespace WPELibrary
                             int iLoopCNT = ((int)this.nudLoop_CNT.Value);
                             int iLoopINT = ((int)this.nudLoop_INT.Value);
 
-                            ss.StartSend(this.SendName, bSystemSocket, iLoopCNT, iLoopINT, this.dtSendCollection);
+                            ss.StartSend(this.SendName, bSystemSocket, iLoopCNT, iLoopINT, this.SendCollection);
                         }
                     }
                 }
@@ -252,17 +269,11 @@ namespace WPELibrary
             }
         }
 
-        private void Worker_ProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
+        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             try
             {
-                int iIndex = e.ProgressPercentage;
-
-                if (iIndex > -1 && iIndex < dgvSendCollection.Rows.Count)
-                {
-                    this.dgvSendCollection.CurrentCell = this.dgvSendCollection.Rows[iIndex].Cells[0];
-                    this.dgvSendCollection.FirstDisplayedScrollingRowIndex = iIndex;
-                }
+                int iIndex = e.ProgressPercentage;             
 
                 this.tlTotal_Send_CNT.Text = this.ss.Total_Send.ToString();
                 this.tlSend_Success_CNT.Text = this.ss.Send_Success.ToString();
@@ -321,54 +332,69 @@ namespace WPELibrary
 
             try
             {
-                int iIndex = 0;
-                int iSIndex = -1;
-
-                if (this.dgvSendCollection.Rows.Count > 0 && this.dgvSendCollection.CurrentRow != null && this.dgvSendCollection.SelectedRows.Count > 0)
+                if (this.dgvSendCollection.Rows.Count > 0)
                 {
-                    iSIndex = this.dgvSendCollection.CurrentRow.Index;
-                }
+                    List<Socket_PacketInfo> spiList = Socket_Operation.GetSelectedSendCollection(this.dgvSendCollection, this.SendCollection);
 
-                switch (sItemText)
-                {
-                    case "cmsSendList_Top":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Top, iSIndex);
-                        break;
+                    if (spiList.Count > 0)
+                    {
+                        switch (sItemText)
+                        {
+                            case "cmsSendList_Send":
 
-                    case "cmsSendList_Up":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Up, iSIndex);
-                        break;
+                                if (this.spiSelect != null)
+                                {
+                                    Socket_Operation.ShowSendForm(spiSelect);
+                                }
+                                
+                                break;
 
-                    case "cmsSendList_Down":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Down, iSIndex);
-                        break;
+                            case "cmsSendList_Top":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Top, spiList);
+                                break;
 
-                    case "cmsSendList_Bottom":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Bottom, iSIndex);
-                        break;
+                            case "cmsSendList_Up":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Up, spiList);
+                                break;
 
-                    case "cmsSendList_Delete":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Delete, iSIndex);
-                        break;
+                            case "cmsSendList_Down":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Down, spiList);
+                                break;
 
-                    case "cmsSendList_Export":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Export, iSIndex);
-                        break;
+                            case "cmsSendList_Bottom":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Bottom, spiList);
+                                break;
 
-                    case "cmsSendList_Import":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.Import, iSIndex);
-                        break;
+                            case "cmsSendList_Delete":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Delete, spiList);
+                                break;
 
-                    case "cmsSendList_CleanUp":
-                        iIndex = Socket_Cache.Send.UpdateSendCollection_ByListAction(this.dtSendCollection, Socket_Cache.System.ListAction.CleanUp, iSIndex);
-                        break;
-                }
+                            case "cmsSendList_Export":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Export, spiList);
+                                break;
 
-                if (iIndex > -1 && iIndex < dgvSendCollection.RowCount)
-                {
-                    this.dgvSendCollection.ClearSelection();
-                    this.dgvSendCollection.Rows[iIndex].Selected = true;
-                    this.dgvSendCollection.CurrentCell = this.dgvSendCollection.Rows[iIndex].Cells[0];
+                            case "cmsSendList_Import":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Import, spiList);
+                                break;
+
+                            case "cmsSendList_CleanUp":
+                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.CleanUp, spiList);
+                                break;
+                        }
+
+                        this.dgvSendCollection.ClearSelection();
+
+                        foreach (Socket_PacketInfo spi in spiList)
+                        {
+                            int iIndex = SendCollection.IndexOf(spi);
+
+                            if (iIndex > -1 && iIndex < dgvSendCollection.RowCount)
+                            {
+                                this.dgvSendCollection.Rows[iIndex].Selected = true;
+                                dgvSendCollection.FirstDisplayedScrollingRowIndex = iIndex;
+                            }
+                        }
+                    }
                 }
             }
             catch (Exception ex)

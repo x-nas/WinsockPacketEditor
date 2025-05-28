@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Be.Windows.Forms;
+using System;
+using System.ComponentModel;
+using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using WPELibrary.Lib;
-using System.Reflection;
-using Be.Windows.Forms;
-using System.Data;
-using System.Threading;
 
 namespace WPELibrary
 {
@@ -417,6 +417,7 @@ namespace WPELibrary
                         Span<byte> bufferSpan = bNewBuff.AsSpan();
                         string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Socket_Cache.SocketPacket.PacketData_MaxLen);
 
+                        this.SPI.PacketSocket = (int)this.nudSendSocket_Socket.Value;
                         this.SPI.PacketBuffer = bNewBuff;
                         this.SPI.PacketData = sNewPacketData_Hex;
                         this.SPI.PacketLen = iNewLen;
@@ -448,7 +449,7 @@ namespace WPELibrary
 
         #region//右键菜单
 
-        private void cmsHexBox_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void cmsHexBox_Opening(object sender, CancelEventArgs e)
         {
             Socket_Operation.InitSendListComboBox(this.tscbSendList);
         }
@@ -461,11 +462,12 @@ namespace WPELibrary
                 {
                     Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
-                    DataTable SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+                    BindingList<Socket_PacketInfo> SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
 
                     if (SCollection != null)
                     {
                         int iSocket = (int)this.nudSendSocket_Socket.Value;
+                        string sIPFrom = this.txtIPFrom.Text.Trim();
                         string sIPTo = this.txtIPTo.Text.Trim();
 
                         byte[] bBuffer = null;
@@ -481,7 +483,7 @@ namespace WPELibrary
                             bBuffer = dbp.Bytes.ToArray();
                         }                        
 
-                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.SPI.PacketType, sIPTo, bBuffer);                      
+                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bBuffer);                      
                     }                                       
 
                     this.cmsHexBox.Close();
@@ -689,7 +691,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    this.bSave.Enabled = hbPacketData.ByteProvider.HasChanges();
+                    this.bSave.Enabled = true;
                     tsPacketData_Find.Enabled = true;
                     tsPacketData_FindNext.Enabled = true;
                     tscbEncoding.Enabled = true;
