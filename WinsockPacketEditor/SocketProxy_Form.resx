@@ -598,13 +598,13 @@
     <value>3, 12</value>
   </data>
   <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>99, 21</value>
+    <value>112, 21</value>
   </data>
   <data name="cbEnable_Auth.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="cbEnable_Auth.Text" xml:space="preserve">
-    <value>启用账号认证</value>
+    <value>启用 - 账号认证</value>
   </data>
   <data name="&gt;&gt;cbEnable_Auth.Name" xml:space="preserve">
     <value>cbEnable_Auth</value>
@@ -628,7 +628,7 @@
     <value>NoControl</value>
   </data>
   <data name="lAuthType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>108, 12</value>
+    <value>121, 12</value>
   </data>
   <data name="lAuthType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -664,7 +664,7 @@
     <value>用户名/密码</value>
   </data>
   <data name="cbbAuthType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 9</value>
+    <value>183, 9</value>
   </data>
   <data name="cbbAuthType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -694,7 +694,7 @@
     <value>NoControl</value>
   </data>
   <data name="bAccount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>290, 9</value>
+    <value>303, 9</value>
   </data>
   <data name="bAccount.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -2143,7 +2143,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAZgBBAGYAQQBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAbABBAGwAQQBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
