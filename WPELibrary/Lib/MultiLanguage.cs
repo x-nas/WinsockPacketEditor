@@ -25,7 +25,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_13 = { "请选择一个进程", "Please select a process" };
         public static string[] MutiLan_14 = { "请选择要注入的应用程序", "Please select the program to inject" };
         public static string[] MutiLan_15 = { "应用程序|*.exe|所有文件|*.*", "Program|*.exe|All Files|*.*" };
-        public static string[] MutiLan_16 = { "滤镜 - [ 序号 {0} ] - {1}", "Filter - [ ID {0} ] - {1}" };
+        public static string[] MutiLan_16 = { "滤镜 - {0}", "Filter - {0}" };
         public static string[] MutiLan_17 = { "确定重置为上次保存时的数据吗?", "Are you sure to reset to the last saved data?" };
         public static string[] MutiLan_18 = { "确定保存当前数据吗?", "Are you sure to save the current data?" };
         public static string[] MutiLan_19 = { "名称不能为空!", "The name cannot be empty!" };
@@ -102,7 +102,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_90 = { "导入列表文件", "Import List File" };
         public static string[] MutiLan_91 = { " 请输入密码", " Please enter the password" };
         public static string[] MutiLan_92 = { "加载失败: 密码错误!", "Failed to load: Password incorrect!" };
-        public static string[] MutiLan_93 = { "机器人 - [ 序号 {0} ] - {1}", "Robot - [ ID {0} ] - {1}" };
+        public static string[] MutiLan_93 = { "机器人 - {0}", "Robot - {0}" };
         public static string[] MutiLan_94 = { "发送", "Send" };
         public static string[] MutiLan_95 = { "延迟", "Delay" };
         public static string[] MutiLan_96 = { "循环开始", "Loop Start" };

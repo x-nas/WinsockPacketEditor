@@ -1785,8 +1785,7 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-
-                    Socket_Cache.Filter.SetIsCheck_ByFilterIndex(FIndex, bCheck);
+                    Socket_Cache.FilterList.lstFilter[FIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
@@ -1799,14 +1798,11 @@ namespace WPELibrary
         {
             try
             {
-                if (dgvFilterList.Rows.Count > 0)
-                {
-                    int FIndex = e.RowIndex;
+                int iSelectIndex = this.dgvFilterList.SelectedRows[0].Index;
 
-                    if (FIndex > -1)
-                    {
-                        Socket_Operation.ShowFilterForm_Dialog(FIndex);
-                    }
+                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.FilterList.lstFilter.Count)
+                {
+                    Socket_Operation.ShowFilterForm_Dialog(Socket_Cache.FilterList.lstFilter[iSelectIndex]);
                 }
             }
             catch (Exception ex)
@@ -2075,8 +2071,7 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-
-                    Socket_Cache.Robot.SetIsCheck_ByRobotIndex(RIndex, bCheck);
+                    Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
@@ -2089,14 +2084,11 @@ namespace WPELibrary
         {
             try
             {
-                if (dgvRobotList.Rows.Count > 0)
-                {
-                    int RIndex = e.RowIndex;
+                int iSelectIndex = this.dgvRobotList.SelectedRows[0].Index;
 
-                    if (RIndex > -1)
-                    {
-                        Socket_Operation.ShowRobotForm_Dialog(RIndex);
-                    }
+                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.RobotList.lstRobot.Count)
+                {
+                    Socket_Operation.ShowRobotForm_Dialog(Socket_Cache.RobotList.lstRobot[iSelectIndex]);
                 }
             }
             catch (Exception ex)

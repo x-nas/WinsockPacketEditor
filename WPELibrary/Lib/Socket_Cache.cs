@@ -3419,8 +3419,8 @@ namespace WPELibrary.Lib
 
             #region//更新滤镜
 
-            public static void UpdateFilter_ByFilterIndex(
-                int iFIndex,
+            public static void UpdateFilter(
+                Socket_FilterInfo sfi,
                 string FName,
                 bool AppointHeader,
                 string HeaderContent,
@@ -3449,33 +3449,33 @@ namespace WPELibrary.Lib
             {
                 try
                 {
-                    if (iFIndex > -1)
+                    if (sfi != null)
                     {
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FName = FName;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].AppointHeader = AppointHeader;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].HeaderContent = HeaderContent;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].AppointSocket = AppointSocket;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].SocketContent = SocketContent;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].AppointLength = AppointLength;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].LengthContent = LengthContent;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].AppointPort = AppointPort;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].PortContent = PortContent;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FMode = FilterMode;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FAction = FilterAction;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].IsExecute = IsExecute;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FEType = FEType;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].SID = SID;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].RID = RID;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FFunction = FilterFunction;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FStartFrom = FilterStartFrom;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].IsProgressionContinuous = IsProgressionContinuous;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionStep = ProgressionStep;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].IsProgressionCarry = IsProgressionCarry;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionCarryNumber = ProgressionCarryNumber;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionPosition = ProgressionPosition;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].ProgressionCount = ProgressionCount;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FSearch = FSearch;
-                        Socket_Cache.FilterList.lstFilter[iFIndex].FModify = FModify;
+                        sfi.FName = FName;
+                        sfi.AppointHeader = AppointHeader;
+                        sfi.HeaderContent = HeaderContent;
+                        sfi.AppointSocket = AppointSocket;
+                        sfi.SocketContent = SocketContent;
+                        sfi.AppointLength = AppointLength;
+                        sfi.LengthContent = LengthContent;
+                        sfi.AppointPort = AppointPort;
+                        sfi.PortContent = PortContent;
+                        sfi.FMode = FilterMode;
+                        sfi.FAction = FilterAction;
+                        sfi.IsExecute = IsExecute;
+                        sfi.FEType = FEType;
+                        sfi.SID = SID;
+                        sfi.RID = RID;
+                        sfi.FFunction = FilterFunction;
+                        sfi.FStartFrom = FilterStartFrom;
+                        sfi.IsProgressionContinuous = IsProgressionContinuous;
+                        sfi.ProgressionStep = ProgressionStep;
+                        sfi.IsProgressionCarry = IsProgressionCarry;
+                        sfi.ProgressionCarryNumber = ProgressionCarryNumber;
+                        sfi.ProgressionPosition = ProgressionPosition;
+                        sfi.ProgressionCount = ProgressionCount;
+                        sfi.FSearch = FSearch;
+                        sfi.FModify = FModify;
                     }
                 }
                 catch (Exception ex)
@@ -3848,26 +3848,7 @@ namespace WPELibrary.Lib
                 return ffReturn;
             }
 
-            #endregion            
-
-            #region//设置滤镜是否启用
-
-            public static void SetIsCheck_ByFilterIndex(int FIndex, bool bCheck)
-            {
-                try
-                {
-                    if (FIndex > -1)
-                    {
-                        Socket_Cache.FilterList.lstFilter[FIndex].IsEnable = bCheck;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
+            #endregion                        
 
             #region//检查滤镜是否生效
 
@@ -5547,14 +5528,14 @@ namespace WPELibrary.Lib
 
             #region//更新机器人
 
-            public static void UpdateRobot_ByRobotIndex(int RIndex, string RName, DataTable RInstruction)
+            public static void UpdateRobot(Socket_RobotInfo sri, string RName, DataTable RInstruction)
             {
                 try
                 {
-                    if (RIndex > -1)
+                    if (sri != null)
                     {
-                        Socket_Cache.RobotList.lstRobot[RIndex].RName = RName;
-                        Socket_Cache.RobotList.lstRobot[RIndex].RInstruction = RInstruction.Copy();
+                        sri.RName = RName;
+                        sri.RInstruction = RInstruction.Copy();
                     }
                 }
                 catch (Exception ex)
@@ -5611,26 +5592,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
-
-            #region//设置机器人是否启用
-
-            public static void SetIsCheck_ByRobotIndex(int RIndex, bool bCheck)
-            {
-                try
-                {
-                    if (RIndex > -1)
-                    {
-                        Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
+            #endregion            
 
             #region//获取指令类型的名称
 

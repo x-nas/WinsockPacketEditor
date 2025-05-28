@@ -9,46 +9,22 @@ using System.Text;
 namespace WPELibrary
 {
     public partial class Socket_FilterForm : Form
-    {  
-        private int FilterIndex = -1;
-        private int LoadAllCount = 0;        
-        private decimal FilterSocketContent = 1;        
-        private decimal FilterPortContent = 1;
-        private decimal FilterProgressionStep = 1;
-        private decimal FilterProgressionCarryNumber = 1;
-        private string FilterName = string.Empty;
-        private string FilterHeaderContent = string.Empty;
-        private string FilterLengthContent = string.Empty;
-        private string FilterProgressionPosition = string.Empty;
-        private string FilterSearch = string.Empty;
-        private string FilterModify = string.Empty;
-        private bool IsExecute = false;
-        private bool FilterAppointHeader = false;
-        private bool FilterAppointSocket = false;
-        private bool FilterAppointLength = false;
-        private bool FilterAppointPort = false;
-        private bool IsProgressionContinuous = false;
-        private bool IsProgressionCarry = false;
-        private Socket_Cache.Filter.FilterMode FilterMode;
-        private Socket_Cache.Filter.FilterAction FilterAction;
-        private Socket_Cache.Filter.FilterExecuteType FilterExecuteType;
-        private Guid SID = Guid.Empty;
-        private Guid RID = Guid.Empty;
-        private Socket_Cache.Filter.FilterFunction FilterFunction;        
-        private Socket_Cache.Filter.FilterStartFrom FilterStartFrom;
+    {
+        private Socket_FilterInfo sfiSelect;
+        private int LoadAllCount = 0;
 
         #region//窗体加载
 
-        public Socket_FilterForm(int FIndex)
+        public Socket_FilterForm(Socket_FilterInfo sfi)
         {
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
                 InitializeComponent();                
 
-                if (FIndex > -1)
+                if (sfi != null)
                 {
-                    this.FilterIndex = FIndex;
+                    this.sfiSelect = sfi;
 
                     this.InitFrom();
                     this.InitDGV();
@@ -82,36 +58,10 @@ namespace WPELibrary
         {
             try
             {
-                string sFID = Socket_Cache.FilterList.lstFilter[FilterIndex].FID.ToString().ToUpper();
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), (FilterIndex + 1), sFID);
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_16), sfiSelect.FName);
                 this.lFilterInfo.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_175), "0");
-
-                this.FilterName = Socket_Cache.FilterList.lstFilter[FilterIndex].FName;
-                this.FilterAppointHeader = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointHeader;
-                this.FilterHeaderContent = Socket_Cache.FilterList.lstFilter[FilterIndex].HeaderContent;
-                this.FilterAppointSocket = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointSocket;
-                this.FilterSocketContent = Socket_Cache.FilterList.lstFilter[FilterIndex].SocketContent;
-                this.FilterAppointLength = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointLength;
-                this.FilterLengthContent = Socket_Cache.FilterList.lstFilter[FilterIndex].LengthContent;
-                this.FilterAppointPort = Socket_Cache.FilterList.lstFilter[FilterIndex].AppointPort;
-                this.FilterPortContent = Socket_Cache.FilterList.lstFilter[FilterIndex].PortContent;
-                this.FilterMode = Socket_Cache.FilterList.lstFilter[FilterIndex].FMode;
-                this.FilterAction = Socket_Cache.FilterList.lstFilter[FilterIndex].FAction;
-                this.IsExecute = Socket_Cache.FilterList.lstFilter[FilterIndex].IsExecute;
-                this.FilterExecuteType = Socket_Cache.FilterList.lstFilter[FilterIndex].FEType;
-                this.SID = Socket_Cache.FilterList.lstFilter[FilterIndex].SID;
-                this.RID = Socket_Cache.FilterList.lstFilter[FilterIndex].RID;
-                this.FilterFunction = Socket_Cache.FilterList.lstFilter[FilterIndex].FFunction;
-                this.FilterStartFrom = Socket_Cache.FilterList.lstFilter[FilterIndex].FStartFrom;
-                this.IsProgressionContinuous = Socket_Cache.FilterList.lstFilter[FilterIndex].IsProgressionContinuous;                
-                this.FilterProgressionStep = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionStep;
-                this.IsProgressionCarry = Socket_Cache.FilterList.lstFilter[FilterIndex].IsProgressionCarry;
-                this.FilterProgressionCarryNumber = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionCarryNumber;
-                this.FilterProgressionPosition = Socket_Cache.FilterList.lstFilter[FilterIndex].ProgressionPosition;
-                this.FilterSearch = Socket_Cache.FilterList.lstFilter[FilterIndex].FSearch;
-                this.FilterModify = Socket_Cache.FilterList.lstFilter[FilterIndex].FModify;
-
-                switch (FilterMode)
+                             
+                switch (sfiSelect.FMode)
                 {
                     case Socket_Cache.Filter.FilterMode.Normal:
                         this.rbFilterMode_Normal.Checked = true;
@@ -123,7 +73,7 @@ namespace WPELibrary
                 }
                 this.FilterModeChange();
 
-                switch (FilterAction)
+                switch (sfiSelect.FAction)
                 {
                     case Socket_Cache.Filter.FilterAction.Replace:
                         this.rbFilterAction_Replace.Checked = true;
@@ -146,7 +96,7 @@ namespace WPELibrary
                         break;                    
                 }            
 
-                switch (FilterStartFrom)
+                switch (sfiSelect.FStartFrom)
                 {
                     case Socket_Cache.Filter.FilterStartFrom.Head:
                         this.rbFilterModifyFrom_Head.Checked = true;
@@ -158,10 +108,10 @@ namespace WPELibrary
                 }
                 this.FilterModifyFromChange();
 
-                this.cbFilterAction_Execute.Checked = IsExecute;
+                this.cbFilterAction_Execute.Checked = sfiSelect.IsExecute;
                 this.FilterAction_ExecuteChange();
 
-                switch (FilterExecuteType)
+                switch (sfiSelect.FEType)
                 { 
                     case Socket_Cache.Filter.FilterExecuteType.Send:
                         this.cbbFilterAction_ExecuteType.SelectedIndex = 0;
@@ -173,20 +123,20 @@ namespace WPELibrary
                 }
                 this.FilterAction_ExecuteTypeChanged();
 
-                this.cbFilter_AppointHeader.Checked = FilterAppointHeader;
-                this.txtFilter_HeaderContent.Text = FilterHeaderContent;
+                this.cbFilter_AppointHeader.Checked = sfiSelect.AppointHeader;
+                this.txtFilter_HeaderContent.Text = sfiSelect.HeaderContent;
                 this.FilterAppointHeaderChange();
 
-                this.cbFilter_AppointSocket.Checked = FilterAppointSocket;
-                this.nudFilter_SocketContent.Value = FilterSocketContent;
+                this.cbFilter_AppointSocket.Checked = sfiSelect.AppointSocket;
+                this.nudFilter_SocketContent.Value = sfiSelect.SocketContent;
                 this.FilterAppointSocketChange();
 
-                this.cbFilter_AppointLength.Checked = FilterAppointLength;
-                if (!string.IsNullOrEmpty(this.FilterLengthContent))
+                this.cbFilter_AppointLength.Checked = sfiSelect.AppointLength;
+                if (!string.IsNullOrEmpty(sfiSelect.LengthContent))
                 {
-                    if (this.FilterLengthContent.Contains("-"))
+                    if (sfiSelect.LengthContent.Contains("-"))
                     {
-                        string[] sLengthContent = this.FilterLengthContent.Split('-');
+                        string[] sLengthContent = sfiSelect.LengthContent.Split('-');
 
                         if (int.TryParse(sLengthContent[0], out int iLenFrom))
                         {
@@ -200,7 +150,7 @@ namespace WPELibrary
                     }
                     else
                     {
-                        if (int.TryParse(this.FilterLengthContent, out int iLength))
+                        if (int.TryParse(sfiSelect.LengthContent, out int iLength))
                         {
                             this.nudFilter_LengthContent_From.Value = iLength;
                             this.nudFilter_LengthContent_To.Value = iLength;
@@ -209,25 +159,25 @@ namespace WPELibrary
                 }                
                 this.FilterAppointLengthChange();
 
-                this.cbFilter_AppointPort.Checked = FilterAppointPort;
-                this.nudFilter_PortContent.Value = FilterPortContent;
+                this.cbFilter_AppointPort.Checked = sfiSelect.AppointPort;
+                this.nudFilter_PortContent.Value = sfiSelect.PortContent;
                 this.FilterAppointPortChange();
 
-                this.cbProgressionContinuous.Checked = IsProgressionContinuous;
-                this.nudProgressionStep.Value = FilterProgressionStep;
-                this.cbProgressionCarry.Checked = IsProgressionCarry;
-                this.nudProgressionCarry.Value = FilterProgressionCarryNumber;
+                this.cbProgressionContinuous.Checked = sfiSelect.IsProgressionContinuous;
+                this.nudProgressionStep.Value = sfiSelect.ProgressionStep;
+                this.cbProgressionCarry.Checked = sfiSelect.IsProgressionCarry;
+                this.nudProgressionCarry.Value = sfiSelect.ProgressionCarryNumber;
                 this.ProgressionCarryChange();
 
-                this.txtFilterName.Text = FilterName;
-                this.cbFilterFunction_Send.Checked = FilterFunction.Send;
-                this.cbFilterFunction_SendTo.Checked = FilterFunction.SendTo;
-                this.cbFilterFunction_Recv.Checked = FilterFunction.Recv;
-                this.cbFilterFunction_RecvFrom.Checked = FilterFunction.RecvFrom;
-                this.cbFilterFunction_WSASend.Checked = FilterFunction.WSASend;
-                this.cbFilterFunction_WSASendTo.Checked = FilterFunction.WSASendTo;
-                this.cbFilterFunction_WSARecv.Checked = FilterFunction.WSARecv;
-                this.cbFilterFunction_WSARecvFrom.Checked = FilterFunction.WSARecvFrom;                
+                this.txtFilterName.Text = sfiSelect.FName;
+                this.cbFilterFunction_Send.Checked = sfiSelect.FFunction.Send;
+                this.cbFilterFunction_SendTo.Checked = sfiSelect.FFunction.SendTo;
+                this.cbFilterFunction_Recv.Checked = sfiSelect.FFunction.Recv;
+                this.cbFilterFunction_RecvFrom.Checked = sfiSelect.FFunction.RecvFrom;
+                this.cbFilterFunction_WSASend.Checked = sfiSelect.FFunction.WSASend;
+                this.cbFilterFunction_WSASendTo.Checked = sfiSelect.FFunction.WSASendTo;
+                this.cbFilterFunction_WSARecv.Checked = sfiSelect.FFunction.WSARecv;
+                this.cbFilterFunction_WSARecvFrom.Checked = sfiSelect.FFunction.WSARecvFrom;                
             }
             catch (Exception ex)
             {
@@ -406,9 +356,9 @@ namespace WPELibrary
         {
             try
             {
-                if (!string.IsNullOrEmpty(FilterProgressionPosition))
+                if (!string.IsNullOrEmpty(sfiSelect.ProgressionPosition))
                 {
-                    string[] slProgressionPosition = FilterProgressionPosition.Split(',');
+                    string[] slProgressionPosition = sfiSelect.ProgressionPosition.Split(',');
 
                     foreach (string sPosition in slProgressionPosition)
                     {
@@ -416,7 +366,7 @@ namespace WPELibrary
                         {
                             if (int.TryParse(sPosition, out int iIndex))
                             {
-                                switch (FilterMode)
+                                switch (sfiSelect.FMode)
                                 {
                                     case Socket_Cache.Filter.FilterMode.Normal:
 
@@ -429,7 +379,7 @@ namespace WPELibrary
 
                                     case Socket_Cache.Filter.FilterMode.Advanced:
 
-                                        switch (FilterStartFrom)
+                                        switch (sfiSelect.FStartFrom)
                                         {
                                             case Socket_Cache.Filter.FilterStartFrom.Head:
 
@@ -513,7 +463,7 @@ namespace WPELibrary
                     cbbFilterAction_Execute.DisplayMember = "SName";
                     cbbFilterAction_Execute.ValueMember = "SID";
 
-                    this.cbbFilterAction_Execute.SelectedValue = this.SID;
+                    this.cbbFilterAction_Execute.SelectedValue = sfiSelect.SID;
                 }
             }
             catch (Exception ex)
@@ -532,7 +482,7 @@ namespace WPELibrary
                     cbbFilterAction_Execute.DisplayMember = "RName";
                     cbbFilterAction_Execute.ValueMember = "RID";
 
-                    this.cbbFilterAction_Execute.SelectedValue = this.RID;
+                    this.cbbFilterAction_Execute.SelectedValue = sfiSelect.RID;
                 }
             }
             catch (Exception ex)
@@ -726,9 +676,9 @@ namespace WPELibrary
         {
             try
             {
-                if (!string.IsNullOrEmpty(FilterSearch))
+                if (!string.IsNullOrEmpty(sfiSelect.FSearch))
                 {
-                    string[] sSearchAll = FilterSearch.Split(',');
+                    string[] sSearchAll = sfiSelect.FSearch.Split(',');
 
                     foreach (string s in sSearchAll)
                     {
@@ -755,9 +705,9 @@ namespace WPELibrary
                     }
                 }
 
-                if (!string.IsNullOrEmpty(FilterModify))
+                if (!string.IsNullOrEmpty(sfiSelect.FModify))
                 {
-                    string[] sModifyAll = FilterModify.Split(',');
+                    string[] sModifyAll = sfiSelect.FModify.Split(',');
                     this.LoadAllCount = sModifyAll.Length;
 
                     int LoadCount = 0;
@@ -767,7 +717,7 @@ namespace WPELibrary
                         {
                             string sValue = s.Split('|')[1];
 
-                            switch (FilterMode)
+                            switch (sfiSelect.FMode)
                             {
                                 case Socket_Cache.Filter.FilterMode.Normal:
 
@@ -783,7 +733,7 @@ namespace WPELibrary
 
                                 case Socket_Cache.Filter.FilterMode.Advanced:
 
-                                    switch (FilterStartFrom)
+                                    switch (sfiSelect.FStartFrom)
                                     {
                                         case Socket_Cache.Filter.FilterStartFrom.Head:
 
@@ -1368,8 +1318,8 @@ namespace WPELibrary
                     string sSearch_New = sbSearch.ToString().TrimEnd(',');
                     string sModify_New = sbModify.ToString().TrimEnd(',');
 
-                    Socket_Cache.Filter.UpdateFilter_ByFilterIndex(
-                        this.FilterIndex,
+                    Socket_Cache.Filter.UpdateFilter(
+                        sfiSelect,
                         sFName_New,
                         bAppointHeader_New,
                         sHeaderContent_New,

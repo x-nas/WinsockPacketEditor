@@ -8,24 +8,28 @@ using WPELibrary.Lib;
 namespace WPELibrary
 {
     public partial class Socket_RobotForm : Form
-    {  
+    {
+        private Socket_RobotInfo sriSelect;
         private bool bIsModifierKeys = true;
-        private int RobotIndex = -1;
-        private string RobotName = string.Empty;
-        
         private DataTable dtRobotInstruction = new DataTable();
         private readonly Socket_Robot sr = new Socket_Robot();        
 
         #region//窗体加载
 
-        public Socket_RobotForm(int RIndex)
+        public Socket_RobotForm(Socket_RobotInfo sri)
         {
             try
             {
                 MultiLanguage.SetDefaultLanguage(MultiLanguage.DefaultLanguage);
                 InitializeComponent();
 
-                this.RobotIndex = RIndex;                
+                if (sri != null)
+                { 
+                    this.sriSelect = sri;
+
+                    this.InitFrom();
+                    this.InitDGV();
+                }
             }
             catch (Exception ex)
             {
@@ -37,30 +41,14 @@ namespace WPELibrary
 
         #region//初始化
 
-        private void Socket_RobotForm_Load(object sender, EventArgs e)
-        {
-            if (this.RobotIndex > -1)
-            {
-                this.InitFrom();
-                this.InitDGV();
-            }
-            else
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
-                this.Close();
-            }
-        }
-
         private void InitFrom()
         {
             try
-            {              
-                string sRID = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RID.ToString().ToUpper();
-                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_93), (RobotIndex + 1), sRID);
+            {
+                this.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_93), sriSelect.RName);
 
-                this.RobotName = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RName;
-                this.txtRobotName.Text = this.RobotName;
-                this.dtRobotInstruction = Socket_Cache.RobotList.lstRobot[this.RobotIndex].RInstruction.Copy();
+                this.txtRobotName.Text = sriSelect.RName;
+                this.dtRobotInstruction = sriSelect.RInstruction.Copy();
 
                 this.cbbKeyBoard_KeyType.SelectedIndex = 0;
                 this.cbbMouse.SelectedIndex = 0;
@@ -182,7 +170,7 @@ namespace WPELibrary
                     }
                 }
 
-                Socket_Cache.Robot.UpdateRobot_ByRobotIndex(this.RobotIndex, RName_New, this.dtRobotInstruction);
+                Socket_Cache.Robot.UpdateRobot(sriSelect, RName_New, this.dtRobotInstruction);
 
                 this.Close();
             }
@@ -233,7 +221,7 @@ namespace WPELibrary
                             this.dgvRobotInstruction.ContextMenuStrip.Enabled = false;
                         }
 
-                        sr.StartRobot(this.RobotName, this.dtRobotInstruction);
+                        sr.StartRobot(sriSelect.RName, this.dtRobotInstruction);
                     }
                 }                
             }
@@ -249,17 +237,17 @@ namespace WPELibrary
             {
                 if (e.Cancelled)
                 {
-                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_110), this.RobotName);
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_110), sriSelect.RName);
                     Socket_Operation.ShowMessageBox(sMsg);
                 }
                 else if (e.Error != null)
                 {
-                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_111), this.RobotName, e.Error.Message);
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_111), sriSelect.RName, e.Error.Message);
                     Socket_Operation.ShowMessageBox(sMsg);
                 }
                 else
                 {
-                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_112), this.RobotName);
+                    string sMsg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_112), sriSelect.RName);
                     Socket_Operation.ShowMessageBox(sMsg);
                 }                
 

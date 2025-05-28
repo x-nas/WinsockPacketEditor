@@ -900,7 +900,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Socket_RobotForm";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.Socket_RobotForm_Load);
             this.tlpRobotForm.ResumeLayout(false);
             this.gbRobotName.ResumeLayout(false);
             this.gbRobotName.PerformLayout();

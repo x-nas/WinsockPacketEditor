@@ -3375,17 +3375,14 @@ namespace WPELibrary.Lib
 
         #region//显示滤镜窗体（对话框）
 
-        public static void ShowFilterForm_Dialog(int FIndex)
+        public static void ShowFilterForm_Dialog(Socket_FilterInfo sfi)
         {
             try
             {
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                if (sfi != null)
                 {
-                    if (FIndex > -1)
-                    {  
-                        Socket_FilterForm fFilterForm = new Socket_FilterForm(FIndex);
-                        fFilterForm.ShowDialog();
-                    }
+                    Socket_FilterForm fFilterForm = new Socket_FilterForm(sfi);
+                    fFilterForm.ShowDialog();
                 }
             }
             catch (Exception ex)
@@ -3418,17 +3415,14 @@ namespace WPELibrary.Lib
 
         #region//显示机器人窗体（对话框）
 
-        public static void ShowRobotForm_Dialog(int RIndex)
+        public static void ShowRobotForm_Dialog(Socket_RobotInfo sri)
         {
             try
             {
-                if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                if (sri != null)
                 {
-                    if (RIndex > -1)
-                    {
-                        Socket_RobotForm fRobotForm = new Socket_RobotForm(RIndex);
-                        fRobotForm.ShowDialog();
-                    }
+                    Socket_RobotForm fRobotForm = new Socket_RobotForm(sri);
+                    fRobotForm.ShowDialog();
                 }
             }
             catch (Exception ex)

@@ -137,18 +137,21 @@ namespace WPELibrary.Lib
                                         Guid SID = Guid.Parse(sContent);
                                         Socket_Send ss = Socket_Cache.Send.DoSend(SID);
 
-                                        while (ss.Worker.IsBusy)
+                                        if (ss != null)
                                         {
-                                            if (this.Worker.CancellationPending)
-                                            { 
-                                                ss.StopSend();
+                                            while (ss.Worker.IsBusy)
+                                            {
+                                                if (this.Worker.CancellationPending)
+                                                {
+                                                    ss.StopSend();
 
-                                                e.Cancel = true;
-                                                return;
+                                                    e.Cancel = true;
+                                                    return;
+                                                }
+
+                                                Thread.Sleep(100);
                                             }
-
-                                            Thread.Sleep(100);
-                                        }
+                                        }                                        
                                     }
 
                                     break;
