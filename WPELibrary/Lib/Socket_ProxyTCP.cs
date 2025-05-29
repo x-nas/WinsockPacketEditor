@@ -2,106 +2,204 @@
 using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
-using System.Reflection;
 
 namespace WPELibrary.Lib
 {
-    public class Socket_ProxyTCP
+    public class Socket_ProxyTCP : IDisposable
     {
+        private volatile bool _isDisposed;
+        private readonly object _closeLock = new object();
+
         public Socket_Cache.SocketProxy.ProxyType ProxyType { get; set; }
         public Socket_Cache.SocketProxy.ProxyStep ProxyStep { get; set; }
         public Socket_Cache.SocketProxy.CommandType CommandType { get; set; }
         public Socket_Cache.SocketProxy.DomainType DomainType { get; set; }
         public Socket_Cache.SocketProxy.AddressType AddressType { get; set; }
 
-        #region//TCP 客户端
+        public ClientConnection Client { get; }
+        public ServerConnection Server { get; }
 
-        public Socket ClientSocket { get; set; }
-        public string ClientAddress { get; set; }
-        public byte[] ClientBuffer { get; set; }
-        public byte[] ClientData { get; set; }
+        #region//Socket_ProxyTCP
 
-        public void CloseTCPClient()
+        public Socket_ProxyTCP(Socket clientSocket, int bufferSize)
         {
-            try
-            {
-                if (this.ClientSocket != null)
-                {
-                    this.ClientSocket.Shutdown(SocketShutdown.Both);
-                    this.ClientSocket.Close();
-                    this.ClientSocket = null;
-                }
-
-                if (ClientBuffer != null)
-                {
-                    ArrayPool<byte>.Shared.Return(ClientBuffer);
-                    ClientBuffer = null;
-                }
-            }
-            catch (SocketException ex)
-            {
-                if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            Client = new ClientConnection(clientSocket, bufferSize);
+            Server = new ServerConnection(bufferSize);
+            ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Handshake;
         }
 
         #endregion
 
-        #region//TCP 服务端
+        #region //TCP 客户端
 
-        public Socket ServerSocket { get; set; }        
-        public string ServerAddress { get; set; }
-        public byte[] ServerBuffer { get; set; }
-        public IPEndPoint ServerEndPoint { get; set; }
-
-        public void CloseTCPServer()
+        public class ClientConnection : IDisposable
         {
-            try
-            {
-                if (this.ServerSocket != null)
-                {
-                    this.ServerSocket.Shutdown(SocketShutdown.Both);
-                    this.ServerSocket.Close();
-                    this.ServerSocket = null;
-                }
+            private volatile bool _isDisposed;
 
-                if (ServerBuffer != null)
+            public Socket Socket { get; private set; }
+            public string Address { get; set; }
+            public byte[] Buffer { get; private set; }
+            public byte[] Data { get; set; }
+
+            public ClientConnection(Socket socket, int bufferSize)
+            {
+                Socket = socket ?? throw new ArgumentNullException(nameof(socket));
+                Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+                Data = Array.Empty<byte>();
+            }
+
+            public void Close()
+            {
+                if (_isDisposed) return;
+
+                lock (this)
                 {
-                    ArrayPool<byte>.Shared.Return(ServerBuffer);
-                    ServerBuffer = null;
+                    if (_isDisposed) return;
+                    _isDisposed = true;
+
+                    try
+                    {
+                        if (Socket != null)
+                        {
+                            var socket = Socket;
+                            Socket = null;
+
+                            try
+                            {
+                                if (socket.Connected)
+                                {
+                                    socket.Shutdown(SocketShutdown.Both);
+                                }
+                            }
+                            finally
+                            {
+                                socket.Close();
+                                socket.Dispose();
+                            }
+                        }
+
+                        var buffer = Buffer;
+                        Buffer = null;
+                        Socket_Operation.ReturnBuffer(buffer);
+                    }
+                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    {
+                        // 忽略预期错误
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!_isDisposed)
+                        {
+                            Socket_Operation.DoLog_Proxy(nameof(ClientConnection.Close), ex.Message);
+                        }
+                    }
                 }
             }
-            catch (SocketException ex)
-            {
-                if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+
+            public void Dispose() => Close();
         }
 
         #endregion
 
-        public Socket_ProxyTCP(Socket clientSocket, int BufferSize)
+        #region //TCP 服务端
+
+        public class ServerConnection : IDisposable
         {
-            this.ClientSocket = clientSocket;
+            private volatile bool _isDisposed;
 
-            this.ClientBuffer = ArrayPool<byte>.Shared.Rent(BufferSize);
-            this.ServerBuffer = ArrayPool<byte>.Shared.Rent(BufferSize);
+            public Socket Socket { get; set; }
+            public string Address { get; set; }
+            public byte[] Buffer { get; private set; }
+            public IPEndPoint EndPoint { get; set; }
 
-            this.ClientData = Array.Empty<byte>();
+            public ServerConnection(int bufferSize)
+            {
+                Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
+            }
 
-            this.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Handshake;
+            public void Close()
+            {
+                if (_isDisposed) return;
+
+                lock (this)
+                {
+                    if (_isDisposed) return;
+                    _isDisposed = true;
+
+                    try
+                    {
+                        if (Socket != null)
+                        {
+                            var socket = Socket;
+                            Socket = null;
+
+                            try
+                            {
+                                if (socket.Connected)
+                                {
+                                    socket.Shutdown(SocketShutdown.Both);
+                                }
+                            }
+                            finally
+                            {
+                                socket.Close();
+                                socket.Dispose();
+                            }
+                        }
+
+                        var buffer = Buffer;
+                        Buffer = null;
+                        Socket_Operation.ReturnBuffer(buffer);
+                    }
+                    catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                    {
+                        // 忽略预期错误
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!_isDisposed)
+                        {
+                            Socket_Operation.DoLog_Proxy(nameof(ServerConnection.Close), ex.Message);
+                        }
+                    }
+                }
+            }
+
+            public void Dispose() => Close();
         }
+
+        #endregion
+
+        #region //IDisposable
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+
+            lock (_closeLock)
+            {
+                if (_isDisposed) return;
+                _isDisposed = true;
+
+                if (disposing)
+                {
+                    Server?.Close();
+                    Client?.Close();
+                }
+            }
+        }
+
+        ~Socket_ProxyTCP()
+        {
+            Dispose(false);
+        }
+
+        #endregion
     }
 }

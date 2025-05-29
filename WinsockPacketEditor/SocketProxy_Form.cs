@@ -751,9 +751,9 @@ namespace WinsockPacketEditor
                 {
                     foreach (Socket_ProxyTCP spi in Socket_Cache.SocketProxyList.lstProxyTCP)
                     {
-                        if (spi.ClientSocket == null)
+                        if (spi.Client.Socket == null)
                         {
-                            TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spi.ClientAddress);
+                            TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spi.Client.Address);
 
                             if (ClientNode != null)
                             {
@@ -889,7 +889,7 @@ namespace WinsockPacketEditor
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
-                            string sChildName = spi.ClientAddress;
+                            string sChildName = spi.Client.Address;
 
                             await Task.Run(() =>
                             {

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
-using EasyHook;
-using System.Reflection;
+﻿using EasyHook;
+using System;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using WPELibrary.Lib.NativeMethods;
 
 namespace WPELibrary.Lib
 {
     public class WinSockHook : IEntryPoint
-    {
+    {        
         private LocalHook lhWS1_Send, lhWS1_SendTo, lhWS1_Recv, lhWS1_RecvFrom;
         private LocalHook lhWS2_Send, lhWS2_SendTo, lhWS2_Recv, lhWS2_RecvFrom;
         private LocalHook lhWSA_Send, lhWSA_SendTo, lhWSA_Recv, lhWSA_RecvFrom;
@@ -296,6 +296,7 @@ namespace WPELibrary.Lib
 
             try
             {
+                DateTime PacketTime = DateTime.Now;
                 Span<byte> bBufferSpan = new Span<byte>((byte*)lpBuffer, Length);
                 byte[] bRawBuffer = bBufferSpan.ToArray();
                 Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
@@ -343,7 +344,7 @@ namespace WPELibrary.Lib
                     }
                 }
 
-                _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr(), PacketTime);
             }
             catch (Exception ex)
             {
@@ -385,6 +386,7 @@ namespace WPELibrary.Lib
 
                 if (res > 0)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     Span<byte> bBufferSpan = new Span<byte>((byte*)lpBuffer, res);
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
@@ -418,7 +420,7 @@ namespace WPELibrary.Lib
                             break;
                     }
 
-                    _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                    _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr(), PacketTime);
                 }
             }
             catch (Exception ex)
@@ -448,6 +450,7 @@ namespace WPELibrary.Lib
             {
                 if (Length > 0)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     Span<byte> bBufferSpan = new Span<byte>((byte*)lpBuffer, Length);
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, To);
@@ -495,7 +498,7 @@ namespace WPELibrary.Lib
                         }
                     }
 
-                    _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, To);
+                    _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, To, PacketTime);
                 }
             }
             catch (Exception ex)
@@ -536,6 +539,7 @@ namespace WPELibrary.Lib
 
                 if (res > 0)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     Span<byte> bBufferSpan = new Span<byte>((byte*)lpBuffer, res);
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, From);
@@ -569,7 +573,7 @@ namespace WPELibrary.Lib
                             break;
                     }
 
-                    _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, From);
+                    _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, res, ptType, FilterAction, From, PacketTime);
                 }
             }
             catch (Exception ex)
@@ -597,11 +601,12 @@ namespace WPELibrary.Lib
             SocketError res = SocketError.Success;
 
             try
-            {
+            {  
                 int BytesSend = WSABuffer.len;
 
                 if (BytesSend > 0)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     Span<byte> bBufferSpan = new Span<byte>((byte*)WSABuffer.buf, BytesSend);
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, new Socket_Cache.SocketPacket.SockAddr());
@@ -644,7 +649,7 @@ namespace WPELibrary.Lib
                     if (res == SocketError.Success)
                     {
                         BytesSend = Marshal.ReadInt32(lpNumberOfBytesSend);
-                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                        _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr(), PacketTime);
                     }
                 }
             }
@@ -676,6 +681,7 @@ namespace WPELibrary.Lib
             {
                 if (res == SocketError.Success)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
 
                     if (BytesRecvd > 0)
@@ -716,7 +722,7 @@ namespace WPELibrary.Lib
                                 break;
                         }
 
-                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr());
+                        _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, new Socket_Cache.SocketPacket.SockAddr(), PacketTime);
                     }
                 }
             }
@@ -752,6 +758,7 @@ namespace WPELibrary.Lib
 
                 if (BytesSend > 0)
                 {
+                    DateTime PacketTime = DateTime.Now;
                     Span<byte> bBufferSpan = new Span<byte>((byte*)WSABuffer.buf, BytesSend);
                     byte[] bRawBuffer = bBufferSpan.ToArray();
                     Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, To);
@@ -794,7 +801,7 @@ namespace WPELibrary.Lib
                     if (res == SocketError.Success)
                     {
                         BytesSend = Marshal.ReadInt32(lpNumberOfBytesSend);
-                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, To);
+                        _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, BytesSend, ptType, FilterAction, To, PacketTime);
                     }
                 }
             }
@@ -832,6 +839,7 @@ namespace WPELibrary.Lib
 
                     if (BytesRecvd > 0)
                     {
+                        DateTime PacketTime = DateTime.Now;
                         Span<byte> bBufferSpan = new Span<byte>((byte*)WSABuffer.buf, BytesRecvd);
                         byte[] bRawBuffer = bBufferSpan.ToArray();
                         Socket_Cache.Filter.FilterAction FilterAction = Socket_Cache.FilterList.DoFilterList(Socket, bBufferSpan, out byte[] bNewBuffer, ptType, From);
@@ -868,7 +876,7 @@ namespace WPELibrary.Lib
                                 break;
                         }
 
-                        _ = Socket_Operation.ProcessingHookResult(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, From);
+                        _ = Socket_Operation.ProcessingHookResultAsync(Socket, bRawBuffer, bNewBuffer, BytesRecvd, ptType, FilterAction, From, PacketTime);
                     }
                 }
             }

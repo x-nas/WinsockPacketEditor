@@ -3,6 +3,7 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -674,6 +675,18 @@ namespace WPELibrary.Lib
 
         #region//数据格式转换
 
+        #region//返还 Byte[] 占用的内存
+
+        public static void ReturnBuffer(byte[] buffer)
+        {
+            if (buffer != null)
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
+        }
+
+        #endregion
+
         #region//base64 编码，解码
 
         public static string Base64_Encoding(string sString)
@@ -1126,7 +1139,7 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #endregion
+        #endregion        
 
         #region//判断地址的类型
 
@@ -1713,32 +1726,33 @@ namespace WPELibrary.Lib
 
         #region//处理 Hook 结果（异步）
 
-        public static async Task ProcessingHookResult(
-            Int32 socket,
+        public static Task ProcessingHookResultAsync(
+            int socket,
             byte[] bRawBuffer,
-            byte[] bBuffer, 
-            Int32 res, 
-            Socket_Cache.SocketPacket.PacketType ptType, 
-            Socket_Cache.Filter.FilterAction FilterAction, 
-            Socket_Cache.SocketPacket.SockAddr sockaddr)
+            byte[] bBuffer,
+            int res,
+            Socket_Cache.SocketPacket.PacketType ptType,
+            Socket_Cache.Filter.FilterAction filterAction,
+            Socket_Cache.SocketPacket.SockAddr sockaddr,
+            DateTime packetTime)
         {
-            await Task.Run(() =>
+            if (filterAction == Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
+                return Task.CompletedTask;
+
+            if (filterAction != Socket_Cache.Filter.FilterAction.Intercept && res <= 0)
+                return Task.CompletedTask;
+
+            return Task.Run(() =>
             {
                 try
                 {
-                    if (FilterAction != Socket_Cache.Filter.FilterAction.NoModify_NoDisplay)
-                    {
-                        if (FilterAction == Socket_Cache.Filter.FilterAction.Intercept || res > 0)
-                        {
-                            Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, FilterAction);
-                        }                        
-                    }
+                    Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, filterAction, packetTime);
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                    
                 }
-            });            
+            });
         }
 
         #endregion
@@ -1874,7 +1888,18 @@ namespace WPELibrary.Lib
             return saReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//判断 Socket 错误码是否是预期的错误
+
+        public static bool IsExpectedSocketError(int errorCode)
+        {
+            // 10053: 软件导致连接中止
+            // 10054: 远程主机强迫关闭了一个现有的连接
+            return errorCode == 10053 || errorCode == 10054;
+        }
+
+        #endregion
 
         #region//获取IP地址信息
 
@@ -2875,32 +2900,9 @@ namespace WPELibrary.Lib
             return iReturn;
         }
 
-        #endregion
+        #endregion        
 
-        #region//接收 TCP 代理数据
-
-        public static int ReceiveTCPData(Socket socket, IAsyncResult ar)
-        {
-            int iReturn = 0;
-
-            try
-            {
-                if (socket != null)
-                {
-                    iReturn = socket.EndReceive(ar);
-                }
-            }
-            catch
-            {
-                //
-            }
-
-            return iReturn;
-        }
-
-        #endregion
-
-        #region//发送 UDP 中继数据
+        #region//发送 UDP 代理数据
 
         public static int SendUDPData(UdpClient ClientUDP, ReadOnlySpan<byte> bData, IPEndPoint ep)
         {
@@ -2923,13 +2925,13 @@ namespace WPELibrary.Lib
 
         #endregion
 
-        #region//接收 UDP 中继数据
+        #region//接收 UDP 代理数据
 
         public static byte[] ReceiveUDPData(UdpClient ClientUDP, IAsyncResult ar, ref IPEndPoint ep)
         {
             try
             {
-                if (ClientUDP != null)
+                if (ClientUDP != null && ClientUDP.Client != null)
                 {
                     return ClientUDP.EndReceive(ar, ref ep);                    
                 }

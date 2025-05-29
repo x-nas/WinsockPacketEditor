@@ -871,7 +871,7 @@ namespace WPELibrary
             {
                 if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
                 {
-                    await Socket_Cache.SocketList.SocketToList(Socket_Cache.SocketPacket.PacketData_MaxLen);
+                    await Socket_Cache.SocketList.SocketToList();
                     this.AutoScrollDataGridView(dgvSocketList, cbSocketList_AutoRoll.Checked);
                     this.AutoCleanUp_SocketList();
                 }
@@ -1226,25 +1226,34 @@ namespace WPELibrary
         {
             if (!this.bgwPacketStatistics.IsBusy)
             {
-                this.bgwPacketStatistics.RunWorkerAsync();
+                int selectedIndex = cbbPacketStatistics.SelectedIndex;
+                this.bgwPacketStatistics.RunWorkerAsync(selectedIndex);
             }
         }
 
-        private void bgwPacketStatistics_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void bgwPacketStatistics_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                if (this.cbbPacketStatistics.SelectedIndex == 0)
+                int selectedIndex = (int)e.Argument;
+
+                switch (selectedIndex)
                 {
-                    e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketLen();
-                }
-                else if (this.cbbPacketStatistics.SelectedIndex == 1)
-                {
-                    e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketSocket();
-                }
-                else if (this.cbbPacketStatistics.SelectedIndex == 2)
-                {
-                    e.Result = Socket_Cache.SocketList.StatisticalFilterList_ByExecutionCount();
+                    case 0:
+                        e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketLen();
+                        break;
+
+                    case 1:
+                        e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketSocket();
+                        break;
+
+                    case 2:
+                        e.Result = Socket_Cache.SocketList.StatisticalFilterList_ByExecutionCount();
+                        break;
+
+                    default:
+                        e.Result = null;
+                        break;
                 }
             }
             catch (Exception ex)
@@ -1253,7 +1262,7 @@ namespace WPELibrary
             }
         }
 
-        private void bgwPacketStatistics_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void bgwPacketStatistics_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {

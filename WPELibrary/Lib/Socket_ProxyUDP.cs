@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Net;
-using System.Reflection;
 
 namespace WPELibrary.Lib
 {
@@ -10,26 +9,33 @@ namespace WPELibrary.Lib
         public UdpClient ClientUDP { get; set; }
         public IPEndPoint ClientUDP_EndPoint { get; set; }
         public DateTime ClientUDP_Time { get; set; }
-
-        public void CloseUDPClient()
-        {
-            try
-            {
-                if (this.ClientUDP != null)
-                {
-                    this.ClientUDP.Close();
-                    this.ClientUDP = null;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        public bool IsActive { get; private set; }        
 
         public Socket_ProxyUDP(IPEndPoint UDPClient)
         {
             this.ClientUDP = new UdpClient(UDPClient);
-        }        
+            this.ClientUDP_Time = DateTime.Now;
+            this.IsActive = true;
+        }
+
+        #region//关闭 UDP 客户端
+
+        public void CloseUDPClient()
+        {
+            if (!IsActive) return;
+
+            IsActive = false;
+
+            try
+            {
+                ClientUDP?.Close();
+            }
+            finally
+            {
+                ClientUDP = null;
+            }
+        }
+
+        #endregion
     }
 }

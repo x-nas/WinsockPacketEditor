@@ -393,7 +393,8 @@ namespace WPELibrary.Lib
                 try
                 {
                     Socket_ProxyTCP spc = new Socket_ProxyTCP(clientSocket, clientSocket.ReceiveBufferSize);
-                    spc.ClientSocket.BeginReceive(spc.ClientBuffer, 0, spc.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spc);
+
+                    Socket_Cache.SocketProxy.StartReceive(spc);
                 }
                 catch (Exception ex)
                 {
@@ -401,80 +402,97 @@ namespace WPELibrary.Lib
                 }
             }
 
-            private static void ReadCallback(IAsyncResult ar)
+            private static void StartReceive(Socket_ProxyTCP spc)
             {
-                Socket_ProxyTCP spc = (Socket_ProxyTCP)ar.AsyncState;
-
                 try
                 {
-                    if (Socket_Cache.SocketProxy.IsListening)
+                    var args = new SocketAsyncEventArgs();
+                    args.SetBuffer(spc.Client.Buffer, 0, spc.Client.Buffer.Length);
+                    args.UserToken = spc;
+                    args.Completed += ReceiveCompleted;
+
+                    if (!spc.Client.Socket.ReceiveAsync(args))
                     {
-                        int bytesRead = Socket_Operation.ReceiveTCPData(spc.ClientSocket, ar);
-
-                        if (bytesRead > 0)
-                        {
-                            ReadOnlySpan<byte> proxyDataSpan = spc.ClientData.AsSpan();
-                            ReadOnlySpan<byte> proxyBufferSpan = spc.ClientBuffer.AsSpan(0, bytesRead);
-                            Span<byte> combinedData = new Span<byte>(new byte[spc.ClientData.Length + bytesRead]);
-
-                            if (spc.ClientData.Length > 0)
-                            {
-                                proxyDataSpan.CopyTo(combinedData);
-                            }
-                            proxyBufferSpan.CopyTo(combinedData.Slice(spc.ClientData.Length));
-
-                            bool bIsMatch = Socket_Operation.CheckDataIsMatchProxyStep(combinedData, spc.ProxyStep);
-                            if (bIsMatch)
-                            {
-                                switch (spc.ProxyStep)
-                                {
-                                    case Socket_Cache.SocketProxy.ProxyStep.Handshake:
-                                        Socket_Cache.SocketProxy.Handshake(spc, combinedData);
-                                        break;
-
-                                    case Socket_Cache.SocketProxy.ProxyStep.AuthUserName:
-                                        Socket_Cache.SocketProxy.AuthUserName(spc, combinedData);
-                                        break;
-
-                                    case Socket_Cache.SocketProxy.ProxyStep.Command:
-                                        Socket_Cache.SocketProxy.Command(spc, combinedData);
-                                        break;
-
-                                    case Socket_Cache.SocketProxy.ProxyStep.ForwardData:
-                                        Socket_Cache.SocketProxy.ForwardData(spc, combinedData);
-                                        break;
-                                }
-
-                                spc.ClientData = Array.Empty<byte>();
-                            }
-                            else
-                            {
-                                spc.ClientData = combinedData.ToArray();
-                            }
-
-                            spc.ClientSocket.BeginReceive(spc.ClientBuffer, 0, spc.ClientBuffer.Length, 0, new AsyncCallback(ReadCallback), spc);
-                        }
-                        else
-                        {
-                            spc.CloseTCPClient();
-                        }
+                        Socket_Cache.SocketProxy.ReceiveCompleted(spc.Client.Socket, args);
                     }
-                }
-                catch (SocketException ex)
-                {
-                    if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
-                    }
-                    
-                    spc.CloseTCPClient();
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientSocket.RemoteEndPoint + " - " + ex.Message);
-                    spc.CloseTCPClient();
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    spc.Client.Close();
                 }
             }
+
+            private static void ReceiveCompleted(object sender, SocketAsyncEventArgs args)
+            {
+                Socket_ProxyTCP spc = (Socket_ProxyTCP)args.UserToken;
+
+                try
+                {
+                    if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
+                    {
+                        spc.Client.Close();
+                        return;
+                    }
+
+                    if (Socket_Cache.SocketProxy.IsListening)
+                    {
+                        int bytesRead = args.BytesTransferred;
+                        ReadOnlySpan<byte> proxyBufferSpan = spc.Client.Buffer.AsSpan(0, bytesRead);
+                        Span<byte> combinedData = new byte[spc.Client.Data.Length + bytesRead].AsSpan();
+
+                        if (spc.Client.Data.Length > 0)
+                        {
+                            spc.Client.Data.AsSpan().CopyTo(combinedData);
+                        }
+                        proxyBufferSpan.CopyTo(combinedData.Slice(spc.Client.Data.Length));
+
+                        bool bIsMatch = Socket_Operation.CheckDataIsMatchProxyStep(combinedData, spc.ProxyStep);
+                        if (bIsMatch)
+                        {
+                            switch (spc.ProxyStep)
+                            {
+                                case Socket_Cache.SocketProxy.ProxyStep.Handshake:
+                                    Socket_Cache.SocketProxy.Handshake(spc, combinedData);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.AuthUserName:
+                                    Socket_Cache.SocketProxy.AuthUserName(spc, combinedData);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.Command:
+                                    Socket_Cache.SocketProxy.Command(spc, combinedData);
+                                    break;
+
+                                case Socket_Cache.SocketProxy.ProxyStep.ForwardData:
+                                    Socket_Cache.SocketProxy.ForwardData(spc, combinedData);
+                                    break;
+                            }
+
+                            spc.Client.Data = Array.Empty<byte>();
+                        }
+                        else
+                        {
+                            spc.Client.Data = combinedData.ToArray();
+                        }
+
+                        Socket_Cache.SocketProxy.StartReceive(spc);
+                    }
+                }
+                catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                {
+                    spc.Client.Close();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.Client.Socket.RemoteEndPoint + " - " + ex.Message);
+                    spc.Client.Close();
+                }
+                finally
+                {
+                    args.Dispose();
+                }
+            }            
 
             #endregion
 
@@ -518,7 +536,7 @@ namespace WPELibrary.Lib
                             Span<byte> bAuth = stackalloc byte[2];
                             bAuth[0] = (byte)Socket_Cache.SocketProxy.ProxyType.Socket5;
                             bAuth[1] = (byte)atServer;
-                            Socket_Operation.SendTCPData(spc.ClientSocket, bAuth);
+                            Socket_Operation.SendTCPData(spc.Client.Socket, bAuth);
 
                             if (atServer == Socket_Cache.SocketProxy.AuthType.UserName)
                             {
@@ -542,7 +560,7 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
-                            IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
+                            IPEndPoint epClient = (IPEndPoint)spc.Client.Socket.RemoteEndPoint;
                             Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), string.Empty, false);
                         }
                     }
@@ -581,7 +599,7 @@ namespace WPELibrary.Lib
 
                         bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
 
-                        IPEndPoint epClient = (IPEndPoint)spc.ClientSocket.RemoteEndPoint;
+                        IPEndPoint epClient = (IPEndPoint)spc.Client.Socket.RemoteEndPoint;
                         Socket_Cache.SocketProxy.AuthResult_ToList(epClient.Address.ToString(), sUserName, bAuthOK);
 
                         Span<byte> bAuth = stackalloc byte[2];
@@ -599,7 +617,7 @@ namespace WPELibrary.Lib
                             bAuth[1] = 0x01;
                         }
 
-                        Socket_Operation.SendTCPData(spc.ClientSocket, bAuth);
+                        Socket_Operation.SendTCPData(spc.Client.Socket, bAuth);
                         spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                     }
                 }
@@ -630,13 +648,13 @@ namespace WPELibrary.Lib
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
                                                         
                             IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spc.AddressType, bADDRESS, out string AddressString);                            
-                            spc.ServerSocket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                            spc.ServerEndPoint = epServer;
+                            spc.Server.Socket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                            spc.Server.EndPoint = epServer;
                             ushort uPort = ((ushort)epServer.Port);
 
                             spc.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);                            
-                            spc.ServerAddress = Socket_Operation.GetServerAddress(spc.DomainType, AddressString, uPort);                            
-                            spc.ClientAddress = Socket_Operation.GetClientAddress(spc.ClientSocket, AddressString, uPort);                            
+                            spc.Server.Address = Socket_Operation.GetServerAddress(spc.DomainType, AddressString, uPort);                            
+                            spc.Client.Address = Socket_Operation.GetClientAddress(spc.Client.Socket, AddressString, uPort);                            
 
                             switch (spc.CommandType)
                             {
@@ -651,96 +669,63 @@ namespace WPELibrary.Lib
                                             try
                                             {
                                                 IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.ExternalProxy_IP), Socket_Cache.SocketProxy.ExternalProxy_Port);
-                                                spc.ServerSocket.Connect(HttpProxyEP);
+                                                spc.Server.Socket.Connect(HttpProxyEP);
 
                                                 byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
-                                                spc.ServerSocket.Send(handshakeRequest);
+                                                spc.Server.Socket.Send(handshakeRequest);
 
                                                 byte[] handshakeResponse = new byte[2];
-                                                spc.ServerSocket.Receive(handshakeResponse);
+                                                spc.Server.Socket.Receive(handshakeResponse);
 
                                                 if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
                                                 {
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                     return;
                                                 }
 
-                                                spc.ServerSocket.Send(bData.ToArray());
+                                                spc.Server.Socket.Send(bData.ToArray());
 
                                                 byte[] connectResponse = new byte[10];
-                                                spc.ServerSocket.Receive(connectResponse);
+                                                spc.Server.Socket.Receive(connectResponse);
 
                                                 if (connectResponse[1] != 0x00)
                                                 {
-                                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                    Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                                     return;
                                                 }
 
-                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                Socket_Cache.SocketProxy.StartServerReceive(spc);
                                                 spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
                                                 Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
                                             }
                                             catch (SocketException)
                                             {
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                             }                                            
 
                                             break;
 
                                         case Socket_Cache.SocketProxy.DomainType.Http:
-
-                                            try
-                                            {
-                                                spc.ServerSocket.Connect(spc.ServerEndPoint);
-                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-
-                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
-                                            }
-                                            catch (SocketException)
-                                            {
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                            }
-
-                                            break;
-
                                         case Socket_Cache.SocketProxy.DomainType.Https:
-
-                                            try
-                                            {
-                                                spc.ServerSocket.Connect(spc.ServerEndPoint);
-                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
-                                                spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
-                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
-                                            }
-                                            catch (SocketException)
-                                            {
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                            }
-
-                                            break;
-
                                         case Socket_Cache.SocketProxy.DomainType.Socket:
 
                                             try
                                             {
-                                                spc.ServerSocket.Connect(spc.ServerEndPoint);
-                                                spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                                                spc.Server.Socket.Connect(spc.Server.EndPoint);
+                                                Socket_Cache.SocketProxy.StartServerReceive(spc);
                                                 spc.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
 
                                                 Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spc);
                                             }
                                             catch (SocketException)
                                             {
-                                                Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                             }
 
-                                            break;
+                                            break;                                        
                                     }
 
                                     #endregion
@@ -754,17 +739,17 @@ namespace WPELibrary.Lib
                                     try
                                     {
                                         Socket_ProxyUDP spu = new Socket_ProxyUDP(new IPEndPoint(IPAddress.Any, 0));
-                                        spu.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spu);
+                                        Socket_Cache.SocketProxy.StartUdpReceive(spu);
                                         Socket_Cache.SocketProxyQueue.ProxyUDP_ToQueue(spu);
 
                                         ReadOnlySpan<byte> bServerUDP_IP = Socket_Cache.SocketProxy.ProxyUDP_IP.GetAddressBytes();
                                         ReadOnlySpan<byte> bServerUDP_Port = BitConverter.GetBytes(((IPEndPoint)spu.ClientUDP.Client.LocalEndPoint).Port);                                        
 
-                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));                                        
+                                        Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerUDP_IP, bServerUDP_Port));                                        
                                     }
                                     catch (SocketException)
                                     {
-                                        Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                        Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                     }
 
                                     #endregion
@@ -775,9 +760,9 @@ namespace WPELibrary.Lib
 
                                     #region//不支持的命令
 
-                                    Socket_Operation.SendTCPData(spc.ClientSocket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
+                                    Socket_Operation.SendTCPData(spc.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Unsupport, bServerTCP_IP, bServerTCP_Port));
 
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spc.ClientSocket.RemoteEndPoint, spc.CommandType);
+                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_152), spc.Client.Socket.RemoteEndPoint, spc.CommandType);
                                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
 
                                     #endregion
@@ -787,7 +772,7 @@ namespace WPELibrary.Lib
                         }
                         catch (SocketException ex)
                         {
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.Server.Address + " - " + ex.Message);
                         }
                     }
                 }
@@ -807,7 +792,7 @@ namespace WPELibrary.Lib
                 {
                     if (spc.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        Socket_Operation.SendTCPData(spc.ServerSocket, bData);
+                        Socket_Operation.SendTCPData(spc.Server.Socket, bData);
 
                         bool enableProxyQueue = false;
                         switch (spc.DomainType)
@@ -837,7 +822,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ClientAddress + " - " + ex.Message);
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.Client.Address + " - " + ex.Message);
                 }
             }
 
@@ -845,68 +830,85 @@ namespace WPELibrary.Lib
 
             #region//响应数据（TCP）
 
-            private static void ResponseCallback(IAsyncResult ar)
+            private static void StartServerReceive(Socket_ProxyTCP spc)
             {
-                Socket_ProxyTCP spc = (Socket_ProxyTCP)ar.AsyncState;
-
                 try
                 {
-                    int bytesRead = spc.ServerSocket.EndReceive(ar);
+                    var args = new SocketAsyncEventArgs();
+                    args.SetBuffer(spc.Server.Buffer, 0, spc.Server.Buffer.Length);
+                    args.UserToken = spc;
+                    args.Completed += Socket_Cache.SocketProxy.ServerReceiveCompleted;
 
-                    if (bytesRead > 0)
+                    if (!spc.Server.Socket.ReceiveAsync(args))
                     {
-                        ReadOnlySpan<byte> receivedData = spc.ServerBuffer.AsSpan(0, bytesRead);
-
-                        if (spc.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
-                        {
-                            Socket_Operation.SendTCPData(spc.ClientSocket, receivedData);
-
-                            bool enableProxyQueue = false;
-                            switch (spc.DomainType)
-                            {
-                                case Socket_Cache.SocketProxy.DomainType.Http:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case Socket_Cache.SocketProxy.DomainType.Https:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case Socket_Cache.SocketProxy.DomainType.Socket:
-                                    enableProxyQueue = true;
-                                    break;
-
-                                case Socket_Cache.SocketProxy.DomainType.External:
-                                    enableProxyQueue = true;
-                                    break;
-                            }
-
-                            if (enableProxyQueue)
-                            {
-                                Socket_Cache.SocketProxyQueue.ProxyData_ToQueue(spc, receivedData, Socket_Cache.SocketProxy.DataType.Response);
-                            }
-                        }
-
-                        spc.ServerSocket.BeginReceive(spc.ServerBuffer, 0, spc.ServerBuffer.Length, SocketFlags.None, new AsyncCallback(ResponseCallback), spc);
+                        Socket_Cache.SocketProxy.ServerReceiveCompleted(spc.Server.Socket, args);
                     }
-                    else
-                    {
-                        spc.CloseTCPServer();
-                    }
-                }
-                catch (SocketException ex)
-                {
-                    if (ex.ErrorCode != 10053 && ex.ErrorCode != 10054)
-                    {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
-                    }                    
-
-                    spc.CloseTCPServer();
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.ServerAddress + " - " + ex.Message);
-                    spc.CloseTCPServer();
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void ServerReceiveCompleted(object sender, SocketAsyncEventArgs args)
+            {
+                Socket_ProxyTCP spc = (Socket_ProxyTCP)args.UserToken;
+
+                try
+                {
+                    if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
+                    {
+                        spc.Server.Close();
+                        return;
+                    }
+
+                    int bytesRead = args.BytesTransferred;
+                    ReadOnlySpan<byte> receivedData = spc.Server.Buffer.AsSpan(0, bytesRead);
+
+                    if (spc.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
+                    {
+                        Socket_Operation.SendTCPData(spc.Client.Socket, receivedData);
+
+                        bool enableProxyQueue = false;
+                        switch (spc.DomainType)
+                        {
+                            case Socket_Cache.SocketProxy.DomainType.Http:
+                                enableProxyQueue = true;
+                                break;
+
+                            case Socket_Cache.SocketProxy.DomainType.Https:
+                                enableProxyQueue = true;
+                                break;
+
+                            case Socket_Cache.SocketProxy.DomainType.Socket:
+                                enableProxyQueue = true;
+                                break;
+
+                            case Socket_Cache.SocketProxy.DomainType.External:
+                                enableProxyQueue = true;
+                                break;
+                        }
+
+                        if (enableProxyQueue)
+                        {
+                            Socket_Cache.SocketProxyQueue.ProxyData_ToQueue(spc, receivedData, Socket_Cache.SocketProxy.DataType.Response);
+                        }
+                    }
+
+                    Socket_Cache.SocketProxy.StartServerReceive(spc);
+                }
+                catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                {
+                    spc.Server.Close();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spc.Server.Address + " - " + ex.Message);
+                    spc.Server.Close();
+                }
+                finally
+                {
+                    args.Dispose();
                 }
             }
 
@@ -914,14 +916,30 @@ namespace WPELibrary.Lib
 
             #region//UDP 中继
 
-            private static void AcceptUdpCallback(IAsyncResult ar)
+            private static void StartUdpReceive(Socket_ProxyUDP spu)
+            {
+                try
+                {
+                    if (spu.ClientUDP != null)
+                    {
+                        spu.ClientUDP.BeginReceive(new AsyncCallback(UdpReceiveCallback), spu);
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void UdpReceiveCallback(IAsyncResult ar)
             {
                 Socket_ProxyUDP spu = (Socket_ProxyUDP)ar.AsyncState;
 
                 try
                 {
                     IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                    ReadOnlySpan<byte> bData = Socket_Operation.ReceiveUDPData(spu.ClientUDP, ar, ref remoteEndPoint);
+                    byte[] receivedData = Socket_Operation.ReceiveUDPData(spu.ClientUDP, ar, ref remoteEndPoint);
+                    ReadOnlySpan<byte> bData = receivedData.AsSpan();
 
                     if (!bData.IsEmpty && !remoteEndPoint.Address.Equals(IPAddress.Any) && remoteEndPoint.Port != 0)
                     {
@@ -973,12 +991,17 @@ namespace WPELibrary.Lib
                         }
 
                         Socket_Cache.SocketProxy.ProxyUDP_CNT++;
-                        spu.ClientUDP.BeginReceive(new AsyncCallback(AcceptUdpCallback), spu);
+                        Socket_Cache.SocketProxy.StartUdpReceive(spu);
                     }
+                }                
+                catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
+                {
+                    //
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Cache.SocketProxy.StartUdpReceive(spu);
                 }
             }
 
@@ -1009,14 +1032,14 @@ namespace WPELibrary.Lib
 
                 try
                 {
-                    if (spc != null && spc.ClientSocket != null)
+                    if (spc != null && spc.Client.Socket != null)
                     {
-                        if (!spc.ClientSocket.IsBound || !spc.ClientSocket.Connected)
+                        if (!spc.Client.Socket.IsBound || !spc.Client.Socket.Connected)
                         {
                             return sReturn;
                         }
 
-                        if (spc.ClientSocket.RemoteEndPoint is IPEndPoint endpoint)
+                        if (spc.Client.Socket.RemoteEndPoint is IPEndPoint endpoint)
                         {
                             return endpoint.Address.ToString();
                         }
@@ -1030,7 +1053,7 @@ namespace WPELibrary.Lib
                 return sReturn;
             }
 
-            #endregion
+            #endregion            
 
             #region//更新 UDP 状态（异步）
 
@@ -1041,14 +1064,17 @@ namespace WPELibrary.Lib
                     try
                     {
                         DateTime dtNow = DateTime.Now;
-                        foreach (Socket_ProxyUDP spu in Socket_Cache.SocketProxyList.lstProxyUDP)
+
+                        for (int i = Socket_Cache.SocketProxyList.lstProxyUDP.Count - 1; i >= 0; i--)
                         {
+                            var spu = Socket_Cache.SocketProxyList.lstProxyUDP[i];
                             if (spu.ClientUDP != null && spu.ClientUDP_Time != null)
                             {
                                 TimeSpan timeSpan = dtNow - spu.ClientUDP_Time;
                                 if (timeSpan.TotalSeconds > Socket_Cache.SocketProxy.UDPCloseTime)
                                 {
                                     spu.CloseUDPClient();
+                                    Socket_Cache.SocketProxyList.ClearUDP(spu);
                                 }
                             }
                         }
@@ -1120,7 +1146,7 @@ namespace WPELibrary.Lib
 
                     if (!Socket_Cache.SocketProxy.SpeedMode)
                     {
-                        Socket_ProxyData spd = new Socket_ProxyData(spc.ServerAddress, spc.DomainType, bData.ToArray(), DataType);
+                        Socket_ProxyData spd = new Socket_ProxyData(spc.Server.Address, spc.DomainType, bData.ToArray(), DataType);
                         qSocket_ProxyData.Enqueue(spd);
                     }
                 }
@@ -1236,9 +1262,27 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion            
+            #endregion
 
-            #region//清除列表数据
+            #region//清除 TCP 列表中的指定数据
+
+            public static void ClearTCP(Socket_ProxyTCP spt)
+            {
+                Socket_Cache.SocketProxyList.lstProxyTCP.Remove(spt);
+            }
+
+            #endregion
+
+            #region//清除 UDP 列表中的指定数据
+
+            public static void ClearUDP(Socket_ProxyUDP spu)
+            {
+                Socket_Cache.SocketProxyList.lstProxyUDP.Remove(spu);
+            }
+
+            #endregion
+
+            #region//清空整个列表
 
             public static void ResetProxy_TCPList()
             {
@@ -2628,7 +2672,8 @@ namespace WPELibrary.Lib
                 byte[] bBuffByte, 
                 Socket_Cache.SocketPacket.PacketType ptPacketType, 
                 Socket_Cache.SocketPacket.SockAddr sAddr,
-                Socket_Cache.Filter.FilterAction pAction)
+                Socket_Cache.Filter.FilterAction pAction,
+                DateTime PacketTime)
             {
                 try
                 {
@@ -2642,11 +2687,10 @@ namespace WPELibrary.Lib
                         {
                             string[] ipParts = sPacketIP.Split('|');
                             string sIPFrom = ipParts[0];
-                            string sIPTo = ipParts[1];
-                            DateTime dtTime = DateTime.Now;
+                            string sIPTo = ipParts[1];                            
 
-                            Socket_PacketInfo spc = new Socket_PacketInfo(dtTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
-                            qSocket_PacketInfo.Enqueue(spc);
+                            Socket_PacketInfo spi = new Socket_PacketInfo(PacketTime, iSocket, ptPacketType, sIPFrom, sIPTo, bRawBuff, bBuffByte, bBuffByte.Length, pAction);
+                            qSocket_PacketInfo.Enqueue(spi);
                         }
                     }
                 }
@@ -2697,20 +2741,20 @@ namespace WPELibrary.Lib
 
             #region//封包入列表
 
-            public static async Task SocketToList(int iMax_DataLen)
+            public static async Task SocketToList()
             {
                 try
                 {
                     await Task.Run(() =>
                     {
-                        if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spc))
+                        if (SocketQueue.qSocket_PacketInfo.TryDequeue(out Socket_PacketInfo spi))
                         {
-                            bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spc);
+                            bool bIsShow = Socket_Operation.IsShowSocketPacket_ByFilter(spi);
                             if (bIsShow)
                             {
-                                Span<byte> bufferSpan = spc.PacketBuffer.AsSpan();
-                                spc.PacketData = Socket_Operation.GetPacketData_Hex(bufferSpan, iMax_DataLen);
-                                RecSocketPacket?.Invoke(spc);
+                                Span<byte> bufferSpan = spi.PacketBuffer.AsSpan();
+                                spi.PacketData = Socket_Operation.GetPacketData_Hex(bufferSpan, Socket_Cache.SocketPacket.PacketData_MaxLen);
+                                RecSocketPacket?.Invoke(spi);
                             }
                             else
                             {
