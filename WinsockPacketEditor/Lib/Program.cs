@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 using WPELibrary;
 using WPELibrary.Lib;
@@ -42,7 +43,10 @@ namespace WinsockPacketEditor
                     {
                         switch (Socket_Cache.System.StartMode)
                         { 
-                            case Socket_Cache.System.SystemMode.Proxy:                                
+                            case Socket_Cache.System.SystemMode.Proxy:
+
+                                ThreadPool.SetMinThreads(100, 100);
+                                ThreadPool.SetMaxThreads(Environment.ProcessorCount * 2, 1000);
 
                                 Socket_Form socket_Form = new Socket_Form();
                                 socket_Form.Show();
