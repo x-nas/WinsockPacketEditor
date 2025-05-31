@@ -1,6 +1,5 @@
 ﻿using EasyHook;
 using System;
-using System.Buffers;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -540,51 +539,53 @@ namespace WPELibrary.Lib
                         byte[] bRawBuffer = null;
                         byte[] bNewBuffer = null;
 
-                        using (var bufferOwner = MemoryPool<byte>.Shared.Rent(BytesSent))
+                        Span<byte> bBufferSpan = new Span<byte>((byte*)pWSABuffers[0].buf, BytesSent);                        
+                        bRawBuffer = bBufferSpan.ToArray();
+
+                        Socket_Cache.Filter.FilterAction filterAction =
+                        Socket_Cache.FilterList.DoFilterList(
+                            socket,
+                            bBufferSpan,
+                            out bNewBuffer,
+                            packetType,
+                            new Socket_Cache.SocketPacket.SockAddr());
+
+                        if (filterAction == Socket_Cache.Filter.FilterAction.Intercept)
                         {
-                            Span<byte> bBufferSpan = bufferOwner.Memory.Span.Slice(0, BytesSent);
-                            new ReadOnlySpan<byte>((byte*)pWSABuffers[0].buf, BytesSent).CopyTo(bBufferSpan);
-                            bRawBuffer = bBufferSpan.ToArray();
+                            Marshal.WriteInt32(lpNumberOfBytesSent, BytesSent);
+                            res = SocketError.Success;
+                        }
+                        else
+                        {
+                            BytesSent = Math.Min(bNewBuffer.Length, BytesSent);
+                            bNewBuffer.AsSpan(0, BytesSent).CopyTo(bBufferSpan);
 
-                            Socket_Cache.Filter.FilterAction filterAction =
-                            Socket_Cache.FilterList.DoFilterList(
+                            int WSABufferLen = pWSABuffers[0].len;
+                            pWSABuffers[0].len = BytesSent;
+
+                            res = WS2_32.WSASend(
                                 socket,
-                                bBufferSpan,
-                                out bNewBuffer,
-                                packetType,
-                                new Socket_Cache.SocketPacket.SockAddr());
+                                lpWSABuffer,
+                                bufferCount,
+                                lpNumberOfBytesSent,
+                                flags,
+                                lpOverlapped,
+                                lpCompletionRoutine);
 
-                            if (filterAction == Socket_Cache.Filter.FilterAction.Intercept)
-                            {
-                                Marshal.WriteInt32(lpNumberOfBytesSent, BytesSent);
-                                res = SocketError.Success;
-                            }
-                            else
-                            {
-                                fixed (byte* pBuffer = bNewBuffer)
-                                {
-                                    Socket_Cache.SocketPacket.WSABUF WSABuffer = new Socket_Cache.SocketPacket.WSABUF
-                                    {
-                                        buf = (IntPtr)pBuffer,
-                                        len = bNewBuffer.Length
-                                    };
+                            pWSABuffers[0].len = WSABufferLen;
+                        }
 
-                                    res = WS2_32.WSASend(socket, (IntPtr)(&WSABuffer), bufferCount, lpNumberOfBytesSent, flags, lpOverlapped, lpCompletionRoutine);                                    
-                                }
-                            }
+                        BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
 
-                            BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
-
-                            _ = Socket_Operation.ProcessingHookResultAsync(
-                           socket,
-                           bRawBuffer,
-                           bNewBuffer,
-                           BytesSent,
-                           packetType,
-                           filterAction,
-                           new Socket_Cache.SocketPacket.SockAddr(),
-                           packetTime);
-                        }                        
+                        _ = Socket_Operation.ProcessingHookResultAsync(
+                       socket,
+                       bRawBuffer,
+                       bNewBuffer,
+                       BytesSent,
+                       packetType,
+                       filterAction,
+                       new Socket_Cache.SocketPacket.SockAddr(),
+                       packetTime);
                     }
 
                     #endregion
@@ -593,7 +594,16 @@ namespace WPELibrary.Lib
                 {
                     #region//多缓存区
 
-                    res = WS2_32.WSASend(socket, lpWSABuffer, bufferCount, lpNumberOfBytesSent, flags, lpOverlapped, lpCompletionRoutine);
+                    res = WS2_32.WSASend(
+                        socket, 
+                        lpWSABuffer, 
+                        bufferCount, 
+                        lpNumberOfBytesSent, 
+                        flags, 
+                        lpOverlapped, 
+                        lpCompletionRoutine);
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_198));
 
                     #endregion
                 }
@@ -628,10 +638,10 @@ namespace WPELibrary.Lib
                 {
                     int BytesRecvd = Marshal.ReadInt32(lpNumberOfBytesRecvd);
                     if (BytesRecvd > 0)
-                    {  
+                    {
                         DateTime packetTime = DateTime.Now;
                         Socket_Cache.SocketPacket.WSABUF* pWSABuffers = (Socket_Cache.SocketPacket.WSABUF*)lpWSABuffer;
-                                               
+
                         if (bufferCount == 1)
                         {
                             #region//单缓存区
@@ -674,8 +684,8 @@ namespace WPELibrary.Lib
                         else
                         {
                             #region//多缓存区
-
-                            return res;
+                            
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_198));
 
                             #endregion
                         }
@@ -723,63 +733,58 @@ namespace WPELibrary.Lib
                         byte[] bRawBuffer = null;
                         byte[] bNewBuffer = null;
 
-                        using (var bufferOwner = MemoryPool<byte>.Shared.Rent(BytesSent))
+                        Span<byte> bBufferSpan = new Span<byte>((byte*)pWSABuffers[0].buf, BytesSent);
+                        bRawBuffer = bBufferSpan.ToArray();
+
+                        Socket_Cache.Filter.FilterAction filterAction =
+                        Socket_Cache.FilterList.DoFilterList(
+                            socket,
+                            bBufferSpan,
+                            out bNewBuffer,
+                            packetType,
+                            To);
+
+                        if (filterAction == Socket_Cache.Filter.FilterAction.Intercept)
                         {
-                            Span<byte> bBufferSpan = bufferOwner.Memory.Span.Slice(0, BytesSent);
-                            new ReadOnlySpan<byte>((byte*)pWSABuffers[0].buf, BytesSent).CopyTo(bBufferSpan);
-                            bRawBuffer = bBufferSpan.ToArray();
-
-                            Socket_Cache.Filter.FilterAction filterAction =
-                            Socket_Cache.FilterList.DoFilterList(
-                                socket,
-                                bBufferSpan,
-                                out bNewBuffer,
-                                packetType,
-                                To);
-
-                            if (filterAction == Socket_Cache.Filter.FilterAction.Intercept)
-                            {
-                                Marshal.WriteInt32(lpNumberOfBytesSent, BytesSent);
-                                res = SocketError.Success;
-                            }
-                            else
-                            {
-                                fixed (byte* pBuffer = bNewBuffer)
-                                {
-                                    Socket_Cache.SocketPacket.WSABUF WSABuffer = new Socket_Cache.SocketPacket.WSABUF
-                                    {
-                                        buf = (IntPtr)pBuffer,
-                                        len = bNewBuffer.Length
-                                    };
-
-                                    res = WS2_32.WSASendTo(
-                                        socket, 
-                                        (IntPtr)(&WSABuffer), 
-                                        bufferCount, 
-                                        lpNumberOfBytesSent, 
-                                        flags, 
-                                        ref To, 
-                                        lpToLen, 
-                                        lpOverlapped, 
-                                        lpCompletionRoutine);
-                                }
-                            }
-
-                            BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
-
-                            _ = Socket_Operation.ProcessingHookResultAsync(
-                           socket,
-                           bRawBuffer,
-                           bNewBuffer,
-                           BytesSent,
-                           packetType,
-                           filterAction,
-                           To,
-                           packetTime);
+                            Marshal.WriteInt32(lpNumberOfBytesSent, BytesSent);
+                            res = SocketError.Success;
                         }
+                        else
+                        {
+                            BytesSent = Math.Min(bNewBuffer.Length, BytesSent);
+                            bNewBuffer.AsSpan(0, BytesSent).CopyTo(bBufferSpan);
+
+                            int WSABufferLen = pWSABuffers[0].len;
+                            pWSABuffers[0].len = BytesSent;
+
+                            res = WS2_32.WSASendTo(
+                                socket,
+                                lpWSABuffer,
+                                bufferCount,
+                                lpNumberOfBytesSent,
+                                flags,
+                                ref To,
+                                lpToLen,
+                                lpOverlapped,
+                                lpCompletionRoutine);
+
+                            pWSABuffers[0].len = WSABufferLen;
+                        }
+
+                        BytesSent = Marshal.ReadInt32(lpNumberOfBytesSent);
+
+                        _ = Socket_Operation.ProcessingHookResultAsync(
+                       socket,
+                       bRawBuffer,
+                       bNewBuffer,
+                       BytesSent,
+                       packetType,
+                       filterAction,
+                       To,
+                       packetTime);
                     }
 
-                    #endregion
+                    #endregion                    
                 }
                 else
                 {
@@ -795,6 +800,8 @@ namespace WPELibrary.Lib
                         lpToLen, 
                         lpOverlapped, 
                         lpCompletionRoutine);
+
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_198));
 
                     #endregion
                 }
@@ -878,7 +885,7 @@ namespace WPELibrary.Lib
                         {
                             #region//多缓存区
 
-                            return res;
+                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_198));
 
                             #endregion
                         }

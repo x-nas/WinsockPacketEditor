@@ -207,6 +207,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_195 = { "更新账号失败!", "Failed to Update Account!" };
         public static string[] MutiLan_196 = { "计数", "Count" };
         public static string[] MutiLan_197 = { "执行滤镜", "Filter Execution" };
+        public static string[] MutiLan_198 = { "不支持的多缓存区模式！", "Unsupported multi cache mode!" };
 
         #endregion
 
