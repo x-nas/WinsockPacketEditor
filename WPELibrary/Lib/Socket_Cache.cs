@@ -15,6 +15,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -4763,10 +4764,11 @@ namespace WPELibrary.Lib
             #region//执行滤镜列表
 
             public static Socket_Cache.Filter.FilterAction DoFilterList(Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr)
-            {  
+            {
+                Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.None;
+
                 bool bBreak = false;
-                bNewBuffer = Array.Empty<byte>();
-                Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.None;            
+                bNewBuffer = bufferSpan.ToArray();
 
                 try
                 {
@@ -4849,17 +4851,17 @@ namespace WPELibrary.Lib
 
                                         break;
 
-                                    case Filter.FilterAction.Intercept:
+                                    case Filter.FilterAction.Intercept:                                        
                                         bDoFilter = true;
                                         bBreak = true;
                                         break;
 
-                                    case Filter.FilterAction.NoModify_Display:
+                                    case Filter.FilterAction.NoModify_Display:                                        
                                         bDoFilter = true;
                                         bBreak = true;
                                         break;
 
-                                    case Filter.FilterAction.NoModify_NoDisplay:
+                                    case Filter.FilterAction.NoModify_NoDisplay:                                        
                                         bDoFilter = true;
                                         bBreak = true;
                                         break;
@@ -4873,7 +4875,7 @@ namespace WPELibrary.Lib
                             if (bDoFilter)
                             {
                                 sfi.ExecutionCount++;
-                                Socket_Cache.Filter.FilterExecute_CNT++;
+                                Interlocked.Increment(ref Socket_Cache.Filter.FilterExecute_CNT);
 
                                 if (sfi.IsExecute)
                                 {

@@ -596,22 +596,7 @@ namespace WPELibrary.Lib
             return string.Empty;
         }
 
-        #endregion
-
-        #region//将数据写回内存
-
-        public static unsafe void CopyBufferToIntPtr(IntPtr lpBuffer, byte[] bBuffer)
-        {
-            if (bBuffer.Length > 0)
-            {
-                fixed (byte* bufferPtr = bBuffer)
-                {
-                    Buffer.MemoryCopy(bufferPtr, (void*)lpBuffer, bBuffer.Length, bBuffer.Length);
-                }
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//设置系统代理
 
@@ -1745,7 +1730,7 @@ namespace WPELibrary.Lib
             return Task.Run(() =>
             {
                 try
-                {
+                {                   
                     Socket_Cache.SocketQueue.SocketPacket_ToQueue(socket, bRawBuffer, bBuffer, ptType, sockaddr, filterAction, packetTime);
                 }
                 catch (Exception ex)
