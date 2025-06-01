@@ -1,5 +1,6 @@
 ﻿using Be.Windows.Forms;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -749,38 +750,61 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    foreach (Socket_ProxyTCP spi in Socket_Cache.SocketProxyList.lstProxyTCP)
-                    {
-                        if (spi.Client.Socket == null)
-                        {
-                            TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spi.Client.Address);
+                    List<Socket_ProxyTCP> sptRemove = new List<Socket_ProxyTCP>();
+                    object lockObj = new object();
 
-                            if (ClientNode != null)
+                    foreach (Socket_ProxyTCP spt in Socket_Cache.SocketProxyList.lstProxyTCP.ToList())
+                    {
+                        if (spt.Client.Socket == null)
+                        {
+                            string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
+                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
+
+                            if (RootNode != null)
                             {
+                                TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
+
                                 if (!IsDisposed)
                                 {
-                                    tvProxyInfo.BeginInvoke(new MethodInvoker(delegate
+                                    tvProxyInfo.Invoke(new MethodInvoker(delegate
                                     {
-                                        if (this.cbDeleteClosed.Checked)
+                                        if (ClientNode != null)
                                         {
                                             ClientNode.Remove();
+                                            lock (lockObj)
+                                            {
+                                                sptRemove.Add(spt);
+                                            }
                                         }
-                                        else
+
+                                        if (RootNode.Nodes.Count == 0)
                                         {
-                                            ClientNode.ImageIndex = 6;
-                                            ClientNode.SelectedImageIndex = 6;
+                                            if (this.cbDeleteClosed.Checked)
+                                            {
+                                                RootNode.Remove();
+                                            }
+
+                                            if (spt.AID != null && spt.AID != Guid.Empty)
+                                            {
+                                                Socket_Cache.ProxyAccount.SetOnline_ByAccountID(spt.AID, false);
+                                            }
                                         }
                                     }));
                                 }
                             }
                         }
                     }
+
+                    foreach (Socket_ProxyTCP spt in sptRemove.ToList())
+                    {
+                        Socket_Cache.SocketProxyList.ClearTCP(spt);
+                    }
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            });            
+            });
         }
 
         #endregion
@@ -885,7 +909,7 @@ namespace WinsockPacketEditor
                     {
                         int iRootImgIndex = -1;
                         int iChildImgIndex = 5;
-                        string sRootName = Socket_Cache.SocketProxy.GetClientName(spi);
+                        string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spi);
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
@@ -899,11 +923,14 @@ namespace WinsockPacketEditor
                                     RootNode = Socket_Operation.AddTreeNode(this.tvProxyInfo, this.tvProxyInfo.Nodes, sRootName, iRootImgIndex, null);
                                 }
 
-                                TreeNode ChildNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sChildName);
-                                if (ChildNode == null)
+                                if (RootNode != null)
                                 {
-                                    ChildNode = Socket_Operation.AddTreeNode(this.tvProxyInfo, RootNode.Nodes, sChildName, iChildImgIndex, null);
-                                }
+                                    TreeNode ChildNode = Socket_Operation.FindNodeSync(RootNode.Nodes, sChildName);
+                                    if (ChildNode == null)
+                                    {
+                                        ChildNode = Socket_Operation.AddTreeNode(this.tvProxyInfo, RootNode.Nodes, sChildName, iChildImgIndex, null);
+                                    }
+                                }                                
                             });
 
                             if (tvProxyInfo.InvokeRequired)

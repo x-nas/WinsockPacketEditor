@@ -15,7 +15,7 @@ namespace WPELibrary.Lib
         public Socket_Cache.SocketProxy.CommandType CommandType { get; set; }
         public Socket_Cache.SocketProxy.DomainType DomainType { get; set; }
         public Socket_Cache.SocketProxy.AddressType AddressType { get; set; }
-
+        public Guid AID { get; set; }
         public ClientConnection Client { get; }
         public ServerConnection Server { get; }
 
@@ -37,13 +37,15 @@ namespace WPELibrary.Lib
             private volatile bool _isDisposed;
 
             public Socket Socket { get; private set; }
+            public IPEndPoint EndPoint { get; set; }
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public byte[] Data { get; set; }
 
             public ClientConnection(Socket socket, int bufferSize)
             {
-                Socket = socket ?? throw new ArgumentNullException(nameof(socket));
+                Socket = socket;
+                EndPoint = socket?.RemoteEndPoint as IPEndPoint;
                 Buffer = ArrayPool<byte>.Shared.Rent(bufferSize);
                 Data = Array.Empty<byte>();
             }
@@ -107,7 +109,7 @@ namespace WPELibrary.Lib
         {
             private volatile bool _isDisposed;
 
-            public Socket Socket { get; set; }
+            public Socket Socket { get; set; }        
             public string Address { get; set; }
             public byte[] Buffer { get; private set; }
             public IPEndPoint EndPoint { get; set; }
