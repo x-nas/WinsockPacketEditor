@@ -1007,9 +1007,9 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion
+            #endregion            
 
-            #region//记录代理认证结果            
+            #region//代理认证入列表            
 
             public static void AuthResult_ToList(string IPAddress, string UserName, bool AuthResult)
             {
@@ -1025,6 +1025,29 @@ namespace WPELibrary.Lib
             }
 
             #endregion            
+
+            #region//查找代理认证
+
+            public static Proxy_AuthInfo GetProxyAuthInfo_ByIPAddress(string IPAddress)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(IPAddress))
+                    {
+                        return null;
+                    }
+
+                    return Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(p => p.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion
 
             #region//获取客户端的IP地址
 
@@ -1053,7 +1076,7 @@ namespace WPELibrary.Lib
 
             #region//更新 UDP 状态（异步）
 
-            public static async void UpdateProxyUDP()
+            public static async Task UpdateProxyUDP()
             {
                 await Task.Run(() =>
                 {
@@ -1452,7 +1475,7 @@ namespace WPELibrary.Lib
 
             #region//更新所有代理账号的在线状态（异步）
 
-            public static async void UpdateOnlineStatus()
+            public static async Task UpdateOnlineStatus()
             {
                 await Task.Run(() =>
                 {

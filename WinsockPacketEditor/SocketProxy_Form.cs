@@ -1,6 +1,6 @@
 ﻿using Be.Windows.Forms;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -638,11 +638,13 @@ namespace WinsockPacketEditor
             this.ShowProxyChart();            
         }
 
-        private void tUpdateProxyState_Tick(object sender, EventArgs e)
+        private async void tUpdateProxyState_Tick(object sender, EventArgs e)
         {
-            this.UpdateProxyTCP();
-            Socket_Cache.SocketProxy.UpdateProxyUDP();
-            Socket_Cache.ProxyAccount.UpdateOnlineStatus();
+            await this.UpdateClientLinks();
+            await this.UpdateAccountLinks();
+            this.dgvAuth.Refresh();
+            await Socket_Cache.SocketProxy.UpdateProxyUDP();
+            await Socket_Cache.ProxyAccount.UpdateOnlineStatus();
         }
 
         #endregion
@@ -738,73 +740,6 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        #endregion
-
-        #region//更新 TCP 状态（异步）
-
-        private async void UpdateProxyTCP()
-        {
-            await Task.Run(() =>
-            {
-                try
-                {
-                    List<Socket_ProxyTCP> sptRemove = new List<Socket_ProxyTCP>();
-                    object lockObj = new object();
-
-                    foreach (Socket_ProxyTCP spt in Socket_Cache.SocketProxyList.lstProxyTCP.ToList())
-                    {
-                        if (spt.Client.Socket == null)
-                        {
-                            string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
-                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
-
-                            if (RootNode != null)
-                            {
-                                TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
-
-                                if (!IsDisposed)
-                                {
-                                    tvProxyInfo.Invoke(new MethodInvoker(delegate
-                                    {
-                                        if (ClientNode != null)
-                                        {
-                                            ClientNode.Remove();
-                                            lock (lockObj)
-                                            {
-                                                sptRemove.Add(spt);
-                                            }
-                                        }
-
-                                        if (RootNode.Nodes.Count == 0)
-                                        {
-                                            if (this.cbDeleteClosed.Checked)
-                                            {
-                                                RootNode.Remove();
-                                            }
-
-                                            if (spt.AID != null && spt.AID != Guid.Empty)
-                                            {
-                                                Socket_Cache.ProxyAccount.SetOnline_ByAccountID(spt.AID, false);
-                                            }
-                                        }
-                                    }));
-                                }
-                            }
-                        }
-                    }
-
-                    foreach (Socket_ProxyTCP spt in sptRemove.ToList())
-                    {
-                        Socket_Cache.SocketProxyList.ClearTCP(spt);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            });
         }
 
         #endregion
@@ -952,6 +887,100 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//更新客户端链接（异步）
+
+        private async Task UpdateClientLinks()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    ConcurrentBag<Socket_ProxyTCP> sptRemove = new ConcurrentBag<Socket_ProxyTCP>();
+
+                    foreach (Socket_ProxyTCP spt in Socket_Cache.SocketProxyList.lstProxyTCP.ToList())
+                    {
+                        if (spt.Client.Socket == null)
+                        {
+                            string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
+                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
+
+                            if (RootNode != null)
+                            {
+                                TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
+
+                                if (!tvProxyInfo.IsDisposed)
+                                {
+                                    tvProxyInfo.Invoke(new MethodInvoker(delegate
+                                    {
+                                        if (ClientNode != null)
+                                        {
+                                            ClientNode.Remove();
+                                            sptRemove.Add(spt);
+                                        }
+
+                                        if (RootNode.Nodes.Count == 0)
+                                        {
+                                            if (this.cbDeleteClosed.Checked)
+                                            {
+                                                RootNode.Remove();
+                                            }
+
+                                            if (spt.AID != null && spt.AID != Guid.Empty)
+                                            {
+                                                Socket_Cache.ProxyAccount.SetOnline_ByAccountID(spt.AID, false);
+                                            }
+                                        }
+                                    }));
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (Socket_ProxyTCP spt in sptRemove)
+                    {
+                        Socket_Cache.SocketProxyList.ClearTCP(spt);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });
+        }
+
+        #endregion
+
+        #region//更新账号链接数（异步）
+
+        private async Task UpdateAccountLinks()
+        {
+            await Task.Run(() =>
+            {
+                try
+                {
+                    foreach (Proxy_AuthInfo pai in Socket_Cache.SocketProxy.lstProxyAuth.ToList())
+                    {
+                        TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, pai.IPAddress);
+
+                        if (RootNode != null)
+                        {
+                            pai.LinksNumber = RootNode.Nodes.Count;
+                        }
+                        else
+                        {
+                            pai.LinksNumber = 0;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            });
         }
 
         #endregion
@@ -1152,7 +1181,6 @@ namespace WinsockPacketEditor
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
 
         #endregion
 
