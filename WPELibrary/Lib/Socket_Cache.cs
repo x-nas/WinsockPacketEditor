@@ -13,6 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -3327,6 +3328,18 @@ namespace WPELibrary.Lib
                 }
             }
 
+            private struct SearchCondition
+            {
+                public int RelativePosition { get; set; }
+                public byte Value { get; set; }
+            }
+
+            private struct Modification
+            {
+                public int Index { get; set; }
+                public byte Value { get; set; }
+            }
+
             #endregion
 
             #region//新增滤镜            
@@ -3758,39 +3771,34 @@ namespace WPELibrary.Lib
 
             public static string GetName_ByFilterAction(Socket_Cache.Filter.FilterAction filterAction)
             {
-                string sReturn = string.Empty;
-
                 try
                 {
                     switch (filterAction)
                     {
                         case Socket_Cache.Filter.FilterAction.Replace:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
-                            break;
+                            return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_65);
 
                         case Socket_Cache.Filter.FilterAction.Intercept:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66);
-                            break;
+                            return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_66);
 
                         case Socket_Cache.Filter.FilterAction.Change:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_173);
-                            break;
+                            return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_173);
 
                         case Socket_Cache.Filter.FilterAction.NoModify_Display:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67);
-                            break;
+                            return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_67);
 
                         case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
-                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
-                            break;
+                            return MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_68);
+
+                        default:
+                            return string.Empty;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(GetName_ByFilterAction), ex.Message);
+                    return string.Empty;
                 }
-
-                return sReturn;
             }
 
             #endregion            
@@ -3897,276 +3905,191 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否生效
 
-            public static bool CheckFilter_IsEffective(Int32 iSocket, Span<byte> bufferSpan, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, Socket_FilterInfo sfi)
+            public static bool CheckFilter_IsEffective(
+                Int32 iSocket, 
+                Span<byte> bufferSpan,
+                Socket_Cache.SocketPacket.PacketType ptType,
+                Socket_Cache.SocketPacket.SockAddr sAddr,
+                Socket_FilterInfo sfi)
             {
-                bool bResult = true;
-
-                try
-                {
-                    if (!sfi.IsEnable)
-                    {
-                        return false;
-                    }
-
-                    if (!Socket_Cache.Filter.CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
-                    {
-                        return false;
-                    }
-
-                    if (sfi.AppointSocket && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointSocket(iSocket, sfi.SocketContent))
-                    {
-                        return false;
-                    }
-
-                    if (sfi.AppointLength && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointLength(bufferSpan.Length, sfi.LengthContent))
-                    {
-                        return false;
-                    }
-
-                    if (sfi.AppointPort && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointPort(iSocket, ptType, sAddr, sfi.PortContent))
-                    {
-                        return false;
-                    }
-
-                    if (sfi.AppointHeader && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(bufferSpan, sfi.HeaderContent))
-                    {
-                        return false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                if (!sfi.IsEnable)
                     return false;
-                }
 
-                return bResult;
+                if (!Socket_Cache.Filter.CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
+                    return false;
+
+                if (sfi.AppointSocket && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointSocket(iSocket, ((int)sfi.SocketContent)))
+                    return false;
+
+                if (sfi.AppointPort && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointPort(iSocket, ptType, sAddr, ((int)sfi.PortContent)))
+                    return false;
+
+                if (sfi.AppointLength && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointLength(bufferSpan.Length, sfi.LengthContent))
+                    return false;
+
+                if (sfi.AppointHeader && !Socket_Cache.Filter.CheckPacket_IsMatch_AppointHeader(bufferSpan, sfi.HeaderContent))
+                    return false;
+
+                return true;
             }
 
             #endregion
 
             #region//检查滤镜作用类别
 
-            public static bool CheckFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.Filter.FilterFunction ffFunction)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static unsafe bool CheckFilterFunction_ByPacketType(Socket_Cache.SocketPacket.PacketType ptType, in FilterFunction ffFunction)
             {
-                bool bReturn = false;
-
-                try
+                fixed (bool* pFlags = &ffFunction.Send)
                 {
-                    switch (ptType)
+                    byte* indexMap = stackalloc byte[13]
                     {
-                        case Socket_Cache.SocketPacket.PacketType.WS1_Send:
-                            bReturn = ffFunction.Send;
-                            break;
+                        0,  // WS1_Send -> Send (offset 0)
+                        0,  // WS2_Send -> Send
+                        1,  // WS1_SendTo -> SendTo
+                        1,  // WS2_SendTo -> SendTo
+                        2,  // WS1_Recv -> Recv
+                        2,  // WS2_Recv -> Recv
+                        3,  // WS1_RecvFrom -> RecvFrom
+                        3,  // WS2_RecvFrom -> RecvFrom
+                        4,  // WSASend -> WSASend
+                        5,  // WSASendTo -> WSASendTo
+                        6,  // WSARecv -> WSARecv
+                        6,  // WSARecvEx -> WSARecv
+                        7   // WSARecvFrom -> WSARecvFrom
+                    };
 
-                        case Socket_Cache.SocketPacket.PacketType.WS2_Send:
-                            bReturn = ffFunction.Send;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS1_SendTo:
-                            bReturn = ffFunction.SendTo;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS2_SendTo:
-                            bReturn = ffFunction.SendTo;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS1_Recv:
-                            bReturn = ffFunction.Recv;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS2_Recv:
-                            bReturn = ffFunction.Recv;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS1_RecvFrom:
-                            bReturn = ffFunction.RecvFrom;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WS2_RecvFrom:
-                            bReturn = ffFunction.RecvFrom;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WSASend:
-                            bReturn = ffFunction.WSASend;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WSASendTo:
-                            bReturn = ffFunction.WSASendTo;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WSARecv:
-                            bReturn = ffFunction.WSARecv;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WSARecvEx:
-                            bReturn = ffFunction.WSARecv;
-                            break;
-
-                        case Socket_Cache.SocketPacket.PacketType.WSARecvFrom:
-                            bReturn = ffFunction.WSARecvFrom;
-                            break;
+                    int index = (int)ptType;
+                    if (index >= 0 && index < 13)
+                    {
+                        return pFlags[indexMap[index]];
                     }
                 }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
 
-                return bReturn;
-            }
+                return false;
+            }            
 
             #endregion
 
             #region//检查是否匹配指定套接字
 
-            public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, decimal dSocketContent)
+            public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, int socketContent)
             {
-                bool bResult = false;
-
-                try
-                {
-                    if (iSocket == dSocketContent)
-                    {
-                        bResult = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
-                }
-
-                return bResult;
+                return iSocket == socketContent;
             }
 
             #endregion
 
             #region//检查是否匹配指定长度
 
-            public static bool CheckPacket_IsMatch_AppointLength(int Len, string LengthContent)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static bool CheckPacket_IsMatch_AppointLength(int len, string lengthContent)
             {
-                bool bResult = false;
+                if (string.IsNullOrEmpty(lengthContent))
+                    return false;
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(LengthContent))
+                    int dashIndex = lengthContent.IndexOf('-');
+
+                    if (dashIndex >= 0)
                     {
-                        if (LengthContent.Contains("-"))
-                        {
-                            string[] sLengthContent = LengthContent.Split('-');
-                            if (int.TryParse(sLengthContent[0], out int iLenFrom))
-                            {
-                                if (int.TryParse(sLengthContent[1], out int iLenTo))
-                                {
-                                    if (Len >= iLenFrom && Len <= iLenTo)
-                                    {
-                                        bResult = true;
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (int.TryParse(LengthContent, out int iLength))
-                            {
-                                if (Len == iLength)
-                                {
-                                    bResult = true;
-                                }
-                            }
-                        }
-                    }                    
+                        string fromStr = lengthContent.Substring(0, dashIndex);
+                        string toStr = lengthContent.Substring(dashIndex + 1);
+
+                        return int.TryParse(fromStr, out int lenFrom) &&
+                               int.TryParse(toStr, out int lenTo) &&
+                               len >= lenFrom &&
+                               len <= lenTo;
+                    }
+                    
+                    return int.TryParse(lengthContent, out int exactLen) &&
+                           len == exactLen;
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return false;
                 }
-
-                return bResult;
             }
 
             #endregion
 
             #region//检查是否匹配指定端口
 
-            public static bool CheckPacket_IsMatch_AppointPort(Int32 iSocket, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr, decimal dPortContent)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static bool CheckPacket_IsMatch_AppointPort(
+                int iSocket,
+                Socket_Cache.SocketPacket.PacketType ptType,
+                Socket_Cache.SocketPacket.SockAddr sAddr,
+                int portContent)
             {
-                bool bResult = false;
-
                 try
                 {
-                    string sPort = string.Empty;
-                    string sPacketIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
+                    string packetIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
+                    if (string.IsNullOrEmpty(packetIP))
+                        return false;
 
-                    if (!string.IsNullOrEmpty(sPacketIP) && sPacketIP.IndexOf("|") > 0)
-                    {
-                        string sIPFrom = sPacketIP.Split('|')[0];
-                        string sIPTo = sPacketIP.Split('|')[1];
-                        string sPortFrom = string.Empty;
-                        string sPortTo = string.Empty;
+                    ReadOnlySpan<char> ipSpan = packetIP.AsSpan();
+                    int pipeIndex = ipSpan.IndexOf('|');
 
-                        if (!string.IsNullOrEmpty(sIPFrom) && sIPFrom.IndexOf(":") > 0)
-                        {
-                            sPortFrom = sIPFrom.Split(':')[1];
+                    if (pipeIndex <= 0)
+                        return false;
 
-                            if (sPortFrom.Equals(dPortContent.ToString()))
-                            {
-                                bResult = true;
-                            }
-                        }
+                    if (CheckPortInPart(ipSpan.Slice(0, pipeIndex), portContent))
+                        return true;
 
-                        if (!string.IsNullOrEmpty(sIPTo) && sIPTo.IndexOf(":") > 0)
-                        {
-                            sPortTo = sIPTo.Split(':')[1];
-
-                            if (sPortTo.Equals(dPortContent.ToString()))
-                            {
-                                bResult = true;
-                            }
-                        }
-                    }
+                    return CheckPortInPart(ipSpan.Slice(pipeIndex + 1), portContent);
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return false;
                 }
+            }
 
-                return bResult;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool CheckPortInPart(ReadOnlySpan<char> ipPortPart, int port)
+            {
+                int colonIndex = ipPortPart.IndexOf(':');
+                if (colonIndex <= 0)
+                    return false;
+
+                ReadOnlySpan<char> portSpan = ipPortPart.Slice(colonIndex + 1);
+                unsafe
+                {
+                    fixed (char* ptr = &portSpan.GetPinnableReference())
+                    {
+                        return int.TryParse(new string(ptr, 0, portSpan.Length), out int actualPort)
+                            && actualPort == port;
+                    }
+                }
             }
 
             #endregion
 
             #region//检查是否匹配指定包头
 
-            public static bool CheckPacket_IsMatch_AppointHeader(Span<byte> bufferSpan, string sHeaderContent)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static bool CheckPacket_IsMatch_AppointHeader(ReadOnlySpan<byte> bufferSpan, string headerContent)
             {
-                if (string.IsNullOrEmpty(sHeaderContent))
-                {
+                if (string.IsNullOrEmpty(headerContent))
                     return false;
-                }
 
                 try
                 {
-                    byte[] bHeaderContent = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sHeaderContent);
-                    int iHeaderContent_Len = bHeaderContent.Length;
+                    byte[] headerBytes = Socket_Operation.StringToBytes(
+                        Socket_Cache.SocketPacket.EncodingFormat.Hex,
+                        headerContent);
 
-                    if (iHeaderContent_Len > 0 && iHeaderContent_Len <= bufferSpan.Length)
+                    if (headerBytes.Length > 0 && headerBytes.Length <= bufferSpan.Length)
                     {
-                        Span<byte> headerSpan = new Span<byte>(bHeaderContent);
-
-                        for (int i = 0; i < iHeaderContent_Len; i++)
-                        {
-                            if (bufferSpan[i] != headerSpan[i])
-                            {
-                                return false;
-                            }
-                        }
-
-                        return true;
+                        return bufferSpan.Slice(0, headerBytes.Length).SequenceEqual(headerBytes);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
                 return false;
@@ -4176,35 +4099,32 @@ namespace WPELibrary.Lib
 
             #region//检查滤镜是否匹配成功（普通滤镜）
 
-            public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
             {
                 if (string.IsNullOrEmpty(sfi.FSearch))
-                {
                     return false;
-                }
 
                 try
                 {
-                    string[] slSearch = sfi.FSearch.Split(',');
-
-                    foreach (string sSearch in slSearch)
+                    string[] searchParts = sfi.FSearch.Split(',');
+                    foreach (string part in searchParts)
                     {
-                        if (!string.IsNullOrEmpty(sSearch) && sSearch.IndexOf("|") > 0)
+                        if (!string.IsNullOrEmpty(part) && part.IndexOf('|') > 0)
                         {
-                            string[] searchParts = sSearch.Split('|');
+                            string[] pair = part.Split('|');
+                            if (pair.Length != 2)
+                                return false;
 
-                            if (int.TryParse(searchParts[0], out int iIndex) && iIndex >= 0 && iIndex < bufferSpan.Length)
+                            if (!TryParseNonNegativeInt(pair[0], out int index) ||
+                                index >= bufferSpan.Length)
                             {
-                                string sValue = searchParts[1].ToUpper();
-                                byte bufferByte = bufferSpan[iIndex];
-                                string sBuffValue = bufferByte.ToString("X2");
-
-                                if (!sValue.Equals(sBuffValue))
-                                {
-                                    return false;
-                                }
+                                return false;
                             }
-                            else
+
+                            if (pair[1].Length != 2 ||
+                                !HexCharsToByte(pair[1], out byte expected) ||
+                                bufferSpan[index] != expected)
                             {
                                 return false;
                             }
@@ -4213,354 +4133,447 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return false;
                 }
 
                 return true;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool TryParseNonNegativeInt(string s, out int result)
+            {
+                return int.TryParse(s, NumberStyles.None, CultureInfo.InvariantCulture, out result) &&
+                       result >= 0;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool HexCharsToByte(string s, out byte result)
+            {
+                result = 0;
+                if (s.Length != 2) return false;
+
+                int high = CharToNibble(s[0]);
+                int low = CharToNibble(s[1]);
+                if (high == -1 || low == -1)
+                    return false;
+
+                result = (byte)((high << 4) | low);
+                return true;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static int CharToNibble(char c)
+            {
+                if (c >= '0' && c <= '9') return c - '0';
+                if (c >= 'A' && c <= 'F') return 10 + (c - 'A');
+                if (c >= 'a' && c <= 'f') return 10 + (c - 'a');
+                return -1;
             }
 
             #endregion
 
             #region//检查滤镜是否匹配成功（高级滤镜）
 
-            public static List<int> CheckFilter_IsMatch_Adcanced(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static List<int> CheckFilter_IsMatch_Advanced(Socket_FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
             {
-                List<int> lReturn = new List<int>();
-
+                var result = new List<int>();
                 if (string.IsNullOrEmpty(sfi.FSearch))
-                {
-                    return lReturn;
-                }
+                    return result;
 
                 try
                 {
-                    string[] slSearch = sfi.FSearch.Split(',');
+                    var searchConditions = Socket_Cache.Filter.ParseSearchConditions(sfi.FSearch);
+                    if (searchConditions.Count == 0)
+                        return result;
 
-                    int[] searchIndices = new int[slSearch.Length];
-                    byte[] searchValues = new byte[slSearch.Length];
-
-                    for (int i = 0; i < slSearch.Length; i++)
-                    {
-                        string[] searchParts = slSearch[i].Split('|');
-
-                        if (int.TryParse(searchParts[0], out int iIndex) && byte.TryParse(searchParts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte bValue))
-                        {
-                            searchIndices[i] = iIndex;
-                            searchValues[i] = bValue;
-                        }
-                    }
-
-                    int iMatchIndex = -1;
-                    int iBuffIndex = -1;
-
-                    byte bFirst_SearchValue = searchValues[0];
+                    var firstCondition = searchConditions[0];
+                    byte firstValue = firstCondition.Value;
+                    int relativePosition = firstCondition.RelativePosition;
 
                     for (int i = 0; i < bufferSpan.Length; i++)
                     {
-                        if (bufferSpan[i] == bFirst_SearchValue)
+                        if (bufferSpan[i] == firstValue)
                         {
-                            iMatchIndex = i;
+                            bool isMatch = true;
+                            int lastCheckedIndex = i;
 
-                            for (int j = 1; j < slSearch.Length; j++)
+                            for (int j = 1; j < searchConditions.Count; j++)
                             {
-                                int iIndex = searchIndices[j];
-                                byte bValue = searchValues[j];
+                                var condition = searchConditions[j];
+                                int checkIndex = i + condition.RelativePosition - relativePosition;
 
-                                iBuffIndex = i + iIndex;
-
-                                if (iBuffIndex >= 0 && iBuffIndex < bufferSpan.Length)
+                                if (checkIndex < 0 || checkIndex >= bufferSpan.Length ||
+                                    bufferSpan[checkIndex] != condition.Value)
                                 {
-                                    if (bufferSpan[iBuffIndex] != bValue)
-                                    {
-                                        iMatchIndex = -1;
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    iMatchIndex = -1;
+                                    isMatch = false;
                                     break;
                                 }
+                                lastCheckedIndex = Math.Max(lastCheckedIndex, checkIndex);
                             }
 
-                            if (iMatchIndex > -1)
+                            if (isMatch)
                             {
-                                lReturn.Add(iMatchIndex);
-
-                                if (iBuffIndex > i)
-                                {
-                                    i = iBuffIndex;
-                                }
+                                result.Add(i);
 
                                 if (sfi.FStartFrom == Socket_Cache.Filter.FilterStartFrom.Head)
                                 {
                                     break;
                                 }
+
+                                i = lastCheckedIndex;
                             }
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_53) + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
 
-                return lReturn;
+                return result;
             }
 
-            #endregion            
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static List<SearchCondition> ParseSearchConditions(string searchPattern)
+            {
+                var conditions = new List<SearchCondition>();
+                string[] parts = searchPattern.Split(',');
+
+                foreach (string part in parts)
+                {
+                    if (string.IsNullOrEmpty(part))
+                        continue;
+
+                    string[] pair = part.Split('|');
+                    if (pair.Length != 2)
+                        continue;
+
+                    if (int.TryParse(pair[0], out int position) &&
+                        byte.TryParse(pair[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                    {
+                        conditions.Add(new Socket_Cache.Filter.SearchCondition
+                        {
+                            RelativePosition = position,
+                            Value = value
+                        });
+                    }
+                }
+
+                return conditions;
+            }
+
+            #endregion
 
             #region//执行替换（普通滤镜）
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool Replace_Normal(Socket_FilterInfo sfi, Span<byte> bufferSpan)
             {
                 if (string.IsNullOrEmpty(sfi.FSearch))
-                {
                     return false;
-                }
 
-                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
+                bool hasModifications = !string.IsNullOrEmpty(sfi.FModify);
+                bool hasProgressions = !string.IsNullOrEmpty(sfi.ProgressionPosition);
+
+                if (!hasModifications && !hasProgressions)
                     return false;
-                }
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(sfi.FModify))
+                    bool result = false;
+
+                    if (hasModifications)
                     {
-                        string[] slModify = sfi.FModify.Split(',');
-
-                        foreach (string sModify in slModify)
-                        {
-                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
-                            {
-                                string[] modifyParts = sModify.Split('|');
-
-                                if (int.TryParse(sModify.Split('|')[0], out int iIndex) && iIndex >= 0 && iIndex < bufferSpan.Length)
-                                {
-                                    if (byte.TryParse(modifyParts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte bValue))
-                                    {
-                                        bufferSpan[iIndex] = bValue;
-                                    }
-                                }                                
-                            }
-                        }
+                        result |= Socket_Cache.Filter.ProcessModifications(sfi, bufferSpan);
                     }
 
-                    if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
+                    if (hasProgressions)
                     {
-                        int iCarryCount = 0;
-                        int iStep = ((int)sfi.ProgressionStep);
-                        string[] slProgression = sfi.ProgressionPosition.Split(',');
-
-                        foreach (string sProgression in slProgression)
-                        {
-                            if (!string.IsNullOrEmpty(sProgression) && int.TryParse(sProgression, out int iIndex) && iIndex >= 0 && iIndex < bufferSpan.Length)
-                            {
-                                byte bValue = bufferSpan[iIndex];
-                                bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1), out iCarryCount);
-                                bufferSpan[iIndex] = bValue;
-
-                                if (sfi.IsProgressionCarry && iCarryCount > 0)
-                                {
-                                    for (int i = 0; i < sfi.ProgressionCarryNumber; i ++)
-                                    {
-                                        int iIndexPre = iIndex - (i + 1);
-
-                                        if (iIndexPre > -1)
-                                        {
-                                            byte bValuePrev = bufferSpan[iIndexPre];
-                                            bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
-                                            bufferSpan[iIndexPre] = bValuePrev;
-
-                                            if (iCarryCount == 0)
-                                            {
-                                                break;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                sfi.IsProgressionDone = true;                            
-                            }
-                        }
+                        result |= Socket_Cache.Filter.ProcessProgressions(sfi, bufferSpan);
                     }
+
+                    return result;
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sfi.FName + " - " + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return false;
                 }
+            }
 
-                return true;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool ProcessModifications(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+            {
+                bool modified = false;
+                string[] modifications = sfi.FModify.Split(',');
+
+                foreach (string modification in modifications)
+                {
+                    if (string.IsNullOrEmpty(modification))
+                        continue;
+
+                    string[] parts = modification.Split('|');
+                    if (parts.Length != 2)
+                        continue;
+
+                    if (int.TryParse(parts[0], out int index) &&
+                        index >= 0 &&
+                        index < bufferSpan.Length &&
+                        byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                    {
+                        bufferSpan[index] = value;
+                        modified = true;
+                    }
+                }
+
+                return modified;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool ProcessProgressions(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+            {
+                bool modified = false;
+                int carryCount = 0;
+                int step = (int)sfi.ProgressionStep;
+                string[] positions = sfi.ProgressionPosition.Split(',');
+
+                foreach (string position in positions)
+                {
+                    if (string.IsNullOrEmpty(position) ||
+                        !int.TryParse(position, out int index) ||
+                        index < 0 ||
+                        index >= bufferSpan.Length)
+                    {
+                        continue;
+                    }
+
+                    byte currentValue = bufferSpan[index];
+                    byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                    bufferSpan[index] = newValue;
+                    modified = true;
+                    sfi.IsProgressionDone = true;
+
+                    if (sfi.IsProgressionCarry && carryCount > 0)
+                    {
+                        for (int i = 0; i < sfi.ProgressionCarryNumber; i++)
+                        {
+                            int prevIndex = index - (i + 1);
+                            if (prevIndex < 0)
+                                break;
+
+                            byte prevValue = bufferSpan[prevIndex];
+                            prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                            bufferSpan[prevIndex] = prevValue;
+                            modified = true;
+
+                            if (carryCount == 0)
+                                break;
+                        }
+                    }
+                }
+
+                return modified;
             }
 
             #endregion            
 
             #region//执行替换（高级滤镜）
 
-            public static bool Replace_Advanced(Socket_FilterInfo sfi, int iMatch, Span<byte> bufferSpan)
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static bool Replace_Advanced(Socket_FilterInfo sfi, int matchIndex, Span<byte> bufferSpan)
             {
                 if (string.IsNullOrEmpty(sfi.FSearch))
-                {
                     return false;
-                }
 
-                if (string.IsNullOrEmpty(sfi.FModify) && string.IsNullOrEmpty(sfi.ProgressionPosition))
-                {
+                bool hasModifications = !string.IsNullOrEmpty(sfi.FModify);
+                bool hasProgressions = !string.IsNullOrEmpty(sfi.ProgressionPosition);
+
+                if (!hasModifications && !hasProgressions)
                     return false;
-                }
-
-                Socket_Cache.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
 
                 try
                 {
-                    if (!string.IsNullOrEmpty(sfi.FModify))
+                    bool result = false;
+                    var startFrom = sfi.FStartFrom;
+
+                    if (hasModifications)
                     {
-                        string[] slModify = sfi.FModify.Split(',');
-
-                        foreach (string sModify in slModify)
-                        {
-                            if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
-                            {
-                                string[] modifyParts = sModify.Split('|');
-
-                                if (int.TryParse(modifyParts[0], out int iIndex))
-                                {
-                                    if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
-                                    {
-                                        iIndex += iMatch;
-                                    }
-
-                                    if (iIndex >=0 && iIndex < bufferSpan.Length)
-                                    {
-                                        if (byte.TryParse(modifyParts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte bValue))
-                                        {
-                                            bufferSpan[iIndex] = bValue;
-                                        }                             
-                                    }
-                                }
-                            }
-                        }
+                        result |= ProcessAdvancedModifications(sfi, matchIndex, bufferSpan, startFrom);
                     }
 
-                    if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
+                    if (hasProgressions)
                     {
-                        int iCarryCount = 0;
-                        int iStep = ((int)sfi.ProgressionStep);
-                        string[] slProgression = sfi.ProgressionPosition.Split(',');
-
-                        foreach (string sProgression in slProgression)
-                        {
-                            if (!string.IsNullOrEmpty(sProgression) && int.TryParse(sProgression, out int iIndex))
-                            {
-                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
-                                {
-                                    iIndex += iMatch;
-                                }
-
-                                if (iIndex > -1 && iIndex < bufferSpan.Length)
-                                {
-                                    byte bValue = bufferSpan[iIndex];
-                                    bValue = Socket_Operation.GetStepByte(bValue, iStep * (sfi.ProgressionCount + 1), out iCarryCount);
-                                    bufferSpan[iIndex] = bValue;
-
-                                    if (sfi.IsProgressionCarry && iCarryCount > 0)
-                                    {
-                                        for (int i = 0; i < sfi.ProgressionCarryNumber; i++)
-                                        {
-                                            int iIndexPre = iIndex - (i + 1);
-
-                                            if (iIndexPre > -1)
-                                            {
-                                                byte bValuePrev = bufferSpan[iIndexPre];
-                                                bValuePrev = Socket_Operation.GetStepByte(bValuePrev, iCarryCount, out iCarryCount);
-                                                bufferSpan[iIndexPre] = bValuePrev;
-
-                                                if (iCarryCount == 0)
-                                                {
-                                                    break;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    sfi.IsProgressionDone = true;
-                                }
-                            }
-                        }
+                        result |= ProcessAdvancedProgressions(sfi, matchIndex, bufferSpan, startFrom);
                     }
+
+                    return result;
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sfi.FName + " - " + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return false;
                 }
+            }
 
-                return true;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool ProcessAdvancedModifications(
+                Socket_FilterInfo sfi, 
+                int matchIndex, 
+                Span<byte> bufferSpan,
+                Socket_Cache.Filter.FilterStartFrom startFrom)
+            {
+                bool modified = false;
+                string[] modifications = sfi.FModify.Split(',');
+
+                foreach (string modification in modifications)
+                {
+                    if (string.IsNullOrEmpty(modification))
+                        continue;
+
+                    string[] parts = modification.Split('|');
+                    if (parts.Length != 2)
+                        continue;
+
+                    if (!int.TryParse(parts[0], out int index))
+                        continue;
+
+                    if (startFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                    {
+                        index += matchIndex;
+                    }
+
+                    if (index < 0 || index >= bufferSpan.Length)
+                        continue;
+
+                    if (byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                    {
+                        bufferSpan[index] = value;
+                        modified = true;
+                    }
+                }
+
+                return modified;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static bool ProcessAdvancedProgressions(
+                Socket_FilterInfo sfi, 
+                int matchIndex, 
+                Span<byte> bufferSpan,
+                Socket_Cache.Filter.FilterStartFrom startFrom)
+            {
+                bool modified = false;
+                int carryCount = 0;
+                int step = (int)sfi.ProgressionStep;
+                string[] positions = sfi.ProgressionPosition.Split(',');
+
+                foreach (string position in positions)
+                {
+                    if (string.IsNullOrEmpty(position) || !int.TryParse(position, out int index))
+                        continue;
+
+                    if (startFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                    {
+                        index += matchIndex;
+                    }
+
+                    if (index < 0 || index >= bufferSpan.Length)
+                        continue;
+
+                    byte currentValue = bufferSpan[index];
+                    byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                    bufferSpan[index] = newValue;
+                    modified = true;
+                    sfi.IsProgressionDone = true;
+                    
+                    if (sfi.IsProgressionCarry && carryCount > 0)
+                    {
+                        HandleCarryOver(sfi, bufferSpan, index, ref carryCount);
+                    }
+                }
+
+                return modified;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static void HandleCarryOver(Socket_FilterInfo sfi, Span<byte> bufferSpan, int index, ref int carryCount)
+            {
+                for (int i = 0; i < sfi.ProgressionCarryNumber && carryCount > 0; i++)
+                {
+                    int prevIndex = index - (i + 1);
+                    if (prevIndex < 0)
+                        break;
+
+                    byte prevValue = bufferSpan[prevIndex];
+                    prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                    bufferSpan[prevIndex] = prevValue;
+                }
             }
 
             #endregion
 
             #region//执行换包
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static byte[] ChangePacket_Filter(Socket_FilterInfo sfi)
             {
                 if (string.IsNullOrEmpty(sfi.FModify))
-                {
                     return Array.Empty<byte>();
-                }
 
                 try
                 {
-                    string[] slModify = sfi.FModify.Split(',');
+                    var modifications = Socket_Cache.Filter.ParseModifications(sfi.FModify);
+                    if (modifications.Count == 0)
+                        return Array.Empty<byte>();
 
-                    int maxIndex = 0;
+                    byte[] newBuffer = new byte[modifications.Max(m => m.Index) + 1];
+                    Socket_Cache.Filter.ApplyModifications(newBuffer, modifications);
 
-                    foreach (string sModify in slModify)
-                    {
-                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
-                        {
-                            string[] modifyParts = sModify.Split('|');
-                            if (int.TryParse(modifyParts[0], out int iIndex))
-                            {
-                                maxIndex = Math.Max(maxIndex, iIndex);
-                            }
-                        }
-                    }
-
-                    Span<byte> newBufferSpan = new Span<byte>(new byte[maxIndex + 1]);
-
-                    foreach (string sModify in slModify)
-                    {
-                        if (!string.IsNullOrEmpty(sModify) && sModify.IndexOf("|") > 0)
-                        {
-                            string[] modifyParts = sModify.Split('|');
-                            if (int.TryParse(modifyParts[0], out int iIndex) && byte.TryParse(modifyParts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte bValue))
-                            {
-                                if (iIndex >= 0 && iIndex < newBufferSpan.Length)
-                                {
-                                    newBufferSpan[iIndex] = bValue;
-                                }
-                            }
-                        }
-                    }
-
-                    return newBufferSpan.ToArray();
+                    return newBuffer;
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sfi.FName + " - " + ex.Message);
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return Array.Empty<byte>();
+                }
+            }            
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static List<Socket_Cache.Filter.Modification> ParseModifications(string modifyString)
+            {
+                var modifications = new List<Socket_Cache.Filter.Modification>();
+                string[] parts = modifyString.Split(',');
+
+                foreach (string part in parts)
+                {
+                    if (string.IsNullOrEmpty(part))
+                        continue;
+
+                    string[] pair = part.Split('|');
+                    if (pair.Length != 2)
+                        continue;
+
+                    if (int.TryParse(pair[0], out int index) &&
+                        byte.TryParse(pair[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
+                    {
+                        modifications.Add(new Socket_Cache.Filter.Modification { Index = index, Value = value });
+                    }
+                }
+
+                return modifications;
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static void ApplyModifications(byte[] buffer, List<Socket_Cache.Filter.Modification> modifications)
+            {
+                foreach (var mod in modifications)
+                {
+                    if (mod.Index >= 0 && mod.Index < buffer.Length)
+                    {
+                        buffer[mod.Index] = mod.Value;
+                    }
                 }
             }
 
@@ -4766,151 +4779,145 @@ namespace WPELibrary.Lib
             public static Socket_Cache.Filter.FilterAction DoFilterList(Int32 iSocket, Span<byte> bufferSpan, out byte[] bNewBuffer, Socket_Cache.SocketPacket.PacketType ptType, Socket_Cache.SocketPacket.SockAddr sAddr)
             {
                 Socket_Cache.Filter.FilterAction faReturn = Filter.FilterAction.None;
-
                 bool bBreak = false;
-                bNewBuffer = bufferSpan.ToArray();
+                bNewBuffer = null;
 
                 try
                 {
-                    foreach (Socket_FilterInfo sfi in Socket_Cache.FilterList.lstFilter)
+                    var filters = Socket_Cache.FilterList.lstFilter;
+                    for (int i = 0; i < filters.Count; i++)
                     {
-                        if (Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bufferSpan, ptType, sAddr, sfi))
+                        var sfi = filters[i];
+                        if (!Socket_Cache.Filter.CheckFilter_IsEffective(iSocket, bufferSpan, ptType, sAddr, sfi))
                         {
-                            bool bDoFilter = false;
-                            bool isMatch = false;
-                            List<int> MatchIndex = new List<int>();
-                            
-                            if (sfi.FMode == Filter.FilterMode.Normal)
-                            {
-                                isMatch = Socket_Cache.Filter.CheckFilter_IsMatch_Normal(sfi, bufferSpan);
-                            }
-                            else if (sfi.FMode == Filter.FilterMode.Advanced)
-                            {
-                                MatchIndex = Socket_Cache.Filter.CheckFilter_IsMatch_Adcanced(sfi, bufferSpan);
-                                isMatch = MatchIndex.Count > 0;
-                            }
-                            
-                            if (isMatch)
-                            {
-                                faReturn = sfi.FAction;
+                            continue;
+                        }                            
 
-                                switch (sfi.FAction)
+                        bool bDoFilter = false;
+                        bool isMatch = false;
+                        List<int> MatchIndex = null;
+
+                        if (sfi.FMode == Filter.FilterMode.Normal)
+                        {
+                            isMatch = Socket_Cache.Filter.CheckFilter_IsMatch_Normal(sfi, bufferSpan);
+                        }
+                        else if (sfi.FMode == Filter.FilterMode.Advanced)
+                        {
+                            MatchIndex = Socket_Cache.Filter.CheckFilter_IsMatch_Advanced(sfi, bufferSpan);
+                            isMatch = MatchIndex != null && MatchIndex.Count > 0;
+                        }
+
+                        if (!isMatch)
+                        {
+                            continue;
+                        }
+
+                        faReturn = sfi.FAction;
+                        byte[] tempBuffer = null;
+
+                        switch (sfi.FAction)
+                        {
+                            case Filter.FilterAction.Replace:
+
+                                sfi.IsProgressionDone = false;
+
+                                if (sfi.FMode == Filter.FilterMode.Normal)
                                 {
-                                    case Filter.FilterAction.Replace:
+                                    bDoFilter = Socket_Cache.Filter.Replace_Normal(sfi, bufferSpan);
+                                    if (bDoFilter)
+                                    {
+                                        tempBuffer = bufferSpan.ToArray();
+                                    }
+                                }
+                                else if (sfi.FMode == Filter.FilterMode.Advanced && MatchIndex != null)
+                                {
+                                    foreach (int iIndex in MatchIndex)
+                                    {
+                                        Socket_Cache.Filter.Replace_Advanced(sfi, iIndex, bufferSpan);
+                                    }
 
-                                        sfi.IsProgressionDone = false;
+                                    bDoFilter = true;
+                                    tempBuffer = bufferSpan.ToArray();
+                                }
 
-                                        if (sfi.FMode == Filter.FilterMode.Normal)
-                                        {
-                                            bDoFilter = Socket_Cache.Filter.Replace_Normal(sfi, bufferSpan);
-                                        }
-                                        else if (sfi.FMode == Filter.FilterMode.Advanced)
-                                        {
-                                            foreach (int iIndex in MatchIndex)
-                                            {
-                                                Socket_Cache.Filter.Replace_Advanced(sfi, iIndex, bufferSpan);
-                                            }
+                                if (sfi.IsProgressionDone && sfi.IsProgressionContinuous)
+                                {
+                                    sfi.ProgressionCount++;
+                                }
 
-                                            bDoFilter = true;
-                                        }
+                                break;
 
-                                        if (sfi.IsProgressionDone && sfi.IsProgressionContinuous)
-                                        {
-                                            sfi.ProgressionCount++;
-                                        }
+                            case Filter.FilterAction.Change:
 
-                                        if (bDoFilter)
-                                        {
-                                            bNewBuffer = bufferSpan.ToArray();
+                                tempBuffer = Socket_Cache.Filter.ChangePacket_Filter(sfi);
+                                bDoFilter = tempBuffer != null && tempBuffer.Length > 0;
 
-                                            if (Socket_Cache.Filter.FilterExecute == Socket_Cache.Filter.Execute.Priority)
-                                            {
-                                                bBreak = true;
-                                            }
-                                        }
+                                break;
 
+                            case Filter.FilterAction.Intercept:
+                            case Filter.FilterAction.NoModify_Display:
+                            case Filter.FilterAction.NoModify_NoDisplay:
+
+                                bDoFilter = true;
+                                bBreak = true;
+
+                                break;
+                        }
+
+                        if (bDoFilter)
+                        {
+                            sfi.ExecutionCount++;
+                            Interlocked.Increment(ref Socket_Cache.Filter.FilterExecute_CNT);
+
+                            if (tempBuffer != null)
+                            {
+                                bNewBuffer = tempBuffer;
+                            }
+
+                            if (sfi.IsExecute)
+                            {
+                                switch (sfi.FEType)
+                                {
+                                    case Socket_Cache.Filter.FilterExecuteType.Send:
+                                        Socket_Cache.Send.DoSend(sfi.SID);
                                         break;
-
-                                    case Filter.FilterAction.Change:
-
-                                        bNewBuffer = Socket_Cache.Filter.ChangePacket_Filter(sfi);
-
-                                        if (bNewBuffer.Length > 0)
-                                        {
-                                            bDoFilter = true;
-
-                                            if (Socket_Cache.Filter.FilterExecute == Socket_Cache.Filter.Execute.Priority)
-                                            {
-                                                bBreak = true;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            bNewBuffer = bufferSpan.ToArray();
-                                        }
-
-                                        break;
-
-                                    case Filter.FilterAction.Intercept:                                        
-                                        bDoFilter = true;
-                                        bBreak = true;
-                                        break;
-
-                                    case Filter.FilterAction.NoModify_Display:                                        
-                                        bDoFilter = true;
-                                        bBreak = true;
-                                        break;
-
-                                    case Filter.FilterAction.NoModify_NoDisplay:                                        
-                                        bDoFilter = true;
-                                        bBreak = true;
+                                    case Socket_Cache.Filter.FilterExecuteType.Robot:
+                                        Socket_Cache.Robot.DoRobot(sfi.RID);
                                         break;
                                 }
                             }
-                            else
+
+                            if (!Socket_Cache.SocketPacket.SpeedMode)
                             {
-                                bDoFilter = false;
+                                string sFilterLog = MatchIndex != null && MatchIndex.Count > 0
+                                    ? string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69),
+                                        Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction),
+                                        sfi.FName,
+                                        Socket_Cache.SocketPacket.GetName_ByPacketType(ptType),
+                                        bufferSpan.Length,
+                                        MatchIndex.Count)
+                                    : string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51),
+                                        Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction),
+                                        sfi.FName,
+                                        Socket_Cache.SocketPacket.GetName_ByPacketType(ptType),
+                                        bufferSpan.Length);
+
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sFilterLog);
                             }
 
-                            if (bDoFilter)
+                            if (Socket_Cache.Filter.FilterExecute == Socket_Cache.Filter.Execute.Priority)
                             {
-                                sfi.ExecutionCount++;
-                                Interlocked.Increment(ref Socket_Cache.Filter.FilterExecute_CNT);
-
-                                if (sfi.IsExecute)
-                                {
-                                    switch (sfi.FEType)
-                                    {
-                                        case Socket_Cache.Filter.FilterExecuteType.Send:
-                                            Socket_Cache.Send.DoSend(sfi.SID);
-                                            break;
-
-                                        case Socket_Cache.Filter.FilterExecuteType.Robot:
-                                            Socket_Cache.Robot.DoRobot(sfi.RID);
-                                            break;
-                                    }
-                                }
-
-                                if (!Socket_Cache.SocketPacket.SpeedMode)
-                                {
-                                    string sFilterLog = string.Empty;
-
-                                    if (MatchIndex.Count > 0)
-                                    {
-                                        sFilterLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_69), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sfi.FName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), bufferSpan.Length, MatchIndex.Count);
-                                    }
-                                    else
-                                    {
-                                        sFilterLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_51), Socket_Cache.Filter.GetName_ByFilterAction(sfi.FAction), sfi.FName, Socket_Cache.SocketPacket.GetName_ByPacketType(ptType), bufferSpan.Length);
-                                    }
-
-                                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sFilterLog);
-                                }
+                                bBreak = true;
                             }
                         }
 
                         if (bBreak)
-                        {  
+                        {
+                            if (bNewBuffer == null)
+                            {
+                                bNewBuffer = bufferSpan.ToArray();
+                            }
+
                             return faReturn;
                         }
                     }
@@ -4918,6 +4925,11 @@ namespace WPELibrary.Lib
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                if (bNewBuffer == null)
+                {
+                    bNewBuffer = bufferSpan.ToArray();
                 }
 
                 return faReturn;
