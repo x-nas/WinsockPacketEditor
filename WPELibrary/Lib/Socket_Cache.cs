@@ -196,7 +196,10 @@ namespace WPELibrary.Lib
                         Socket_Cache.SocketProxy.ExternalProxy_IP = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_IP"].ToString();
                         Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ExternalProxy_Port"].ToString());                                                
                         Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy_AppointPort"]);
-                        Socket_Cache.SocketProxy.ExternalProxy_AppointPort = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_AppointPort"].ToString();                        
+                        Socket_Cache.SocketProxy.ExternalProxy_AppointPort = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_AppointPort"].ToString();
+                        Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy_Auth"]);
+                        Socket_Cache.SocketProxy.ExternalProxy_UserName = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_UserName"].ToString();
+                        Socket_Cache.SocketProxy.ExternalProxy_PassWord = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_PassWord"].ToString();
                         Socket_Cache.SocketProxy.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_SpeedMode"]);
                         Socket_Cache.SocketPacket.CheckNotShow = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckNotShow"]);
                         Socket_Cache.SocketPacket.CheckSocket = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSocket"]);
@@ -302,10 +305,10 @@ namespace WPELibrary.Lib
             public static bool IsListening = false;            
             public static bool ProxyIP_Auto = true;
             public static bool Enable_SOCKS5 = true, Enable_Auth = true;
-            public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false;
+            public static bool Enable_ExternalProxy = false, Enable_ExternalProxy_AppointPort = false, Enable_ExternalProxy_Auth = false;
             public static string ExternalProxy_IP = "127.0.0.1";
             public static ushort ExternalProxy_Port = 8889;
-            public static string ExternalProxy_AppointPort = "80,8080,443,8443";            
+            public static string ExternalProxy_AppointPort = "80,8080,443,8443", ExternalProxy_UserName, ExternalProxy_PassWord;            
             public static ushort ProxyPort = 1080;
             public static int UDPCloseTime = 60;
             public static long Total_Request = 0;
@@ -314,7 +317,7 @@ namespace WPELibrary.Lib
             public const long MaxNetworkSpeed = 100000;
             public static string ProxyOnLineInfo = string.Empty;
             public static string ProxyBytesInfo = string.Empty;
-            public static string ProxySpeedInfo = string.Empty;            
+            public static string ProxySpeedInfo = string.Empty;
 
             public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
             public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);         
@@ -562,7 +565,7 @@ namespace WPELibrary.Lib
                         else
                         {
                             string ClientIP = spt.Client.EndPoint.Address.ToString();
-                            Socket_Cache.SocketProxy.AuthResult_ToList(ClientIP, string.Empty, false);
+                            Socket_Cache.SocketProxy.AuthResult_ToList(Guid.Empty, ClientIP, false);
                         }
                     }
                     else
@@ -601,26 +604,23 @@ namespace WPELibrary.Lib
                         bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
 
                         string ClientIP = spt.Client.EndPoint.Address.ToString();
-                        Socket_Cache.SocketProxy.AuthResult_ToList(ClientIP, sUserName, bAuthOK);
+                        Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, bAuthOK);
 
                         Span<byte> bAuth = stackalloc byte[2];
-                        if (bAuthOK)
-                        {
-                            bAuth[0] = 0x01;
-                            bAuth[1] = 0x00;
+                        bAuth[0] = 0x01;
 
-                            spt.AID = AccountID;
+                        bool isAllowed = bAuthOK && !Socket_Cache.ProxyAccount.CheckLimitLinks_ByAccountID(AccountID);
+                        bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
+
+                        if (isAllowed)
+                        {
                             Socket_Cache.ProxyAccount.SetOnline_ByAccountID(AccountID, true);
                             Socket_Cache.ProxyAccount.RecordLoginIP_ByAccountID(AccountID, ClientIP);
-                        }
-                        else
-                        {
-                            bAuth[0] = 0x01;
-                            bAuth[1] = 0x01;
+                            spt.AID = AccountID;
+                            spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                         }
 
                         Socket_Operation.SendTCPData(spt.Client.Socket, bAuth);
-                        spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                     }
                 }
                 catch (Exception ex)
@@ -670,8 +670,8 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                IPEndPoint HttpProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.ExternalProxy_IP), Socket_Cache.SocketProxy.ExternalProxy_Port);
-                                                spt.Server.Socket.Connect(HttpProxyEP);
+                                                IPEndPoint ExternalProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.ExternalProxy_IP), Socket_Cache.SocketProxy.ExternalProxy_Port);
+                                                spt.Server.Socket.Connect(ExternalProxyEP);
 
                                                 byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
                                                 spt.Server.Socket.Send(handshakeRequest);
@@ -1011,11 +1011,11 @@ namespace WPELibrary.Lib
 
             #region//代理认证入列表            
 
-            public static void AuthResult_ToList(string IPAddress, string UserName, bool AuthResult)
+            public static void AuthResult_ToList(Guid AID, string IPAddress, bool AuthResult)
             {
                 try
                 {                    
-                    Proxy_AuthInfo pai = new Proxy_AuthInfo(IPAddress, UserName, AuthResult, DateTime.Now);
+                    Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
                     RecProxyAuth?.Invoke(pai);
                 }
                 catch (Exception ex)
@@ -1027,6 +1027,28 @@ namespace WPELibrary.Lib
             #endregion            
 
             #region//查找代理认证
+
+            public static Proxy_AuthInfo GetProxyAuthInfo_ByAccountID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        Proxy_AuthInfo pai = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(Auth => Auth.AID == AID);
+
+                        if (pai != null)
+                        {
+                            return pai;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
 
             public static Proxy_AuthInfo GetProxyAuthInfo_ByIPAddress(string IPAddress)
             {
@@ -1283,6 +1305,32 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//查找TCP代理列表
+
+            public static Socket_ProxyTCP GetProxyTCP_ByAccountID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        Socket_ProxyTCP spt = Socket_Cache.SocketProxyList.lstProxyTCP.FirstOrDefault(ProxyTCP => ProxyTCP.AID == AID);
+
+                        if (spt != null)
+                        {
+                            return spt;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion            
+
             #region//清除 TCP 列表中的指定数据
 
             public static void ClearTCP(Socket_ProxyTCP spt)
@@ -1418,7 +1466,43 @@ namespace WPELibrary.Lib
                 return false;
             }
 
-            #endregion            
+            #endregion
+
+            #region//检测是否已超过限制链接数
+
+            public static bool CheckLimitLinks_ByAccountID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null && AID != Guid.Empty)
+                    {
+                        Proxy_AccountInfo paiAccount = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);                        
+                        Proxy_AuthInfo paiAuth = Socket_Cache.SocketProxy.GetProxyAuthInfo_ByAccountID(AID);
+
+                        if (paiAccount != null && paiAuth != null)
+                        {
+                            if (paiAccount.IsLimitLinks)
+                            {
+                                int LimitLinks = paiAccount.LimitLinks;
+                                int LinksNumber = paiAuth.LinksNumber;
+
+                                if (LinksNumber >= LimitLinks)
+                                {
+                                    return true;
+                                }
+                            }                                
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            #endregion
 
             #region//获取认证结果对应的图标
 
@@ -1551,7 +1635,19 @@ namespace WPELibrary.Lib
 
             #region//新增代理账号
 
-            public static bool AddProxyAccount(Guid AID, bool IsEnable, string UserName, string PassWord, DateTime LoginTime, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime)
+            public static bool AddProxyAccount(
+                Guid AID, 
+                bool IsEnable, 
+                string UserName, 
+                string PassWord, 
+                DateTime LoginTime, 
+                string LoginIP, 
+                string IPLocation, 
+                bool IsLimitLinks,
+                int LimitLinks, 
+                bool IsExpiry, 
+                DateTime ExpiryTime, 
+                DateTime CreateTime)
             {
                 try
                 {
@@ -1559,7 +1655,7 @@ namespace WPELibrary.Lib
                     {
                         if (!Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
                         {
-                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
                             Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
 
                             return true;
@@ -1578,7 +1674,14 @@ namespace WPELibrary.Lib
 
             #region//更新代理账号            
 
-            public static bool UpdateProxyAccount_ByAccountID(Guid AID, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            public static bool UpdateProxyAccount_ByAccountID(
+                Guid AID, 
+                bool IsEnable, 
+                string PassWord,
+                bool IsLimitLinks,
+                int LimitLinks,
+                bool IsExpiry, 
+                DateTime ExpiryTime)
             {
                 try
                 {
@@ -1590,6 +1693,8 @@ namespace WPELibrary.Lib
                         {
                             pai.IsEnable = IsEnable;
                             pai.PassWord = PassWord;
+                            pai.IsLimitLinks = IsLimitLinks;
+                            pai.LimitLinks = LimitLinks;
                             pai.IsExpiry = IsExpiry;
                             pai.ExpiryTime = ExpiryTime;
 
@@ -1605,7 +1710,14 @@ namespace WPELibrary.Lib
                 return false;
             }
 
-            public static bool UpdateProxyAccount_ByUserName(string UserName, bool IsEnable, string PassWord, bool IsExpiry, DateTime ExpiryTime)
+            public static bool UpdateProxyAccount_ByUserName(
+                string UserName, 
+                bool IsEnable, 
+                string PassWord,
+                bool IsLimitLinks,
+                int LimitLinks,
+                bool IsExpiry, 
+                DateTime ExpiryTime)
             {
                 try
                 {
@@ -1615,16 +1727,7 @@ namespace WPELibrary.Lib
 
                         if (pai != null)
                         {
-                            pai.IsEnable = IsEnable;
-
-                            if (!string.IsNullOrEmpty(PassWord))
-                            {
-                                pai.PassWord = PassWord;
-                            }
-                            
-                            pai.IsExpiry = IsExpiry;
-                            pai.ExpiryTime = ExpiryTime;
-
+                            Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, IsEnable, PassWord, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime);
                             return true;
                         }
                     }
@@ -1727,6 +1830,28 @@ namespace WPELibrary.Lib
             #endregion
 
             #region//查找代理账号
+
+            public static string GetUserName_ByAccountID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.lstProxyAccount.FirstOrDefault(account => account.AID == AID);
+
+                        if (pai != null)
+                        {
+                            return pai.UserName;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return string.Empty;
+            }
 
             public static Proxy_AccountInfo GetProxyAccount_ByAccountID(Guid AID)
             {
@@ -1991,11 +2116,13 @@ namespace WPELibrary.Lib
                             DateTime LoginTime = Convert.ToDateTime(dataRow["LoginTime"]);
                             string LoginIP = dataRow["LoginIP"].ToString();
                             string IPLocation = dataRow["IPLocation"].ToString();
+                            bool IsLimitLinks = Convert.ToBoolean(dataRow["IsLimitLinks"]);
+                            int LimitLinks = int.Parse(dataRow["LimitLinks"].ToString());
                             bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
                             DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
                             DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
 
-                            Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                            Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
                         }
                     }
                     catch (Exception ex)
@@ -2097,6 +2224,8 @@ namespace WPELibrary.Lib
                                 new XElement("LoginIP", pai.LoginIP),
                                 new XElement("IPLocation", pai.IPLocation),
                                 new XElement("IsOnLine", pai.IsOnLine.ToString()),
+                                new XElement("IsLimitLinks", pai.IsLimitLinks),
+                                new XElement("LimitLinks", pai.LimitLinks),
                                 new XElement("IsExpiry", pai.IsExpiry),
                                 new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
                                 new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
@@ -2268,6 +2397,18 @@ namespace WPELibrary.Lib
                             IsOnLine = bool.Parse(xeProxyAccount.Element("IsOnLine").Value);
                         }
 
+                        bool IsLimitLinks = false;
+                        if (xeProxyAccount.Element("IsLimitLinks") != null)
+                        {
+                            IsLimitLinks = bool.Parse(xeProxyAccount.Element("IsLimitLinks").Value);
+                        }
+
+                        int LimitLinks = 1;
+                        if (xeProxyAccount.Element("LimitLinks") != null)
+                        {
+                            LimitLinks = int.Parse(xeProxyAccount.Element("LimitLinks").Value);
+                        }
+
                         bool IsExpiry = false;
                         if (xeProxyAccount.Element("IsExpiry") != null)
                         {
@@ -2286,7 +2427,7 @@ namespace WPELibrary.Lib
                             CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
 
                         if (!bOK)
                         {
@@ -2340,6 +2481,19 @@ namespace WPELibrary.Lib
                                     pai.PassWord = value;
                                     break;
 
+                                case "MaxConn":
+                                    if (value.Equals("-1"))
+                                    {
+                                        pai.IsLimitLinks = false;
+                                        pai.LimitLinks = 1;
+                                    }
+                                    else
+                                    { 
+                                        pai.IsLimitLinks = true;
+                                        pai.LimitLinks = int.Parse(value);
+                                    }
+                                    break;
+
                                 case "AutoDisable":
                                     pai.IsExpiry = Convert.ToBoolean(int.Parse(value));
                                     break;
@@ -2390,12 +2544,24 @@ namespace WPELibrary.Lib
 
                         pai.LoginTime = DateTime.MinValue;
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(pai.AID, pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginTime, pai.LoginIP, pai.IPLocation, pai.IsExpiry, pai.ExpiryTime, pai.CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(
+                            pai.AID, 
+                            pai.IsEnable, 
+                            pai.UserName, 
+                            pai.PassWord, 
+                            pai.LoginTime, 
+                            pai.LoginIP, 
+                            pai.IPLocation, 
+                            pai.IsLimitLinks,
+                            pai.LimitLinks,
+                            pai.IsExpiry, 
+                            pai.ExpiryTime, 
+                            pai.CreateTime);
 
                         if (!bOK)
                         {
                             string FailLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_193), pai.UserName);
-                            Socket_Operation.DoLog_Proxy("Import Proxy Account", FailLog);
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, FailLog);
                         }
                     }
                 }
@@ -8167,6 +8333,9 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
                         sql += "ProxyConfig_Enable_ExternalProxy_AppointPort BOOLEAN DEFAULT 0,";//代理模式 - 启用指定代理端口
                         sql += "ProxyConfig_ExternalProxy_AppointPort TEXT,";//代理模式 - 指定代理端口
+                        sql += "ProxyConfig_Enable_ExternalProxy_Auth BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理认证
+                        sql += "ProxyConfig_ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
+                        sql += "ProxyConfig_ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
                         sql += "ProxyConfig_SpeedMode BOOLEAN DEFAULT 0,";//代理模式 - 极速模式
                         sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//注入模式 - 过滤设置不显示
                         sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//注入模式 - 过滤套接字
@@ -8286,6 +8455,9 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_ExternalProxy_Port,";                    
                         sql += "ProxyConfig_Enable_ExternalProxy_AppointPort,";
                         sql += "ProxyConfig_ExternalProxy_AppointPort,";
+                        sql += "ProxyConfig_Enable_ExternalProxy_Auth,";
+                        sql += "ProxyConfig_ExternalProxy_UserName,";
+                        sql += "ProxyConfig_ExternalProxy_PassWord,";
                         sql += "ProxyConfig_SpeedMode,";
                         sql += "InjectionConfig_CheckNotShow,";
                         sql += "InjectionConfig_CheckSocket,";
@@ -8335,6 +8507,9 @@ namespace WPELibrary.Lib
                         sql += "@ProxyConfig_ExternalProxy_Port,";                    
                         sql += "@ProxyConfig_Enable_ExternalProxy_AppointPort,";
                         sql += "@ProxyConfig_ExternalProxy_AppointPort,";
+                        sql += "@ProxyConfig_Enable_ExternalProxy_Auth,";
+                        sql += "@ProxyConfig_ExternalProxy_UserName,";
+                        sql += "@ProxyConfig_ExternalProxy_PassWord,";
                         sql += "@ProxyConfig_SpeedMode,";
                         sql += "@InjectionConfig_CheckNotShow,";
                         sql += "@InjectionConfig_CheckSocket,";
@@ -8387,6 +8562,9 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port);                          
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy_AppointPort", Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_AppointPort", Socket_Cache.SocketProxy.ExternalProxy_AppointPort);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy_Auth", Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_UserName", Socket_Cache.SocketProxy.ExternalProxy_UserName);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_PassWord", Socket_Cache.SocketProxy.ExternalProxy_PassWord);
                             cmd.Parameters.AddWithValue("@ProxyConfig_SpeedMode", Socket_Cache.SocketProxy.SpeedMode);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckNotShow", Socket_Cache.SocketPacket.CheckNotShow);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckSocket", Socket_Cache.SocketPacket.CheckSocket);
@@ -9024,6 +9202,8 @@ namespace WPELibrary.Lib
                         sql += "LoginTime TIMESTAMP,";
                         sql += "LoginIP TEXT,";
                         sql += "IPLocation TEXT,";
+                        sql += "IsLimitLinks BOOLEAN DEFAULT 0,";
+                        sql += "LimitLinks INTEGER DEFAULT 1,";
                         sql += "IsExpiry BOOLEAN DEFAULT 0,";
                         sql += "ExpiryTime TIMESTAMP,";                        
                         sql += "CreateTime TIMESTAMP";
@@ -9184,9 +9364,9 @@ namespace WPELibrary.Lib
                         using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
                             string sql = "INSERT INTO ProxyAccount (" +
-                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsExpiry, ExpiryTime, CreateTime" +
+                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime" +
                                          ") VALUES (" +
-                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsExpiry, @ExpiryTime, @CreateTime" +
+                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsLimitLinks, @LimitLinks, @IsExpiry, @ExpiryTime, @CreateTime" +
                                          ");";
 
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -9198,6 +9378,8 @@ namespace WPELibrary.Lib
                                 cmd.Parameters.Add(new SQLiteParameter("@LoginTime", DbType.DateTime));
                                 cmd.Parameters.Add(new SQLiteParameter("@LoginIP", DbType.String));
                                 cmd.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
                                 cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
                                 cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
                                 cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
@@ -9211,6 +9393,8 @@ namespace WPELibrary.Lib
                                     cmd.Parameters["@LoginTime"].Value = pai.LoginTime;
                                     cmd.Parameters["@LoginIP"].Value = pai.LoginIP;
                                     cmd.Parameters["@IPLocation"].Value = pai.IPLocation;
+                                    cmd.Parameters["@IsLimitLinks"].Value = pai.IsLimitLinks;
+                                    cmd.Parameters["@LimitLinks"].Value = pai.LimitLinks;
                                     cmd.Parameters["@IsExpiry"].Value = pai.IsExpiry;
                                     cmd.Parameters["@ExpiryTime"].Value = pai.ExpiryTime;
                                     cmd.Parameters["@CreateTime"].Value = pai.CreateTime;

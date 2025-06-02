@@ -88,6 +88,30 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否限制链接数
+
+        protected bool islimitlinks;
+
+        public bool IsLimitLinks
+        {
+            get { return islimitlinks; }
+            set { islimitlinks = value; }
+        }
+
+        #endregion
+
+        #region//最大链接数  
+
+        protected int limitlinks;
+
+        public int LimitLinks
+        {
+            get { return limitlinks; }
+            set { limitlinks = value; }
+        }
+
+        #endregion
+
         #region//是否过期
 
         protected bool isexpiry;
@@ -143,7 +167,19 @@ namespace WPELibrary.Lib
             //
         }
 
-        public Proxy_AccountInfo(Guid AID, bool IsEnable, string UserName, string PassWord, DateTime LoginTime, string LoginIP, string IPLocation, bool IsExpiry, DateTime ExpiryTime, DateTime CreateTime) 
+        public Proxy_AccountInfo(
+            Guid AID, 
+            bool IsEnable, 
+            string UserName, 
+            string PassWord, 
+            DateTime LoginTime, 
+            string LoginIP, 
+            string IPLocation, 
+            bool IsLimitLinks, 
+            int LimitLinks, 
+            bool IsExpiry, 
+            DateTime ExpiryTime, 
+            DateTime CreateTime) 
         {
             this.aid = AID;
             this.isenable = IsEnable;
@@ -152,6 +188,8 @@ namespace WPELibrary.Lib
             this.logintime = LoginTime;
             this.loginip = LoginIP;
             this.iplocation = IPLocation;
+            this.islimitlinks = IsLimitLinks;
+            this.limitlinks = LimitLinks;
             this.isexpiry = IsExpiry;
             this.expirytime = ExpiryTime;
             this.createtime = CreateTime;

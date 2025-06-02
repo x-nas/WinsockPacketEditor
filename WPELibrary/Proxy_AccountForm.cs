@@ -42,6 +42,13 @@ namespace WPELibrary
                         this.cbIsEnable.Checked = pai.IsEnable;
                         this.txtUserName.Text = pai.UserName;
                         this.txtPassWord.Text = Socket_Operation.PassWord_Decrypt(pai.PassWord);
+                        this.cbIsLimitLinks.Checked = pai.IsLimitLinks;
+
+                        if (pai.LimitLinks > 0)
+                        {
+                            this.nudLimitLinks.Value = pai.LimitLinks;                            
+                        }
+
                         this.cbIsExpiry.Checked = pai.IsExpiry;
 
                         if (pai.ExpiryTime > this.dtpExpiryTime.MaxDate)
@@ -54,12 +61,41 @@ namespace WPELibrary
                     }                    
                 }
 
+                this.LimitLinks_CheckedChanged();
                 this.ExpiryTime_CheckedChanged();
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//限制链接数
+
+        private void cbIsLimitLinks_CheckedChanged(object sender, EventArgs e)
+        {
+            this.LimitLinks_CheckedChanged();
+        }
+
+        private void LimitLinks_CheckedChanged()
+        {
+            this.nudLimitLinks.Enabled = this.cbIsLimitLinks.Checked;
+        }
+
+        #endregion
+
+        #region//到期时间
+
+        private void cbExpiryTime_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ExpiryTime_CheckedChanged();
+        }
+
+        private void ExpiryTime_CheckedChanged()
+        {
+            this.dtpExpiryTime.Enabled = this.cbIsExpiry.Checked;
         }
 
         #endregion
@@ -80,6 +116,8 @@ namespace WPELibrary
                 string UserName = this.txtUserName.Text.Trim();
                 string PassWord = this.txtPassWord.Text.Trim();
                 PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
+                bool IsLimitLinks = this.cbIsLimitLinks.Checked;
+                int LimitLinks = ((int)this.nudLimitLinks.Value);
                 bool IsExpiry = this.cbIsExpiry.Checked;
                 DateTime LoginTime = DateTime.MinValue;
 
@@ -101,11 +139,30 @@ namespace WPELibrary
                         return;
                     }
 
-                    Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), IsEnable, UserName, PassWord, LoginTime, string.Empty, string.Empty, IsExpiry, ExpiryTime, DateTime.Now);
+                    Socket_Cache.ProxyAccount.AddProxyAccount(
+                        Guid.NewGuid(), 
+                        IsEnable, 
+                        UserName, 
+                        PassWord, 
+                        LoginTime, 
+                        string.Empty, 
+                        string.Empty, 
+                        IsLimitLinks,
+                        LimitLinks,
+                        IsExpiry, 
+                        ExpiryTime, 
+                        DateTime.Now);
                 }
                 else
                 {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(this.SelectAID, IsEnable, PassWord, IsExpiry, ExpiryTime);
+                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(
+                        this.SelectAID, 
+                        IsEnable, 
+                        PassWord, 
+                        IsLimitLinks,
+                        LimitLinks,
+                        IsExpiry, 
+                        ExpiryTime);
                 }
 
                 this.Close();
@@ -152,19 +209,5 @@ namespace WPELibrary
         }
 
         #endregion        
-
-        #region//到期时间
-
-        private void cbExpiryTime_CheckedChanged(object sender, EventArgs e)
-        {
-            this.ExpiryTime_CheckedChanged();
-        }
-
-        private void ExpiryTime_CheckedChanged()
-        {
-            this.dtpExpiryTime.Enabled = this.cbIsExpiry.Checked;
-        }
-
-        #endregion
     }
 }

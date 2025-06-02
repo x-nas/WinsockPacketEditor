@@ -152,7 +152,7 @@
     <value>170, 0</value>
   </data>
   <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 61</value>
+    <value>67, 91</value>
   </data>
   <data name="cbIsExpiry.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 24</value>
@@ -161,6 +161,18 @@
     <value>Expiry Time</value>
   </data>
   <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>170, 88</value>
+  </data>
+  <data name="cbIsLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
+    <value>67, 61</value>
+  </data>
+  <data name="cbIsLimitLinks.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="cbIsLimitLinks.Text" xml:space="preserve">
+    <value>Limit Links</value>
+  </data>
+  <data name="nudLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
     <value>170, 58</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

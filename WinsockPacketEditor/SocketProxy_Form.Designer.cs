@@ -41,6 +41,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -83,18 +84,18 @@
             this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.tpExternalProxy = new System.Windows.Forms.TabPage();
             this.tlpExternalProxy = new System.Windows.Forms.TableLayoutPanel();
-            this.gbExternalProxy_AppointPort = new System.Windows.Forms.GroupBox();
-            this.tlpExternalProxy_AppointPort = new System.Windows.Forms.TableLayoutPanel();
-            this.cbExternalProxy_AppointPort = new System.Windows.Forms.CheckBox();
-            this.txtExternalProxy_AppointPort = new System.Windows.Forms.TextBox();
+            this.gbExternalProxy_Auth = new System.Windows.Forms.GroupBox();
+            this.tlpExternalProxy_Auth = new System.Windows.Forms.TableLayoutPanel();
+            this.cbExternalProxy_EnableAuth = new System.Windows.Forms.CheckBox();
+            this.txtExternalProxy_UserName = new System.Windows.Forms.TextBox();
+            this.txtExternalProxy_PassWord = new System.Windows.Forms.TextBox();
             this.gbExternalProxy_Address = new System.Windows.Forms.GroupBox();
             this.tlpExternalProxy_Address = new System.Windows.Forms.TableLayoutPanel();
+            this.txtExternalProxy_AppointPort = new System.Windows.Forms.TextBox();
+            this.cbExternalProxy_AppointPort = new System.Windows.Forms.CheckBox();
+            this.cbExternalProxy_Enable = new System.Windows.Forms.CheckBox();
             this.txtExternalProxy_IP = new System.Windows.Forms.TextBox();
             this.txtExternalProxy_Port = new System.Windows.Forms.TextBox();
-            this.gbExternalProxy_Enable = new System.Windows.Forms.GroupBox();
-            this.tlpExternalProxy_Enable = new System.Windows.Forms.TableLayoutPanel();
-            this.cbbProxyProtocol = new System.Windows.Forms.ComboBox();
-            this.cbExternalProxy_Enable = new System.Windows.Forms.CheckBox();
             this.tpSystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.gbWorkMode = new System.Windows.Forms.GroupBox();
@@ -127,6 +128,7 @@
             this.dgvAuth = new System.Windows.Forms.DataGridView();
             this.cAuthID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cAuthTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLinksNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -189,12 +191,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
             this.tpExternalProxy.SuspendLayout();
             this.tlpExternalProxy.SuspendLayout();
-            this.gbExternalProxy_AppointPort.SuspendLayout();
-            this.tlpExternalProxy_AppointPort.SuspendLayout();
+            this.gbExternalProxy_Auth.SuspendLayout();
+            this.tlpExternalProxy_Auth.SuspendLayout();
             this.gbExternalProxy_Address.SuspendLayout();
             this.tlpExternalProxy_Address.SuspendLayout();
-            this.gbExternalProxy_Enable.SuspendLayout();
-            this.tlpExternalProxy_Enable.SuspendLayout();
             this.tpSystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
             this.gbWorkMode.SuspendLayout();
@@ -512,37 +512,42 @@
             // tlpExternalProxy
             // 
             resources.ApplyResources(this.tlpExternalProxy, "tlpExternalProxy");
-            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_AppointPort, 2, 0);
-            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Address, 1, 0);
-            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Enable, 0, 0);
+            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Auth, 1, 0);
+            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Address, 0, 0);
             this.tlpExternalProxy.Name = "tlpExternalProxy";
             // 
-            // gbExternalProxy_AppointPort
+            // gbExternalProxy_Auth
             // 
-            this.gbExternalProxy_AppointPort.Controls.Add(this.tlpExternalProxy_AppointPort);
-            resources.ApplyResources(this.gbExternalProxy_AppointPort, "gbExternalProxy_AppointPort");
-            this.gbExternalProxy_AppointPort.Name = "gbExternalProxy_AppointPort";
-            this.gbExternalProxy_AppointPort.TabStop = false;
+            this.gbExternalProxy_Auth.Controls.Add(this.tlpExternalProxy_Auth);
+            resources.ApplyResources(this.gbExternalProxy_Auth, "gbExternalProxy_Auth");
+            this.gbExternalProxy_Auth.Name = "gbExternalProxy_Auth";
+            this.gbExternalProxy_Auth.TabStop = false;
             // 
-            // tlpExternalProxy_AppointPort
+            // tlpExternalProxy_Auth
             // 
-            resources.ApplyResources(this.tlpExternalProxy_AppointPort, "tlpExternalProxy_AppointPort");
-            this.tlpExternalProxy_AppointPort.Controls.Add(this.cbExternalProxy_AppointPort, 0, 1);
-            this.tlpExternalProxy_AppointPort.Controls.Add(this.txtExternalProxy_AppointPort, 1, 1);
-            this.tlpExternalProxy_AppointPort.Name = "tlpExternalProxy_AppointPort";
+            resources.ApplyResources(this.tlpExternalProxy_Auth, "tlpExternalProxy_Auth");
+            this.tlpExternalProxy_Auth.Controls.Add(this.cbExternalProxy_EnableAuth, 0, 1);
+            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_UserName, 1, 1);
+            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_PassWord, 2, 1);
+            this.tlpExternalProxy_Auth.Name = "tlpExternalProxy_Auth";
             // 
-            // cbExternalProxy_AppointPort
+            // cbExternalProxy_EnableAuth
             // 
-            resources.ApplyResources(this.cbExternalProxy_AppointPort, "cbExternalProxy_AppointPort");
-            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
-            this.cbExternalProxy_AppointPort.UseVisualStyleBackColor = true;
-            this.cbExternalProxy_AppointPort.CheckedChanged += new System.EventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
+            resources.ApplyResources(this.cbExternalProxy_EnableAuth, "cbExternalProxy_EnableAuth");
+            this.cbExternalProxy_EnableAuth.Name = "cbExternalProxy_EnableAuth";
+            this.cbExternalProxy_EnableAuth.UseVisualStyleBackColor = true;
+            this.cbExternalProxy_EnableAuth.CheckedChanged += new System.EventHandler(this.cbExternalProxy_EnableAuth_CheckedChanged);
             // 
-            // txtExternalProxy_AppointPort
+            // txtExternalProxy_UserName
             // 
-            this.txtExternalProxy_AppointPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtExternalProxy_AppointPort, "txtExternalProxy_AppointPort");
-            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
+            resources.ApplyResources(this.txtExternalProxy_UserName, "txtExternalProxy_UserName");
+            this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
+            // 
+            // txtExternalProxy_PassWord
+            // 
+            resources.ApplyResources(this.txtExternalProxy_PassWord, "txtExternalProxy_PassWord");
+            this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
+            this.txtExternalProxy_PassWord.UseSystemPasswordChar = true;
             // 
             // gbExternalProxy_Address
             // 
@@ -554,9 +559,32 @@
             // tlpExternalProxy_Address
             // 
             resources.ApplyResources(this.tlpExternalProxy_Address, "tlpExternalProxy_Address");
-            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_IP, 0, 1);
-            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_Port, 1, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_AppointPort, 5, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.cbExternalProxy_AppointPort, 3, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.cbExternalProxy_Enable, 0, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_IP, 1, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_Port, 2, 1);
             this.tlpExternalProxy_Address.Name = "tlpExternalProxy_Address";
+            // 
+            // txtExternalProxy_AppointPort
+            // 
+            this.txtExternalProxy_AppointPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtExternalProxy_AppointPort, "txtExternalProxy_AppointPort");
+            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
+            // 
+            // cbExternalProxy_AppointPort
+            // 
+            resources.ApplyResources(this.cbExternalProxy_AppointPort, "cbExternalProxy_AppointPort");
+            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
+            this.cbExternalProxy_AppointPort.UseVisualStyleBackColor = true;
+            this.cbExternalProxy_AppointPort.CheckedChanged += new System.EventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
+            // 
+            // cbExternalProxy_Enable
+            // 
+            resources.ApplyResources(this.cbExternalProxy_Enable, "cbExternalProxy_Enable");
+            this.cbExternalProxy_Enable.Name = "cbExternalProxy_Enable";
+            this.cbExternalProxy_Enable.UseVisualStyleBackColor = true;
+            this.cbExternalProxy_Enable.CheckedChanged += new System.EventHandler(this.cbExternalProxy_Enable_CheckedChanged);
             // 
             // txtExternalProxy_IP
             // 
@@ -569,36 +597,6 @@
             this.txtExternalProxy_Port.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtExternalProxy_Port, "txtExternalProxy_Port");
             this.txtExternalProxy_Port.Name = "txtExternalProxy_Port";
-            // 
-            // gbExternalProxy_Enable
-            // 
-            this.gbExternalProxy_Enable.Controls.Add(this.tlpExternalProxy_Enable);
-            resources.ApplyResources(this.gbExternalProxy_Enable, "gbExternalProxy_Enable");
-            this.gbExternalProxy_Enable.Name = "gbExternalProxy_Enable";
-            this.gbExternalProxy_Enable.TabStop = false;
-            // 
-            // tlpExternalProxy_Enable
-            // 
-            resources.ApplyResources(this.tlpExternalProxy_Enable, "tlpExternalProxy_Enable");
-            this.tlpExternalProxy_Enable.Controls.Add(this.cbbProxyProtocol, 1, 1);
-            this.tlpExternalProxy_Enable.Controls.Add(this.cbExternalProxy_Enable, 0, 1);
-            this.tlpExternalProxy_Enable.Name = "tlpExternalProxy_Enable";
-            // 
-            // cbbProxyProtocol
-            // 
-            resources.ApplyResources(this.cbbProxyProtocol, "cbbProxyProtocol");
-            this.cbbProxyProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbProxyProtocol.FormattingEnabled = true;
-            this.cbbProxyProtocol.Items.AddRange(new object[] {
-            resources.GetString("cbbProxyProtocol.Items")});
-            this.cbbProxyProtocol.Name = "cbbProxyProtocol";
-            // 
-            // cbExternalProxy_Enable
-            // 
-            resources.ApplyResources(this.cbExternalProxy_Enable, "cbExternalProxy_Enable");
-            this.cbExternalProxy_Enable.Name = "cbExternalProxy_Enable";
-            this.cbExternalProxy_Enable.UseVisualStyleBackColor = true;
-            this.cbExternalProxy_Enable.CheckedChanged += new System.EventHandler(this.cbExternalProxy_Enable_CheckedChanged);
             // 
             // tpSystemSet
             // 
@@ -847,6 +845,7 @@
             this.dgvAuth.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cAuthID,
             this.cAuthTime,
+            this.cAID,
             this.cIPAddress,
             this.cLinksNumber,
             this.cUserName,
@@ -887,13 +886,26 @@
             this.cAuthTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cAuthTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cAID
+            // 
+            this.cAID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cAID.DataPropertyName = "AID";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAID.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cAID, "cAID");
+            this.cAID.Name = "cAID";
+            this.cAID.ReadOnly = true;
+            this.cAID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // cIPAddress
             // 
             this.cIPAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cIPAddress.DataPropertyName = "IPAddress";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle5;
             resources.ApplyResources(this.cIPAddress, "cIPAddress");
             this.cIPAddress.Name = "cIPAddress";
             this.cIPAddress.ReadOnly = true;
@@ -904,9 +916,9 @@
             // 
             this.cLinksNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cLinksNumber.DataPropertyName = "LinksNumber";
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLinksNumber.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLinksNumber.DefaultCellStyle = dataGridViewCellStyle6;
             resources.ApplyResources(this.cLinksNumber, "cLinksNumber");
             this.cLinksNumber.Name = "cLinksNumber";
             this.cLinksNumber.ReadOnly = true;
@@ -916,10 +928,9 @@
             // cUserName
             // 
             this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.cUserName.DataPropertyName = "UserName";
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cUserName.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cUserName.DefaultCellStyle = dataGridViewCellStyle7;
             resources.ApplyResources(this.cUserName, "cUserName");
             this.cUserName.Name = "cUserName";
             this.cUserName.ReadOnly = true;
@@ -930,10 +941,10 @@
             // 
             this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cAuthResult.DataPropertyName = "AuthResult";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle7.NullValue")));
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthResult.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle8.NullValue")));
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthResult.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(this.cAuthResult, "cAuthResult");
             this.cAuthResult.Name = "cAuthResult";
             this.cAuthResult.ReadOnly = true;
@@ -956,14 +967,14 @@
             this.dgvLogList.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvLogList.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvLogList.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvLogList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dgvLogList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLogList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cLogID,
@@ -984,9 +995,9 @@
             // cLogID
             // 
             this.cLogID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLogID.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLogID.DefaultCellStyle = dataGridViewCellStyle10;
             resources.ApplyResources(this.cLogID, "cLogID");
             this.cLogID.Name = "cLogID";
             this.cLogID.ReadOnly = true;
@@ -996,8 +1007,8 @@
             // cLogTime
             // 
             this.cLogTime.DataPropertyName = "LogTime";
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cLogTime.DefaultCellStyle = dataGridViewCellStyle11;
             resources.ApplyResources(this.cLogTime, "cLogTime");
             this.cLogTime.Name = "cLogTime";
             this.cLogTime.ReadOnly = true;
@@ -1007,8 +1018,8 @@
             // cFuncName
             // 
             this.cFuncName.DataPropertyName = "FuncName";
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cFuncName.DefaultCellStyle = dataGridViewCellStyle12;
             resources.ApplyResources(this.cFuncName, "cFuncName");
             this.cFuncName.Name = "cFuncName";
             this.cFuncName.ReadOnly = true;
@@ -1272,15 +1283,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
             this.tpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.ResumeLayout(false);
-            this.gbExternalProxy_AppointPort.ResumeLayout(false);
-            this.tlpExternalProxy_AppointPort.ResumeLayout(false);
-            this.tlpExternalProxy_AppointPort.PerformLayout();
+            this.gbExternalProxy_Auth.ResumeLayout(false);
+            this.tlpExternalProxy_Auth.ResumeLayout(false);
+            this.tlpExternalProxy_Auth.PerformLayout();
             this.gbExternalProxy_Address.ResumeLayout(false);
             this.tlpExternalProxy_Address.ResumeLayout(false);
             this.tlpExternalProxy_Address.PerformLayout();
-            this.gbExternalProxy_Enable.ResumeLayout(false);
-            this.tlpExternalProxy_Enable.ResumeLayout(false);
-            this.tlpExternalProxy_Enable.PerformLayout();
             this.tpSystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
             this.gbWorkMode.ResumeLayout(false);
@@ -1409,18 +1417,12 @@
         private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount;
         private System.Windows.Forms.ToolStripStatusLabel tlProxyAccount_CNT;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy;
-        private System.Windows.Forms.GroupBox gbExternalProxy_Enable;
-        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Enable;
         private System.Windows.Forms.GroupBox gbExternalProxy_Address;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Address;
-        private System.Windows.Forms.ComboBox cbbProxyProtocol;
-        private System.Windows.Forms.CheckBox cbExternalProxy_Enable;
         private System.Windows.Forms.TextBox txtExternalProxy_IP;
         private System.Windows.Forms.TextBox txtExternalProxy_Port;
-        private System.Windows.Forms.GroupBox gbExternalProxy_AppointPort;
-        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_AppointPort;
-        private System.Windows.Forms.CheckBox cbExternalProxy_AppointPort;
-        private System.Windows.Forms.TextBox txtExternalProxy_AppointPort;
+        private System.Windows.Forms.GroupBox gbExternalProxy_Auth;
+        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Auth;
         private System.Windows.Forms.ContextMenuStrip cmsHexBox;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_CopyHex;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Copy;
@@ -1428,9 +1430,16 @@
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
         private System.Windows.Forms.DataGridViewTextBoxColumn cAuthID;
         private System.Windows.Forms.DataGridViewTextBoxColumn cAuthTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cAID;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPAddress;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLinksNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
         private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
+        private System.Windows.Forms.CheckBox cbExternalProxy_Enable;
+        private System.Windows.Forms.TextBox txtExternalProxy_AppointPort;
+        private System.Windows.Forms.CheckBox cbExternalProxy_AppointPort;
+        private System.Windows.Forms.CheckBox cbExternalProxy_EnableAuth;
+        private System.Windows.Forms.TextBox txtExternalProxy_UserName;
+        private System.Windows.Forms.TextBox txtExternalProxy_PassWord;
     }
 }

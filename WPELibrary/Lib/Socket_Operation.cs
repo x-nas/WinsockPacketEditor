@@ -1157,15 +1157,15 @@ namespace WPELibrary.Lib
 
             try
             {
-                if (IsIPv4(IPString))
+                if (Socket_Operation.IsIPv4(IPString))
                 {
                     atType = Socket_Cache.SocketProxy.AddressType.IPV4;
                 }
-                else if (IsIPv6(IPString))
+                else if (Socket_Operation.IsIPv6(IPString))
                 {
                     atType = Socket_Cache.SocketProxy.AddressType.IPV6;
                 }
-                else if (IsDomain(IPString))
+                else if (Socket_Operation.IsDomain(IPString))
                 {
                     atType = Socket_Cache.SocketProxy.AddressType.Domain;
                 }                
@@ -1176,7 +1176,7 @@ namespace WPELibrary.Lib
             }
 
             return atType;
-        }
+        }        
 
         #endregion
 

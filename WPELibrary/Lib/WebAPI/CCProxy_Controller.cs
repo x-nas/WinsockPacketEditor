@@ -76,7 +76,19 @@ namespace WPELibrary.Lib.WebAPI
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
 
-                return Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginTime, string.Empty, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
+                return Socket_Cache.ProxyAccount.AddProxyAccount(
+                    Guid.NewGuid(), 
+                    pai.IsEnable, 
+                    pai.UserName, 
+                    pai.PassWord, 
+                    pai.LoginTime, 
+                    string.Empty, 
+                    string.Empty, 
+                    pai.IsLimitLinks,
+                    pai.LimitLinks,
+                    pai.IsExpiry, 
+                    pai.ExpiryTime, 
+                    DateTime.Now);
             }
             catch (Exception ex)
             {
@@ -113,7 +125,14 @@ namespace WPELibrary.Lib.WebAPI
                     pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
                 }
 
-                return Socket_Cache.ProxyAccount.UpdateProxyAccount_ByUserName(pai.UserName, pai.IsEnable, pai.PassWord, pai.IsExpiry, pai.ExpiryTime);
+                return Socket_Cache.ProxyAccount.UpdateProxyAccount_ByUserName(
+                    pai.UserName, 
+                    pai.IsEnable, 
+                    pai.PassWord, 
+                    pai.IsLimitLinks,
+                    pai.LimitLinks,
+                    pai.IsExpiry, 
+                    pai.ExpiryTime);
             }
             catch (Exception ex)
             {

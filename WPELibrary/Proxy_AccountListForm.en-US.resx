@@ -167,6 +167,12 @@
   <data name="cLoginIP.Width" type="System.Int32, mscorlib">
     <value>67</value>
   </data>
+  <data name="cLimitLinks.HeaderText" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="cLimitLinks.Width" type="System.Int32, mscorlib">
+    <value>49</value>
+  </data>
   <data name="cIPLocation.HeaderText" xml:space="preserve">
     <value>IP Location</value>
   </data>

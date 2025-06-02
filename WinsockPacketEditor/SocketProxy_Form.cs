@@ -49,7 +49,8 @@ namespace WinsockPacketEditor
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
             this.ExternalProxy_Enable_Changed();
-            this.ExternalProxy_AppointPort_Changed();        
+            this.ExternalProxy_AppointPort_Changed();
+            this.ExternalProxy_EnableAuth_Changed();            
         }
 
         private void SocketProxy_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -127,8 +128,7 @@ namespace WinsockPacketEditor
 
                 this.tSocketProxy.Enabled = true;
                 this.tShowProxyState.Enabled = true;
-                this.cbbAuthType.SelectedIndex = 0;
-                this.cbbProxyProtocol.SelectedIndex = 0;
+                this.cbbAuthType.SelectedIndex = 0;                
 
                 this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketProxy.Total_Response));
                 this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00", "0.00");
@@ -223,6 +223,9 @@ namespace WinsockPacketEditor
                 this.txtExternalProxy_Port.Text = Socket_Cache.SocketProxy.ExternalProxy_Port.ToString();
                 this.cbExternalProxy_AppointPort.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort;
                 this.txtExternalProxy_AppointPort.Text = Socket_Cache.SocketProxy.ExternalProxy_AppointPort;
+                this.cbExternalProxy_EnableAuth.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth;
+                this.txtExternalProxy_UserName.Text = Socket_Cache.SocketProxy.ExternalProxy_UserName;
+                this.txtExternalProxy_PassWord.Text = Socket_Cache.SocketProxy.ExternalProxy_PassWord;
 
                 this.cbSpeedMode.Checked = Socket_Cache.SocketProxy.SpeedMode;
 
@@ -259,6 +262,9 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
                 Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort = this.cbExternalProxy_AppointPort.Checked;
                 Socket_Cache.SocketProxy.ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
+                Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth = this.cbExternalProxy_EnableAuth.Checked;
+                Socket_Cache.SocketProxy.ExternalProxy_UserName = this.txtExternalProxy_UserName.Text.Trim();
+                Socket_Cache.SocketProxy.ExternalProxy_PassWord = this.txtExternalProxy_PassWord.Text.Trim();
 
                 Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
             }
@@ -321,7 +327,13 @@ namespace WinsockPacketEditor
 
         private void ExternalProxy_Enable_Changed()
         { 
-            this.cbbProxyProtocol.Enabled = this.gbExternalProxy_Address.Enabled = this.gbExternalProxy_AppointPort.Enabled = this.cbExternalProxy_Enable.Checked;
+            this.txtExternalProxy_IP.Enabled =
+                this.txtExternalProxy_Port.Enabled =
+                this.cbExternalProxy_AppointPort.Enabled =                
+                this.gbExternalProxy_Auth.Enabled = 
+                this.cbExternalProxy_Enable.Checked;
+
+            this.ExternalProxy_AppointPort_Changed();
         }
 
         private void cbExternalProxy_AppointPort_CheckedChanged(object sender, EventArgs e)
@@ -330,8 +342,22 @@ namespace WinsockPacketEditor
         }
 
         private void ExternalProxy_AppointPort_Changed()
+        {
+            this.txtExternalProxy_AppointPort.Enabled =
+                this.cbExternalProxy_Enable.Checked && 
+                this.cbExternalProxy_AppointPort.Checked;
+        }
+
+        private void cbExternalProxy_EnableAuth_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ExternalProxy_EnableAuth_Changed();
+        }
+
+        private void ExternalProxy_EnableAuth_Changed()
         { 
-            this.txtExternalProxy_AppointPort.Enabled = this.cbExternalProxy_AppointPort.Checked;
+            this.txtExternalProxy_UserName.Enabled = 
+                this.txtExternalProxy_PassWord.Enabled = 
+                this.cbExternalProxy_EnableAuth.Checked;
         }
 
         #endregion
@@ -351,7 +377,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.SocketProxy.IsListening = true;
 
                 this.InitProxyStart();
-                this.UpdateUIState(starting: true);
+                this.UpdateUIState(starting: true);                
 
                 if (SocketServer == null)
                 {
@@ -491,39 +517,19 @@ namespace WinsockPacketEditor
 
             try
             {
+                //启用SOCKS5代理
                 if (!this.cbEnable_SOCKS5.Checked)
                 {
                     return false;
-                }                
-
-                if (this.cbExternalProxy_Enable.Checked)
-                {
-                    string HttpIP = this.txtExternalProxy_IP.Text.Trim();
-                    ushort HttpPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
-                    string AppointHttpPort = this.txtExternalProxy_AppointPort.Text.Trim();
-
-                    if (string.IsNullOrEmpty(HttpIP) || HttpPort < 1)
-                    {
-                        return false;
-                    }
-
-                    if (!Socket_Operation.IsIPv4(HttpIP))
-                    {
-                        return false;
-                    }
-
-                    if (string.IsNullOrEmpty(AppointHttpPort))
-                    {
-                        return false;
-                    }                    
                 }
 
+                //启用外部代理
                 if (this.cbExternalProxy_Enable.Checked)
                 {
                     string ExternalProxyIP = this.txtExternalProxy_IP.Text.Trim();
-                    ushort ExternalProxyPort = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());                    
+                    string ExternalProxyPort = this.txtExternalProxy_Port.Text.Trim();                    
 
-                    if (string.IsNullOrEmpty(ExternalProxyIP) || ExternalProxyPort < 1)
+                    if (string.IsNullOrEmpty(ExternalProxyIP) || string.IsNullOrEmpty(ExternalProxyPort))
                     {
                         return false;
                     }
@@ -531,18 +537,43 @@ namespace WinsockPacketEditor
                     if (!Socket_Operation.IsIPv4(ExternalProxyIP))
                     {
                         return false;
-                    }                    
-                }
+                    }
 
-                if (this.cbExternalProxy_AppointPort.Checked)
-                {
-                    string ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
-
-                    if (string.IsNullOrEmpty(ExternalProxy_AppointPort))
+                    if (ushort.TryParse(ExternalProxyPort, out ushort uPort))
+                    {
+                        if (uPort < 0)
+                        {
+                            return false;
+                        }
+                    }
+                    else
                     {
                         return false;
+                    }                    
+
+                    //指定端口
+                    if (this.cbExternalProxy_AppointPort.Checked)
+                    {
+                        string ExternalProxy_AppointPort = this.txtExternalProxy_AppointPort.Text.Trim();
+
+                        if (string.IsNullOrEmpty(ExternalProxy_AppointPort))
+                        {
+                            return false;
+                        }
                     }
-                }
+
+                    //启用外部代理认证
+                    if (this.cbExternalProxy_EnableAuth.Checked)
+                    {
+                        string UserName = this.txtExternalProxy_UserName.Text.Trim();
+                        string PassWord = this.txtExternalProxy_PassWord.Text.Trim();
+
+                        if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(PassWord)) 
+                        {
+                            return false;                        
+                        }
+                    }
+                }                
             }
             catch (Exception ex)
             {
@@ -995,7 +1026,7 @@ namespace WinsockPacketEditor
                 {
                     dgvAuth.Invoke(new MethodInvoker(delegate
                     {
-                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.UserName == pai.UserName);
+                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
 
                         if (paiItem != null)
                         {
@@ -1008,7 +1039,6 @@ namespace WinsockPacketEditor
                         }
 
                         this.dgvAuth.Refresh();
-
                     }));
                 }
             }
@@ -1025,6 +1055,12 @@ namespace WinsockPacketEditor
                 if (e.ColumnIndex == dgvAuth.Columns["cAuthID"].Index)
                 {
                     e.Value = (e.RowIndex + 1).ToString();
+                    e.FormattingApplied = true;
+                }
+                else if (e.ColumnIndex == dgvAuth.Columns["cUserName"].Index)
+                {
+                    Guid AID = Guid.Parse(dgvAuth.Rows[e.RowIndex].Cells["cAID"].Value.ToString());
+                    e.Value = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(AID);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)

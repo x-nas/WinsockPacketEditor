@@ -41,9 +41,12 @@
             this.txtUserName = new System.Windows.Forms.TextBox();
             this.cbIsExpiry = new System.Windows.Forms.CheckBox();
             this.dtpExpiryTime = new System.Windows.Forms.DateTimePicker();
+            this.cbIsLimitLinks = new System.Windows.Forms.CheckBox();
+            this.nudLimitLinks = new System.Windows.Forms.NumericUpDown();
             this.tlpProxyAccount.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpAccountInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitLinks)).BeginInit();
             this.SuspendLayout();
             // 
             // tlpProxyAccount
@@ -88,8 +91,10 @@
             this.tlpAccountInfo.Controls.Add(this.lPassWord, 1, 1);
             this.tlpAccountInfo.Controls.Add(this.lUserName, 1, 0);
             this.tlpAccountInfo.Controls.Add(this.txtUserName, 2, 0);
-            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 2);
-            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 2);
+            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 3);
+            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 3);
+            this.tlpAccountInfo.Controls.Add(this.cbIsLimitLinks, 1, 2);
+            this.tlpAccountInfo.Controls.Add(this.nudLimitLinks, 2, 2);
             this.tlpAccountInfo.Name = "tlpAccountInfo";
             // 
             // txtPassWord
@@ -129,6 +134,33 @@
             this.dtpExpiryTime.Name = "dtpExpiryTime";
             this.dtpExpiryTime.ShowUpDown = true;
             // 
+            // cbIsLimitLinks
+            // 
+            resources.ApplyResources(this.cbIsLimitLinks, "cbIsLimitLinks");
+            this.cbIsLimitLinks.Name = "cbIsLimitLinks";
+            this.cbIsLimitLinks.UseVisualStyleBackColor = true;
+            this.cbIsLimitLinks.CheckedChanged += new System.EventHandler(this.cbIsLimitLinks_CheckedChanged);
+            // 
+            // nudLimitLinks
+            // 
+            resources.ApplyResources(this.nudLimitLinks, "nudLimitLinks");
+            this.nudLimitLinks.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudLimitLinks.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLimitLinks.Name = "nudLimitLinks";
+            this.nudLimitLinks.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // Proxy_AccountForm
             // 
             resources.ApplyResources(this, "$this");
@@ -142,6 +174,7 @@
             this.tlpButton.ResumeLayout(false);
             this.tlpAccountInfo.ResumeLayout(false);
             this.tlpAccountInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitLinks)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -160,5 +193,7 @@
         private System.Windows.Forms.CheckBox cbIsExpiry;
         private System.Windows.Forms.DateTimePicker dtpExpiryTime;
         private System.Windows.Forms.CheckBox cbIsEnable;
+        private System.Windows.Forms.CheckBox cbIsLimitLinks;
+        private System.Windows.Forms.NumericUpDown nudLimitLinks;
     }
 }

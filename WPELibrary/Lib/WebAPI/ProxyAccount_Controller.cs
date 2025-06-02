@@ -67,7 +67,19 @@ namespace WPELibrary.Lib.WebAPI
                 }
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
-                bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(Guid.NewGuid(), pai.IsEnable, pai.UserName, pai.PassWord, pai.LoginTime, string.Empty, string.Empty, pai.IsExpiry, pai.ExpiryTime, DateTime.Now);
+                bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(
+                    Guid.NewGuid(), 
+                    pai.IsEnable, 
+                    pai.UserName, 
+                    pai.PassWord, 
+                    pai.LoginTime, 
+                    string.Empty, 
+                    string.Empty, 
+                    pai.IsLimitLinks,
+                    pai.LimitLinks,
+                    pai.IsExpiry, 
+                    pai.ExpiryTime, 
+                    DateTime.Now);
 
                 if (bOK)
                 {
@@ -122,7 +134,14 @@ namespace WPELibrary.Lib.WebAPI
             }
 
             pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
-            bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, pai.IsEnable, pai.PassWord, pai.IsExpiry, pai.ExpiryTime);
+            bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(
+                pai.AID, 
+                pai.IsEnable, 
+                pai.PassWord, 
+                pai.IsLimitLinks,
+                pai.LimitLinks,
+                pai.IsExpiry, pai.
+                ExpiryTime);
 
             if (bOK)
             {

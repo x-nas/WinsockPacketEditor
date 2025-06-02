@@ -1017,6 +1017,42 @@ namespace WPELibrary
             }
         }
 
+        private void dgvFilterList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvFilterList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+                {
+                    int FIndex = e.RowIndex;
+                    bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+                    dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
+                    Socket_Cache.FilterList.lstFilter[FIndex].IsEnable = bCheck;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvFilterList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                int iSelectIndex = this.dgvFilterList.SelectedRows[0].Index;
+
+                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.FilterList.lstFilter.Count)
+                {
+                    Socket_Operation.ShowFilterForm_Dialog(Socket_Cache.FilterList.lstFilter[iSelectIndex]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//显示发送列表（异步）
@@ -1039,6 +1075,46 @@ namespace WPELibrary
             }
         }
 
+        private void dgvSendList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvSendList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+                {
+                    int SIndex = e.RowIndex;
+                    bool bCheck = !bool.Parse(dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+                    dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
+
+                    Socket_Cache.Send.SetIsCheck_BySendIndex(SIndex, bCheck);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvSendList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvSendList.Rows.Count > 0)
+                {
+                    int SIndex = e.RowIndex;
+
+                    if (SIndex > -1 && SIndex < Socket_Cache.SendList.lstSend.Count)
+                    {
+                        Socket_Operation.ShowSendListForm_Dialog(Socket_Cache.SendList.lstSend[SIndex]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
         #endregion
 
         #region//显示机器人列表（异步）
@@ -1053,6 +1129,42 @@ namespace WPELibrary
                     {
                         Socket_Cache.RobotList.lstRobot.Add(sri);
                     }));
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvRobotList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                if (dgvRobotList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
+                {
+                    int RIndex = e.RowIndex;
+                    bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
+
+                    dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
+                    Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void dgvRobotList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            try
+            {
+                int iSelectIndex = this.dgvRobotList.SelectedRows[0].Index;
+
+                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.RobotList.lstRobot.Count)
+                {
+                    Socket_Operation.ShowRobotForm_Dialog(Socket_Cache.RobotList.lstRobot[iSelectIndex]);
                 }
             }
             catch (Exception ex)
@@ -1780,47 +1892,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//滤镜列表操作
-
-        private void dgvFilterList_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgvFilterList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
-                {
-                    int FIndex = e.RowIndex;
-                    bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
-
-                    dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Socket_Cache.FilterList.lstFilter[FIndex].IsEnable = bCheck;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvFilterList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                int iSelectIndex = this.dgvFilterList.SelectedRows[0].Index;
-
-                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.FilterList.lstFilter.Count)
-                {
-                    Socket_Operation.ShowFilterForm_Dialog(Socket_Cache.FilterList.lstFilter[iSelectIndex]);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//滤镜列表按钮
 
@@ -1909,51 +1981,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//发送列表操作
-
-        private void dgvSendList_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgvSendList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
-                {
-                    int SIndex = e.RowIndex;
-                    bool bCheck = !bool.Parse(dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
-
-                    dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-
-                    Socket_Cache.Send.SetIsCheck_BySendIndex(SIndex, bCheck);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvSendList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgvSendList.Rows.Count > 0)
-                {
-                    int SIndex = e.RowIndex;
-
-                    if (SIndex > -1 && SIndex < Socket_Cache.SendList.lstSend.Count)
-                    {
-                        Socket_Operation.ShowSendListForm_Dialog(Socket_Cache.SendList.lstSend[SIndex]);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//发送列表按钮
 
@@ -2019,7 +2047,7 @@ namespace WPELibrary
 
         #region//执行发送列表（异步）
 
-        private void bgwSendList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void bgwSendList_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
@@ -2066,47 +2094,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion
-
-        #region//机器人列表操作
-
-        private void dgvRobotList_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                if (dgvRobotList.Columns[e.ColumnIndex] is DataGridViewCheckBoxColumn && e.RowIndex >= 0)
-                {
-                    int RIndex = e.RowIndex;
-                    bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
-
-                    dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void dgvRobotList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                int iSelectIndex = this.dgvRobotList.SelectedRows[0].Index;
-
-                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.RobotList.lstRobot.Count)
-                {
-                    Socket_Operation.ShowRobotForm_Dialog(Socket_Cache.RobotList.lstRobot[iSelectIndex]);
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//机器人列表按钮
 
@@ -2172,7 +2160,7 @@ namespace WPELibrary
 
         #region//执行机器人列表（异步）
 
-        private void bgwRobotList_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        private void bgwRobotList_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {

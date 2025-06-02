@@ -39,7 +39,6 @@ namespace WPELibrary
         { 
             this.cbbPageSize.SelectedIndex = 0;
             this.PageSize_Changed();
-
             this.InitExpireTime();
         }
 
@@ -176,12 +175,20 @@ namespace WPELibrary
                 int end = Math.Min(start + pageSize, totalRecords);
 
                 pageData = allData.Skip(start).Take(pageSize).ToList();
-
                 dgvAccountList.DataSource = this.pageData;
 
                 for (int i = 0; i < dgvAccountList.Rows.Count; i++)
                 {
                     dgvAccountList.Rows[i].Cells["cID"].Value = start + i + 1;
+
+                    if (this.pageData[i].IsLimitLinks)
+                    {
+                        dgvAccountList.Rows[i].Cells["cLimitLinks"].Value = this.pageData[i].LimitLinks;
+                    }
+                    else
+                    {
+                        dgvAccountList.Rows[i].Cells["cLimitLinks"].Value = "无限制";
+                    }                    
                 }
 
                 if (totalPages == 0)
@@ -321,6 +328,7 @@ namespace WPELibrary
                     if (AID != null && AID != Guid.Empty)
                     {
                         Socket_Operation.ShowProxyAccountForm(AID);
+                        this.LoadData(string.Empty);
                     }
                 }
             }

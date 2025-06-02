@@ -4,6 +4,12 @@ namespace WPELibrary.Lib
 {
     public class Proxy_AuthInfo
     {
+        #region//代理账号序号
+
+        public Guid AID { get; set; }
+
+        #endregion
+
         #region//IP地址
 
         public string IPAddress { get; set; }
@@ -14,13 +20,7 @@ namespace WPELibrary.Lib
 
         public int LinksNumber { get; set; }
 
-        #endregion
-
-        #region//用户名
-
-        public string UserName { get; set; }
-
-        #endregion
+        #endregion        
 
         #region//是否验证成功
 
@@ -36,11 +36,11 @@ namespace WPELibrary.Lib
 
         #region//Proxy_AuthInfo
 
-        public Proxy_AuthInfo(string ipAddress, string userName, bool authResult, DateTime authTime)
+        public Proxy_AuthInfo(Guid AID, string ipAddress, bool authResult, DateTime authTime)
         {
+            this.AID = AID;
             this.IPAddress = ipAddress;
-            this.LinksNumber = 0;
-            this.UserName = userName;
+            this.LinksNumber = 0;            
             this.AuthResult = authResult;
             this.AuthTime = authTime;
         }
