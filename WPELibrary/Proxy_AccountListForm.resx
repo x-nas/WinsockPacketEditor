@@ -223,7 +223,7 @@
     <value>3, 0, 3, 0</value>
   </data>
   <data name="ssProxyAccount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>928, 22</value>
+    <value>878, 22</value>
   </data>
   <data name="ssProxyAccount.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -367,7 +367,7 @@
     <value>3, 3</value>
   </data>
   <data name="dgvAccountList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>828, 303</value>
+    <value>778, 303</value>
   </data>
   <data name="dgvAccountList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -571,7 +571,7 @@
     <value>Fill</value>
   </data>
   <data name="tlpAccountButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>834, 0</value>
+    <value>784, 0</value>
   </data>
   <data name="tlpAccountButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -610,7 +610,7 @@
     <value>NoControl</value>
   </data>
   <data name="bFirst.Location" type="System.Drawing.Point, System.Drawing">
-    <value>204, 10</value>
+    <value>179, 10</value>
   </data>
   <data name="bFirst.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -643,7 +643,7 @@
     <value>NoControl</value>
   </data>
   <data name="bPrevious.Location" type="System.Drawing.Point, System.Drawing">
-    <value>324, 10</value>
+    <value>299, 10</value>
   </data>
   <data name="bPrevious.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -676,7 +676,7 @@
     <value>NoControl</value>
   </data>
   <data name="bNext.Location" type="System.Drawing.Point, System.Drawing">
-    <value>444, 10</value>
+    <value>419, 10</value>
   </data>
   <data name="bNext.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -709,7 +709,7 @@
     <value>NoControl</value>
   </data>
   <data name="bLast.Location" type="System.Drawing.Point, System.Drawing">
-    <value>564, 10</value>
+    <value>539, 10</value>
   </data>
   <data name="bLast.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -748,7 +748,7 @@
     <value>NoControl</value>
   </data>
   <data name="lblTotalPages.Location" type="System.Drawing.Point, System.Drawing">
-    <value>758, 3</value>
+    <value>708, 3</value>
   </data>
   <data name="lblTotalPages.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -829,7 +829,7 @@
     <value>2</value>
   </data>
   <data name="tlpAccountListButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>834, 50</value>
+    <value>784, 50</value>
   </data>
   <data name="tlpAccountListButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -862,7 +862,7 @@
     <value>2</value>
   </data>
   <data name="tlpAccountList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 359</value>
+    <value>884, 359</value>
   </data>
   <data name="tlpAccountList.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -895,7 +895,7 @@
     <value>NoControl</value>
   </data>
   <data name="bSearch_Expire.Location" type="System.Drawing.Point, System.Drawing">
-    <value>308, 5</value>
+    <value>328, 5</value>
   </data>
   <data name="bSearch_Expire.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -934,7 +934,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="dtpExpireFrom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 23</value>
+    <value>153, 23</value>
   </data>
   <data name="dtpExpireFrom.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -958,13 +958,13 @@
     <value>Fill</value>
   </data>
   <data name="dtpExpireTo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>160, 5</value>
+    <value>170, 5</value>
   </data>
   <data name="dtpExpireTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="dtpExpireTo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>143, 23</value>
+    <value>153, 23</value>
   </data>
   <data name="dtpExpireTo.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
@@ -991,7 +991,7 @@
     <value>NoControl</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>143, 8</value>
+    <value>153, 8</value>
   </data>
   <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 0, 3</value>
@@ -1033,7 +1033,7 @@
     <value>3</value>
   </data>
   <data name="tlpSearch_Expire.Size" type="System.Drawing.Size, System.Drawing">
-    <value>368, 35</value>
+    <value>388, 35</value>
   </data>
   <data name="tlpSearch_Expire.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1057,13 +1057,13 @@
     <value>Fill</value>
   </data>
   <data name="gSearch_Expire.Location" type="System.Drawing.Point, System.Drawing">
-    <value>403, 3</value>
+    <value>483, 3</value>
   </data>
   <data name="gSearch_Expire.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gSearch_Expire.Size" type="System.Drawing.Size, System.Drawing">
-    <value>374, 57</value>
+    <value>394, 57</value>
   </data>
   <data name="gSearch_Expire.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1096,7 +1096,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="txtSearch_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 23</value>
+    <value>173, 23</value>
   </data>
   <data name="txtSearch_UserName.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1120,7 +1120,7 @@
     <value>NoControl</value>
   </data>
   <data name="bSearch_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>128, 6</value>
+    <value>178, 6</value>
   </data>
   <data name="bSearch_UserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1159,7 +1159,7 @@
     <value>3</value>
   </data>
   <data name="tlpSearch_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 35</value>
+    <value>238, 35</value>
   </data>
   <data name="tlpSearch_UserName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1189,7 +1189,7 @@
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbSearch_UserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 57</value>
+    <value>244, 57</value>
   </data>
   <data name="gbSearch_UserName.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1240,7 +1240,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="cbbSearch_State.Size" type="System.Drawing.Size, System.Drawing">
-    <value>123, 25</value>
+    <value>153, 25</value>
   </data>
   <data name="cbbSearch_State.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -1264,7 +1264,7 @@
     <value>NoControl</value>
   </data>
   <data name="bSearch_State.Location" type="System.Drawing.Point, System.Drawing">
-    <value>128, 5</value>
+    <value>158, 5</value>
   </data>
   <data name="bSearch_State.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -1303,7 +1303,7 @@
     <value>3</value>
   </data>
   <data name="tlpSearch_State.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 35</value>
+    <value>218, 35</value>
   </data>
   <data name="tlpSearch_State.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1327,13 +1327,13 @@
     <value>Fill</value>
   </data>
   <data name="gbSearch_State.Location" type="System.Drawing.Point, System.Drawing">
-    <value>203, 3</value>
+    <value>253, 3</value>
   </data>
   <data name="gbSearch_State.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
   <data name="gbSearch_State.Size" type="System.Drawing.Size, System.Drawing">
-    <value>194, 57</value>
+    <value>224, 57</value>
   </data>
   <data name="gbSearch_State.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1366,7 +1366,7 @@
     <value>1</value>
   </data>
   <data name="tlpSearchAccount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 60</value>
+    <value>884, 60</value>
   </data>
   <data name="tlpSearchAccount.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1384,7 +1384,7 @@
     <value>2</value>
   </data>
   <data name="tlpSearchAccount.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gSearch_Expire" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSearch_UserName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSearch_State" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,200,Absolute,200,Absolute,380,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gSearch_Expire" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="gbSearch_UserName" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSearch_State" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,250,Absolute,230,Absolute,400,Percent,100" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpProxyAccountList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1399,7 +1399,7 @@
     <value>4</value>
   </data>
   <data name="tlpProxyAccountList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>934, 441</value>
+    <value>884, 441</value>
   </data>
   <data name="tlpProxyAccountList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1432,7 +1432,7 @@
     <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>934, 441</value>
+    <value>884, 441</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
