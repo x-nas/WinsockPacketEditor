@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WPELibrary.Lib;
 
@@ -167,64 +166,37 @@ namespace WPELibrary
             }            
         }
 
-        private async void ShowAccountList()
+        private void ShowAccountList()
         {
-            await Task.Run(() =>
+            try
             {
-                try
+                int totalRecords = this.allData.Count;
+                int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+                int start = (currentPage - 1) * pageSize;
+                int end = Math.Min(start + pageSize, totalRecords);
+
+                pageData = allData.Skip(start).Take(pageSize).ToList();
+
+                dgvAccountList.DataSource = this.pageData;
+
+                for (int i = 0; i < dgvAccountList.Rows.Count; i++)
                 {
-                    int totalRecords = this.allData.Count;
-                    int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-                    int start = (currentPage - 1) * pageSize;
-                    int end = Math.Min(start + pageSize, totalRecords);                
-
-                    pageData = allData.Skip(start).Take(pageSize).ToList();
-
-                    if (dgvAccountList.InvokeRequired)
-                    {
-                        dgvAccountList.Invoke(new Action(() =>
-                        {
-                            dgvAccountList.DataSource = this.pageData;
-
-                            for (int i = 0; i < dgvAccountList.Rows.Count; i++)
-                            {
-                                dgvAccountList.Rows[i].Cells["cID"].Value = start + i + 1;
-                            }
-
-                            if (totalPages == 0)
-                            {
-                                lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), 0, 0);
-                            }
-                            else
-                            {
-                                lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), currentPage, totalPages);
-                            }
-                        }));
-                    }
-                    else
-                    {
-                        dgvAccountList.DataSource = this.pageData;
-
-                        for (int i = 0; i < dgvAccountList.Rows.Count; i++)
-                        {
-                            dgvAccountList.Rows[i].Cells["cID"].Value = start + i + 1;
-                        }
-
-                        if (totalPages == 0)
-                        {
-                            lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), 0, 0);
-                        }
-                        else
-                        {
-                            lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), currentPage, totalPages);
-                        }
-                    }                                           
+                    dgvAccountList.Rows[i].Cells["cID"].Value = start + i + 1;
                 }
-                catch (Exception ex)
+
+                if (totalPages == 0)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), 0, 0);
                 }
-            });            
+                else
+                {
+                    lblTotalPages.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_32), currentPage, totalPages);
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         private void ShowProxyAccountInfo()
