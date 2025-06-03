@@ -29,7 +29,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPELibrary.Lib.NativeMethods;
 using WPELibrary.Lib.WebAPI;
-using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
@@ -1944,12 +1943,9 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        public static IPEndPoint GetIPEndPoint_ByAddressType(
-            Socket_Cache.SocketProxy.AddressType addressType,
-            ReadOnlySpan<byte> bData,
-            out IPAddress ipAddress)
+        public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
         {
-            ipAddress = null;
+            AddressString = string.Empty;
 
             try
             {
@@ -1962,27 +1958,27 @@ namespace WPELibrary.Lib
                     case Socket_Cache.SocketProxy.AddressType.IPv4:
                         ip = new IPAddress(bData.Slice(0, 4).ToArray());
                         portPosition = 4;
+                        AddressString = ip.ToString();
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.IPv6:
                         ip = new IPAddress(bData.Slice(0, 16).ToArray());
                         portPosition = 16;
+                        AddressString = ip.ToString();
                         break;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
                         byte length = bData[0];
                         var domainBytes = bData.Slice(1, length);
-                        string domainString = Socket_Operation.BytesToString(
+                        AddressString = Socket_Operation.BytesToString(
                             Socket_Cache.SocketPacket.EncodingFormat.UTF8,
                             domainBytes.ToArray());
-                        ip = ResolveAddress(domainString);
+                        ip = Socket_Operation.ResolveAddress(AddressString);
                         portPosition = 1 + length;
                         break;
                 }
 
                 port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
-                ipAddress = ip;
-
                 return new IPEndPoint(ip, port);
             }
             catch (Exception ex)
@@ -1994,6 +1990,11 @@ namespace WPELibrary.Lib
 
         private static IPAddress ResolveAddress(string addressString)
         {
+            return ResolveAddressAsync(addressString).ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
+        private static async Task<IPAddress> ResolveAddressAsync(string addressString)
+        {
             var addressType = Socket_Operation.GetAddressType_ByString(addressString);
 
             switch (addressType)
@@ -2003,9 +2004,30 @@ namespace WPELibrary.Lib
                     return IPAddress.Parse(addressString);
 
                 case Socket_Cache.SocketProxy.AddressType.Domain:
-                    var addresses = Dns.GetHostEntry(addressString).AddressList;
-                    var ipv4Address = addresses.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
-                    return ipv4Address ?? addresses.First();
+
+                    if (Socket_Cache.SocketProxy.DnsCache.TryGetValue(addressString, out var cachedIp))
+                    {
+                        return cachedIp;
+                    }
+
+                    try
+                    {
+                        var entry = await Dns.GetHostEntryAsync(addressString).ConfigureAwait(false);
+                        var ipv4 = entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+                        var result = ipv4 ?? entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                     ?? entry.AddressList.First();
+
+                        Socket_Cache.SocketProxy.DnsCache.AddOrUpdate(
+                            key: addressString,
+                            addValue: result,
+                            updateValueFactory: (key, oldValue) => result);
+
+                        return result;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
 
                 default:
                     return null;
@@ -2407,9 +2429,9 @@ namespace WPELibrary.Lib
 
         #region//获取服务端地址
 
-        public static string GetServerAddress(Socket_Cache.SocketProxy.DomainType dtType, IPAddress ipAddress, ushort port)
+        public static string GetServerAddress(Socket_Cache.SocketProxy.DomainType dtType, string AddressString, ushort port)
         {
-            if (ipAddress == null)
+            if (string.IsNullOrEmpty(AddressString))
             {
                 return string.Empty;
             }  
@@ -2434,11 +2456,7 @@ namespace WPELibrary.Lib
                         break;
                 }
 
-                string address = ipAddress.AddressFamily == AddressFamily.InterNetworkV6
-                    ? string.Format("[{0}]", ipAddress)
-                    : ipAddress.ToString();
-
-                return string.Format("{0}{1}: {2}", protocol, address, port);
+                return string.Format("{0}{1}: {2}", protocol, AddressString, port);
             }
             catch (Exception ex)
             {
@@ -2451,31 +2469,26 @@ namespace WPELibrary.Lib
 
         #region//获取客户端地址
 
-        public static string GetClientAddress(Socket clientSocket, IPAddress ipAddress, ushort port)
+        public static string GetClientAddress(Socket clientSocket, string AddressString, ushort port)
         {
-            if (ipAddress == null)
+            if (string.IsNullOrEmpty(AddressString))
+            {
                 return string.Empty;
+            }                
 
             try
             {
                 if (clientSocket?.RemoteEndPoint is IPEndPoint remoteEndPoint)
                 {
-                    string formattedIp = ipAddress.AddressFamily == AddressFamily.InterNetworkV6
-                        ? $"[{ipAddress}]"
-                        : ipAddress.ToString();
-
-                    return $"{formattedIp}: {port} [{remoteEndPoint.Port}]";
+                    return $"{AddressString}: {port} [{remoteEndPoint.Port}]";
                 }
-
-                return ipAddress.AddressFamily == AddressFamily.InterNetworkV6
-                    ? $"[{ipAddress}]: {port}"
-                    : $"{ipAddress}: {port}";
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return string.Empty;
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
+
+            return string.Empty;
         }
 
         #endregion
