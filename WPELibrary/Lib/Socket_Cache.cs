@@ -650,14 +650,14 @@ namespace WPELibrary.Lib
                             ReadOnlySpan<byte> bServerTCP_IP = Socket_Cache.SocketProxy.ProxyTCP_IP.GetAddressBytes();
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
                                                         
-                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spt.AddressType, bADDRESS, out string AddressString);
+                            IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spt.AddressType, bADDRESS, out IPAddress ipAddress);
                             spt.Server.Socket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                             spt.Server.EndPoint = epServer;
                             ushort uPort = ((ushort)epServer.Port);
 
                             spt.DomainType = Socket_Operation.GetDomainType_ByPort(uPort);
-                            spt.Server.Address = Socket_Operation.GetServerAddress(spt.DomainType, AddressString, uPort);
-                            spt.Client.Address = Socket_Operation.GetClientAddress(spt.Client.Socket, AddressString, uPort);                            
+                            spt.Server.Address = Socket_Operation.GetServerAddress(spt.DomainType, ipAddress, uPort);
+                            spt.Client.Address = Socket_Operation.GetClientAddress(spt.Client.Socket, ipAddress, uPort);                            
 
                             switch (spt.CommandType)
                             {
@@ -957,7 +957,7 @@ namespace WPELibrary.Lib
                                 spu.ClientUDP_EndPoint = remoteEndPoint;
 
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
-                                IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
+                                IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out IPAddress ipAddress);
 
                                 ReadOnlySpan<byte> bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
                                 if (!bUDP_Data.IsEmpty)
