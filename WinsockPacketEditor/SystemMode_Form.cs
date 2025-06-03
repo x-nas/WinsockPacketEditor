@@ -25,7 +25,7 @@ namespace WinsockPacketEditor
         {
             try
             {
-                IPAddress[] ipAddresses = await Socket_Operation.GetLocalIPAddress();
+                IPAddress[] ipAddresses = Socket_Operation.GetLocalIPAddress();
 
                 if (ipAddresses.Length > 0)
                 {

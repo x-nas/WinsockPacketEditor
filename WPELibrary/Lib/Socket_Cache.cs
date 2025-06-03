@@ -350,9 +350,10 @@ namespace WPELibrary.Lib
 
             public enum AddressType : byte
             {
-                IPV4 = 1,
+                Invalid = 0,
+                IPv4 = 1,
                 Domain = 3,
-                IPV6 = 4,
+                IPv6 = 4,
             }
 
             public enum DomainType : byte
@@ -949,8 +950,8 @@ namespace WPELibrary.Lib
                         {
                             Socket_Cache.SocketProxy.AddressType addressType = (Socket_Cache.SocketProxy.AddressType)bData[3];
 
-                            if (addressType == Socket_Cache.SocketProxy.AddressType.IPV4 ||
-                                addressType == Socket_Cache.SocketProxy.AddressType.IPV6 ||
+                            if (addressType == Socket_Cache.SocketProxy.AddressType.IPv4 ||
+                                addressType == Socket_Cache.SocketProxy.AddressType.IPv6 ||
                                 addressType == Socket_Cache.SocketProxy.AddressType.Domain)
                             {
                                 spu.ClientUDP_EndPoint = remoteEndPoint;
@@ -978,7 +979,7 @@ namespace WPELibrary.Lib
                             bResponseData[0] = 0x00;
                             bResponseData[1] = 0x00;
                             bResponseData[2] = 0x00;
-                            bResponseData[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPV4;
+                            bResponseData[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPv4;
                             bIP.CopyTo(bResponseData.Slice(4, bIP.Length));
                             bPort.CopyTo(bResponseData.Slice(8, bPort.Length));
                             bData.CopyTo(bResponseData.Slice(10, bData.Length));

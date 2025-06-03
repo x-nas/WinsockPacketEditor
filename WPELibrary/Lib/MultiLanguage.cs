@@ -208,6 +208,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_196 = { "计数", "Count" };
         public static string[] MutiLan_197 = { "执行滤镜", "Filter Execution" };
         public static string[] MutiLan_198 = { "不支持的多缓存区模式！", "Unsupported multi cache mode!" };
+        public static string[] MutiLan_199 = { "未知IP地址", "Invalid query" };
+        public static string[] MutiLan_200 = { "本地局域网", "Private range" };
+        public static string[] MutiLan_201 = { "保留IP地址", "Reserved range" };
 
         #endregion
 

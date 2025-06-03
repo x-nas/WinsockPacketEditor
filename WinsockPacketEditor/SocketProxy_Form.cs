@@ -139,11 +139,11 @@ namespace WinsockPacketEditor
             }
         }
 
-        private async void InitProxyIPAppoint()
+        private void InitProxyIPAppoint()
         {
             try
             {
-                IPAddress[] ipAddresses = await Socket_Operation.GetLocalIPAddress();
+                IPAddress[] ipAddresses = Socket_Operation.GetLocalIPAddress();
 
                 this.cbbProxyIP_Appoint.Items.Clear();
 
@@ -534,7 +534,7 @@ namespace WinsockPacketEditor
                         return false;
                     }
 
-                    if (!Socket_Operation.IsIPv4(ExternalProxyIP))
+                    if (Socket_Operation.GetAddressType_ByString(ExternalProxyIP) != Socket_Cache.SocketProxy.AddressType.IPv4)
                     {
                         return false;
                     }

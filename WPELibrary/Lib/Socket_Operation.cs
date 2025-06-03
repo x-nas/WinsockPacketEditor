@@ -15,6 +15,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -27,6 +28,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPELibrary.Lib.NativeMethods;
 using WPELibrary.Lib.WebAPI;
+using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
@@ -1128,54 +1130,36 @@ namespace WPELibrary.Lib
 
         #region//判断地址的类型
 
-        public static bool IsIPv4(string IPString)
+        private static bool IsValidIPv4(string IPString)
         {
-            return IPAddress.TryParse(IPString, out IPAddress ip);
+            string pattern = @"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
+            return Regex.IsMatch(IPString, pattern);           
         }
 
-        public static bool IsIPv6(string IPString)
+        private static bool IsValidIPv6(string IPString)
         {
-            return IPAddress.TryParse(IPString, out IPAddress ip) && ip.AddressFamily == AddressFamily.InterNetworkV6;
+            string pattern = @"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$";
+            return Regex.IsMatch(IPString, pattern);
         }
 
-        public static bool IsDomain(string IPString)
+        private static bool IsValidDomain(string IPString)
         {
-            try
-            {
-                IPHostEntry hostEntry = Dns.GetHostEntry(IPString);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            string pattern = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]{2,}|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$";
+            return Regex.IsMatch(IPString, pattern);
         }
 
         public static Socket_Cache.SocketProxy.AddressType GetAddressType_ByString(string IPString)
         {
-            Socket_Cache.SocketProxy.AddressType atType = new Socket_Cache.SocketProxy.AddressType();
+            if (IsValidIPv4(IPString))
+                return Socket_Cache.SocketProxy.AddressType.IPv4;
 
-            try
-            {
-                if (Socket_Operation.IsIPv4(IPString))
-                {
-                    atType = Socket_Cache.SocketProxy.AddressType.IPV4;
-                }
-                else if (Socket_Operation.IsIPv6(IPString))
-                {
-                    atType = Socket_Cache.SocketProxy.AddressType.IPV6;
-                }
-                else if (Socket_Operation.IsDomain(IPString))
-                {
-                    atType = Socket_Cache.SocketProxy.AddressType.Domain;
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            if (IsValidIPv6(IPString))
+                return Socket_Cache.SocketProxy.AddressType.IPv6;
 
-            return atType;
+            if (IsValidDomain(IPString))
+                return Socket_Cache.SocketProxy.AddressType.Domain;
+
+            return Socket_Cache.SocketProxy.AddressType.Invalid;
         }        
 
         #endregion
@@ -1399,11 +1383,11 @@ namespace WPELibrary.Lib
                                 int DST_ADDR = 0;
                                 switch (AddressType)
                                 {
-                                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+                                    case Socket_Cache.SocketProxy.AddressType.IPv4:
                                         DST_ADDR = 4;
                                         break;
 
-                                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                                    case Socket_Cache.SocketProxy.AddressType.IPv6:
                                         DST_ADDR = 16;
                                         break;
 
@@ -1888,24 +1872,15 @@ namespace WPELibrary.Lib
 
         #region//获取IP地址信息
 
-        public static async Task<IPAddress[]> GetLocalIPAddress()
+        public static IPAddress[] GetLocalIPAddress()
         {
-            IPAddress[] ipAddres = null;
-
-            try
-            {
-                await Task.Run(() =>
-                {
-                    ipAddres = Dns.GetHostAddresses(Dns.GetHostName()).Where(address => address.AddressFamily == AddressFamily.InterNetwork).ToArray();
-                });                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-
-            return ipAddres;
-        }        
+            return NetworkInterface.GetAllNetworkInterfaces()
+                .Where(nic => nic.OperationalStatus == OperationalStatus.Up)
+                .SelectMany(nic => nic.GetIPProperties().UnicastAddresses)
+                .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
+                .Select(addr => addr.Address)
+                .ToArray();
+        }
 
         public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
         {
@@ -1919,7 +1894,7 @@ namespace WPELibrary.Lib
 
                 switch (addressType)
                 {
-                    case Socket_Cache.SocketProxy.AddressType.IPV4:
+                    case Socket_Cache.SocketProxy.AddressType.IPv4:
 
                         ip = new IPAddress(bData.Slice(0, 4).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(4, 2));
@@ -1938,11 +1913,11 @@ namespace WPELibrary.Lib
 
                         switch (atType)
                         {
-                            case Socket_Cache.SocketProxy.AddressType.IPV4:
+                            case Socket_Cache.SocketProxy.AddressType.IPv4:
                                 ip = IPAddress.Parse(AddressString);
                                 break;
 
-                            case Socket_Cache.SocketProxy.AddressType.IPV6:
+                            case Socket_Cache.SocketProxy.AddressType.IPv6:
                                 ip = IPAddress.Parse(AddressString);
                                 break;
 
@@ -1955,7 +1930,7 @@ namespace WPELibrary.Lib
 
                         break;
 
-                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                    case Socket_Cache.SocketProxy.AddressType.IPv6:
 
                         ip = new IPAddress(bData.Slice(0, 16).ToArray());
                         port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(16, 2));
@@ -2012,13 +1987,13 @@ namespace WPELibrary.Lib
                             switch(message)
                             {
                                 case "invalid query":
-                                    sReturn = "未知IP地址";
+                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_199);
                                     break;
                                 case "private range":
-                                    sReturn = "本地局域网";
+                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_200);
                                     break;
                                 case "reserved range":
-                                    sReturn = "保留IP地址";
+                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_201);
                                     break;
                                 default:
                                     sReturn = message;
@@ -2046,14 +2021,14 @@ namespace WPELibrary.Lib
             {
                 switch (addressType)
                 {
-                    case Socket_Cache.SocketProxy.AddressType.IPV4: 
+                    case Socket_Cache.SocketProxy.AddressType.IPv4: 
                         return bData.Slice(10);
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
                         byte LENGTH = bData[4];
                         return bData.Slice(LENGTH + 7);
 
-                    case Socket_Cache.SocketProxy.AddressType.IPV6:
+                    case Socket_Cache.SocketProxy.AddressType.IPv6:
                         return bData.Slice(22);
 
                     default:
@@ -2079,7 +2054,7 @@ namespace WPELibrary.Lib
                 response[0] = (byte)Socket_Cache.SocketProxy.ProxyType.Socket5;
                 response[1] = (byte)CommandResponse;
                 response[2] = 0x00;
-                response[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPV4;
+                response[3] = (byte)Socket_Cache.SocketProxy.AddressType.IPv4;
                 bServerIP.CopyTo(response.Slice(4, 4));
                 response[8] = bServerPort[1];
                 response[9] = bServerPort[0];
