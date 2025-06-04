@@ -329,8 +329,8 @@ namespace WinsockPacketEditor
         { 
             this.txtExternalProxy_IP.Enabled =
                 this.txtExternalProxy_Port.Enabled =
-                this.cbExternalProxy_AppointPort.Enabled =                
-                this.gbExternalProxy_Auth.Enabled = 
+                this.bExternalProxy_Detection.Enabled =
+                this.tlpExternalProxy_Appoint.Enabled =
                 this.cbExternalProxy_Enable.Checked;
 
             this.ExternalProxy_AppointPort_Changed();
@@ -343,9 +343,7 @@ namespace WinsockPacketEditor
 
         private void ExternalProxy_AppointPort_Changed()
         {
-            this.txtExternalProxy_AppointPort.Enabled =
-                this.cbExternalProxy_Enable.Checked && 
-                this.cbExternalProxy_AppointPort.Checked;
+            this.txtExternalProxy_AppointPort.Enabled = this.cbExternalProxy_AppointPort.Checked;
         }
 
         private void cbExternalProxy_EnableAuth_CheckedChanged(object sender, EventArgs e)
@@ -355,9 +353,16 @@ namespace WinsockPacketEditor
 
         private void ExternalProxy_EnableAuth_Changed()
         { 
-            this.txtExternalProxy_UserName.Enabled = 
-                this.txtExternalProxy_PassWord.Enabled = 
-                this.cbExternalProxy_EnableAuth.Checked;
+            this.txtExternalProxy_UserName.Enabled = this.txtExternalProxy_PassWord.Enabled = this.cbExternalProxy_EnableAuth.Checked;
+        }
+
+        private void bExternalProxy_Detection_Click(object sender, EventArgs e)
+        {
+            if (this.CheckProxySet())
+            {
+                this.SaveConfigs_Parameter();
+                Socket_Operation.DetectionExternalProxy();
+            }
         }
 
         #endregion

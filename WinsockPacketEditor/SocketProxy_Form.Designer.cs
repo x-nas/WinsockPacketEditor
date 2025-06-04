@@ -84,18 +84,19 @@
             this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.tpExternalProxy = new System.Windows.Forms.TabPage();
             this.tlpExternalProxy = new System.Windows.Forms.TableLayoutPanel();
-            this.gbExternalProxy_Auth = new System.Windows.Forms.GroupBox();
-            this.tlpExternalProxy_Auth = new System.Windows.Forms.TableLayoutPanel();
-            this.cbExternalProxy_EnableAuth = new System.Windows.Forms.CheckBox();
-            this.txtExternalProxy_UserName = new System.Windows.Forms.TextBox();
-            this.txtExternalProxy_PassWord = new System.Windows.Forms.TextBox();
             this.gbExternalProxy_Address = new System.Windows.Forms.GroupBox();
             this.tlpExternalProxy_Address = new System.Windows.Forms.TableLayoutPanel();
-            this.txtExternalProxy_AppointPort = new System.Windows.Forms.TextBox();
-            this.cbExternalProxy_AppointPort = new System.Windows.Forms.CheckBox();
             this.cbExternalProxy_Enable = new System.Windows.Forms.CheckBox();
             this.txtExternalProxy_IP = new System.Windows.Forms.TextBox();
             this.txtExternalProxy_Port = new System.Windows.Forms.TextBox();
+            this.bExternalProxy_Detection = new System.Windows.Forms.Button();
+            this.tlpExternalProxy_Appoint = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpExternalProxy_Auth = new System.Windows.Forms.TableLayoutPanel();
+            this.txtExternalProxy_UserName = new System.Windows.Forms.TextBox();
+            this.txtExternalProxy_PassWord = new System.Windows.Forms.TextBox();
+            this.cbExternalProxy_EnableAuth = new System.Windows.Forms.CheckBox();
+            this.txtExternalProxy_AppointPort = new System.Windows.Forms.TextBox();
+            this.cbExternalProxy_AppointPort = new System.Windows.Forms.CheckBox();
             this.tpSystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.gbWorkMode = new System.Windows.Forms.GroupBox();
@@ -191,10 +192,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
             this.tpExternalProxy.SuspendLayout();
             this.tlpExternalProxy.SuspendLayout();
-            this.gbExternalProxy_Auth.SuspendLayout();
-            this.tlpExternalProxy_Auth.SuspendLayout();
             this.gbExternalProxy_Address.SuspendLayout();
             this.tlpExternalProxy_Address.SuspendLayout();
+            this.tlpExternalProxy_Appoint.SuspendLayout();
+            this.tlpExternalProxy_Auth.SuspendLayout();
             this.tpSystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
             this.gbWorkMode.SuspendLayout();
@@ -512,42 +513,9 @@
             // tlpExternalProxy
             // 
             resources.ApplyResources(this.tlpExternalProxy, "tlpExternalProxy");
-            this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Auth, 1, 0);
             this.tlpExternalProxy.Controls.Add(this.gbExternalProxy_Address, 0, 0);
+            this.tlpExternalProxy.Controls.Add(this.tlpExternalProxy_Appoint, 1, 0);
             this.tlpExternalProxy.Name = "tlpExternalProxy";
-            // 
-            // gbExternalProxy_Auth
-            // 
-            this.gbExternalProxy_Auth.Controls.Add(this.tlpExternalProxy_Auth);
-            resources.ApplyResources(this.gbExternalProxy_Auth, "gbExternalProxy_Auth");
-            this.gbExternalProxy_Auth.Name = "gbExternalProxy_Auth";
-            this.gbExternalProxy_Auth.TabStop = false;
-            // 
-            // tlpExternalProxy_Auth
-            // 
-            resources.ApplyResources(this.tlpExternalProxy_Auth, "tlpExternalProxy_Auth");
-            this.tlpExternalProxy_Auth.Controls.Add(this.cbExternalProxy_EnableAuth, 0, 1);
-            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_UserName, 1, 1);
-            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_PassWord, 2, 1);
-            this.tlpExternalProxy_Auth.Name = "tlpExternalProxy_Auth";
-            // 
-            // cbExternalProxy_EnableAuth
-            // 
-            resources.ApplyResources(this.cbExternalProxy_EnableAuth, "cbExternalProxy_EnableAuth");
-            this.cbExternalProxy_EnableAuth.Name = "cbExternalProxy_EnableAuth";
-            this.cbExternalProxy_EnableAuth.UseVisualStyleBackColor = true;
-            this.cbExternalProxy_EnableAuth.CheckedChanged += new System.EventHandler(this.cbExternalProxy_EnableAuth_CheckedChanged);
-            // 
-            // txtExternalProxy_UserName
-            // 
-            resources.ApplyResources(this.txtExternalProxy_UserName, "txtExternalProxy_UserName");
-            this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
-            // 
-            // txtExternalProxy_PassWord
-            // 
-            resources.ApplyResources(this.txtExternalProxy_PassWord, "txtExternalProxy_PassWord");
-            this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
-            this.txtExternalProxy_PassWord.UseSystemPasswordChar = true;
             // 
             // gbExternalProxy_Address
             // 
@@ -559,25 +527,11 @@
             // tlpExternalProxy_Address
             // 
             resources.ApplyResources(this.tlpExternalProxy_Address, "tlpExternalProxy_Address");
-            this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_AppointPort, 5, 1);
-            this.tlpExternalProxy_Address.Controls.Add(this.cbExternalProxy_AppointPort, 3, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.cbExternalProxy_Enable, 0, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_IP, 1, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_Port, 2, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.bExternalProxy_Detection, 3, 1);
             this.tlpExternalProxy_Address.Name = "tlpExternalProxy_Address";
-            // 
-            // txtExternalProxy_AppointPort
-            // 
-            this.txtExternalProxy_AppointPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            resources.ApplyResources(this.txtExternalProxy_AppointPort, "txtExternalProxy_AppointPort");
-            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
-            // 
-            // cbExternalProxy_AppointPort
-            // 
-            resources.ApplyResources(this.cbExternalProxy_AppointPort, "cbExternalProxy_AppointPort");
-            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
-            this.cbExternalProxy_AppointPort.UseVisualStyleBackColor = true;
-            this.cbExternalProxy_AppointPort.CheckedChanged += new System.EventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
             // 
             // cbExternalProxy_Enable
             // 
@@ -597,6 +551,60 @@
             this.txtExternalProxy_Port.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.txtExternalProxy_Port, "txtExternalProxy_Port");
             this.txtExternalProxy_Port.Name = "txtExternalProxy_Port";
+            // 
+            // bExternalProxy_Detection
+            // 
+            resources.ApplyResources(this.bExternalProxy_Detection, "bExternalProxy_Detection");
+            this.bExternalProxy_Detection.Name = "bExternalProxy_Detection";
+            this.bExternalProxy_Detection.UseVisualStyleBackColor = true;
+            this.bExternalProxy_Detection.Click += new System.EventHandler(this.bExternalProxy_Detection_Click);
+            // 
+            // tlpExternalProxy_Appoint
+            // 
+            resources.ApplyResources(this.tlpExternalProxy_Appoint, "tlpExternalProxy_Appoint");
+            this.tlpExternalProxy_Appoint.Controls.Add(this.tlpExternalProxy_Auth, 1, 1);
+            this.tlpExternalProxy_Appoint.Controls.Add(this.cbExternalProxy_EnableAuth, 0, 1);
+            this.tlpExternalProxy_Appoint.Controls.Add(this.txtExternalProxy_AppointPort, 1, 0);
+            this.tlpExternalProxy_Appoint.Controls.Add(this.cbExternalProxy_AppointPort, 0, 0);
+            this.tlpExternalProxy_Appoint.Name = "tlpExternalProxy_Appoint";
+            // 
+            // tlpExternalProxy_Auth
+            // 
+            resources.ApplyResources(this.tlpExternalProxy_Auth, "tlpExternalProxy_Auth");
+            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_UserName, 0, 0);
+            this.tlpExternalProxy_Auth.Controls.Add(this.txtExternalProxy_PassWord, 1, 0);
+            this.tlpExternalProxy_Auth.Name = "tlpExternalProxy_Auth";
+            // 
+            // txtExternalProxy_UserName
+            // 
+            resources.ApplyResources(this.txtExternalProxy_UserName, "txtExternalProxy_UserName");
+            this.txtExternalProxy_UserName.Name = "txtExternalProxy_UserName";
+            // 
+            // txtExternalProxy_PassWord
+            // 
+            resources.ApplyResources(this.txtExternalProxy_PassWord, "txtExternalProxy_PassWord");
+            this.txtExternalProxy_PassWord.Name = "txtExternalProxy_PassWord";
+            this.txtExternalProxy_PassWord.UseSystemPasswordChar = true;
+            // 
+            // cbExternalProxy_EnableAuth
+            // 
+            resources.ApplyResources(this.cbExternalProxy_EnableAuth, "cbExternalProxy_EnableAuth");
+            this.cbExternalProxy_EnableAuth.Name = "cbExternalProxy_EnableAuth";
+            this.cbExternalProxy_EnableAuth.UseVisualStyleBackColor = true;
+            this.cbExternalProxy_EnableAuth.CheckedChanged += new System.EventHandler(this.cbExternalProxy_EnableAuth_CheckedChanged);
+            // 
+            // txtExternalProxy_AppointPort
+            // 
+            this.txtExternalProxy_AppointPort.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.txtExternalProxy_AppointPort, "txtExternalProxy_AppointPort");
+            this.txtExternalProxy_AppointPort.Name = "txtExternalProxy_AppointPort";
+            // 
+            // cbExternalProxy_AppointPort
+            // 
+            resources.ApplyResources(this.cbExternalProxy_AppointPort, "cbExternalProxy_AppointPort");
+            this.cbExternalProxy_AppointPort.Name = "cbExternalProxy_AppointPort";
+            this.cbExternalProxy_AppointPort.UseVisualStyleBackColor = true;
+            this.cbExternalProxy_AppointPort.CheckedChanged += new System.EventHandler(this.cbExternalProxy_AppointPort_CheckedChanged);
             // 
             // tpSystemSet
             // 
@@ -1283,12 +1291,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
             this.tpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.ResumeLayout(false);
-            this.gbExternalProxy_Auth.ResumeLayout(false);
-            this.tlpExternalProxy_Auth.ResumeLayout(false);
-            this.tlpExternalProxy_Auth.PerformLayout();
             this.gbExternalProxy_Address.ResumeLayout(false);
             this.tlpExternalProxy_Address.ResumeLayout(false);
             this.tlpExternalProxy_Address.PerformLayout();
+            this.tlpExternalProxy_Appoint.ResumeLayout(false);
+            this.tlpExternalProxy_Appoint.PerformLayout();
+            this.tlpExternalProxy_Auth.ResumeLayout(false);
+            this.tlpExternalProxy_Auth.PerformLayout();
             this.tpSystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
             this.gbWorkMode.ResumeLayout(false);
@@ -1421,8 +1430,6 @@
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Address;
         private System.Windows.Forms.TextBox txtExternalProxy_IP;
         private System.Windows.Forms.TextBox txtExternalProxy_Port;
-        private System.Windows.Forms.GroupBox gbExternalProxy_Auth;
-        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Auth;
         private System.Windows.Forms.ContextMenuStrip cmsHexBox;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_CopyHex;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Copy;
@@ -1436,9 +1443,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
         private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
         private System.Windows.Forms.CheckBox cbExternalProxy_Enable;
+        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Appoint;
+        private System.Windows.Forms.CheckBox cbExternalProxy_EnableAuth;
         private System.Windows.Forms.TextBox txtExternalProxy_AppointPort;
         private System.Windows.Forms.CheckBox cbExternalProxy_AppointPort;
-        private System.Windows.Forms.CheckBox cbExternalProxy_EnableAuth;
+        private System.Windows.Forms.Button bExternalProxy_Detection;
+        private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Auth;
         private System.Windows.Forms.TextBox txtExternalProxy_UserName;
         private System.Windows.Forms.TextBox txtExternalProxy_PassWord;
     }

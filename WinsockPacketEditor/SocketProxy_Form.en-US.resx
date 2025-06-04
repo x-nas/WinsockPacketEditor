@@ -229,35 +229,8 @@
   <data name="tpExternalProxy.Text" xml:space="preserve">
     <value>[ EXT Proxy ]</value>
   </data>
-  <data name="gbExternalProxy_Auth.Text" xml:space="preserve">
-    <value>EXT Proxy Auth</value>
-  </data>
-  <data name="cbExternalProxy_EnableAuth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 23</value>
-  </data>
-  <data name="cbExternalProxy_EnableAuth.Text" xml:space="preserve">
-    <value>UN/PW:</value>
-  </data>
-  <data name="txtExternalProxy_UserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 9</value>
-  </data>
-  <data name="txtExternalProxy_PassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>179, 9</value>
-  </data>
   <data name="gbExternalProxy_Address.Text" xml:space="preserve">
     <value>EXT Proxy Address</value>
-  </data>
-  <data name="txtExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>309, 9</value>
-  </data>
-  <data name="txtExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
-    <value>156, 23</value>
-  </data>
-  <data name="cbExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>252, 9</value>
-  </data>
-  <data name="cbExternalProxy_AppointPort.Text" xml:space="preserve">
-    <value>Port:</value>
   </data>
   <data name="cbExternalProxy_Enable.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 23</value>
@@ -269,7 +242,46 @@
     <value>72, 9</value>
   </data>
   <data name="txtExternalProxy_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>192, 9</value>
+    <value>222, 9</value>
+  </data>
+  <data name="bExternalProxy_Detection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>302, 9</value>
+  </data>
+  <data name="bExternalProxy_Detection.Text" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="tlpExternalProxy_Auth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>103, 33</value>
+  </data>
+  <data name="tlpExternalProxy_Auth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>277, 34</value>
+  </data>
+  <data name="txtExternalProxy_UserName.Size" type="System.Drawing.Size, System.Drawing">
+    <value>132, 23</value>
+  </data>
+  <data name="txtExternalProxy_PassWord.Location" type="System.Drawing.Point, System.Drawing">
+    <value>141, 3</value>
+  </data>
+  <data name="txtExternalProxy_PassWord.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 23</value>
+  </data>
+  <data name="cbExternalProxy_EnableAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 28</value>
+  </data>
+  <data name="cbExternalProxy_EnableAuth.Text" xml:space="preserve">
+    <value>UN / PW:</value>
+  </data>
+  <data name="txtExternalProxy_AppointPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>106, 3</value>
+  </data>
+  <data name="txtExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>271, 23</value>
+  </data>
+  <data name="cbExternalProxy_AppointPort.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 27</value>
+  </data>
+  <data name="cbExternalProxy_AppointPort.Text" xml:space="preserve">
+    <value>Specify port:</value>
   </data>
   <data name="tpSystemSet.Text" xml:space="preserve">
     <value>[ System Setting ]</value>
@@ -298,7 +310,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAdABAQHQAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAdgBAQHYAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

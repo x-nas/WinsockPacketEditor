@@ -1859,6 +1859,100 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//检测外部代理服务器
+
+        public static bool DetectionExternalProxy()
+        {
+            try
+            {
+                IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Socket_Cache.SocketProxy.ExternalProxy_IP, Socket_Cache.SocketProxy.ExternalProxy_Port);
+                if (ExternalProxyEP == null)
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_205));
+                    return false;
+                }
+
+                using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    // 设置连接超时
+                    var connectResult = proxySocket.BeginConnect(ExternalProxyEP, null, null);
+                    if (!connectResult.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_206));
+                        return false;
+                    }
+                    proxySocket.EndConnect(connectResult);
+
+                    //SOCKS5 握手
+                    byte[] handshakeRequest = null;
+                    if (Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth)
+                    {
+                        handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
+                    }
+                    else
+                    {
+                        handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
+                    }
+                    proxySocket.Send(handshakeRequest);
+
+                    byte[] handshakeResponse = new byte[2];
+                    proxySocket.Receive(handshakeResponse);
+
+                    if (handshakeResponse[0] != 0x05)
+                    {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_207));
+                        return false;
+                    }
+
+                    switch (handshakeResponse[1])
+                    {
+                        case 0x00:
+                            // 无需认证
+                            break;
+
+                        case 0x02:
+                            // 需要用户名/密码认证
+                            if (!Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_208));
+                                return false;
+                            }
+
+                            byte[] AuthRequest = Socket_Operation.CreateSOCKS5AuthPacket(Socket_Cache.SocketProxy.ExternalProxy_UserName, Socket_Cache.SocketProxy.ExternalProxy_PassWord);
+                            if (AuthRequest == null)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
+                                return false;
+                            }
+                            proxySocket.Send(AuthRequest);
+
+                            byte[] AuthResponse = new byte[2];
+                            proxySocket.Receive(AuthResponse);
+                            if (AuthResponse[1] != 0x00)
+                            {
+                                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
+                                return false;
+                            }
+                            break;
+
+                        default:
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_210));
+                            return false;
+                    }
+
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_211));
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return false;
+            }
+        }
+
+        #endregion
+
         #region//判断 Socket 错误码是否是预期的错误
 
         public static bool IsExpectedSocketError(int errorCode)
