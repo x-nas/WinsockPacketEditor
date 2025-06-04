@@ -29,7 +29,6 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPELibrary.Lib.NativeMethods;
 using WPELibrary.Lib.WebAPI;
-using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
