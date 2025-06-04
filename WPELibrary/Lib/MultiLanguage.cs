@@ -150,7 +150,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_138 = { "< 请求数据 >", "< Request >" };
         public static string[] MutiLan_139 = { "< 响应数据 >", "< Response >" };
         public static string[] MutiLan_140 = { "< {0} 字节 >", "< {0} Bytes >" };
-        public static string[] MutiLan_141 = { "代理设置错误!", "Proxy setting error!" };
+        public static string[] MutiLan_141 = { "代理类型设置错误!", "Proxy type setting error!" };
         public static string[] MutiLan_142 = { "开始 SOCKS5 代理!", "Start SOCKS5 proxy!" };
         public static string[] MutiLan_143 = { "停止 SOCKS5 代理!", "Stop SOCKS5 proxy!" };
         public static string[] MutiLan_144 = { "{0} 句柄: {1}", "{0} Handle: {1}" };
@@ -211,6 +211,9 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_199 = { "未知IP地址", "Invalid query" };
         public static string[] MutiLan_200 = { "本地局域网", "Private range" };
         public static string[] MutiLan_201 = { "保留IP地址", "Reserved range" };
+        public static string[] MutiLan_202 = { "外部代理设置错误!", "External proxy setting error!" };
+        public static string[] MutiLan_203 = { "外部代理服务器地址错误!", "External proxy server setting error!" };
+        public static string[] MutiLan_204 = { "外部代理认证设置错误!", "External proxy auth setting error!" };      
 
         #endregion
 

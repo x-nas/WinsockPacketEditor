@@ -674,37 +674,84 @@ namespace WPELibrary.Lib
 
                                             try
                                             {
-                                                IPEndPoint ExternalProxyEP = new IPEndPoint(IPAddress.Parse(Socket_Cache.SocketProxy.ExternalProxy_IP), Socket_Cache.SocketProxy.ExternalProxy_Port);
-                                                spt.Server.Socket.Connect(ExternalProxyEP);
+                                                IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Socket_Cache.SocketProxy.ExternalProxy_IP, Socket_Cache.SocketProxy.ExternalProxy_Port);
 
-                                                byte[] handshakeRequest = { 0x05, 0x01, 0x00 };
-                                                spt.Server.Socket.Send(handshakeRequest);
-
-                                                byte[] handshakeResponse = new byte[2];
-                                                spt.Server.Socket.Receive(handshakeResponse);
-
-                                                if (handshakeResponse[0] != 0x05 || handshakeResponse[1] != 0x00)
+                                                if (ExternalProxyEP != null)
                                                 {
-                                                    Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                    return;
-                                                }
+                                                    spt.Server.Socket.Connect(ExternalProxyEP);
 
-                                                spt.Server.Socket.Send(bData.ToArray());
+                                                    //SOCKS5 握手
+                                                    byte[] handshakeRequest = null;
+                                                    if (Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth)
+                                                    {
+                                                        handshakeRequest = new byte[] { 0x05, 0x02, 0x00, 0x02 };
+                                                    }
+                                                    else
+                                                    {
+                                                        handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
+                                                    }
+                                                        
+                                                    spt.Server.Socket.Send(handshakeRequest);
 
-                                                byte[] connectResponse = new byte[10];
-                                                spt.Server.Socket.Receive(connectResponse);
+                                                    byte[] handshakeResponse = new byte[2];
+                                                    spt.Server.Socket.Receive(handshakeResponse);
 
-                                                if (connectResponse[1] != 0x00)
-                                                {
-                                                    Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
-                                                    return;
-                                                }
+                                                    if (handshakeResponse[0] == 0x05 && handshakeResponse[1] == 0x00)
+                                                    {
+                                                        //无需认证
+                                                    }
+                                                    else if (handshakeResponse[0] == 0x05 && handshakeResponse[1] == 0x02)
+                                                    {
+                                                        //需要账号密码认证
+                                                        if (!Socket_Cache.SocketProxy.Enable_ExternalProxy_Auth)
+                                                        {
+                                                            //认证失败
+                                                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "外部代理服务器需要认证!");
+                                                            return;
+                                                        }
+                                                        
+                                                        byte[] AuthRequest = Socket_Operation.CreateSOCKS5AuthPacket(Socket_Cache.SocketProxy.ExternalProxy_UserName, Socket_Cache.SocketProxy.ExternalProxy_PassWord);
+                                                        
+                                                        if (AuthRequest != null)
+                                                        {
+                                                            spt.Server.Socket.Send(AuthRequest);
 
-                                                Socket_Cache.SocketProxy.StartServerReceive(spt);
-                                                spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
-                                                Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+                                                            byte[] AuthResponse = new byte[2];
+                                                            spt.Server.Socket.Receive(AuthResponse);
 
-                                                Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spt);
+                                                            if (AuthResponse[1] != 0x00)
+                                                            {
+                                                                //认证失败
+                                                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "外部代理服务器认证失败!");
+                                                                return;
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        //不支持的认证
+                                                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, "不支持外部代理服务器的认证方式!");
+                                                        return;
+                                                    }
+
+                                                    //命令过程
+                                                    spt.Server.Socket.Send(bData.ToArray());
+
+                                                    byte[] connectResponse = new byte[10];
+                                                    spt.Server.Socket.Receive(connectResponse);
+
+                                                    if (connectResponse[1] != 0x00)
+                                                    {
+                                                        Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                                        return;
+                                                    }
+
+                                                    Socket_Cache.SocketProxy.StartServerReceive(spt);
+                                                    spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.ForwardData;
+                                                    Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Success, bServerTCP_IP, bServerTCP_Port));
+
+                                                    Socket_Cache.SocketProxyQueue.ProxyTCP_ToQueue(spt);
+                                                }                                                
                                             }
                                             catch (SocketException)
                                             {

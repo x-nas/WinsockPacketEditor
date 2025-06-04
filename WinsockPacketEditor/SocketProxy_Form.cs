@@ -368,23 +368,20 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (!this.CheckProxySet())
+                if (this.CheckProxySet())
                 {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_141));
-                    return;
-                }
+                    Socket_Cache.SocketProxy.IsListening = true;
 
-                Socket_Cache.SocketProxy.IsListening = true;
+                    this.InitProxyStart();
+                    this.UpdateUIState(starting: true);
 
-                this.InitProxyStart();
-                this.UpdateUIState(starting: true);                
+                    if (SocketServer == null)
+                    {
+                        InitializeServerSocket();
+                    }
 
-                if (SocketServer == null)
-                {
-                    InitializeServerSocket();
-                }                
-
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));                
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_142));
+                }                                
             }
             catch (Exception ex)
             {
@@ -520,6 +517,7 @@ namespace WinsockPacketEditor
                 //启用SOCKS5代理
                 if (!this.cbEnable_SOCKS5.Checked)
                 {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_141));
                     return false;
                 }
 
@@ -531,11 +529,14 @@ namespace WinsockPacketEditor
 
                     if (string.IsNullOrEmpty(ExternalProxyIP) || string.IsNullOrEmpty(ExternalProxyPort))
                     {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
                         return false;
                     }
 
-                    if (Socket_Operation.GetAddressType_ByString(ExternalProxyIP) != Socket_Cache.SocketProxy.AddressType.IPv4)
+                    Socket_Cache.SocketProxy.AddressType atExternalProxy = Socket_Operation.GetAddressType_ByString(ExternalProxyIP);
+                    if (atExternalProxy != Socket_Cache.SocketProxy.AddressType.IPv4 && atExternalProxy != Socket_Cache.SocketProxy.AddressType.Domain)
                     {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_203));
                         return false;
                     }
 
@@ -543,11 +544,13 @@ namespace WinsockPacketEditor
                     {
                         if (uPort < 0)
                         {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
                             return false;
                         }
                     }
                     else
                     {
+                        Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
                         return false;
                     }                    
 
@@ -558,6 +561,7 @@ namespace WinsockPacketEditor
 
                         if (string.IsNullOrEmpty(ExternalProxy_AppointPort))
                         {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
                             return false;
                         }
                     }
@@ -570,6 +574,7 @@ namespace WinsockPacketEditor
 
                         if (string.IsNullOrEmpty(UserName) || string.IsNullOrEmpty(PassWord)) 
                         {
+                            Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_204));
                             return false;                        
                         }
                     }

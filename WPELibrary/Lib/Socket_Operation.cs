@@ -29,6 +29,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPELibrary.Lib.NativeMethods;
 using WPELibrary.Lib.WebAPI;
+using static WPELibrary.Lib.Socket_Cache.SocketProxy;
 
 namespace WPELibrary.Lib
 {   
@@ -1943,6 +1944,21 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
+        public static IPEndPoint GetIPEndPoint_ByAddressString(string AddressString, ushort Port)
+        {
+            try
+            {
+                IPAddress ipAddress = Socket_Operation.ResolveAddress(AddressString);                
+                return new IPEndPoint(ipAddress, Port);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);                
+            }
+
+            return null;
+        }
+
         public static IPEndPoint GetIPEndPoint_ByAddressType(Socket_Cache.SocketProxy.AddressType addressType, ReadOnlySpan<byte> bData, out string AddressString)
         {
             AddressString = string.Empty;
@@ -2121,7 +2137,48 @@ namespace WPELibrary.Lib
             return sReturn;
         }
 
-        #endregion        
+        #endregion
+
+        #region//获取 SOCKS5 认证格式的封包
+
+        public static byte[] CreateSOCKS5AuthPacket(string username, string password)
+        {
+            // 验证输入参数
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password) || username.Length > 255 || password.Length > 255)
+            {
+                return null;
+            }
+
+            // 计算所需缓冲区大小
+            // 1 (VER) + 1 (ULEN) + username + 1 (PLEN) + password
+            int packetSize = 1 + 1 + username.Length + 1 + password.Length;
+
+            // 创建字节数组
+            byte[] packet = new byte[packetSize];
+            int offset = 0;
+
+            // 版本号 (0x01)
+            packet[offset++] = 0x01;
+
+            // 用户名长度 (1字节)
+            packet[offset++] = (byte)username.Length;
+
+            // 用户名 (UTF8编码)
+            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
+            Buffer.BlockCopy(usernameBytes, 0, packet, offset, usernameBytes.Length);
+            offset += usernameBytes.Length;
+
+            // 密码长度 (1字节)
+            packet[offset++] = (byte)password.Length;
+
+            // 密码 (UTF8编码)
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            Buffer.BlockCopy(passwordBytes, 0, packet, offset, passwordBytes.Length);
+
+            return packet;
+        }
+
+        #endregion
 
         #region//获取指定步长的 Byte
 
