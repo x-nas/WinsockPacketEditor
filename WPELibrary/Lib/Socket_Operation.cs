@@ -1861,27 +1861,28 @@ namespace WPELibrary.Lib
 
         #region//检测外部代理服务器
 
-        public static bool DetectionExternalProxy()
+        public static async Task<bool> DetectionExternalProxy()
         {
             try
             {
                 IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Socket_Cache.SocketProxy.ExternalProxy_IP, Socket_Cache.SocketProxy.ExternalProxy_Port);
                 if (ExternalProxyEP == null)
                 {
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_205));
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_202));
                     return false;
                 }
 
                 using (Socket proxySocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                 {
                     // 设置连接超时
-                    var connectResult = proxySocket.BeginConnect(ExternalProxyEP, null, null);
-                    if (!connectResult.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
+                    var connectTask = proxySocket.ConnectAsync(ExternalProxyEP);
+                    var timeoutTask = Task.Delay(TimeSpan.FromSeconds(5));
+
+                    if (await Task.WhenAny(connectTask, timeoutTask) == timeoutTask)
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_206));
                         return false;
                     }
-                    proxySocket.EndConnect(connectResult);
 
                     //SOCKS5 握手
                     byte[] handshakeRequest = null;
@@ -1893,10 +1894,10 @@ namespace WPELibrary.Lib
                     {
                         handshakeRequest = new byte[] { 0x05, 0x01, 0x00 };
                     }
-                    proxySocket.Send(handshakeRequest);
+                    await proxySocket.SendAsync(new ArraySegment<byte>(handshakeRequest), SocketFlags.None);
 
                     byte[] handshakeResponse = new byte[2];
-                    proxySocket.Receive(handshakeResponse);
+                    int received = await proxySocket.ReceiveAsync(new ArraySegment<byte>(handshakeResponse), SocketFlags.None);
 
                     if (handshakeResponse[0] != 0x05)
                     {
@@ -1924,10 +1925,10 @@ namespace WPELibrary.Lib
                                 Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
                                 return false;
                             }
-                            proxySocket.Send(AuthRequest);
+                            await proxySocket.SendAsync(new ArraySegment<byte>(AuthRequest), SocketFlags.None);
 
                             byte[] AuthResponse = new byte[2];
-                            proxySocket.Receive(AuthResponse);
+                            await proxySocket.ReceiveAsync(new ArraySegment<byte>(AuthResponse), SocketFlags.None);
                             if (AuthResponse[1] != 0x00)
                             {
                                 Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_209));
@@ -1939,14 +1940,13 @@ namespace WPELibrary.Lib
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_210));
                             return false;
                     }
-
-                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_211));
+                    
                     return true;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_212));
                 return false;
             }
         }

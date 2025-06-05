@@ -211,16 +211,17 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_199 = { "未知IP地址", "Invalid query" };
         public static string[] MutiLan_200 = { "本地局域网", "Private range" };
         public static string[] MutiLan_201 = { "保留IP地址", "Reserved range" };
-        public static string[] MutiLan_202 = { "外部代理设置错误!", "External proxy setting error!" };
-        public static string[] MutiLan_203 = { "外部代理服务器地址错误!", "External proxy server setting error!" };
-        public static string[] MutiLan_204 = { "外部代理认证设置错误!", "External proxy auth setting error!" };
-        public static string[] MutiLan_205 = { "外部代理服务器地址错误!", "External proxy server address error!" };
-        public static string[] MutiLan_206 = { "连接外部代理服务器超时!", "Connection to external proxy server timed out!" };
-        public static string[] MutiLan_207 = { "外部代理服务器不支持 SOCKS5 代理!", "The external proxy server does not support SOCKS5 proxy!" };
-        public static string[] MutiLan_208 = { "外部代理服务器需要认证!", "External proxy servers require authentication!" };
-        public static string[] MutiLan_209 = { "外部代理服务器认证失败!", "External proxy server authentication failed!" };
+        public static string[] MutiLan_202 = { "外部代理: 设置错误!", "External proxy: setting error!" };
+        public static string[] MutiLan_203 = { "外部代理: 地址错误!", "External proxy: server setting error!" };
+        public static string[] MutiLan_204 = { "外部代理: 认证设置错误!", "External proxy: auth setting error!" };
+        //public static string[] MutiLan_205 = { "外部代理: 地址错误!", "External proxy: server address error!" };
+        public static string[] MutiLan_206 = { "连接超时!", "Connection timeout!" };
+        public static string[] MutiLan_207 = { "外部代理: 不支持 SOCKS5 代理!", "External proxy: Not support SOCKS5 proxy!" };
+        public static string[] MutiLan_208 = { "外部代理: 需要认证!", "External proxy: Require authentication!" };
+        public static string[] MutiLan_209 = { "外部代理: 认证失败!", "External proxy: Authentication failed!" };
         public static string[] MutiLan_210 = { "不支持的认证方式!", "Unsupported authentication method!" };
-        public static string[] MutiLan_211 = { "外部代理服务器连接成功!", "External proxy server connection successful!" };        
+        public static string[] MutiLan_211 = { "外部代理: 连接成功!", "External proxy: Connection successful!" };
+        public static string[] MutiLan_212 = { "外部代理: 拒绝连接!", "External proxy: Refused connection!" };
 
         #endregion
 

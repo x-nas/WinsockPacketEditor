@@ -356,12 +356,21 @@ namespace WinsockPacketEditor
             this.txtExternalProxy_UserName.Enabled = this.txtExternalProxy_PassWord.Enabled = this.cbExternalProxy_EnableAuth.Checked;
         }
 
-        private void bExternalProxy_Detection_Click(object sender, EventArgs e)
+        private async void bExternalProxy_Detection_Click(object sender, EventArgs e)
         {
             if (this.CheckProxySet())
             {
                 this.SaveConfigs_Parameter();
-                Socket_Operation.DetectionExternalProxy();
+
+                this.bExternalProxy_Detection.Enabled = false;
+                bool Result = await Socket_Operation.DetectionExternalProxy();
+
+                if (Result)
+                {
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_211));
+                }
+
+                this.bExternalProxy_Detection.Enabled = true;
             }
         }
 
