@@ -1068,9 +1068,12 @@ namespace WPELibrary.Lib
             public static void AuthResult_ToList(Guid AID, string IPAddress, bool AuthResult)
             {
                 try
-                {                    
-                    Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
-                    RecProxyAuth?.Invoke(pai);
+                {
+                    if (AID != null && AID != Guid.Empty)
+                    {
+                        Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
+                        RecProxyAuth?.Invoke(pai);
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -1121,6 +1124,30 @@ namespace WPELibrary.Lib
                 }
 
                 return null;
+            }
+
+            #endregion
+
+            #region//删除代理认证
+
+            public static void DeleteProxyAuthInfo_ByIPAndAID(string IPAddress, Guid AID)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(IPAddress) && AID != null)
+                    {
+                        Proxy_AuthInfo pai = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(Auth => Auth.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
+
+                        if (pai != null)
+                        {
+                            Socket_Cache.SocketProxy.lstProxyAuth.Remove(pai);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion

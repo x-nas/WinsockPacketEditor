@@ -2643,6 +2643,15 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//获取客户端列表名称
+
+        public static string GetClientListName(string ClientIP, string ClientUserName)
+        {
+            return string.Format("{0} [{1}]", ClientIP, ClientUserName);
+        }
+
+        #endregion
+
         #region//获取列表中的选中的项
 
         //封包列表

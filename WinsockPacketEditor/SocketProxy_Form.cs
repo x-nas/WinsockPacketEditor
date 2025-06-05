@@ -884,21 +884,24 @@ namespace WinsockPacketEditor
 
         #region//显示客户端列表（异步）
 
-        private async void Event_RecProxyInfo(Socket_ProxyTCP spi)
+        private async void Event_RecProxyInfo(Socket_ProxyTCP spt)
         {
             try
             {
-                if (!tvProxyInfo.IsDisposed && spi != null)
+                if (!tvProxyInfo.IsDisposed && spt != null)
                 {
-                    if (spi.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
+                    if (spt.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
                         int iRootImgIndex = -1;
                         int iChildImgIndex = 5;
-                        string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spi);
+
+                        string ClientIP = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
+                        string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(spt.AID);
+                        string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
 
                         if (!string.IsNullOrEmpty(sRootName))
                         {
-                            string sChildName = spi.Client.Address;
+                            string sChildName = spt.Client.Address;
 
                             await Task.Run(() =>
                             {
@@ -955,9 +958,11 @@ namespace WinsockPacketEditor
                     {
                         if (spt.Client.Socket == null)
                         {
-                            string sRootName = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
-                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
+                            string ClientIP = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
+                            string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(spt.AID);
+                            string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
 
+                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
                             if (RootNode != null)
                             {
                                 TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
@@ -974,6 +979,8 @@ namespace WinsockPacketEditor
 
                                         if (RootNode.Nodes.Count == 0)
                                         {
+                                            Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByIPAndAID(ClientIP, spt.AID);
+
                                             if (this.cbDeleteClosed.Checked)
                                             {
                                                 RootNode.Remove();
@@ -1014,8 +1021,11 @@ namespace WinsockPacketEditor
                 {
                     foreach (Proxy_AuthInfo pai in Socket_Cache.SocketProxy.lstProxyAuth.ToList())
                     {
-                        TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, pai.IPAddress);
+                        string ClientIP = pai.IPAddress.ToString();
+                        string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(pai.AID);
+                        string RootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
 
+                        TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, RootName);
                         if (RootNode != null)
                         {
                             pai.LinksNumber = RootNode.Nodes.Count;
