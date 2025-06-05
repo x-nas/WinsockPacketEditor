@@ -117,6 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cbIsEnable.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
   <data name="cbIsEnable.Text" xml:space="preserve">
     <value>Enable</value>
   </data>
@@ -126,54 +130,65 @@
   <data name="bCancel.Text" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="nudLimitDevices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>175, 88</value>
+  </data>
   <data name="txtPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 29</value>
+    <value>175, 29</value>
   </data>
   <data name="lPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 32</value>
+    <value>61, 32</value>
   </data>
   <data name="lPassWord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
+    <value>111, 23</value>
   </data>
   <data name="lPassWord.Text" xml:space="preserve">
-    <value>PassWord</value>
+    <value>Password:</value>
   </data>
   <data name="lUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 3</value>
+    <value>61, 3</value>
   </data>
   <data name="lUserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
+    <value>111, 23</value>
   </data>
   <data name="lUserName.Text" xml:space="preserve">
-    <value>UserName</value>
+    <value>Username:</value>
   </data>
   <data name="txtUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 0</value>
+    <value>175, 0</value>
   </data>
   <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 91</value>
+    <value>61, 121</value>
   </data>
   <data name="cbIsExpiry.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="cbIsExpiry.Text" xml:space="preserve">
-    <value>Expiry Time</value>
+    <value>Expiry Time:</value>
   </data>
   <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 88</value>
+    <value>175, 118</value>
   </data>
   <data name="cbIsLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>67, 61</value>
+    <value>61, 61</value>
   </data>
   <data name="cbIsLimitLinks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
+    <value>111, 24</value>
   </data>
   <data name="cbIsLimitLinks.Text" xml:space="preserve">
-    <value>Limit Links</value>
+    <value>Limit Links:</value>
   </data>
   <data name="nudLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 58</value>
+    <value>175, 58</value>
+  </data>
+  <data name="cbIsLimitDevices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>61, 91</value>
+  </data>
+  <data name="cbIsLimitDevices.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 24</value>
+  </data>
+  <data name="cbIsLimitDevices.Text" xml:space="preserve">
+    <value>Limit Devices:</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

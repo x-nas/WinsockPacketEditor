@@ -16,7 +16,7 @@ namespace WinsockPacketEditor
     public partial class SocketProxy_Form : Form
     {
         private readonly Socket_Cache.System.SystemMode RunMode = Socket_Cache.System.SystemMode.Proxy;
-        private Socket_Form socketForm;
+        private readonly Socket_Form socketForm;
         private static Socket SocketServer;
 
         #region//窗体事件

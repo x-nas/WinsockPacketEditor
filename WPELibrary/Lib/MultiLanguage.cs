@@ -214,7 +214,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_202 = { "外部代理: 设置错误!", "External proxy: setting error!" };
         public static string[] MutiLan_203 = { "外部代理: 地址错误!", "External proxy: server setting error!" };
         public static string[] MutiLan_204 = { "外部代理: 认证设置错误!", "External proxy: auth setting error!" };
-        //public static string[] MutiLan_205 = { "外部代理: 地址错误!", "External proxy: server address error!" };
+        public static string[] MutiLan_205 = { "无限制", "Unlimited" };
         public static string[] MutiLan_206 = { "连接超时!", "Connection timeout!" };
         public static string[] MutiLan_207 = { "外部代理: 不支持 SOCKS5 代理!", "External proxy: Not support SOCKS5 proxy!" };
         public static string[] MutiLan_208 = { "外部代理: 需要认证!", "External proxy: Require authentication!" };

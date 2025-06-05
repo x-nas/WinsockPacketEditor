@@ -565,12 +565,7 @@ namespace WPELibrary.Lib
                             {
                                 spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                             }
-                        }
-                        else
-                        {
-                            string ClientIP = spt.Client.EndPoint.Address.ToString();
-                            Socket_Cache.SocketProxy.AuthResult_ToList(Guid.Empty, ClientIP, false);
-                        }
+                        }                        
                     }
                     else
                     {
@@ -604,22 +599,25 @@ namespace WPELibrary.Lib
 
                         string sUserName = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, USERNAME);
                         string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
+                        string ClientIP = spt.Client.EndPoint.Address.ToString();
 
                         bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
-
-                        string ClientIP = spt.Client.EndPoint.Address.ToString();
-                        Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, bAuthOK);
 
                         Span<byte> bAuth = stackalloc byte[2];
                         bAuth[0] = 0x01;
 
-                        bool isAllowed = bAuthOK && !Socket_Cache.ProxyAccount.CheckLimitLinks_ByAccountID(AccountID);
-                        bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
+                        bool isAllowed = 
+                            bAuthOK && 
+                            !Socket_Cache.ProxyAccount.CheckLimitLinks_ByAccountID(AccountID) &&
+                            !Socket_Cache.ProxyAccount.CheckLimitDevices_ByAccountID(AccountID);
 
+                        bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
                         if (isAllowed)
                         {
                             Socket_Cache.ProxyAccount.SetOnline_ByAccountID(AccountID, true);
                             Socket_Cache.ProxyAccount.RecordLoginIP_ByAccountID(AccountID, ClientIP);
+                            Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, bAuthOK);
+
                             spt.AID = AccountID;
                             spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
                         }
@@ -1585,6 +1583,39 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//检测是否已超过限制设备数
+
+            public static bool CheckLimitDevices_ByAccountID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null && AID != Guid.Empty)
+                    {
+                        Proxy_AccountInfo paiAccount = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);
+                        if (paiAccount != null)
+                        {
+                            if (paiAccount.IsLimitDevices)
+                            {
+                                int DevicesNumber = Socket_Operation.GetDevicesNumber_ByAccountID(AID);
+
+                                if (DevicesNumber >= paiAccount.LimitDevices) 
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return false;
+            }
+
+            #endregion
+
             #region//获取认证结果对应的图标
 
             public static Image GetImg_ByAuthResult(bool AuthResult)
@@ -1725,7 +1756,9 @@ namespace WPELibrary.Lib
                 string LoginIP, 
                 string IPLocation, 
                 bool IsLimitLinks,
-                int LimitLinks, 
+                int LimitLinks,
+                bool IsLimitDevices,
+                int LimitDevices,
                 bool IsExpiry, 
                 DateTime ExpiryTime, 
                 DateTime CreateTime)
@@ -1736,7 +1769,22 @@ namespace WPELibrary.Lib
                     {
                         if (!Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
                         {
-                            Proxy_AccountInfo pai = new Proxy_AccountInfo(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
+                            Proxy_AccountInfo pai = new Proxy_AccountInfo(
+                                AID, 
+                                IsEnable, 
+                                UserName, 
+                                PassWord, 
+                                LoginTime, 
+                                LoginIP, 
+                                IPLocation, 
+                                IsLimitLinks, 
+                                LimitLinks, 
+                                IsLimitDevices,
+                                LimitDevices,
+                                IsExpiry, 
+                                ExpiryTime, 
+                                CreateTime);
+
                             Socket_Cache.ProxyAccount.ProxyAccountToList(pai);
 
                             return true;
@@ -1761,6 +1809,8 @@ namespace WPELibrary.Lib
                 string PassWord,
                 bool IsLimitLinks,
                 int LimitLinks,
+                bool IsLimitDevices,
+                int LimitDevices,
                 bool IsExpiry, 
                 DateTime ExpiryTime)
             {
@@ -1777,6 +1827,8 @@ namespace WPELibrary.Lib
                             pai.IsLimitLinks = IsLimitLinks;
                             pai.LimitLinks = LimitLinks;
                             pai.IsExpiry = IsExpiry;
+                            pai.IsLimitDevices = IsLimitDevices;
+                            pai.LimitDevices = LimitDevices;
                             pai.ExpiryTime = ExpiryTime;
 
                             return true;
@@ -1797,6 +1849,8 @@ namespace WPELibrary.Lib
                 string PassWord,
                 bool IsLimitLinks,
                 int LimitLinks,
+                bool IsLimitDevices,
+                int LimitDevices,
                 bool IsExpiry, 
                 DateTime ExpiryTime)
             {
@@ -1808,7 +1862,7 @@ namespace WPELibrary.Lib
 
                         if (pai != null)
                         {
-                            Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, IsEnable, PassWord, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime);
+                            Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, IsEnable, PassWord, IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, IsExpiry, ExpiryTime);
                             return true;
                         }
                     }
@@ -2031,6 +2085,40 @@ namespace WPELibrary.Lib
                 return null;
             }
 
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsLimitLinks(bool IsLimitLinks)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.IsLimitLinks == IsLimitLinks).ToList());
+
+                    return pai;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByIsLimitDevices(bool IsLimitDevices)
+            {
+                try
+                {
+                    BindingList<Proxy_AccountInfo> pai = new BindingList<Proxy_AccountInfo>
+                        (lstProxyAccount.Where(account => account.IsLimitDevices == IsLimitDevices).ToList());
+
+                    return pai;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
             public static BindingList<Proxy_AccountInfo> GetProxyAccount_ByExpireTime(DateTime dtFrom, DateTime dtTo)
             {
                 try
@@ -2199,11 +2287,27 @@ namespace WPELibrary.Lib
                             string IPLocation = dataRow["IPLocation"].ToString();
                             bool IsLimitLinks = Convert.ToBoolean(dataRow["IsLimitLinks"]);
                             int LimitLinks = int.Parse(dataRow["LimitLinks"].ToString());
+                            bool IsLimitDevices = Convert.ToBoolean(dataRow["IsLimitDevices"]);
+                            int LimitDevices = int.Parse(dataRow["LimitDevices"].ToString());
                             bool IsExpiry = Convert.ToBoolean(dataRow["IsExpiry"]);
                             DateTime ExpiryTime = Convert.ToDateTime(dataRow["ExpiryTime"]);
                             DateTime CreateTime = Convert.ToDateTime(dataRow["CreateTime"]);
 
-                            Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
+                            Socket_Cache.ProxyAccount.AddProxyAccount(
+                                AID, 
+                                IsEnable, 
+                                UserName, 
+                                PassWord, 
+                                LoginTime, 
+                                LoginIP, 
+                                IPLocation, 
+                                IsLimitLinks, 
+                                LimitLinks, 
+                                IsLimitDevices,
+                                LimitDevices,
+                                IsExpiry, 
+                                ExpiryTime, 
+                                CreateTime);
                         }
                     }
                     catch (Exception ex)
@@ -2307,6 +2411,8 @@ namespace WPELibrary.Lib
                                 new XElement("IsOnLine", pai.IsOnLine.ToString()),
                                 new XElement("IsLimitLinks", pai.IsLimitLinks),
                                 new XElement("LimitLinks", pai.LimitLinks),
+                                new XElement("IsLimitDevices", pai.IsLimitDevices),
+                                new XElement("LimitDevices", pai.LimitDevices),
                                 new XElement("IsExpiry", pai.IsExpiry),
                                 new XElement("ExpiryTime", pai.ExpiryTime.ToString("yyyy/MM/dd HH:mm:ss")),
                                 new XElement("CreateTime", pai.CreateTime.ToString("yyyy/MM/dd HH:mm:ss"))
@@ -2490,6 +2596,18 @@ namespace WPELibrary.Lib
                             LimitLinks = int.Parse(xeProxyAccount.Element("LimitLinks").Value);
                         }
 
+                        bool IsLimitDevices = true;
+                        if (xeProxyAccount.Element("IsLimitDevices") != null)
+                        {
+                            IsLimitDevices = bool.Parse(xeProxyAccount.Element("IsLimitDevices").Value);
+                        }
+
+                        int LimitDevices = 1;
+                        if (xeProxyAccount.Element("LimitDevices") != null)
+                        {
+                            LimitDevices = int.Parse(xeProxyAccount.Element("LimitDevices").Value);
+                        }
+
                         bool IsExpiry = false;
                         if (xeProxyAccount.Element("IsExpiry") != null)
                         {
@@ -2508,7 +2626,21 @@ namespace WPELibrary.Lib
                             CreateTime = DateTime.Parse(xeProxyAccount.Element("CreateTime").Value);
                         }
 
-                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(AID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime);
+                        bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(
+                            AID, 
+                            IsEnable, 
+                            UserName, 
+                            PassWord, 
+                            LoginTime, 
+                            LoginIP, 
+                            IPLocation, 
+                            IsLimitLinks, 
+                            LimitLinks, 
+                            IsLimitDevices,
+                            LimitDevices,
+                            IsExpiry, 
+                            ExpiryTime, 
+                            CreateTime);
 
                         if (!bOK)
                         {
@@ -2624,6 +2756,8 @@ namespace WPELibrary.Lib
                         }
 
                         pai.LoginTime = DateTime.MinValue;
+                        pai.IsLimitDevices = true;
+                        pai.LimitDevices = 1;
 
                         bool bOK = Socket_Cache.ProxyAccount.AddProxyAccount(
                             pai.AID, 
@@ -2635,6 +2769,8 @@ namespace WPELibrary.Lib
                             pai.IPLocation, 
                             pai.IsLimitLinks,
                             pai.LimitLinks,
+                            pai.IsLimitDevices,
+                            pai.LimitDevices,
                             pai.IsExpiry, 
                             pai.ExpiryTime, 
                             pai.CreateTime);
@@ -9285,6 +9421,8 @@ namespace WPELibrary.Lib
                         sql += "IPLocation TEXT,";
                         sql += "IsLimitLinks BOOLEAN DEFAULT 0,";
                         sql += "LimitLinks INTEGER DEFAULT 1,";
+                        sql += "IsLimitDevices BOOLEAN DEFAULT 0,";
+                        sql += "LimitDevices INTEGER DEFAULT 1,";
                         sql += "IsExpiry BOOLEAN DEFAULT 0,";
                         sql += "ExpiryTime TIMESTAMP,";                        
                         sql += "CreateTime TIMESTAMP";
@@ -9445,9 +9583,9 @@ namespace WPELibrary.Lib
                         using (SQLiteTransaction transaction = conn.BeginTransaction())
                         {
                             string sql = "INSERT INTO ProxyAccount (" +
-                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsExpiry, ExpiryTime, CreateTime" +
+                                         "GUID, IsEnable, UserName, PassWord, LoginTime, LoginIP, IPLocation, IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, IsExpiry, ExpiryTime, CreateTime" +
                                          ") VALUES (" +
-                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsLimitLinks, @LimitLinks, @IsExpiry, @ExpiryTime, @CreateTime" +
+                                         "@GUID, @IsEnable, @UserName, @PassWord, @LoginTime, @LoginIP, @IPLocation, @IsLimitLinks, @LimitLinks, @IsLimitDevices, @LimitDevices, @IsExpiry, @ExpiryTime, @CreateTime" +
                                          ");";
 
                             using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -9461,6 +9599,8 @@ namespace WPELibrary.Lib
                                 cmd.Parameters.Add(new SQLiteParameter("@IPLocation", DbType.String));
                                 cmd.Parameters.Add(new SQLiteParameter("@IsLimitLinks", DbType.Boolean));
                                 cmd.Parameters.Add(new SQLiteParameter("@LimitLinks", DbType.Int32));
+                                cmd.Parameters.Add(new SQLiteParameter("@IsLimitDevices", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@LimitDevices", DbType.Int32));
                                 cmd.Parameters.Add(new SQLiteParameter("@IsExpiry", DbType.Boolean));
                                 cmd.Parameters.Add(new SQLiteParameter("@ExpiryTime", DbType.DateTime));
                                 cmd.Parameters.Add(new SQLiteParameter("@CreateTime", DbType.DateTime));
@@ -9476,6 +9616,8 @@ namespace WPELibrary.Lib
                                     cmd.Parameters["@IPLocation"].Value = pai.IPLocation;
                                     cmd.Parameters["@IsLimitLinks"].Value = pai.IsLimitLinks;
                                     cmd.Parameters["@LimitLinks"].Value = pai.LimitLinks;
+                                    cmd.Parameters["@IsLimitDevices"].Value = pai.IsLimitDevices;
+                                    cmd.Parameters["@LimitDevices"].Value = pai.LimitDevices;
                                     cmd.Parameters["@IsExpiry"].Value = pai.IsExpiry;
                                     cmd.Parameters["@ExpiryTime"].Value = pai.ExpiryTime;
                                     cmd.Parameters["@CreateTime"].Value = pai.CreateTime;

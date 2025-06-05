@@ -31,8 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Proxy_AccountListForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -40,6 +40,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpProxyAccountList = new System.Windows.Forms.TableLayoutPanel();
             this.ssProxyAccount = new System.Windows.Forms.StatusStrip();
             this.tsslAccount = new System.Windows.Forms.ToolStripStatusLabel();
@@ -61,6 +62,7 @@
             this.cLoginTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLoginIP = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLimitLinks = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLimitDevices = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cIPLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cExpiryTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsAccountList = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -232,25 +234,26 @@
             this.cLoginTime,
             this.cLoginIP,
             this.cLimitLinks,
+            this.cLimitDevices,
             this.cIPLocation,
             this.cExpiryTime});
             this.dgvAccountList.ContextMenuStrip = this.cmsAccountList;
             resources.ApplyResources(this.dgvAccountList, "dgvAccountList");
             this.dgvAccountList.Name = "dgvAccountList";
             this.dgvAccountList.ReadOnly = true;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.Padding = new System.Windows.Forms.Padding(3);
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
-            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle10.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle10;
+            this.dgvAccountList.RowHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            this.dgvAccountList.RowHeadersVisible = false;
+            dataGridViewCellStyle11.Padding = new System.Windows.Forms.Padding(3);
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAccountList.RowsDefaultCellStyle = dataGridViewCellStyle11;
             this.dgvAccountList.RowTemplate.Height = 23;
             this.dgvAccountList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAccountList.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvAccountList_CellDoubleClick);
@@ -330,13 +333,25 @@
             this.cLimitLinks.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cLimitLinks.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cLimitDevices
+            // 
+            this.cLimitDevices.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLimitDevices.DefaultCellStyle = dataGridViewCellStyle7;
+            resources.ApplyResources(this.cLimitDevices, "cLimitDevices");
+            this.cLimitDevices.Name = "cLimitDevices";
+            this.cLimitDevices.ReadOnly = true;
+            this.cLimitDevices.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLimitDevices.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // cIPLocation
             // 
             this.cIPLocation.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.cIPLocation.DataPropertyName = "IPLocation";
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPLocation.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPLocation.DefaultCellStyle = dataGridViewCellStyle8;
             resources.ApplyResources(this.cIPLocation, "cIPLocation");
             this.cIPLocation.Name = "cIPLocation";
             this.cIPLocation.ReadOnly = true;
@@ -347,9 +362,9 @@
             // 
             this.cExpiryTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.cExpiryTime.DataPropertyName = "ExpiryTime";
-            dataGridViewCellStyle8.Format = "g";
-            dataGridViewCellStyle8.NullValue = null;
-            this.cExpiryTime.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.Format = "g";
+            dataGridViewCellStyle9.NullValue = null;
+            this.cExpiryTime.DefaultCellStyle = dataGridViewCellStyle9;
             resources.ApplyResources(this.cExpiryTime, "cExpiryTime");
             this.cExpiryTime.Name = "cExpiryTime";
             this.cExpiryTime.ReadOnly = true;
@@ -620,7 +635,11 @@
             resources.GetString("cbbSearch_State.Items2"),
             resources.GetString("cbbSearch_State.Items3"),
             resources.GetString("cbbSearch_State.Items4"),
-            resources.GetString("cbbSearch_State.Items5")});
+            resources.GetString("cbbSearch_State.Items5"),
+            resources.GetString("cbbSearch_State.Items6"),
+            resources.GetString("cbbSearch_State.Items7"),
+            resources.GetString("cbbSearch_State.Items8"),
+            resources.GetString("cbbSearch_State.Items9")});
             this.cbbSearch_State.Name = "cbbSearch_State";
             // 
             // bSearch_State
@@ -729,6 +748,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cLoginTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLoginIP;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLimitLinks;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cLimitDevices;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn cExpiryTime;
     }

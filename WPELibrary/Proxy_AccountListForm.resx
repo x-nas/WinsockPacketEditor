@@ -297,6 +297,15 @@
   <data name="cLimitLinks.Width" type="System.Int32, mscorlib">
     <value>56</value>
   </data>
+  <metadata name="cLimitDevices.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLimitDevices.HeaderText" xml:space="preserve">
+    <value>设备数</value>
+  </data>
+  <data name="cLimitDevices.Width" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
   <metadata name="cIPLocation.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -1241,6 +1250,18 @@
   </data>
   <data name="cbbSearch_State.Items5" xml:space="preserve">
     <value>未启用过期</value>
+  </data>
+  <data name="cbbSearch_State.Items6" xml:space="preserve">
+    <value>限制链接数</value>
+  </data>
+  <data name="cbbSearch_State.Items7" xml:space="preserve">
+    <value>不限制链接数</value>
+  </data>
+  <data name="cbbSearch_State.Items8" xml:space="preserve">
+    <value>限制设备数</value>
+  </data>
+  <data name="cbbSearch_State.Items9" xml:space="preserve">
+    <value>不限制设备数</value>
   </data>
   <data name="cbbSearch_State.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 5</value>
@@ -7724,6 +7745,12 @@
     <value>cLimitLinks</value>
   </data>
   <data name="&gt;&gt;cLimitLinks.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLimitDevices.Name" xml:space="preserve">
+    <value>cLimitDevices</value>
+  </data>
+  <data name="&gt;&gt;cLimitDevices.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cIPLocation.Name" xml:space="preserve">

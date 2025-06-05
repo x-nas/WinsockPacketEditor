@@ -35,6 +35,7 @@
             this.bSave = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
             this.tlpAccountInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.nudLimitDevices = new System.Windows.Forms.NumericUpDown();
             this.txtPassWord = new System.Windows.Forms.TextBox();
             this.lPassWord = new System.Windows.Forms.Label();
             this.lUserName = new System.Windows.Forms.Label();
@@ -43,9 +44,11 @@
             this.dtpExpiryTime = new System.Windows.Forms.DateTimePicker();
             this.cbIsLimitLinks = new System.Windows.Forms.CheckBox();
             this.nudLimitLinks = new System.Windows.Forms.NumericUpDown();
+            this.cbIsLimitDevices = new System.Windows.Forms.CheckBox();
             this.tlpProxyAccount.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpAccountInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitDevices)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLimitLinks)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,15 +90,37 @@
             // tlpAccountInfo
             // 
             resources.ApplyResources(this.tlpAccountInfo, "tlpAccountInfo");
+            this.tlpAccountInfo.Controls.Add(this.nudLimitDevices, 2, 3);
             this.tlpAccountInfo.Controls.Add(this.txtPassWord, 2, 1);
             this.tlpAccountInfo.Controls.Add(this.lPassWord, 1, 1);
             this.tlpAccountInfo.Controls.Add(this.lUserName, 1, 0);
             this.tlpAccountInfo.Controls.Add(this.txtUserName, 2, 0);
-            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 3);
-            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 3);
+            this.tlpAccountInfo.Controls.Add(this.cbIsExpiry, 1, 4);
+            this.tlpAccountInfo.Controls.Add(this.dtpExpiryTime, 2, 4);
             this.tlpAccountInfo.Controls.Add(this.cbIsLimitLinks, 1, 2);
             this.tlpAccountInfo.Controls.Add(this.nudLimitLinks, 2, 2);
+            this.tlpAccountInfo.Controls.Add(this.cbIsLimitDevices, 1, 3);
             this.tlpAccountInfo.Name = "tlpAccountInfo";
+            // 
+            // nudLimitDevices
+            // 
+            resources.ApplyResources(this.nudLimitDevices, "nudLimitDevices");
+            this.nudLimitDevices.Maximum = new decimal(new int[] {
+            99999,
+            0,
+            0,
+            0});
+            this.nudLimitDevices.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLimitDevices.Name = "nudLimitDevices";
+            this.nudLimitDevices.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // txtPassWord
             // 
@@ -161,6 +186,13 @@
             0,
             0});
             // 
+            // cbIsLimitDevices
+            // 
+            resources.ApplyResources(this.cbIsLimitDevices, "cbIsLimitDevices");
+            this.cbIsLimitDevices.Name = "cbIsLimitDevices";
+            this.cbIsLimitDevices.UseVisualStyleBackColor = true;
+            this.cbIsLimitDevices.CheckedChanged += new System.EventHandler(this.cbIsLimitDevices_CheckedChanged);
+            // 
             // Proxy_AccountForm
             // 
             resources.ApplyResources(this, "$this");
@@ -174,6 +206,7 @@
             this.tlpButton.ResumeLayout(false);
             this.tlpAccountInfo.ResumeLayout(false);
             this.tlpAccountInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLimitDevices)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLimitLinks)).EndInit();
             this.ResumeLayout(false);
 
@@ -195,5 +228,7 @@
         private System.Windows.Forms.CheckBox cbIsEnable;
         private System.Windows.Forms.CheckBox cbIsLimitLinks;
         private System.Windows.Forms.NumericUpDown nudLimitLinks;
+        private System.Windows.Forms.NumericUpDown nudLimitDevices;
+        private System.Windows.Forms.CheckBox cbIsLimitDevices;
     }
 }

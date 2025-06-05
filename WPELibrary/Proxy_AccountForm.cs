@@ -29,6 +29,7 @@ namespace WPELibrary
             {
                 if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
+                    this.cbIsLimitDevices.Checked = true;
                     this.dtpExpiryTime.Value = DateTime.Now;
                     this.txtUserName.Enabled = true;
                 }
@@ -43,10 +44,16 @@ namespace WPELibrary
                         this.txtUserName.Text = pai.UserName;
                         this.txtPassWord.Text = Socket_Operation.PassWord_Decrypt(pai.PassWord);
                         this.cbIsLimitLinks.Checked = pai.IsLimitLinks;
+                        this.cbIsLimitDevices.Checked = pai.IsLimitDevices;
 
                         if (pai.LimitLinks > 0)
                         {
                             this.nudLimitLinks.Value = pai.LimitLinks;                            
+                        }
+
+                        if (pai.LimitDevices > 0)
+                        {
+                            this.nudLimitDevices.Value = pai.LimitDevices;
                         }
 
                         this.cbIsExpiry.Checked = pai.IsExpiry;
@@ -61,8 +68,9 @@ namespace WPELibrary
                     }                    
                 }
 
-                this.LimitLinks_CheckedChanged();
-                this.ExpiryTime_CheckedChanged();
+                this.LimitLinks_Changed();
+                this.LimitDevices_Changed();
+                this.ExpiryTime_Changed();
             }
             catch (Exception ex)
             {
@@ -76,12 +84,26 @@ namespace WPELibrary
 
         private void cbIsLimitLinks_CheckedChanged(object sender, EventArgs e)
         {
-            this.LimitLinks_CheckedChanged();
+            this.LimitLinks_Changed();
         }
 
-        private void LimitLinks_CheckedChanged()
+        private void LimitLinks_Changed()
         {
             this.nudLimitLinks.Enabled = this.cbIsLimitLinks.Checked;
+        }
+
+        #endregion
+
+        #region//限制设备数
+
+        private void cbIsLimitDevices_CheckedChanged(object sender, EventArgs e)
+        {
+            this.LimitDevices_Changed();
+        }
+
+        private void LimitDevices_Changed()
+        {
+            this.nudLimitDevices.Enabled = this.cbIsLimitDevices.Checked;
         }
 
         #endregion
@@ -90,10 +112,10 @@ namespace WPELibrary
 
         private void cbExpiryTime_CheckedChanged(object sender, EventArgs e)
         {
-            this.ExpiryTime_CheckedChanged();
+            this.ExpiryTime_Changed();
         }
 
-        private void ExpiryTime_CheckedChanged()
+        private void ExpiryTime_Changed()
         {
             this.dtpExpiryTime.Enabled = this.cbIsExpiry.Checked;
         }
@@ -118,6 +140,8 @@ namespace WPELibrary
                 PassWord = Socket_Operation.PassWord_Encrypt(PassWord);
                 bool IsLimitLinks = this.cbIsLimitLinks.Checked;
                 int LimitLinks = ((int)this.nudLimitLinks.Value);
+                bool IsLimitDevices = this.cbIsLimitDevices.Checked;
+                int LimitDevices = ((int)this.nudLimitDevices.Value);
                 bool IsExpiry = this.cbIsExpiry.Checked;
                 DateTime LoginTime = DateTime.MinValue;
 
@@ -149,6 +173,8 @@ namespace WPELibrary
                         string.Empty, 
                         IsLimitLinks,
                         LimitLinks,
+                        IsLimitDevices,
+                        LimitDevices,
                         IsExpiry, 
                         ExpiryTime, 
                         DateTime.Now);
@@ -161,6 +187,8 @@ namespace WPELibrary
                         PassWord, 
                         IsLimitLinks,
                         LimitLinks,
+                        IsLimitDevices,
+                        LimitDevices,
                         IsExpiry, 
                         ExpiryTime);
                 }

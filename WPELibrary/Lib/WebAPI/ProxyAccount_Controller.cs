@@ -77,6 +77,8 @@ namespace WPELibrary.Lib.WebAPI
                     string.Empty, 
                     pai.IsLimitLinks,
                     pai.LimitLinks,
+                    pai.IsLimitDevices,
+                    pai.LimitDevices,
                     pai.IsExpiry, 
                     pai.ExpiryTime, 
                     DateTime.Now);
@@ -134,14 +136,17 @@ namespace WPELibrary.Lib.WebAPI
             }
 
             pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+
             bool bOK = Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(
                 pai.AID, 
                 pai.IsEnable, 
                 pai.PassWord, 
                 pai.IsLimitLinks,
                 pai.LimitLinks,
-                pai.IsExpiry, pai.
-                ExpiryTime);
+                pai.IsLimitDevices,
+                pai.LimitDevices,
+                pai.IsExpiry, 
+                pai.ExpiryTime);
 
             if (bOK)
             {

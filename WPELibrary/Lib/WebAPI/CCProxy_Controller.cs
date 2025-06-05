@@ -86,6 +86,8 @@ namespace WPELibrary.Lib.WebAPI
                     string.Empty, 
                     pai.IsLimitLinks,
                     pai.LimitLinks,
+                    pai.IsLimitDevices,
+                    pai.LimitDevices,
                     pai.IsExpiry, 
                     pai.ExpiryTime, 
                     DateTime.Now);
@@ -131,6 +133,8 @@ namespace WPELibrary.Lib.WebAPI
                     pai.PassWord, 
                     pai.IsLimitLinks,
                     pai.LimitLinks,
+                    pai.IsLimitDevices,
+                    pai.LimitDevices,
                     pai.IsExpiry, 
                     pai.ExpiryTime);
             }

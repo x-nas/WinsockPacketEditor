@@ -133,6 +133,22 @@ namespace WPELibrary
 
                     case "IsExpiry_False":
                         e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsExpiry(false);
+                        break;                        
+
+                    case "IsLimitLinks_True":
+                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitLinks(true);
+                        break;
+
+                    case "IsLimitLinks_False":
+                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitLinks(false);
+                        break;
+
+                    case "IsLimitDevices_True":
+                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitDevices(true);
+                        break;
+
+                    case "IsLimitDevices_False":
+                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitDevices(false);
                         break;
 
                     case "Expire_Time":
@@ -187,8 +203,17 @@ namespace WPELibrary
                     }
                     else
                     {
-                        dgvAccountList.Rows[i].Cells["cLimitLinks"].Value = "无限制";
-                    }                    
+                        dgvAccountList.Rows[i].Cells["cLimitLinks"].Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_205);
+                    }
+
+                    if (this.pageData[i].IsLimitDevices)
+                    {
+                        dgvAccountList.Rows[i].Cells["cLimitDevices"].Value = this.pageData[i].LimitDevices;
+                    }
+                    else
+                    {
+                        dgvAccountList.Rows[i].Cells["cLimitDevices"].Value = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_205);
+                    }
                 }
 
                 if (totalPages == 0)
@@ -471,6 +496,22 @@ namespace WPELibrary
             else if (this.cbbSearch_State.SelectedIndex == 5)
             {
                 sType = "IsExpiry_False";
+            }
+            else if (this.cbbSearch_State.SelectedIndex == 6)
+            {
+                sType = "IsLimitLinks_True";
+            }
+            else if (this.cbbSearch_State.SelectedIndex == 7)
+            {
+                sType = "IsLimitLinks_False";
+            }
+            else if (this.cbbSearch_State.SelectedIndex == 8)
+            {
+                sType = "IsLimitDevices_True";
+            }
+            else if (this.cbbSearch_State.SelectedIndex == 9)
+            {
+                sType = "IsLimitDevices_False";
             }
             else
             {

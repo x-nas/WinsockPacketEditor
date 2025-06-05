@@ -129,6 +129,9 @@
     <value>Fill</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cbIsEnable.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt, style=Bold</value>
+  </data>
   <data name="cbIsEnable.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
@@ -249,11 +252,41 @@
   <data name="tlpAccountInfo.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
+  <data name="nudLimitDevices.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudLimitDevices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>168, 88</value>
+  </data>
+  <data name="nudLimitDevices.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudLimitDevices.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 23</value>
+  </data>
+  <data name="nudLimitDevices.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="nudLimitDevices.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudLimitDevices.Name" xml:space="preserve">
+    <value>nudLimitDevices</value>
+  </data>
+  <data name="&gt;&gt;nudLimitDevices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudLimitDevices.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;nudLimitDevices.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="txtPassWord.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="txtPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>166, 29</value>
+    <value>168, 29</value>
   </data>
   <data name="txtPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -277,7 +310,7 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;txtPassWord.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="lPassWord.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -286,7 +319,7 @@
     <value>Fill</value>
   </data>
   <data name="lPassWord.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 32</value>
+    <value>69, 32</value>
   </data>
   <data name="lPassWord.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -295,13 +328,16 @@
     <value>3, 0, 3, 6</value>
   </data>
   <data name="lPassWord.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 23</value>
+    <value>96, 23</value>
   </data>
   <data name="lPassWord.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="lPassWord.Text" xml:space="preserve">
-    <value>密码</value>
+    <value>密码:</value>
+  </data>
+  <data name="lPassWord.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
   </data>
   <data name="&gt;&gt;lPassWord.Name" xml:space="preserve">
     <value>lPassWord</value>
@@ -313,7 +349,7 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;lPassWord.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="lUserName.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -322,7 +358,7 @@
     <value>Fill</value>
   </data>
   <data name="lUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 3</value>
+    <value>69, 3</value>
   </data>
   <data name="lUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
@@ -331,13 +367,16 @@
     <value>3, 0, 3, 6</value>
   </data>
   <data name="lUserName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 23</value>
+    <value>96, 23</value>
   </data>
   <data name="lUserName.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="lUserName.Text" xml:space="preserve">
-    <value>用户名</value>
+    <value>用户名:</value>
+  </data>
+  <data name="lUserName.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>TopRight</value>
   </data>
   <data name="&gt;&gt;lUserName.Name" xml:space="preserve">
     <value>lUserName</value>
@@ -349,13 +388,13 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;lUserName.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="txtUserName.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="txtUserName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>166, 0</value>
+    <value>168, 0</value>
   </data>
   <data name="txtUserName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -379,7 +418,7 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;txtUserName.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="cbIsExpiry.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -388,19 +427,19 @@
     <value>Fill</value>
   </data>
   <data name="cbIsExpiry.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 91</value>
+    <value>69, 121</value>
   </data>
   <data name="cbIsExpiry.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 3</value>
   </data>
   <data name="cbIsExpiry.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 24</value>
+    <value>96, 24</value>
   </data>
   <data name="cbIsExpiry.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="cbIsExpiry.Text" xml:space="preserve">
-    <value>到期时间</value>
+    <value>到期时间:</value>
   </data>
   <data name="cbIsExpiry.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>TopLeft</value>
@@ -415,7 +454,7 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;cbIsExpiry.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="dtpExpiryTime.CustomFormat" xml:space="preserve">
     <value>yyyy-MM-dd HH:mm</value>
@@ -424,7 +463,7 @@
     <value>Fill</value>
   </data>
   <data name="dtpExpiryTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>166, 88</value>
+    <value>168, 118</value>
   </data>
   <data name="dtpExpiryTime.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -445,7 +484,7 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;dtpExpiryTime.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="cbIsLimitLinks.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -454,19 +493,19 @@
     <value>Fill</value>
   </data>
   <data name="cbIsLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>70, 61</value>
+    <value>69, 61</value>
   </data>
   <data name="cbIsLimitLinks.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 3</value>
   </data>
   <data name="cbIsLimitLinks.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 24</value>
+    <value>96, 24</value>
   </data>
   <data name="cbIsLimitLinks.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
   <data name="cbIsLimitLinks.Text" xml:space="preserve">
-    <value>限制链接数</value>
+    <value>限制链接数:</value>
   </data>
   <data name="&gt;&gt;cbIsLimitLinks.Name" xml:space="preserve">
     <value>cbIsLimitLinks</value>
@@ -478,13 +517,13 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;cbIsLimitLinks.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="nudLimitLinks.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="nudLimitLinks.Location" type="System.Drawing.Point, System.Drawing">
-    <value>166, 58</value>
+    <value>168, 58</value>
   </data>
   <data name="nudLimitLinks.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
@@ -508,7 +547,40 @@
     <value>tlpAccountInfo</value>
   </data>
   <data name="&gt;&gt;nudLimitLinks.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
+  </data>
+  <data name="cbIsLimitDevices.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbIsLimitDevices.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbIsLimitDevices.Location" type="System.Drawing.Point, System.Drawing">
+    <value>69, 91</value>
+  </data>
+  <data name="cbIsLimitDevices.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 0, 3, 3</value>
+  </data>
+  <data name="cbIsLimitDevices.Size" type="System.Drawing.Size, System.Drawing">
+    <value>96, 24</value>
+  </data>
+  <data name="cbIsLimitDevices.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="cbIsLimitDevices.Text" xml:space="preserve">
+    <value>限制设备数:</value>
+  </data>
+  <data name="&gt;&gt;cbIsLimitDevices.Name" xml:space="preserve">
+    <value>cbIsLimitDevices</value>
+  </data>
+  <data name="&gt;&gt;cbIsLimitDevices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbIsLimitDevices.Parent" xml:space="preserve">
+    <value>tlpAccountInfo</value>
+  </data>
+  <data name="&gt;&gt;cbIsLimitDevices.ZOrder" xml:space="preserve">
+    <value>9</value>
   </data>
   <data name="tlpAccountInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -520,7 +592,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpAccountInfo.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="tlpAccountInfo.Size" type="System.Drawing.Size, System.Drawing">
     <value>434, 178</value>
@@ -541,7 +613,7 @@
     <value>2</value>
   </data>
   <data name="tlpAccountInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtPassWord" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lPassWord" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUserName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtUserName" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsExpiry" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dtpExpiryTime" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsLimitLinks" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudLimitLinks" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,200,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudLimitDevices" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtPassWord" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="lPassWord" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lUserName" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtUserName" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsExpiry" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="dtpExpiryTime" Row="4" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsLimitLinks" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudLimitLinks" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="cbIsLimitDevices" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,AutoSize,0,Absolute,200,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tlpProxyAccount.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

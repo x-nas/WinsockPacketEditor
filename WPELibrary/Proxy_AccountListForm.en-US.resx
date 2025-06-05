@@ -173,6 +173,12 @@
   <data name="cLimitLinks.Width" type="System.Int32, mscorlib">
     <value>49</value>
   </data>
+  <data name="cLimitDevices.HeaderText" xml:space="preserve">
+    <value>Devices</value>
+  </data>
+  <data name="cLimitDevices.Width" type="System.Int32, mscorlib">
+    <value>64</value>
+  </data>
   <data name="cIPLocation.HeaderText" xml:space="preserve">
     <value>IP Location</value>
   </data>
@@ -292,6 +298,18 @@
   </data>
   <data name="cbbSearch_State.Items5" xml:space="preserve">
     <value>Disable Expiry</value>
+  </data>
+  <data name="cbbSearch_State.Items6" xml:space="preserve">
+    <value>Limit Links</value>
+  </data>
+  <data name="cbbSearch_State.Items7" xml:space="preserve">
+    <value>Unlimited Links</value>
+  </data>
+  <data name="cbbSearch_State.Items8" xml:space="preserve">
+    <value>Limit Devices</value>
+  </data>
+  <data name="cbbSearch_State.Items9" xml:space="preserve">
+    <value>Unlimited Devices</value>
   </data>
   <data name="bSearch_State.Text" xml:space="preserve">
     <value>Find</value>

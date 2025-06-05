@@ -112,6 +112,30 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//是否限制设备数
+
+        protected bool islimitdevices;
+
+        public bool IsLimitDevices
+        {
+            get { return islimitdevices; }
+            set { islimitdevices = value; }
+        }
+
+        #endregion
+
+        #region//最大设备数
+
+        protected int limitdevices;
+
+        public int LimitDevices
+        {
+            get { return limitdevices; }
+            set { limitdevices = value; }
+        }
+
+        #endregion
+
         #region//是否过期
 
         protected bool isexpiry;
@@ -176,7 +200,9 @@ namespace WPELibrary.Lib
             string LoginIP, 
             string IPLocation, 
             bool IsLimitLinks, 
-            int LimitLinks, 
+            int LimitLinks,
+            bool IsLimitDevices,
+            int LimitDevices,
             bool IsExpiry, 
             DateTime ExpiryTime, 
             DateTime CreateTime) 
@@ -190,6 +216,8 @@ namespace WPELibrary.Lib
             this.iplocation = IPLocation;
             this.islimitlinks = IsLimitLinks;
             this.limitlinks = LimitLinks;
+            this.islimitdevices = IsLimitDevices;
+            this.limitdevices = LimitDevices;
             this.isexpiry = IsExpiry;
             this.expirytime = ExpiryTime;
             this.createtime = CreateTime;
