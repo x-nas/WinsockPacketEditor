@@ -690,7 +690,7 @@ namespace WinsockPacketEditor
         private async void tUpdateProxyState_Tick(object sender, EventArgs e)
         {
             await this.UpdateClientLinks();
-            await this.UpdateAccountLinks();
+            await this.UpdateAccountLinksAndDevices();
             this.dgvAuth.Refresh();
             await Socket_Cache.SocketProxy.UpdateProxyUDP();
             await Socket_Cache.ProxyAccount.UpdateOnlineStatus();
@@ -1010,9 +1010,9 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//更新账号链接数（异步）
+        #region//更新账号链接数和设备数（异步）
 
-        private async Task UpdateAccountLinks()
+        private async Task UpdateAccountLinksAndDevices()
         {
             await Task.Run(() =>
             {
@@ -1021,18 +1021,8 @@ namespace WinsockPacketEditor
                     foreach (Proxy_AuthInfo pai in Socket_Cache.SocketProxy.lstProxyAuth.ToList())
                     {
                         string ClientIP = pai.IPAddress.ToString();
-                        string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(pai.AID);
-                        string RootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
-
-                        TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, RootName);
-                        if (RootNode != null)
-                        {
-                            pai.LinksNumber = RootNode.Nodes.Count;
-                        }
-                        else
-                        {
-                            pai.LinksNumber = 0;
-                        }
+                        pai.LinksNumber = Socket_Cache.ProxyAccount.GetLinksNumber_ByAccountID(pai.AID, ClientIP, this.tvProxyInfo.Nodes);
+                        pai.DevicesNumber = Socket_Cache.ProxyAccount.GetDevicesNumber_ByAccountID(pai.AID);
                     }
                 }
                 catch (Exception ex)

@@ -22,6 +22,12 @@ namespace WPELibrary.Lib
 
         #endregion        
 
+        #region//设备数
+
+        public int DevicesNumber { get; set; }
+
+        #endregion        
+
         #region//是否验证成功
 
         public bool AuthResult { get; set; }
@@ -40,7 +46,8 @@ namespace WPELibrary.Lib
         {
             this.AID = AID;
             this.IPAddress = ipAddress;
-            this.LinksNumber = 0;            
+            this.LinksNumber = 0;
+            this.DevicesNumber = 0;
             this.AuthResult = authResult;
             this.AuthTime = authTime;
         }

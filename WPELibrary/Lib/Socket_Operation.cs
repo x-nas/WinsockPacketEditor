@@ -1,5 +1,4 @@
 ﻿using EasyHook;
-using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Hosting;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
@@ -2489,21 +2488,7 @@ namespace WPELibrary.Lib
             return iReturn;
         }
 
-        #endregion
-
-        #region//获取代理账号登录的设备数
-
-        public static int GetDevicesNumber_ByAccountID(Guid AID)
-        {
-            if (AID != null && AID != Guid.Empty)
-            {
-                return Socket_Cache.SocketProxy.lstProxyAuth.Count(Auth => Auth.AID == AID);
-            }
-
-            return 0;
-        }
-
-        #endregion
+        #endregion        
 
         #region//查找树节点        
 

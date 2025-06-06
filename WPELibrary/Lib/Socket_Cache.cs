@@ -2555,7 +2555,7 @@ namespace WPELibrary.Lib
                         {
                             if (paiAccount.IsLimitDevices)
                             {
-                                int DevicesNumber = Socket_Operation.GetDevicesNumber_ByAccountID(AID);
+                                int DevicesNumber = Socket_Cache.ProxyAccount.GetDevicesNumber_ByAccountID(AID);
 
                                 if (DevicesNumber < paiAccount.LimitDevices)
                                 {
@@ -2641,6 +2641,42 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            #endregion
+
+            #region//获取代理账号的链接数
+
+            public static int GetLinksNumber_ByAccountID(Guid AID, string ClientIP, TreeNodeCollection nodes)
+            {
+                int iReturn = 0;
+
+                try
+                {
+                    string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(AID);
+                    string RootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
+
+                    TreeNode RootNode = Socket_Operation.FindNodeSync(nodes, RootName);
+                    if (RootNode != null)
+                    {
+                        iReturn = RootNode.Nodes.Count;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iReturn;                
+            }
+
+            #endregion
+
+            #region//获取代理账号登录的设备数
+
+            public static int GetDevicesNumber_ByAccountID(Guid AID)
+            {
+                return Socket_Cache.SocketProxy.lstProxyAuth.Count(p => p.AID == AID);
             }
 
             #endregion
