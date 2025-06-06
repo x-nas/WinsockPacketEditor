@@ -375,6 +375,15 @@ namespace WinsockPacketEditor
 
         #endregion
 
+        #region//系统设置
+
+        private void cbSpeedMode_CheckedChanged(object sender, EventArgs e)
+        {
+            Socket_Cache.SocketProxy.SpeedMode = this.cbSpeedMode.Checked;
+        }
+
+        #endregion
+
         #region//开始代理
 
         private void bStart_Click(object sender, EventArgs e)
@@ -407,8 +416,7 @@ namespace WinsockPacketEditor
             this.bStart.Enabled = !starting;
             this.bStop.Enabled = starting;
 
-            this.cbEnable_Auth.Enabled = !starting;
-            this.cbSpeedMode.Enabled = !starting;
+            this.cbEnable_Auth.Enabled = !starting;            
 
             this.tpProxySet.Enabled = !starting;
             this.tpExternalProxy.Enabled = !starting;            

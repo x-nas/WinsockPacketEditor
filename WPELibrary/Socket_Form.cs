@@ -580,6 +580,11 @@ namespace WPELibrary
             this.TopMost = this.cbTopMost.Checked;
         }
 
+        private void cbWorkingMode_Speed_CheckedChanged(object sender, EventArgs e)
+        {
+            Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
+        }
+
         private void InitFilterActionColor()
         {
             try
@@ -797,7 +802,7 @@ namespace WPELibrary
             {
                 this.tcSocketInfo_FilterSet.Enabled = false;
                 this.tcSocketInfo_HookSet.Enabled = false;
-                this.tcSocketInfo_SystemSet.Enabled = false;
+                this.gbSystemSet_FilterSet.Enabled = false;
 
                 this.bStartHook.Enabled = false;
                 this.bStopHook.Enabled = true;
@@ -845,7 +850,7 @@ namespace WPELibrary
             {
                 this.tcSocketInfo_FilterSet.Enabled = true;
                 this.tcSocketInfo_HookSet.Enabled = true;
-                this.tcSocketInfo_SystemSet.Enabled = true;
+                this.gbSystemSet_FilterSet.Enabled = true;
 
                 this.bStartHook.Enabled = true;
                 this.bStopHook.Enabled = false;
@@ -2694,8 +2699,7 @@ namespace WPELibrary
 
 
 
-        #endregion
 
-        
+        #endregion        
     }
 }

@@ -639,6 +639,7 @@
             resources.ApplyResources(this.cbSpeedMode, "cbSpeedMode");
             this.cbSpeedMode.Name = "cbSpeedMode";
             this.cbSpeedMode.UseVisualStyleBackColor = true;
+            this.cbSpeedMode.CheckedChanged += new System.EventHandler(this.cbSpeedMode_CheckedChanged);
             // 
             // tlpButton
             // 
@@ -1262,7 +1263,7 @@
             // tUpdateProxyState
             // 
             this.tUpdateProxyState.Enabled = true;
-            this.tUpdateProxyState.Interval = 10000;
+            this.tUpdateProxyState.Interval = 3000;
             this.tUpdateProxyState.Tick += new System.EventHandler(this.tUpdateProxyState_Tick);
             // 
             // SocketProxy_Form
