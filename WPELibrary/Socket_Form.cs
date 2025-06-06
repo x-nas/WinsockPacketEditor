@@ -234,28 +234,23 @@ namespace WPELibrary
             {
                 dgvSocketList.AutoGenerateColumns = false;
                 dgvSocketList.DataSource = Socket_Cache.SocketList.lstRecPacket;
-                dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
-                Socket_Cache.SocketList.RecSocketPacket += new Socket_Cache.SocketList.SocketPacketReceived(Event_RecSocketPacket);
+                dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);                
 
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
-                dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
-                Socket_Cache.FilterList.RecSocketFilter += new Socket_Cache.FilterList.SocketFilterReceived(Event_RecSocketFilter);
+                dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);                
 
                 dgvSendList.AutoGenerateColumns = false;
                 dgvSendList.DataSource = Socket_Cache.SendList.lstSend;
-                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
-                Socket_Cache.SendList.RecSocketSend += new Socket_Cache.SendList.SocketSendReceived(Event_RecSocketSend);
+                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);                
 
                 dgvRobotList.AutoGenerateColumns = false;
                 dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
                 dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
-                Socket_Cache.RobotList.RecSocketRobot += new Socket_Cache.RobotList.SocketRobotReceived(Event_RecSocketRobot);
 
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstSocketLog;
-                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
-                Socket_Cache.LogList.RecSocketLog += new Socket_Cache.LogList.SocketLogReceived(Event_RecSocketLog);
+                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);                
             }
             catch (Exception ex)
             {
@@ -609,6 +604,39 @@ namespace WPELibrary
 
         #endregion
 
+        #region//系统备份
+
+        private void bBackUp_Export_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string FileName = Socket_Operation.AssemblyVersion;
+                bool SystemConfig = this.cbBackUp_SystemConfig.Checked;
+                bool ProxySet = this.cbBackUp_ProxySet.Checked;
+                bool ProxyAccount = this.cbBackUp_ProxyAccount.Checked;
+                bool InjectionSet = this.cbBackUp_InjectionSet.Checked;
+                bool FilterList = this.cbBackUp_FilterList.Checked;
+                bool SendList = this.cbBackUp_SendList.Checked;
+                bool RobotList = this.cbBackUp_RobotList.Checked;                
+
+                Socket_Cache.System.ExportSystemBackUp_Dialog(
+                    FileName,
+                    SystemConfig,
+                    ProxySet, 
+                    ProxyAccount,
+                    InjectionSet, 
+                    FilterList, 
+                    SendList, 
+                    RobotList);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//清空数据
 
         private void bCleanUp_Click(object sender, EventArgs e)
@@ -893,24 +921,6 @@ namespace WPELibrary
 
         #region//显示封包列表（异步）
 
-        private void Event_RecSocketPacket(Socket_PacketInfo spi)
-        {
-            try
-            {
-                if (!this.dgvSocketList.IsDisposed)
-                {
-                    this.dgvSocketList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.SocketList.lstRecPacket.Add(spi);
-                    }));
-                }                
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
         private void dgvSocketList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
@@ -961,24 +971,6 @@ namespace WPELibrary
 
         #region//显示日志列表（异步）
 
-        private void Event_RecSocketLog(Socket_LogInfo sli)
-        {
-            try
-            {
-                if (!this.dgvLogList.IsDisposed)
-                {
-                    this.dgvLogList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.LogList.lstSocketLog.Add(sli);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
         private void dgvLogList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             try
@@ -997,25 +989,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//显示滤镜列表（异步）
-
-        private void Event_RecSocketFilter(Socket_FilterInfo sfi)
-        {
-            try
-            {
-                if (!this.dgvFilterList.IsDisposed)
-                {
-                    this.dgvFilterList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.FilterList.lstFilter.Add(sfi);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        #region//显示滤镜列表（异步）        
 
         private void dgvFilterList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1055,25 +1029,7 @@ namespace WPELibrary
 
         #endregion
 
-        #region//显示发送列表（异步）
-
-        private void Event_RecSocketSend(Socket_SendInfo ssi)
-        {
-            try
-            {
-                if (!this.dgvSendList.IsDisposed)
-                {
-                    this.dgvSendList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.SendList.lstSend.Add(ssi);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        #region//显示发送列表（异步）        
 
         private void dgvSendList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -1118,25 +1074,7 @@ namespace WPELibrary
         #endregion
 
         #region//显示机器人列表（异步）
-
-        private void Event_RecSocketRobot(Socket_RobotInfo sri)
-        {
-            try
-            {
-                if (!this.dgvRobotList.IsDisposed)
-                {
-                    this.dgvRobotList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.RobotList.lstRobot.Add(sri);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
+        
         private void dgvRobotList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -2756,6 +2694,8 @@ namespace WPELibrary
 
 
 
-        #endregion        
+        #endregion
+
+        
     }
 }

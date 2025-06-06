@@ -222,6 +222,11 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_210 = { "不支持的认证方式!", "Unsupported authentication method!" };
         public static string[] MutiLan_211 = { "外部代理: 连接成功!", "External proxy: Connection successful!" };
         public static string[] MutiLan_212 = { "外部代理: 拒绝连接!", "External proxy: Refused connection!" };
+        public static string[] MutiLan_213 = { "系统备份文件", "System backup file" };
+        public static string[] MutiLan_214 = { "系统备份保存完毕 {0}", "System backup export {0}" };
+        public static string[] MutiLan_215 = { "导入系统备份成功! [未加密]", "Import System Backup successful! [Unencrypted]" };
+        public static string[] MutiLan_216 = { "导入系统备份成功! [已加密]", "Import System Backup successful! [Encrypted]" };
+        public static string[] MutiLan_217 = { "不是有效的备份文件!", "Not a valid backup file!" };
 
         #endregion
 

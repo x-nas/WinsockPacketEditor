@@ -35,6 +35,7 @@ namespace WPELibrary
                     case Socket_Cache.System.PWType.SendList_Import:
                     case Socket_Cache.System.PWType.SendCollection_Import:
                     case Socket_Cache.System.PWType.ProxyAccount_Import:
+                    case Socket_Cache.System.PWType.SystemBackUp_Import:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_90);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_91);
                         break;
@@ -44,6 +45,7 @@ namespace WPELibrary
                     case Socket_Cache.System.PWType.SendList_Export:
                     case Socket_Cache.System.PWType.SendCollection_Export:
                     case Socket_Cache.System.PWType.ProxyAccount_Export:
+                    case Socket_Cache.System.PWType.SystemBackUp_Export:
                         sTitle = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_36);
                         sShow = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_88);
                         break;
@@ -85,6 +87,11 @@ namespace WPELibrary
                 case Socket_Cache.System.PWType.ProxyAccount_Import:
                 case Socket_Cache.System.PWType.ProxyAccount_Export:
                     Socket_Cache.ProxyAccount.AESKey = SocketList_Password;
+                    break;
+
+                case Socket_Cache.System.PWType.SystemBackUp_Import:
+                case Socket_Cache.System.PWType.SystemBackUp_Export:
+                    Socket_Cache.System.AESKey = SocketList_Password;
                     break;
             }
         }

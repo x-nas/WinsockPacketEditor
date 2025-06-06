@@ -284,11 +284,23 @@
   <data name="tsmiLanguage.Text" xml:space="preserve">
     <value> 语言 ( Language )</value>
   </data>
+  <data name="tsmiImport.Size" type="System.Drawing.Size, System.Drawing">
+    <value>124, 22</value>
+  </data>
+  <data name="tsmiImport.Text" xml:space="preserve">
+    <value>导入配置</value>
+  </data>
   <data name="tsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>119, 21</value>
+    <value>124, 22</value>
   </data>
   <data name="tsmiAbout.Text" xml:space="preserve">
-    <value> 关于 ( About )</value>
+    <value>关于</value>
+  </data>
+  <data name="tsmiSystem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 21</value>
+  </data>
+  <data name="tsmiSystem.Text" xml:space="preserve">
+    <value> 系统 ( System )</value>
   </data>
   <data name="msSystem.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
@@ -7009,6 +7021,18 @@
     <value>tsmiEnglish</value>
   </data>
   <data name="&gt;&gt;tsmiEnglish.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiSystem.Name" xml:space="preserve">
+    <value>tsmiSystem</value>
+  </data>
+  <data name="&gt;&gt;tsmiSystem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsmiImport.Name" xml:space="preserve">
+    <value>tsmiImport</value>
+  </data>
+  <data name="&gt;&gt;tsmiImport.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tsmiAbout.Name" xml:space="preserve">

@@ -262,6 +262,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon\WPE64.ico" />
+    <None Include="Resources\openHS.png" />
+    <None Include="Resources\aboutthis.png" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -391,6 +393,12 @@
     <FileAssociation Include=".rp">
       <Visible>False</Visible>
       <Description>WPE64 Robot List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".sb">
+      <Visible>False</Visible>
+      <Description>WPE64 System BackUp File</Description>
       <Progid>WPE64</Progid>
       <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
     </FileAssociation>

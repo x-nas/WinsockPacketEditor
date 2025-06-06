@@ -133,7 +133,7 @@
   <data name="tsmiChinese.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
+        vQAADr0BR/uQrQAAAX9JREFUOE+tlD1Lw1AUhq+Ig4vgICit0I80bfOlIg6ddXAQXKyzk4ur/8Cf4OYP
         8SeIqzQ3af0IQi2CRTo5qOjrOZcUG0kbEzo8kN40z33PudwjPvt9BAdNyIoO37QieFXCiK5Ngh3sYqfg
         h1Yur14oUT38U81CZ6sGSWujHyfBLnYKqVXUgtRsdBpVSNOAV7Hh2wY+rmYpsQm3QL/TJCen4FI9y4Dv
         GHg9X0TvJIf2Zh1St+CWbQT7ZXSP83Bp4zhJHBxGcOnemoHBxQIwEPjuCTyfrtCuJKbkwV4o5ipSpBa+
@@ -142,10 +142,13 @@
         EsTZoQuSPdU41AUZXulpoq706BCaBmoINWkITRqbafkdm338AN2/DECo5xoaAAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="tsmiChinese.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 22</value>
+  </data>
   <data name="tsmiEnglish.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vwAADr8BOAVTJAAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
+        vgAADr4B6kKxwAAAApdJREFUOE+tlF9IU2EYxr/wxruuMwucelF5VVHSRaiRQX/AVmAEi/4cIYqELqKi
         m4KCdtGsUYOZRZZp81/+qexsK8nLCjOSoO3MbErOpltXIe7i6X2+6VhpkNHFs/Od932eH+fsfO+nEB9H
         97P3yLEHoEpboLZ3QFV2prWtHTn7+xH3XIdVlKfFNWvsZXzMSJYMsshUUTOAlFGFkc5ulF54B7WlDapi
         LvQ3YHolwywZZJGpcu1+tPd9AM4exuyVM7jV9xmqvFfMjyTU9mewBopHvB7JpCRLBllkKlUuT7ipFTvq
@@ -159,8 +162,17 @@
         NYMsMueOzaH/eGwOAVPj+AlyomoNOtmMtQAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="tsmiAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 21</value>
+  <data name="tsmiEnglish.Size" type="System.Drawing.Size, System.Drawing">
+    <value>123, 22</value>
+  </data>
+  <data name="tsmiSystem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 21</value>
+  </data>
+  <data name="tsmiSystem.Text" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="tsmiImport.Text" xml:space="preserve">
+    <value>Import Backup</value>
   </data>
   <data name="tsmiAbout.Text" xml:space="preserve">
     <value>About</value>

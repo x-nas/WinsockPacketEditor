@@ -101,8 +101,7 @@ namespace WinsockPacketEditor
 
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstProxyLog;
-                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
-                Socket_Cache.LogList.RecProxyLog += new Socket_Cache.LogList.ProxyLogReceived(Event_RecProxyLog);
+                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);                
 
                 tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
                 Socket_Cache.SocketProxyList.RecProxyData += new Socket_Cache.SocketProxyList.ProxyDataReceived(Event_RecProxyData);
@@ -1106,25 +1105,7 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//显示日志列表（异步）        
-
-        private void Event_RecProxyLog(Socket_LogInfo sli)
-        {
-            try
-            {
-                if (!dgvLogList.IsDisposed)
-                {
-                    dgvLogList.Invoke(new MethodInvoker(delegate
-                    {
-                        Socket_Cache.LogList.lstProxyLog.Add(sli);
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        #region//显示日志列表（异步）
 
         private void dgvLogList_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {

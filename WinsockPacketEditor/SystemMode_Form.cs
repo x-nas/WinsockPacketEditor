@@ -47,12 +47,7 @@ namespace WinsockPacketEditor
                     this.WebSiteURL = Socket_Cache.System.WPE64_IP;
                 }
 
-                this.cbIsRemote.Checked = Socket_Cache.System.IsRemote;
-                this.txtRemote_UserName.Text = Socket_Cache.System.Remote_UserName;
-                this.txtRemote_PassWord.Text = Socket_Cache.System.Remote_PassWord;
-                this.nudRemote_Port.Value = Socket_Cache.System.Remote_Port;
-
-                this.IsRemote_Changed();
+                this.InitRemote();
             }
             catch (Exception ex)
             {
@@ -63,6 +58,16 @@ namespace WinsockPacketEditor
         private void SystemMode_Form_FormClosing(object sender, FormClosingEventArgs e)
         {
             Socket_Cache.System.SaveSystemConfig_ToDB();
+        }
+
+        private void InitRemote()
+        {
+            this.cbIsRemote.Checked = Socket_Cache.System.IsRemote;
+            this.txtRemote_UserName.Text = Socket_Cache.System.Remote_UserName;
+            this.txtRemote_PassWord.Text = Socket_Cache.System.Remote_PassWord;
+            this.nudRemote_Port.Value = Socket_Cache.System.Remote_Port;
+
+            this.IsRemote_Changed();
         }
 
         #endregion        
@@ -124,11 +129,18 @@ namespace WinsockPacketEditor
 
         #endregion
 
-        #region//关于
+        #region//系统
 
         private void tsmiAbout_Click(object sender, EventArgs e)
         {
             Process.Start(this.WebSiteURL);
+        }
+
+        private void tsmiImport_Click(object sender, EventArgs e)
+        {
+            Socket_Cache.System.ImportSystemBackUp_Dialog();
+
+            this.InitRemote();
         }
 
         #endregion
@@ -202,6 +214,6 @@ namespace WinsockPacketEditor
             Process.Start(this.lRemoteURL.Text);
         }
 
-        #endregion               
+        #endregion        
     }
 }

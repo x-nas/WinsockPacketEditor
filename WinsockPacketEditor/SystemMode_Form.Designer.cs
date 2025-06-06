@@ -37,6 +37,8 @@
             this.tsmiLanguage = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiChinese = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiEnglish = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSystem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiImport = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.gbRemoteMGT = new System.Windows.Forms.GroupBox();
             this.tlpRemoteMGT = new System.Windows.Forms.TableLayoutPanel();
@@ -94,7 +96,7 @@
             // 
             this.msSystem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiLanguage,
-            this.tsmiAbout});
+            this.tsmiSystem});
             resources.ApplyResources(this.msSystem, "msSystem");
             this.msSystem.Name = "msSystem";
             // 
@@ -119,9 +121,25 @@
             this.tsmiEnglish.Name = "tsmiEnglish";
             this.tsmiEnglish.Click += new System.EventHandler(this.tsmiEnglish_Click);
             // 
+            // tsmiSystem
+            // 
+            this.tsmiSystem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiImport,
+            this.tsmiAbout});
+            this.tsmiSystem.Image = global::WinsockPacketEditor.Properties.Resources.help;
+            this.tsmiSystem.Name = "tsmiSystem";
+            resources.ApplyResources(this.tsmiSystem, "tsmiSystem");
+            // 
+            // tsmiImport
+            // 
+            this.tsmiImport.Image = global::WinsockPacketEditor.Properties.Resources.openHS;
+            this.tsmiImport.Name = "tsmiImport";
+            resources.ApplyResources(this.tsmiImport, "tsmiImport");
+            this.tsmiImport.Click += new System.EventHandler(this.tsmiImport_Click);
+            // 
             // tsmiAbout
             // 
-            this.tsmiAbout.Image = global::WinsockPacketEditor.Properties.Resources.help;
+            this.tsmiAbout.Image = global::WinsockPacketEditor.Properties.Resources.aboutthis;
             this.tsmiAbout.Name = "tsmiAbout";
             resources.ApplyResources(this.tsmiAbout, "tsmiAbout");
             this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
@@ -254,7 +272,7 @@
         private System.Windows.Forms.TableLayoutPanel tlpSystemMode;
         private System.Windows.Forms.MenuStrip msSystem;
         private System.Windows.Forms.ToolStripMenuItem tsmiLanguage;
-        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSystem;
         private System.Windows.Forms.TableLayoutPanel tlpModeSelect;
         private System.Windows.Forms.Button bProcess_Start;
         private System.Windows.Forms.Button bProxy_Start;
@@ -273,5 +291,7 @@
         private System.Windows.Forms.TableLayoutPanel tlpRemoteURL;
         private System.Windows.Forms.LinkLabel lRemoteURL;
         private System.Windows.Forms.Label lRemoteMGT;
+        private System.Windows.Forms.ToolStripMenuItem tsmiImport;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
     }
 }

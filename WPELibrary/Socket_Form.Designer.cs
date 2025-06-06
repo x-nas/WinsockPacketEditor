@@ -194,6 +194,18 @@ namespace WPELibrary
             this.gbSystemSet_WorkMode = new System.Windows.Forms.GroupBox();
             this.tlpSystemSet_WorkMode = new System.Windows.Forms.TableLayoutPanel();
             this.cbWorkingMode_Speed = new System.Windows.Forms.CheckBox();
+            this.tcSocketInfo_SystemBackup = new System.Windows.Forms.TabPage();
+            this.tlpSystemBackup = new System.Windows.Forms.TableLayoutPanel();
+            this.gbBackUp_Content = new System.Windows.Forms.GroupBox();
+            this.tlpBackUp_Content = new System.Windows.Forms.TableLayoutPanel();
+            this.cbBackUp_SystemConfig = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_RobotList = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_SendList = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_FilterList = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_InjectionSet = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_ProxyAccount = new System.Windows.Forms.CheckBox();
+            this.cbBackUp_ProxySet = new System.Windows.Forms.CheckBox();
+            this.bBackUp_Export = new System.Windows.Forms.Button();
             this.tlpInformation = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPacketInfo = new System.Windows.Forms.TableLayoutPanel();
             this.tcPacketInfo = new System.Windows.Forms.TabControl();
@@ -406,11 +418,11 @@ namespace WPELibrary
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.bgwRobotList = new System.ComponentModel.BackgroundWorker();
             this.bgwSearch = new System.ComponentModel.BackgroundWorker();
+            this.bgwPacketStatistics = new System.ComponentModel.BackgroundWorker();
             this.dataGridViewImageColumn1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn3 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn4 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.bgwPacketStatistics = new System.ComponentModel.BackgroundWorker();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -450,6 +462,10 @@ namespace WPELibrary
             this.tlpSystemSet_FilterSet.SuspendLayout();
             this.gbSystemSet_WorkMode.SuspendLayout();
             this.tlpSystemSet_WorkMode.SuspendLayout();
+            this.tcSocketInfo_SystemBackup.SuspendLayout();
+            this.tlpSystemBackup.SuspendLayout();
+            this.gbBackUp_Content.SuspendLayout();
+            this.tlpBackUp_Content.SuspendLayout();
             this.tlpInformation.SuspendLayout();
             this.tlpPacketInfo.SuspendLayout();
             this.tcPacketInfo.SuspendLayout();
@@ -1084,6 +1100,7 @@ namespace WPELibrary
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_ListSet);
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_HotKey);
             this.tcSocketInfo.Controls.Add(this.tcSocketInfo_SystemSet);
+            this.tcSocketInfo.Controls.Add(this.tcSocketInfo_SystemBackup);
             this.tcSocketInfo.Name = "tcSocketInfo";
             this.tcSocketInfo.SelectedIndex = 0;
             // 
@@ -1098,19 +1115,19 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.tlpFilterSet, "tlpFilterSet");
             this.tlpFilterSet.Controls.Add(this.txtCheckLength, 1, 2);
-            this.tlpFilterSet.Controls.Add(this.txtCheckHead, 7, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheckHead, 6, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheckHead, 5, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckHead, 4, 1);
             this.tlpFilterSet.Controls.Add(this.cbCheckSize, 0, 2);
             this.tlpFilterSet.Controls.Add(this.rbFilter_Show, 1, 0);
             this.tlpFilterSet.Controls.Add(this.rbFilter_NotShow, 0, 0);
-            this.tlpFilterSet.Controls.Add(this.txtCheckPort, 4, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheckPort, 3, 2);
-            this.tlpFilterSet.Controls.Add(this.txtCheckData, 7, 2);
-            this.tlpFilterSet.Controls.Add(this.cbCheckData, 6, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckPort, 3, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckPort, 2, 2);
+            this.tlpFilterSet.Controls.Add(this.txtCheckData, 5, 2);
+            this.tlpFilterSet.Controls.Add(this.cbCheckData, 4, 2);
             this.tlpFilterSet.Controls.Add(this.cbCheckSocket, 0, 1);
-            this.tlpFilterSet.Controls.Add(this.cbCheckIP, 3, 1);
+            this.tlpFilterSet.Controls.Add(this.cbCheckIP, 2, 1);
             this.tlpFilterSet.Controls.Add(this.txtCheckSocket, 1, 1);
-            this.tlpFilterSet.Controls.Add(this.txtCheckIP, 4, 1);
+            this.tlpFilterSet.Controls.Add(this.txtCheckIP, 3, 1);
             this.tlpFilterSet.Name = "tlpFilterSet";
             // 
             // txtCheckLength
@@ -1609,6 +1626,103 @@ namespace WPELibrary
             resources.ApplyResources(this.cbWorkingMode_Speed, "cbWorkingMode_Speed");
             this.cbWorkingMode_Speed.Name = "cbWorkingMode_Speed";
             this.cbWorkingMode_Speed.UseVisualStyleBackColor = true;
+            // 
+            // tcSocketInfo_SystemBackup
+            // 
+            resources.ApplyResources(this.tcSocketInfo_SystemBackup, "tcSocketInfo_SystemBackup");
+            this.tcSocketInfo_SystemBackup.BackColor = System.Drawing.SystemColors.Control;
+            this.tcSocketInfo_SystemBackup.Controls.Add(this.tlpSystemBackup);
+            this.tcSocketInfo_SystemBackup.Name = "tcSocketInfo_SystemBackup";
+            // 
+            // tlpSystemBackup
+            // 
+            resources.ApplyResources(this.tlpSystemBackup, "tlpSystemBackup");
+            this.tlpSystemBackup.Controls.Add(this.gbBackUp_Content, 0, 0);
+            this.tlpSystemBackup.Name = "tlpSystemBackup";
+            // 
+            // gbBackUp_Content
+            // 
+            resources.ApplyResources(this.gbBackUp_Content, "gbBackUp_Content");
+            this.gbBackUp_Content.Controls.Add(this.tlpBackUp_Content);
+            this.gbBackUp_Content.Name = "gbBackUp_Content";
+            this.gbBackUp_Content.TabStop = false;
+            // 
+            // tlpBackUp_Content
+            // 
+            resources.ApplyResources(this.tlpBackUp_Content, "tlpBackUp_Content");
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_SystemConfig, 0, 0);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_RobotList, 3, 1);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_SendList, 2, 1);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_FilterList, 1, 1);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_InjectionSet, 0, 1);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_ProxyAccount, 2, 0);
+            this.tlpBackUp_Content.Controls.Add(this.cbBackUp_ProxySet, 1, 0);
+            this.tlpBackUp_Content.Controls.Add(this.bBackUp_Export, 5, 1);
+            this.tlpBackUp_Content.Name = "tlpBackUp_Content";
+            // 
+            // cbBackUp_SystemConfig
+            // 
+            resources.ApplyResources(this.cbBackUp_SystemConfig, "cbBackUp_SystemConfig");
+            this.cbBackUp_SystemConfig.Checked = true;
+            this.cbBackUp_SystemConfig.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_SystemConfig.Name = "cbBackUp_SystemConfig";
+            this.cbBackUp_SystemConfig.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_RobotList
+            // 
+            resources.ApplyResources(this.cbBackUp_RobotList, "cbBackUp_RobotList");
+            this.cbBackUp_RobotList.Checked = true;
+            this.cbBackUp_RobotList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_RobotList.Name = "cbBackUp_RobotList";
+            this.cbBackUp_RobotList.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_SendList
+            // 
+            resources.ApplyResources(this.cbBackUp_SendList, "cbBackUp_SendList");
+            this.cbBackUp_SendList.Checked = true;
+            this.cbBackUp_SendList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_SendList.Name = "cbBackUp_SendList";
+            this.cbBackUp_SendList.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_FilterList
+            // 
+            resources.ApplyResources(this.cbBackUp_FilterList, "cbBackUp_FilterList");
+            this.cbBackUp_FilterList.Checked = true;
+            this.cbBackUp_FilterList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_FilterList.Name = "cbBackUp_FilterList";
+            this.cbBackUp_FilterList.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_InjectionSet
+            // 
+            resources.ApplyResources(this.cbBackUp_InjectionSet, "cbBackUp_InjectionSet");
+            this.cbBackUp_InjectionSet.Checked = true;
+            this.cbBackUp_InjectionSet.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_InjectionSet.Name = "cbBackUp_InjectionSet";
+            this.cbBackUp_InjectionSet.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_ProxyAccount
+            // 
+            resources.ApplyResources(this.cbBackUp_ProxyAccount, "cbBackUp_ProxyAccount");
+            this.cbBackUp_ProxyAccount.Checked = true;
+            this.cbBackUp_ProxyAccount.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_ProxyAccount.Name = "cbBackUp_ProxyAccount";
+            this.cbBackUp_ProxyAccount.UseVisualStyleBackColor = true;
+            // 
+            // cbBackUp_ProxySet
+            // 
+            resources.ApplyResources(this.cbBackUp_ProxySet, "cbBackUp_ProxySet");
+            this.cbBackUp_ProxySet.Checked = true;
+            this.cbBackUp_ProxySet.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBackUp_ProxySet.Name = "cbBackUp_ProxySet";
+            this.cbBackUp_ProxySet.UseVisualStyleBackColor = true;
+            // 
+            // bBackUp_Export
+            // 
+            resources.ApplyResources(this.bBackUp_Export, "bBackUp_Export");
+            this.bBackUp_Export.Image = global::WPELibrary.Properties.Resources.saveas;
+            this.bBackUp_Export.Name = "bBackUp_Export";
+            this.bBackUp_Export.UseVisualStyleBackColor = true;
+            this.bBackUp_Export.Click += new System.EventHandler(this.bBackUp_Export_Click);
             // 
             // tlpInformation
             // 
@@ -3342,6 +3456,11 @@ namespace WPELibrary
             this.bgwSearch.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearch_DoWork);
             this.bgwSearch.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearch_RunWorkerCompleted);
             // 
+            // bgwPacketStatistics
+            // 
+            this.bgwPacketStatistics.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketStatistics_DoWork);
+            this.bgwPacketStatistics.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwPacketStatistics_RunWorkerCompleted);
+            // 
             // dataGridViewImageColumn1
             // 
             dataGridViewCellStyle35.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -3381,11 +3500,6 @@ namespace WPELibrary
             this.dataGridViewImageColumn4.Name = "dataGridViewImageColumn4";
             this.dataGridViewImageColumn4.ReadOnly = true;
             this.dataGridViewImageColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // bgwPacketStatistics
-            // 
-            this.bgwPacketStatistics.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketStatistics_DoWork);
-            this.bgwPacketStatistics.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwPacketStatistics_RunWorkerCompleted);
             // 
             // Socket_Form
             // 
@@ -3449,6 +3563,11 @@ namespace WPELibrary
             this.gbSystemSet_WorkMode.ResumeLayout(false);
             this.tlpSystemSet_WorkMode.ResumeLayout(false);
             this.tlpSystemSet_WorkMode.PerformLayout();
+            this.tcSocketInfo_SystemBackup.ResumeLayout(false);
+            this.tlpSystemBackup.ResumeLayout(false);
+            this.gbBackUp_Content.ResumeLayout(false);
+            this.tlpBackUp_Content.ResumeLayout(false);
+            this.tlpBackUp_Content.PerformLayout();
             this.tlpInformation.ResumeLayout(false);
             this.tlpPacketInfo.ResumeLayout(false);
             this.tcPacketInfo.ResumeLayout(false);
@@ -3879,5 +3998,17 @@ namespace WPELibrary
         private System.Windows.Forms.ComboBox cbbPacketStatistics;
         private System.Windows.Forms.Button bPacketStatistics;
         private System.Windows.Forms.Label lPacketStatistics;
+        private System.Windows.Forms.TabPage tcSocketInfo_SystemBackup;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemBackup;
+        private System.Windows.Forms.GroupBox gbBackUp_Content;
+        private System.Windows.Forms.TableLayoutPanel tlpBackUp_Content;
+        private System.Windows.Forms.CheckBox cbBackUp_RobotList;
+        private System.Windows.Forms.CheckBox cbBackUp_SendList;
+        private System.Windows.Forms.CheckBox cbBackUp_FilterList;
+        private System.Windows.Forms.CheckBox cbBackUp_InjectionSet;
+        private System.Windows.Forms.CheckBox cbBackUp_ProxyAccount;
+        private System.Windows.Forms.CheckBox cbBackUp_ProxySet;
+        private System.Windows.Forms.Button bBackUp_Export;
+        private System.Windows.Forms.CheckBox cbBackUp_SystemConfig;
     }
 }
