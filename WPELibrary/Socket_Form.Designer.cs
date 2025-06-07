@@ -173,9 +173,30 @@ namespace WPELibrary
             this.cbSocketList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.tcSocketInfo_HotKey = new System.Windows.Forms.TabPage();
             this.tlpHotKeySet = new System.Windows.Forms.TableLayoutPanel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lHotKey_RobotList = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lHotKey12 = new System.Windows.Forms.Label();
+            this.lHotKey9 = new System.Windows.Forms.Label();
+            this.lHotKey6 = new System.Windows.Forms.Label();
+            this.lHotKey3 = new System.Windows.Forms.Label();
+            this.lHotKey11 = new System.Windows.Forms.Label();
+            this.lHotKey8 = new System.Windows.Forms.Label();
+            this.lHotKey5 = new System.Windows.Forms.Label();
+            this.lHotKey2 = new System.Windows.Forms.Label();
+            this.lHotKey10 = new System.Windows.Forms.Label();
+            this.lHotKey7 = new System.Windows.Forms.Label();
+            this.lHotKey4 = new System.Windows.Forms.Label();
+            this.lHotKey1 = new System.Windows.Forms.Label();
+            this.bHotKey1 = new System.Windows.Forms.Button();
+            this.bHotKey2 = new System.Windows.Forms.Button();
+            this.bHotKey3 = new System.Windows.Forms.Button();
+            this.bHotKey4 = new System.Windows.Forms.Button();
+            this.bHotKey5 = new System.Windows.Forms.Button();
+            this.bHotKey6 = new System.Windows.Forms.Button();
+            this.bHotKey7 = new System.Windows.Forms.Button();
+            this.bHotKey8 = new System.Windows.Forms.Button();
+            this.bHotKey9 = new System.Windows.Forms.Button();
+            this.bHotKey10 = new System.Windows.Forms.Button();
+            this.bHotKey11 = new System.Windows.Forms.Button();
+            this.bHotKey12 = new System.Windows.Forms.Button();
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
             this.gbSystemSet_FilterActionColor = new System.Windows.Forms.GroupBox();
@@ -423,6 +444,18 @@ namespace WPELibrary
             this.dataGridViewImageColumn2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn3 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridViewImageColumn4 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.txtHotKey3 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey4 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey5 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey6 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey7 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey8 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey9 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey10 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey11 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey12 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey1 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
+            this.txtHotKey2 = new WPELibrary.Lib.UserControl.HotkeyTextBox();
             this.tlpSocketForm.SuspendLayout();
             this.ssSocketList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSocketList)).BeginInit();
@@ -1480,25 +1513,190 @@ namespace WPELibrary
             // tlpHotKeySet
             // 
             resources.ApplyResources(this.tlpHotKeySet, "tlpHotKeySet");
-            this.tlpHotKeySet.Controls.Add(this.label2, 2, 0);
-            this.tlpHotKeySet.Controls.Add(this.lHotKey_RobotList, 0, 0);
-            this.tlpHotKeySet.Controls.Add(this.label1, 1, 0);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey12, 9, 3);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey9, 6, 3);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey6, 3, 3);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey3, 0, 3);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey11, 9, 2);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey8, 6, 2);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey5, 3, 2);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey2, 0, 2);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey10, 9, 1);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey7, 6, 1);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey4, 3, 1);
+            this.tlpHotKeySet.Controls.Add(this.lHotKey1, 0, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey3, 1, 3);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey4, 4, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey5, 4, 2);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey6, 4, 3);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey7, 7, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey8, 7, 2);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey9, 7, 3);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey10, 10, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey11, 10, 2);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey12, 10, 3);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey1, 2, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey1, 1, 1);
+            this.tlpHotKeySet.Controls.Add(this.txtHotKey2, 1, 2);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey2, 2, 2);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey3, 2, 3);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey4, 5, 1);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey5, 5, 2);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey6, 5, 3);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey7, 8, 1);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey8, 8, 2);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey9, 8, 3);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey10, 11, 1);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey11, 11, 2);
+            this.tlpHotKeySet.Controls.Add(this.bHotKey12, 11, 3);
             this.tlpHotKeySet.Name = "tlpHotKeySet";
             // 
-            // label2
+            // lHotKey12
             // 
-            resources.ApplyResources(this.label2, "label2");
-            this.label2.Name = "label2";
+            resources.ApplyResources(this.lHotKey12, "lHotKey12");
+            this.lHotKey12.Name = "lHotKey12";
             // 
-            // lHotKey_RobotList
+            // lHotKey9
             // 
-            resources.ApplyResources(this.lHotKey_RobotList, "lHotKey_RobotList");
-            this.lHotKey_RobotList.Name = "lHotKey_RobotList";
+            resources.ApplyResources(this.lHotKey9, "lHotKey9");
+            this.lHotKey9.Name = "lHotKey9";
             // 
-            // label1
+            // lHotKey6
             // 
-            resources.ApplyResources(this.label1, "label1");
-            this.label1.Name = "label1";
+            resources.ApplyResources(this.lHotKey6, "lHotKey6");
+            this.lHotKey6.Name = "lHotKey6";
+            // 
+            // lHotKey3
+            // 
+            resources.ApplyResources(this.lHotKey3, "lHotKey3");
+            this.lHotKey3.Name = "lHotKey3";
+            // 
+            // lHotKey11
+            // 
+            resources.ApplyResources(this.lHotKey11, "lHotKey11");
+            this.lHotKey11.Name = "lHotKey11";
+            // 
+            // lHotKey8
+            // 
+            resources.ApplyResources(this.lHotKey8, "lHotKey8");
+            this.lHotKey8.Name = "lHotKey8";
+            // 
+            // lHotKey5
+            // 
+            resources.ApplyResources(this.lHotKey5, "lHotKey5");
+            this.lHotKey5.Name = "lHotKey5";
+            // 
+            // lHotKey2
+            // 
+            resources.ApplyResources(this.lHotKey2, "lHotKey2");
+            this.lHotKey2.Name = "lHotKey2";
+            // 
+            // lHotKey10
+            // 
+            resources.ApplyResources(this.lHotKey10, "lHotKey10");
+            this.lHotKey10.Name = "lHotKey10";
+            // 
+            // lHotKey7
+            // 
+            resources.ApplyResources(this.lHotKey7, "lHotKey7");
+            this.lHotKey7.Name = "lHotKey7";
+            // 
+            // lHotKey4
+            // 
+            resources.ApplyResources(this.lHotKey4, "lHotKey4");
+            this.lHotKey4.Name = "lHotKey4";
+            // 
+            // lHotKey1
+            // 
+            resources.ApplyResources(this.lHotKey1, "lHotKey1");
+            this.lHotKey1.Name = "lHotKey1";
+            // 
+            // bHotKey1
+            // 
+            this.bHotKey1.Image = global::WPELibrary.Properties.Resources.Compare;
+            resources.ApplyResources(this.bHotKey1, "bHotKey1");
+            this.bHotKey1.Name = "bHotKey1";
+            this.bHotKey1.UseVisualStyleBackColor = true;
+            this.bHotKey1.Click += new System.EventHandler(this.bHotKey1_Click);
+            // 
+            // bHotKey2
+            // 
+            this.bHotKey2.Image = global::WPELibrary.Properties.Resources.Compare;
+            resources.ApplyResources(this.bHotKey2, "bHotKey2");
+            this.bHotKey2.Name = "bHotKey2";
+            this.bHotKey2.UseVisualStyleBackColor = true;
+            this.bHotKey2.Click += new System.EventHandler(this.bHotKey2_Click);
+            // 
+            // bHotKey3
+            // 
+            this.bHotKey3.Image = global::WPELibrary.Properties.Resources.Compare;
+            resources.ApplyResources(this.bHotKey3, "bHotKey3");
+            this.bHotKey3.Name = "bHotKey3";
+            this.bHotKey3.UseVisualStyleBackColor = true;
+            this.bHotKey3.Click += new System.EventHandler(this.bHotKey3_Click);
+            // 
+            // bHotKey4
+            // 
+            resources.ApplyResources(this.bHotKey4, "bHotKey4");
+            this.bHotKey4.Name = "bHotKey4";
+            this.bHotKey4.UseVisualStyleBackColor = true;
+            this.bHotKey4.Click += new System.EventHandler(this.bHotKey4_Click);
+            // 
+            // bHotKey5
+            // 
+            resources.ApplyResources(this.bHotKey5, "bHotKey5");
+            this.bHotKey5.Name = "bHotKey5";
+            this.bHotKey5.UseVisualStyleBackColor = true;
+            this.bHotKey5.Click += new System.EventHandler(this.bHotKey5_Click);
+            // 
+            // bHotKey6
+            // 
+            resources.ApplyResources(this.bHotKey6, "bHotKey6");
+            this.bHotKey6.Name = "bHotKey6";
+            this.bHotKey6.UseVisualStyleBackColor = true;
+            this.bHotKey6.Click += new System.EventHandler(this.bHotKey6_Click);
+            // 
+            // bHotKey7
+            // 
+            resources.ApplyResources(this.bHotKey7, "bHotKey7");
+            this.bHotKey7.Name = "bHotKey7";
+            this.bHotKey7.UseVisualStyleBackColor = true;
+            this.bHotKey7.Click += new System.EventHandler(this.bHotKey7_Click);
+            // 
+            // bHotKey8
+            // 
+            resources.ApplyResources(this.bHotKey8, "bHotKey8");
+            this.bHotKey8.Name = "bHotKey8";
+            this.bHotKey8.UseVisualStyleBackColor = true;
+            this.bHotKey8.Click += new System.EventHandler(this.bHotKey8_Click);
+            // 
+            // bHotKey9
+            // 
+            resources.ApplyResources(this.bHotKey9, "bHotKey9");
+            this.bHotKey9.Name = "bHotKey9";
+            this.bHotKey9.UseVisualStyleBackColor = true;
+            this.bHotKey9.Click += new System.EventHandler(this.bHotKey9_Click);
+            // 
+            // bHotKey10
+            // 
+            resources.ApplyResources(this.bHotKey10, "bHotKey10");
+            this.bHotKey10.Name = "bHotKey10";
+            this.bHotKey10.UseVisualStyleBackColor = true;
+            this.bHotKey10.Click += new System.EventHandler(this.bHotKey10_Click);
+            // 
+            // bHotKey11
+            // 
+            resources.ApplyResources(this.bHotKey11, "bHotKey11");
+            this.bHotKey11.Name = "bHotKey11";
+            this.bHotKey11.UseVisualStyleBackColor = true;
+            this.bHotKey11.Click += new System.EventHandler(this.bHotKey11_Click);
+            // 
+            // bHotKey12
+            // 
+            resources.ApplyResources(this.bHotKey12, "bHotKey12");
+            this.bHotKey12.Name = "bHotKey12";
+            this.bHotKey12.UseVisualStyleBackColor = true;
+            this.bHotKey12.Click += new System.EventHandler(this.bHotKey12_Click);
             // 
             // tcSocketInfo_SystemSet
             // 
@@ -3494,6 +3692,102 @@ namespace WPELibrary
             this.dataGridViewImageColumn4.ReadOnly = true;
             this.dataGridViewImageColumn4.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
+            // txtHotKey3
+            // 
+            this.txtHotKey3.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey3, "txtHotKey3");
+            this.txtHotKey3.Name = "txtHotKey3";
+            this.txtHotKey3.ReadOnly = true;
+            this.txtHotKey3.ShortcutsEnabled = false;
+            // 
+            // txtHotKey4
+            // 
+            this.txtHotKey4.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey4, "txtHotKey4");
+            this.txtHotKey4.Name = "txtHotKey4";
+            this.txtHotKey4.ReadOnly = true;
+            this.txtHotKey4.ShortcutsEnabled = false;
+            // 
+            // txtHotKey5
+            // 
+            this.txtHotKey5.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey5, "txtHotKey5");
+            this.txtHotKey5.Name = "txtHotKey5";
+            this.txtHotKey5.ReadOnly = true;
+            this.txtHotKey5.ShortcutsEnabled = false;
+            // 
+            // txtHotKey6
+            // 
+            this.txtHotKey6.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey6, "txtHotKey6");
+            this.txtHotKey6.Name = "txtHotKey6";
+            this.txtHotKey6.ReadOnly = true;
+            this.txtHotKey6.ShortcutsEnabled = false;
+            // 
+            // txtHotKey7
+            // 
+            this.txtHotKey7.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey7, "txtHotKey7");
+            this.txtHotKey7.Name = "txtHotKey7";
+            this.txtHotKey7.ReadOnly = true;
+            this.txtHotKey7.ShortcutsEnabled = false;
+            // 
+            // txtHotKey8
+            // 
+            this.txtHotKey8.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey8, "txtHotKey8");
+            this.txtHotKey8.Name = "txtHotKey8";
+            this.txtHotKey8.ReadOnly = true;
+            this.txtHotKey8.ShortcutsEnabled = false;
+            // 
+            // txtHotKey9
+            // 
+            this.txtHotKey9.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey9, "txtHotKey9");
+            this.txtHotKey9.Name = "txtHotKey9";
+            this.txtHotKey9.ReadOnly = true;
+            this.txtHotKey9.ShortcutsEnabled = false;
+            // 
+            // txtHotKey10
+            // 
+            this.txtHotKey10.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey10, "txtHotKey10");
+            this.txtHotKey10.Name = "txtHotKey10";
+            this.txtHotKey10.ReadOnly = true;
+            this.txtHotKey10.ShortcutsEnabled = false;
+            // 
+            // txtHotKey11
+            // 
+            this.txtHotKey11.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey11, "txtHotKey11");
+            this.txtHotKey11.Name = "txtHotKey11";
+            this.txtHotKey11.ReadOnly = true;
+            this.txtHotKey11.ShortcutsEnabled = false;
+            // 
+            // txtHotKey12
+            // 
+            this.txtHotKey12.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey12, "txtHotKey12");
+            this.txtHotKey12.Name = "txtHotKey12";
+            this.txtHotKey12.ReadOnly = true;
+            this.txtHotKey12.ShortcutsEnabled = false;
+            // 
+            // txtHotKey1
+            // 
+            this.txtHotKey1.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey1, "txtHotKey1");
+            this.txtHotKey1.Name = "txtHotKey1";
+            this.txtHotKey1.ReadOnly = true;
+            this.txtHotKey1.ShortcutsEnabled = false;
+            // 
+            // txtHotKey2
+            // 
+            this.txtHotKey2.BackColor = System.Drawing.SystemColors.Window;
+            resources.ApplyResources(this.txtHotKey2, "txtHotKey2");
+            this.txtHotKey2.Name = "txtHotKey2";
+            this.txtHotKey2.ReadOnly = true;
+            this.txtHotKey2.ShortcutsEnabled = false;
+            // 
             // Socket_Form
             // 
             resources.ApplyResources(this, "$this");
@@ -3893,8 +4187,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Export;
         private System.Windows.Forms.TabPage tcSocketInfo_HotKey;
         private System.Windows.Forms.TableLayoutPanel tlpHotKeySet;
-        private System.Windows.Forms.Label lHotKey_RobotList;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Top;
         private System.Windows.Forms.ToolStripSeparator cmsRobotList_Split1;
         private System.Windows.Forms.ToolStripMenuItem cmsRobotList_Up;
@@ -3945,7 +4237,6 @@ namespace WPELibrary
         private System.Windows.Forms.ToolStripSeparator tss6;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_SendList;
         private System.Windows.Forms.ToolStripComboBox tscbSendList;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SendList;
         private System.Windows.Forms.ToolStripComboBox cmsHexBox_tscbSendList;
         private System.Windows.Forms.DataGridViewImageColumn cTypeImg;
@@ -4003,5 +4294,41 @@ namespace WPELibrary
         private System.Windows.Forms.CheckBox cbBackUp_ProxySet;
         private System.Windows.Forms.Button bBackUp_Export;
         private System.Windows.Forms.CheckBox cbBackUp_SystemConfig;
+        private System.Windows.Forms.Label lHotKey1;
+        private System.Windows.Forms.Label lHotKey10;
+        private System.Windows.Forms.Label lHotKey7;
+        private System.Windows.Forms.Label lHotKey4;
+        private System.Windows.Forms.Label lHotKey12;
+        private System.Windows.Forms.Label lHotKey9;
+        private System.Windows.Forms.Label lHotKey6;
+        private System.Windows.Forms.Label lHotKey3;
+        private System.Windows.Forms.Label lHotKey11;
+        private System.Windows.Forms.Label lHotKey8;
+        private System.Windows.Forms.Label lHotKey5;
+        private System.Windows.Forms.Label lHotKey2;
+        private System.Windows.Forms.Button bHotKey1;
+        private Lib.UserControl.HotkeyTextBox txtHotKey3;
+        private Lib.UserControl.HotkeyTextBox txtHotKey4;
+        private Lib.UserControl.HotkeyTextBox txtHotKey5;
+        private Lib.UserControl.HotkeyTextBox txtHotKey6;
+        private Lib.UserControl.HotkeyTextBox txtHotKey7;
+        private Lib.UserControl.HotkeyTextBox txtHotKey8;
+        private Lib.UserControl.HotkeyTextBox txtHotKey9;
+        private Lib.UserControl.HotkeyTextBox txtHotKey10;
+        private Lib.UserControl.HotkeyTextBox txtHotKey11;
+        private Lib.UserControl.HotkeyTextBox txtHotKey12;
+        private Lib.UserControl.HotkeyTextBox txtHotKey1;
+        private Lib.UserControl.HotkeyTextBox txtHotKey2;
+        private System.Windows.Forms.Button bHotKey2;
+        private System.Windows.Forms.Button bHotKey3;
+        private System.Windows.Forms.Button bHotKey4;
+        private System.Windows.Forms.Button bHotKey5;
+        private System.Windows.Forms.Button bHotKey6;
+        private System.Windows.Forms.Button bHotKey7;
+        private System.Windows.Forms.Button bHotKey8;
+        private System.Windows.Forms.Button bHotKey9;
+        private System.Windows.Forms.Button bHotKey10;
+        private System.Windows.Forms.Button bHotKey11;
+        private System.Windows.Forms.Button bHotKey12;
     }
 }

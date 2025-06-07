@@ -325,6 +325,18 @@ namespace WPELibrary.Lib
                         new XElement("HookWSA_SendTo", Socket_Cache.SocketPacket.HookWSA_SendTo),
                         new XElement("HookWSA_Recv", Socket_Cache.SocketPacket.HookWSA_Recv),
                         new XElement("HookWSA_RecvFrom", Socket_Cache.SocketPacket.HookWSA_RecvFrom),
+                        new XElement("HotKey1", Socket_Cache.SocketPacket.HotKey1),
+                        new XElement("HotKey2", Socket_Cache.SocketPacket.HotKey2),
+                        new XElement("HotKey3", Socket_Cache.SocketPacket.HotKey3),
+                        new XElement("HotKey4", Socket_Cache.SocketPacket.HotKey4),
+                        new XElement("HotKey5", Socket_Cache.SocketPacket.HotKey5),
+                        new XElement("HotKey6", Socket_Cache.SocketPacket.HotKey6),
+                        new XElement("HotKey7", Socket_Cache.SocketPacket.HotKey7),
+                        new XElement("HotKey8", Socket_Cache.SocketPacket.HotKey8),
+                        new XElement("HotKey9", Socket_Cache.SocketPacket.HotKey9),
+                        new XElement("HotKey10", Socket_Cache.SocketPacket.HotKey10),
+                        new XElement("HotKey11", Socket_Cache.SocketPacket.HotKey11),
+                        new XElement("HotKey12", Socket_Cache.SocketPacket.HotKey12),
                         new XElement("SocketList_AutoRoll", Socket_Cache.SocketList.AutoRoll),
                         new XElement("SocketList_AutoClear", Socket_Cache.SocketList.AutoClear),
                         new XElement("SocketList_AutoClear_Value", Socket_Cache.SocketList.AutoClear_Value),
@@ -400,6 +412,18 @@ namespace WPELibrary.Lib
                         Socket_Cache.SocketPacket.HookWSA_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_SendTo"]);
                         Socket_Cache.SocketPacket.HookWSA_Recv = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_Recv"]);
                         Socket_Cache.SocketPacket.HookWSA_RecvFrom = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWSA_RecvFrom"]);
+                        Socket_Cache.SocketPacket.HotKey1 = RunConfig.Rows[0]["InjectionConfig_HotKey1"].ToString();
+                        Socket_Cache.SocketPacket.HotKey2 = RunConfig.Rows[0]["InjectionConfig_HotKey2"].ToString();
+                        Socket_Cache.SocketPacket.HotKey3 = RunConfig.Rows[0]["InjectionConfig_HotKey3"].ToString();
+                        Socket_Cache.SocketPacket.HotKey4 = RunConfig.Rows[0]["InjectionConfig_HotKey4"].ToString();
+                        Socket_Cache.SocketPacket.HotKey5 = RunConfig.Rows[0]["InjectionConfig_HotKey5"].ToString();
+                        Socket_Cache.SocketPacket.HotKey6 = RunConfig.Rows[0]["InjectionConfig_HotKey6"].ToString();
+                        Socket_Cache.SocketPacket.HotKey7 = RunConfig.Rows[0]["InjectionConfig_HotKey7"].ToString();
+                        Socket_Cache.SocketPacket.HotKey8 = RunConfig.Rows[0]["InjectionConfig_HotKey8"].ToString();
+                        Socket_Cache.SocketPacket.HotKey9 = RunConfig.Rows[0]["InjectionConfig_HotKey9"].ToString();
+                        Socket_Cache.SocketPacket.HotKey10 = RunConfig.Rows[0]["InjectionConfig_HotKey10"].ToString();
+                        Socket_Cache.SocketPacket.HotKey11 = RunConfig.Rows[0]["InjectionConfig_HotKey11"].ToString();
+                        Socket_Cache.SocketPacket.HotKey12 = RunConfig.Rows[0]["InjectionConfig_HotKey12"].ToString();
                         Socket_Cache.SocketList.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoRoll"]);
                         Socket_Cache.SocketList.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoClear"]);
                         Socket_Cache.SocketList.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_SocketList_AutoClear_Value"]);
@@ -686,6 +710,78 @@ namespace WPELibrary.Lib
                     if (HookWSA_RecvFrom != null)
                     {
                         Socket_Cache.SocketPacket.HookWSA_RecvFrom = Convert.ToBoolean(HookWSA_RecvFrom.Value);
+                    }
+
+                    XElement HotKey1 = xeInjectionConfig.Element("HotKey1");
+                    if (HotKey1 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey1 = HotKey1.Value;
+                    }
+
+                    XElement HotKey2 = xeInjectionConfig.Element("HotKey2");
+                    if (HotKey2 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey2 = HotKey2.Value;
+                    }
+
+                    XElement HotKey3 = xeInjectionConfig.Element("HotKey3");
+                    if (HotKey3 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey3 = HotKey3.Value;
+                    }
+
+                    XElement HotKey4 = xeInjectionConfig.Element("HotKey4");
+                    if (HotKey4 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey4 = HotKey4.Value;
+                    }
+
+                    XElement HotKey5 = xeInjectionConfig.Element("HotKey5");
+                    if (HotKey5 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey5 = HotKey5.Value;
+                    }
+
+                    XElement HotKey6 = xeInjectionConfig.Element("HotKey6");
+                    if (HotKey6 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey6 = HotKey6.Value;
+                    }
+
+                    XElement HotKey7 = xeInjectionConfig.Element("HotKey7");
+                    if (HotKey7 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey7 = HotKey7.Value;
+                    }
+
+                    XElement HotKey8 = xeInjectionConfig.Element("HotKey8");
+                    if (HotKey8 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey8 = HotKey8.Value;
+                    }
+
+                    XElement HotKey9 = xeInjectionConfig.Element("HotKey9");
+                    if (HotKey9 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey9 = HotKey9.Value;
+                    }
+
+                    XElement HotKey10 = xeInjectionConfig.Element("HotKey10");
+                    if (HotKey10 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey10 = HotKey10.Value;
+                    }
+
+                    XElement HotKey11 = xeInjectionConfig.Element("HotKey11");
+                    if (HotKey11 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey11 = HotKey11.Value;
+                    }
+
+                    XElement HotKey12 = xeInjectionConfig.Element("HotKey12");
+                    if (HotKey12 != null)
+                    {
+                        Socket_Cache.SocketPacket.HotKey12 = HotKey12.Value;
                     }
 
                     XElement SocketList_AutoRoll = xeInjectionConfig.Element("SocketList_AutoRoll");
@@ -3835,6 +3931,18 @@ namespace WPELibrary.Lib
             public static bool HookWSA_Send = true, HookWSA_SendTo = true, HookWSA_Recv = true, HookWSA_RecvFrom = true;
             public static bool CheckNotShow = true, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
             public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
+            public static string HotKey1 = "Ctrl + Alt + F1";
+            public static string HotKey2 = "Ctrl + Alt + F2";
+            public static string HotKey3 = "Ctrl + Alt + F3";
+            public static string HotKey4 = "Ctrl + Alt + F4";
+            public static string HotKey5 = "Ctrl + Alt + F5";
+            public static string HotKey6 = "Ctrl + Alt + F6";
+            public static string HotKey7 = "Ctrl + Alt + F7";
+            public static string HotKey8 = "Ctrl + Alt + F8";
+            public static string HotKey9 = "Ctrl + Alt + F9";
+            public static string HotKey10 = "Ctrl + Alt + F10";
+            public static string HotKey11 = "Ctrl + Alt + F11";
+            public static string HotKey12 = "Ctrl + Alt + F12";
             private static readonly Image SentImage = Properties.Resources.sent;
             private static readonly Image ReceivedImage = Properties.Resources.received;
             public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
@@ -9674,6 +9782,18 @@ namespace WPELibrary.Lib
                         sql += "InjectionConfig_HookWSA_SendTo BOOLEAN DEFAULT 1,";//注入模式 - WSA 发送到
                         sql += "InjectionConfig_HookWSA_Recv BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收
                         sql += "InjectionConfig_HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收自
+                        sql += "InjectionConfig_HotKey1 TEXT,";//注入模式 - 快捷键1
+                        sql += "InjectionConfig_HotKey2 TEXT,";//注入模式 - 快捷键2
+                        sql += "InjectionConfig_HotKey3 TEXT,";//注入模式 - 快捷键3
+                        sql += "InjectionConfig_HotKey4 TEXT,";//注入模式 - 快捷键4
+                        sql += "InjectionConfig_HotKey5 TEXT,";//注入模式 - 快捷键5
+                        sql += "InjectionConfig_HotKey6 TEXT,";//注入模式 - 快捷键6
+                        sql += "InjectionConfig_HotKey7 TEXT,";//注入模式 - 快捷键7
+                        sql += "InjectionConfig_HotKey8 TEXT,";//注入模式 - 快捷键8
+                        sql += "InjectionConfig_HotKey9 TEXT,";//注入模式 - 快捷键9
+                        sql += "InjectionConfig_HotKey10 TEXT,";//注入模式 - 快捷键10
+                        sql += "InjectionConfig_HotKey11 TEXT,";//注入模式 - 快捷键11
+                        sql += "InjectionConfig_HotKey12 TEXT,";//注入模式 - 快捷键12
                         sql += "InjectionConfig_SocketList_AutoRoll BOOLEAN DEFAULT 0,";//注入模式 - 封包列表自动滚动
                         sql += "InjectionConfig_SocketList_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 封包列表自动清理
                         sql += "InjectionConfig_SocketList_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 封包列表自动清理数值
@@ -9796,6 +9916,18 @@ namespace WPELibrary.Lib
                         sql += "InjectionConfig_HookWSA_SendTo,";
                         sql += "InjectionConfig_HookWSA_Recv,";
                         sql += "InjectionConfig_HookWSA_RecvFrom,";
+                        sql += "InjectionConfig_HotKey1,";
+                        sql += "InjectionConfig_HotKey2,";
+                        sql += "InjectionConfig_HotKey3,";
+                        sql += "InjectionConfig_HotKey4,";
+                        sql += "InjectionConfig_HotKey5,";
+                        sql += "InjectionConfig_HotKey6,";
+                        sql += "InjectionConfig_HotKey7,";
+                        sql += "InjectionConfig_HotKey8,";
+                        sql += "InjectionConfig_HotKey9,";
+                        sql += "InjectionConfig_HotKey10,";
+                        sql += "InjectionConfig_HotKey11,";
+                        sql += "InjectionConfig_HotKey12,";
                         sql += "InjectionConfig_SocketList_AutoRoll,";
                         sql += "InjectionConfig_SocketList_AutoClear,";
                         sql += "InjectionConfig_SocketList_AutoClear_Value,";
@@ -9848,6 +9980,18 @@ namespace WPELibrary.Lib
                         sql += "@InjectionConfig_HookWSA_SendTo,";
                         sql += "@InjectionConfig_HookWSA_Recv,";
                         sql += "@InjectionConfig_HookWSA_RecvFrom,";
+                        sql += "@InjectionConfig_HotKey1,";
+                        sql += "@InjectionConfig_HotKey2,";
+                        sql += "@InjectionConfig_HotKey3,";
+                        sql += "@InjectionConfig_HotKey4,";
+                        sql += "@InjectionConfig_HotKey5,";
+                        sql += "@InjectionConfig_HotKey6,";
+                        sql += "@InjectionConfig_HotKey7,";
+                        sql += "@InjectionConfig_HotKey8,";
+                        sql += "@InjectionConfig_HotKey9,";
+                        sql += "@InjectionConfig_HotKey10,";
+                        sql += "@InjectionConfig_HotKey11,";
+                        sql += "@InjectionConfig_HotKey12,";
                         sql += "@InjectionConfig_SocketList_AutoRoll,";
                         sql += "@InjectionConfig_SocketList_AutoClear,";
                         sql += "@InjectionConfig_SocketList_AutoClear_Value,";
@@ -9903,6 +10047,18 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_SendTo", Socket_Cache.SocketPacket.HookWSA_SendTo);
                             cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_Recv", Socket_Cache.SocketPacket.HookWSA_Recv);
                             cmd.Parameters.AddWithValue("@InjectionConfig_HookWSA_RecvFrom", Socket_Cache.SocketPacket.HookWSA_RecvFrom);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey1", Socket_Cache.SocketPacket.HotKey1);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey2", Socket_Cache.SocketPacket.HotKey2);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey3", Socket_Cache.SocketPacket.HotKey3);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey4", Socket_Cache.SocketPacket.HotKey4);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey5", Socket_Cache.SocketPacket.HotKey5);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey6", Socket_Cache.SocketPacket.HotKey6);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey7", Socket_Cache.SocketPacket.HotKey7);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey8", Socket_Cache.SocketPacket.HotKey8);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey9", Socket_Cache.SocketPacket.HotKey9);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey10", Socket_Cache.SocketPacket.HotKey10);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey11", Socket_Cache.SocketPacket.HotKey11);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_HotKey12", Socket_Cache.SocketPacket.HotKey12);
                             cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoRoll", Socket_Cache.SocketList.AutoRoll);
                             cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoClear", Socket_Cache.SocketList.AutoClear);
                             cmd.Parameters.AddWithValue("@InjectionConfig_SocketList_AutoClear_Value", Socket_Cache.SocketList.AutoClear_Value);

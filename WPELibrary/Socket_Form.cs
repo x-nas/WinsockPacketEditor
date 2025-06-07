@@ -29,7 +29,7 @@ namespace WPELibrary
             try
             {
                 Socket_Cache.System.LoadSystemConfig_FromDB();
-                MultiLanguage.SetDefaultLanguage(Socket_Cache.System.DefaultLanguage);                
+                MultiLanguage.SetDefaultLanguage(Socket_Cache.System.DefaultLanguage);
 
                 InitializeComponent();
 
@@ -45,12 +45,12 @@ namespace WPELibrary
                     }
                 };
 
-                this.InitSocketDGV();                
+                this.InitSocketDGV();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
-            }            
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion
@@ -62,10 +62,9 @@ namespace WPELibrary
             this.InitSocketForm();
             this.InitHexBox_XOR();
             this.LoadConfigs_Parameter();
-            
-            Socket_Operation.RegisterHotKey();
-            Socket_Operation.StartRemoteMGT();
+            this.InitHotKeys();
 
+            Socket_Operation.StartRemoteMGT();
             Socket_Cache.System.LoadSystemList_FromDB();
             Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
         }
@@ -89,7 +88,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
         private void niWPE_Click(object sender, EventArgs e)
         {
@@ -112,7 +111,7 @@ namespace WPELibrary
             {
                 this.Show();
                 this.WindowState = FormWindowState.Normal;
-                this.Activate();             
+                this.Activate();
             }
             catch (Exception ex)
             {
@@ -124,20 +123,19 @@ namespace WPELibrary
         {
             try
             {
-                ws.ExitHook();                
+                ws.ExitHook();
                 this.niWPE.Visible = false;
-                
-                Socket_Operation.UnregisterHotKey();
+
                 Socket_Operation.StopRemoteMGT(this.RunMode);
                 Socket_Cache.System.SaveSystemList_ToDB();
                 Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);                
+                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
         protected override void WndProc(ref Message m)
         {
@@ -145,7 +143,7 @@ namespace WPELibrary
             {
                 if (m.Msg == User32.WM_HOTKEY)
                 {
-                    int HOTKEY_ID = m.WParam.ToInt32();                    
+                    int HOTKEY_ID = m.WParam.ToInt32();
 
                     if (this.tcAutomation.SelectedIndex == 1)
                     {
@@ -154,7 +152,7 @@ namespace WPELibrary
                     else if (this.tcAutomation.SelectedIndex == 2)
                     {
                         Socket_Cache.Robot.DoRobot_ByHotKey(HOTKEY_ID);
-                    }                                                            
+                    }
                 }
             }
             catch (Exception ex)
@@ -162,7 +160,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
-            base.WndProc(ref m);            
+            base.WndProc(ref m);
         }
 
         #endregion
@@ -185,11 +183,11 @@ namespace WPELibrary
                 string sProcessName = Socket_Operation.GetProcessName();
                 this.tsslProcessName.Text = sProcessName;
                 this.niWPE.Text = Socket_Cache.System.WPE + "\r\n" + sProcessName;
-                
+
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
-                
-                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();                        
+
+                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();
                 this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
 
                 this.bStartHook.Enabled = true;
@@ -209,20 +207,36 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
         private void InitHexBox_XOR()
         {
             try
-            {  
+            {
                 this.hbXOR_From.ByteProvider = new DynamicByteProvider(new byte[0]);
-                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);                
+                this.hbXOR_To.ByteProvider = new DynamicByteProvider(new byte[0]);
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
-        }        
+            }
+        }
+
+        private void InitHotKeys()
+        {
+            this.txtHotKey1.RegisterHotkeyFromText(9001);
+            this.txtHotKey2.RegisterHotkeyFromText(9002);
+            this.txtHotKey3.RegisterHotkeyFromText(9003);
+            this.txtHotKey4.RegisterHotkeyFromText(9004);
+            this.txtHotKey5.RegisterHotkeyFromText(9005);
+            this.txtHotKey6.RegisterHotkeyFromText(9006);
+            this.txtHotKey7.RegisterHotkeyFromText(9007);
+            this.txtHotKey8.RegisterHotkeyFromText(9008);
+            this.txtHotKey9.RegisterHotkeyFromText(9009);
+            this.txtHotKey10.RegisterHotkeyFromText(9010);
+            this.txtHotKey11.RegisterHotkeyFromText(9011);
+            this.txtHotKey12.RegisterHotkeyFromText(9012);
+        }
 
         #endregion
 
@@ -234,15 +248,15 @@ namespace WPELibrary
             {
                 dgvSocketList.AutoGenerateColumns = false;
                 dgvSocketList.DataSource = Socket_Cache.SocketList.lstRecPacket;
-                dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);                
+                dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
 
                 dgvFilterList.AutoGenerateColumns = false;
                 dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
-                dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);                
+                dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
 
                 dgvSendList.AutoGenerateColumns = false;
                 dgvSendList.DataSource = Socket_Cache.SendList.lstSend;
-                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);                
+                dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
 
                 dgvRobotList.AutoGenerateColumns = false;
                 dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
@@ -250,12 +264,12 @@ namespace WPELibrary
 
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstSocketLog;
-                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);                
+                dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
-            }            
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
         }
 
         #endregion        
@@ -268,41 +282,54 @@ namespace WPELibrary
             {
                 Socket_Cache.System.LoadRunConfig_FromDB();
 
-                cbHookWS1_Send.Checked = Socket_Cache.SocketPacket.HookWS1_Send;
-                cbHookWS1_SendTo.Checked = Socket_Cache.SocketPacket.HookWS1_SendTo;
-                cbHookWS1_Recv.Checked = Socket_Cache.SocketPacket.HookWS1_Recv;
-                cbHookWS1_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
-                cbHookWS2_Send.Checked = Socket_Cache.SocketPacket.HookWS2_Send;
-                cbHookWS2_SendTo.Checked = Socket_Cache.SocketPacket.HookWS2_SendTo;
-                cbHookWS2_Recv.Checked = Socket_Cache.SocketPacket.HookWS2_Recv;
-                cbHookWS2_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
-                cbHookWSA_Send.Checked = Socket_Cache.SocketPacket.HookWSA_Send;
-                cbHookWSA_SendTo.Checked = Socket_Cache.SocketPacket.HookWSA_SendTo;
-                cbHookWSA_Recv.Checked = Socket_Cache.SocketPacket.HookWSA_Recv;
-                cbHookWSA_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
+                this.cbHookWS1_Send.Checked = Socket_Cache.SocketPacket.HookWS1_Send;
+                this.cbHookWS1_SendTo.Checked = Socket_Cache.SocketPacket.HookWS1_SendTo;
+                this.cbHookWS1_Recv.Checked = Socket_Cache.SocketPacket.HookWS1_Recv;
+                this.cbHookWS1_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
+                this.cbHookWS2_Send.Checked = Socket_Cache.SocketPacket.HookWS2_Send;
+                this.cbHookWS2_SendTo.Checked = Socket_Cache.SocketPacket.HookWS2_SendTo;
+                this.cbHookWS2_Recv.Checked = Socket_Cache.SocketPacket.HookWS2_Recv;
+                this.cbHookWS2_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
+                this.cbHookWSA_Send.Checked = Socket_Cache.SocketPacket.HookWSA_Send;
+                this.cbHookWSA_SendTo.Checked = Socket_Cache.SocketPacket.HookWSA_SendTo;
+                this.cbHookWSA_Recv.Checked = Socket_Cache.SocketPacket.HookWSA_Recv;
+                this.cbHookWSA_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
+
+                this.txtHotKey1.Text = Socket_Cache.SocketPacket.HotKey1;
+                this.txtHotKey2.Text = Socket_Cache.SocketPacket.HotKey2;
+                this.txtHotKey3.Text = Socket_Cache.SocketPacket.HotKey3;
+                this.txtHotKey4.Text = Socket_Cache.SocketPacket.HotKey4;
+                this.txtHotKey5.Text = Socket_Cache.SocketPacket.HotKey5;
+                this.txtHotKey6.Text = Socket_Cache.SocketPacket.HotKey6;
+                this.txtHotKey7.Text = Socket_Cache.SocketPacket.HotKey7;
+                this.txtHotKey8.Text = Socket_Cache.SocketPacket.HotKey8;
+                this.txtHotKey9.Text = Socket_Cache.SocketPacket.HotKey9;
+                this.txtHotKey10.Text = Socket_Cache.SocketPacket.HotKey10;
+                this.txtHotKey11.Text = Socket_Cache.SocketPacket.HotKey11;
+                this.txtHotKey12.Text = Socket_Cache.SocketPacket.HotKey12;
 
                 if (Socket_Cache.SocketPacket.CheckNotShow)
                 {
-                    rbFilter_NotShow.Checked = true;
+                    this.rbFilter_NotShow.Checked = true;
                 }
                 else
                 {
-                    rbFilter_Show.Checked = true;
+                    this.rbFilter_Show.Checked = true;
                 }
 
-                cbCheckSocket.Checked = Socket_Cache.SocketPacket.CheckSocket;
-                cbCheckIP.Checked = Socket_Cache.SocketPacket.CheckIP;
-                cbCheckPort.Checked = Socket_Cache.SocketPacket.CheckPort;
-                cbCheckHead.Checked = Socket_Cache.SocketPacket.CheckHead;
-                cbCheckData.Checked = Socket_Cache.SocketPacket.CheckData;
-                cbCheckSize.Checked = Socket_Cache.SocketPacket.CheckSize;
+                this.cbCheckSocket.Checked = Socket_Cache.SocketPacket.CheckSocket;
+                this.cbCheckIP.Checked = Socket_Cache.SocketPacket.CheckIP;
+                this.cbCheckPort.Checked = Socket_Cache.SocketPacket.CheckPort;
+                this.cbCheckHead.Checked = Socket_Cache.SocketPacket.CheckHead;
+                this.cbCheckData.Checked = Socket_Cache.SocketPacket.CheckData;
+                this.cbCheckSize.Checked = Socket_Cache.SocketPacket.CheckSize;
 
                 this.txtCheckSocket.Text = Socket_Cache.SocketPacket.CheckSocket_Value;
                 this.txtCheckLength.Text = Socket_Cache.SocketPacket.CheckLength_Value;
                 this.txtCheckIP.Text = Socket_Cache.SocketPacket.CheckIP_Value;
                 this.txtCheckPort.Text = Socket_Cache.SocketPacket.CheckPort_Value;
                 this.txtCheckHead.Text = Socket_Cache.SocketPacket.CheckHead_Value;
-                this.txtCheckData.Text = Socket_Cache.SocketPacket.CheckData_Value;             
+                this.txtCheckData.Text = Socket_Cache.SocketPacket.CheckData_Value;
 
                 this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
                 this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
@@ -312,7 +339,7 @@ namespace WPELibrary
                 this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Socket_AutoRoll;
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Socket_AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Socket_AutoClear_Value;
-                this.LogList_AutoClearChange();                
+                this.LogList_AutoClearChange();
 
                 this.cbWorkingMode_Speed.Checked = Socket_Cache.SocketPacket.SpeedMode;
 
@@ -355,7 +382,20 @@ namespace WPELibrary
                 Socket_Cache.SocketPacket.HookWSA_SendTo = cbHookWSA_SendTo.Checked;
                 Socket_Cache.SocketPacket.HookWSA_Recv = cbHookWSA_Recv.Checked;
                 Socket_Cache.SocketPacket.HookWSA_RecvFrom = cbHookWSA_RecvFrom.Checked;
-                
+
+                Socket_Cache.SocketPacket.HotKey1 = this.txtHotKey1.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey2 = this.txtHotKey2.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey3 = this.txtHotKey3.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey4 = this.txtHotKey4.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey5 = this.txtHotKey5.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey6 = this.txtHotKey6.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey7 = this.txtHotKey7.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey8 = this.txtHotKey8.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey9 = this.txtHotKey9.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey10 = this.txtHotKey10.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey11 = this.txtHotKey11.Text.Trim();
+                Socket_Cache.SocketPacket.HotKey12 = this.txtHotKey12.Text.Trim();
+
                 Socket_Cache.SocketPacket.CheckNotShow = rbFilter_NotShow.Checked;
                 Socket_Cache.SocketPacket.CheckSocket = cbCheckSocket.Checked;
                 Socket_Cache.SocketPacket.CheckIP = cbCheckIP.Checked;
@@ -369,7 +409,7 @@ namespace WPELibrary
                 Socket_Cache.SocketPacket.CheckIP_Value = this.txtCheckIP.Text.Trim();
                 Socket_Cache.SocketPacket.CheckPort_Value = this.txtCheckPort.Text.Trim();
                 Socket_Cache.SocketPacket.CheckHead_Value = this.txtCheckHead.Text.Trim();
-                Socket_Cache.SocketPacket.CheckData_Value = this.txtCheckData.Text.Trim();            
+                Socket_Cache.SocketPacket.CheckData_Value = this.txtCheckData.Text.Trim();
 
                 Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
                 Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
@@ -377,9 +417,9 @@ namespace WPELibrary
 
                 Socket_Cache.LogList.Socket_AutoRoll = this.cbLogList_AutoRoll.Checked;
                 Socket_Cache.LogList.Socket_AutoClear = this.cbLogList_AutoClear.Checked;
-                Socket_Cache.LogList.Socket_AutoClear_Value = this.nudLogList_AutoClearValue.Value;                
+                Socket_Cache.LogList.Socket_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;            
+                Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
 
                 if (this.rbFilterSet_Priority.Checked)
                 {
@@ -393,7 +433,7 @@ namespace WPELibrary
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }          
+            }
         }
 
         #endregion        
@@ -568,6 +608,118 @@ namespace WPELibrary
 
         #endregion        
 
+        #region//快捷键
+
+        private void bHotKey1_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey1.RegisterHotkeyFromText(9001))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey1.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey2_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey2.RegisterHotkeyFromText(9002))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey2.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey3_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey3.RegisterHotkeyFromText(9003))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey3.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey4_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey4.RegisterHotkeyFromText(9004))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey4.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey5_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey5.RegisterHotkeyFromText(9005))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey5.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey6_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey6.RegisterHotkeyFromText(9006))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey6.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey7_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey7.RegisterHotkeyFromText(9007))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey7.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey8_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey8.RegisterHotkeyFromText(9008))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey8.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey9_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey9.RegisterHotkeyFromText(9009))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey9.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey10_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey10.RegisterHotkeyFromText(9010))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey10.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey11_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey11.RegisterHotkeyFromText(9011))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey11.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        private void bHotKey12_Click(object sender, EventArgs e)
+        {
+            if (this.txtHotKey12.RegisterHotkeyFromText(9012))
+            {
+                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey12.Text.Trim());
+                Socket_Operation.ShowMessageBox(Msg);
+            }
+        }
+
+        #endregion
+
         #region//系统设置
 
         private void cbTopMost_CheckedChanged(object sender, EventArgs e)
@@ -622,16 +774,16 @@ namespace WPELibrary
                 bool InjectionSet = this.cbBackUp_InjectionSet.Checked;
                 bool FilterList = this.cbBackUp_FilterList.Checked;
                 bool SendList = this.cbBackUp_SendList.Checked;
-                bool RobotList = this.cbBackUp_RobotList.Checked;                
+                bool RobotList = this.cbBackUp_RobotList.Checked;
 
                 Socket_Cache.System.ExportSystemBackUp_Dialog(
                     FileName,
                     SystemConfig,
-                    ProxySet, 
+                    ProxySet,
                     ProxyAccount,
-                    InjectionSet, 
-                    FilterList, 
-                    SendList, 
+                    InjectionSet,
+                    FilterList,
+                    SendList,
                     RobotList);
             }
             catch (Exception ex)
@@ -689,9 +841,9 @@ namespace WPELibrary
                 Socket_Cache.SocketQueue.ResetSocketQueue();
                 Socket_Cache.SocketList.lstRecPacket.Clear();
                 Socket_Cache.SocketList.spiSelect = null;
-                this.dgvSocketList.Rows.Clear();                
+                this.dgvSocketList.Rows.Clear();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
@@ -703,7 +855,7 @@ namespace WPELibrary
             {
                 Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.System.LogType.Socket);
                 Socket_Cache.LogList.ResetLogList(Socket_Cache.System.LogType.Socket);
-                this.dgvLogList.Rows.Clear();             
+                this.dgvLogList.Rows.Clear();
             }
             catch (Exception ex)
             {
@@ -723,7 +875,7 @@ namespace WPELibrary
                 }
 
                 hbPacketData.ByteProvider = null;
-            }          
+            }
         }
 
         private void CleanUp_Comparison()
@@ -754,7 +906,7 @@ namespace WPELibrary
                         {
                             this.CleanUp_SocketList();
                             this.CleanUp_HexBox();
-                        }                      
+                        }
                     }
                 }
             }
@@ -841,7 +993,7 @@ namespace WPELibrary
 
         private void bStopHook_Click(object sender, EventArgs e)
         {
-            this.StopHook_MainForm();                      
+            this.StopHook_MainForm();
         }
 
         private void StopHook_MainForm()
@@ -877,7 +1029,7 @@ namespace WPELibrary
             try
             {
                 this.tlTotal_CNT.Text = Socket_Cache.SocketPacket.TotalPackets.ToString();
-                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();                
+                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
                 this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
                 this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
                 this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
@@ -920,9 +1072,9 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
-        #endregion        
+        #endregion
 
         #region//显示封包列表（异步）
 
@@ -1079,7 +1231,7 @@ namespace WPELibrary
         #endregion
 
         #region//显示机器人列表（异步）
-        
+
         private void dgvRobotList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -1201,7 +1353,7 @@ namespace WPELibrary
                             }));
                         }
 
-                        e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);                        
+                        e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);
                     }
                 }
             }
@@ -1225,19 +1377,19 @@ namespace WPELibrary
                             this.dgvSocketList.CurrentCell = this.dgvSocketList.Rows[iSearchResultIndex].Cells[0];
                             this.dgvSocketList.FirstDisplayedScrollingRowIndex = iSearchResultIndex;
 
-                            this.HexBox_FindNext();                            
+                            this.HexBox_FindNext();
                         }
                         else
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_23));
                         }
-                    }                    
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }            
+            }
         }
 
         #endregion        
@@ -1374,7 +1526,7 @@ namespace WPELibrary
 
                         this.cmsHexBox.Close();
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -1388,7 +1540,7 @@ namespace WPELibrary
             this.cmsHexBox.Close();
 
             try
-            {                
+            {
                 if (Socket_Cache.SocketList.spiSelect != null)
                 {
                     switch (sItemText)
@@ -1585,7 +1737,7 @@ namespace WPELibrary
 
                             break;
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -1648,11 +1800,11 @@ namespace WPELibrary
                             int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
 
                             if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
-                            {                                
+                            {
                                 this.dgvFilterList.Rows[iIndex].Selected = true;
                                 dgvFilterList.FirstDisplayedScrollingRowIndex = iIndex;
                             }
-                        }             
+                        }
                     }
                 }
             }
@@ -1826,7 +1978,7 @@ namespace WPELibrary
 
                         this.CleanUp_LogList();
 
-                        break;                   
+                        break;
                 }
             }
             catch (Exception ex)
@@ -1886,7 +2038,7 @@ namespace WPELibrary
                 {
                     List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
-                    foreach (Socket_FilterInfo sfi in sfiList) 
+                    foreach (Socket_FilterInfo sfi in sfiList)
                     {
                         sfi.IsEnable = true;
                     }
@@ -2014,7 +2166,7 @@ namespace WPELibrary
 
                                 Thread.Sleep(100);
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -2113,7 +2265,7 @@ namespace WPELibrary
                     {
                         Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID);
 
-                        if (sr != null) 
+                        if (sr != null)
                         {
                             while (sr.Worker.IsBusy)
                             {
@@ -2127,7 +2279,7 @@ namespace WPELibrary
 
                                 Thread.Sleep(100);
                             }
-                        }                        
+                        }
                     }
                 }
             }
@@ -2192,7 +2344,7 @@ namespace WPELibrary
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }        
+        }
 
         private void bComparison_Exchange_Click(object sender, EventArgs e)
         {
@@ -2257,7 +2409,7 @@ namespace WPELibrary
                 this.txtPacketInfo_Encoding_UTF32.Text = sUTF32;
                 this.txtPacketInfo_Encoding_ANSIUTF32.Text = sANSI_UTF32;
                 this.txtPacketInfo_Encoding_Unicode.Text = sUnicode;
-                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;                
+                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;
                 this.txtPacketInfo_Encoding_base64.Text = sBase64;
                 this.txtPacketInfo_Encoding_ANSIbase64.Text = sANSI_Base64;
             }
@@ -2305,7 +2457,7 @@ namespace WPELibrary
                 this.txtPacketInfo_Encoding_UTF32.Text = sUTF32;
                 this.txtPacketInfo_Encoding_ANSIUTF32.Text = sANSI_UTF32;
                 this.txtPacketInfo_Encoding_Unicode.Text = sUnicode;
-                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;               
+                this.txtPacketInfo_Encoding_ANSIUnicode.Text = sANSI_Unicode;
                 this.txtPacketInfo_Encoding_base64.Text = sBase64;
                 this.txtPacketInfo_Encoding_ANSIbase64.Text = sANSI_Base64;
             }
@@ -2637,7 +2789,7 @@ namespace WPELibrary
                                 break;
                         }
                     }
-                }              
+                }
             }
             catch (Exception ex)
             {
@@ -2696,9 +2848,6 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
-
-
-
 
         #endregion        
     }

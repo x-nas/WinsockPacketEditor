@@ -3576,60 +3576,7 @@ namespace WPELibrary.Lib
             }
         }
 
-        #endregion
-
-        #region//注册操作系统快捷键       
-
-        public static void RegisterHotKey()
-        {
-            try
-            {
-                if (Socket_Cache.System.MainHandle != IntPtr.Zero)
-                {
-                    int KeyControl = (int)User32.KeyModifiers.MOD_CONTROL;
-                    int KeyAlt = (int)User32.KeyModifiers.MOD_ALT;
-                    int iKeyCode = (int)Keys.F1;
-
-                    for (int i = 9001; i < 9013; i++)
-                    {
-                        bool bOK = User32.RegisterHotKey(Socket_Cache.System.MainHandle, i, KeyControl | KeyAlt, iKeyCode);
-
-                        if (!bOK)
-                        {
-                            Keys HotKey = (Keys)iKeyCode;
-                            string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), HotKey.ToString());
-                            Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
-                        }
-
-                        iKeyCode++;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        public static void UnregisterHotKey()
-        {
-            try
-            {
-                if (Socket_Cache.System.MainHandle != IntPtr.Zero)
-                {
-                    for (int i = 9001; i < 9013; i++)
-                    {
-                        User32.UnregisterHotKey(Socket_Cache.System.MainHandle, i);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//加解密滤XML文件
 

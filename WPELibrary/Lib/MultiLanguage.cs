@@ -142,7 +142,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_130 = { "按键组合 {0}", "Key Combine {0}" };
         public static string[] MutiLan_131 = { "文本 {0}", "Text {0}" };
         public static string[] MutiLan_132 = { "相对移动 ( {0} )", "Move By ( {0} )" };
-        public static string[] MutiLan_133 = { "快捷键: Ctrl + Alt + {0} 注册失败!", "HotKey: Ctrl + Alt + {0} registration failed!" };
+        public static string[] MutiLan_133 = { "{0} 注册成功!", "{0} registration successful!" };
         public static string[] MutiLan_134 = { "原始数据  ( 长度 {0} )", "Raw Data  ( Length {0} )" };
         public static string[] MutiLan_135 = { "修改后数据  ( 长度 {0} )", "Modified Data  ( Length {0} )" };
         public static string[] MutiLan_136 = { "账号 - 创建于 [ {0} ]", "Account - Created on [ {0} ]" };
