@@ -273,6 +273,7 @@ namespace WPELibrary.Lib
                         new XElement("LogList_AutoRoll", Socket_Cache.LogList.Proxy_AutoRoll),
                         new XElement("LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear),
                         new XElement("LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value),
+                        new XElement("Enable_MapLocal", Socket_Cache.ProxyMapping.Enable_MapLocal),
                         new XElement("Enable_ExternalProxy", Socket_Cache.SocketProxy.Enable_ExternalProxy),
                         new XElement("ExternalProxy_IP", Socket_Cache.SocketProxy.ExternalProxy_IP),
                         new XElement("ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port),
@@ -378,6 +379,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.LogList.Proxy_AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
                         Socket_Cache.LogList.Proxy_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
                         Socket_Cache.LogList.Proxy_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
+                        Socket_Cache.ProxyMapping.Enable_MapLocal = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapLocal"]);
                         Socket_Cache.SocketProxy.Enable_ExternalProxy = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy"]);
                         Socket_Cache.SocketProxy.ExternalProxy_IP = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_IP"].ToString();
                         Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ExternalProxy_Port"].ToString());                                                
@@ -496,6 +498,12 @@ namespace WPELibrary.Lib
                     if (LogList_AutoClear_Value != null)
                     {
                         Socket_Cache.LogList.Proxy_AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                    }
+
+                    XElement Enable_MapLocal = xeProxyConfig.Element("Enable_MapLocal");
+                    if (Enable_MapLocal != null)
+                    {
+                        Socket_Cache.ProxyMapping.Enable_MapLocal = Convert.ToBoolean(Enable_MapLocal.Value);
                     }
 
                     XElement Enable_ExternalProxy = xeProxyConfig.Element("Enable_ExternalProxy");
@@ -1356,7 +1364,7 @@ namespace WPELibrary.Lib
             public static string ProxySpeedInfo = string.Empty;
 
             public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
-            public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
+            public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);            
 
             public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
             public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);         
@@ -1401,6 +1409,12 @@ namespace WPELibrary.Lib
                 Http = 1,
                 Https = 2,
                 External = 3,
+            }
+
+            public enum MapProtocol : byte
+            {
+                Http = 0,
+                Https = 1,
             }
 
             public enum CommandType : byte
@@ -1882,25 +1896,79 @@ namespace WPELibrary.Lib
                 {
                     if (spt.CommandType == Socket_Cache.SocketProxy.CommandType.Connect)
                     {
-                        Socket_Operation.SendTCPData(spt.Server.Socket, bData);
-
                         bool enableProxyQueue = false;
                         switch (spt.DomainType)
                         {
                             case Socket_Cache.SocketProxy.DomainType.Http:
+
+                                if (Socket_Cache.ProxyMapping.Enable_MapLocal)
+                                {
+                                    #region//Http代理映射
+
+                                    string request = Encoding.ASCII.GetString(bData.ToArray());
+                                    if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                    {
+                                        var headers = Socket_Operation.ParseHttpHeaders(request);
+                                        if (headers.TryGetValue("Host", out string hostHeader))
+                                        {
+                                            string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                                            string cleanPath = requestPath.Split('?')[0];
+
+                                            var rule = Socket_Cache.ProxyMapping.GetMapLocal(Socket_Cache.SocketProxy.MapProtocol.Http, hostHeader.Split(':')[0], spt.Server.EndPoint.Port, cleanPath);
+                                            if (rule != null)
+                                            {
+                                                if (File.Exists(rule.LocalPath))
+                                                {
+                                                    byte[] fileBytes = File.ReadAllBytes(rule.LocalPath);
+                                                    string contentType = Socket_Operation.GetContentType(Path.GetExtension(rule.LocalPath));
+
+                                                    string response =
+                                                        $"HTTP/1.1 200 OK\r\n" +
+                                                        $"Content-Type: {contentType}\r\n" +
+                                                        $"Content-Length: {fileBytes.Length}\r\n" +
+                                                        "Connection: close\r\n\r\n";
+
+                                                    byte[] headerBytes = Encoding.UTF8.GetBytes(response);
+                                                    Socket_Operation.SendTCPData(spt.Client.Socket, headerBytes);
+                                                    Socket_Operation.SendTCPData(spt.Client.Socket, fileBytes);                                                    
+                                                }
+                                                else
+                                                {
+                                                    Socket_Operation.Send404Response(spt.Client.Socket);
+                                                }                                                    
+                                            }
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+                                else
+                                {
+                                    Socket_Operation.SendTCPData(spt.Server.Socket, bData);
+                                }
+
                                 enableProxyQueue = true;
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.Https:
+                                
+                                Socket_Operation.SendTCPData(spt.Server.Socket, bData);
                                 enableProxyQueue = true;
+
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.Socket:
+                                
+                                Socket_Operation.SendTCPData(spt.Server.Socket, bData);
                                 enableProxyQueue = true;
+
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.External:
+                                
+                                Socket_Operation.SendTCPData(spt.Server.Socket, bData);
                                 enableProxyQueue = true;
+
                                 break;
                         }
 
@@ -2115,7 +2183,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            #endregion            
+            #endregion                        
 
             #region//查找代理认证
 
@@ -2278,10 +2346,7 @@ namespace WPELibrary.Lib
 
             public static void ProxyTCP_ToQueue(Socket_ProxyTCP spc)
             {
-                if (!Socket_Cache.SocketProxy.SpeedMode)
-                {
-                    qSocket_ProxyTCP.Enqueue(spc);
-                }
+                qSocket_ProxyTCP.Enqueue(spc);
             }
 
             #endregion
@@ -3906,6 +3971,183 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            #endregion
+        }
+
+        #endregion
+
+        #region//代理映射
+
+        public static class ProxyMapping
+        {
+            public static bool IsShow = false;
+            public static bool Enable_MapLocal = false;
+            public static List<Proxy_MapLocal> lstMapLocal = new List<Proxy_MapLocal>();
+
+            #region//获取 MapProtocol 类型
+
+            public static Socket_Cache.SocketProxy.MapProtocol GetMapProtocol_ByString(string MapProtocol)
+            {
+                Socket_Cache.SocketProxy.MapProtocol MProtocol = SocketProxy.MapProtocol.Http;
+
+                try
+                {
+                    MProtocol = (Socket_Cache.SocketProxy.MapProtocol)Enum.Parse(typeof(Socket_Cache.SocketProxy.MapProtocol), MapProtocol);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return MProtocol;
+            }
+
+            #endregion
+
+            #region//新增本地代理映射    
+
+            public static void AddMapLocal(bool IsEnable, Socket_Cache.SocketProxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(Host) && Port > 0)
+                    {
+                        Proxy_MapLocal pml = new Proxy_MapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                        Socket_Cache.ProxyMapping.lstMapLocal.Add(pml);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//删除本地代理映射
+
+            public static void DelMapLocal(Proxy_MapLocal pml)
+            {
+                try
+                {
+                    if (pml != null)
+                    { 
+                        Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//更新本地代理映射
+
+            public static void UpdateMapLocal(Proxy_MapLocal pml, Socket_Cache.SocketProxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
+            {
+                try
+                {
+                    if (pml != null && !string.IsNullOrEmpty(Host) && Port > 0)
+                    {
+                        pml.ProtocolType = ProtocolType;
+                        pml.Host = Host; 
+                        pml.Port = Port; 
+                        pml.RemotePath = RemotePath;
+                        pml.LocalPath = LocalPath;                        
+                    }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//查找本地代理映射
+
+            public static Proxy_MapLocal GetMapLocal(Socket_Cache.SocketProxy.MapProtocol ProtocolType, string host, int port, string path)
+            {
+                if (string.IsNullOrEmpty(path))
+                {
+                    return Socket_Cache.ProxyMapping.lstMapLocal.FirstOrDefault(rule =>
+                    rule.IsEnable == true &&
+                    rule.ProtocolType == ProtocolType &&
+                    rule.Host.Equals(host, StringComparison.OrdinalIgnoreCase) &&
+                    rule.Port == port);
+                }
+                else
+                {
+                    return Socket_Cache.ProxyMapping.lstMapLocal.FirstOrDefault(rule =>
+                    rule.IsEnable == true &&
+                    rule.ProtocolType == ProtocolType &&
+                    rule.Host.Equals(host, StringComparison.OrdinalIgnoreCase) &&
+                    rule.Port == port &&
+                    path.StartsWith(rule.RemotePath, StringComparison.OrdinalIgnoreCase));
+                }
+                    
+            }
+
+            #endregion
+
+            #region//保存本地代理映射到数据库
+
+            public static void SaveProxyMapLocal_ToDB(Socket_Cache.System.SystemMode FromMode)
+            {
+                try
+                {
+                    if (Socket_Cache.System.StartMode == FromMode)
+                    {
+                        try
+                        {
+                            Socket_Cache.DataBase.DeleteTable_ProxyMapLocal();
+                            Socket_Cache.DataBase.InsertTable_ProxyMapLocal();                            
+                        }
+                        catch (Exception ex)
+                        {
+                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从数据库加载本地代理映射（异步）
+
+            public static async void LoadProxyMapLocal_FromDB()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        DataTable dtProxyMapLocal = Socket_Cache.DataBase.SelectTable_ProxyMapLocal();
+
+                        foreach (DataRow dataRow in dtProxyMapLocal.Rows)
+                        {
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+                            Socket_Cache.SocketProxy.MapProtocol ProtocolType = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(dataRow["ProtocolType"].ToString());
+                            string Host = dataRow["Host"].ToString();
+                            int Port = int.Parse(dataRow["Port"].ToString());
+                            string RemotePath = dataRow["RemotePath"].ToString();
+                            string LocalPath = dataRow["LocalPath"].ToString();
+
+                            Socket_Cache.ProxyMapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });
             }
 
             #endregion
@@ -9551,7 +9793,8 @@ namespace WPELibrary.Lib
                 Socket_Cache.DataBase.CreateTable_Filter();
                 Socket_Cache.DataBase.CreateTable_Send();
                 Socket_Cache.DataBase.CreateTable_Robot();
-                Socket_Cache.DataBase.CreateTable_ProxyAccount();                
+                Socket_Cache.DataBase.CreateTable_ProxyAccount();
+                Socket_Cache.DataBase.CreateTable_ProxyMapLocal();
             }
 
             private static void InitdbPath()
@@ -9747,7 +9990,8 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_ClientList_DelClosed BOOLEAN DEFAULT 1,";//代理模式 - 清理关闭的链接
                         sql += "ProxyConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//代理模式 - 日志列表自动滚动
                         sql += "ProxyConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
-                        sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值
+                        sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值                        
+                        sql += "ProxyConfig_Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
                         sql += "ProxyConfig_Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
                         sql += "ProxyConfig_ExternalProxy_IP TEXT,";//代理模式 - 外部代理IP
                         sql += "ProxyConfig_ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
@@ -9882,6 +10126,7 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_LogList_AutoRoll,";
                         sql += "ProxyConfig_LogList_AutoClear,";
                         sql += "ProxyConfig_LogList_AutoClear_Value,";
+                        sql += "ProxyConfig_Enable_MapLocal,";
                         sql += "ProxyConfig_Enable_ExternalProxy,";
                         sql += "ProxyConfig_ExternalProxy_IP,";
                         sql += "ProxyConfig_ExternalProxy_Port,";                    
@@ -9946,6 +10191,7 @@ namespace WPELibrary.Lib
                         sql += "@ProxyConfig_LogList_AutoRoll,";
                         sql += "@ProxyConfig_LogList_AutoClear,";
                         sql += "@ProxyConfig_LogList_AutoClear_Value,";
+                        sql += "@ProxyConfig_Enable_MapLocal,";
                         sql += "@ProxyConfig_Enable_ExternalProxy,";
                         sql += "@ProxyConfig_ExternalProxy_IP,";
                         sql += "@ProxyConfig_ExternalProxy_Port,";                    
@@ -10013,6 +10259,7 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", Socket_Cache.LogList.Proxy_AutoRoll);
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear);
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapLocal", Socket_Cache.ProxyMapping.Enable_MapLocal);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy", Socket_Cache.SocketProxy.Enable_ExternalProxy);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_IP", Socket_Cache.SocketProxy.ExternalProxy_IP);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port);                          
@@ -10920,9 +11167,140 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }            
+            }
 
-            #endregion            
+            #endregion
+
+            #region//本地代理映射
+
+            private static bool CreateTable_ProxyMapLocal()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS ProxyMapLocal (";                   
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";
+                        sql += "ProtocolType TEXT NOT NULL,";
+                        sql += "Host TEXT NOT NULL,";
+                        sql += "Port INTEGER DEFAULT 80,";
+                        sql += "RemotePath TEXT,";
+                        sql += "LocalPath TEXT NOT NULL";
+                        sql += ");";                    
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_ProxyMapLocal()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ProxyMapLocal;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_ProxyMapLocal()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM ProxyMapLocal;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_ProxyMapLocal()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(Socket_Cache.DataBase.conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = "INSERT INTO ProxyMapLocal (" +
+                                        "IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath" +
+                                        ") VALUES (" +
+                                        "@IsEnable, @ProtocolType, @Host, @Port, @RemotePath, @LocalPath" +
+                                        ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@ProtocolType", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Host", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Port", DbType.Int32));
+                                cmd.Parameters.Add(new SQLiteParameter("@RemotePath", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@LocalPath", DbType.String));
+
+                                foreach (Proxy_MapLocal pml in Socket_Cache.ProxyMapping.lstMapLocal)
+                                {
+                                    cmd.Parameters["@IsEnable"].Value = pml.IsEnable;
+                                    cmd.Parameters["@ProtocolType"].Value = pml.ProtocolType;
+                                    cmd.Parameters["@Host"].Value = pml.Host;
+                                    cmd.Parameters["@Port"].Value = pml.Port;
+                                    cmd.Parameters["@RemotePath"].Value = pml.RemotePath ?? (object)DBNull.Value;
+                                    cmd.Parameters["@LocalPath"].Value = pml.LocalPath;
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
         }
 
         #endregion

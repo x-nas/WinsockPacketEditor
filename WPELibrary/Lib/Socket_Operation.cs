@@ -1159,7 +1159,112 @@ namespace WPELibrary.Lib
                 return Socket_Cache.SocketProxy.AddressType.Domain;
 
             return Socket_Cache.SocketProxy.AddressType.Invalid;
-        }        
+        }
+
+        #endregion
+
+        #region//解析Http头数据
+
+        public static Dictionary<string, string> ParseHttpHeaders(string request)
+        {
+            Dictionary<string, string> headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            try
+            {
+                using (StringReader reader = new StringReader(request))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null && !string.IsNullOrWhiteSpace(line))
+                    {
+                        if (line.Contains(":"))
+                        {
+                            var parts = line.Split(new[] { ':' }, 2);
+                            if (parts.Length == 2)
+                            {
+                                headers[parts[0].Trim()] = parts[1].Trim();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+
+            return headers;
+        }
+
+        #endregion
+
+        #region//发送404响应
+
+        public static void Send404Response(Socket clientSocket)
+        {
+            try
+            {
+                string response =
+                "HTTP/1.1 404 Not Found\r\n" +
+                "Content-Type: text/html\r\n" +
+                "Content-Length: 0\r\n" +
+                "Connection: close\r\n\r\n";
+
+                byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                Socket_Operation.SendTCPData(clientSocket, responseBytes);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
+
+        #region// 获取 Content-Type 类型
+
+        public static string GetContentType(string fileExtension)
+        {
+            try
+            {
+                switch (fileExtension.ToLower())
+                {
+                    case ".html":
+                    case ".htm":
+                        return "text/html";
+
+                    case ".js":
+                        return "application/javascript";
+
+                    case ".css":
+                        return "text/css";
+
+                    case ".png":
+                        return "image/png";
+
+                    case ".jpg":
+                    case ".jpeg":
+                        return "image/jpeg";
+
+                    case ".gif":
+                        return "image/gif";
+
+                    case ".svg":
+                        return "image/svg+xml";
+
+                    case ".json":
+                        return "application/json";
+
+                    default:
+                        return "application/octet-stream";
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return "application/octet-stream";
+        }
 
         #endregion
 
@@ -3509,6 +3614,39 @@ namespace WPELibrary.Lib
                     Proxy_AccountTimeForm patForm = new Proxy_AccountTimeForm(gList);
                     patForm.ShowDialog();
                 }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示本地映射窗体
+
+        public static void ShowProxyMapLocalListForm()
+        {
+            try
+            {
+                if (!Socket_Cache.ProxyMapping.IsShow)
+                {
+                    Proxy_MapLocalListForm pmllForm = new Proxy_MapLocalListForm();
+                    pmllForm.Show();
+                }                
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void ShowProxyMapLocalForm(Proxy_MapLocal pml)
+        {
+            try
+            {
+                Proxy_MapLocalForm pmlForm = new Proxy_MapLocalForm(pml);
+                pmlForm.ShowDialog();
             }
             catch (Exception ex)
             {

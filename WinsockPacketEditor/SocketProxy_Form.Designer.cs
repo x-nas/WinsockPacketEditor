@@ -83,11 +83,17 @@
             this.nudLogList_AutoClearValue = new System.Windows.Forms.NumericUpDown();
             this.cbLogList_AutoClear = new System.Windows.Forms.CheckBox();
             this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
+            this.tpProxyMapping = new System.Windows.Forms.TabPage();
+            this.tlpProxyMapping = new System.Windows.Forms.TableLayoutPanel();
+            this.gbProxyMapping_Local = new System.Windows.Forms.GroupBox();
+            this.tlpProxyMapping_Local = new System.Windows.Forms.TableLayoutPanel();
+            this.cbEnable_MapLocal = new System.Windows.Forms.CheckBox();
+            this.bProxyMapping_Local = new System.Windows.Forms.Button();
             this.tpExternalProxy = new System.Windows.Forms.TabPage();
             this.tlpExternalProxy = new System.Windows.Forms.TableLayoutPanel();
             this.gbExternalProxy_Address = new System.Windows.Forms.GroupBox();
             this.tlpExternalProxy_Address = new System.Windows.Forms.TableLayoutPanel();
-            this.cbExternalProxy_Enable = new System.Windows.Forms.CheckBox();
+            this.cbEnable_ExternalProxy = new System.Windows.Forms.CheckBox();
             this.txtExternalProxy_IP = new System.Windows.Forms.TextBox();
             this.txtExternalProxy_Port = new System.Windows.Forms.TextBox();
             this.bExternalProxy_Detection = new System.Windows.Forms.Button();
@@ -192,6 +198,10 @@
             this.gbListSet_LogList.SuspendLayout();
             this.tlpListSet_LogList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
+            this.tpProxyMapping.SuspendLayout();
+            this.tlpProxyMapping.SuspendLayout();
+            this.gbProxyMapping_Local.SuspendLayout();
+            this.tlpProxyMapping_Local.SuspendLayout();
             this.tpExternalProxy.SuspendLayout();
             this.tlpExternalProxy.SuspendLayout();
             this.gbExternalProxy_Address.SuspendLayout();
@@ -256,6 +266,7 @@
             this.tcSocketProxySet.Controls.Add(this.tpProxySet);
             this.tcSocketProxySet.Controls.Add(this.tpAuthSet);
             this.tcSocketProxySet.Controls.Add(this.tpListSet);
+            this.tcSocketProxySet.Controls.Add(this.tpProxyMapping);
             this.tcSocketProxySet.Controls.Add(this.tpExternalProxy);
             this.tcSocketProxySet.Controls.Add(this.tpSystemSet);
             resources.ApplyResources(this.tcSocketProxySet, "tcSocketProxySet");
@@ -505,6 +516,48 @@
             this.cbLogList_AutoRoll.Name = "cbLogList_AutoRoll";
             this.cbLogList_AutoRoll.UseVisualStyleBackColor = true;
             // 
+            // tpProxyMapping
+            // 
+            this.tpProxyMapping.BackColor = System.Drawing.SystemColors.Control;
+            this.tpProxyMapping.Controls.Add(this.tlpProxyMapping);
+            resources.ApplyResources(this.tpProxyMapping, "tpProxyMapping");
+            this.tpProxyMapping.Name = "tpProxyMapping";
+            // 
+            // tlpProxyMapping
+            // 
+            resources.ApplyResources(this.tlpProxyMapping, "tlpProxyMapping");
+            this.tlpProxyMapping.Controls.Add(this.gbProxyMapping_Local, 0, 0);
+            this.tlpProxyMapping.Name = "tlpProxyMapping";
+            // 
+            // gbProxyMapping_Local
+            // 
+            this.gbProxyMapping_Local.Controls.Add(this.tlpProxyMapping_Local);
+            resources.ApplyResources(this.gbProxyMapping_Local, "gbProxyMapping_Local");
+            this.gbProxyMapping_Local.Name = "gbProxyMapping_Local";
+            this.gbProxyMapping_Local.TabStop = false;
+            // 
+            // tlpProxyMapping_Local
+            // 
+            resources.ApplyResources(this.tlpProxyMapping_Local, "tlpProxyMapping_Local");
+            this.tlpProxyMapping_Local.Controls.Add(this.cbEnable_MapLocal, 0, 1);
+            this.tlpProxyMapping_Local.Controls.Add(this.bProxyMapping_Local, 1, 1);
+            this.tlpProxyMapping_Local.Name = "tlpProxyMapping_Local";
+            // 
+            // cbEnable_MapLocal
+            // 
+            resources.ApplyResources(this.cbEnable_MapLocal, "cbEnable_MapLocal");
+            this.cbEnable_MapLocal.Name = "cbEnable_MapLocal";
+            this.cbEnable_MapLocal.UseVisualStyleBackColor = true;
+            this.cbEnable_MapLocal.CheckedChanged += new System.EventHandler(this.cbEnable_MapLocal_CheckedChanged);
+            // 
+            // bProxyMapping_Local
+            // 
+            resources.ApplyResources(this.bProxyMapping_Local, "bProxyMapping_Local");
+            this.bProxyMapping_Local.Image = global::WinsockPacketEditor.Properties.Resources.Settings;
+            this.bProxyMapping_Local.Name = "bProxyMapping_Local";
+            this.bProxyMapping_Local.UseVisualStyleBackColor = true;
+            this.bProxyMapping_Local.Click += new System.EventHandler(this.bProxyMapping_Local_Click);
+            // 
             // tpExternalProxy
             // 
             this.tpExternalProxy.BackColor = System.Drawing.SystemColors.Control;
@@ -529,18 +582,18 @@
             // tlpExternalProxy_Address
             // 
             resources.ApplyResources(this.tlpExternalProxy_Address, "tlpExternalProxy_Address");
-            this.tlpExternalProxy_Address.Controls.Add(this.cbExternalProxy_Enable, 0, 1);
+            this.tlpExternalProxy_Address.Controls.Add(this.cbEnable_ExternalProxy, 0, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_IP, 1, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.txtExternalProxy_Port, 2, 1);
             this.tlpExternalProxy_Address.Controls.Add(this.bExternalProxy_Detection, 3, 1);
             this.tlpExternalProxy_Address.Name = "tlpExternalProxy_Address";
             // 
-            // cbExternalProxy_Enable
+            // cbEnable_ExternalProxy
             // 
-            resources.ApplyResources(this.cbExternalProxy_Enable, "cbExternalProxy_Enable");
-            this.cbExternalProxy_Enable.Name = "cbExternalProxy_Enable";
-            this.cbExternalProxy_Enable.UseVisualStyleBackColor = true;
-            this.cbExternalProxy_Enable.CheckedChanged += new System.EventHandler(this.cbExternalProxy_Enable_CheckedChanged);
+            resources.ApplyResources(this.cbEnable_ExternalProxy, "cbEnable_ExternalProxy");
+            this.cbEnable_ExternalProxy.Name = "cbEnable_ExternalProxy";
+            this.cbEnable_ExternalProxy.UseVisualStyleBackColor = true;
+            this.cbEnable_ExternalProxy.CheckedChanged += new System.EventHandler(this.cbEnable_ExternalProxy_CheckedChanged);
             // 
             // txtExternalProxy_IP
             // 
@@ -1306,6 +1359,11 @@
             this.tlpListSet_LogList.ResumeLayout(false);
             this.tlpListSet_LogList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
+            this.tpProxyMapping.ResumeLayout(false);
+            this.tlpProxyMapping.ResumeLayout(false);
+            this.gbProxyMapping_Local.ResumeLayout(false);
+            this.tlpProxyMapping_Local.ResumeLayout(false);
+            this.tlpProxyMapping_Local.PerformLayout();
             this.tpExternalProxy.ResumeLayout(false);
             this.tlpExternalProxy.ResumeLayout(false);
             this.gbExternalProxy_Address.ResumeLayout(false);
@@ -1452,7 +1510,7 @@
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_Copy;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem cmsHexBox_SelectAll;
-        private System.Windows.Forms.CheckBox cbExternalProxy_Enable;
+        private System.Windows.Forms.CheckBox cbEnable_ExternalProxy;
         private System.Windows.Forms.TableLayoutPanel tlpExternalProxy_Appoint;
         private System.Windows.Forms.CheckBox cbExternalProxy_EnableAuth;
         private System.Windows.Forms.TextBox txtExternalProxy_AppointPort;
@@ -1469,5 +1527,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cUserName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cDevicesNumber;
         private System.Windows.Forms.DataGridViewImageColumn cAuthResult;
+        private System.Windows.Forms.TabPage tpProxyMapping;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyMapping;
+        private System.Windows.Forms.GroupBox gbProxyMapping_Local;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyMapping_Local;
+        private System.Windows.Forms.CheckBox cbEnable_MapLocal;
+        private System.Windows.Forms.Button bProxyMapping_Local;
     }
 }

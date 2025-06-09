@@ -227,6 +227,7 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_215 = { "导入系统备份成功! [未加密]", "Import System Backup successful! [Unencrypted]" };
         public static string[] MutiLan_216 = { "导入系统备份成功! [已加密]", "Import System Backup successful! [Encrypted]" };
         public static string[] MutiLan_217 = { "不是有效的备份文件!", "Not a valid backup file!" };
+        public static string[] MutiLan_218 = { "请选择一个用于本地映射的文件", "Please select a file for local mapping" };
 
         #endregion
 

@@ -264,6 +264,7 @@
     <Content Include="Icon\WPE64.ico" />
     <None Include="Resources\openHS.png" />
     <None Include="Resources\aboutthis.png" />
+    <None Include="Resources\Settings.png" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

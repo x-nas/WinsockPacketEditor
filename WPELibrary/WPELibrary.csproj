@@ -146,6 +146,7 @@
     <Compile Include="Lib\NativeMethods\Mswsock.cs" />
     <Compile Include="Lib\Proxy_AccountInfo.cs" />
     <Compile Include="Lib\Proxy_AuthInfo.cs" />
+    <Compile Include="Lib\Proxy_MapLocal.cs" />
     <Compile Include="Lib\Socket_ProxyData.cs" />
     <Compile Include="Lib\Socket_ProxyTCP.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />
@@ -194,6 +195,18 @@
     </Compile>
     <Compile Include="Proxy_AccountTimeForm.Designer.cs">
       <DependentUpon>Proxy_AccountTimeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_MapLocalForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_MapLocalForm.Designer.cs">
+      <DependentUpon>Proxy_MapLocalForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_MapLocalListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_MapLocalListForm.Designer.cs">
+      <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_CompareForm.cs">
       <SubType>Form</SubType>
@@ -366,6 +379,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountTimeForm.resx">
       <DependentUpon>Proxy_AccountTimeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapLocalForm.resx">
+      <DependentUpon>Proxy_MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapLocalListForm.resx">
+      <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_CompareForm.en-US.resx">
       <DependentUpon>Socket_CompareForm.cs</DependentUpon>

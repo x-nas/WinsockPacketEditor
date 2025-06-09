@@ -44,11 +44,12 @@ namespace WinsockPacketEditor
 
         private void SocketProxy_Form_Load(object sender, EventArgs e)
         {
-            this.InitProxyIPAppoint();
+            this.InitProxyIPAppoint();            
             this.ProxyIP_Appoint_Changed();
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
-            this.ExternalProxy_Enable_Changed();
+            this.Enable_MapLocal_Changed();
+            this.Enable_ExternalProxyChanged();
             this.ExternalProxy_AppointPort_Changed();
             this.ExternalProxy_EnableAuth_Changed();            
         }
@@ -77,6 +78,7 @@ namespace WinsockPacketEditor
                 Socket_Operation.StopRemoteMGT(this.RunMode);
                 Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
+                Socket_Cache.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
@@ -160,7 +162,7 @@ namespace WinsockPacketEditor
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
+        }        
 
         #endregion
 
@@ -217,7 +219,9 @@ namespace WinsockPacketEditor
                 this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Proxy_AutoClear;
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
-                this.cbExternalProxy_Enable.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy;
+                this.cbEnable_MapLocal.Checked = Socket_Cache.ProxyMapping.Enable_MapLocal;
+
+                this.cbEnable_ExternalProxy.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy;
                 this.txtExternalProxy_IP.Text = Socket_Cache.SocketProxy.ExternalProxy_IP;
                 this.txtExternalProxy_Port.Text = Socket_Cache.SocketProxy.ExternalProxy_Port.ToString();
                 this.cbExternalProxy_AppointPort.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort;
@@ -256,7 +260,9 @@ namespace WinsockPacketEditor
                 Socket_Cache.LogList.Proxy_AutoClear = this.cbLogList_AutoClear.Checked;
                 Socket_Cache.LogList.Proxy_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SocketProxy.Enable_ExternalProxy = this.cbExternalProxy_Enable.Checked;
+                Socket_Cache.ProxyMapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
+
+                Socket_Cache.SocketProxy.Enable_ExternalProxy = this.cbEnable_ExternalProxy.Checked;
                 Socket_Cache.SocketProxy.ExternalProxy_IP = this.txtExternalProxy_IP.Text.Trim();
                 Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(this.txtExternalProxy_Port.Text.Trim());
                 Socket_Cache.SocketProxy.Enable_ExternalProxy_AppointPort = this.cbExternalProxy_AppointPort.Checked;
@@ -315,22 +321,42 @@ namespace WinsockPacketEditor
             this.nudLogList_AutoClearValue.Enabled = this.cbLogList_AutoClear.Checked;           
         }
 
-        #endregion        
+        #endregion
+
+        #region//代理映射
+
+        private void cbEnable_MapLocal_CheckedChanged(object sender, EventArgs e)
+        {
+            this.Enable_MapLocal_Changed();
+        }
+
+        private void Enable_MapLocal_Changed()
+        {
+            this.bProxyMapping_Local.Enabled = this.cbEnable_MapLocal.Checked;
+            Socket_Cache.ProxyMapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
+        }
+
+        private void bProxyMapping_Local_Click(object sender, EventArgs e)
+        {
+            Socket_Operation.ShowProxyMapLocalListForm();
+        }
+
+        #endregion
 
         #region//外部代理
 
-        private void cbExternalProxy_Enable_CheckedChanged(object sender, EventArgs e)
+        private void cbEnable_ExternalProxy_CheckedChanged(object sender, EventArgs e)
         {
-            this.ExternalProxy_Enable_Changed();
+            this.Enable_ExternalProxyChanged();
         }
 
-        private void ExternalProxy_Enable_Changed()
+        private void Enable_ExternalProxyChanged()
         { 
             this.txtExternalProxy_IP.Enabled =
                 this.txtExternalProxy_Port.Enabled =
                 this.bExternalProxy_Detection.Enabled =
                 this.tlpExternalProxy_Appoint.Enabled =
-                this.cbExternalProxy_Enable.Checked;
+                this.cbEnable_ExternalProxy.Checked;
 
             this.ExternalProxy_AppointPort_Changed();
         }
@@ -473,7 +499,7 @@ namespace WinsockPacketEditor
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_169));
                 }
 
-                if (this.cbExternalProxy_Enable.Checked)
+                if (this.cbEnable_ExternalProxy.Checked)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_170));
                 }
@@ -543,7 +569,7 @@ namespace WinsockPacketEditor
                 }
 
                 //启用外部代理
-                if (this.cbExternalProxy_Enable.Checked)
+                if (this.cbEnable_ExternalProxy.Checked)
                 {
                     string ExternalProxyIP = this.txtExternalProxy_IP.Text.Trim();
                     string ExternalProxyPort = this.txtExternalProxy_Port.Text.Trim();                    
@@ -1264,6 +1290,6 @@ namespace WinsockPacketEditor
             }
         }
 
-        #endregion        
+        #endregion
     }
 }
