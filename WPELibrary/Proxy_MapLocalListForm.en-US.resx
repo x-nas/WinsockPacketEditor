@@ -120,46 +120,11 @@
   <data name="lMapLocal.Text" xml:space="preserve">
     <value>Use local files to map remote server addresses</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="bAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 3</value>
-  </data>
-  <data name="bAdd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
-  </data>
-  <data name="bAdd.Text" xml:space="preserve">
-    <value>Add (&amp;A)</value>
-  </data>
-  <data name="bRemove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>185, 3</value>
-  </data>
-  <data name="bRemove.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
-  </data>
-  <data name="bRemove.Text" xml:space="preserve">
-    <value>Remove (&amp;R)</value>
-  </data>
-  <data name="bClose.Location" type="System.Drawing.Point, System.Drawing">
-    <value>425, 3</value>
-  </data>
-  <data name="bClose.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
-  </data>
-  <data name="bClose.Text" xml:space="preserve">
-    <value>OK (&amp;C)</value>
-  </data>
   <data name="cProtocolType.HeaderText" xml:space="preserve">
     <value>Protocol</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cProtocolType.Width" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
   <data name="cHost.HeaderText" xml:space="preserve">
     <value>Host</value>
-  </data>
-  <data name="cHost.Width" type="System.Int32, mscorlib">
-    <value>41</value>
   </data>
   <data name="cPort.HeaderText" xml:space="preserve">
     <value>Port</value>
@@ -167,17 +132,82 @@
   <data name="cRemotePath.HeaderText" xml:space="preserve">
     <value>Remote Path</value>
   </data>
-  <data name="cRemotePath.Width" type="System.Int32, mscorlib">
-    <value>88</value>
-  </data>
   <data name="cURL.HeaderText" xml:space="preserve">
     <value>Remote Path</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cURL.Width" type="System.Int32, mscorlib">
     <value>88</value>
   </data>
   <data name="cLocalPath.HeaderText" xml:space="preserve">
     <value>Local Path</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="cmsMapLocal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 182</value>
+  </data>
+  <data name="cmsMapLocal_Top.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Top.Text" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsMapLocal_Up.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Up.Text" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="cmsMapLocal_Down.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Down.Text" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsMapLocal_Bottom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Bottom.Text" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsMapLocal_Import.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Import.Text" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="cmsMapLocal_Export.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Export.Text" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>143, 6</value>
+  </data>
+  <data name="cmsMapLocal_Clear.Size" type="System.Drawing.Size, System.Drawing">
+    <value>146, 22</value>
+  </data>
+  <data name="cmsMapLocal_Clear.Text" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="bAdd.Text" xml:space="preserve">
+    <value>Add (&amp;A)</value>
+  </data>
+  <data name="bRemove.Text" xml:space="preserve">
+    <value>Remove (&amp;R)</value>
+  </data>
+  <data name="bOK.Text" xml:space="preserve">
+    <value>OK (&amp;C)</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

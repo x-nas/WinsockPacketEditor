@@ -387,7 +387,19 @@
     </FileAssociation>
     <FileAssociation Include=".pa">
       <Visible>False</Visible>
-      <Description>WPE64 ProxyAccount List File</Description>
+      <Description>WPE64 Proxy Account List File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".pml">
+      <Visible>False</Visible>
+      <Description>WPE64 Proxy MapLocal File</Description>
+      <Progid>WPE64</Progid>
+      <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".pmr">
+      <Visible>False</Visible>
+      <Description>WPE64 Proxy MapRemote File</Description>
       <Progid>WPE64</Progid>
       <DefaultIcon>Icon\WPE64.ico</DefaultIcon>
     </FileAssociation>

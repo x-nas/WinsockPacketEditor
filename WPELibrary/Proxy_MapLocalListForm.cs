@@ -129,5 +129,108 @@ namespace WPELibrary
         }
 
         #endregion
+
+        #region//右键菜单
+
+        private void cmsMapLocal_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string sItemText = e.ClickedItem.Name;
+            cmsMapLocal.Close();
+
+            try
+            {
+                Proxy_MapLocal pml = null;
+                if (this.dgvMapLocal.Rows.Count > 0 && this.dgvMapLocal.SelectedRows.Count > 0)
+                {
+                    int iSelectIndex = this.dgvMapLocal.SelectedRows[0].Index;
+                    if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.ProxyMapping.lstMapLocal.Count)
+                    {
+                        pml = Socket_Cache.ProxyMapping.lstMapLocal[iSelectIndex];
+                    }
+                }                              
+
+                switch (sItemText)
+                {
+                    case "cmsMapLocal_Top":
+
+                        if (pml != null)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Top, pml);
+                        }
+
+                        break;
+
+                    case "cmsMapLocal_Up":
+
+                        if (pml != null)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Up, pml);
+                        }
+                        
+                        break;
+
+                    case "cmsMapLocal_Down":
+
+                        if (pml != null)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Down, pml);
+                        }
+                        
+                        break;
+
+                    case "cmsMapLocal_Bottom":
+
+                        if (pml != null)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Bottom, pml);
+                        }
+                        
+                        break;
+
+                    case "cmsMapLocal_Import":
+
+                        Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Import, pml);
+                        bindingSource.ResetBindings(false);
+
+                        break;
+
+                    case "cmsMapLocal_Export":
+
+                        if (this.dgvMapLocal.Rows.Count > 0)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.Export, pml);
+                        }
+                        
+                        break;
+
+                    case "cmsMapLocal_Clear":
+
+                        if (this.dgvMapLocal.Rows.Count > 0)
+                        {
+                            Socket_Cache.ProxyMapping.UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction.CleanUp, pml);
+                            bindingSource.ResetBindings(false);
+                        }
+                        
+                        break;
+                }
+
+                this.dgvMapLocal.ClearSelection();
+
+                int iIndex = Socket_Cache.ProxyMapping.lstMapLocal.IndexOf(pml);
+                if (iIndex > -1 && iIndex < this.dgvMapLocal.RowCount)
+                {
+                    this.dgvMapLocal.Rows[iIndex].Selected = true;
+                    dgvMapLocal.FirstDisplayedScrollingRowIndex = iIndex;
+                }
+
+                this.dgvMapLocal.Refresh();                 
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
     }
 }

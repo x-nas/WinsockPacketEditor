@@ -773,6 +773,7 @@ namespace WPELibrary
                 bool SystemConfig = this.cbBackUp_SystemConfig.Checked;
                 bool ProxySet = this.cbBackUp_ProxySet.Checked;
                 bool ProxyAccount = this.cbBackUp_ProxyAccount.Checked;
+                bool ProxyMapping = this.cbBackUp_ProxyMapping.Checked;
                 bool InjectionSet = this.cbBackUp_InjectionSet.Checked;
                 bool FilterList = this.cbBackUp_FilterList.Checked;
                 bool SendList = this.cbBackUp_SendList.Checked;
@@ -783,6 +784,7 @@ namespace WPELibrary
                     SystemConfig,
                     ProxySet,
                     ProxyAccount,
+                    ProxyMapping,
                     InjectionSet,
                     FilterList,
                     SendList,
@@ -2178,7 +2180,7 @@ namespace WPELibrary
             }
         }
 
-        private void bgwSendList_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        private void bgwSendList_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             try
             {

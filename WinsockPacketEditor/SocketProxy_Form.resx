@@ -1279,7 +1279,7 @@
     <value>2</value>
   </data>
   <data name="tlpProxyMapping.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="tlpProxyMapping_Local.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1336,13 +1336,7 @@
     <value>1</value>
   </data>
   <data name="bProxyMapping_Local.Text" xml:space="preserve">
-    <value> 设 置</value>
-  </data>
-  <data name="bProxyMapping_Local.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleRight</value>
-  </data>
-  <data name="bProxyMapping_Local.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
-    <value>ImageBeforeText</value>
+    <value>配置映射</value>
   </data>
   <data name="&gt;&gt;bProxyMapping_Local.Name" xml:space="preserve">
     <value>bProxyMapping_Local</value>
@@ -1369,7 +1363,7 @@
     <value>3</value>
   </data>
   <data name="tlpProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
-    <value>378, 39</value>
+    <value>768, 39</value>
   </data>
   <data name="tlpProxyMapping_Local.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1396,7 +1390,7 @@
     <value>3, 3</value>
   </data>
   <data name="gbProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
-    <value>384, 61</value>
+    <value>774, 61</value>
   </data>
   <data name="gbProxyMapping_Local.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1447,7 +1441,7 @@
     <value>0</value>
   </data>
   <data name="tlpProxyMapping.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyMapping_Local" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100,Absolute,67,Absolute,67" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyMapping_Local" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpProxyMapping.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -2368,7 +2362,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAWABBQFgAQUBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAXgBBQF4AQUBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

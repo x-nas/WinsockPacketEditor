@@ -226,26 +226,29 @@
   <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
   </data>
+  <data name="tpProxyMapping.Text" xml:space="preserve">
+    <value>[ Proxy Mapping ]</value>
+  </data>
+  <data name="gbProxyMapping_Local.Text" xml:space="preserve">
+    <value>Local Mapping</value>
+  </data>
+  <data name="cbEnable_MapLocal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 21</value>
+  </data>
+  <data name="cbEnable_MapLocal.Text" xml:space="preserve">
+    <value>Enable - MapLocal</value>
+  </data>
+  <data name="bProxyMapping_Local.Location" type="System.Drawing.Point, System.Drawing">
+    <value>142, 6</value>
+  </data>
+  <data name="bProxyMapping_Local.Text" xml:space="preserve">
+    <value>Setting</value>
+  </data>
   <data name="tpExternalProxy.Text" xml:space="preserve">
     <value>[ EXT Proxy ]</value>
   </data>
   <data name="gbExternalProxy_Address.Text" xml:space="preserve">
     <value>EXT Proxy Address</value>
-  </data>
-  <data name="cbExternalProxy_Enable.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 23</value>
-  </data>
-  <data name="cbExternalProxy_Enable.Text" xml:space="preserve">
-    <value>Enable</value>
-  </data>
-  <data name="txtExternalProxy_IP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>72, 9</value>
-  </data>
-  <data name="txtExternalProxy_Port.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 9</value>
-  </data>
-  <data name="bExternalProxy_Detection.Location" type="System.Drawing.Point, System.Drawing">
-    <value>302, 9</value>
   </data>
   <data name="bExternalProxy_Detection.Text" xml:space="preserve">
     <value>Test</value>
@@ -310,7 +313,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAeABAQHgAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAegBAQHoAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

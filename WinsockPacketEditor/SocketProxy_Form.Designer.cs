@@ -553,7 +553,6 @@
             // bProxyMapping_Local
             // 
             resources.ApplyResources(this.bProxyMapping_Local, "bProxyMapping_Local");
-            this.bProxyMapping_Local.Image = global::WinsockPacketEditor.Properties.Resources.Settings;
             this.bProxyMapping_Local.Name = "bProxyMapping_Local";
             this.bProxyMapping_Local.UseVisualStyleBackColor = true;
             this.bProxyMapping_Local.Click += new System.EventHandler(this.bProxyMapping_Local_Click);

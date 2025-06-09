@@ -229,6 +229,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_217 = { "不是有效的备份文件!", "Not a valid backup file!" };
         public static string[] MutiLan_218 = { "请选择一个用于本地映射的文件", "Please select a file for local mapping" };
         public static string[] MutiLan_219 = { "映射数据不完整!", "The mapping data is incomplete!" };
+        public static string[] MutiLan_220 = { "本地代理映射文件", "Local proxy mapping file" };
+        public static string[] MutiLan_221 = { "本地代理映射保存完毕 {0}", "The Local proxy mapping saved {0}" };
+        public static string[] MutiLan_222 = { "加载本地代理映射成功! [未加密]", "Load Local proxy mapping successful! [Unencrypted]" };
+        public static string[] MutiLan_223 = { "加载本地代理映射成功! [已加密]", "Load Local proxy mapping successful! [Encrypted]" };
 
         #endregion
 

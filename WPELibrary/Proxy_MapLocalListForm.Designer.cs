@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Proxy_MapLocalListForm));
             this.tlpMapLocal = new System.Windows.Forms.TableLayoutPanel();
             this.lMapLocal = new System.Windows.Forms.Label();
@@ -39,12 +40,25 @@
             this.cRemotePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cURL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLocalPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cmsMapLocal = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsMapLocal_Top = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsMapLocal_Up = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMapLocal_Down = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsMapLocal_Bottom = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsMapLocal_Import = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMapLocal_Export = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmsMapLocal_Clear = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.bAdd = new System.Windows.Forms.Button();
             this.bRemove = new System.Windows.Forms.Button();
             this.bOK = new System.Windows.Forms.Button();
             this.tlpMapLocal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMapLocal)).BeginInit();
+            this.cmsMapLocal.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,6 +77,7 @@
             // 
             // dgvMapLocal
             // 
+            resources.ApplyResources(this.dgvMapLocal, "dgvMapLocal");
             this.dgvMapLocal.AllowUserToAddRows = false;
             this.dgvMapLocal.AllowUserToDeleteRows = false;
             this.dgvMapLocal.AllowUserToResizeColumns = false;
@@ -79,7 +94,7 @@
             this.cRemotePath,
             this.cURL,
             this.cLocalPath});
-            resources.ApplyResources(this.dgvMapLocal, "dgvMapLocal");
+            this.dgvMapLocal.ContextMenuStrip = this.cmsMapLocal;
             this.dgvMapLocal.MultiSelect = false;
             this.dgvMapLocal.Name = "dgvMapLocal";
             this.dgvMapLocal.RowHeadersVisible = false;
@@ -156,6 +171,86 @@
             this.cLocalPath.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cLocalPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // cmsMapLocal
+            // 
+            resources.ApplyResources(this.cmsMapLocal, "cmsMapLocal");
+            this.cmsMapLocal.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsMapLocal_Top,
+            this.toolStripSeparator1,
+            this.cmsMapLocal_Up,
+            this.cmsMapLocal_Down,
+            this.toolStripSeparator2,
+            this.cmsMapLocal_Bottom,
+            this.toolStripSeparator3,
+            this.cmsMapLocal_Import,
+            this.cmsMapLocal_Export,
+            this.toolStripSeparator4,
+            this.cmsMapLocal_Clear});
+            this.cmsMapLocal.Name = "cmsMapLocal";
+            this.cmsMapLocal.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMapLocal_ItemClicked);
+            // 
+            // cmsMapLocal_Top
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Top, "cmsMapLocal_Top");
+            this.cmsMapLocal_Top.Image = global::WPELibrary.Properties.Resources.go_top;
+            this.cmsMapLocal_Top.Name = "cmsMapLocal_Top";
+            // 
+            // toolStripSeparator1
+            // 
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            // 
+            // cmsMapLocal_Up
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Up, "cmsMapLocal_Up");
+            this.cmsMapLocal_Up.Image = global::WPELibrary.Properties.Resources.Up;
+            this.cmsMapLocal_Up.Name = "cmsMapLocal_Up";
+            // 
+            // cmsMapLocal_Down
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Down, "cmsMapLocal_Down");
+            this.cmsMapLocal_Down.Image = global::WPELibrary.Properties.Resources.Down;
+            this.cmsMapLocal_Down.Name = "cmsMapLocal_Down";
+            // 
+            // toolStripSeparator2
+            // 
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            // 
+            // cmsMapLocal_Bottom
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Bottom, "cmsMapLocal_Bottom");
+            this.cmsMapLocal_Bottom.Image = global::WPELibrary.Properties.Resources.go_bottom;
+            this.cmsMapLocal_Bottom.Name = "cmsMapLocal_Bottom";
+            // 
+            // toolStripSeparator3
+            // 
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            // 
+            // cmsMapLocal_Import
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Import, "cmsMapLocal_Import");
+            this.cmsMapLocal_Import.Image = global::WPELibrary.Properties.Resources.openHS;
+            this.cmsMapLocal_Import.Name = "cmsMapLocal_Import";
+            // 
+            // cmsMapLocal_Export
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Export, "cmsMapLocal_Export");
+            this.cmsMapLocal_Export.Image = global::WPELibrary.Properties.Resources.save;
+            this.cmsMapLocal_Export.Name = "cmsMapLocal_Export";
+            // 
+            // toolStripSeparator4
+            // 
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            // 
+            // cmsMapLocal_Clear
+            // 
+            resources.ApplyResources(this.cmsMapLocal_Clear, "cmsMapLocal_Clear");
+            this.cmsMapLocal_Clear.Image = global::WPELibrary.Properties.Resources.Trash_can16;
+            this.cmsMapLocal_Clear.Name = "cmsMapLocal_Clear";
+            // 
             // tableLayoutPanel1
             // 
             resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
@@ -198,6 +293,7 @@
             this.tlpMapLocal.ResumeLayout(false);
             this.tlpMapLocal.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMapLocal)).EndInit();
+            this.cmsMapLocal.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -219,5 +315,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cRemotePath;
         private System.Windows.Forms.DataGridViewTextBoxColumn cURL;
         private System.Windows.Forms.DataGridViewTextBoxColumn cLocalPath;
+        private System.Windows.Forms.ContextMenuStrip cmsMapLocal;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Top;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Up;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Down;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Bottom;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Import;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Export;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem cmsMapLocal_Clear;
     }
 }

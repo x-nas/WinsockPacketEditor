@@ -72,6 +72,10 @@ namespace WPELibrary.Lib
                 ProxyAccount_Export = 9,
                 SystemBackUp_Import = 10,
                 SystemBackUp_Export = 11,
+                MapLocal_Import = 12,
+                MapLocal_Export = 13,
+                MapRemote_Import = 14,
+                MapRemote_Export = 15,
             }
 
             public enum ListAction
@@ -900,6 +904,7 @@ namespace WPELibrary.Lib
                 bool SystemConfig,
                 bool ProxySet, 
                 bool ProxyAccount, 
+                bool ProxyMapping,
                 bool InjectionSet, 
                 bool FilterList, 
                 bool SendList, 
@@ -929,6 +934,7 @@ namespace WPELibrary.Lib
                                 SystemConfig,
                                 ProxySet,
                                 ProxyAccount,
+                                ProxyMapping,
                                 InjectionSet,
                                 FilterList,
                                 SendList,
@@ -951,6 +957,7 @@ namespace WPELibrary.Lib
                 bool SystemConfig,
                 bool ProxySet,
                 bool ProxyAccount,
+                bool ProxyMapping,
                 bool InjectionSet,
                 bool FilterList,
                 bool SendList,
@@ -1003,6 +1010,20 @@ namespace WPELibrary.Lib
                                 xeBackUp.Add(xeProxyAccount);
                             }
                         }                        
+                    }
+
+                    //代理映射
+                    if (ProxyMapping)
+                    {
+                        //本地映射
+                        if (Socket_Cache.ProxyMapping.lstMapLocal.Count > 0)
+                        {
+                            XElement xeMapLocal = Socket_Cache.ProxyMapping.GetMapLocal_XML(Socket_Cache.ProxyMapping.lstMapLocal.ToList());
+                            if (xeMapLocal != null)
+                            {
+                                xeBackUp.Add(xeMapLocal);
+                            }
+                        }
                     }
 
                     //注入设置
@@ -1246,6 +1267,32 @@ namespace WPELibrary.Lib
                         Socket_Cache.DataBase.DeleteTable_ProxyAccount();
                         Socket_Cache.DataBase.InsertTable_ProxyAccount();
                         Socket_Cache.DataBase.DeleteTable_ProxyAccount_LoginInfo();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog("Import ProxyAccountList", ex.Message);
+                }
+
+                #endregion
+
+                #region//代理映射
+
+                try
+                {
+                    //本地代理映射
+                    XElement xeMapLocal = xdoc.Root.Element("MapLocal");
+                    if (xeMapLocal != null)
+                    {
+                        XDocument MapLocal = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        MapLocal.Add(xeMapLocal);
+
+                        Socket_Cache.ProxyMapping.LoadMapLocal_FromXDocument(MapLocal);
+                        Socket_Cache.DataBase.DeleteTable_ProxyMapLocal();
+                        Socket_Cache.DataBase.InsertTable_ProxyMapLocal();                        
                     }
                 }
                 catch (Exception ex)
@@ -3982,6 +4029,7 @@ namespace WPELibrary.Lib
 
         public static class ProxyMapping
         {
+            public static string AESKey = string.Empty;
             public static bool IsShow = false;
             public static bool Enable_MapLocal = false;
             public static List<Proxy_MapLocal> lstMapLocal = new List<Proxy_MapLocal>();
@@ -4045,6 +4093,39 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//清空本地代理映射（对话框）
+
+            public static void CleanUpMapLocal_Dialog()
+            {
+                try
+                {
+                    DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
+
+                    if (dr.Equals(DialogResult.OK))
+                    {
+                        Socket_Cache.ProxyMapping.MapLocalClear();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void MapLocalClear()
+            {
+                try
+                {
+                    lstMapLocal.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//更新本地代理映射
 
             public static void UpdateMapLocal(Proxy_MapLocal pml, Socket_Cache.SocketProxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
@@ -4093,6 +4174,79 @@ namespace WPELibrary.Lib
             }
 
             #endregion
+
+            #region//本地代理映射的列表操作
+
+            public static void UpdateMapLocal_ByListAction(Socket_Cache.System.ListAction listAction, Proxy_MapLocal pml)
+            {
+                try
+                {
+                    int iIndex = 0;
+
+                    switch (listAction)
+                    {
+                        case Socket_Cache.System.ListAction.Top:
+
+                            Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                            Socket_Cache.ProxyMapping.lstMapLocal.Insert(0, pml);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Up:
+
+                            iIndex = Socket_Cache.ProxyMapping.lstMapLocal.IndexOf(pml);
+                            if (iIndex > 0)
+                            {
+                                Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                                Socket_Cache.ProxyMapping.lstMapLocal.Insert(iIndex - 1, pml);
+                            }
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Down:
+
+                            iIndex = Socket_Cache.ProxyMapping.lstMapLocal.IndexOf(pml);
+                            if (iIndex > -1 && iIndex < Socket_Cache.ProxyMapping.lstMapLocal.Count - 1)
+                            {
+                                Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                                Socket_Cache.ProxyMapping.lstMapLocal.Insert(iIndex + 1, pml);
+                            }
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Bottom:
+
+                            Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                            Socket_Cache.ProxyMapping.lstMapLocal.Add(pml);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Import:
+
+                            Socket_Cache.ProxyMapping.LoadMapLocal_Dialog();
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Export:
+
+                            Socket_Cache.ProxyMapping.SaveMapLocal_Dialog(string.Empty, Socket_Cache.ProxyMapping.lstMapLocal);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.CleanUp:
+
+                            Socket_Cache.ProxyMapping.CleanUpMapLocal_Dialog();
+
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion                        
 
             #region//保存本地代理映射到数据库
 
@@ -4148,6 +4302,261 @@ namespace WPELibrary.Lib
                         Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
                 });
+            }
+
+            #endregion
+
+            #region//保存本地映射到文件（对话框）
+
+            public static void SaveMapLocal_Dialog(string FileName, List<Proxy_MapLocal> pmlList)
+            {
+                try
+                {
+                    if (Socket_Cache.ProxyMapping.lstMapLocal.Count > 0)
+                    {
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+
+                        sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_220) + "（*.pml）|*.pml";
+
+                        if (!string.IsNullOrEmpty(FileName))
+                        {
+                            sfdSaveFile.FileName = FileName;
+                        }
+
+                        sfdSaveFile.RestoreDirectory = true;
+
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.MapLocal_Export);
+                            pwForm.ShowDialog();
+
+                            string FilePath = sfdSaveFile.FileName;
+
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                SaveMapLocal(FilePath, pmlList, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_221), FilePath);
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void SaveMapLocal(string FilePath, List<Proxy_MapLocal> pmlList, bool DoEncrypt)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeMapLocal = Socket_Cache.ProxyMapping.GetMapLocal_XML(pmlList);
+                    if (xeMapLocal == null)
+                    {
+                        return;
+                    }
+
+                    xdoc.Add(xeMapLocal);
+                    xdoc.Save(FilePath);
+
+                    if (DoEncrypt)
+                    {
+                        string sPassword = Socket_Cache.ProxyMapping.AESKey;
+
+                        if (!string.IsNullOrEmpty(sPassword))
+                        {
+                            Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static XElement GetMapLocal_XML(List<Proxy_MapLocal> pmlList)
+            {
+                try
+                {
+                    XElement xeMapLocal = new XElement("MapLocal");
+
+                    foreach (Proxy_MapLocal pml in pmlList)
+                    {
+                        string sIsEnable = pml.IsEnable.ToString();
+                        string sProtocolType = pml.ProtocolType.ToString();
+                        string sHost = pml.Host.ToString();
+                        string sPort = pml.Port.ToString();
+                        string sRemotePath = pml.RemotePath.ToString();
+                        string sLocalPath = pml.LocalPath.ToString();
+
+                        XElement xeLocal =
+                            new XElement("Local",
+                            new XElement("IsEnable", pml.IsEnable.ToString()),
+                            new XElement("ProtocolType", pml.ProtocolType.ToString()),
+                            new XElement("Host", pml.Host),
+                            new XElement("Port", pml.Port.ToString()),
+                            new XElement("RemotePath", pml.RemotePath),
+                            new XElement("LocalPath", pml.LocalPath)
+                            );
+
+                        xeMapLocal.Add(xeLocal);
+                    }
+
+                    return xeMapLocal;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion
+
+            #region//从文件加载本地映射（对话框）
+
+            public static void LoadMapLocal_Dialog()
+            {
+                try
+                {
+                    OpenFileDialog ofdLoadFile = new OpenFileDialog();
+
+                    ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_220) + "（*.pml）|*.pml";
+                    ofdLoadFile.RestoreDirectory = true;
+
+                    if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string FilePath = ofdLoadFile.FileName;
+
+                        if (!string.IsNullOrEmpty(FilePath))
+                        {
+                            LoadMapLocal(FilePath, true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadMapLocal(string FilePath, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        XDocument xdoc = new XDocument();
+
+                        bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+
+                        if (bEncrypt)
+                        {
+                            if (LoadFromUser)
+                            {
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.MapLocal_Import);
+                                pwForm.ShowDialog();
+                            }
+
+                            xdoc = Socket_Operation.DecryptXMLFile(FilePath, Socket_Cache.ProxyMapping.AESKey);
+                        }
+                        else
+                        {
+                            xdoc = XDocument.Load(FilePath);
+                        }
+
+                        if (xdoc == null)
+                        {
+                            string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+
+                            if (LoadFromUser)
+                            {
+                                Socket_Operation.ShowMessageBox(sError);
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                            }
+                        }
+                        else
+                        {
+                            LoadMapLocal_FromXDocument(xdoc);
+
+                            if (bEncrypt)
+                            {
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_223));
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_222));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void LoadMapLocal_FromXDocument(XDocument xdoc)
+            {
+                try
+                {
+                    foreach (XElement xeMapLocal in xdoc.Root.Elements())
+                    {
+                        bool IsEnable = false;
+                        if (xeMapLocal.Element("IsEnable") != null)
+                        {
+                            IsEnable = bool.Parse(xeMapLocal.Element("IsEnable").Value);
+                        }
+
+                        Socket_Cache.SocketProxy.MapProtocol ProtocolType = SocketProxy.MapProtocol.Http;
+                        if (xeMapLocal.Element("ProtocolType") != null)
+                        {
+                            ProtocolType = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(xeMapLocal.Element("ProtocolType").Value);
+                        }
+
+                        string Host = string.Empty;
+                        if (xeMapLocal.Element("Host") != null)
+                        {
+                            Host = xeMapLocal.Element("Host").Value;
+                        }
+
+                        int Port = 80;
+                        if (xeMapLocal.Element("Port") != null)
+                        {
+                            Port = int.Parse(xeMapLocal.Element("Port").Value);
+                        }
+
+                        string RemotePath = string.Empty;
+                        if (xeMapLocal.Element("RemotePath") != null)
+                        {
+                            RemotePath = xeMapLocal.Element("RemotePath").Value;
+                        }
+
+                        string LocalPath = string.Empty;
+                        if (xeMapLocal.Element("LocalPath") != null)
+                        {
+                            LocalPath = xeMapLocal.Element("LocalPath").Value;
+                        }
+
+                        Socket_Cache.ProxyMapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
