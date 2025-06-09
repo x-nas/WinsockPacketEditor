@@ -61,7 +61,7 @@ namespace WPELibrary
 
                 if (string.IsNullOrEmpty(Host_New) || string.IsNullOrEmpty(LocalPath_New))
                 {
-                    Socket_Operation.ShowMessageBox("映射数据不完整!");
+                    Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_219));
                     return;
                 }
 

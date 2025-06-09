@@ -121,13 +121,13 @@ namespace WPELibrary
 
         #endregion        
 
-        #region//关闭
+        #region//确定
 
-        private void bClose_Click(object sender, EventArgs e)
+        private void bOK_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        #endregion        
+        #endregion
     }
 }

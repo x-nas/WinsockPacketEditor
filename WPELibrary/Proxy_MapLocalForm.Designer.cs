@@ -66,8 +66,8 @@
             // 
             // gbLocal
             // 
-            this.gbLocal.Controls.Add(this.tlpLocal);
             resources.ApplyResources(this.gbLocal, "gbLocal");
+            this.gbLocal.Controls.Add(this.tlpLocal);
             this.gbLocal.Name = "gbLocal";
             this.gbLocal.TabStop = false;
             // 
@@ -92,8 +92,8 @@
             // 
             // gbRemote
             // 
-            this.gbRemote.Controls.Add(this.tableLayoutPanel1);
             resources.ApplyResources(this.gbRemote, "gbRemote");
+            this.gbRemote.Controls.Add(this.tableLayoutPanel1);
             this.gbRemote.Name = "gbRemote";
             this.gbRemote.TabStop = false;
             // 

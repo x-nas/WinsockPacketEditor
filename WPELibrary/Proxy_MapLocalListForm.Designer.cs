@@ -32,10 +32,6 @@
             this.tlpMapLocal = new System.Windows.Forms.TableLayoutPanel();
             this.lMapLocal = new System.Windows.Forms.Label();
             this.dgvMapLocal = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.bAdd = new System.Windows.Forms.Button();
-            this.bRemove = new System.Windows.Forms.Button();
-            this.bClose = new System.Windows.Forms.Button();
             this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cProtocolType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cHost = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -43,6 +39,10 @@
             this.cRemotePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cURL = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLocalPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.bAdd = new System.Windows.Forms.Button();
+            this.bRemove = new System.Windows.Forms.Button();
+            this.bOK = new System.Windows.Forms.Button();
             this.tlpMapLocal.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMapLocal)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
@@ -88,35 +88,6 @@
             this.dgvMapLocal.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMapLocal_CellContentClick);
             this.dgvMapLocal.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvMapLocal_CellDoubleClick);
             this.dgvMapLocal.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvMapLocal_CellFormatting);
-            // 
-            // tableLayoutPanel1
-            // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.bAdd, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bRemove, 3, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bClose, 7, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            // 
-            // bAdd
-            // 
-            resources.ApplyResources(this.bAdd, "bAdd");
-            this.bAdd.Name = "bAdd";
-            this.bAdd.UseVisualStyleBackColor = true;
-            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
-            // 
-            // bRemove
-            // 
-            resources.ApplyResources(this.bRemove, "bRemove");
-            this.bRemove.Name = "bRemove";
-            this.bRemove.UseVisualStyleBackColor = true;
-            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
-            // 
-            // bClose
-            // 
-            resources.ApplyResources(this.bClose, "bClose");
-            this.bClose.Name = "bClose";
-            this.bClose.UseVisualStyleBackColor = true;
-            this.bClose.Click += new System.EventHandler(this.bClose_Click);
             // 
             // cIsEnable
             // 
@@ -185,6 +156,35 @@
             this.cLocalPath.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.cLocalPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
+            // tableLayoutPanel1
+            // 
+            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.Controls.Add(this.bAdd, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.bRemove, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.bOK, 7, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            // 
+            // bAdd
+            // 
+            resources.ApplyResources(this.bAdd, "bAdd");
+            this.bAdd.Name = "bAdd";
+            this.bAdd.UseVisualStyleBackColor = true;
+            this.bAdd.Click += new System.EventHandler(this.bAdd_Click);
+            // 
+            // bRemove
+            // 
+            resources.ApplyResources(this.bRemove, "bRemove");
+            this.bRemove.Name = "bRemove";
+            this.bRemove.UseVisualStyleBackColor = true;
+            this.bRemove.Click += new System.EventHandler(this.bRemove_Click);
+            // 
+            // bOK
+            // 
+            resources.ApplyResources(this.bOK, "bOK");
+            this.bOK.Name = "bOK";
+            this.bOK.UseVisualStyleBackColor = true;
+            this.bOK.Click += new System.EventHandler(this.bOK_Click);
+            // 
             // Proxy_MapLocalListForm
             // 
             resources.ApplyResources(this, "$this");
@@ -211,7 +211,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button bAdd;
         private System.Windows.Forms.Button bRemove;
-        private System.Windows.Forms.Button bClose;
+        private System.Windows.Forms.Button bOK;
         private System.Windows.Forms.DataGridViewCheckBoxColumn cIsEnable;
         private System.Windows.Forms.DataGridViewTextBoxColumn cProtocolType;
         private System.Windows.Forms.DataGridViewTextBoxColumn cHost;

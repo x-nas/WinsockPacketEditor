@@ -380,8 +380,14 @@
     <EmbeddedResource Include="Proxy_AccountTimeForm.resx">
       <DependentUpon>Proxy_AccountTimeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapLocalForm.en-US.resx">
+      <DependentUpon>Proxy_MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Proxy_MapLocalForm.resx">
       <DependentUpon>Proxy_MapLocalForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapLocalListForm.en-US.resx">
+      <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_MapLocalListForm.resx">
       <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
