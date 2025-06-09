@@ -1236,15 +1236,6 @@
   <data name="tpPacketStatistics.Text" xml:space="preserve">
     <value>[ Statistics ]</value>
   </data>
-  <data name="bComparison_Exchange.Text" xml:space="preserve">
-    <value>Exchange</value>
-  </data>
-  <data name="bComparison_Clear.Text" xml:space="preserve">
-    <value>Clear</value>
-  </data>
-  <data name="bComparison.Text" xml:space="preserve">
-    <value>Compare</value>
-  </data>
   <data name="lComparison_B.Text" xml:space="preserve">
     <value>Text B</value>
   </data>
@@ -1252,22 +1243,31 @@
     <value>Text A</value>
   </data>
   <data name="rtbComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 166</value>
+    <value>326, 166</value>
   </data>
   <data name="pComparison_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 174</value>
+    <value>334, 174</value>
   </data>
   <data name="rtbComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>267, 166</value>
+    <value>326, 166</value>
   </data>
   <data name="pComparison_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>275, 174</value>
+    <value>334, 174</value>
   </data>
-  <data name="rtbComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>276, 166</value>
+  <data name="bTextCompare.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 47</value>
   </data>
-  <data name="pComparison_Result.Size" type="System.Drawing.Size, System.Drawing">
-    <value>284, 174</value>
+  <data name="bTextCompare.Text" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="bTextDuplicate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>34, 97</value>
+  </data>
+  <data name="bTextDuplicate.Text" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="tlpComparison_Button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>168, 174</value>
   </data>
   <data name="tlpComparison.Size" type="System.Drawing.Size, System.Drawing">
     <value>840, 204</value>
@@ -14306,9 +14306,5 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
   </data>
 </root>

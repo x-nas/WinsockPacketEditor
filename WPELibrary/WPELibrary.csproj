@@ -264,6 +264,18 @@
     <Compile Include="Socket_SendForm.Designer.cs">
       <DependentUpon>Socket_SendForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TextComparison\TextCompareForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextComparison\TextCompareForm.Designer.cs">
+      <DependentUpon>TextCompareForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TextComparison\TextDuplicateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextComparison\TextDuplicateForm.Designer.cs">
+      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="EasyHook32.dll">
@@ -445,6 +457,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_SendForm.resx">
       <DependentUpon>Socket_SendForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextComparison\TextCompareForm.en-US.resx">
+      <DependentUpon>TextCompareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextComparison\TextCompareForm.resx">
+      <DependentUpon>TextCompareForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextComparison\TextDuplicateForm.en-US.resx">
+      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TextComparison\TextDuplicateForm.resx">
+      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

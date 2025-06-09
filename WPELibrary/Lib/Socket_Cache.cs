@@ -46,6 +46,7 @@ namespace WPELibrary.Lib
             public static IDisposable WebServer;
             public static PerformanceCounter cpuCounter;
             public static string AESKey = string.Empty;
+            public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
 
             public static Action<Action> InvokeAction { get; set; }
 

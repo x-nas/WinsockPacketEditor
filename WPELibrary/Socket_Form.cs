@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using WPELibrary.Lib;
 using WPELibrary.Lib.NativeMethods;
+using WPELibrary.TextComparison;
 
 namespace WPELibrary
 {
@@ -880,21 +881,7 @@ namespace WPELibrary
 
                 hbPacketData.ByteProvider = null;
             }
-        }
-
-        private void CleanUp_Comparison()
-        {
-            try
-            {
-                this.rtbComparison_A.Clear();
-                this.rtbComparison_B.Clear();
-                this.rtbComparison_Result.Clear();
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         private void AutoCleanUp_SocketList()
         {
@@ -2308,67 +2295,30 @@ namespace WPELibrary
 
         #endregion
 
-        #region//文本对比（异步）
+        #region//文本对比
 
-        private void rtbComparison_A_TextChanged(object sender, EventArgs e)
+        private void bTextCompare_Click(object sender, EventArgs e)
         {
-            try
+            string TextA = this.rtbComparison_A.Text.Trim();
+            string TextB = this.rtbComparison_B.Text.Trim();
+
+            if (!Socket_Cache.System.IsShow_TextCompare)
             {
-                int iTextLen = rtbComparison_A.Text.Length;
-                this.lComparison_A.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_33), iTextLen);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+                TextCompareForm tcForm = new TextCompareForm(TextA, TextB);
+                tcForm.Show();
+            }            
         }
 
-        private void rtbComparison_B_TextChanged(object sender, EventArgs e)
+        private void bTextDuplicate_Click(object sender, EventArgs e)
         {
-            try
-            {
-                int iTextLen = rtbComparison_B.Text.Length;
-                this.lComparison_B.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_34), iTextLen);
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+            string TextA = this.rtbComparison_A.Text.Trim();
+            string TextB = this.rtbComparison_B.Text.Trim();
 
-        private async void bComparison_Click(object sender, EventArgs e)
-        {
-            try
+            if (!Socket_Cache.System.IsShow_TextDuplicate)
             {
-                this.rtbComparison_Result.Clear();
-                this.rtbComparison_Result.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);
-                this.rtbComparison_Result.Rtf = await Socket_Operation.CompareData(this.Font, this.rtbComparison_A.Text, this.rtbComparison_B.Text);
+                TextDuplicateForm tdForm = new TextDuplicateForm(TextA, TextB);
+                tdForm.Show();
             }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bComparison_Exchange_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string sText_A = this.rtbComparison_A.Text;
-                string sText_B = this.rtbComparison_B.Text;
-
-                this.rtbComparison_A.Text = sText_B;
-                this.rtbComparison_B.Text = sText_A;
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        private void bComparison_Clear_Click(object sender, EventArgs e)
-        {
-            this.CleanUp_Comparison();
         }
 
         #endregion
@@ -2852,6 +2802,7 @@ namespace WPELibrary
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
+
 
         #endregion        
     }

@@ -258,18 +258,15 @@ namespace WPELibrary
             this.lPacketStatistics = new System.Windows.Forms.Label();
             this.tpComparison = new System.Windows.Forms.TabPage();
             this.tlpComparison = new System.Windows.Forms.TableLayoutPanel();
-            this.tlpComparison_Button = new System.Windows.Forms.TableLayoutPanel();
-            this.bComparison_Exchange = new System.Windows.Forms.Button();
-            this.bComparison_Clear = new System.Windows.Forms.Button();
-            this.bComparison = new System.Windows.Forms.Button();
             this.lComparison_B = new System.Windows.Forms.Label();
             this.lComparison_A = new System.Windows.Forms.Label();
             this.pComparison_A = new System.Windows.Forms.Panel();
             this.rtbComparison_A = new System.Windows.Forms.RichTextBox();
             this.pComparison_B = new System.Windows.Forms.Panel();
             this.rtbComparison_B = new System.Windows.Forms.RichTextBox();
-            this.pComparison_Result = new System.Windows.Forms.Panel();
-            this.rtbComparison_Result = new System.Windows.Forms.RichTextBox();
+            this.tlpComparison_Button = new System.Windows.Forms.TableLayoutPanel();
+            this.bTextCompare = new System.Windows.Forms.Button();
+            this.bTextDuplicate = new System.Windows.Forms.Button();
             this.tpXOR = new System.Windows.Forms.TabPage();
             this.tlpPacketInfo_XOR = new System.Windows.Forms.TableLayoutPanel();
             this.hbXOR_To = new Be.Windows.Forms.HexBox();
@@ -513,10 +510,9 @@ namespace WPELibrary
             this.tlpPacketStatistics_Button.SuspendLayout();
             this.tpComparison.SuspendLayout();
             this.tlpComparison.SuspendLayout();
-            this.tlpComparison_Button.SuspendLayout();
             this.pComparison_A.SuspendLayout();
             this.pComparison_B.SuspendLayout();
-            this.pComparison_Result.SuspendLayout();
+            this.tlpComparison_Button.SuspendLayout();
             this.tpXOR.SuspendLayout();
             this.tlpPacketInfo_XOR.SuspendLayout();
             this.tlpPacketInfo_XOR_Button.SuspendLayout();
@@ -2188,43 +2184,12 @@ namespace WPELibrary
             // 
             resources.ApplyResources(this.tlpComparison, "tlpComparison");
             this.tlpComparison.BackColor = System.Drawing.SystemColors.Control;
-            this.tlpComparison.Controls.Add(this.tlpComparison_Button, 2, 0);
             this.tlpComparison.Controls.Add(this.lComparison_B, 1, 0);
             this.tlpComparison.Controls.Add(this.lComparison_A, 0, 0);
             this.tlpComparison.Controls.Add(this.pComparison_A, 0, 1);
             this.tlpComparison.Controls.Add(this.pComparison_B, 1, 1);
-            this.tlpComparison.Controls.Add(this.pComparison_Result, 2, 1);
+            this.tlpComparison.Controls.Add(this.tlpComparison_Button, 2, 1);
             this.tlpComparison.Name = "tlpComparison";
-            // 
-            // tlpComparison_Button
-            // 
-            resources.ApplyResources(this.tlpComparison_Button, "tlpComparison_Button");
-            this.tlpComparison_Button.BackColor = System.Drawing.SystemColors.Control;
-            this.tlpComparison_Button.Controls.Add(this.bComparison_Exchange, 5, 0);
-            this.tlpComparison_Button.Controls.Add(this.bComparison_Clear, 1, 0);
-            this.tlpComparison_Button.Controls.Add(this.bComparison, 3, 0);
-            this.tlpComparison_Button.Name = "tlpComparison_Button";
-            // 
-            // bComparison_Exchange
-            // 
-            resources.ApplyResources(this.bComparison_Exchange, "bComparison_Exchange");
-            this.bComparison_Exchange.Name = "bComparison_Exchange";
-            this.bComparison_Exchange.UseVisualStyleBackColor = true;
-            this.bComparison_Exchange.Click += new System.EventHandler(this.bComparison_Exchange_Click);
-            // 
-            // bComparison_Clear
-            // 
-            resources.ApplyResources(this.bComparison_Clear, "bComparison_Clear");
-            this.bComparison_Clear.Name = "bComparison_Clear";
-            this.bComparison_Clear.UseVisualStyleBackColor = true;
-            this.bComparison_Clear.Click += new System.EventHandler(this.bComparison_Clear_Click);
-            // 
-            // bComparison
-            // 
-            resources.ApplyResources(this.bComparison, "bComparison");
-            this.bComparison.Name = "bComparison";
-            this.bComparison.UseVisualStyleBackColor = true;
-            this.bComparison.Click += new System.EventHandler(this.bComparison_Click);
             // 
             // lComparison_B
             // 
@@ -2250,7 +2215,6 @@ namespace WPELibrary
             resources.ApplyResources(this.rtbComparison_A, "rtbComparison_A");
             this.rtbComparison_A.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbComparison_A.Name = "rtbComparison_A";
-            this.rtbComparison_A.TextChanged += new System.EventHandler(this.rtbComparison_A_TextChanged);
             // 
             // pComparison_B
             // 
@@ -2264,20 +2228,27 @@ namespace WPELibrary
             resources.ApplyResources(this.rtbComparison_B, "rtbComparison_B");
             this.rtbComparison_B.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbComparison_B.Name = "rtbComparison_B";
-            this.rtbComparison_B.TextChanged += new System.EventHandler(this.rtbComparison_B_TextChanged);
             // 
-            // pComparison_Result
+            // tlpComparison_Button
             // 
-            resources.ApplyResources(this.pComparison_Result, "pComparison_Result");
-            this.pComparison_Result.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pComparison_Result.Controls.Add(this.rtbComparison_Result);
-            this.pComparison_Result.Name = "pComparison_Result";
+            resources.ApplyResources(this.tlpComparison_Button, "tlpComparison_Button");
+            this.tlpComparison_Button.Controls.Add(this.bTextCompare, 1, 1);
+            this.tlpComparison_Button.Controls.Add(this.bTextDuplicate, 1, 3);
+            this.tlpComparison_Button.Name = "tlpComparison_Button";
             // 
-            // rtbComparison_Result
+            // bTextCompare
             // 
-            resources.ApplyResources(this.rtbComparison_Result, "rtbComparison_Result");
-            this.rtbComparison_Result.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtbComparison_Result.Name = "rtbComparison_Result";
+            resources.ApplyResources(this.bTextCompare, "bTextCompare");
+            this.bTextCompare.Name = "bTextCompare";
+            this.bTextCompare.UseVisualStyleBackColor = true;
+            this.bTextCompare.Click += new System.EventHandler(this.bTextCompare_Click);
+            // 
+            // bTextDuplicate
+            // 
+            resources.ApplyResources(this.bTextDuplicate, "bTextDuplicate");
+            this.bTextDuplicate.Name = "bTextDuplicate";
+            this.bTextDuplicate.UseVisualStyleBackColor = true;
+            this.bTextDuplicate.Click += new System.EventHandler(this.bTextDuplicate_Click);
             // 
             // tpXOR
             // 
@@ -3888,10 +3859,9 @@ namespace WPELibrary
             this.tpComparison.ResumeLayout(false);
             this.tlpComparison.ResumeLayout(false);
             this.tlpComparison.PerformLayout();
-            this.tlpComparison_Button.ResumeLayout(false);
             this.pComparison_A.ResumeLayout(false);
             this.pComparison_B.ResumeLayout(false);
-            this.pComparison_Result.ResumeLayout(false);
+            this.tlpComparison_Button.ResumeLayout(false);
             this.tpXOR.ResumeLayout(false);
             this.tlpPacketInfo_XOR.ResumeLayout(false);
             this.tlpPacketInfo_XOR_Button.ResumeLayout(false);
@@ -4029,13 +3999,9 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpComparison;
         private System.Windows.Forms.Label lComparison_A;
         private System.Windows.Forms.Label lComparison_B;
-        private System.Windows.Forms.TableLayoutPanel tlpComparison_Button;
-        private System.Windows.Forms.Button bComparison;
-        private System.Windows.Forms.Button bComparison_Clear;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_Comparison_A;
         private System.Windows.Forms.ToolStripMenuItem cmsSocketList_Comparison_B;
-        private System.Windows.Forms.Button bComparison_Exchange;
         private System.Windows.Forms.DataGridView dgvLogList;
         private System.Windows.Forms.TabPage tpEncoding;
         private System.Windows.Forms.TableLayoutPanel tlpPacketInfo_Encoding;
@@ -4092,8 +4058,6 @@ namespace WPELibrary
         private System.Windows.Forms.RichTextBox rtbComparison_A;
         private System.Windows.Forms.Panel pComparison_B;
         private System.Windows.Forms.RichTextBox rtbComparison_B;
-        private System.Windows.Forms.Panel pComparison_Result;
-        private System.Windows.Forms.RichTextBox rtbComparison_Result;
         private System.Windows.Forms.Panel pPacketInfo_Encoding;
         private System.Windows.Forms.RichTextBox rtbPacketInfo_Encoding;
         private System.Windows.Forms.ContextMenuStrip cmsFilterList;
@@ -4349,5 +4313,8 @@ namespace WPELibrary
         private System.Windows.Forms.Button bHotKey11;
         private System.Windows.Forms.Button bHotKey12;
         private System.Windows.Forms.CheckBox cbBackUp_ProxyMapping;
+        private System.Windows.Forms.TableLayoutPanel tlpComparison_Button;
+        private System.Windows.Forms.Button bTextCompare;
+        private System.Windows.Forms.Button bTextDuplicate;
     }
 }
