@@ -346,6 +346,17 @@ namespace WPELibrary
 
                 this.cbWorkingMode_Speed.Checked = Socket_Cache.SocketPacket.SpeedMode;
 
+                switch (Socket_Cache.System.ListExecute)
+                {
+                    case Socket_Cache.System.Execute.Together:
+                        this.rbListExecute_Together.Checked = true;
+                        break;
+
+                    case Socket_Cache.System.Execute.Sequence:
+                        this.rbListExecute_Sequence.Checked = true;
+                        break;
+                }
+
                 switch (Socket_Cache.Filter.FilterExecute)
                 {
                     case Socket_Cache.Filter.Execute.Priority:
@@ -423,6 +434,15 @@ namespace WPELibrary
                 Socket_Cache.LogList.Socket_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
                 Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
+
+                if (this.rbListExecute_Together.Checked)
+                {
+                    Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Together;
+                }
+                else
+                {
+                    Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Sequence;
+                }
 
                 if (this.rbFilterSet_Priority.Checked)
                 {
@@ -738,6 +758,23 @@ namespace WPELibrary
         private void cbWorkingMode_Speed_CheckedChanged(object sender, EventArgs e)
         {
             Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
+        }
+
+        private void rbListExecute_Together_CheckedChanged(object sender, EventArgs e)
+        {
+            this.ListExecute_Changed();
+        }
+
+        private void ListExecute_Changed()
+        {
+            if (this.rbListExecute_Together.Checked)
+            {
+                Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Together;
+            }
+            else
+            {
+                Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Sequence;
+            }
         }
 
         private void InitFilterActionColor()
@@ -2102,6 +2139,7 @@ namespace WPELibrary
                 {
                     this.tsSendList_Start.Enabled = false;
                     this.tsSendList_Stop.Enabled = true;
+                    Socket_Cache.SendList.lstExecute.Clear();
 
                     this.bgwSendList.RunWorkerAsync();
                 }
@@ -2110,7 +2148,7 @@ namespace WPELibrary
 
         private void tsSendList_Stop_Click(object sender, EventArgs e)
         {
-            this.bgwSendList.CancelAsync();
+            this.bgwSendList.CancelAsync();            
         }
 
         private void tsSendList_Add_Click(object sender, EventArgs e)
@@ -2142,24 +2180,48 @@ namespace WPELibrary
                     if (ssi.IsEnable)
                     {
                         Socket_Send ss = Socket_Cache.Send.DoSend(ssi.SID);
-
                         if (ss != null)
                         {
-                            while (ss.Worker.IsBusy)
-                            {
-                                if (this.bgwSendList.CancellationPending)
-                                {
-                                    ss.StopSend();
-
-                                    e.Cancel = true;
-                                    return;
-                                }
-
-                                Thread.Sleep(100);
+                            if (Socket_Cache.System.ListExecute == Socket_Cache.System.Execute.Together)
+                            { 
+                                Socket_Cache.SendList.lstExecute.Add(ss);
                             }
+                            else
+                            {
+                                while (ss.Worker.IsBusy)
+                                {
+                                    if (this.bgwSendList.CancellationPending)
+                                    {
+                                        ss.StopSend();
+
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
+                                    Thread.Sleep(100);
+                                }
+                            }  
                         }
                     }
                 }
+
+                while (Socket_Cache.SendList.lstExecute.Count > 0)
+                {
+                    foreach (Socket_Send ss in Socket_Cache.SendList.lstExecute.ToList())
+                    {
+                        if (this.bgwSendList.CancellationPending)
+                        {
+                            ss.StopSend();                            
+                        }
+
+                        if (!ss.Worker.IsBusy)
+                        {
+                            Socket_Cache.SendList.lstExecute.Remove(ss);
+                        }
+                    }
+
+                    Thread.Sleep(100);
+                }                
             }
             catch (Exception ex)
             {
@@ -2215,6 +2277,7 @@ namespace WPELibrary
                 {
                     this.tsRobotList_Start.Enabled = false;
                     this.tsRobotList_Stop.Enabled = true;
+                    Socket_Cache.RobotList.lstExecute.Clear();
 
                     this.bgwRobotList.RunWorkerAsync();
                 }
@@ -2255,23 +2318,47 @@ namespace WPELibrary
                     if (sri.IsEnable)
                     {
                         Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID);
-
                         if (sr != null)
                         {
-                            while (sr.Worker.IsBusy)
+                            if (Socket_Cache.System.ListExecute == Socket_Cache.System.Execute.Together)
                             {
-                                if (this.bgwRobotList.CancellationPending)
-                                {
-                                    sr.StopRobot();
-
-                                    e.Cancel = true;
-                                    return;
-                                }
-
-                                Thread.Sleep(100);
+                                Socket_Cache.RobotList.lstExecute.Add(sr);
                             }
+                            else
+                            {
+                                while (sr.Worker.IsBusy)
+                                {
+                                    if (this.bgwRobotList.CancellationPending)
+                                    {
+                                        sr.StopRobot();
+
+                                        e.Cancel = true;
+                                        return;
+                                    }
+
+                                    Thread.Sleep(100);
+                                }
+                            }                                
                         }
                     }
+                }
+
+                while (Socket_Cache.RobotList.lstExecute.Count > 0)
+                {
+                    foreach (Socket_Robot sr in Socket_Cache.RobotList.lstExecute.ToList())
+                    {
+                        if (this.bgwRobotList.CancellationPending)
+                        {
+                            sr.StopRobot();
+                        }
+
+                        if (!sr.Worker.IsBusy)
+                        {
+                            Socket_Cache.RobotList.lstExecute.Remove(sr);
+                        }
+                    }
+
+                    Thread.Sleep(100);
                 }
             }
             catch (Exception ex)

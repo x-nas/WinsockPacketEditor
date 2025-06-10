@@ -199,6 +199,10 @@ namespace WPELibrary
             this.bHotKey12 = new System.Windows.Forms.Button();
             this.tcSocketInfo_SystemSet = new System.Windows.Forms.TabPage();
             this.tlpSystemSet = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSystemSet_ListExecute = new System.Windows.Forms.GroupBox();
+            this.tlpSystemSet_ListExecute = new System.Windows.Forms.TableLayoutPanel();
+            this.rbListExecute_Sequence = new System.Windows.Forms.RadioButton();
+            this.rbListExecute_Together = new System.Windows.Forms.RadioButton();
             this.gbSystemSet_FilterActionColor = new System.Windows.Forms.GroupBox();
             this.tlpSystemSet_FilterActionColor = new System.Windows.Forms.TableLayoutPanel();
             this.lFAColor_Other = new System.Windows.Forms.Label();
@@ -485,6 +489,8 @@ namespace WPELibrary
             this.tlpHotKeySet.SuspendLayout();
             this.tcSocketInfo_SystemSet.SuspendLayout();
             this.tlpSystemSet.SuspendLayout();
+            this.gbSystemSet_ListExecute.SuspendLayout();
+            this.tlpSystemSet_ListExecute.SuspendLayout();
             this.gbSystemSet_FilterActionColor.SuspendLayout();
             this.tlpSystemSet_FilterActionColor.SuspendLayout();
             this.gbSystemSet_ShowMode.SuspendLayout();
@@ -1705,11 +1711,41 @@ namespace WPELibrary
             // tlpSystemSet
             // 
             resources.ApplyResources(this.tlpSystemSet, "tlpSystemSet");
-            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterActionColor, 3, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_ListExecute, 2, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterActionColor, 4, 0);
             this.tlpSystemSet.Controls.Add(this.gbSystemSet_ShowMode, 0, 0);
-            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterSet, 2, 0);
+            this.tlpSystemSet.Controls.Add(this.gbSystemSet_FilterSet, 3, 0);
             this.tlpSystemSet.Controls.Add(this.gbSystemSet_WorkMode, 1, 0);
             this.tlpSystemSet.Name = "tlpSystemSet";
+            // 
+            // gbSystemSet_ListExecute
+            // 
+            resources.ApplyResources(this.gbSystemSet_ListExecute, "gbSystemSet_ListExecute");
+            this.gbSystemSet_ListExecute.Controls.Add(this.tlpSystemSet_ListExecute);
+            this.gbSystemSet_ListExecute.Name = "gbSystemSet_ListExecute";
+            this.gbSystemSet_ListExecute.TabStop = false;
+            // 
+            // tlpSystemSet_ListExecute
+            // 
+            resources.ApplyResources(this.tlpSystemSet_ListExecute, "tlpSystemSet_ListExecute");
+            this.tlpSystemSet_ListExecute.Controls.Add(this.rbListExecute_Sequence, 0, 1);
+            this.tlpSystemSet_ListExecute.Controls.Add(this.rbListExecute_Together, 0, 0);
+            this.tlpSystemSet_ListExecute.Name = "tlpSystemSet_ListExecute";
+            // 
+            // rbListExecute_Sequence
+            // 
+            resources.ApplyResources(this.rbListExecute_Sequence, "rbListExecute_Sequence");
+            this.rbListExecute_Sequence.Checked = true;
+            this.rbListExecute_Sequence.Name = "rbListExecute_Sequence";
+            this.rbListExecute_Sequence.TabStop = true;
+            this.rbListExecute_Sequence.UseVisualStyleBackColor = true;
+            // 
+            // rbListExecute_Together
+            // 
+            resources.ApplyResources(this.rbListExecute_Together, "rbListExecute_Together");
+            this.rbListExecute_Together.Name = "rbListExecute_Together";
+            this.rbListExecute_Together.UseVisualStyleBackColor = true;
+            this.rbListExecute_Together.CheckedChanged += new System.EventHandler(this.rbListExecute_Together_CheckedChanged);
             // 
             // gbSystemSet_FilterActionColor
             // 
@@ -3827,6 +3863,9 @@ namespace WPELibrary
             this.tlpHotKeySet.PerformLayout();
             this.tcSocketInfo_SystemSet.ResumeLayout(false);
             this.tlpSystemSet.ResumeLayout(false);
+            this.gbSystemSet_ListExecute.ResumeLayout(false);
+            this.tlpSystemSet_ListExecute.ResumeLayout(false);
+            this.tlpSystemSet_ListExecute.PerformLayout();
             this.gbSystemSet_FilterActionColor.ResumeLayout(false);
             this.tlpSystemSet_FilterActionColor.ResumeLayout(false);
             this.tlpSystemSet_FilterActionColor.PerformLayout();
@@ -4316,5 +4355,9 @@ namespace WPELibrary
         private System.Windows.Forms.TableLayoutPanel tlpComparison_Button;
         private System.Windows.Forms.Button bTextCompare;
         private System.Windows.Forms.Button bTextDuplicate;
+        private System.Windows.Forms.GroupBox gbSystemSet_ListExecute;
+        private System.Windows.Forms.TableLayoutPanel tlpSystemSet_ListExecute;
+        private System.Windows.Forms.RadioButton rbListExecute_Sequence;
+        private System.Windows.Forms.RadioButton rbListExecute_Together;
     }
 }

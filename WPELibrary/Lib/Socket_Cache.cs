@@ -47,6 +47,7 @@ namespace WPELibrary.Lib
             public static PerformanceCounter cpuCounter;
             public static string AESKey = string.Empty;
             public static bool IsShow_TextCompare = false, IsShow_TextDuplicate = false;
+            public static Socket_Cache.System.Execute ListExecute = Socket_Cache.System.Execute.Sequence;
 
             public static Action<Action> InvokeAction { get; set; }
 
@@ -96,9 +97,35 @@ namespace WPELibrary.Lib
             {
                 Socket,
                 Proxy,
-            }            
+            }
+
+            public enum Execute
+            {
+                Together,
+                Sequence,
+            }
 
             #endregion
+
+            #region//获取列表执行模式
+
+            public static Socket_Cache.System.Execute GetListExecute_ByString(string sListExecute)
+            {
+                Socket_Cache.System.Execute leReturn = Socket_Cache.System.Execute.Sequence;
+
+                try
+                {
+                    return (Socket_Cache.System.Execute)Enum.Parse(typeof(Socket_Cache.System.Execute), sListExecute);
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return leReturn;
+            }
+
+            #endregion          
 
             #region//保存系统配置到数据库
 
@@ -350,6 +377,7 @@ namespace WPELibrary.Lib
                         new XElement("LogList_AutoClear", Socket_Cache.LogList.Socket_AutoClear),
                         new XElement("LogList_AutoClear_Value", Socket_Cache.LogList.Socket_AutoClear_Value),
                         new XElement("SpeedMode", Socket_Cache.SocketPacket.SpeedMode),
+                        new XElement("ListExecute", Socket_Cache.System.ListExecute),
                         new XElement("FilterExecute", Socket_Cache.Filter.FilterExecute)
                         );
 
@@ -438,6 +466,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.LogList.Socket_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear"]);
                         Socket_Cache.LogList.Socket_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear_Value"]);
                         Socket_Cache.SocketPacket.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SpeedMode"]);
+                        Socket_Cache.System.ListExecute = Socket_Cache.System.GetListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_ListExecute"].ToString());
                         Socket_Cache.Filter.FilterExecute = Socket_Cache.FilterList.GetFilterListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_FilterExecute"].ToString());
                     }
                 }
@@ -837,6 +866,12 @@ namespace WPELibrary.Lib
                     if (SpeedMode != null)
                     {
                         Socket_Cache.SocketPacket.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
+                    }
+
+                    XElement ListExecute = xeInjectionConfig.Element("ListExecute");
+                    if (ListExecute != null)
+                    {
+                        Socket_Cache.System.ListExecute = Socket_Cache.System.GetListExecute_ByString(ListExecute.Value);
                     }
 
                     XElement FilterExecute = xeInjectionConfig.Element("FilterExecute");
@@ -8414,6 +8449,7 @@ namespace WPELibrary.Lib
         public static class RobotList
         {
             public static string AESKey = string.Empty;
+            public static List<Socket_Robot> lstExecute = new List<Socket_Robot>();
             public static BindingList<Socket_RobotInfo> lstRobot = new BindingList<Socket_RobotInfo>();
 
             #region//机器人入列表
@@ -9636,6 +9672,7 @@ namespace WPELibrary.Lib
         public static class SendList
         {
             public static string AESKey = string.Empty;
+            public static List<Socket_Send> lstExecute = new List<Socket_Send>();
             public static BindingList<Socket_SendInfo> lstSend = new BindingList<Socket_SendInfo>();        
 
             #region//发送列表索引项
@@ -10455,6 +10492,7 @@ namespace WPELibrary.Lib
                         sql += "InjectionConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 日志列表自动清理
                         sql += "InjectionConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 日志列表自动清理数值
                         sql += "InjectionConfig_SpeedMode BOOLEAN DEFAULT 0,";//注入模式 - 极速模式
+                        sql += "InjectionConfig_ListExecute INTEGER DEFAULT 1,";//注入模式 - 列表执行模式
                         sql += "InjectionConfig_FilterExecute INTEGER DEFAULT 1";//注入模式 - 滤镜执行模式
                         sql += ");";
 
@@ -10590,6 +10628,7 @@ namespace WPELibrary.Lib
                         sql += "InjectionConfig_LogList_AutoClear,";
                         sql += "InjectionConfig_LogList_AutoClear_Value,";
                         sql += "InjectionConfig_SpeedMode,";
+                        sql += "InjectionConfig_ListExecute,";
                         sql += "InjectionConfig_FilterExecute";
                         sql += ") VALUES (";                  
                         sql += "@ProxyConfig_ProxyIP_Auto,";
@@ -10655,6 +10694,7 @@ namespace WPELibrary.Lib
                         sql += "@InjectionConfig_LogList_AutoClear,";
                         sql += "@InjectionConfig_LogList_AutoClear_Value,";
                         sql += "@InjectionConfig_SpeedMode,";
+                        sql += "@InjectionConfig_ListExecute,";
                         sql += "@InjectionConfig_FilterExecute";
                         sql += ");";
 
@@ -10723,6 +10763,7 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear", Socket_Cache.LogList.Socket_AutoClear);
                             cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Socket_AutoClear_Value);
                             cmd.Parameters.AddWithValue("@InjectionConfig_SpeedMode", Socket_Cache.SocketPacket.SpeedMode);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_ListExecute", Socket_Cache.System.ListExecute);
                             cmd.Parameters.AddWithValue("@InjectionConfig_FilterExecute", Socket_Cache.Filter.FilterExecute);
 
                             conn.Open();

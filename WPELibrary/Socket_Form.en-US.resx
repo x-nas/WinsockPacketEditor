@@ -903,6 +903,30 @@
   <data name="tcSocketInfo_HotKey.Text" xml:space="preserve">
     <value>[ Hot Keys ]</value>
   </data>
+  <data name="rbListExecute_Sequence.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 34</value>
+  </data>
+  <data name="rbListExecute_Sequence.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 25</value>
+  </data>
+  <data name="rbListExecute_Sequence.Text" xml:space="preserve">
+    <value>Execute Sequence</value>
+  </data>
+  <data name="rbListExecute_Together.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 25</value>
+  </data>
+  <data name="rbListExecute_Together.Text" xml:space="preserve">
+    <value>Execute Toghther</value>
+  </data>
+  <data name="tlpSystemSet_ListExecute.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 17</value>
+  </data>
+  <data name="tlpSystemSet_ListExecute.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 73</value>
+  </data>
+  <data name="gbSystemSet_ListExecute.Text" xml:space="preserve">
+    <value>List Execution</value>
+  </data>
   <data name="lFAColor_Other.Location" type="System.Drawing.Point, System.Drawing">
     <value>74, 39</value>
   </data>
@@ -961,22 +985,22 @@
     <value>3, 34</value>
   </data>
   <data name="rbFilterSet_Sequence.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 25</value>
+    <value>136, 25</value>
   </data>
   <data name="rbFilterSet_Sequence.Text" xml:space="preserve">
-    <value>Execute in order</value>
+    <value>Execute Sequence</value>
   </data>
   <data name="rbFilterSet_Priority.Size" type="System.Drawing.Size, System.Drawing">
-    <value>290, 25</value>
+    <value>136, 25</value>
   </data>
   <data name="rbFilterSet_Priority.Text" xml:space="preserve">
-    <value>Priority principle</value>
+    <value>Priority Principle</value>
   </data>
   <data name="tlpSystemSet_FilterSet.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
   <data name="tlpSystemSet_FilterSet.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 73</value>
+    <value>142, 73</value>
   </data>
   <data name="gbSystemSet_FilterSet.Text" xml:space="preserve">
     <value>Filter Execution</value>
