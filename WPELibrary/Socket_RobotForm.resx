@@ -832,7 +832,7 @@
     <value>0</value>
   </data>
   <data name="tlpDelay.ColumnCount" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="bDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -844,13 +844,13 @@
     <value>NoControl</value>
   </data>
   <data name="bDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>245, 1</value>
+    <value>255, 1</value>
   </data>
   <data name="bDelay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
   </data>
   <data name="bDelay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 27</value>
+    <value>68, 27</value>
   </data>
   <data name="bDelay.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -870,38 +870,176 @@
   <data name="&gt;&gt;bDelay.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="nudDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="nudDelay_Fix.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="nudDelay.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="nudDelay_Fix.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="nudDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
+  <data name="nudDelay_Fix.Location" type="System.Drawing.Point, System.Drawing">
+    <value>59, 0</value>
   </data>
-  <data name="nudDelay.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="nudDelay_Fix.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="nudDelay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 23</value>
+  <data name="nudDelay_Fix.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
   </data>
-  <data name="nudDelay.TabIndex" type="System.Int32, mscorlib">
+  <data name="nudDelay_Fix.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="nudDelay.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+  <data name="nudDelay_Fix.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
   </data>
-  <data name="&gt;&gt;nudDelay.Name" xml:space="preserve">
-    <value>nudDelay</value>
+  <data name="&gt;&gt;nudDelay_Fix.Name" xml:space="preserve">
+    <value>nudDelay_Fix</value>
   </data>
-  <data name="&gt;&gt;nudDelay.Type" xml:space="preserve">
+  <data name="&gt;&gt;nudDelay_Fix.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudDelay.Parent" xml:space="preserve">
+  <data name="&gt;&gt;nudDelay_Fix.Parent" xml:space="preserve">
     <value>tlpDelay</value>
   </data>
-  <data name="&gt;&gt;nudDelay.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;nudDelay_Fix.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="rbDelay_Fix.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbDelay_Fix.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbDelay_Fix.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rbDelay_Fix.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="rbDelay_Fix.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 23</value>
+  </data>
+  <data name="rbDelay_Fix.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
+  <data name="rbDelay_Fix.Text" xml:space="preserve">
+    <value>定时:</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Fix.Name" xml:space="preserve">
+    <value>rbDelay_Fix</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Fix.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Fix.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Fix.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="rbDelay_Random.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rbDelay_Random.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="rbDelay_Random.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="rbDelay_Random.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 32</value>
+  </data>
+  <data name="rbDelay_Random.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 21</value>
+  </data>
+  <data name="rbDelay_Random.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="rbDelay_Random.Text" xml:space="preserve">
+    <value>随机:</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Random.Name" xml:space="preserve">
+    <value>rbDelay_Random</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Random.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Random.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;rbDelay_Random.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>59, 29</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="nudDelay_RandomFrom.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
+  <data name="nudDelay_RandomFrom.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomFrom.Name" xml:space="preserve">
+    <value>nudDelay_RandomFrom</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomFrom.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomFrom.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomFrom.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="nudDelay_RandomTo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudDelay_RandomTo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="nudDelay_RandomTo.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
+  </data>
+  <data name="nudDelay_RandomTo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>144, 29</value>
+  </data>
+  <data name="nudDelay_RandomTo.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="nudDelay_RandomTo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 23</value>
+  </data>
+  <data name="nudDelay_RandomTo.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="nudDelay_RandomTo.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomTo.Name" xml:space="preserve">
+    <value>nudDelay_RandomTo</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomTo.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomTo.Parent" xml:space="preserve">
+    <value>tlpDelay</value>
+  </data>
+  <data name="&gt;&gt;nudDelay_RandomTo.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="tlpDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -913,7 +1051,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="tlpDelay.RowCount" type="System.Int32, mscorlib">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tlpDelay.Size" type="System.Drawing.Size, System.Drawing">
     <value>324, 75</value>
@@ -934,7 +1072,7 @@
     <value>0</value>
   </data>
   <data name="tlpDelay.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bDelay" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="nudDelay" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,100,Percent,100,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bDelay" Row="0" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="nudDelay_Fix" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbDelay_Fix" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbDelay_Random" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudDelay_RandomFrom" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudDelay_RandomTo" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,Absolute,5,Absolute,80,Percent,100,Absolute,70" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbDelay.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

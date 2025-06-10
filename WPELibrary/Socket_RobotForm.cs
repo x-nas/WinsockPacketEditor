@@ -508,14 +508,35 @@ namespace WPELibrary
 
         #region//封包指令 - 延迟
 
+        private void rbDelay_Fix_CheckedChanged(object sender, EventArgs e)
+        {
+            this.nudDelay_Fix.Enabled = this.rbDelay_Fix.Checked;
+        }
+
+        private void rbDelay_Random_CheckedChanged(object sender, EventArgs e)
+        {
+            this.nudDelay_RandomFrom.Enabled = this.nudDelay_RandomTo.Enabled = this.rbDelay_Random.Checked;
+        }
+
         private void bDelay_Click(object sender, EventArgs e)
         {
             try
             {
-                int Delay = ((int)this.nudDelay.Value);
+                string sContent = string.Empty;
 
-                string sContent = Delay.ToString();
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, sContent);                               
+                if (this.rbDelay_Fix.Checked)
+                {
+                    int Delay = ((int)this.nudDelay_Fix.Value);
+                    sContent = Delay.ToString();
+                }
+                else
+                { 
+                    int DelayFrom = ((int)this.nudDelay_RandomFrom.Value);
+                    int DelayTo = ((int)this.nudDelay_RandomTo.Value);
+                    sContent = DelayFrom.ToString() + "-" + DelayTo.ToString();
+                }
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, sContent);
             }
             catch (Exception ex)
             {

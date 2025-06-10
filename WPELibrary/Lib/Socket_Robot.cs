@@ -164,10 +164,27 @@ namespace WPELibrary.Lib
 
                                 case Socket_Cache.Robot.InstructionType.Delay:
 
-                                    if (int.TryParse(sContent, out int iDelay))
+                                    int iDelay = 0;
+                                    if (sContent.Contains("-"))
                                     {
-                                        Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                        string sFrom = sContent.Split('-')[0];
+                                        string sTo = sContent.Split('-')[1];
+
+                                        if (int.TryParse(sFrom, out int iFrom) && int.TryParse(sTo, out int iTo))
+                                        {
+                                            Random random = new Random();
+                                            iDelay = random.Next(iFrom, iTo + 1);
+
+                                            Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                        }
                                     }
+                                    else
+                                    {
+                                        if (int.TryParse(sContent, out iDelay))
+                                        {
+                                            Socket_Operation.DoSleepAsync(iDelay, this.cts.Token).Wait();
+                                        }
+                                    }                                    
 
                                     break;
 

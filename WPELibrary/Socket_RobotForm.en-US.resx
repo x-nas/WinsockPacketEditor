@@ -211,8 +211,35 @@
   <data name="gbDelay.Text" xml:space="preserve">
     <value>Delay</value>
   </data>
+  <data name="bDelay.Location" type="System.Drawing.Point, System.Drawing">
+    <value>255, 1</value>
+  </data>
+  <data name="bDelay.Size" type="System.Drawing.Size, System.Drawing">
+    <value>68, 27</value>
+  </data>
   <data name="bDelay.Text" xml:space="preserve">
     <value>Insert</value>
+  </data>
+  <data name="nudDelay_Fix.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 0</value>
+  </data>
+  <data name="rbDelay_Fix.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 23</value>
+  </data>
+  <data name="rbDelay_Fix.Text" xml:space="preserve">
+    <value>Fixed:</value>
+  </data>
+  <data name="rbDelay_Random.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 21</value>
+  </data>
+  <data name="rbDelay_Random.Text" xml:space="preserve">
+    <value>Random:</value>
+  </data>
+  <data name="nudDelay_RandomFrom.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 29</value>
+  </data>
+  <data name="nudDelay_RandomTo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 29</value>
   </data>
   <data name="tpInstruction_keyboard.Text" xml:space="preserve">
     <value>[ Keyboard ]</value>
@@ -269,7 +296,7 @@
     <value>Mouse Wheel</value>
   </data>
   <data name="lMouseWheel_Distance.Size" type="System.Drawing.Size, System.Drawing">
-    <value>63, 23</value>
+    <value>63, 17</value>
   </data>
   <data name="lMouseWheel_Distance.Text" xml:space="preserve">
     <value>Distance:</value>
@@ -281,7 +308,7 @@
     <value>Direction:</value>
   </data>
   <data name="nudMouseWheel_Distance.Location" type="System.Drawing.Point, System.Drawing">
-    <value>72, 34</value>
+    <value>69, 31</value>
   </data>
   <data name="bMouseWheel.Text" xml:space="preserve">
     <value>Insert</value>
@@ -299,10 +326,10 @@
     <value>Move By</value>
   </data>
   <data name="nudMouseMove_Y.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 63</value>
+    <value>84, 54</value>
   </data>
   <data name="lMouseMove_Y.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
+    <value>78, 17</value>
   </data>
   <data name="lMouseMove_Y.Text" xml:space="preserve">
     <value>Y-Coord:</value>
@@ -311,10 +338,10 @@
     <value>Insert</value>
   </data>
   <data name="nudMouseMove_X.Location" type="System.Drawing.Point, System.Drawing">
-    <value>87, 34</value>
+    <value>84, 31</value>
   </data>
   <data name="lMouseMove_X.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 23</value>
+    <value>78, 17</value>
   </data>
   <data name="lMouseMove_X.Text" xml:space="preserve">
     <value>X-Coord:</value>

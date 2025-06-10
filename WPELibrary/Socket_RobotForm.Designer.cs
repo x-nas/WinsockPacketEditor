@@ -74,7 +74,11 @@
             this.gbDelay = new System.Windows.Forms.GroupBox();
             this.tlpDelay = new System.Windows.Forms.TableLayoutPanel();
             this.bDelay = new System.Windows.Forms.Button();
-            this.nudDelay = new System.Windows.Forms.NumericUpDown();
+            this.nudDelay_Fix = new System.Windows.Forms.NumericUpDown();
+            this.rbDelay_Fix = new System.Windows.Forms.RadioButton();
+            this.rbDelay_Random = new System.Windows.Forms.RadioButton();
+            this.nudDelay_RandomFrom = new System.Windows.Forms.NumericUpDown();
+            this.nudDelay_RandomTo = new System.Windows.Forms.NumericUpDown();
             this.tpInstruction_keyboard = new System.Windows.Forms.TabPage();
             this.tlpInstruction_keyboard = new System.Windows.Forms.TableLayoutPanel();
             this.gbKeyboard_Text = new System.Windows.Forms.GroupBox();
@@ -142,7 +146,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop)).BeginInit();
             this.gbDelay.SuspendLayout();
             this.tlpDelay.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_Fix)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_RandomFrom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_RandomTo)).BeginInit();
             this.tpInstruction_keyboard.SuspendLayout();
             this.tlpInstruction_keyboard.SuspendLayout();
             this.gbKeyboard_Text.SuspendLayout();
@@ -495,8 +501,12 @@
             // tlpDelay
             // 
             resources.ApplyResources(this.tlpDelay, "tlpDelay");
-            this.tlpDelay.Controls.Add(this.bDelay, 2, 0);
-            this.tlpDelay.Controls.Add(this.nudDelay, 0, 0);
+            this.tlpDelay.Controls.Add(this.bDelay, 5, 0);
+            this.tlpDelay.Controls.Add(this.nudDelay_Fix, 1, 0);
+            this.tlpDelay.Controls.Add(this.rbDelay_Fix, 0, 0);
+            this.tlpDelay.Controls.Add(this.rbDelay_Random, 0, 1);
+            this.tlpDelay.Controls.Add(this.nudDelay_RandomFrom, 1, 1);
+            this.tlpDelay.Controls.Add(this.nudDelay_RandomTo, 3, 1);
             this.tlpDelay.Name = "tlpDelay";
             // 
             // bDelay
@@ -506,17 +516,63 @@
             this.bDelay.UseVisualStyleBackColor = true;
             this.bDelay.Click += new System.EventHandler(this.bDelay_Click);
             // 
-            // nudDelay
+            // nudDelay_Fix
             // 
-            resources.ApplyResources(this.nudDelay, "nudDelay");
-            this.nudDelay.Maximum = new decimal(new int[] {
+            resources.ApplyResources(this.nudDelay_Fix, "nudDelay_Fix");
+            this.nudDelay_Fix.Maximum = new decimal(new int[] {
             999999999,
             0,
             0,
             0});
-            this.nudDelay.Name = "nudDelay";
-            this.nudDelay.Value = new decimal(new int[] {
+            this.nudDelay_Fix.Name = "nudDelay_Fix";
+            this.nudDelay_Fix.Value = new decimal(new int[] {
             100,
+            0,
+            0,
+            0});
+            // 
+            // rbDelay_Fix
+            // 
+            resources.ApplyResources(this.rbDelay_Fix, "rbDelay_Fix");
+            this.rbDelay_Fix.Checked = true;
+            this.rbDelay_Fix.Name = "rbDelay_Fix";
+            this.rbDelay_Fix.TabStop = true;
+            this.rbDelay_Fix.UseVisualStyleBackColor = true;
+            this.rbDelay_Fix.CheckedChanged += new System.EventHandler(this.rbDelay_Fix_CheckedChanged);
+            // 
+            // rbDelay_Random
+            // 
+            resources.ApplyResources(this.rbDelay_Random, "rbDelay_Random");
+            this.rbDelay_Random.Name = "rbDelay_Random";
+            this.rbDelay_Random.UseVisualStyleBackColor = true;
+            this.rbDelay_Random.CheckedChanged += new System.EventHandler(this.rbDelay_Random_CheckedChanged);
+            // 
+            // nudDelay_RandomFrom
+            // 
+            resources.ApplyResources(this.nudDelay_RandomFrom, "nudDelay_RandomFrom");
+            this.nudDelay_RandomFrom.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudDelay_RandomFrom.Name = "nudDelay_RandomFrom";
+            this.nudDelay_RandomFrom.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // nudDelay_RandomTo
+            // 
+            resources.ApplyResources(this.nudDelay_RandomTo, "nudDelay_RandomTo");
+            this.nudDelay_RandomTo.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
+            this.nudDelay_RandomTo.Name = "nudDelay_RandomTo";
+            this.nudDelay_RandomTo.Value = new decimal(new int[] {
+            1000,
             0,
             0,
             0});
@@ -922,7 +978,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLoop)).EndInit();
             this.gbDelay.ResumeLayout(false);
             this.tlpDelay.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudDelay)).EndInit();
+            this.tlpDelay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_Fix)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_RandomFrom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDelay_RandomTo)).EndInit();
             this.tpInstruction_keyboard.ResumeLayout(false);
             this.tlpInstruction_keyboard.ResumeLayout(false);
             this.gbKeyboard_Text.ResumeLayout(false);
@@ -987,7 +1046,7 @@
         private System.Windows.Forms.GroupBox gbDelay;
         private System.Windows.Forms.TableLayoutPanel tlpDelay;
         private System.Windows.Forms.Button bDelay;
-        private System.Windows.Forms.NumericUpDown nudDelay;
+        private System.Windows.Forms.NumericUpDown nudDelay_Fix;
         private System.Windows.Forms.TabPage tpInstruction_keyboard;
         private System.Windows.Forms.TableLayoutPanel tlpInstruction_keyboard;
         private System.Windows.Forms.GroupBox gbKeyboard;
@@ -1045,5 +1104,9 @@
         private System.Windows.Forms.Label lSend_SocketList;
         private System.Windows.Forms.Button bSend_SocketList;
         private System.Windows.Forms.ComboBox cbbSendLIst;
+        private System.Windows.Forms.RadioButton rbDelay_Fix;
+        private System.Windows.Forms.RadioButton rbDelay_Random;
+        private System.Windows.Forms.NumericUpDown nudDelay_RandomFrom;
+        private System.Windows.Forms.NumericUpDown nudDelay_RandomTo;
     }
 }
