@@ -3126,7 +3126,12 @@ namespace WPELibrary.Lib
                         if (pai != null)
                         {
                             pai.IsEnable = IsEnable;
-                            pai.PassWord = PassWord;
+
+                            if (!string.IsNullOrEmpty(PassWord))
+                            {
+                                pai.PassWord = PassWord;
+                            }
+                            
                             pai.IsLimitLinks = IsLimitLinks;
                             pai.LimitLinks = LimitLinks;
                             pai.IsExpiry = IsExpiry;
