@@ -743,6 +743,7 @@ namespace WinsockPacketEditor
                 this.CleanUp_LogList();
                 this.CleanUp_HexBox();
                 this.CleanUp_ShowProxyInfo();
+                Socket_Cache.SocketProxy.ClearProxyAuthList();
             }
             catch (Exception ex)
             {
@@ -993,40 +994,60 @@ namespace WinsockPacketEditor
                         {
                             string ClientIP = Socket_Cache.SocketProxy.GetClientIPAddress(spt);
                             string ClientUserName = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(spt.AID);
-                            string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
 
-                            TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
-                            if (RootNode != null)
+                            if (string.IsNullOrEmpty(ClientUserName))
                             {
-                                TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
-
-                                if (!tvProxyInfo.IsDisposed)
+                                TreeNode ClientNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, spt.Client.Address);
+                                if (ClientNode != null)
                                 {
-                                    tvProxyInfo.Invoke(new MethodInvoker(delegate
+                                    if (!tvProxyInfo.IsDisposed)
                                     {
-                                        if (ClientNode != null)
+                                        tvProxyInfo.Invoke(new MethodInvoker(delegate
                                         {
                                             ClientNode.Remove();
-                                            sptRemove.Add(spt);
-                                        }
-
-                                        if (RootNode.Nodes.Count == 0)
-                                        {
-                                            Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByIPAndAID(ClientIP, spt.AID);
-
-                                            if (this.cbDeleteClosed.Checked)
-                                            {
-                                                RootNode.Remove();
-                                            }
-
-                                            if (spt.AID != null && spt.AID != Guid.Empty)
-                                            {
-                                                Socket_Cache.ProxyAccount.SetOnline_ByAccountID(spt.AID, false);
-                                            }
-                                        }
-                                    }));
+                                        }));
+                                    }
                                 }
+
+                                sptRemove.Add(spt);
                             }
+                            else
+                            {
+                                string sRootName = Socket_Operation.GetClientListName(ClientIP, ClientUserName);
+
+                                TreeNode RootNode = Socket_Operation.FindNodeSync(this.tvProxyInfo.Nodes, sRootName);
+                                if (RootNode != null)
+                                {
+                                    TreeNode ClientNode = Socket_Operation.FindNodeSync(RootNode.Nodes, spt.Client.Address);
+
+                                    if (!tvProxyInfo.IsDisposed)
+                                    {
+                                        tvProxyInfo.Invoke(new MethodInvoker(delegate
+                                        {
+                                            if (ClientNode != null)
+                                            {
+                                                ClientNode.Remove();
+                                                sptRemove.Add(spt);
+                                            }
+
+                                            if (RootNode.Nodes.Count == 0)
+                                            {
+                                                Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByIPAndAID(ClientIP, spt.AID);
+
+                                                if (this.cbDeleteClosed.Checked)
+                                                {
+                                                    RootNode.Remove();
+                                                }
+
+                                                if (spt.AID != null && spt.AID != Guid.Empty)
+                                                {
+                                                    Socket_Cache.ProxyAccount.SetOnline_ByAccountID(spt.AID, false);
+                                                }
+                                            }
+                                        }));
+                                    }
+                                }
+                            }                                
                         }
                     }
 

@@ -2334,6 +2334,27 @@ namespace WPELibrary.Lib
 
             #region//删除代理认证
 
+            public static void DeleteProxyAuthInfo_ByAID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        for (int i = Socket_Cache.SocketProxy.lstProxyAuth.Count - 1; i >= 0; i--)
+                        {
+                            if (Socket_Cache.SocketProxy.lstProxyAuth[i].AID == AID)
+                            {
+                                Socket_Cache.SocketProxy.lstProxyAuth.RemoveAt(i);
+                            }
+                        }                        
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
             public static void DeleteProxyAuthInfo_ByIPAndAID(string IPAddress, Guid AID)
             {
                 try
@@ -2352,6 +2373,15 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
+            }
+
+            #endregion
+
+            #region//清空代理认证列表
+
+            public static void ClearProxyAuthList()
+            {
+                lstProxyAuth.Clear();
             }
 
             #endregion
@@ -2589,18 +2619,13 @@ namespace WPELibrary.Lib
 
             #region//查找TCP代理列表
 
-            public static Socket_ProxyTCP GetProxyTCP_ByAccountID(Guid AID)
+            public static List<Socket_ProxyTCP> GetProxyTCP_ByAccountID(Guid AID)
             {
                 try
                 {
                     if (AID != null)
                     {
-                        Socket_ProxyTCP spt = Socket_Cache.SocketProxyList.lstProxyTCP.FirstOrDefault(ProxyTCP => ProxyTCP.AID == AID);
-
-                        if (spt != null)
-                        {
-                            return spt;
-                        }
+                        return new List<Socket_ProxyTCP>(Socket_Cache.SocketProxyList.lstProxyTCP.Where(x => x.AID == AID));
                     }
                 }
                 catch (Exception ex)
@@ -2611,14 +2636,36 @@ namespace WPELibrary.Lib
                 return null;
             }
 
-            #endregion            
+            #endregion
+
+            #region//关闭 TCP 列表中的指定账号的链接
+
+            public static void CloseProxyTCP_ByAID(Guid AID)
+            {
+                try
+                {
+                    List<Socket_ProxyTCP> ProxyTCP = GetProxyTCP_ByAccountID(AID);
+
+                    foreach (Socket_ProxyTCP spt in ProxyTCP)
+                    {
+                        spt.Client.Close();
+                        spt.Server.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }                
+            }
+
+            #endregion
 
             #region//清除 TCP 列表中的指定数据
 
             public static void ClearTCP(Socket_ProxyTCP spt)
             {
                 Socket_Cache.SocketProxyList.lstProxyTCP.Remove(spt);
-            }
+            }            
 
             #endregion
 
@@ -3173,6 +3220,7 @@ namespace WPELibrary.Lib
                                 Socket_Cache.System.InvokeAction(() =>
                                 {
                                     Socket_Cache.ProxyAccount.lstProxyAccount.Remove(pai);
+                                    Socket_Cache.SocketProxyList.CloseProxyTCP_ByAID(AID);
                                 });
                             }
                             
