@@ -123,9 +123,6 @@
   <data name="&gt;&gt;lPort.Name" xml:space="preserve">
     <value>lPort</value>
   </data>
-  <data name="&gt;&gt;cbbProtocol.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
   <data name="&gt;&gt;lRemotePath.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -146,11 +143,11 @@
   <data name="bLocalPath.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 27</value>
   </data>
-  <data name="txtHost.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 23</value>
+  <data name="&gt;&gt;cbbProtocol.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="lPort.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="&gt;&gt;lHost.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tlpLocal.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
@@ -177,8 +174,8 @@
   <data name="bSure.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
   </data>
-  <data name="&gt;&gt;lHost.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+  <data name="txtHost.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="lPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
@@ -186,14 +183,17 @@
   <data name="tlpLocal.Size" type="System.Drawing.Size, System.Drawing">
     <value>422, 52</value>
   </data>
-  <data name="txtLocalPath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>326, 23</value>
-  </data>
   <data name="gbLocal.Text" xml:space="preserve">
     <value>[ 本地文件 ]</value>
   </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <data name="&gt;&gt;bLocalPath.Parent" xml:space="preserve">
     <value>tlpLocal</value>
+  </data>
+  <data name="lPort.Text" xml:space="preserve">
+    <value>端口:</value>
   </data>
   <data name="txtLocalPath.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -207,8 +207,8 @@
   <data name="cbbProtocol.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
-  <data name="&gt;&gt;lPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="lProtocol.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 19</value>
@@ -222,11 +222,14 @@
   <data name="tableLayoutPanel1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="lProtocol.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
   <data name="&gt;&gt;lHost.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="nudPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_MapLocalForm</value>
   </data>
   <data name="&gt;&gt;lHost.Name" xml:space="preserve">
     <value>lHost</value>
@@ -240,9 +243,6 @@
   <data name="bCancel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="nudPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>68, 71</value>
-  </data>
   <data name="txtRemotePath.Location" type="System.Drawing.Point, System.Drawing">
     <value>68, 104</value>
   </data>
@@ -251,9 +251,6 @@
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>422, 158</value>
-  </data>
-  <data name="&gt;&gt;nudPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="bSure.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -300,14 +297,8 @@
   <data name="cbbProtocol.Items" xml:space="preserve">
     <value>http</value>
   </data>
-  <data name="bCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>357, 3</value>
-  </data>
   <data name="&gt;&gt;tlpMapLocal.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="lProtocol.Text" xml:space="preserve">
-    <value>协议:</value>
   </data>
   <data name="bSure.Location" type="System.Drawing.Point, System.Drawing">
     <value>267, 3</value>
@@ -318,11 +309,14 @@
   <data name="gbRemote.Size" type="System.Drawing.Size, System.Drawing">
     <value>428, 180</value>
   </data>
+  <data name="lProtocol.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
   <data name="&gt;&gt;tlpLocal.Parent" xml:space="preserve">
     <value>gbLocal</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Proxy_MapLocalForm</value>
+  <data name="nudPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
   </data>
   <data name="lHost.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
@@ -354,8 +348,8 @@
   <data name="tlpLocal.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="lPort.Text" xml:space="preserve">
-    <value>端口:</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>本地映射</value>
   </data>
   <data name="txtLocalPath.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -363,8 +357,8 @@
   <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="tlpMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>434, 311</value>
+  <data name="nudPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 71</value>
   </data>
   <data name="txtLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -384,17 +378,17 @@
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>96, 96</value>
   </data>
+  <data name="&gt;&gt;gbRemote.Parent" xml:space="preserve">
+    <value>tlpMapLocal</value>
+  </data>
+  <data name="tlpMapLocal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>434, 311</value>
+  </data>
   <data name="tlpMapLocal.RowCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
   <data name="&gt;&gt;txtHost.Name" xml:space="preserve">
     <value>txtHost</value>
-  </data>
-  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>本地映射</value>
   </data>
   <data name="lRemotePath.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
@@ -402,23 +396,23 @@
   <data name="lRemotePath.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="&gt;&gt;cbbProtocol.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
   <data name="&gt;&gt;tlpMapLocal.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;txtHost.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;txtRemotePath.Name" xml:space="preserve">
     <value>txtRemotePath</value>
+  </data>
+  <data name="lPort.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="lHost.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+  <data name="txtHost.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
   </data>
   <data name="&gt;&gt;txtHost.ZOrder" xml:space="preserve">
     <value>6</value>
@@ -441,20 +435,11 @@
   <data name="&gt;&gt;bSure.Name" xml:space="preserve">
     <value>bSure</value>
   </data>
-  <data name="lProtocol.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
   <data name="&gt;&gt;nudPort.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="txtHost.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
   <data name="&gt;&gt;bSure.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bLocalPath.Name" xml:space="preserve">
-    <value>bLocalPath</value>
   </data>
   <data name="lProtocol.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 6</value>
@@ -473,6 +458,9 @@
   </data>
   <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
     <value>tlpMapLocal</value>
+  </data>
+  <data name="&gt;&gt;bSure.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="lRemotePath.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -501,6 +489,12 @@
   <data name="&gt;&gt;lRemotePath.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
+  <data name="lRemotePath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="tlpLocal.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="bLocalPath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
   </data>
@@ -516,9 +510,6 @@
   <data name="&gt;&gt;cbbProtocol.Name" xml:space="preserve">
     <value>cbbProtocol</value>
   </data>
-  <data name="&gt;&gt;tlpMapLocal.Name" xml:space="preserve">
-    <value>tlpMapLocal</value>
-  </data>
   <data name="bLocalPath.Location" type="System.Drawing.Point, System.Drawing">
     <value>343, 1</value>
   </data>
@@ -531,17 +522,20 @@
   <data name="cbbProtocol.Size" type="System.Drawing.Size, System.Drawing">
     <value>121, 25</value>
   </data>
+  <data name="lHost.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
   <data name="lPort.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;txtRemotePath.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+  <data name="&gt;&gt;lPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="bCancel.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 29</value>
   </data>
-  <data name="nudPort.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="lProtocol.Text" xml:space="preserve">
+    <value>协议:</value>
   </data>
   <data name="gbLocal.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 189</value>
@@ -549,14 +543,20 @@
   <data name="&gt;&gt;txtHost.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
+  <data name="&gt;&gt;txtRemotePath.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="txtRemotePath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
+  </data>
   <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="&gt;&gt;txtLocalPath.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;bSure.ZOrder" xml:space="preserve">
-    <value>0</value>
+  <data name="&gt;&gt;tlpMapLocal.Name" xml:space="preserve">
+    <value>tlpMapLocal</value>
   </data>
   <data name="gbLocal.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -567,6 +567,9 @@
   <data name="lRemotePath.Text" xml:space="preserve">
     <value>路径:</value>
   </data>
+  <data name="cbbProtocol.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
   <data name="&gt;&gt;gbLocal.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
@@ -576,8 +579,8 @@
   <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
     <value>gbRemote</value>
   </data>
-  <data name="tlpLocal.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;txtLocalPath.Parent" xml:space="preserve">
     <value>tlpLocal</value>
@@ -621,20 +624,17 @@
   <data name="&gt;&gt;gbLocal.Parent" xml:space="preserve">
     <value>tlpMapLocal</value>
   </data>
-  <data name="lRemotePath.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="&gt;&gt;nudPort.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="txtLocalPath.Size" type="System.Drawing.Size, System.Drawing">
+    <value>326, 23</value>
   </data>
   <data name="&gt;&gt;lRemotePath.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="cbbProtocol.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="nudPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Left</value>
+  <data name="&gt;&gt;bLocalPath.Name" xml:space="preserve">
+    <value>bLocalPath</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -6826,8 +6826,8 @@
   <data name="&gt;&gt;gbLocal.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbRemote.Parent" xml:space="preserve">
-    <value>tlpMapLocal</value>
+  <data name="bCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>357, 3</value>
   </data>
   <data name="&gt;&gt;tlpLocal.Name" xml:space="preserve">
     <value>tlpLocal</value>
@@ -6850,14 +6850,14 @@
   <data name="bCancel.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;cbbProtocol.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;txtHost.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="txtRemotePath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>351, 23</value>
+  <data name="lProtocol.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="&gt;&gt;bLocalPath.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

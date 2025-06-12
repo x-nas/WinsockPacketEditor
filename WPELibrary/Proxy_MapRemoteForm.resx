@@ -117,176 +117,248 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>584, 311</value>
+  <data name="&gt;&gt;tlpButton.Name" xml:space="preserve">
+    <value>tlpButton</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Bottom.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lPort_To.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Clear.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;lProtocol_From.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lMapLocal.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="lPath_From.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cRemotePath.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="tableLayoutPanel2.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;bAdd.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="tlpMapLocal.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
   <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 271</value>
+    <value>3, 19</value>
   </data>
-  <data name="&gt;&gt;bOK.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="gbRemote_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>428, 177</value>
   </data>
-  <data name="cmsMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>153, 182</value>
+  <data name="&gt;&gt;nudPort_From.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Up.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lPath_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 107</value>
   </data>
-  <data name="cmsMapLocal_Export.Text" xml:space="preserve">
-    <value>导出 本地映射</value>
+  <data name="&gt;&gt;txtPath_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
   </data>
-  <data name="cProtocolType.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;cmsMapLocal.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsMapLocal_Export.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cmsMapLocal_Top.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="cmsMapLocal_Up.Text" xml:space="preserve">
-    <value>向上移动</value>
-  </data>
-  <data name="&gt;&gt;lMapLocal.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cPort.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator4.Name" xml:space="preserve">
-    <value>toolStripSeparator4</value>
-  </data>
-  <data name="cmsMapLocal_Bottom.Text" xml:space="preserve">
-    <value>置底</value>
-  </data>
-  <data name="&gt;&gt;bRemove.Name" xml:space="preserve">
-    <value>bRemove</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
-    <value>toolStripSeparator2</value>
-  </data>
-  <data name="&gt;&gt;bOK.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lPort_From.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="bAdd.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
+  <data name="lProtocol_To.Text" xml:space="preserve">
+    <value>协议:</value>
   </data>
-  <data name="bRemove.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;lProtocol_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lPort_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 74</value>
+  </data>
+  <data name="txtHost_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 38</value>
+  </data>
+  <data name="txtPath_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
+  </data>
+  <data name="gbRemote_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>428, 177</value>
+  </data>
+  <data name="tlpButton.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bSure" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bCancel" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,80,Absolute,10,Absolute,80" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tlpMapLocal.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="cmsMapLocal_Down.Text" xml:space="preserve">
-    <value>向下移动</value>
+  <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>422, 155</value>
   </data>
-  <data name="bAdd.Text" xml:space="preserve">
-    <value>新 增 (&amp;A)</value>
+  <data name="bCancel.Text" xml:space="preserve">
+    <value>取 消 (&amp;C)</value>
   </data>
-  <data name="cmsMapLocal_Down.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
+  <data name="lPath_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 107</value>
   </data>
-  <data name="cmsMapLocal_Clear.Text" xml:space="preserve">
-    <value>清空 本地映射</value>
+  <data name="&gt;&gt;cbbProtocol_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Top.Name" xml:space="preserve">
-    <value>cmsMapLocal_Top</value>
+  <data name="&gt;&gt;lPort_From.Name" xml:space="preserve">
+    <value>lPort_From</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal.Name" xml:space="preserve">
-    <value>cmsMapLocal</value>
+  <data name="&gt;&gt;txtHost_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
   </data>
-  <data name="bRemove.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
+  <data name="&gt;&gt;txtHost_To.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
-  <data name="cmsMapLocal_Top.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="bSure.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 29</value>
   </data>
-  <data name="bOK.Text" xml:space="preserve">
-    <value>确 定 (&amp;C)</value>
+  <data name="lHost_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="&gt;&gt;bOK.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="nudPort_To.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="lPath_From.Text" xml:space="preserve">
+    <value>路径:</value>
   </data>
-  <data name="cIsEnable.HeaderText" xml:space="preserve">
-    <value />
+  <data name="lHost_To.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
   </data>
-  <data name="&gt;&gt;dgvMapLocal.Name" xml:space="preserve">
-    <value>dgvMapLocal</value>
+  <data name="lProtocol_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="&gt;&gt;cURL.Name" xml:space="preserve">
-    <value>cURL</value>
-  </data>
-  <data name="&gt;&gt;cLocalPath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bRemove.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbRemote_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lMapLocal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
+  <data name="gbRemote_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 186</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lPath_From.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="dgvMapLocal.TabIndex" type="System.Int32, mscorlib">
+  <data name="txtHost_To.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="nudPort_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 71</value>
+  </data>
+  <data name="cbbProtocol_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="lPort_To.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="txtHost_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudPort_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;bCancel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lProtocol_From.Text" xml:space="preserve">
+    <value>协议:</value>
   </data>
-  <data name="lMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 23</value>
+  <data name="&gt;&gt;txtPath_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Proxy_MapLocalListForm</value>
+  <data name="txtPath_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 104</value>
   </data>
-  <data name="cRemotePath.HeaderText" xml:space="preserve">
-    <value>远程路径</value>
+  <data name="&gt;&gt;nudPort_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="lMapLocal.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="&gt;&gt;cbbProtocol_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Top.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtHost_From.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="tlpButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_To.Name" xml:space="preserve">
+    <value>lProtocol_To</value>
+  </data>
+  <data name="txtHost_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 38</value>
+  </data>
+  <data name="lHost_From.Text" xml:space="preserve">
+    <value>主机地址:</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_To.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="nudPort_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 23</value>
+  </data>
+  <data name="nudPort_From.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;txtPath_From.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="cbbProtocol_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 3</value>
+  </data>
+  <data name="lHost_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;txtPath_To.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Parent" xml:space="preserve">
+    <value>tlpMapLocal</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_To.Parent" xml:space="preserve">
+    <value>tlpMapLocal</value>
+  </data>
+  <data name="bSure.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bCancel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
   </data>
   <data name="&gt;&gt;tlpMapLocal.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>584, 35</value>
+    <value>422, 155</value>
   </data>
-  <data name="&gt;&gt;cRemotePath.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lPort_From.Text" xml:space="preserve">
+    <value>端口:</value>
   </data>
-  <data name="cmsMapLocal_Export.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
+  <data name="lProtocol_From.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="bOK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>425, 3</value>
+  <data name="bSure.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lPath_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="lProtocol_To.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;txtHost_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="nudPort_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="cbbProtocol_From.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Name" xml:space="preserve">
+    <value>bCancel</value>
+  </data>
+  <data name="lPath_To.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;lPort_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
   </data>
   <data name="&gt;&gt;tableLayoutPanel1.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -297,185 +369,494 @@
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterParent</value>
   </data>
-  <data name="cProtocolType.HeaderText" xml:space="preserve">
-    <value>协议</value>
+  <data name="&gt;&gt;txtHost_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cProtocolType.Name" xml:space="preserve">
-    <value>cProtocolType</value>
+  <data name="&gt;&gt;lPath_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="cbbProtocol_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="tlpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>434, 35</value>
+  </data>
+  <data name="nudPort_To.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
+  </data>
+  <data name="cbbProtocol_To.Items1" xml:space="preserve">
+    <value>https</value>
   </data>
   <data name="&gt;&gt;tlpMapLocal.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
-  <data name="lMapLocal.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="lPort_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 74</value>
   </data>
-  <data name="cIsEnable.Width" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="bRemove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>185, 3</value>
-  </data>
-  <data name="&gt;&gt;dgvMapLocal.Parent" xml:space="preserve">
-    <value>tlpMapLocal</value>
-  </data>
-  <data name="&gt;&gt;dgvMapLocal.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
-    <value>toolStripSeparator1</value>
-  </data>
-  <data name="cHost.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="bOK.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lProtocol_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpMapLocal.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lMapLocal" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvMapLocal" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tableLayoutPanel1" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,35,Absolute,5" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="bSure.Location" type="System.Drawing.Point, System.Drawing">
+    <value>267, 3</value>
   </data>
-  <data name="&gt;&gt;toolStripSeparator2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="lHost_From.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;lPath_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="lPath_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="&gt;&gt;cbbProtocol_From.Name" xml:space="preserve">
+    <value>cbbProtocol_From</value>
+  </data>
+  <data name="&gt;&gt;txtHost_To.Name" xml:space="preserve">
+    <value>txtHost_To</value>
+  </data>
+  <data name="&gt;&gt;cbbProtocol_To.Name" xml:space="preserve">
+    <value>cbbProtocol_To</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_MapRemoteForm</value>
+  </data>
+  <data name="lHost_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 41</value>
+  </data>
+  <data name="&gt;&gt;txtHost_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;nudPort_To.Name" xml:space="preserve">
+    <value>nudPort_To</value>
+  </data>
+  <data name="lHost_From.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpMapLocal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>434, 411</value>
+  </data>
+  <data name="&gt;&gt;lHost_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="lHost_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="txtHost_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
+  </data>
+  <data name="&gt;&gt;txtPath_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tlpMapLocal.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbRemote_To" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbRemote_From" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpButton" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Percent,50,Percent,50,Absolute,35,Absolute,10" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="tableLayoutPanel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="&gt;&gt;bSure.Parent" xml:space="preserve">
+    <value>tlpButton</value>
+  </data>
+  <data name="bCancel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>远程映射</value>
+  </data>
+  <data name="gbRemote_From.Text" xml:space="preserve">
+    <value>[ 请求地址 ]</value>
+  </data>
+  <data name="lPort_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpButton.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="lPort_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>本地映射</value>
+  <data name="&gt;&gt;txtPath_From.Name" xml:space="preserve">
+    <value>txtPath_From</value>
   </data>
-  <data name="cmsMapLocal_Bottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="gbRemote_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
   </data>
-  <data name="cmsMapLocal_Down.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="txtHost_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lProtocol_From.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;bCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lPort_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>96, 96</value>
   </data>
-  <data name="&gt;&gt;cIsEnable.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewCheckBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cbbProtocol_To.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
   </data>
-  <data name="lMapLocal.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lProtocol_From.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lPath_To.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="tableLayoutPanel2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbbProtocol_To.Items" xml:space="preserve">
+    <value>http</value>
+  </data>
+  <data name="tableLayoutPanel2.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Up.Name" xml:space="preserve">
-    <value>cmsMapLocal_Up</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
-    <value>toolStripSeparator3</value>
+  <data name="tlpButton.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
   <data name="&gt;&gt;tlpMapLocal.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;cPort.Name" xml:space="preserve">
-    <value>cPort</value>
+  <data name="txtHost_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
   </data>
-  <data name="cmsMapLocal_Import.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="lProtocol_To.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lHost_From.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
-    <value>1</value>
+    <value>8</value>
   </data>
-  <data name="cmsMapLocal_Bottom.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
+  <data name="lPath_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="cURL.Width" type="System.Int32, mscorlib">
-    <value>62</value>
+  <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="tableLayoutPanel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="&gt;&gt;cRemotePath.Name" xml:space="preserve">
-    <value>cRemotePath</value>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lMapLocal.Name" xml:space="preserve">
-    <value>lMapLocal</value>
+  <data name="&gt;&gt;bSure.Name" xml:space="preserve">
+    <value>bSure</value>
   </data>
-  <data name="tlpMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>584, 311</value>
+  <data name="&gt;&gt;cbbProtocol_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cIsEnable.Name" xml:space="preserve">
-    <value>cIsEnable</value>
+  <data name="lPort_To.Text" xml:space="preserve">
+    <value>端口:</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Export.Name" xml:space="preserve">
-    <value>cmsMapLocal_Export</value>
+  <data name="txtPath_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
+  <data name="bCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
   </data>
-  <data name="bAdd.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;cmsMapLocal_Import.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cHost.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
-  </data>
-  <data name="&gt;&gt;cHost.Name" xml:space="preserve">
-    <value>cHost</value>
-  </data>
-  <data name="&gt;&gt;lMapLocal.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cPort.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;cmsMapLocal_Down.Name" xml:space="preserve">
-    <value>cmsMapLocal_Down</value>
-  </data>
-  <data name="cmsMapLocal_Clear.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
-  </data>
-  <data name="dgvMapLocal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 32</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="cmsMapLocal_Export.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
-  </data>
-  <data name="tlpMapLocal.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbbProtocol_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="cPort.HeaderText" xml:space="preserve">
-    <value>端口</value>
+  <data name="lPort_From.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="txtPath_From.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;bSure.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="tableLayoutPanel2.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbProtocol_To" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtPath_To" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lPath_To" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lPort_To" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lProtocol_To" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHost_To" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtHost_To" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudPort_To" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,AutoSize,0,Absolute,10,AutoSize,0,Absolute,10,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="lHost_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="gbRemote_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="nudPort_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_From.Name" xml:space="preserve">
+    <value>gbRemote_From</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_From.Name" xml:space="preserve">
+    <value>lProtocol_From</value>
+  </data>
+  <data name="&gt;&gt;txtHost_From.Name" xml:space="preserve">
+    <value>txtHost_From</value>
+  </data>
+  <data name="&gt;&gt;bSure.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;cbbProtocol_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="lHost_To.Text" xml:space="preserve">
+    <value>主机地址:</value>
+  </data>
+  <data name="lPath_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lProtocol_To.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbbProtocol_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="lPort_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lPath_From.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="bSure.Text" xml:space="preserve">
+    <value>确 定 (&amp;S)</value>
+  </data>
+  <data name="cbbProtocol_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 3</value>
+  </data>
+  <data name="lPath_To.Text" xml:space="preserve">
+    <value>路径:</value>
+  </data>
+  <data name="&gt;&gt;lPort_From.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="lProtocol_From.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="lPath_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;lHost_From.Name" xml:space="preserve">
+    <value>lHost_From</value>
+  </data>
+  <data name="&gt;&gt;lPath_From.Name" xml:space="preserve">
+    <value>lPath_From</value>
   </data>
   <data name="tlpMapLocal.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpMapLocal.TabIndex" type="System.Int32, mscorlib">
+  <data name="&gt;&gt;lPath_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtPath_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>434, 411</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Name" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="nudPort_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 71</value>
+  </data>
+  <data name="txtPath_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>68, 104</value>
+  </data>
+  <data name="lPort_From.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;lPath_To.Name" xml:space="preserve">
+    <value>lPath_To</value>
+  </data>
+  <data name="lProtocol_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 6</value>
+  </data>
+  <data name="txtPath_To.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lPath_To.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;nudPort_To.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;lHost_To.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;lPath_From.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="bCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 29</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_To.Name" xml:space="preserve">
+    <value>gbRemote_To</value>
+  </data>
+  <data name="bSure.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lHost_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;bRemove.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="txtPath_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>351, 23</value>
   </data>
-  <data name="&gt;&gt;lMapLocal.Parent" xml:space="preserve">
+  <data name="tlpButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;lHost_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="&gt;&gt;tlpMapLocal.Name" xml:space="preserve">
     <value>tlpMapLocal</value>
   </data>
-  <data name="&gt;&gt;bOK.Name" xml:space="preserve">
-    <value>bOK</value>
+  <data name="&gt;&gt;nudPort_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cmsMapLocal_Top.Text" xml:space="preserve">
-    <value>置顶</value>
+  <data name="gbRemote_From.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
-  <data name="cmsMapLocal_Up.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
-    <value>None</value>
+  <data name="cbbProtocol_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 25</value>
   </data>
-  <data name="&gt;&gt;bAdd.Name" xml:space="preserve">
-    <value>bAdd</value>
+  <data name="&gt;&gt;tableLayoutPanel2.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
-  <data name="cmsMapLocal_Clear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="tlpMapLocal.RowCount" type="System.Int32, mscorlib">
+    <value>4</value>
   </data>
-  <data name="cURL.HeaderText" xml:space="preserve">
-    <value>远程地址</value>
+  <data name="lHost_To.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="dgvMapLocal.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lPort_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="lPort_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
+    <value>gbRemote_From</value>
+  </data>
+  <data name="&gt;&gt;txtPath_To.Name" xml:space="preserve">
+    <value>txtPath_To</value>
+  </data>
+  <data name="lPort_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_From.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbbProtocol_From" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtPath_From" Row="6" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lPath_From" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lPort_From" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lProtocol_From" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHost_From" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtHost_From" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="nudPort_From" Row="4" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,Absolute,10,AutoSize,0,Absolute,10,AutoSize,0,Absolute,10,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="lPath_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
+  </data>
+  <data name="&gt;&gt;cbbProtocol_From.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="cbbProtocol_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>121, 25</value>
+  </data>
+  <data name="&gt;&gt;nudPort_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_To.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lPort_From.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;lPort_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_From.Parent" xml:space="preserve">
+    <value>tlpMapLocal</value>
+  </data>
+  <data name="&gt;&gt;tlpButton.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="nudPort_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>120, 23</value>
+  </data>
+  <data name="&gt;&gt;lHost_To.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbRemote_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lHost_To.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="&gt;&gt;lPath_From.Parent" xml:space="preserve">
+    <value>tableLayoutPanel1</value>
+  </data>
+  <data name="tlpButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 366</value>
+  </data>
+  <data name="txtHost_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;cbbProtocol_To.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lHost_From.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;lHost_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="lPort_To.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbbProtocol_From.Items" xml:space="preserve">
+    <value>http</value>
+  </data>
+  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtHost_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;lProtocol_From.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="txtPath_From.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="txtPath_To.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="gbRemote_To.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="tableLayoutPanel2.RowCount" type="System.Int32, mscorlib">
+    <value>8</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6649,139 +7030,70 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="lMapLocal.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="&gt;&gt;tlpMapLocal.Name" xml:space="preserve">
-    <value>tlpMapLocal</value>
-  </data>
-  <data name="&gt;&gt;cLocalPath.Name" xml:space="preserve">
-    <value>cLocalPath</value>
-  </data>
-  <data name="&gt;&gt;cProtocolType.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpMapLocal.RowCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel1.Parent" xml:space="preserve">
-    <value>tlpMapLocal</value>
-  </data>
-  <data name="&gt;&gt;dgvMapLocal.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bOK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
-  </data>
-  <data name="&gt;&gt;bAdd.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="bAdd" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bRemove" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="bOK" Row="0" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Absolute,100,Absolute,20,Absolute,100,Absolute,20,Absolute,100,Absolute,20,Absolute,100,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="bAdd.Location" type="System.Drawing.Point, System.Drawing">
-    <value>65, 3</value>
-  </data>
-  <data name="&gt;&gt;bAdd.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;bRemove.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="bRemove.Text" xml:space="preserve">
-    <value>移 除 (&amp;R)</value>
-  </data>
-  <data name="&gt;&gt;cmsMapLocal_Bottom.Name" xml:space="preserve">
-    <value>cmsMapLocal_Bottom</value>
-  </data>
-  <data name="cHost.HeaderText" xml:space="preserve">
-    <value>主机地址</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
-  </data>
-  <data name="&gt;&gt;cURL.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="bOK.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lProtocol_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+  <data name="nudPort_From.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
   </data>
-  <data name="bAdd.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 29</value>
+  <data name="lHost_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
   </data>
-  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+  <data name="gbRemote_To.Text" xml:space="preserve">
+    <value>[ 映射地址 ]</value>
+  </data>
+  <data name="bCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>357, 3</value>
+  </data>
+  <data name="lHost_To.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 41</value>
+  </data>
+  <data name="&gt;&gt;lPort_To.Name" xml:space="preserve">
+    <value>lPort_To</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel2.Parent" xml:space="preserve">
+    <value>gbRemote_To</value>
+  </data>
+  <data name="&gt;&gt;nudPort_To.Parent" xml:space="preserve">
+    <value>tableLayoutPanel2</value>
+  </data>
+  <data name="txtPath_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="&gt;&gt;lPath_To.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="dgvMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 236</value>
+  <data name="nudPort_From.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Center</value>
   </data>
-  <data name="cLocalPath.HeaderText" xml:space="preserve">
-    <value>本地文件</value>
+  <data name="&gt;&gt;nudPort_From.Name" xml:space="preserve">
+    <value>nudPort_From</value>
   </data>
-  <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>149, 6</value>
+  <data name="lProtocol_To.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
   </data>
-  <data name="cmsMapLocal_Import.Text" xml:space="preserve">
-    <value>导入 本地映射</value>
-  </data>
-  <data name="&gt;&gt;bRemove.Parent" xml:space="preserve">
+  <data name="&gt;&gt;tableLayoutPanel1.Name" xml:space="preserve">
     <value>tableLayoutPanel1</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Import.Name" xml:space="preserve">
-    <value>cmsMapLocal_Import</value>
-  </data>
-  <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
-    <value>9</value>
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Down.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;txtHost_From.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
-  <data name="&gt;&gt;cmsMapLocal_Clear.Name" xml:space="preserve">
-    <value>cmsMapLocal_Clear</value>
+  <data name="&gt;&gt;lHost_To.Name" xml:space="preserve">
+    <value>lHost_To</value>
   </data>
-  <data name="lMapLocal.Text" xml:space="preserve">
-    <value>使用本地文件映射远程服务器地址</value>
+  <data name="lPort_To.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="cmsMapLocal_Up.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+  <data name="lProtocol_From.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 19</value>
   </data>
-  <metadata name="cRemotePath.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cPort.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIsEnable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="lProtocol_To.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 19</value>
+  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </metadata>
-  <metadata name="cURL.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cHost.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cLocalPath.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cProtocolType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cmsMapLocal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
   </metadata>
 </root>

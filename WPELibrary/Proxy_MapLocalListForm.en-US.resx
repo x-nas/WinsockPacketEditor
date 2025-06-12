@@ -143,9 +143,6 @@
     <value>Local Path</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cmsMapLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>147, 182</value>
-  </data>
   <data name="cmsMapLocal_Top.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
   </data>
@@ -199,6 +196,9 @@
   </data>
   <data name="cmsMapLocal_Clear.Text" xml:space="preserve">
     <value>Clear</value>
+  </data>
+  <data name="cmsMapLocal.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 182</value>
   </data>
   <data name="bAdd.Text" xml:space="preserve">
     <value>Add (&amp;A)</value>

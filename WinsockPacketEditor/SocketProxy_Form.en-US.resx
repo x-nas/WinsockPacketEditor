@@ -229,6 +229,21 @@
   <data name="tpProxyMapping.Text" xml:space="preserve">
     <value>[ Proxy Mapping ]</value>
   </data>
+  <data name="gbProxyMapping_Remote.Text" xml:space="preserve">
+    <value>Remote Mapping</value>
+  </data>
+  <data name="cbEnable_MapRemote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 21</value>
+  </data>
+  <data name="cbEnable_MapRemote.Text" xml:space="preserve">
+    <value>Enable - MapRemote</value>
+  </data>
+  <data name="bProxyMapping_Remote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>157, 6</value>
+  </data>
+  <data name="bProxyMapping_Remote.Text" xml:space="preserve">
+    <value>Setting</value>
+  </data>
   <data name="gbProxyMapping_Local.Text" xml:space="preserve">
     <value>Local Mapping</value>
   </data>
@@ -313,7 +328,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAegBAQHoAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAfABAQHwAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

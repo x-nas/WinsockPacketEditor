@@ -233,6 +233,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_221 = { "本地代理映射保存完毕 {0}", "The Local proxy mapping saved {0}" };
         public static string[] MutiLan_222 = { "加载本地代理映射成功! [未加密]", "Load Local proxy mapping successful! [Unencrypted]" };
         public static string[] MutiLan_223 = { "加载本地代理映射成功! [已加密]", "Load Local proxy mapping successful! [Encrypted]" };
+        public static string[] MutiLan_224 = { "远程代理映射文件", "Remote proxy mapping file" };
+        public static string[] MutiLan_225 = { "远程代理映射保存完毕 {0}", "The Remote proxy mapping saved {0}" };
+        public static string[] MutiLan_226 = { "加载远程代理映射成功! [未加密]", "Load Remote proxy mapping successful! [Unencrypted]" };
+        public static string[] MutiLan_227 = { "加载远程代理映射成功! [已加密]", "Load Remote proxy mapping successful! [Encrypted]" };
 
         #endregion
 

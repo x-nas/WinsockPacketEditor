@@ -1268,6 +1268,201 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//获取远程代理映射的数据
+
+        public static byte[] GetRemoteMappedData(string remoteUrl, string originalRequest, Dictionary<string, string> headers)
+        {
+            try
+            {
+                // 解析原始请求
+                string[] requestParts = originalRequest.Split(new[] { "\r\n" }, StringSplitOptions.None);
+                string[] requestLine = requestParts[0].Split(' ');
+                string method = requestLine[0];
+                string path = requestLine.Length > 1 ? requestLine[1] : "/";
+
+                // 构建新的请求URL
+                UriBuilder remoteUri = new UriBuilder(remoteUrl);
+                if (!string.IsNullOrEmpty(path) && path != "/")
+                {
+                    // 保留原始路径参数
+                    string queryToAppend = remoteUri.Query;
+                    if (!string.IsNullOrEmpty(remoteUri.Query))
+                    {
+                        queryToAppend = "&" + remoteUri.Query.TrimStart('?');
+                    }
+
+                    // 处理路径拼接
+                    string originalPath = path.Split('?')[0];
+                    string originalQuery = path.Contains('?') ? path.Substring(path.IndexOf('?')) : "";
+
+                    remoteUri.Path = remoteUri.Path.TrimEnd('/') + "/" + originalPath.TrimStart('/');
+                    remoteUri.Query = originalQuery.TrimStart('?') + queryToAppend;
+                }
+
+                // 创建HTTP请求
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(remoteUri.Uri);
+                request.Method = method;
+
+                // 设置超时时间
+                request.Timeout = 10000; // 10秒超时
+                request.ReadWriteTimeout = 10000;
+
+                // 复制原始请求头（排除不应转发的头）
+                foreach (var header in headers)
+                {
+                    string headerKey = header.Key.ToLower();
+
+                    // 跳过这些不应该转发的头
+                    if (headerKey == "connection" ||
+                        headerKey == "keep-alive" ||
+                        headerKey == "proxy-connection" ||
+                        headerKey == "te" ||
+                        headerKey == "trailer" ||
+                        headerKey == "transfer-encoding" ||
+                        headerKey == "upgrade")
+                    {
+                        continue;
+                    }
+
+                    switch (headerKey)
+                    {
+                        case "host":
+                            request.Host = remoteUri.Host;
+                            break;
+                        case "accept":
+                            request.Accept = header.Value;
+                            break;
+                        case "user-agent":
+                            request.UserAgent = header.Value;
+                            break;
+                        case "content-type":
+                            request.ContentType = header.Value;
+                            break;
+                        case "content-length":
+                            // 将在处理请求体时设置
+                            break;
+                        case "referer":
+                            // 更新Referer为新的远程地址
+                            if (Uri.TryCreate(header.Value, UriKind.Absolute, out Uri originalReferer))
+                            {
+                                string newReferer = remoteUri.Scheme + "://" + remoteUri.Host + originalReferer.PathAndQuery;
+                                request.Referer = newReferer;
+                            }
+                            else
+                            {
+                                request.Referer = header.Value;
+                            }
+                            break;
+                        default:
+                            request.Headers[header.Key] = header.Value;
+                            break;
+                    }
+                }
+
+                // 处理请求体（POST/PUT等）
+                if ((method == "POST" || method == "PUT" || method == "PATCH") &&
+                    headers.TryGetValue("content-length", out string contentLengthStr) &&
+                    int.TryParse(contentLengthStr, out int contentLength) &&
+                    contentLength > 0)
+                {
+                    // 从原始请求中提取请求体
+                    int bodyStartIndex = originalRequest.IndexOf("\r\n\r\n") + 4;
+                    if (bodyStartIndex >= 4 && bodyStartIndex < originalRequest.Length)
+                    {
+                        string requestBody = originalRequest.Substring(bodyStartIndex);
+
+                        using (Stream requestStream = request.GetRequestStream())
+                        using (StreamWriter writer = new StreamWriter(requestStream))
+                        {
+                            writer.Write(requestBody);
+                        }
+                    }
+                }
+
+                // 获取响应
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (Stream responseStream = response.GetResponseStream())
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    responseStream.CopyTo(memoryStream);
+
+                    // 构建响应头
+                    StringBuilder responseHeaders = new StringBuilder();
+                    responseHeaders.Append($"HTTP/1.1 {(int)response.StatusCode} {response.StatusDescription}\r\n");
+
+                    // 复制响应头（排除不应转发的头）
+                    foreach (string headerName in response.Headers.AllKeys)
+                    {
+                        string lowerHeaderName = headerName.ToLower();
+
+                        if (lowerHeaderName == "transfer-encoding" ||
+                            lowerHeaderName == "connection" ||
+                            lowerHeaderName == "keep-alive")
+                        {
+                            continue;
+                        }
+
+                        responseHeaders.Append($"{headerName}: {response.Headers[headerName]}\r\n");
+                    }
+
+                    responseHeaders.Append("\r\n");
+
+                    // 合并响应头和响应体
+                    byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
+                    byte[] responseBytes = memoryStream.ToArray();
+
+                    byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
+                    Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
+                    Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
+
+                    return fullResponse;
+                }
+            }
+            catch (WebException webEx) when (webEx.Response is HttpWebResponse errorResponse)
+            {
+                // 处理远程服务器返回的错误响应
+                using (Stream errorStream = errorResponse.GetResponseStream())
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    errorStream?.CopyTo(memoryStream);
+
+                    StringBuilder responseHeaders = new StringBuilder();
+                    responseHeaders.Append($"HTTP/1.1 {(int)errorResponse.StatusCode} {errorResponse.StatusDescription}\r\n");
+
+                    foreach (string headerName in errorResponse.Headers.AllKeys)
+                    {
+                        responseHeaders.Append($"{headerName}: {errorResponse.Headers[headerName]}\r\n");
+                    }
+
+                    responseHeaders.Append("\r\n");
+
+                    byte[] headerBytes = Encoding.UTF8.GetBytes(responseHeaders.ToString());
+                    byte[] responseBytes = memoryStream.ToArray();
+
+                    byte[] fullResponse = new byte[headerBytes.Length + responseBytes.Length];
+                    Buffer.BlockCopy(headerBytes, 0, fullResponse, 0, headerBytes.Length);
+                    Buffer.BlockCopy(responseBytes, 0, fullResponse, headerBytes.Length, responseBytes.Length);
+
+                    return fullResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, $"远程映射失败: {ex.Message}");
+
+                // 返回500错误响应
+                string errorResponse = "HTTP/1.1 500 Internal Server Error\r\n" +
+                                      "Content-Type: text/plain\r\n" +
+                                      "Connection: close\r\n" +
+                                      "\r\n" +
+                                      "Remote mapping failed: " + ex.Message;
+
+                return Encoding.UTF8.GetBytes(errorResponse);
+            }
+        }
+
+        #endregion
+
         #region//统计封包数量
 
         public static void CountSocketInfo(Socket_Cache.SocketPacket.PacketType ptPacketType, int packetLength)
@@ -3629,7 +3824,7 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (!Socket_Cache.ProxyMapping.IsShow)
+                if (!Socket_Cache.ProxyMapping.IsShow_MapLocal)
                 {
                     Proxy_MapLocalListForm pmllForm = new Proxy_MapLocalListForm();
                     pmllForm.Show();
@@ -3647,6 +3842,39 @@ namespace WPELibrary.Lib
             {
                 Proxy_MapLocalForm pmlForm = new Proxy_MapLocalForm(pml);
                 pmlForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示远程映射窗体
+
+        public static void ShowProxyMapRemoteListForm()
+        {
+            try
+            {
+                if (!Socket_Cache.ProxyMapping.IsShow_MapRemote)
+                {
+                    Proxy_MapRemoteListForm pmllForm = new Proxy_MapRemoteListForm();
+                    pmllForm.Show();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        public static void ShowProxyMapRemoteForm(Proxy_MapRemote pmr)
+        {
+            try
+            {
+                Proxy_MapRemoteForm pmrForm = new Proxy_MapRemoteForm(pmr);
+                pmrForm.ShowDialog();
             }
             catch (Exception ex)
             {

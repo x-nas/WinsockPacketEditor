@@ -85,6 +85,10 @@
             this.cbLogList_AutoRoll = new System.Windows.Forms.CheckBox();
             this.tpProxyMapping = new System.Windows.Forms.TabPage();
             this.tlpProxyMapping = new System.Windows.Forms.TableLayoutPanel();
+            this.gbProxyMapping_Remote = new System.Windows.Forms.GroupBox();
+            this.tlpProxyMapping_Remote = new System.Windows.Forms.TableLayoutPanel();
+            this.cbEnable_MapRemote = new System.Windows.Forms.CheckBox();
+            this.bProxyMapping_Remote = new System.Windows.Forms.Button();
             this.gbProxyMapping_Local = new System.Windows.Forms.GroupBox();
             this.tlpProxyMapping_Local = new System.Windows.Forms.TableLayoutPanel();
             this.cbEnable_MapLocal = new System.Windows.Forms.CheckBox();
@@ -200,6 +204,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).BeginInit();
             this.tpProxyMapping.SuspendLayout();
             this.tlpProxyMapping.SuspendLayout();
+            this.gbProxyMapping_Remote.SuspendLayout();
+            this.tlpProxyMapping_Remote.SuspendLayout();
             this.gbProxyMapping_Local.SuspendLayout();
             this.tlpProxyMapping_Local.SuspendLayout();
             this.tpExternalProxy.SuspendLayout();
@@ -526,8 +532,37 @@
             // tlpProxyMapping
             // 
             resources.ApplyResources(this.tlpProxyMapping, "tlpProxyMapping");
+            this.tlpProxyMapping.Controls.Add(this.gbProxyMapping_Remote, 1, 0);
             this.tlpProxyMapping.Controls.Add(this.gbProxyMapping_Local, 0, 0);
             this.tlpProxyMapping.Name = "tlpProxyMapping";
+            // 
+            // gbProxyMapping_Remote
+            // 
+            this.gbProxyMapping_Remote.Controls.Add(this.tlpProxyMapping_Remote);
+            resources.ApplyResources(this.gbProxyMapping_Remote, "gbProxyMapping_Remote");
+            this.gbProxyMapping_Remote.Name = "gbProxyMapping_Remote";
+            this.gbProxyMapping_Remote.TabStop = false;
+            // 
+            // tlpProxyMapping_Remote
+            // 
+            resources.ApplyResources(this.tlpProxyMapping_Remote, "tlpProxyMapping_Remote");
+            this.tlpProxyMapping_Remote.Controls.Add(this.cbEnable_MapRemote, 0, 1);
+            this.tlpProxyMapping_Remote.Controls.Add(this.bProxyMapping_Remote, 1, 1);
+            this.tlpProxyMapping_Remote.Name = "tlpProxyMapping_Remote";
+            // 
+            // cbEnable_MapRemote
+            // 
+            resources.ApplyResources(this.cbEnable_MapRemote, "cbEnable_MapRemote");
+            this.cbEnable_MapRemote.Name = "cbEnable_MapRemote";
+            this.cbEnable_MapRemote.UseVisualStyleBackColor = true;
+            this.cbEnable_MapRemote.CheckedChanged += new System.EventHandler(this.cbEnable_MapRemote_CheckedChanged);
+            // 
+            // bProxyMapping_Remote
+            // 
+            resources.ApplyResources(this.bProxyMapping_Remote, "bProxyMapping_Remote");
+            this.bProxyMapping_Remote.Name = "bProxyMapping_Remote";
+            this.bProxyMapping_Remote.UseVisualStyleBackColor = true;
+            this.bProxyMapping_Remote.Click += new System.EventHandler(this.bProxyMapping_Remote_Click);
             // 
             // gbProxyMapping_Local
             // 
@@ -1360,6 +1395,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLogList_AutoClearValue)).EndInit();
             this.tpProxyMapping.ResumeLayout(false);
             this.tlpProxyMapping.ResumeLayout(false);
+            this.gbProxyMapping_Remote.ResumeLayout(false);
+            this.tlpProxyMapping_Remote.ResumeLayout(false);
+            this.tlpProxyMapping_Remote.PerformLayout();
             this.gbProxyMapping_Local.ResumeLayout(false);
             this.tlpProxyMapping_Local.ResumeLayout(false);
             this.tlpProxyMapping_Local.PerformLayout();
@@ -1532,5 +1570,9 @@
         private System.Windows.Forms.TableLayoutPanel tlpProxyMapping_Local;
         private System.Windows.Forms.CheckBox cbEnable_MapLocal;
         private System.Windows.Forms.Button bProxyMapping_Local;
+        private System.Windows.Forms.GroupBox gbProxyMapping_Remote;
+        private System.Windows.Forms.TableLayoutPanel tlpProxyMapping_Remote;
+        private System.Windows.Forms.CheckBox cbEnable_MapRemote;
+        private System.Windows.Forms.Button bProxyMapping_Remote;
     }
 }

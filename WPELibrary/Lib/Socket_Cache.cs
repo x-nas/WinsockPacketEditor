@@ -306,6 +306,7 @@ namespace WPELibrary.Lib
                         new XElement("LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear),
                         new XElement("LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value),
                         new XElement("Enable_MapLocal", Socket_Cache.ProxyMapping.Enable_MapLocal),
+                        new XElement("Enable_MapRemote", Socket_Cache.ProxyMapping.Enable_MapRemote),
                         new XElement("Enable_ExternalProxy", Socket_Cache.SocketProxy.Enable_ExternalProxy),
                         new XElement("ExternalProxy_IP", Socket_Cache.SocketProxy.ExternalProxy_IP),
                         new XElement("ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port),
@@ -413,6 +414,7 @@ namespace WPELibrary.Lib
                         Socket_Cache.LogList.Proxy_AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
                         Socket_Cache.LogList.Proxy_AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
                         Socket_Cache.ProxyMapping.Enable_MapLocal = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapLocal"]);
+                        Socket_Cache.ProxyMapping.Enable_MapRemote = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapRemote"]);
                         Socket_Cache.SocketProxy.Enable_ExternalProxy = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy"]);
                         Socket_Cache.SocketProxy.ExternalProxy_IP = RunConfig.Rows[0]["ProxyConfig_ExternalProxy_IP"].ToString();
                         Socket_Cache.SocketProxy.ExternalProxy_Port = ushort.Parse(RunConfig.Rows[0]["ProxyConfig_ExternalProxy_Port"].ToString());                                                
@@ -538,6 +540,12 @@ namespace WPELibrary.Lib
                     if (Enable_MapLocal != null)
                     {
                         Socket_Cache.ProxyMapping.Enable_MapLocal = Convert.ToBoolean(Enable_MapLocal.Value);
+                    }
+
+                    XElement Enable_MapRemote = xeProxyConfig.Element("Enable_MapRemote");
+                    if (Enable_MapRemote != null)
+                    {
+                        Socket_Cache.ProxyMapping.Enable_MapRemote = Convert.ToBoolean(Enable_MapRemote.Value);
                     }
 
                     XElement Enable_ExternalProxy = xeProxyConfig.Element("Enable_ExternalProxy");
@@ -1330,6 +1338,21 @@ namespace WPELibrary.Lib
                         Socket_Cache.DataBase.DeleteTable_ProxyMapLocal();
                         Socket_Cache.DataBase.InsertTable_ProxyMapLocal();                        
                     }
+
+                    //远程代理映射
+                    XElement xeMapRemote = xdoc.Root.Element("MapRemote");
+                    if (xeMapRemote != null)
+                    {
+                        XDocument MapRemote = new XDocument
+                        {
+                            Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                        };
+                        MapRemote.Add(xeMapRemote);
+
+                        Socket_Cache.ProxyMapping.LoadMapRemote_FromXDocument(MapRemote);
+                        Socket_Cache.DataBase.DeleteTable_ProxyMapRemote();
+                        Socket_Cache.DataBase.InsertTable_ProxyMapRemote();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1984,26 +2007,33 @@ namespace WPELibrary.Lib
                         {
                             case Socket_Cache.SocketProxy.DomainType.Http:
 
-                                if (Socket_Cache.ProxyMapping.Enable_MapLocal)
+                                bool requestHandled = false;
+                                string request = Encoding.ASCII.GetString(bData.ToArray());
+
+                                if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
                                 {
-                                    #region//Http代理映射
-
-                                    string request = Encoding.ASCII.GetString(bData.ToArray());
-                                    if (request.StartsWith("GET") || request.StartsWith("POST") || request.StartsWith("HEAD") || request.StartsWith("PUT"))
+                                    var headers = Socket_Operation.ParseHttpHeaders(request);
+                                    if (headers.TryGetValue("Host", out string hostHeader))
                                     {
-                                        var headers = Socket_Operation.ParseHttpHeaders(request);
-                                        if (headers.TryGetValue("Host", out string hostHeader))
-                                        {
-                                            string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
-                                            string cleanPath = requestPath.Split('?')[0];
+                                        string requestPath = request.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                                        string cleanPath = requestPath.Split('?')[0];                                        
 
-                                            var rule = Socket_Cache.ProxyMapping.GetMapLocal(Socket_Cache.SocketProxy.MapProtocol.Http, hostHeader.Split(':')[0], spt.Server.EndPoint.Port, cleanPath);
-                                            if (rule != null)
+                                        #region//本地代理映射
+
+                                        if (Socket_Cache.ProxyMapping.Enable_MapLocal)
+                                        {
+                                            var localRule = Socket_Cache.ProxyMapping.GetMapLocal(
+                                                Socket_Cache.SocketProxy.MapProtocol.Http,
+                                                hostHeader.Split(':')[0],
+                                                spt.Server.EndPoint.Port,
+                                                cleanPath);
+
+                                            if (localRule != null)
                                             {
-                                                if (File.Exists(rule.LocalPath))
+                                                if (File.Exists(localRule.LocalPath))
                                                 {
-                                                    byte[] fileBytes = File.ReadAllBytes(rule.LocalPath);
-                                                    string contentType = Socket_Operation.GetContentType(Path.GetExtension(rule.LocalPath));
+                                                    byte[] fileBytes = File.ReadAllBytes(localRule.LocalPath);
+                                                    string contentType = Socket_Operation.GetContentType(Path.GetExtension(localRule.LocalPath));
 
                                                     string response =
                                                         $"HTTP/1.1 200 OK\r\n" +
@@ -2013,24 +2043,52 @@ namespace WPELibrary.Lib
 
                                                     byte[] headerBytes = Encoding.UTF8.GetBytes(response);
                                                     Socket_Operation.SendTCPData(spt.Client.Socket, headerBytes);
-                                                    Socket_Operation.SendTCPData(spt.Client.Socket, fileBytes);                                                    
+                                                    Socket_Operation.SendTCPData(spt.Client.Socket, fileBytes);
+                                                    requestHandled = true;
                                                 }
                                                 else
                                                 {
                                                     Socket_Operation.Send404Response(spt.Client.Socket);
-                                                }                                                    
+                                                    requestHandled = true;
+                                                }
                                             }
                                         }
-                                    }
 
-                                    #endregion
+                                        #endregion
+
+                                        #region//远程代理映射
+
+                                        if (!requestHandled && Socket_Cache.ProxyMapping.Enable_MapRemote)
+                                        {
+                                            var remoteRule = Socket_Cache.ProxyMapping.GetMapRemote(
+                                                Socket_Cache.SocketProxy.MapProtocol.Http,
+                                                hostHeader.Split(':')[0],
+                                                spt.Server.EndPoint.Port,
+                                                cleanPath);
+
+                                            if (remoteRule != null)
+                                            {
+                                                string RemoteURL = remoteRule.ProtocolType_To.ToString() + "://" + remoteRule.Host_To + ":" + remoteRule.Port_To + remoteRule.Path_To;
+                                                byte[] remoteResponse = Socket_Operation.GetRemoteMappedData(RemoteURL, request, headers);
+                                                if (remoteResponse != null)
+                                                {
+                                                    Socket_Operation.SendTCPData(spt.Client.Socket, remoteResponse);
+                                                    requestHandled = true;
+                                                }
+                                            }
+                                        }
+
+                                        #endregion                                        
+                                    }
                                 }
-                                else
+
+                                if (!requestHandled)
                                 {
                                     Socket_Operation.SendTCPData(spt.Server.Socket, bData);
                                 }
 
                                 enableProxyQueue = true;
+
                                 break;
 
                             case Socket_Cache.SocketProxy.DomainType.Https:
@@ -4119,9 +4177,10 @@ namespace WPELibrary.Lib
         public static class ProxyMapping
         {
             public static string AESKey = string.Empty;
-            public static bool IsShow = false;
-            public static bool Enable_MapLocal = false;
+            public static bool IsShow_MapLocal = false, IsShow_MapRemote = false;
+            public static bool Enable_MapLocal = false, Enable_MapRemote = false;
             public static List<Proxy_MapLocal> lstMapLocal = new List<Proxy_MapLocal>();
+            public static List<Proxy_MapRemote> lstMapRemote = new List<Proxy_MapRemote>();
 
             #region//获取 MapProtocol 类型
 
@@ -4163,6 +4222,45 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//新增远程代理映射    
+
+            public static void AddMapRemote(
+                bool IsEnable, 
+                Socket_Cache.SocketProxy.MapProtocol ProtocolType_From, 
+                string Host_From, 
+                int Port_From, 
+                string Path_From,
+                Socket_Cache.SocketProxy.MapProtocol ProtocolType_To,
+                string Host_To,
+                int Port_To,
+                string Path_To)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(Host_From) && Port_From > 0 && !string.IsNullOrEmpty(Host_To) && Port_To > 0)
+                    {
+                        Proxy_MapRemote pmr = new Proxy_MapRemote(
+                            IsEnable, 
+                            ProtocolType_From, 
+                            Host_From, 
+                            Port_From, 
+                            Path_From, 
+                            ProtocolType_To, 
+                            Host_To, 
+                            Port_To, 
+                            Path_To);
+
+                        Socket_Cache.ProxyMapping.lstMapRemote.Add(pmr);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//删除本地代理映射
 
             public static void DelMapLocal(Proxy_MapLocal pml)
@@ -4172,6 +4270,25 @@ namespace WPELibrary.Lib
                     if (pml != null)
                     { 
                         Socket_Cache.ProxyMapping.lstMapLocal.Remove(pml);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//删除远程代理映射
+
+            public static void DelMapRemote(Proxy_MapRemote pmr)
+            {
+                try
+                {
+                    if (pmr != null)
+                    {
+                        Socket_Cache.ProxyMapping.lstMapRemote.Remove(pmr);
                     }
                 }
                 catch (Exception ex)
@@ -4215,6 +4332,39 @@ namespace WPELibrary.Lib
 
             #endregion
 
+            #region//清空远程代理映射（对话框）
+
+            public static void CleanUpMapRemote_Dialog()
+            {
+                try
+                {
+                    DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
+
+                    if (dr.Equals(DialogResult.OK))
+                    {
+                        Socket_Cache.ProxyMapping.MapRemoteClear();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void MapRemoteClear()
+            {
+                try
+                {
+                    lstMapRemote.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//更新本地代理映射
 
             public static void UpdateMapLocal(Proxy_MapLocal pml, Socket_Cache.SocketProxy.MapProtocol ProtocolType, string Host, int Port, string RemotePath, string LocalPath)
@@ -4229,6 +4379,41 @@ namespace WPELibrary.Lib
                         pml.RemotePath = RemotePath;
                         pml.LocalPath = LocalPath;                        
                     }                    
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//更新远程代理映射
+
+            public static void UpdateMapRemote(
+                Proxy_MapRemote pmr, 
+                Socket_Cache.SocketProxy.MapProtocol ProtocolType_From, 
+                string Host_From, 
+                int Port_From, 
+                string Path_From,
+                Socket_Cache.SocketProxy.MapProtocol ProtocolType_To,
+                string Host_To,
+                int Port_To,
+                string Path_To)
+            {
+                try
+                {
+                    if (pmr != null && !string.IsNullOrEmpty(Host_From) && Port_From > 0 && !string.IsNullOrEmpty(Host_To) && Port_To > 0)
+                    {
+                        pmr.ProtocolType_From = ProtocolType_From;
+                        pmr.Host_From = Host_From;
+                        pmr.Port_From = Port_From;
+                        pmr.Path_From = Path_From;
+                        pmr.ProtocolType_To = ProtocolType_To;
+                        pmr.Host_To = Host_To;
+                        pmr.Port_To = Port_To;
+                        pmr.Path_To = Path_To;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -4260,6 +4445,31 @@ namespace WPELibrary.Lib
                     path.StartsWith(rule.RemotePath, StringComparison.OrdinalIgnoreCase));
                 }
                     
+            }
+
+            #endregion
+
+            #region//查找远程代理映射
+
+            public static Proxy_MapRemote GetMapRemote(Socket_Cache.SocketProxy.MapProtocol ProtocolType_From, string Host_From, int Port_From, string Path_From)
+            {
+                if (string.IsNullOrEmpty(Path_From))
+                {
+                    return Socket_Cache.ProxyMapping.lstMapRemote.FirstOrDefault(rule =>
+                    rule.IsEnable == true &&
+                    rule.ProtocolType_From == ProtocolType_From &&
+                    rule.Host_From.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
+                    rule.Port_From == Port_From);
+                }
+                else
+                {
+                    return Socket_Cache.ProxyMapping.lstMapRemote.FirstOrDefault(rule =>
+                    rule.IsEnable == true &&
+                    rule.ProtocolType_From == ProtocolType_From &&
+                    rule.Host_From.Equals(Host_From, StringComparison.OrdinalIgnoreCase) &&
+                    rule.Port_From == Port_From &&
+                    Path_From.StartsWith(rule.Path_From, StringComparison.OrdinalIgnoreCase));
+                }
             }
 
             #endregion
@@ -4337,6 +4547,79 @@ namespace WPELibrary.Lib
 
             #endregion                        
 
+            #region//远程代理映射的列表操作
+
+            public static void UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction listAction, Proxy_MapRemote pmr)
+            {
+                try
+                {
+                    int iIndex = 0;
+
+                    switch (listAction)
+                    {
+                        case Socket_Cache.System.ListAction.Top:
+
+                            Socket_Cache.ProxyMapping.lstMapRemote.Remove(pmr);
+                            Socket_Cache.ProxyMapping.lstMapRemote.Insert(0, pmr);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Up:
+
+                            iIndex = Socket_Cache.ProxyMapping.lstMapRemote.IndexOf(pmr);
+                            if (iIndex > 0)
+                            {
+                                Socket_Cache.ProxyMapping.lstMapRemote.Remove(pmr);
+                                Socket_Cache.ProxyMapping.lstMapRemote.Insert(iIndex - 1, pmr);
+                            }
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Down:
+
+                            iIndex = Socket_Cache.ProxyMapping.lstMapRemote.IndexOf(pmr);
+                            if (iIndex > -1 && iIndex < Socket_Cache.ProxyMapping.lstMapRemote.Count - 1)
+                            {
+                                Socket_Cache.ProxyMapping.lstMapRemote.Remove(pmr);
+                                Socket_Cache.ProxyMapping.lstMapRemote.Insert(iIndex + 1, pmr);
+                            }
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Bottom:
+
+                            Socket_Cache.ProxyMapping.lstMapRemote.Remove(pmr);
+                            Socket_Cache.ProxyMapping.lstMapRemote.Add(pmr);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Import:
+
+                            Socket_Cache.ProxyMapping.LoadMapRemote_Dialog();
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.Export:
+
+                            Socket_Cache.ProxyMapping.SaveMapRemote_Dialog(string.Empty, Socket_Cache.ProxyMapping.lstMapRemote);
+
+                            break;
+
+                        case Socket_Cache.System.ListAction.CleanUp:
+
+                            Socket_Cache.ProxyMapping.CleanUpMapRemote_Dialog();
+
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion                        
+
             #region//保存本地代理映射到数据库
 
             public static void SaveProxyMapLocal_ToDB(Socket_Cache.System.SystemMode FromMode)
@@ -4345,16 +4628,29 @@ namespace WPELibrary.Lib
                 {
                     if (Socket_Cache.System.StartMode == FromMode)
                     {
-                        try
-                        {
-                            Socket_Cache.DataBase.DeleteTable_ProxyMapLocal();
-                            Socket_Cache.DataBase.InsertTable_ProxyMapLocal();                            
-                        }
-                        catch (Exception ex)
-                        {
-                            Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                        }
+                        Socket_Cache.DataBase.DeleteTable_ProxyMapLocal();
+                        Socket_Cache.DataBase.InsertTable_ProxyMapLocal();
                     }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//保存远程代理映射到数据库
+
+            public static void SaveProxyMapRemote_ToDB(Socket_Cache.System.SystemMode FromMode)
+            {
+                try
+                {
+                    if (Socket_Cache.System.StartMode == FromMode)
+                    {
+                        Socket_Cache.DataBase.DeleteTable_ProxyMapRemote();
+                        Socket_Cache.DataBase.InsertTable_ProxyMapRemote();
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -4384,6 +4680,51 @@ namespace WPELibrary.Lib
                             string LocalPath = dataRow["LocalPath"].ToString();
 
                             Socket_Cache.ProxyMapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+                });
+            }
+
+            #endregion
+
+            #region//从数据库加载远程代理映射（异步）
+
+            public static async void LoadProxyMapRemote_FromDB()
+            {
+                await Task.Run(() =>
+                {
+                    try
+                    {
+                        DataTable dtProxyMapRemote = Socket_Cache.DataBase.SelectTable_ProxyMapRemote();
+
+                        foreach (DataRow dataRow in dtProxyMapRemote.Rows)
+                        {
+                            bool IsEnable = Convert.ToBoolean(dataRow["IsEnable"]);
+
+                            Socket_Cache.SocketProxy.MapProtocol ProtocolType_From = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(dataRow["ProtocolType_From"].ToString());
+                            string Host_From = dataRow["Host_From"].ToString();
+                            int Port_From = int.Parse(dataRow["Port_From"].ToString());
+                            string Path_From = dataRow["Path_From"].ToString();
+
+                            Socket_Cache.SocketProxy.MapProtocol ProtocolType_To = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(dataRow["ProtocolType_To"].ToString());
+                            string Host_To = dataRow["Host_To"].ToString();
+                            int Port_To = int.Parse(dataRow["Port_To"].ToString());
+                            string Path_To = dataRow["Path_To"].ToString();
+
+                            Socket_Cache.ProxyMapping.AddMapRemote(
+                                IsEnable,
+                                ProtocolType_From,
+                                Host_From,
+                                Port_From,
+                                Path_From,
+                                ProtocolType_To,
+                                Host_To,
+                                Port_To,
+                                Path_To);
                         }
                     }
                     catch (Exception ex)
@@ -4479,13 +4820,6 @@ namespace WPELibrary.Lib
 
                     foreach (Proxy_MapLocal pml in pmlList)
                     {
-                        string sIsEnable = pml.IsEnable.ToString();
-                        string sProtocolType = pml.ProtocolType.ToString();
-                        string sHost = pml.Host.ToString();
-                        string sPort = pml.Port.ToString();
-                        string sRemotePath = pml.RemotePath.ToString();
-                        string sLocalPath = pml.LocalPath.ToString();
-
                         XElement xeLocal =
                             new XElement("Local",
                             new XElement("IsEnable", pml.IsEnable.ToString()),
@@ -4500,6 +4834,118 @@ namespace WPELibrary.Lib
                     }
 
                     return xeMapLocal;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion
+
+            #region//保存远程映射到文件（对话框）
+
+            public static void SaveMapRemote_Dialog(string FileName, List<Proxy_MapRemote> pmrList)
+            {
+                try
+                {
+                    if (Socket_Cache.ProxyMapping.lstMapRemote.Count > 0)
+                    {
+                        SaveFileDialog sfdSaveFile = new SaveFileDialog();
+
+                        sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_224) + "（*.pmr）|*.pmr";
+
+                        if (!string.IsNullOrEmpty(FileName))
+                        {
+                            sfdSaveFile.FileName = FileName;
+                        }
+
+                        sfdSaveFile.RestoreDirectory = true;
+
+                        if (sfdSaveFile.ShowDialog() == DialogResult.OK)
+                        {
+                            Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.MapRemote_Export);
+                            pwForm.ShowDialog();
+
+                            string FilePath = sfdSaveFile.FileName;
+
+                            if (!string.IsNullOrEmpty(FilePath))
+                            {
+                                SaveMapRemote(FilePath, pmrList, true);
+
+                                string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_225), FilePath);
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, sLog);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void SaveMapRemote(string FilePath, List<Proxy_MapRemote> pmrList, bool DoEncrypt)
+            {
+                try
+                {
+                    XDocument xdoc = new XDocument
+                    {
+                        Declaration = new XDeclaration("1.0", "utf-8", "yes")
+                    };
+
+                    XElement xeMapRemote = Socket_Cache.ProxyMapping.GetMapRemote_XML(pmrList);
+                    if (xeMapRemote == null)
+                    {
+                        return;
+                    }
+
+                    xdoc.Add(xeMapRemote);
+                    xdoc.Save(FilePath);
+
+                    if (DoEncrypt)
+                    {
+                        string sPassword = Socket_Cache.ProxyMapping.AESKey;
+
+                        if (!string.IsNullOrEmpty(sPassword))
+                        {
+                            Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static XElement GetMapRemote_XML(List<Proxy_MapRemote> pmrList)
+            {
+                try
+                {
+                    XElement xeMapRemote = new XElement("MapRemote");
+
+                    foreach (Proxy_MapRemote pmr in pmrList)
+                    {
+                        XElement xeLocal =
+                            new XElement("Remote",
+                            new XElement("IsEnable", pmr.IsEnable.ToString()),
+                            new XElement("ProtocolType_From", pmr.ProtocolType_From.ToString()),
+                            new XElement("Host_From", pmr.Host_From),
+                            new XElement("Port_From", pmr.Port_From.ToString()),
+                            new XElement("Path_From", pmr.Path_From),                            
+                            new XElement("ProtocolType_To", pmr.ProtocolType_To.ToString()),
+                            new XElement("Host_To", pmr.Host_To),
+                            new XElement("Port_To", pmr.Port_To.ToString()),
+                            new XElement("Path_To", pmr.Path_To)
+                            );
+
+                        xeMapRemote.Add(xeLocal);
+                    }
+
+                    return xeMapRemote;
                 }
                 catch (Exception ex)
                 {
@@ -4640,6 +5086,172 @@ namespace WPELibrary.Lib
                         }
 
                         Socket_Cache.ProxyMapping.AddMapLocal(IsEnable, ProtocolType, Host, Port, RemotePath, LocalPath);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//从文件加载远程映射（对话框）
+
+            public static void LoadMapRemote_Dialog()
+            {
+                try
+                {
+                    OpenFileDialog ofdLoadFile = new OpenFileDialog();
+
+                    ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_224) + "（*.pmr）|*.pmr";
+                    ofdLoadFile.RestoreDirectory = true;
+
+                    if (ofdLoadFile.ShowDialog() == DialogResult.OK)
+                    {
+                        string FilePath = ofdLoadFile.FileName;
+
+                        if (!string.IsNullOrEmpty(FilePath))
+                        {
+                            LoadMapRemote(FilePath, true);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            private static void LoadMapRemote(string FilePath, bool LoadFromUser)
+            {
+                try
+                {
+                    if (File.Exists(FilePath))
+                    {
+                        XDocument xdoc = new XDocument();
+
+                        bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+
+                        if (bEncrypt)
+                        {
+                            if (LoadFromUser)
+                            {
+                                Socket_PasswordFrom pwForm = new Socket_PasswordFrom(Socket_Cache.System.PWType.MapRemote_Import);
+                                pwForm.ShowDialog();
+                            }
+
+                            xdoc = Socket_Operation.DecryptXMLFile(FilePath, Socket_Cache.ProxyMapping.AESKey);
+                        }
+                        else
+                        {
+                            xdoc = XDocument.Load(FilePath);
+                        }
+
+                        if (xdoc == null)
+                        {
+                            string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+
+                            if (LoadFromUser)
+                            {
+                                Socket_Operation.ShowMessageBox(sError);
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sError);
+                            }
+                        }
+                        else
+                        {
+                            LoadMapRemote_FromXDocument(xdoc);
+
+                            if (bEncrypt)
+                            {
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_227));
+                            }
+                            else
+                            {
+                                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_226));
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void LoadMapRemote_FromXDocument(XDocument xdoc)
+            {
+                try
+                {
+                    foreach (XElement xeMapRemote in xdoc.Root.Elements())
+                    {
+                        bool IsEnable = false;
+                        if (xeMapRemote.Element("IsEnable") != null)
+                        {
+                            IsEnable = bool.Parse(xeMapRemote.Element("IsEnable").Value);
+                        }
+
+                        Socket_Cache.SocketProxy.MapProtocol ProtocolType_From = SocketProxy.MapProtocol.Http;
+                        if (xeMapRemote.Element("ProtocolType_From") != null)
+                        {
+                            ProtocolType_From = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(xeMapRemote.Element("ProtocolType_From").Value);
+                        }
+
+                        string Host_From = string.Empty;
+                        if (xeMapRemote.Element("Host_From") != null)
+                        {
+                            Host_From = xeMapRemote.Element("Host_From").Value;
+                        }
+
+                        int Port_From = 80;
+                        if (xeMapRemote.Element("Port_From") != null)
+                        {
+                            Port_From = int.Parse(xeMapRemote.Element("Port_From").Value);
+                        }
+
+                        string Path_From = string.Empty;
+                        if (xeMapRemote.Element("Path_From") != null)
+                        {
+                            Path_From = xeMapRemote.Element("Path_From").Value;
+                        }
+
+                        Socket_Cache.SocketProxy.MapProtocol ProtocolType_To = SocketProxy.MapProtocol.Http;
+                        if (xeMapRemote.Element("ProtocolType_To") != null)
+                        {
+                            ProtocolType_To = Socket_Cache.ProxyMapping.GetMapProtocol_ByString(xeMapRemote.Element("ProtocolType_To").Value);
+                        }
+
+                        string Host_To = string.Empty;
+                        if (xeMapRemote.Element("Host_To") != null)
+                        {
+                            Host_To = xeMapRemote.Element("Host_To").Value;
+                        }
+
+                        int Port_To = 80;
+                        if (xeMapRemote.Element("Port_To") != null)
+                        {
+                            Port_To = int.Parse(xeMapRemote.Element("Port_To").Value);
+                        }
+
+                        string Path_To = string.Empty;
+                        if (xeMapRemote.Element("Path_To") != null)
+                        {
+                            Path_To = xeMapRemote.Element("Path_To").Value;
+                        }
+
+                        Socket_Cache.ProxyMapping.AddMapRemote(
+                            IsEnable,
+                            ProtocolType_From,
+                            Host_From,
+                            Port_From,
+                            Path_From,
+                            ProtocolType_To,
+                            Host_To,
+                            Port_To,
+                            Path_To);
                     }
                 }
                 catch (Exception ex)
@@ -10295,6 +10907,7 @@ namespace WPELibrary.Lib
                 Socket_Cache.DataBase.CreateTable_Robot();
                 Socket_Cache.DataBase.CreateTable_ProxyAccount();
                 Socket_Cache.DataBase.CreateTable_ProxyMapLocal();
+                Socket_Cache.DataBase.CreateTable_ProxyMapRemote();
             }
 
             private static void InitdbPath()
@@ -10492,6 +11105,7 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//代理模式 - 日志列表自动清理
                         sql += "ProxyConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//代理模式 - 日志列表自动清理数值                        
                         sql += "ProxyConfig_Enable_MapLocal BOOLEAN DEFAULT 0,";//代理模式 - 启用本地代理映射
+                        sql += "ProxyConfig_Enable_MapRemote BOOLEAN DEFAULT 0,";//代理模式 - 启用远程代理映射
                         sql += "ProxyConfig_Enable_ExternalProxy BOOLEAN DEFAULT 0,";//代理模式 - 启用外部代理
                         sql += "ProxyConfig_ExternalProxy_IP TEXT,";//代理模式 - 外部代理IP
                         sql += "ProxyConfig_ExternalProxy_Port INTEGER DEFAULT 8889,";//代理模式 - 外部代理端口               
@@ -10628,6 +11242,7 @@ namespace WPELibrary.Lib
                         sql += "ProxyConfig_LogList_AutoClear,";
                         sql += "ProxyConfig_LogList_AutoClear_Value,";
                         sql += "ProxyConfig_Enable_MapLocal,";
+                        sql += "ProxyConfig_Enable_MapRemote,";
                         sql += "ProxyConfig_Enable_ExternalProxy,";
                         sql += "ProxyConfig_ExternalProxy_IP,";
                         sql += "ProxyConfig_ExternalProxy_Port,";                    
@@ -10694,6 +11309,7 @@ namespace WPELibrary.Lib
                         sql += "@ProxyConfig_LogList_AutoClear,";
                         sql += "@ProxyConfig_LogList_AutoClear_Value,";
                         sql += "@ProxyConfig_Enable_MapLocal,";
+                        sql += "@ProxyConfig_Enable_MapRemote,";
                         sql += "@ProxyConfig_Enable_ExternalProxy,";
                         sql += "@ProxyConfig_ExternalProxy_IP,";
                         sql += "@ProxyConfig_ExternalProxy_Port,";                    
@@ -10763,6 +11379,7 @@ namespace WPELibrary.Lib
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", Socket_Cache.LogList.Proxy_AutoClear);
                             cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", Socket_Cache.LogList.Proxy_AutoClear_Value);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapLocal", Socket_Cache.ProxyMapping.Enable_MapLocal);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapRemote", Socket_Cache.ProxyMapping.Enable_MapRemote);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy", Socket_Cache.SocketProxy.Enable_ExternalProxy);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_IP", Socket_Cache.SocketProxy.ExternalProxy_IP);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ExternalProxy_Port", Socket_Cache.SocketProxy.ExternalProxy_Port);                          
@@ -11789,6 +12406,148 @@ namespace WPELibrary.Lib
                                     cmd.Parameters["@Port"].Value = pml.Port;
                                     cmd.Parameters["@RemotePath"].Value = pml.RemotePath ?? (object)DBNull.Value;
                                     cmd.Parameters["@LocalPath"].Value = pml.LocalPath;
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
+
+                            transaction.Commit();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//远程代理映射
+
+            private static bool CreateTable_ProxyMapRemote()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS ProxyMapRemote (";
+                        sql += "IsEnable BOOLEAN DEFAULT 0,";
+                        sql += "ProtocolType_From TEXT NOT NULL,";
+                        sql += "Host_From TEXT NOT NULL,";
+                        sql += "Port_From INTEGER DEFAULT 80,";
+                        sql += "Path_From TEXT,";
+                        sql += "ProtocolType_To TEXT NOT NULL,";
+                        sql += "Host_To TEXT NOT NULL,";
+                        sql += "Port_To INTEGER DEFAULT 80,";
+                        sql += "Path_To TEXT";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_ProxyMapRemote()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM ProxyMapRemote;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_ProxyMapRemote()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM ProxyMapRemote;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_ProxyMapRemote()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(Socket_Cache.DataBase.conStr))
+                    {
+                        conn.Open();
+
+                        using (SQLiteTransaction transaction = conn.BeginTransaction())
+                        {
+                            string sql = "INSERT INTO ProxyMapRemote (" +
+                                        "IsEnable, ProtocolType_From, Host_From, Port_From, Path_From, " +
+                                        "ProtocolType_To, Host_To, Port_To, Path_To" +
+                                        ") VALUES (" +
+                                        "@IsEnable, @ProtocolType_From, @Host_From, @Port_From, @Path_From, " +
+                                        "@ProtocolType_To, @Host_To, @Port_To, @Path_To" +
+                                        ");";
+
+                            using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                            {
+                                cmd.Parameters.Add(new SQLiteParameter("@IsEnable", DbType.Boolean));
+                                cmd.Parameters.Add(new SQLiteParameter("@ProtocolType_From", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Host_From", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Port_From", DbType.Int32));
+                                cmd.Parameters.Add(new SQLiteParameter("@Path_From", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@ProtocolType_To", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Host_To", DbType.String));
+                                cmd.Parameters.Add(new SQLiteParameter("@Port_To", DbType.Int32));
+                                cmd.Parameters.Add(new SQLiteParameter("@Path_To", DbType.String));
+
+                                foreach (Proxy_MapRemote pmr in Socket_Cache.ProxyMapping.lstMapRemote)
+                                {
+                                    cmd.Parameters["@IsEnable"].Value = pmr.IsEnable;
+                                    cmd.Parameters["@ProtocolType_From"].Value = pmr.ProtocolType_From.ToString();
+                                    cmd.Parameters["@Host_From"].Value = pmr.Host_From;
+                                    cmd.Parameters["@Port_From"].Value = pmr.Port_From;
+                                    cmd.Parameters["@Path_From"].Value = pmr.Path_From ?? (object)DBNull.Value;
+                                    cmd.Parameters["@ProtocolType_To"].Value = pmr.ProtocolType_To.ToString();
+                                    cmd.Parameters["@Host_To"].Value = pmr.Host_To;
+                                    cmd.Parameters["@Port_To"].Value = pmr.Port_To;
+                                    cmd.Parameters["@Path_To"].Value = pmr.Path_To ?? (object)DBNull.Value;
 
                                     cmd.ExecuteNonQuery();
                                 }

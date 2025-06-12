@@ -69,6 +69,7 @@ namespace WPELibrary
             Socket_Cache.System.LoadSystemList_FromDB();
             Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
             Socket_Cache.ProxyMapping.LoadProxyMapLocal_FromDB();
+            Socket_Cache.ProxyMapping.LoadProxyMapRemote_FromDB();
         }
 
         private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -133,6 +134,7 @@ namespace WPELibrary
                 Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
                 Socket_Cache.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
+                Socket_Cache.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {

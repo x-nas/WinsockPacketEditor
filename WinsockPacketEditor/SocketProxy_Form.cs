@@ -49,6 +49,7 @@ namespace WinsockPacketEditor
             this.EnableAuth_Changed();
             this.LogList_AutoClear_Changed();
             this.Enable_MapLocal_Changed();
+            this.Enable_MapRemote_Changed();
             this.Enable_ExternalProxyChanged();
             this.ExternalProxy_AppointPort_Changed();
             this.ExternalProxy_EnableAuth_Changed();            
@@ -79,6 +80,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
                 Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
                 Socket_Cache.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
+                Socket_Cache.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
@@ -220,6 +222,7 @@ namespace WinsockPacketEditor
                 this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Proxy_AutoClear_Value;
 
                 this.cbEnable_MapLocal.Checked = Socket_Cache.ProxyMapping.Enable_MapLocal;
+                this.cbEnable_MapRemote.Checked = Socket_Cache.ProxyMapping.Enable_MapRemote;
 
                 this.cbEnable_ExternalProxy.Checked = Socket_Cache.SocketProxy.Enable_ExternalProxy;
                 this.txtExternalProxy_IP.Text = Socket_Cache.SocketProxy.ExternalProxy_IP;
@@ -261,6 +264,7 @@ namespace WinsockPacketEditor
                 Socket_Cache.LogList.Proxy_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
                 Socket_Cache.ProxyMapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
+                Socket_Cache.ProxyMapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
 
                 Socket_Cache.SocketProxy.Enable_ExternalProxy = this.cbEnable_ExternalProxy.Checked;
                 Socket_Cache.SocketProxy.ExternalProxy_IP = this.txtExternalProxy_IP.Text.Trim();
@@ -330,15 +334,31 @@ namespace WinsockPacketEditor
             this.Enable_MapLocal_Changed();
         }
 
+        private void cbEnable_MapRemote_CheckedChanged(object sender, EventArgs e)
+        {
+            this.Enable_MapRemote_Changed();
+        }
+
         private void Enable_MapLocal_Changed()
         {
             this.bProxyMapping_Local.Enabled = this.cbEnable_MapLocal.Checked;
             Socket_Cache.ProxyMapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
         }
 
+        private void Enable_MapRemote_Changed()
+        {
+            this.bProxyMapping_Remote.Enabled = this.cbEnable_MapRemote.Checked;
+            Socket_Cache.ProxyMapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
+        }
+
         private void bProxyMapping_Local_Click(object sender, EventArgs e)
         {
             Socket_Operation.ShowProxyMapLocalListForm();
+        }
+
+        private void bProxyMapping_Remote_Click(object sender, EventArgs e)
+        {
+            Socket_Operation.ShowProxyMapRemoteListForm();
         }
 
         #endregion
@@ -1311,6 +1331,9 @@ namespace WinsockPacketEditor
             }
         }
 
+
         #endregion
+
+        
     }
 }

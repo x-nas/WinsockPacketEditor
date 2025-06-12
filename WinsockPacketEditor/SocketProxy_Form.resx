@@ -1279,7 +1279,136 @@
     <value>2</value>
   </data>
   <data name="tlpProxyMapping.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="cbEnable_MapRemote.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cbEnable_MapRemote.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="cbEnable_MapRemote.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="cbEnable_MapRemote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
+  </data>
+  <data name="cbEnable_MapRemote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>112, 21</value>
+  </data>
+  <data name="cbEnable_MapRemote.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="cbEnable_MapRemote.Text" xml:space="preserve">
+    <value>启用 - 远程映射</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_MapRemote.Name" xml:space="preserve">
+    <value>cbEnable_MapRemote</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_MapRemote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_MapRemote.Parent" xml:space="preserve">
+    <value>tlpProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;cbEnable_MapRemote.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bProxyMapping_Remote.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bProxyMapping_Remote.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="bProxyMapping_Remote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>118, 6</value>
+  </data>
+  <data name="bProxyMapping_Remote.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bProxyMapping_Remote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 27</value>
+  </data>
+  <data name="bProxyMapping_Remote.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="bProxyMapping_Remote.Text" xml:space="preserve">
+    <value>配置映射</value>
+  </data>
+  <data name="&gt;&gt;bProxyMapping_Remote.Name" xml:space="preserve">
+    <value>bProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;bProxyMapping_Remote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bProxyMapping_Remote.Parent" xml:space="preserve">
+    <value>tlpProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;bProxyMapping_Remote.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 39</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyMapping_Remote.Name" xml:space="preserve">
+    <value>tlpProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyMapping_Remote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyMapping_Remote.Parent" xml:space="preserve">
+    <value>gbProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;tlpProxyMapping_Remote.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="cbEnable_MapRemote" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bProxyMapping_Remote" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,80,Percent,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbProxyMapping_Remote.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbProxyMapping_Remote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>393, 3</value>
+  </data>
+  <data name="gbProxyMapping_Remote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 61</value>
+  </data>
+  <data name="gbProxyMapping_Remote.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="gbProxyMapping_Remote.Text" xml:space="preserve">
+    <value>远程映射</value>
+  </data>
+  <data name="&gt;&gt;gbProxyMapping_Remote.Name" xml:space="preserve">
+    <value>gbProxyMapping_Remote</value>
+  </data>
+  <data name="&gt;&gt;gbProxyMapping_Remote.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbProxyMapping_Remote.Parent" xml:space="preserve">
+    <value>tlpProxyMapping</value>
+  </data>
+  <data name="&gt;&gt;gbProxyMapping_Remote.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="tlpProxyMapping_Local.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1363,7 +1492,7 @@
     <value>3</value>
   </data>
   <data name="tlpProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
-    <value>768, 39</value>
+    <value>378, 39</value>
   </data>
   <data name="tlpProxyMapping_Local.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1390,7 +1519,7 @@
     <value>3, 3</value>
   </data>
   <data name="gbProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
-    <value>774, 61</value>
+    <value>384, 61</value>
   </data>
   <data name="gbProxyMapping_Local.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1408,7 +1537,7 @@
     <value>tlpProxyMapping</value>
   </data>
   <data name="&gt;&gt;gbProxyMapping_Local.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="tlpProxyMapping.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1441,7 +1570,7 @@
     <value>0</value>
   </data>
   <data name="tlpProxyMapping.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyMapping_Local" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbProxyMapping_Remote" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbProxyMapping_Local" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpProxyMapping.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
@@ -2362,7 +2491,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAXgBBQF4AQUBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAaABBQGgAQUBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA

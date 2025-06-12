@@ -147,6 +147,7 @@
     <Compile Include="Lib\Proxy_AccountInfo.cs" />
     <Compile Include="Lib\Proxy_AuthInfo.cs" />
     <Compile Include="Lib\Proxy_MapLocal.cs" />
+    <Compile Include="Lib\Proxy_MapRemote.cs" />
     <Compile Include="Lib\Socket_ProxyData.cs" />
     <Compile Include="Lib\Socket_ProxyTCP.cs" />
     <Compile Include="Lib\Socket_BitInfo.cs" />
@@ -207,6 +208,18 @@
     </Compile>
     <Compile Include="Proxy_MapLocalListForm.Designer.cs">
       <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_MapRemoteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_MapRemoteForm.Designer.cs">
+      <DependentUpon>Proxy_MapRemoteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_MapRemoteListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_MapRemoteListForm.Designer.cs">
+      <DependentUpon>Proxy_MapRemoteListForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Socket_CompareForm.cs">
       <SubType>Form</SubType>
@@ -403,6 +416,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_MapLocalListForm.resx">
       <DependentUpon>Proxy_MapLocalListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapRemoteForm.en-US.resx">
+      <DependentUpon>Proxy_MapRemoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapRemoteForm.resx">
+      <DependentUpon>Proxy_MapRemoteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapRemoteListForm.en-US.resx">
+      <DependentUpon>Proxy_MapRemoteListForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_MapRemoteListForm.resx">
+      <DependentUpon>Proxy_MapRemoteListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_CompareForm.en-US.resx">
       <DependentUpon>Socket_CompareForm.cs</DependentUpon>

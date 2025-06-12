@@ -131,16 +131,22 @@
     <value>69, 3</value>
   </data>
   <data name="txtRemotePath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 104</value>
+    <value>69, 102</value>
   </data>
   <data name="txtRemotePath.Size" type="System.Drawing.Size, System.Drawing">
     <value>350, 23</value>
+  </data>
+  <data name="lRemotePath.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 105</value>
   </data>
   <data name="lRemotePath.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 17</value>
   </data>
   <data name="lRemotePath.Text" xml:space="preserve">
     <value>Path:</value>
+  </data>
+  <data name="lPort.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 72</value>
   </data>
   <data name="lPort.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 17</value>
@@ -149,10 +155,13 @@
     <value>Port:</value>
   </data>
   <data name="lProtocol.Size" type="System.Drawing.Size, System.Drawing">
-    <value>60, 19</value>
+    <value>60, 17</value>
   </data>
   <data name="lProtocol.Text" xml:space="preserve">
     <value>Protocol:</value>
+  </data>
+  <data name="lHost.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 39</value>
   </data>
   <data name="lHost.Size" type="System.Drawing.Size, System.Drawing">
     <value>60, 17</value>
@@ -161,13 +170,13 @@
     <value>Host:</value>
   </data>
   <data name="txtHost.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 38</value>
+    <value>69, 36</value>
   </data>
   <data name="txtHost.Size" type="System.Drawing.Size, System.Drawing">
     <value>350, 23</value>
   </data>
   <data name="nudPort.Location" type="System.Drawing.Point, System.Drawing">
-    <value>69, 71</value>
+    <value>69, 69</value>
   </data>
   <data name="bSure.Text" xml:space="preserve">
     <value>OK (&amp;S)</value>
