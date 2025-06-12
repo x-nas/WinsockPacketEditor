@@ -3209,14 +3209,12 @@ namespace WPELibrary.Lib
                 return false;
             }
 
-            public static bool UpdateProxyAccount_ByUserName(
+            public static bool UpdateProxyAccount_ByCCProxy(
                 string UserName, 
                 bool IsEnable, 
                 string PassWord,
                 bool IsLimitLinks,
-                int LimitLinks,
-                bool IsLimitDevices,
-                int LimitDevices,
+                int LimitLinks,               
                 bool IsExpiry, 
                 DateTime ExpiryTime)
             {
@@ -3228,7 +3226,18 @@ namespace WPELibrary.Lib
 
                         if (pai != null)
                         {
-                            Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(pai.AID, IsEnable, PassWord, IsLimitLinks, LimitLinks, IsLimitDevices, LimitDevices, IsExpiry, ExpiryTime);
+                            pai.IsEnable = IsEnable;
+
+                            if (!string.IsNullOrEmpty(PassWord))
+                            {
+                                pai.PassWord = PassWord;
+                            }
+
+                            pai.IsLimitLinks = IsLimitLinks;
+                            pai.LimitLinks = LimitLinks;
+                            pai.IsExpiry = IsExpiry;                            
+                            pai.ExpiryTime = ExpiryTime;
+
                             return true;
                         }
                     }

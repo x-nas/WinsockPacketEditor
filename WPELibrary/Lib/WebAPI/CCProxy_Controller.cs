@@ -75,6 +75,8 @@ namespace WPELibrary.Lib.WebAPI
                 }
 
                 pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
+                pai.IsLimitDevices = true;
+                pai.LimitDevices = 1;
 
                 return Socket_Cache.ProxyAccount.AddProxyAccount(
                     Guid.NewGuid(), 
@@ -127,14 +129,14 @@ namespace WPELibrary.Lib.WebAPI
                     pai.PassWord = Socket_Operation.PassWord_Encrypt(pai.PassWord);
                 }
 
-                return Socket_Cache.ProxyAccount.UpdateProxyAccount_ByUserName(
+                pai.IsLimitDevices = true;
+
+                return Socket_Cache.ProxyAccount.UpdateProxyAccount_ByCCProxy(
                     pai.UserName, 
                     pai.IsEnable, 
                     pai.PassWord, 
                     pai.IsLimitLinks,
-                    pai.LimitLinks,
-                    pai.IsLimitDevices,
-                    pai.LimitDevices,
+                    pai.LimitLinks,                   
                     pai.IsExpiry, 
                     pai.ExpiryTime);
             }
