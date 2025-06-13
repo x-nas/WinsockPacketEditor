@@ -237,6 +237,10 @@ namespace WPELibrary.Lib
         public static string[] MutiLan_225 = { "远程代理映射保存完毕 {0}", "The Remote proxy mapping saved {0}" };
         public static string[] MutiLan_226 = { "加载远程代理映射成功! [未加密]", "Load Remote proxy mapping successful! [Unencrypted]" };
         public static string[] MutiLan_227 = { "加载远程代理映射成功! [已加密]", "Load Remote proxy mapping successful! [Encrypted]" };
+        public static string[] MutiLan_228 = { "系统套接字 = 选中封包的套接字", "System socket = Selected packet socket" };
+        public static string[] MutiLan_229 = { "系统套接字 = 调用滤镜的套接字", "System socket = Socket for calling filters" };
+        public static string[] MutiLan_230 = { "系统套接字 = {0}", "System socket = {0}" };
+        public static string[] MutiLan_231 = { "设置", "Set" };
 
         #endregion
 

@@ -14,6 +14,7 @@ namespace WPELibrary.Lib
         public int Instruction_Index = 0;      
         public int Total_Instruction = 0;
         public string RobotName = string.Empty;
+        private Dictionary<string, object> _parameters = new Dictionary<string, object>();
 
         private CancellationTokenSource cts;
         private DataTable RobotInstruction = new DataTable();
@@ -41,7 +42,7 @@ namespace WPELibrary.Lib
 
         #region//启动机器人
 
-        public void StartRobot(string RobotName, DataTable dtRobotInstruction)
+        public void StartRobot(string RobotName, DataTable dtRobotInstruction, Dictionary<string, object> parameters)
         {
             try
             {
@@ -52,6 +53,15 @@ namespace WPELibrary.Lib
                         this.Total_Instruction = 0;
                         this.RobotName = RobotName;
                         this.RobotInstruction = dtRobotInstruction;
+
+                        if (parameters != null)
+                        {
+                            this._parameters = parameters;
+                        }
+                        else
+                        {
+                            this._parameters.Clear();
+                        }
 
                         int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.RobotInstruction, true);
 
@@ -159,6 +169,35 @@ namespace WPELibrary.Lib
                                 case Socket_Cache.Robot.InstructionType.SendSocketList:
 
                                     Socket_Cache.SocketList.SendSocketList_BySelect();
+
+                                    break;
+
+                                case Socket_Cache.Robot.InstructionType.SetSystemSocket:
+
+                                    int iSocket = 0;
+                                    if (sContent.Equals("SocketList"))
+                                    {
+                                        if (Socket_Cache.SocketList.spiSelect != null)
+                                        {
+                                            iSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;                                            
+                                        }
+                                    }
+                                    else if (sContent.Equals("FilterSocket"))
+                                    {
+                                        iSocket = GetParameter<int>("FilterSocket", -1);
+                                    }
+                                    else if (sContent.Contains("Customize") && sContent.Contains("|"))
+                                    {
+                                        if (int.TryParse(sContent.Split('|')[1], out int CustomSocket))
+                                        {
+                                            iSocket = CustomSocket;
+                                        }
+                                    }
+
+                                    if (iSocket > 0)
+                                    {
+                                        Socket_Cache.System.SystemSocket = iSocket;
+                                    }
 
                                     break;
 
@@ -471,6 +510,51 @@ namespace WPELibrary.Lib
             {
                 Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
+        }
+
+        #endregion
+
+        #region//解析参数
+
+        private object GetParameter(string key)
+        {
+            try
+            {
+                if (_parameters.ContainsKey(key))
+                {
+                    return _parameters[key];
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+
+            return null;
+        }
+
+        private T GetParameter<T>(string key, T defaultValue = default(T))
+        {
+            try
+            {
+                if (_parameters.ContainsKey(key))
+                {
+                    try
+                    {
+                        return (T)Convert.ChangeType(_parameters[key], typeof(T));
+                    }
+                    catch
+                    {
+                        return defaultValue;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+            
+            return defaultValue;
         }
 
         #endregion

@@ -56,14 +56,23 @@
             this.tcRobotInstruction = new System.Windows.Forms.TabControl();
             this.tpInstruction_Socket = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Socket = new System.Windows.Forms.TableLayoutPanel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSet_SystemSocket = new System.Windows.Forms.GroupBox();
+            this.tlpSet_SystemSocket = new System.Windows.Forms.TableLayoutPanel();
+            this.lSet_SystemSocket_Filter = new System.Windows.Forms.Label();
+            this.bSet_SystemSocket = new System.Windows.Forms.Button();
+            this.rbSet_SystemSocket_SocketList = new System.Windows.Forms.RadioButton();
+            this.rbSet_SystemSocket_Filter = new System.Windows.Forms.RadioButton();
+            this.lSet_SystemSocket_SocketList = new System.Windows.Forms.Label();
+            this.rbSet_SystemSocket_Customize = new System.Windows.Forms.RadioButton();
+            this.nudSet_SystemSocket_Customize = new System.Windows.Forms.NumericUpDown();
+            this.gbSend_SocketList = new System.Windows.Forms.GroupBox();
+            this.tlpSend_SocketList = new System.Windows.Forms.TableLayoutPanel();
             this.lSend_SocketList = new System.Windows.Forms.Label();
             this.bSend_SocketList = new System.Windows.Forms.Button();
-            this.gbSend = new System.Windows.Forms.GroupBox();
-            this.tlpSend = new System.Windows.Forms.TableLayoutPanel();
+            this.gbSend_SendLIst = new System.Windows.Forms.GroupBox();
+            this.tlpSend_SendLIst = new System.Windows.Forms.TableLayoutPanel();
             this.bSend_SendList = new System.Windows.Forms.Button();
-            this.cbbSendLIst = new System.Windows.Forms.ComboBox();
+            this.cbbSend_SendLIst = new System.Windows.Forms.ComboBox();
             this.tpInstruction_Control = new System.Windows.Forms.TabPage();
             this.tlpInstruction_Control = new System.Windows.Forms.TableLayoutPanel();
             this.gbLoop = new System.Windows.Forms.GroupBox();
@@ -135,10 +144,13 @@
             this.tcRobotInstruction.SuspendLayout();
             this.tpInstruction_Socket.SuspendLayout();
             this.tlpInstruction_Socket.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.gbSend.SuspendLayout();
-            this.tlpSend.SuspendLayout();
+            this.gbSet_SystemSocket.SuspendLayout();
+            this.tlpSet_SystemSocket.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSet_SystemSocket_Customize)).BeginInit();
+            this.gbSend_SocketList.SuspendLayout();
+            this.tlpSend_SocketList.SuspendLayout();
+            this.gbSend_SendLIst.SuspendLayout();
+            this.tlpSend_SendLIst.SuspendLayout();
             this.tpInstruction_Control.SuspendLayout();
             this.tlpInstruction_Control.SuspendLayout();
             this.gbLoop.SuspendLayout();
@@ -370,23 +382,90 @@
             // tlpInstruction_Socket
             // 
             resources.ApplyResources(this.tlpInstruction_Socket, "tlpInstruction_Socket");
-            this.tlpInstruction_Socket.Controls.Add(this.groupBox1, 0, 1);
-            this.tlpInstruction_Socket.Controls.Add(this.gbSend, 0, 0);
+            this.tlpInstruction_Socket.Controls.Add(this.gbSet_SystemSocket, 0, 2);
+            this.tlpInstruction_Socket.Controls.Add(this.gbSend_SocketList, 0, 1);
+            this.tlpInstruction_Socket.Controls.Add(this.gbSend_SendLIst, 0, 0);
             this.tlpInstruction_Socket.Name = "tlpInstruction_Socket";
             // 
-            // groupBox1
+            // gbSet_SystemSocket
             // 
-            this.groupBox1.Controls.Add(this.tableLayoutPanel1);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.TabStop = false;
+            this.gbSet_SystemSocket.Controls.Add(this.tlpSet_SystemSocket);
+            resources.ApplyResources(this.gbSet_SystemSocket, "gbSet_SystemSocket");
+            this.gbSet_SystemSocket.Name = "gbSet_SystemSocket";
+            this.gbSet_SystemSocket.TabStop = false;
             // 
-            // tableLayoutPanel1
+            // tlpSet_SystemSocket
             // 
-            resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
-            this.tableLayoutPanel1.Controls.Add(this.lSend_SocketList, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.bSend_SocketList, 2, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            resources.ApplyResources(this.tlpSet_SystemSocket, "tlpSet_SystemSocket");
+            this.tlpSet_SystemSocket.Controls.Add(this.lSet_SystemSocket_Filter, 1, 1);
+            this.tlpSet_SystemSocket.Controls.Add(this.bSet_SystemSocket, 3, 0);
+            this.tlpSet_SystemSocket.Controls.Add(this.rbSet_SystemSocket_SocketList, 0, 0);
+            this.tlpSet_SystemSocket.Controls.Add(this.rbSet_SystemSocket_Filter, 0, 1);
+            this.tlpSet_SystemSocket.Controls.Add(this.lSet_SystemSocket_SocketList, 1, 0);
+            this.tlpSet_SystemSocket.Controls.Add(this.rbSet_SystemSocket_Customize, 0, 2);
+            this.tlpSet_SystemSocket.Controls.Add(this.nudSet_SystemSocket_Customize, 1, 2);
+            this.tlpSet_SystemSocket.Name = "tlpSet_SystemSocket";
+            // 
+            // lSet_SystemSocket_Filter
+            // 
+            resources.ApplyResources(this.lSet_SystemSocket_Filter, "lSet_SystemSocket_Filter");
+            this.lSet_SystemSocket_Filter.Name = "lSet_SystemSocket_Filter";
+            // 
+            // bSet_SystemSocket
+            // 
+            resources.ApplyResources(this.bSet_SystemSocket, "bSet_SystemSocket");
+            this.bSet_SystemSocket.Name = "bSet_SystemSocket";
+            this.bSet_SystemSocket.UseVisualStyleBackColor = true;
+            this.bSet_SystemSocket.Click += new System.EventHandler(this.bSet_SystemSocket_Click);
+            // 
+            // rbSet_SystemSocket_SocketList
+            // 
+            resources.ApplyResources(this.rbSet_SystemSocket_SocketList, "rbSet_SystemSocket_SocketList");
+            this.rbSet_SystemSocket_SocketList.Name = "rbSet_SystemSocket_SocketList";
+            this.rbSet_SystemSocket_SocketList.UseVisualStyleBackColor = true;
+            // 
+            // rbSet_SystemSocket_Filter
+            // 
+            resources.ApplyResources(this.rbSet_SystemSocket_Filter, "rbSet_SystemSocket_Filter");
+            this.rbSet_SystemSocket_Filter.Name = "rbSet_SystemSocket_Filter";
+            this.rbSet_SystemSocket_Filter.UseVisualStyleBackColor = true;
+            // 
+            // lSet_SystemSocket_SocketList
+            // 
+            resources.ApplyResources(this.lSet_SystemSocket_SocketList, "lSet_SystemSocket_SocketList");
+            this.lSet_SystemSocket_SocketList.Name = "lSet_SystemSocket_SocketList";
+            // 
+            // rbSet_SystemSocket_Customize
+            // 
+            resources.ApplyResources(this.rbSet_SystemSocket_Customize, "rbSet_SystemSocket_Customize");
+            this.rbSet_SystemSocket_Customize.Checked = true;
+            this.rbSet_SystemSocket_Customize.Name = "rbSet_SystemSocket_Customize";
+            this.rbSet_SystemSocket_Customize.TabStop = true;
+            this.rbSet_SystemSocket_Customize.UseVisualStyleBackColor = true;
+            // 
+            // nudSet_SystemSocket_Customize
+            // 
+            resources.ApplyResources(this.nudSet_SystemSocket_Customize, "nudSet_SystemSocket_Customize");
+            this.nudSet_SystemSocket_Customize.Maximum = new decimal(new int[] {
+            99999999,
+            0,
+            0,
+            0});
+            this.nudSet_SystemSocket_Customize.Name = "nudSet_SystemSocket_Customize";
+            // 
+            // gbSend_SocketList
+            // 
+            this.gbSend_SocketList.Controls.Add(this.tlpSend_SocketList);
+            resources.ApplyResources(this.gbSend_SocketList, "gbSend_SocketList");
+            this.gbSend_SocketList.Name = "gbSend_SocketList";
+            this.gbSend_SocketList.TabStop = false;
+            // 
+            // tlpSend_SocketList
+            // 
+            resources.ApplyResources(this.tlpSend_SocketList, "tlpSend_SocketList");
+            this.tlpSend_SocketList.Controls.Add(this.lSend_SocketList, 0, 0);
+            this.tlpSend_SocketList.Controls.Add(this.bSend_SocketList, 2, 0);
+            this.tlpSend_SocketList.Name = "tlpSend_SocketList";
             // 
             // lSend_SocketList
             // 
@@ -400,19 +479,19 @@
             this.bSend_SocketList.UseVisualStyleBackColor = true;
             this.bSend_SocketList.Click += new System.EventHandler(this.bSend_SocketList_Click);
             // 
-            // gbSend
+            // gbSend_SendLIst
             // 
-            this.gbSend.Controls.Add(this.tlpSend);
-            resources.ApplyResources(this.gbSend, "gbSend");
-            this.gbSend.Name = "gbSend";
-            this.gbSend.TabStop = false;
+            this.gbSend_SendLIst.Controls.Add(this.tlpSend_SendLIst);
+            resources.ApplyResources(this.gbSend_SendLIst, "gbSend_SendLIst");
+            this.gbSend_SendLIst.Name = "gbSend_SendLIst";
+            this.gbSend_SendLIst.TabStop = false;
             // 
-            // tlpSend
+            // tlpSend_SendLIst
             // 
-            resources.ApplyResources(this.tlpSend, "tlpSend");
-            this.tlpSend.Controls.Add(this.bSend_SendList, 2, 0);
-            this.tlpSend.Controls.Add(this.cbbSendLIst, 0, 0);
-            this.tlpSend.Name = "tlpSend";
+            resources.ApplyResources(this.tlpSend_SendLIst, "tlpSend_SendLIst");
+            this.tlpSend_SendLIst.Controls.Add(this.bSend_SendList, 2, 0);
+            this.tlpSend_SendLIst.Controls.Add(this.cbbSend_SendLIst, 0, 0);
+            this.tlpSend_SendLIst.Name = "tlpSend_SendLIst";
             // 
             // bSend_SendList
             // 
@@ -421,12 +500,12 @@
             this.bSend_SendList.UseVisualStyleBackColor = true;
             this.bSend_SendList.Click += new System.EventHandler(this.bSend_SendList_Click);
             // 
-            // cbbSendLIst
+            // cbbSend_SendLIst
             // 
-            resources.ApplyResources(this.cbbSendLIst, "cbbSendLIst");
-            this.cbbSendLIst.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbSendLIst.FormattingEnabled = true;
-            this.cbbSendLIst.Name = "cbbSendLIst";
+            resources.ApplyResources(this.cbbSend_SendLIst, "cbbSend_SendLIst");
+            this.cbbSend_SendLIst.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbSend_SendLIst.FormattingEnabled = true;
+            this.cbbSend_SendLIst.Name = "cbbSend_SendLIst";
             // 
             // tpInstruction_Control
             // 
@@ -966,11 +1045,15 @@
             this.tcRobotInstruction.ResumeLayout(false);
             this.tpInstruction_Socket.ResumeLayout(false);
             this.tlpInstruction_Socket.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.gbSend.ResumeLayout(false);
-            this.tlpSend.ResumeLayout(false);
+            this.gbSet_SystemSocket.ResumeLayout(false);
+            this.tlpSet_SystemSocket.ResumeLayout(false);
+            this.tlpSet_SystemSocket.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSet_SystemSocket_Customize)).EndInit();
+            this.gbSend_SocketList.ResumeLayout(false);
+            this.tlpSend_SocketList.ResumeLayout(false);
+            this.tlpSend_SocketList.PerformLayout();
+            this.gbSend_SendLIst.ResumeLayout(false);
+            this.tlpSend_SendLIst.ResumeLayout(false);
             this.tpInstruction_Control.ResumeLayout(false);
             this.tlpInstruction_Control.ResumeLayout(false);
             this.gbLoop.ResumeLayout(false);
@@ -1038,8 +1121,8 @@
         private System.Windows.Forms.TabControl tcRobotInstruction;
         private System.Windows.Forms.TabPage tpInstruction_Socket;
         private System.Windows.Forms.TableLayoutPanel tlpInstruction_Socket;
-        private System.Windows.Forms.GroupBox gbSend;
-        private System.Windows.Forms.TableLayoutPanel tlpSend;
+        private System.Windows.Forms.GroupBox gbSend_SendLIst;
+        private System.Windows.Forms.TableLayoutPanel tlpSend_SendLIst;
         private System.Windows.Forms.Button bSend_SendList;
         private System.Windows.Forms.TabPage tpInstruction_Control;
         private System.Windows.Forms.TableLayoutPanel tlpInstruction_Control;
@@ -1099,14 +1182,23 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn cRobotInstruction_Content;
         private System.Windows.Forms.Button bMouseWheel;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.GroupBox gbSend_SocketList;
+        private System.Windows.Forms.TableLayoutPanel tlpSend_SocketList;
         private System.Windows.Forms.Label lSend_SocketList;
         private System.Windows.Forms.Button bSend_SocketList;
-        private System.Windows.Forms.ComboBox cbbSendLIst;
+        private System.Windows.Forms.ComboBox cbbSend_SendLIst;
         private System.Windows.Forms.RadioButton rbDelay_Fix;
         private System.Windows.Forms.RadioButton rbDelay_Random;
         private System.Windows.Forms.NumericUpDown nudDelay_RandomFrom;
         private System.Windows.Forms.NumericUpDown nudDelay_RandomTo;
+        private System.Windows.Forms.GroupBox gbSet_SystemSocket;
+        private System.Windows.Forms.TableLayoutPanel tlpSet_SystemSocket;
+        private System.Windows.Forms.Button bSet_SystemSocket;
+        private System.Windows.Forms.RadioButton rbSet_SystemSocket_SocketList;
+        private System.Windows.Forms.RadioButton rbSet_SystemSocket_Filter;
+        private System.Windows.Forms.Label lSet_SystemSocket_Filter;
+        private System.Windows.Forms.Label lSet_SystemSocket_SocketList;
+        private System.Windows.Forms.RadioButton rbSet_SystemSocket_Customize;
+        private System.Windows.Forms.NumericUpDown nudSet_SystemSocket_Customize;
     }
 }

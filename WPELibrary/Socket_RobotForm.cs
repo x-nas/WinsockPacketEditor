@@ -97,11 +97,11 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Operation.InitSendListComboBox(this.cbbSendLIst);
+                Socket_Operation.InitSendListComboBox(this.cbbSend_SendLIst);
 
-                if (this.cbbSendLIst.Items.Count > 0)
+                if (this.cbbSend_SendLIst.Items.Count > 0)
                 { 
-                    this.cbbSendLIst.SelectedIndex = 0;
+                    this.cbbSend_SendLIst.SelectedIndex = 0;
                 }
             }
             catch (Exception ex)
@@ -221,7 +221,7 @@ namespace WPELibrary
                             this.dgvRobotInstruction.ContextMenuStrip.Enabled = false;
                         }
 
-                        sr.StartRobot(sriSelect.RName, this.dtRobotInstruction);
+                        sr.StartRobot(sriSelect.RName, this.dtRobotInstruction, null);
                     }
                 }                
             }
@@ -473,9 +473,9 @@ namespace WPELibrary
         {
             try
             {
-                if (this.cbbSendLIst.SelectedItem != null)
+                if (this.cbbSend_SendLIst.SelectedItem != null)
                 {
-                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cbbSendLIst.SelectedItem;              
+                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cbbSend_SendLIst.SelectedItem;              
                     Guid SID = item.SID;
                     string sContent = SID.ToString().ToUpper();
 
@@ -497,6 +497,37 @@ namespace WPELibrary
             try
             {
                 this.AddInstruction(Socket_Cache.Robot.InstructionType.SendSocketList, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//封包指令 - 设置 - 系统套接字
+
+        private void bSet_SystemSocket_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string sContent = string.Empty;
+                if (this.rbSet_SystemSocket_SocketList.Checked)
+                {
+                    sContent = "SocketList";
+                }
+                else if (this.rbSet_SystemSocket_Filter.Checked)
+                {
+                    sContent = "FilterSocket";
+                }
+                else if (this.rbSet_SystemSocket_Customize.Checked)
+                {
+                    string sSocket = this.nudSet_SystemSocket_Customize.Value.ToString();
+                    sContent = "Customize" + "|" + sSocket;
+                }
+
+                this.AddInstruction(Socket_Cache.Robot.InstructionType.SetSystemSocket, sContent);
             }
             catch (Exception ex)
             {

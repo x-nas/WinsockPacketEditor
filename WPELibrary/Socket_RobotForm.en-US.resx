@@ -178,8 +178,53 @@
   <data name="tpInstruction_Socket.Text" xml:space="preserve">
     <value>[ Socket ]</value>
   </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Send [ Socket List ]</value>
+  <data name="gbSet_SystemSocket.Text" xml:space="preserve">
+    <value>Set [ SystemSocket ]</value>
+  </data>
+  <data name="lSet_SystemSocket_Filter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 32</value>
+  </data>
+  <data name="lSet_SystemSocket_Filter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 21</value>
+  </data>
+  <data name="lSet_SystemSocket_Filter.Text" xml:space="preserve">
+    <value>Socket for calling filters</value>
+  </data>
+  <data name="bSet_SystemSocket.Text" xml:space="preserve">
+    <value>Insert</value>
+  </data>
+  <data name="rbSet_SystemSocket_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 23</value>
+  </data>
+  <data name="rbSet_SystemSocket_SocketList.Text" xml:space="preserve">
+    <value>Equal:</value>
+  </data>
+  <data name="rbSet_SystemSocket_Filter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 21</value>
+  </data>
+  <data name="rbSet_SystemSocket_Filter.Text" xml:space="preserve">
+    <value>Equal:</value>
+  </data>
+  <data name="lSet_SystemSocket_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+    <value>70, 3</value>
+  </data>
+  <data name="lSet_SystemSocket_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>145, 23</value>
+  </data>
+  <data name="lSet_SystemSocket_SocketList.Text" xml:space="preserve">
+    <value>Selected packet socket</value>
+  </data>
+  <data name="rbSet_SystemSocket_Customize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 21</value>
+  </data>
+  <data name="rbSet_SystemSocket_Customize.Text" xml:space="preserve">
+    <value>Equal:</value>
+  </data>
+  <data name="nudSet_SystemSocket_Customize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>67, 56</value>
+  </data>
+  <data name="nudSet_SystemSocket_Customize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>151, 23</value>
   </data>
   <data name="lSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
     <value>202, 23</value>
@@ -189,9 +234,6 @@
   </data>
   <data name="bSend_SocketList.Text" xml:space="preserve">
     <value>Insert</value>
-  </data>
-  <data name="gbSend.Text" xml:space="preserve">
-    <value>Send [ Send List ]</value>
   </data>
   <data name="bSend_SendList.Text" xml:space="preserve">
     <value>Insert</value>
@@ -210,12 +252,6 @@
   </data>
   <data name="gbDelay.Text" xml:space="preserve">
     <value>Delay</value>
-  </data>
-  <data name="bDelay.Location" type="System.Drawing.Point, System.Drawing">
-    <value>255, 1</value>
-  </data>
-  <data name="bDelay.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 27</value>
   </data>
   <data name="bDelay.Text" xml:space="preserve">
     <value>Insert</value>

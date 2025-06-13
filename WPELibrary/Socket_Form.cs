@@ -2319,7 +2319,7 @@ namespace WPELibrary
                 {
                     if (sri.IsEnable)
                     {
-                        Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID);
+                        Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID, null);
                         if (sr != null)
                         {
                             if (Socket_Cache.System.ListExecute == Socket_Cache.System.Execute.Together)

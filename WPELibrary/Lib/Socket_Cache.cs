@@ -7803,10 +7803,18 @@ namespace WPELibrary.Lib
                                 switch (sfi.FEType)
                                 {
                                     case Socket_Cache.Filter.FilterExecuteType.Send:
+
                                         Socket_Cache.Send.DoSend(sfi.SID);
+
                                         break;
                                     case Socket_Cache.Filter.FilterExecuteType.Robot:
-                                        Socket_Cache.Robot.DoRobot(sfi.RID);
+
+                                        var parameters = new Dictionary<string, object>
+                                        {                                            
+                                            { "FilterSocket", iSocket }
+                                        };
+
+                                        Socket_Cache.Robot.DoRobot(sfi.RID, parameters);
                                         break;
                                 }
                             }
@@ -8454,6 +8462,7 @@ namespace WPELibrary.Lib
                 KeyBoard = 4,
                 Mouse = 5,
                 SendSocketList = 6,
+                SetSystemSocket = 7,
             }
 
             #endregion
@@ -8602,6 +8611,10 @@ namespace WPELibrary.Lib
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_94);
                             break;
 
+                        case Socket_Cache.Robot.InstructionType.SetSystemSocket:
+                            sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_231);
+                            break;
+
                         case Socket_Cache.Robot.InstructionType.Delay:
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_95);
                             break;
@@ -8649,6 +8662,10 @@ namespace WPELibrary.Lib
 
                         case Socket_Cache.Robot.InstructionType.SendSocketList:
                             cReturn = Color.YellowGreen;
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.SetSystemSocket:
+                            cReturn = Color.Violet;
                             break;
 
                         case Socket_Cache.Robot.InstructionType.Delay:
@@ -8707,6 +8724,24 @@ namespace WPELibrary.Lib
                         case Socket_Cache.Robot.InstructionType.SendSocketList:
 
                             sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_161);
+
+                            break;
+
+                        case Socket_Cache.Robot.InstructionType.SetSystemSocket:
+
+                            if (sContent.Equals("SocketList"))
+                            {
+                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_228);
+                            }
+                            else if (sContent.Equals("FilterSocket"))
+                            {
+                                sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_229);
+                            }
+                            else if (sContent.Contains("Customize") && sContent.Contains("|"))
+                            {
+                                string sSocket = sContent.Split('|')[1];
+                                sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_230), sSocket);
+                            }                                
 
                             break;
 
@@ -9013,7 +9048,12 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//执行机器人
+            #region//执行机器人            
+
+            public static Socket_Robot DoRobot(Guid RID, Dictionary<string, object> parameters)
+            {
+                return Task.Run(() => DoRobotAsync(RID, parameters)).GetAwaiter().GetResult();
+            }
 
             private static void DoRobot_ByIndex(int RobotListIndex)
             {
@@ -9021,9 +9061,9 @@ namespace WPELibrary.Lib
                 {
                     if (RobotListIndex > -1 && RobotListIndex < Socket_Cache.RobotList.lstRobot.Count)
                     {
-                        Guid RID = Socket_Cache.RobotList.lstRobot[RobotListIndex].RID;
-                        Socket_Cache.Robot.DoRobot(RID);
-                    }                   
+                        Guid RID = Socket_Cache.RobotList.lstRobot[RobotListIndex].RID;                        
+                        Task.Run(() => DoRobotAsync(RID, null)).GetAwaiter().GetResult();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -9031,7 +9071,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static Socket_Robot DoRobot(Guid RID)
+            private static async Task<Socket_Robot> DoRobotAsync(Guid RID, Dictionary<string, object> parameters)
             {
                 Socket_Robot srReturn = null;
 
@@ -9041,12 +9081,12 @@ namespace WPELibrary.Lib
                     {
                         Socket_RobotInfo sri = Socket_Cache.RobotList.lstRobot.Where(item => item.RID == RID).FirstOrDefault();
 
-                        if (sri != null) 
+                        if (sri != null)
                         {
                             if (sri.RInstruction.Rows.Count > 0)
                             {
                                 srReturn = new Socket_Robot();
-                                srReturn.StartRobot(sri.RName, sri.RInstruction);
+                                await Task.Run(() => srReturn.StartRobot(sri.RName, sri.RInstruction, parameters));
                             }
                         }
                     }
@@ -9057,7 +9097,7 @@ namespace WPELibrary.Lib
                 }
 
                 return srReturn;
-            }
+            }            
 
             public static void DoRobot_ByHotKey(int HOTKEY_ID)
             {
@@ -9925,11 +9965,19 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }            
+            }
 
             #endregion
 
             #region//执行发送
+
+            public static Socket_Send DoSend(Guid SID)
+            {
+                return Task.Run(() => DoSendAsync(SID))
+                          .ConfigureAwait(false)
+                          .GetAwaiter()
+                          .GetResult();
+            }
 
             public static void DoSend_ByIndex(int SendListIndex)
             {
@@ -9938,7 +9986,11 @@ namespace WPELibrary.Lib
                     if (SendListIndex > -1 && SendListIndex < Socket_Cache.SendList.lstSend.Count)
                     {
                         Guid SID = Socket_Cache.SendList.lstSend[SendListIndex].SID;
-                        Socket_Cache.Send.DoSend(SID);
+                        
+                        Task.Run(() => DoSendAsync(SID))
+                          .ConfigureAwait(false)
+                          .GetAwaiter()
+                          .GetResult();
                     }
                 }
                 catch (Exception ex)
@@ -9947,7 +9999,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static Socket_Send DoSend(Guid SID)
+            public static async Task<Socket_Send> DoSendAsync(Guid SID)
             {
                 Socket_Send ssReturn = null;
 
@@ -9962,7 +10014,7 @@ namespace WPELibrary.Lib
                             if (ssi.SCollection.Count > 0)
                             {
                                 ssReturn = new Socket_Send();
-                                ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection);
+                                await Task.Run(() => ssReturn.StartSend(ssi.SName, ssi.SSystemSocket, ssi.SLoopCNT, ssi.SLoopINT, ssi.SCollection));
                             }
                         }
                     }
