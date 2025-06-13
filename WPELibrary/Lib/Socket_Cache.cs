@@ -7548,7 +7548,9 @@ namespace WPELibrary.Lib
             public static byte[] ChangePacket_Filter(Socket_FilterInfo sfi)
             {
                 if (string.IsNullOrEmpty(sfi.FModify))
+                {
                     return Array.Empty<byte>();
+                }
 
                 try
                 {
@@ -7559,6 +7561,11 @@ namespace WPELibrary.Lib
                     byte[] newBuffer = new byte[modifications.Max(m => m.Index) + 1];
                     Socket_Cache.Filter.ApplyModifications(newBuffer, modifications);
 
+                    if (!string.IsNullOrEmpty(sfi.ProgressionPosition))
+                    {
+                        ApplyProgressions(sfi, newBuffer);
+                    }
+
                     return newBuffer;
                 }
                 catch (Exception ex)
@@ -7566,7 +7573,7 @@ namespace WPELibrary.Lib
                     Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     return Array.Empty<byte>();
                 }
-            }            
+            }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private static List<Socket_Cache.Filter.Modification> ParseModifications(string modifyString)
@@ -7601,6 +7608,47 @@ namespace WPELibrary.Lib
                     if (mod.Index >= 0 && mod.Index < buffer.Length)
                     {
                         buffer[mod.Index] = mod.Value;
+                    }
+                }
+            }
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private static void ApplyProgressions(Socket_FilterInfo sfi, byte[] buffer)
+            {
+                int carryCount = 0;
+                int step = (int)sfi.ProgressionStep;
+                string[] positions = sfi.ProgressionPosition.Split(',');
+
+                foreach (string position in positions)
+                {
+                    if (string.IsNullOrEmpty(position) ||
+                        !int.TryParse(position, out int index) ||
+                        index < 0 ||
+                        index >= buffer.Length)
+                    {
+                        continue;
+                    }
+
+                    byte currentValue = buffer[index];
+                    byte newValue = Socket_Operation.GetStepByte(currentValue, step * (sfi.ProgressionCount + 1), out carryCount);
+                    buffer[index] = newValue;
+                    sfi.IsProgressionDone = true;
+
+                    if (sfi.IsProgressionCarry && carryCount > 0)
+                    {
+                        for (int i = 0; i < sfi.ProgressionCarryNumber; i++)
+                        {
+                            int prevIndex = index - (i + 1);
+                            if (prevIndex < 0)
+                                break;
+
+                            byte prevValue = buffer[prevIndex];
+                            prevValue = Socket_Operation.GetStepByte(prevValue, carryCount, out carryCount);
+                            buffer[prevIndex] = prevValue;
+
+                            if (carryCount == 0)
+                                break;
+                        }
                     }
                 }
             }
@@ -7885,8 +7933,15 @@ namespace WPELibrary.Lib
 
                             case Filter.FilterAction.Change:
 
+                                sfi.IsProgressionDone = false;
+
                                 tempBuffer = Socket_Cache.Filter.ChangePacket_Filter(sfi);
                                 bDoFilter = tempBuffer != null && tempBuffer.Length > 0;
+
+                                if (sfi.IsProgressionDone && sfi.IsProgressionContinuous)
+                                {
+                                    sfi.ProgressionCount++;
+                                }
 
                                 break;
 
