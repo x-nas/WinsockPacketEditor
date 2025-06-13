@@ -609,6 +609,40 @@ namespace WPELibrary
                                     }
 
                                     break;
+
+                                case "cmsAccountList_Links":
+
+                                    List<Guid> gLinks = new List<Guid>();
+
+                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    {
+                                        gLinks.Add(pai.AID);
+                                    }
+
+                                    if (gLinks.Count > 0)
+                                    {
+                                        Socket_Operation.ShowAccountLinksForm(gLinks);
+                                        this.LoadData(string.Empty);
+                                    }
+
+                                    break;
+
+                                case "cmsAccountList_Devices":
+
+                                    List<Guid> gDevices = new List<Guid>();
+
+                                    foreach (Proxy_AccountInfo pai in this.allData)
+                                    {
+                                        gDevices.Add(pai.AID);
+                                    }
+
+                                    if (gDevices.Count > 0)
+                                    {
+                                        Socket_Operation.ShowAccountDevicesForm(gDevices);
+                                        this.LoadData(string.Empty);
+                                    }
+
+                                    break;
                             }
                         }
                     }

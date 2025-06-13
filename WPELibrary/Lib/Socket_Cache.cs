@@ -3586,7 +3586,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//代理账号加时
+            #region//设置代理账号加时（对话框）
 
             public static void ProxyAccountAddTime_Dialog(List<Guid> gList, int Hours)
             {
@@ -3621,9 +3621,75 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
-            }            
+            }
 
-            #endregion            
+            #endregion
+
+            #region//设置代理账号链接数（对话框）
+
+            public static void ProxyAccountLinks_Dialog(List<Guid> gList, bool IsLimitLinks, int LimitLinks)
+            {
+                try
+                {
+                    if (gList.Count > 0)
+                    {
+                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
+
+                        if (dr.Equals(DialogResult.OK))
+                        {
+                            foreach (Guid gAID in gList)
+                            {
+                                Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(gAID);
+
+                                if (pai != null)
+                                {
+                                    pai.IsLimitLinks = IsLimitLinks;
+                                    pai.LimitLinks = LimitLinks;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//设置代理账号设备数（对话框）
+
+            public static void ProxyAccountDevices_Dialog(List<Guid> gList, bool IsLimitDevices, int LimitDevices)
+            {
+                try
+                {
+                    if (gList.Count > 0)
+                    {
+                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_18));
+
+                        if (dr.Equals(DialogResult.OK))
+                        {
+                            foreach (Guid gAID in gList)
+                            {
+                                Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(gAID);
+
+                                if (pai != null)
+                                {
+                                    pai.IsLimitDevices = IsLimitDevices;
+                                    pai.LimitDevices = LimitDevices;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
 
             #region//保存登录信息到数据库
 

@@ -3818,6 +3818,46 @@ namespace WPELibrary.Lib
 
         #endregion
 
+        #region//显示账号链接数数窗体（对话框）
+
+        public static void ShowAccountLinksForm(List<Guid> gList)
+        {
+            try
+            {
+                if (gList.Count > 0)
+                {
+                    Proxy_AccountLinksForm palForm = new Proxy_AccountLinksForm(gList);
+                    palForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示账号设备数窗体（对话框）
+
+        public static void ShowAccountDevicesForm(List<Guid> gList)
+        {
+            try
+            {
+                if (gList.Count > 0)
+                {
+                    Proxy_AccountDevicesForm padForm = new Proxy_AccountDevicesForm(gList);
+                    padForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
         #region//显示本地映射窗体
 
         public static void ShowProxyMapLocalListForm()

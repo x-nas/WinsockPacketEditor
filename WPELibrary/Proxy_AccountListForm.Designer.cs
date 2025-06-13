@@ -103,6 +103,8 @@
             this.cbbSearch_State = new System.Windows.Forms.ComboBox();
             this.bSearch_State = new System.Windows.Forms.Button();
             this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
+            this.cmsAccountList_Devices = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsAccountList_Links = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpProxyAccountList.SuspendLayout();
             this.ssProxyAccount.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
@@ -377,6 +379,8 @@
             this.cmsAccountList_LoginInfo,
             this.toolStripSeparator1,
             this.cmsAccountList_AddTime,
+            this.cmsAccountList_Links,
+            this.cmsAccountList_Devices,
             this.toolStripSeparator3,
             this.cmsAccountList_Export,
             this.toolStripSeparator2,
@@ -398,7 +402,7 @@
             // 
             // cmsAccountList_AddTime
             // 
-            this.cmsAccountList_AddTime.Image = global::WPELibrary.Properties.Resources.Add;
+            this.cmsAccountList_AddTime.Image = global::WPELibrary.Properties.Resources.SelectAll;
             resources.ApplyResources(this.cmsAccountList_AddTime, "cmsAccountList_AddTime");
             this.cmsAccountList_AddTime.Name = "cmsAccountList_AddTime";
             // 
@@ -654,6 +658,18 @@
             this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
             this.bgwAccountList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwAccountList_RunWorkerCompleted);
             // 
+            // cmsAccountList_Devices
+            // 
+            this.cmsAccountList_Devices.Image = global::WPELibrary.Properties.Resources.SelectAll;
+            resources.ApplyResources(this.cmsAccountList_Devices, "cmsAccountList_Devices");
+            this.cmsAccountList_Devices.Name = "cmsAccountList_Devices";
+            // 
+            // cmsAccountList_Links
+            // 
+            this.cmsAccountList_Links.Image = global::WPELibrary.Properties.Resources.SelectAll;
+            resources.ApplyResources(this.cmsAccountList_Links, "cmsAccountList_Links");
+            this.cmsAccountList_Links.Name = "cmsAccountList_Links";
+            // 
             // Proxy_AccountListForm
             // 
             resources.ApplyResources(this, "$this");
@@ -751,5 +767,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn cLimitDevices;
         private System.Windows.Forms.DataGridViewTextBoxColumn cIPLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn cExpiryTime;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_Devices;
+        private System.Windows.Forms.ToolStripMenuItem cmsAccountList_Links;
     }
 }

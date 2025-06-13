@@ -179,6 +179,18 @@
     <Compile Include="Proxy_AccountForm.Designer.cs">
       <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Proxy_AccountDevicesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountDevicesForm.Designer.cs">
+      <DependentUpon>Proxy_AccountDevicesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Proxy_AccountLinksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountLinksForm.Designer.cs">
+      <DependentUpon>Proxy_AccountLinksForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Proxy_AccountListForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -381,11 +393,23 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Proxy_AccountDevicesForm.en-US.resx">
+      <DependentUpon>Proxy_AccountDevicesForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountForm.en-US.resx">
       <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountForm.resx">
       <DependentUpon>Proxy_AccountForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountDevicesForm.resx">
+      <DependentUpon>Proxy_AccountDevicesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountLinksForm.en-US.resx">
+      <DependentUpon>Proxy_AccountLinksForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountLinksForm.resx">
+      <DependentUpon>Proxy_AccountLinksForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountListForm.en-US.resx">
       <DependentUpon>Proxy_AccountListForm.cs</DependentUpon>
