@@ -1052,7 +1052,7 @@ namespace WinsockPacketEditor
 
                                             if (RootNode.Nodes.Count == 0)
                                             {
-                                                Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByIPAndAID(ClientIP, spt.AID);
+                                                Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByAIDAndIP(spt.AID, ClientIP);
 
                                                 if (this.cbDeleteClosed.Checked)
                                                 {
@@ -1067,8 +1067,8 @@ namespace WinsockPacketEditor
                                         }));
                                     }
                                 }
-                            }                                
-                        }
+                            }
+                        }                        
                     }
 
                     foreach (Socket_ProxyTCP spt in sptRemove)
@@ -1332,8 +1332,6 @@ namespace WinsockPacketEditor
         }
 
 
-        #endregion
-
-        
+        #endregion        
     }
 }

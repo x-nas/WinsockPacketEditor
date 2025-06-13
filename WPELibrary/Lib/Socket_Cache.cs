@@ -1555,13 +1555,16 @@ namespace WPELibrary.Lib
 
             public static void HandleClient(Socket clientSocket)
             {
+                Socket_ProxyTCP spt = null;
+
                 try
                 {
-                    Socket_ProxyTCP spt = new Socket_ProxyTCP(clientSocket, clientSocket.ReceiveBufferSize);
+                    spt = new Socket_ProxyTCP(clientSocket, clientSocket.ReceiveBufferSize);
                     Socket_Cache.SocketProxy.StartReceive(spt);
                 }
                 catch (Exception ex)
                 {
+                    spt?.Dispose();
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }
             }
@@ -1757,22 +1760,47 @@ namespace WPELibrary.Lib
                         string sPassWord = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, PASSWORD);
                         string ClientIP = spt.Client.EndPoint.Address.ToString();
 
-                        bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
-
                         Span<byte> bAuth = stackalloc byte[2];
                         bAuth[0] = 0x01;
 
-                        bool isAllowed = 
-                            bAuthOK && 
-                            !Socket_Cache.ProxyAccount.CheckLimitLinks_ByAccountID(AccountID) &&
-                            !Socket_Cache.ProxyAccount.CheckLimitDevices_ByAccountID(AccountID, ClientIP);
+                        // 第一步：先验证账号密码
+                        bool bAuthOK = Socket_Cache.ProxyAccount.CheckUserNameAndPassWord(sUserName, sPassWord, out Guid AccountID);
 
+                        if (!bAuthOK)
+                        {
+                            // 账号密码验证失败直接返回
+                            bAuth[1] = (byte)0x01;
+                            Socket_Operation.SendTCPData(spt.Client.Socket, bAuth);
+                            return;
+                        }
+
+                        // 第二步：验证通过后检查连接数限制
+                        bool isOverLinks = Socket_Cache.ProxyAccount.CheckLimitLinks(AccountID, ClientIP);
+                        if (isOverLinks)
+                        {
+                            bAuth[1] = (byte)0x01;
+                            Socket_Operation.SendTCPData(spt.Client.Socket, bAuth);
+                            return;
+                        }
+
+                        // 第三步：检查设备数限制
+                        bool isOverDevices = Socket_Cache.ProxyAccount.CheckLimitDevices(AccountID, ClientIP);                                                
+                        if (isOverDevices)
+                        {
+                            bAuth[1] = (byte)0x01;
+                            Socket_Operation.SendTCPData(spt.Client.Socket, bAuth);
+                            return;
+                        }
+
+                        // 最终判断是否允许登录
+                        bool isAllowed = bAuthOK && !isOverLinks && !isOverDevices;
                         bAuth[1] = isAllowed ? (byte)0x00 : (byte)0x01;
+
                         if (isAllowed)
                         {
                             Socket_Cache.ProxyAccount.SetOnline_ByAccountID(AccountID, true);
                             Socket_Cache.ProxyAccount.RecordLoginIP_ByAccountID(AccountID, ClientIP);
-                            Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, bAuthOK);
+                            Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, true);
 
                             spt.AID = AccountID;
                             spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
@@ -1831,12 +1859,16 @@ namespace WPELibrary.Lib
                                                 IPEndPoint ExternalProxyEP = Socket_Operation.GetIPEndPoint_ByAddressString(Socket_Cache.SocketProxy.ExternalProxy_IP, Socket_Cache.SocketProxy.ExternalProxy_Port);
                                                 if (ExternalProxyEP == null)
                                                 {
+                                                    spt.Server.Close();
+                                                    spt.Client.Close();
                                                     return;
                                                 }
 
                                                 var connectResult = spt.Server.Socket.BeginConnect(ExternalProxyEP, null, null);
                                                 if (!connectResult.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5)))
                                                 {
+                                                    spt.Server.Close();
+                                                    spt.Client.Close();
                                                     return;
                                                 }
                                                 spt.Server.Socket.EndConnect(connectResult);
@@ -1912,6 +1944,8 @@ namespace WPELibrary.Lib
                                             }
                                             catch (SocketException)
                                             {
+                                                spt.Server.Close();
+                                                spt.Client.Close();
                                                 Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
                                             }                                            
 
@@ -2121,6 +2155,9 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
+                    spt.Server.Close();
+                    spt.Client.Close();
+
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spt.Client.Address + " - " + ex.Message);
                 }
             }
@@ -2156,8 +2193,9 @@ namespace WPELibrary.Lib
                 try
                 {
                     if (args.SocketError != SocketError.Success || args.BytesTransferred <= 0)
-                    {
+                    {                        
                         spt.Server.Close();
+                        spt.Client.Close();
                         return;
                     }
 
@@ -2199,11 +2237,17 @@ namespace WPELibrary.Lib
                 catch (SocketException ex) when (Socket_Operation.IsExpectedSocketError(ex.ErrorCode))
                 {
                     spt.Server.Close();
+                    spt.Client.Close();
+                }
+                catch (ObjectDisposedException)
+                {
+                    // 忽略已释放的对象
                 }
                 catch (Exception ex)
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, spt.Server.Address + " - " + ex.Message);
                     spt.Server.Close();
+                    spt.Client.Close();
                 }
                 finally
                 {
@@ -2328,48 +2372,7 @@ namespace WPELibrary.Lib
 
             #region//查找代理认证
 
-            public static Proxy_AuthInfo GetProxyAuthInfo_ByAccountID(Guid AID)
-            {
-                try
-                {
-                    if (AID != null)
-                    {
-                        Proxy_AuthInfo pai = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(Auth => Auth.AID == AID);
-
-                        if (pai != null)
-                        {
-                            return pai;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return null;
-            }
-
-            public static Proxy_AuthInfo GetProxyAuthInfo_ByIPAddress(string IPAddress)
-            {
-                try
-                {
-                    if (string.IsNullOrEmpty(IPAddress))
-                    {
-                        return null;
-                    }
-
-                    return Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(p => p.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return null;
-            }
-
-            public static Proxy_AuthInfo GetProxyAuthInfo_ByAIDandIP(Guid AID, string IPAddress)
+            public static Proxy_AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
             {
                 try
                 {
@@ -2413,7 +2416,7 @@ namespace WPELibrary.Lib
                 }
             }
 
-            public static void DeleteProxyAuthInfo_ByIPAndAID(string IPAddress, Guid AID)
+            public static void DeleteProxyAuthInfo_ByAIDAndIP(Guid AID, string IPAddress)
             {
                 try
                 {
@@ -2694,6 +2697,31 @@ namespace WPELibrary.Lib
                 return null;
             }
 
+            public static List<Socket_ProxyTCP> GetProxyTCP_ByAIDandIP(Guid AID, string ClientIP)
+            {
+                try
+                {
+                    if (AID == Guid.Empty || string.IsNullOrWhiteSpace(ClientIP))
+                    {
+                        return new List<Socket_ProxyTCP>();
+                    }
+
+                    var proxyList = Socket_Cache.SocketProxyList.lstProxyTCP;
+
+                    return proxyList
+                        .Where(x => x != null &&
+                                   x.AID == AID &&
+                                   x.Client?.EndPoint?.Address != null &&
+                                   x.Client.EndPoint.Address.ToString().Equals(ClientIP.Trim(), StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    return new List<Socket_ProxyTCP>();
+                }
+            }
+
             #endregion
 
             #region//关闭 TCP 列表中的指定账号的链接
@@ -2714,6 +2742,24 @@ namespace WPELibrary.Lib
                 {
                     Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
                 }                
+            }
+
+            public static void CloseProxyTCP_ByAIDAndIP(Guid AID, string ClientIP)
+            {
+                try
+                {
+                    List<Socket_ProxyTCP> ProxyTCP = GetProxyTCP_ByAIDandIP(AID, ClientIP);
+
+                    foreach (Socket_ProxyTCP spt in ProxyTCP)
+                    {
+                        spt.Client.Close();
+                        spt.Server.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }
 
             #endregion
@@ -2857,14 +2903,14 @@ namespace WPELibrary.Lib
 
             #region//检测是否已超过限制链接数
 
-            public static bool CheckLimitLinks_ByAccountID(Guid AID)
+            public static bool CheckLimitLinks(Guid AID, string IPAddress)
             {
                 try
                 {
                     if (AID != null && AID != Guid.Empty)
                     {
                         Proxy_AccountInfo paiAccount = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);                        
-                        Proxy_AuthInfo paiAuth = Socket_Cache.SocketProxy.GetProxyAuthInfo_ByAccountID(AID);
+                        Proxy_AuthInfo paiAuth = Socket_Cache.SocketProxy.GetProxyAuthInfo(AID, IPAddress);
 
                         if (paiAccount != null && paiAuth != null)
                         {
@@ -2893,7 +2939,7 @@ namespace WPELibrary.Lib
 
             #region//检测是否已超过限制设备数
 
-            public static bool CheckLimitDevices_ByAccountID(Guid AID, string ClientIP)
+            public static bool CheckLimitDevices(Guid AID, string ClientIP)
             {
                 try
                 {
@@ -2912,7 +2958,7 @@ namespace WPELibrary.Lib
                                 }
                                 else if (DevicesNumber == paiAccount.LimitDevices)
                                 {
-                                    Proxy_AuthInfo pai = Socket_Cache.SocketProxy.GetProxyAuthInfo_ByAIDandIP(AID, ClientIP);
+                                    Proxy_AuthInfo pai = Socket_Cache.SocketProxy.GetProxyAuthInfo(AID, ClientIP);
 
                                     if (pai != null)
                                     {
