@@ -265,6 +265,8 @@
     <None Include="Resources\openHS.png" />
     <None Include="Resources\aboutthis.png" />
     <None Include="Resources\Settings.png" />
+    <Content Include="Resources\http.png" />
+    <Content Include="Resources\js.png" />
     <Content Include="Web\CCProxy\cn_acclistadmin.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
