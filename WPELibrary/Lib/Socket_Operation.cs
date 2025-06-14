@@ -3784,7 +3784,7 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (!Socket_Cache.ProxyAccount.IsShow_ProxyAccount)
+                if (!Socket_Cache.ProxyAccount.IsShow_ProxyAuth)
                 {
                     Proxy_AccountAuthForm paaForm = new Proxy_AccountAuthForm();
                     paaForm.Show();
