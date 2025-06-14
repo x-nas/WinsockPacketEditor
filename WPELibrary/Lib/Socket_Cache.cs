@@ -1470,11 +1470,7 @@ namespace WPELibrary.Lib
             public static string ProxySpeedInfo = string.Empty;
 
             public static readonly ConcurrentDictionary<string, IPAddress> DnsCache = new ConcurrentDictionary<string, IPAddress>(StringComparer.OrdinalIgnoreCase);
-            public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);            
-
-            public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
-            public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);         
-            public static event ProxyAuthReceived RecProxyAuth;
+            public static readonly TimeSpan CacheExpiration = TimeSpan.FromMinutes(5);
 
             #region//定义结构
 
@@ -1800,7 +1796,7 @@ namespace WPELibrary.Lib
                         {
                             Socket_Cache.ProxyAccount.SetOnline_ByAccountID(AccountID, true);
                             Socket_Cache.ProxyAccount.RecordLoginIP_ByAccountID(AccountID, ClientIP);
-                            Socket_Cache.SocketProxy.AuthResult_ToList(AccountID, ClientIP, true);
+                            Socket_Cache.ProxyAccount.AuthResult_ToList(AccountID, ClientIP, true);
 
                             spt.AID = AccountID;
                             spt.ProxyStep = Socket_Cache.SocketProxy.ProxyStep.Command;
@@ -2350,103 +2346,6 @@ namespace WPELibrary.Lib
 
             #endregion            
 
-            #region//代理认证入列表            
-
-            public static void AuthResult_ToList(Guid AID, string IPAddress, bool AuthResult)
-            {
-                try
-                {
-                    if (AID != null && AID != Guid.Empty)
-                    {
-                        Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
-                        RecProxyAuth?.Invoke(pai);
-                    }                    
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion                        
-
-            #region//查找代理认证
-
-            public static Proxy_AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
-            {
-                try
-                {
-                    if (string.IsNullOrEmpty(IPAddress))
-                    {
-                        return null;
-                    }
-
-                    return Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(p => p.AID == AID && p.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-
-                return null;
-            }
-
-            #endregion
-
-            #region//删除代理认证
-
-            public static void DeleteProxyAuthInfo_ByAID(Guid AID)
-            {
-                try
-                {
-                    if (AID != null)
-                    {
-                        for (int i = Socket_Cache.SocketProxy.lstProxyAuth.Count - 1; i >= 0; i--)
-                        {
-                            if (Socket_Cache.SocketProxy.lstProxyAuth[i].AID == AID)
-                            {
-                                Socket_Cache.SocketProxy.lstProxyAuth.RemoveAt(i);
-                            }
-                        }                        
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            public static void DeleteProxyAuthInfo_ByAIDAndIP(Guid AID, string IPAddress)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(IPAddress) && AID != null)
-                    {
-                        Proxy_AuthInfo pai = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(Auth => Auth.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
-
-                        if (pai != null)
-                        {
-                            Socket_Cache.SocketProxy.lstProxyAuth.Remove(pai);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                }
-            }
-
-            #endregion
-
-            #region//清空代理认证列表
-
-            public static void ClearProxyAuthList()
-            {
-                lstProxyAuth.Clear();
-            }
-
-            #endregion
-
             #region//获取客户端的IP地址
 
             public static string GetClientIPAddress(Socket_ProxyTCP spt)
@@ -2808,11 +2707,172 @@ namespace WPELibrary.Lib
 
         public static class ProxyAccount
         {            
-            public static bool IsShow = false;
+            public static bool IsShow_ProxyAccount = false, IsShow_ProxyAuth = false;
             public static int OnLineTimeOut = 60;
             public static string AESKey = string.Empty;
             public static string CCProxy_HTML = string.Empty;
+
             public static BindingList<Proxy_AccountInfo> lstProxyAccount = new BindingList<Proxy_AccountInfo>();
+
+            public static BindingList<Proxy_AuthInfo> lstProxyAuth = new BindingList<Proxy_AuthInfo>();
+            public delegate void ProxyAuthReceived(Proxy_AuthInfo pai);
+            public static event ProxyAuthReceived RecProxyAuth;
+
+            #region//代理认证入列表            
+
+            public static void AuthResult_ToList(Guid AID, string IPAddress, bool AuthResult)
+            {
+                try
+                {
+                    if (AID != null && AID != Guid.Empty)
+                    {
+                        Proxy_AuthInfo pai = new Proxy_AuthInfo(AID, IPAddress, AuthResult, DateTime.Now);
+                        RecProxyAuth?.Invoke(pai);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//查找代理认证
+
+            public static Proxy_AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
+            {
+                try
+                {
+                    if (string.IsNullOrEmpty(IPAddress))
+                    {
+                        return null;
+                    }
+
+                    return Socket_Cache.ProxyAccount.lstProxyAuth.FirstOrDefault(p => p.AID == AID && p.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase));
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion
+
+            #region//删除代理认证
+
+            public static void DeleteProxyAuthInfo_ByAID(Guid AID)
+            {
+                try
+                {
+                    if (AID != null)
+                    {
+                        for (int i = Socket_Cache.ProxyAccount.lstProxyAuth.Count - 1; i >= 0; i--)
+                        {
+                            if (Socket_Cache.ProxyAccount.lstProxyAuth[i].AID == AID)
+                            {
+                                Socket_Cache.ProxyAccount.lstProxyAuth.RemoveAt(i);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void DeleteProxyAuthInfo_ByAIDAndIP(Guid AID, string IPAddress)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(IPAddress) && AID != null)
+                    {
+                        Proxy_AuthInfo pai = Socket_Cache.ProxyAccount.lstProxyAuth.FirstOrDefault(Auth => Auth.IPAddress.Equals(IPAddress, StringComparison.OrdinalIgnoreCase) && Auth.AID == AID);
+
+                        if (pai != null)
+                        {
+                            Socket_Cache.ProxyAccount.lstProxyAuth.Remove(pai);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
+            #region//清空代理认证列表
+
+            public static void ClearProxyAuthList()
+            {
+                lstProxyAuth.Clear();
+            }
+
+            #endregion
+
+            #region//获取代理认证列表的信息
+
+            public static int GetLinksCount_FromProxyAuthList()
+            {
+                return lstProxyAuth?.Sum(proxy => proxy.LinksNumber) ?? 0;
+            }
+
+            public static int GetDevicesCount_FromProxyAuthList()
+            {
+                return lstProxyAuth?.Sum(proxy => proxy.DevicesNumber) ?? 0;
+            }
+
+            #endregion
+
+            #region//搜索代理认证列表
+
+            public static int SearchForProxyAuthList(int fromIndex, string FindString)
+            {
+                int iResult = -1;
+
+                try
+                {
+                    if (string.IsNullOrEmpty(FindString) || fromIndex < 0)
+                    {
+                        return -1;
+                    }
+
+                    int listCount = Socket_Cache.ProxyAccount.lstProxyAuth.Count;
+                    if (listCount == 0 || fromIndex >= listCount)
+                    {
+                        return -1;
+                    }
+
+                    for (int i = fromIndex; i < listCount; i++)
+                    {
+                        string AccountUserName = GetUserName_ByAccountID(Socket_Cache.ProxyAccount.lstProxyAuth[i].AID);
+                        string IPAddress = Socket_Cache.ProxyAccount.lstProxyAuth[i].IPAddress;
+
+                        if (!string.IsNullOrEmpty(AccountUserName) && AccountUserName.Contains(FindString))
+                        {
+                            return i;
+                        }
+
+                        if (!string.IsNullOrEmpty(IPAddress) && IPAddress.Contains(FindString))
+                        {
+                            return i;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return iResult;
+            }
+
+            #endregion
 
             #region//验证远程管理的账号密码
 
@@ -2910,7 +2970,7 @@ namespace WPELibrary.Lib
                     if (AID != null && AID != Guid.Empty)
                     {
                         Proxy_AccountInfo paiAccount = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);                        
-                        Proxy_AuthInfo paiAuth = Socket_Cache.SocketProxy.GetProxyAuthInfo(AID, IPAddress);
+                        Proxy_AuthInfo paiAuth = Socket_Cache.ProxyAccount.GetProxyAuthInfo(AID, IPAddress);
 
                         if (paiAccount != null && paiAuth != null)
                         {
@@ -2958,7 +3018,7 @@ namespace WPELibrary.Lib
                                 }
                                 else if (DevicesNumber == paiAccount.LimitDevices)
                                 {
-                                    Proxy_AuthInfo pai = Socket_Cache.SocketProxy.GetProxyAuthInfo(AID, ClientIP);
+                                    Proxy_AuthInfo pai = Socket_Cache.ProxyAccount.GetProxyAuthInfo(AID, ClientIP);
 
                                     if (pai != null)
                                     {
@@ -3071,7 +3131,7 @@ namespace WPELibrary.Lib
 
             public static int GetDevicesNumber_ByAccountID(Guid AID)
             {
-                return Socket_Cache.SocketProxy.lstProxyAuth.Count(p => p.AID == AID);
+                return Socket_Cache.ProxyAccount.lstProxyAuth.Count(p => p.AID == AID);
             }
 
             #endregion

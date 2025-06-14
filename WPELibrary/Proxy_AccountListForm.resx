@@ -328,19 +328,19 @@
     <value>None</value>
   </data>
   <data name="cmsAccountList_LoginInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_LoginInfo.Text" xml:space="preserve">
     <value>查看 登录IP</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>149, 6</value>
   </data>
   <data name="cmsAccountList_AddTime.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsAccountList_AddTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_AddTime.Text" xml:space="preserve">
     <value>设置 加时</value>
@@ -349,7 +349,7 @@
     <value>None</value>
   </data>
   <data name="cmsAccountList_Links.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_Links.Text" xml:space="preserve">
     <value>设置 链接数</value>
@@ -358,37 +358,37 @@
     <value>None</value>
   </data>
   <data name="cmsAccountList_Devices.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_Devices.Text" xml:space="preserve">
     <value>设置 设备数</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>149, 6</value>
   </data>
   <data name="cmsAccountList_Export.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsAccountList_Export.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_Export.Text" xml:space="preserve">
     <value>导出 账号列表</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+    <value>149, 6</value>
   </data>
   <data name="cmsAccountList_Clear.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cmsAccountList_Clear.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
+    <value>152, 22</value>
   </data>
   <data name="cmsAccountList_Clear.Text" xml:space="preserve">
     <value>清空 账号列表</value>
   </data>
   <data name="cmsAccountList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 176</value>
+    <value>153, 154</value>
   </data>
   <data name="&gt;&gt;cmsAccountList.Name" xml:space="preserve">
     <value>cmsAccountList</value>
@@ -7801,6 +7801,18 @@
   <data name="&gt;&gt;cmsAccountList_AddTime.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;cmsAccountList_Links.Name" xml:space="preserve">
+    <value>cmsAccountList_Links</value>
+  </data>
+  <data name="&gt;&gt;cmsAccountList_Links.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cmsAccountList_Devices.Name" xml:space="preserve">
+    <value>cmsAccountList_Devices</value>
+  </data>
+  <data name="&gt;&gt;cmsAccountList_Devices.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator3.Name" xml:space="preserve">
     <value>toolStripSeparator3</value>
   </data>
@@ -7830,18 +7842,6 @@
   </data>
   <data name="&gt;&gt;bgwAccountList.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsAccountList_Devices.Name" xml:space="preserve">
-    <value>cmsAccountList_Devices</value>
-  </data>
-  <data name="&gt;&gt;cmsAccountList_Devices.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cmsAccountList_Links.Name" xml:space="preserve">
-    <value>cmsAccountList_Links</value>
-  </data>
-  <data name="&gt;&gt;cmsAccountList_Links.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Proxy_AccountListForm</value>

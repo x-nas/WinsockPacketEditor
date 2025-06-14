@@ -97,12 +97,7 @@ namespace WinsockPacketEditor
             try
             {
                 tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
-
-                dgvAuth.AutoGenerateColumns = false;
-                dgvAuth.DataSource = Socket_Cache.SocketProxy.lstProxyAuth;
-                dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
-                Socket_Cache.SocketProxy.RecProxyAuth += new Socket_Cache.SocketProxy.ProxyAuthReceived(Event_RecProxyAuth);
-
+          
                 dgvLogList.AutoGenerateColumns = false;
                 dgvLogList.DataSource = Socket_Cache.LogList.lstProxyLog;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);                
@@ -191,12 +186,20 @@ namespace WinsockPacketEditor
 
         private void EnableAuth_Changed()
         {
-            this.cbbAuthType.Enabled = this.bAccount.Enabled = this.cbEnable_Auth.Checked;
+            this.cbbAuthType.Enabled = 
+                this.bAccount.Enabled = 
+                this.bAuthInfo.Enabled =
+                this.cbEnable_Auth.Checked;
         }
 
         private void bAccount_Click(object sender, EventArgs e)
         {
             Socket_Operation.ShowProxyAccountListForm();
+        }
+
+        private void bAuthInfo_Click(object sender, EventArgs e)
+        {
+            Socket_Operation.ShowProxyAuthForm();
         }
 
         #endregion
@@ -744,8 +747,7 @@ namespace WinsockPacketEditor
         private async void tUpdateProxyState_Tick(object sender, EventArgs e)
         {
             await this.UpdateClientLinks();
-            await this.UpdateAccountLinksAndDevices();
-            this.dgvAuth.Refresh();
+            await this.UpdateAccountLinksAndDevices();            
             await Socket_Cache.SocketProxy.UpdateProxyUDP();
             await Socket_Cache.ProxyAccount.UpdateOnlineStatus();
         }
@@ -763,7 +765,7 @@ namespace WinsockPacketEditor
                 this.CleanUp_LogList();
                 this.CleanUp_HexBox();
                 this.CleanUp_ShowProxyInfo();
-                Socket_Cache.SocketProxy.ClearProxyAuthList();
+                Socket_Cache.ProxyAccount.ClearProxyAuthList();
             }
             catch (Exception ex)
             {
@@ -1052,7 +1054,7 @@ namespace WinsockPacketEditor
 
                                             if (RootNode.Nodes.Count == 0)
                                             {
-                                                Socket_Cache.SocketProxy.DeleteProxyAuthInfo_ByAIDAndIP(spt.AID, ClientIP);
+                                                Socket_Cache.ProxyAccount.DeleteProxyAuthInfo_ByAIDAndIP(spt.AID, ClientIP);
 
                                                 if (this.cbDeleteClosed.Checked)
                                                 {
@@ -1093,7 +1095,7 @@ namespace WinsockPacketEditor
             {
                 try
                 {
-                    foreach (Proxy_AuthInfo pai in Socket_Cache.SocketProxy.lstProxyAuth.ToList())
+                    foreach (Proxy_AuthInfo pai in Socket_Cache.ProxyAccount.lstProxyAuth.ToList())
                     {
                         string ClientIP = pai.IPAddress.ToString();
                         pai.LinksNumber = Socket_Cache.ProxyAccount.GetLinksNumber_ByAccountID(pai.AID, ClientIP, this.tvProxyInfo.Nodes);
@@ -1107,68 +1109,7 @@ namespace WinsockPacketEditor
             });
         }
 
-        #endregion
-
-        #region//显示认证列表（异步）        
-
-        private void Event_RecProxyAuth(Proxy_AuthInfo pai)
-        {
-            try
-            {
-                if (!dgvAuth.IsDisposed)
-                {
-                    dgvAuth.Invoke(new MethodInvoker(delegate
-                    {
-                        Proxy_AuthInfo paiItem = Socket_Cache.SocketProxy.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
-
-                        if (paiItem != null)
-                        {
-                            paiItem.AuthResult = pai.AuthResult;
-                            paiItem.AuthTime = pai.AuthTime;
-                        }
-                        else
-                        {
-                            Socket_Cache.SocketProxy.lstProxyAuth.Add(pai);
-                        }
-
-                        this.dgvAuth.Refresh();
-                    }));
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }        
-
-        private void dgvAuth_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            try
-            {
-                if (e.ColumnIndex == dgvAuth.Columns["cAuthID"].Index)
-                {
-                    e.Value = (e.RowIndex + 1).ToString();
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvAuth.Columns["cUserName"].Index)
-                {
-                    Guid AID = Guid.Parse(dgvAuth.Rows[e.RowIndex].Cells["cAID"].Value.ToString());
-                    e.Value = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(AID);
-                    e.FormattingApplied = true;
-                }
-                else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)
-                {
-                    e.Value = Socket_Cache.ProxyAccount.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
-                    e.FormattingApplied = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
-
-        #endregion
+        #endregion        
 
         #region//显示日志列表（异步）
 

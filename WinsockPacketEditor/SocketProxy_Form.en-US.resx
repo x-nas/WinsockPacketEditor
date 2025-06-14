@@ -139,6 +139,9 @@
   <data name="cbbProxyIP_Appoint.Location" type="System.Drawing.Point, System.Drawing">
     <value>104, 12</value>
   </data>
+  <data name="cbProxyIP_Auto.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
+  </data>
   <data name="cbProxyIP_Auto.Size" type="System.Drawing.Size, System.Drawing">
     <value>95, 21</value>
   </data>
@@ -151,11 +154,29 @@
   <data name="lSOCKS_Port.Text" xml:space="preserve">
     <value>Port:</value>
   </data>
+  <data name="tpAuthSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
   <data name="tpAuthSet.Text" xml:space="preserve">
     <value>[ Auth Setting ]</value>
   </data>
+  <data name="tlpAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="gbAuthSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>774, 64</value>
+  </data>
   <data name="gbAuthSet.Text" xml:space="preserve">
     <value>Proxy Authentication</value>
+  </data>
+  <data name="tlpAuthSet_Auth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 45</value>
+  </data>
+  <data name="cbEnable_Auth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
   </data>
   <data name="cbEnable_Auth.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 21</value>
@@ -184,11 +205,35 @@
   <data name="bAccount.Text" xml:space="preserve">
     <value>Account</value>
   </data>
+  <data name="bAuthInfo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>462, 9</value>
+  </data>
+  <data name="bAuthInfo.Text" xml:space="preserve">
+    <value>Auth REC</value>
+  </data>
+  <data name="tpListSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpListSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
   <data name="tpListSet.Text" xml:space="preserve">
     <value>[ List Settings ]</value>
   </data>
+  <data name="tlpListSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="gbClientList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 64</value>
+  </data>
   <data name="gbClientList.Text" xml:space="preserve">
     <value>Client List</value>
+  </data>
+  <data name="tlpClientList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 45</value>
+  </data>
+  <data name="cbDeleteClosed.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
   </data>
   <data name="cbDeleteClosed.Size" type="System.Drawing.Size, System.Drawing">
     <value>101, 21</value>
@@ -196,8 +241,17 @@
   <data name="cbDeleteClosed.Text" xml:space="preserve">
     <value>Clear Closed</value>
   </data>
+  <data name="gbProxyList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>228, 64</value>
+  </data>
   <data name="gbProxyList.Text" xml:space="preserve">
     <value>Proxy List</value>
+  </data>
+  <data name="tlpProxyList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>222, 45</value>
+  </data>
+  <data name="cbNoRecordData.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
   </data>
   <data name="cbNoRecordData.Size" type="System.Drawing.Size, System.Drawing">
     <value>122, 21</value>
@@ -205,8 +259,14 @@
   <data name="cbNoRecordData.Text" xml:space="preserve">
     <value>No Record Data</value>
   </data>
+  <data name="gbListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>306, 64</value>
+  </data>
   <data name="gbListSet_LogList.Text" xml:space="preserve">
     <value>Log List</value>
+  </data>
+  <data name="tlpListSet_LogList.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 45</value>
   </data>
   <data name="nudLogList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>180, 9</value>
@@ -220,17 +280,38 @@
   <data name="cbLogList_AutoClear.Text" xml:space="preserve">
     <value>Auto Clear</value>
   </data>
+  <data name="cbLogList_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
+  </data>
   <data name="cbLogList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 21</value>
   </data>
   <data name="cbLogList_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
   </data>
+  <data name="tpProxyMapping.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpProxyMapping.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
   <data name="tpProxyMapping.Text" xml:space="preserve">
     <value>[ Proxy Mapping ]</value>
   </data>
+  <data name="tlpProxyMapping.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="gbProxyMapping_Remote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 61</value>
+  </data>
   <data name="gbProxyMapping_Remote.Text" xml:space="preserve">
     <value>Remote Mapping</value>
+  </data>
+  <data name="tlpProxyMapping_Remote.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 39</value>
+  </data>
+  <data name="cbEnable_MapRemote.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
   </data>
   <data name="cbEnable_MapRemote.Size" type="System.Drawing.Size, System.Drawing">
     <value>151, 21</value>
@@ -244,8 +325,17 @@
   <data name="bProxyMapping_Remote.Text" xml:space="preserve">
     <value>Setting</value>
   </data>
+  <data name="gbProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 61</value>
+  </data>
   <data name="gbProxyMapping_Local.Text" xml:space="preserve">
     <value>Local Mapping</value>
+  </data>
+  <data name="tlpProxyMapping_Local.Size" type="System.Drawing.Size, System.Drawing">
+    <value>378, 39</value>
+  </data>
+  <data name="cbEnable_MapLocal.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
   </data>
   <data name="cbEnable_MapLocal.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 21</value>
@@ -259,14 +349,44 @@
   <data name="bProxyMapping_Local.Text" xml:space="preserve">
     <value>Setting</value>
   </data>
+  <data name="tpExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpExternalProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
   <data name="tpExternalProxy.Text" xml:space="preserve">
     <value>[ EXT Proxy ]</value>
+  </data>
+  <data name="tlpExternalProxy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="gbExternalProxy_Address.Size" type="System.Drawing.Size, System.Drawing">
+    <value>394, 64</value>
   </data>
   <data name="gbExternalProxy_Address.Text" xml:space="preserve">
     <value>EXT Proxy Address</value>
   </data>
+  <data name="tlpExternalProxy_Address.Size" type="System.Drawing.Size, System.Drawing">
+    <value>388, 42</value>
+  </data>
+  <data name="cbEnable_ExternalProxy.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 9</value>
+  </data>
+  <data name="txtExternalProxy_IP.Location" type="System.Drawing.Point, System.Drawing">
+    <value>57, 9</value>
+  </data>
+  <data name="txtExternalProxy_Port.Location" type="System.Drawing.Point, System.Drawing">
+    <value>207, 9</value>
+  </data>
+  <data name="bExternalProxy_Detection.Location" type="System.Drawing.Point, System.Drawing">
+    <value>287, 9</value>
+  </data>
   <data name="bExternalProxy_Detection.Text" xml:space="preserve">
     <value>Test</value>
+  </data>
+  <data name="tlpExternalProxy_Appoint.Size" type="System.Drawing.Size, System.Drawing">
+    <value>380, 67</value>
   </data>
   <data name="tlpExternalProxy_Auth.Location" type="System.Drawing.Point, System.Drawing">
     <value>103, 33</value>
@@ -282,6 +402,9 @@
   </data>
   <data name="txtExternalProxy_PassWord.Size" type="System.Drawing.Size, System.Drawing">
     <value>133, 23</value>
+  </data>
+  <data name="cbExternalProxy_EnableAuth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 36</value>
   </data>
   <data name="cbExternalProxy_EnableAuth.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 28</value>
@@ -301,11 +424,29 @@
   <data name="cbExternalProxy_AppointPort.Text" xml:space="preserve">
     <value>Specify port:</value>
   </data>
+  <data name="tpSystemSet.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 26</value>
+  </data>
+  <data name="tpSystemSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
   <data name="tpSystemSet.Text" xml:space="preserve">
     <value>[ System Setting ]</value>
   </data>
+  <data name="tlpSystemSet.Size" type="System.Drawing.Size, System.Drawing">
+    <value>780, 67</value>
+  </data>
+  <data name="gbWorkMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>774, 64</value>
+  </data>
   <data name="gbWorkMode.Text" xml:space="preserve">
     <value>Work Mode</value>
+  </data>
+  <data name="tlpSpeedMode.Size" type="System.Drawing.Size, System.Drawing">
+    <value>768, 45</value>
+  </data>
+  <data name="cbSpeedMode.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 12</value>
   </data>
   <data name="cbSpeedMode.Size" type="System.Drawing.Size, System.Drawing">
     <value>103, 21</value>
@@ -328,7 +469,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACS
-        EQAAAk1TRnQBSQFMAgEBCQEAAfABAQHwAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        EQAAAk1TRnQBSQFMAgEBCQEAAfgBAQH4AQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABQAMAATADAAEBAQABCAYAAQwYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
         AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
         AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
@@ -448,72 +589,13 @@
   <data name="cmsHexBox_SelectAll.Text" xml:space="preserve">
     <value>Select All</value>
   </data>
-  <data name="tpAuth.Text" xml:space="preserve">
-    <value>[ Auth Info ]</value>
-  </data>
-  <data name="cAuthID.HeaderText" xml:space="preserve">
-    <value>ID</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cAuthID.Width" type="System.Int32, mscorlib">
-    <value>27</value>
-  </data>
-  <data name="cAuthTime.HeaderText" xml:space="preserve">
-    <value>Time</value>
-  </data>
-  <data name="cAuthTime.Width" type="System.Int32, mscorlib">
-    <value>42</value>
-  </data>
-  <data name="cIPAddress.HeaderText" xml:space="preserve">
-    <value>IP Address</value>
-  </data>
-  <data name="cIPAddress.Width" type="System.Int32, mscorlib">
-    <value>77</value>
-  </data>
-  <data name="cLinksNumber.HeaderText" xml:space="preserve">
-    <value>Links</value>
-  </data>
-  <data name="cLinksNumber.Width" type="System.Int32, mscorlib">
-    <value>43</value>
-  </data>
-  <data name="cUserName.HeaderText" xml:space="preserve">
-    <value>UserName</value>
-  </data>
-  <data name="cDevicesNumber.HeaderText" xml:space="preserve">
-    <value>Devices</value>
-  </data>
-  <data name="cDevicesNumber.Width" type="System.Int32, mscorlib">
-    <value>58</value>
-  </data>
-  <data name="dataGridViewCellStyle22.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEgoTGw8bGw8bGw8bGw8bGw8bGw8bG
-        w8bGw8bGw8bGw8bGw8bGw8YAAAAAAISChP///////////////////////////////////////////8bD
-        xgAAAAAAhIKE////////////////////////////////////////////xsPGAAAAAACEgoT/////////
-        ///////////////////////////////////Gw8YAAAAAAISChP//////////////////////////////
-        /////////////8bDxgAAAAAAhIKE////////////AAD/AAD/////////AAD/AAD/////////xsPGAAAA
-        AACEgoT///////////////8AAP8AAP8AAP8AAP/////////////Gw8YAAAAAAISChP//////////////
-        /////wAA/wAA/////////////////8bDxgAAAAAAhIKE////////////////AAD/AAD/AAD/AAD/////
-        ////////xsPGAAAAAACEgoT///////////8AAP8AAP////////8AAP8AAP/////////Gw8YAAAAAAISC
-        hP///////////////////////////////////////////8bDxgAAAAAAhIKE////////////////////
-        ////////////////////////xsPGAAAAAACEgoT/////////////////////////////////////////
-        ///Gw8YAAAAAAISChP///////////////////////////////////////////8bDxgAAAAAAhIKEhIKE
-        hIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEAAA=
-</value>
-  </data>
-  <data name="cAuthResult.HeaderText" xml:space="preserve">
-    <value>Auth Info</value>
-  </data>
-  <data name="cAuthResult.Width" type="System.Int32, mscorlib">
-    <value>67</value>
-  </data>
   <data name="tpLog.Text" xml:space="preserve">
     <value>[ Proxy Log ]</value>
   </data>
   <data name="cLogID.HeaderText" xml:space="preserve">
     <value>ID</value>
   </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="cLogID.Width" type="System.Int32, mscorlib">
     <value>27</value>
   </data>
@@ -6730,6 +6812,10 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>Inherit</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Socket Proxy Mode</value>

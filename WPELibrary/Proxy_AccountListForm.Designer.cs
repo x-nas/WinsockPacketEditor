@@ -69,6 +69,8 @@
             this.cmsAccountList_LoginInfo = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsAccountList_AddTime = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsAccountList_Links = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsAccountList_Devices = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsAccountList_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -103,8 +105,6 @@
             this.cbbSearch_State = new System.Windows.Forms.ComboBox();
             this.bSearch_State = new System.Windows.Forms.Button();
             this.bgwAccountList = new System.ComponentModel.BackgroundWorker();
-            this.cmsAccountList_Devices = new System.Windows.Forms.ToolStripMenuItem();
-            this.cmsAccountList_Links = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpProxyAccountList.SuspendLayout();
             this.ssProxyAccount.SuspendLayout();
             this.tlpAccountList.SuspendLayout();
@@ -406,6 +406,18 @@
             resources.ApplyResources(this.cmsAccountList_AddTime, "cmsAccountList_AddTime");
             this.cmsAccountList_AddTime.Name = "cmsAccountList_AddTime";
             // 
+            // cmsAccountList_Links
+            // 
+            this.cmsAccountList_Links.Image = global::WPELibrary.Properties.Resources.SelectAll;
+            resources.ApplyResources(this.cmsAccountList_Links, "cmsAccountList_Links");
+            this.cmsAccountList_Links.Name = "cmsAccountList_Links";
+            // 
+            // cmsAccountList_Devices
+            // 
+            this.cmsAccountList_Devices.Image = global::WPELibrary.Properties.Resources.SelectAll;
+            resources.ApplyResources(this.cmsAccountList_Devices, "cmsAccountList_Devices");
+            this.cmsAccountList_Devices.Name = "cmsAccountList_Devices";
+            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
@@ -657,18 +669,6 @@
             // 
             this.bgwAccountList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwAccountList_DoWork);
             this.bgwAccountList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwAccountList_RunWorkerCompleted);
-            // 
-            // cmsAccountList_Devices
-            // 
-            this.cmsAccountList_Devices.Image = global::WPELibrary.Properties.Resources.SelectAll;
-            resources.ApplyResources(this.cmsAccountList_Devices, "cmsAccountList_Devices");
-            this.cmsAccountList_Devices.Name = "cmsAccountList_Devices";
-            // 
-            // cmsAccountList_Links
-            // 
-            this.cmsAccountList_Links.Image = global::WPELibrary.Properties.Resources.SelectAll;
-            resources.ApplyResources(this.cmsAccountList_Links, "cmsAccountList_Links");
-            this.cmsAccountList_Links.Name = "cmsAccountList_Links";
             // 
             // Proxy_AccountListForm
             // 

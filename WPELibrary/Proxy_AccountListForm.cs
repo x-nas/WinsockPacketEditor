@@ -58,12 +58,12 @@ namespace WPELibrary
 
         private void Proxy_AccountListForm_Load(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow = true;            
+            Socket_Cache.ProxyAccount.IsShow_ProxyAccount = true;            
         }
 
         private void Proxy_AccountListForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow = false;
+            Socket_Cache.ProxyAccount.IsShow_ProxyAccount = false;
         }
 
         #endregion

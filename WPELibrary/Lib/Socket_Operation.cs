@@ -3751,7 +3751,7 @@ namespace WPELibrary.Lib
         {
             try
             {
-                if (!Socket_Cache.ProxyAccount.IsShow)
+                if (!Socket_Cache.ProxyAccount.IsShow_ProxyAccount)
                 {
                     Proxy_AccountListForm palForm = new Proxy_AccountListForm();
                     palForm.Show();
@@ -3769,6 +3769,26 @@ namespace WPELibrary.Lib
             {
                 Proxy_AccountForm paForm = new Proxy_AccountForm(AID);
                 paForm.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//显示账号认证记录窗体
+
+        public static void ShowProxyAuthForm()
+        {
+            try
+            {
+                if (!Socket_Cache.ProxyAccount.IsShow_ProxyAccount)
+                {
+                    Proxy_AccountAuthForm paaForm = new Proxy_AccountAuthForm();
+                    paaForm.Show();
+                }
             }
             catch (Exception ex)
             {

@@ -173,6 +173,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Proxy_AccountAuthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Proxy_AccountAuthForm.Designer.cs">
+      <DependentUpon>Proxy_AccountAuthForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Proxy_AccountForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -393,6 +399,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Proxy_AccountAuthForm.en-US.resx">
+      <DependentUpon>Proxy_AccountAuthForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Proxy_AccountAuthForm.resx">
+      <DependentUpon>Proxy_AccountAuthForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Proxy_AccountDevicesForm.en-US.resx">
       <DependentUpon>Proxy_AccountDevicesForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -47,7 +47,7 @@ namespace WPELibrary.Lib.WebAPI
 
         public IEnumerable<Proxy_AuthInfo> GetProxyAuthList()
         {
-            return Socket_Cache.SocketProxy.lstProxyAuth;
+            return Socket_Cache.ProxyAccount.lstProxyAuth;
         }
 
         #endregion
