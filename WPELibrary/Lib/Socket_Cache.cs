@@ -2824,7 +2824,7 @@ namespace WPELibrary.Lib
 
             public static int GetDevicesCount_FromProxyAuthList()
             {
-                return lstProxyAuth?.Sum(proxy => proxy.DevicesNumber) ?? 0;
+                return lstProxyAuth?.GroupBy(proxy => proxy.AID).Sum(group => group.First().DevicesNumber) ?? 0;
             }
 
             #endregion

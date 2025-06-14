@@ -117,270 +117,74 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="cIPAddress.HeaderText" xml:space="preserve">
-    <value>IP地址</value>
-  </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpAccountAuth_Search.ColumnCount" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="&gt;&gt;ssAccountAuth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpAccountAuth_Search.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 19</value>
-  </data>
-  <data name="&gt;&gt;cIPAddress.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="tlpAccountAuth.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;tsslAuthCount_Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;txtSearch_Account.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="cLinksNumber.HeaderText" xml:space="preserve">
-    <value>链接数</value>
-  </data>
-  <data name="&gt;&gt;tsslLinksCount.Name" xml:space="preserve">
-    <value>tsslLinksCount</value>
-  </data>
+  <metadata name="cAuthID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <data name="cAuthID.HeaderText" xml:space="preserve">
     <value>序号</value>
   </data>
-  <data name="&gt;&gt;cUserName.Name" xml:space="preserve">
-    <value>cUserName</value>
+  <data name="cAuthID.Width" type="System.Int32, mscorlib">
+    <value>38</value>
   </data>
+  <metadata name="cAuthTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cAuthTime.HeaderText" xml:space="preserve">
+    <value>记录时间</value>
+  </data>
+  <data name="cAuthTime.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <metadata name="cAID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <data name="cAID.HeaderText" xml:space="preserve">
     <value>AID</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="lSearch_Account.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
+  <data name="cAID.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
-  <data name="lSearch_Account.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <metadata name="cIPAddress.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cIPAddress.HeaderText" xml:space="preserve">
+    <value>IP地址</value>
   </data>
-  <data name="&gt;&gt;tsslLinksCount_Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="cIPAddress.Width" type="System.Int32, mscorlib">
+    <value>49</value>
   </data>
-  <data name="&gt;&gt;lSearch_Account.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <metadata name="cUserName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cUserName.HeaderText" xml:space="preserve">
+    <value>账号</value>
   </data>
-  <data name="dgvAuth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 83</value>
-  </data>
-  <data name="&gt;&gt;lSearch_Account.Name" xml:space="preserve">
-    <value>lSearch_Account</value>
-  </data>
-  <data name="&gt;&gt;cAuthID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tsslDevicesCount_Value.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="gbAccountAuth_Search.Text" xml:space="preserve">
-    <value>[ 查找记录 ]</value>
-  </data>
-  <data name="txtSearch_Account.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tsslAuthCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <metadata name="cLinksNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="cLinksNumber.HeaderText" xml:space="preserve">
+    <value>链接数</value>
   </data>
   <data name="cLinksNumber.Width" type="System.Int32, mscorlib">
     <value>50</value>
   </data>
-  <data name="ssAccountAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tsslAuthCount.Name" xml:space="preserve">
-    <value>tsslAuthCount</value>
-  </data>
-  <data name="tlpAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>584, 761</value>
-  </data>
-  <data name="&gt;&gt;tsslLinksCount_Value.Name" xml:space="preserve">
-    <value>tsslLinksCount_Value</value>
-  </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel4.Name" xml:space="preserve">
-    <value>toolStripStatusLabel4</value>
-  </data>
-  <data name="&gt;&gt;lSearch_Account.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="gbAccountAuth_Search.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>Proxy_AccountAuthForm</value>
-  </data>
-  <data name="&gt;&gt;bSearch_Account.Parent" xml:space="preserve">
-    <value>tlpAccountAuth_Search</value>
-  </data>
-  <data name="ssAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 22</value>
-  </data>
-  <data name="&gt;&gt;bSearch_Account.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tsslAuthCount.Text" xml:space="preserve">
-    <value>记录总数:</value>
-  </data>
-  <data name="&gt;&gt;cAuthID.Name" xml:space="preserve">
-    <value>cAuthID</value>
-  </data>
-  <data name="&gt;&gt;ssAccountAuth.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="tlpAccountAuth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="toolStripStatusLabel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>11, 17</value>
-  </data>
-  <data name="cDevicesNumber.HeaderText" xml:space="preserve">
-    <value>设备数</value>
-  </data>
-  <data name="tlpAccountAuth_Search.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtSearch_Account" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSearch_Account" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lSearch_Account" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,10,Absolute,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth_Search.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lSearch_Account.Text" xml:space="preserve">
-    <value>账号 / IP地址:</value>
-  </data>
-  <data name="bSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 29</value>
-  </data>
-  <data name="txtSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterParent</value>
-  </data>
-  <data name="tlpAccountAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;txtSearch_Account.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth_Search.Parent" xml:space="preserve">
-    <value>gbAccountAuth_Search</value>
-  </data>
-  <data name="lSearch_Account.AutoSize" type="System.Boolean, mscorlib">
+  <metadata name="cDevicesNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <data name="cDevicesNumber.HeaderText" xml:space="preserve">
+    <value>设备总数</value>
   </data>
-  <data name="tlpAccountAuth.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="cDevicesNumber.Width" type="System.Int32, mscorlib">
+    <value>62</value>
   </data>
-  <data name="toolStripStatusLabel1.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="&gt;&gt;gbAccountAuth_Search.Name" xml:space="preserve">
-    <value>gbAccountAuth_Search</value>
-  </data>
-  <data name="toolStripStatusLabel4.Text" xml:space="preserve">
-    <value>|</value>
-  </data>
-  <data name="&gt;&gt;tsslDevicesCount.Name" xml:space="preserve">
-    <value>tsslDevicesCount</value>
-  </data>
-  <data name="&gt;&gt;cAID.Name" xml:space="preserve">
-    <value>cAID</value>
-  </data>
-  <data name="tlpAccountAuth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;cLinksNumber.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpAccountAuth.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="tlpAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>572, 52</value>
-  </data>
-  <data name="&gt;&gt;cAuthResult.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tsslLinksCount_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="gbAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 74</value>
-  </data>
-  <data name="&gt;&gt;lSearch_Account.Parent" xml:space="preserve">
-    <value>tlpAccountAuth_Search</value>
-  </data>
-  <data name="&gt;&gt;txtSearch_Account.Name" xml:space="preserve">
-    <value>txtSearch_Account</value>
-  </data>
-  <data name="tlpAccountAuth_Search.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;dgvAuth.Name" xml:space="preserve">
-    <value>dgvAuth</value>
-  </data>
-  <data name="&gt;&gt;dgvAuth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
-    <value>微软雅黑, 9pt</value>
-  </data>
-  <data name="tlpAccountAuth.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAuth" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssAccountAuth" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbAccountAuth_Search" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="bSearch_Account.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="tsslAuthCount_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="&gt;&gt;ssAccountAuth.Name" xml:space="preserve">
-    <value>ssAccountAuth</value>
-  </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>96, 96</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth_Search.Name" xml:space="preserve">
-    <value>tlpAccountAuth_Search</value>
-  </data>
-  <data name="&gt;&gt;tsslDevicesCount_Value.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>账号认证记录</value>
-  </data>
-  <data name="&gt;&gt;tsslLinksCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;bSearch_Account.Name" xml:space="preserve">
-    <value>bSearch_Account</value>
-  </data>
-  <data name="&gt;&gt;cAuthResult.Name" xml:space="preserve">
-    <value>cAuthResult</value>
-  </data>
-  <data name="tsslDevicesCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="gbAccountAuth_Search.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 3</value>
-  </data>
+  <metadata name="cAuthResult.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="dataGridViewCellStyle9.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -398,29 +202,330 @@
         hIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEAAA=
 </value>
   </data>
-  <data name="dgvAuth.Size" type="System.Drawing.Size, System.Drawing">
-    <value>578, 647</value>
+  <data name="cAuthResult.HeaderText" xml:space="preserve">
+    <value>认证结果</value>
   </data>
-  <data name="cAID.Visible" type="System.Boolean, mscorlib">
+  <data name="cAuthResult.Width" type="System.Int32, mscorlib">
+    <value>62</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="dgvAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="dgvAuth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 83</value>
+  </data>
+  <data name="dgvAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 647</value>
+  </data>
+  <data name="dgvAuth.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;dgvAuth.Name" xml:space="preserve">
+    <value>dgvAuth</value>
+  </data>
+  <data name="&gt;&gt;dgvAuth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dgvAuth.Parent" xml:space="preserve">
+    <value>tlpAccountAuth</value>
+  </data>
+  <data name="&gt;&gt;dgvAuth.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="ssAccountAuth.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="ssAccountAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tsslAuthCount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="tsslAuthCount.Text" xml:space="preserve">
+    <value>记录总数:</value>
+  </data>
+  <data name="tsslAuthCount_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="tsslAuthCount_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tsslAuthCount_Value.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel1.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="&gt;&gt;tsslDevicesCount_Value.Name" xml:space="preserve">
-    <value>tsslDevicesCount_Value</value>
+  <data name="toolStripStatusLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel1.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tsslLinksCount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="tsslLinksCount.Text" xml:space="preserve">
+    <value>链接总数:</value>
+  </data>
+  <data name="tsslLinksCount_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="tsslLinksCount_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tsslLinksCount_Value.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="toolStripStatusLabel4.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="toolStripStatusLabel4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>11, 17</value>
+  </data>
+  <data name="toolStripStatusLabel4.Text" xml:space="preserve">
+    <value>|</value>
+  </data>
+  <data name="tsslDevicesCount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 17</value>
+  </data>
+  <data name="tsslDevicesCount.Text" xml:space="preserve">
+    <value>设备总数:</value>
+  </data>
+  <data name="tsslDevicesCount_Value.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
+  </data>
+  <data name="tsslDevicesCount_Value.Size" type="System.Drawing.Size, System.Drawing">
+    <value>15, 17</value>
+  </data>
+  <data name="tsslDevicesCount_Value.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ssAccountAuth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 736</value>
+  </data>
+  <data name="ssAccountAuth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="ssAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 22</value>
+  </data>
+  <data name="ssAccountAuth.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;ssAccountAuth.Name" xml:space="preserve">
+    <value>ssAccountAuth</value>
+  </data>
+  <data name="&gt;&gt;ssAccountAuth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ssAccountAuth.Parent" xml:space="preserve">
+    <value>tlpAccountAuth</value>
+  </data>
+  <data name="&gt;&gt;ssAccountAuth.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tlpAccountAuth_Search.ColumnCount" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="txtSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="txtSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
+    <value>92, 14</value>
+  </data>
+  <data name="txtSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
+    <value>417, 23</value>
+  </data>
+  <data name="txtSearch_Account.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;txtSearch_Account.Name" xml:space="preserve">
+    <value>txtSearch_Account</value>
+  </data>
+  <data name="&gt;&gt;txtSearch_Account.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;txtSearch_Account.Parent" xml:space="preserve">
+    <value>tlpAccountAuth_Search</value>
+  </data>
+  <data name="&gt;&gt;txtSearch_Account.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="bSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="bSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
+    <value>522, 11</value>
+  </data>
+  <data name="bSearch_Account.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="bSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 29</value>
+  </data>
+  <data name="bSearch_Account.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="bSearch_Account.Text" xml:space="preserve">
+    <value>查找下一个 (&amp;F)</value>
+  </data>
+  <data name="&gt;&gt;bSearch_Account.Name" xml:space="preserve">
+    <value>bSearch_Account</value>
+  </data>
+  <data name="&gt;&gt;bSearch_Account.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bSearch_Account.Parent" xml:space="preserve">
+    <value>tlpAccountAuth_Search</value>
+  </data>
+  <data name="&gt;&gt;bSearch_Account.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lSearch_Account.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="lSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 14</value>
+  </data>
+  <data name="lSearch_Account.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 3, 3, 3</value>
+  </data>
+  <data name="lSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
+    <value>83, 23</value>
+  </data>
+  <data name="lSearch_Account.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="lSearch_Account.Text" xml:space="preserve">
+    <value>账号 / IP地址:</value>
+  </data>
+  <data name="lSearch_Account.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;lSearch_Account.Name" xml:space="preserve">
+    <value>lSearch_Account</value>
+  </data>
+  <data name="&gt;&gt;lSearch_Account.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lSearch_Account.Parent" xml:space="preserve">
+    <value>tlpAccountAuth_Search</value>
+  </data>
+  <data name="&gt;&gt;lSearch_Account.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="tlpAccountAuth_Search.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tlpAccountAuth_Search.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 19</value>
+  </data>
+  <data name="tlpAccountAuth_Search.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAccountAuth_Search.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
+    <value>622, 52</value>
+  </data>
+  <data name="tlpAccountAuth_Search.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth_Search.Name" xml:space="preserve">
+    <value>tlpAccountAuth_Search</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth_Search.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth_Search.Parent" xml:space="preserve">
+    <value>gbAccountAuth_Search</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth_Search.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAccountAuth_Search.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="txtSearch_Account" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSearch_Account" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lSearch_Account" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,10,Absolute,100" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="gbAccountAuth_Search.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="gbAccountAuth_Search.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="gbAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 74</value>
+  </data>
+  <data name="gbAccountAuth_Search.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="gbAccountAuth_Search.Text" xml:space="preserve">
+    <value>[ 查找记录 ]</value>
+  </data>
+  <data name="&gt;&gt;gbAccountAuth_Search.Name" xml:space="preserve">
+    <value>gbAccountAuth_Search</value>
   </data>
   <data name="&gt;&gt;gbAccountAuth_Search.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cAID.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;gbAccountAuth_Search.Parent" xml:space="preserve">
+    <value>tlpAccountAuth</value>
   </data>
-  <data name="&gt;&gt;toolStripStatusLabel4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;gbAccountAuth_Search.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
-  <data name="&gt;&gt;cUserName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="tlpAccountAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
   </data>
-  <data name="toolStripStatusLabel1.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
+  <data name="tlpAccountAuth.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tlpAccountAuth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 0, 0, 0</value>
+  </data>
+  <data name="tlpAccountAuth.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="tlpAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>634, 761</value>
+  </data>
+  <data name="tlpAccountAuth.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth.Name" xml:space="preserve">
+    <value>tlpAccountAuth</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;tlpAccountAuth.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tlpAccountAuth.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="dgvAuth" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssAccountAuth" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbAccountAuth_Search" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80,Percent,100,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>634, 761</value>
+  </data>
+  <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
+    <value>微软雅黑, 9pt</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -6594,237 +6699,112 @@
         AAB8AAAAf4AAAD/wAAAP/gAAD/AAAA/wAAAP4AAAB+AAAAAAAAAAAAAAAAAAAAAAAAA=
 </value>
   </data>
-  <data name="&gt;&gt;gbAccountAuth_Search.ZOrder" xml:space="preserve">
-    <value>2</value>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
   </data>
-  <data name="cAuthID.Width" type="System.Int32, mscorlib">
-    <value>38</value>
+  <data name="$this.Text" xml:space="preserve">
+    <value>账号认证记录</value>
   </data>
-  <data name="&gt;&gt;cAuthTime.Type" xml:space="preserve">
+  <data name="&gt;&gt;cAuthID.Name" xml:space="preserve">
+    <value>cAuthID</value>
+  </data>
+  <data name="&gt;&gt;cAuthID.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="ssAccountAuth.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;cDevicesNumber.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="dgvAuth.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth_Search.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tlpAccountAuth_Search.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="tsslDevicesCount.Text" xml:space="preserve">
-    <value>设备总数:</value>
-  </data>
-  <data name="ssAccountAuth.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>3, 3, 3, 3</value>
-  </data>
-  <data name="txtSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
-    <value>92, 14</value>
-  </data>
-  <data name="tsslLinksCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="bSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>584, 761</value>
-  </data>
-  <data name="tsslDevicesCount_Value.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="cIPAddress.Width" type="System.Int32, mscorlib">
-    <value>49</value>
-  </data>
-  <data name="tsslAuthCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 17</value>
-  </data>
-  <data name="&gt;&gt;tsslDevicesCount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tsslAuthCount_Value.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tlpAccountAuth_Search.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth.Name" xml:space="preserve">
-    <value>tlpAccountAuth</value>
-  </data>
-  <data name="&gt;&gt;txtSearch_Account.Parent" xml:space="preserve">
-    <value>tlpAccountAuth_Search</value>
-  </data>
-  <data name="cAID.Width" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="gbAccountAuth_Search.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="cDevicesNumber.Width" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
-  <data name="tsslDevicesCount_Value.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 17</value>
-  </data>
-  <data name="toolStripStatusLabel4.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="tsslLinksCount.Text" xml:space="preserve">
-    <value>链接总数:</value>
-  </data>
-  <data name="bSearch_Account.Text" xml:space="preserve">
-    <value>查找下一个 (&amp;F)</value>
-  </data>
-  <data name="lSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 14</value>
-  </data>
-  <data name="&gt;&gt;cIPAddress.Name" xml:space="preserve">
-    <value>cIPAddress</value>
-  </data>
-  <data name="cUserName.HeaderText" xml:space="preserve">
-    <value>账号</value>
-  </data>
-  <data name="&gt;&gt;tsslAuthCount_Value.Name" xml:space="preserve">
-    <value>tsslAuthCount_Value</value>
-  </data>
-  <data name="&gt;&gt;cDevicesNumber.Name" xml:space="preserve">
-    <value>cDevicesNumber</value>
-  </data>
-  <data name="&gt;&gt;dgvAuth.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="bSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
-    <value>472, 11</value>
-  </data>
-  <data name="&gt;&gt;ssAccountAuth.Parent" xml:space="preserve">
-    <value>tlpAccountAuth</value>
-  </data>
-  <data name="cAuthResult.Width" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="&gt;&gt;gbAccountAuth_Search.Parent" xml:space="preserve">
-    <value>tlpAccountAuth</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="lSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 23</value>
-  </data>
-  <data name="ssAccountAuth.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 736</value>
-  </data>
-  <data name="lSearch_Account.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tsslAuthCount_Value.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
-  </data>
-  <data name="&gt;&gt;cLinksNumber.Name" xml:space="preserve">
-    <value>cLinksNumber</value>
-  </data>
-  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
-    <value>toolStripStatusLabel1</value>
-  </data>
-  <data name="cAuthResult.HeaderText" xml:space="preserve">
-    <value>认证结果</value>
-  </data>
-  <data name="tlpAccountAuth_Search.RowCount" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="bSearch_Account.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 0, 0, 0</value>
-  </data>
-  <data name="&gt;&gt;dgvAuth.Parent" xml:space="preserve">
-    <value>tlpAccountAuth</value>
-  </data>
-  <data name="txtSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
-    <value>367, 23</value>
-  </data>
-  <data name="dataGridViewCellStyle18.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        Qk32AgAAAAAAADYAAAAoAAAADgAAABAAAAABABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACEgoTGw8bGw8bGw8bGw8bGw8bGw8bG
-        w8bGw8bGw8bGw8bGw8bGw8YAAAAAAISChP///////////////////////////////////////////8bD
-        xgAAAAAAhIKE////////////////////////////////////////////xsPGAAAAAACEgoT/////////
-        ///////////////////////////////////Gw8YAAAAAAISChP//////////////////////////////
-        /////////////8bDxgAAAAAAhIKE////////////AAD/AAD/////////AAD/AAD/////////xsPGAAAA
-        AACEgoT///////////////8AAP8AAP8AAP8AAP/////////////Gw8YAAAAAAISChP//////////////
-        /////wAA/wAA/////////////////8bDxgAAAAAAhIKE////////////////AAD/AAD/AAD/AAD/////
-        ////////xsPGAAAAAACEgoT///////////8AAP8AAP////////8AAP8AAP/////////Gw8YAAAAAAISC
-        hP///////////////////////////////////////////8bDxgAAAAAAhIKE////////////////////
-        ////////////////////////xsPGAAAAAACEgoT/////////////////////////////////////////
-        ///Gw8YAAAAAAISChP///////////////////////////////////////////8bDxgAAAAAAhIKEhIKE
-        hIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEhIKEAAA=
-</value>
-  </data>
-  <data name="dgvAuth.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="lSearch_Account.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;bSearch_Account.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="tsslLinksCount_Value.Text" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;tlpAccountAuth.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="cAuthTime.HeaderText" xml:space="preserve">
-    <value>记录时间</value>
-  </data>
-  <data name="cAuthTime.Width" type="System.Int32, mscorlib">
-    <value>62</value>
-  </data>
-  <data name="tsslLinksCount_Value.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft YaHei UI, 9pt, style=Bold</value>
   </data>
   <data name="&gt;&gt;cAuthTime.Name" xml:space="preserve">
     <value>cAuthTime</value>
   </data>
-  <metadata name="cUserName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cAID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cAuthTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cIPAddress.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cLinksNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cDevicesNumber.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="cAuthResult.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ssAccountAuth.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="cAuthID.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
+  <data name="&gt;&gt;cAuthTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cAID.Name" xml:space="preserve">
+    <value>cAID</value>
+  </data>
+  <data name="&gt;&gt;cAID.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cIPAddress.Name" xml:space="preserve">
+    <value>cIPAddress</value>
+  </data>
+  <data name="&gt;&gt;cIPAddress.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cUserName.Name" xml:space="preserve">
+    <value>cUserName</value>
+  </data>
+  <data name="&gt;&gt;cUserName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cLinksNumber.Name" xml:space="preserve">
+    <value>cLinksNumber</value>
+  </data>
+  <data name="&gt;&gt;cLinksNumber.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cDevicesNumber.Name" xml:space="preserve">
+    <value>cDevicesNumber</value>
+  </data>
+  <data name="&gt;&gt;cDevicesNumber.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cAuthResult.Name" xml:space="preserve">
+    <value>cAuthResult</value>
+  </data>
+  <data name="&gt;&gt;cAuthResult.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslAuthCount.Name" xml:space="preserve">
+    <value>tsslAuthCount</value>
+  </data>
+  <data name="&gt;&gt;tsslAuthCount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslAuthCount_Value.Name" xml:space="preserve">
+    <value>tsslAuthCount_Value</value>
+  </data>
+  <data name="&gt;&gt;tsslAuthCount_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Name" xml:space="preserve">
+    <value>toolStripStatusLabel1</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslLinksCount.Name" xml:space="preserve">
+    <value>tsslLinksCount</value>
+  </data>
+  <data name="&gt;&gt;tsslLinksCount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslLinksCount_Value.Name" xml:space="preserve">
+    <value>tsslLinksCount_Value</value>
+  </data>
+  <data name="&gt;&gt;tsslLinksCount_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Name" xml:space="preserve">
+    <value>toolStripStatusLabel4</value>
+  </data>
+  <data name="&gt;&gt;toolStripStatusLabel4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslDevicesCount.Name" xml:space="preserve">
+    <value>tsslDevicesCount</value>
+  </data>
+  <data name="&gt;&gt;tsslDevicesCount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tsslDevicesCount_Value.Name" xml:space="preserve">
+    <value>tsslDevicesCount_Value</value>
+  </data>
+  <data name="&gt;&gt;tsslDevicesCount_Value.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>Proxy_AccountAuthForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

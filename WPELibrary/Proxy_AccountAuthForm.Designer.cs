@@ -29,17 +29,25 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Proxy_AccountAuthForm));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tlpAccountAuth = new System.Windows.Forms.TableLayoutPanel();
             this.dgvAuth = new System.Windows.Forms.DataGridView();
+            this.cAuthID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAuthTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cLinksNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cDevicesNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAuthResult = new System.Windows.Forms.DataGridViewImageColumn();
             this.ssAccountAuth = new System.Windows.Forms.StatusStrip();
             this.tsslAuthCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslAuthCount_Value = new System.Windows.Forms.ToolStripStatusLabel();
@@ -54,14 +62,6 @@
             this.txtSearch_Account = new System.Windows.Forms.TextBox();
             this.bSearch_Account = new System.Windows.Forms.Button();
             this.lSearch_Account = new System.Windows.Forms.Label();
-            this.cAuthID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAuthTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cIPAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cLinksNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cDevicesNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAuthResult = new System.Windows.Forms.DataGridViewImageColumn();
             this.tlpAccountAuth.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAuth)).BeginInit();
             this.ssAccountAuth.SuspendLayout();
@@ -79,7 +79,6 @@
             // 
             // dgvAuth
             // 
-            resources.ApplyResources(this.dgvAuth, "dgvAuth");
             this.dgvAuth.AllowUserToAddRows = false;
             this.dgvAuth.AllowUserToDeleteRows = false;
             this.dgvAuth.AllowUserToResizeColumns = false;
@@ -88,14 +87,14 @@
             this.dgvAuth.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgvAuth.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dgvAuth.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("微软雅黑", 9F);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvAuth.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("微软雅黑", 9F);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvAuth.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvAuth.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAuth.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cAuthID,
@@ -106,6 +105,7 @@
             this.cLinksNumber,
             this.cDevicesNumber,
             this.cAuthResult});
+            resources.ApplyResources(this.dgvAuth, "dgvAuth");
             this.dgvAuth.MultiSelect = false;
             this.dgvAuth.Name = "dgvAuth";
             this.dgvAuth.ReadOnly = true;
@@ -115,6 +115,108 @@
             this.dgvAuth.RowTemplate.Height = 23;
             this.dgvAuth.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAuth.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvAuth_CellFormatting);
+            // 
+            // cAuthID
+            // 
+            this.cAuthID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthID.DefaultCellStyle = dataGridViewCellStyle2;
+            resources.ApplyResources(this.cAuthID, "cAuthID");
+            this.cAuthID.Name = "cAuthID";
+            this.cAuthID.ReadOnly = true;
+            this.cAuthID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cAuthTime
+            // 
+            this.cAuthTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cAuthTime.DataPropertyName = "AuthTime";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthTime.DefaultCellStyle = dataGridViewCellStyle3;
+            resources.ApplyResources(this.cAuthTime, "cAuthTime");
+            this.cAuthTime.Name = "cAuthTime";
+            this.cAuthTime.ReadOnly = true;
+            this.cAuthTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cAID
+            // 
+            this.cAID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cAID.DataPropertyName = "AID";
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAID.DefaultCellStyle = dataGridViewCellStyle4;
+            resources.ApplyResources(this.cAID, "cAID");
+            this.cAID.Name = "cAID";
+            this.cAID.ReadOnly = true;
+            this.cAID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cIPAddress
+            // 
+            this.cIPAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cIPAddress.DataPropertyName = "IPAddress";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle5;
+            resources.ApplyResources(this.cIPAddress, "cIPAddress");
+            this.cIPAddress.Name = "cIPAddress";
+            this.cIPAddress.ReadOnly = true;
+            this.cIPAddress.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cIPAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cUserName
+            // 
+            this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cUserName.DefaultCellStyle = dataGridViewCellStyle6;
+            resources.ApplyResources(this.cUserName, "cUserName");
+            this.cUserName.Name = "cUserName";
+            this.cUserName.ReadOnly = true;
+            this.cUserName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cUserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cLinksNumber
+            // 
+            this.cLinksNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cLinksNumber.DataPropertyName = "LinksNumber";
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLinksNumber.DefaultCellStyle = dataGridViewCellStyle7;
+            resources.ApplyResources(this.cLinksNumber, "cLinksNumber");
+            this.cLinksNumber.Name = "cLinksNumber";
+            this.cLinksNumber.ReadOnly = true;
+            this.cLinksNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cLinksNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cDevicesNumber
+            // 
+            this.cDevicesNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cDevicesNumber.DataPropertyName = "DevicesNumber";
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cDevicesNumber.DefaultCellStyle = dataGridViewCellStyle8;
+            resources.ApplyResources(this.cDevicesNumber, "cDevicesNumber");
+            this.cDevicesNumber.Name = "cDevicesNumber";
+            this.cDevicesNumber.ReadOnly = true;
+            this.cDevicesNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.cDevicesNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // cAuthResult
+            // 
+            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.cAuthResult.DataPropertyName = "AuthResult";
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle9.NullValue")));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.cAuthResult.DefaultCellStyle = dataGridViewCellStyle9;
+            resources.ApplyResources(this.cAuthResult, "cAuthResult");
+            this.cAuthResult.Name = "cAuthResult";
+            this.cAuthResult.ReadOnly = true;
+            this.cAuthResult.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // ssAccountAuth
             // 
@@ -132,8 +234,8 @@
             // 
             // tsslAuthCount
             // 
-            resources.ApplyResources(this.tsslAuthCount, "tsslAuthCount");
             this.tsslAuthCount.Name = "tsslAuthCount";
+            resources.ApplyResources(this.tsslAuthCount, "tsslAuthCount");
             // 
             // tsslAuthCount_Value
             // 
@@ -147,8 +249,8 @@
             // 
             // tsslLinksCount
             // 
-            resources.ApplyResources(this.tsslLinksCount, "tsslLinksCount");
             this.tsslLinksCount.Name = "tsslLinksCount";
+            resources.ApplyResources(this.tsslLinksCount, "tsslLinksCount");
             // 
             // tsslLinksCount_Value
             // 
@@ -162,8 +264,8 @@
             // 
             // tsslDevicesCount
             // 
-            resources.ApplyResources(this.tsslDevicesCount, "tsslDevicesCount");
             this.tsslDevicesCount.Name = "tsslDevicesCount";
+            resources.ApplyResources(this.tsslDevicesCount, "tsslDevicesCount");
             // 
             // tsslDevicesCount_Value
             // 
@@ -172,8 +274,8 @@
             // 
             // gbAccountAuth_Search
             // 
-            resources.ApplyResources(this.gbAccountAuth_Search, "gbAccountAuth_Search");
             this.gbAccountAuth_Search.Controls.Add(this.tlpAccountAuth_Search);
+            resources.ApplyResources(this.gbAccountAuth_Search, "gbAccountAuth_Search");
             this.gbAccountAuth_Search.Name = "gbAccountAuth_Search";
             this.gbAccountAuth_Search.TabStop = false;
             // 
@@ -201,108 +303,6 @@
             // 
             resources.ApplyResources(this.lSearch_Account, "lSearch_Account");
             this.lSearch_Account.Name = "lSearch_Account";
-            // 
-            // cAuthID
-            // 
-            this.cAuthID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthID.DefaultCellStyle = dataGridViewCellStyle11;
-            resources.ApplyResources(this.cAuthID, "cAuthID");
-            this.cAuthID.Name = "cAuthID";
-            this.cAuthID.ReadOnly = true;
-            this.cAuthID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cAuthTime
-            // 
-            this.cAuthTime.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cAuthTime.DataPropertyName = "AuthTime";
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthTime.DefaultCellStyle = dataGridViewCellStyle12;
-            resources.ApplyResources(this.cAuthTime, "cAuthTime");
-            this.cAuthTime.Name = "cAuthTime";
-            this.cAuthTime.ReadOnly = true;
-            this.cAuthTime.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthTime.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cAID
-            // 
-            this.cAID.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cAID.DataPropertyName = "AID";
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAID.DefaultCellStyle = dataGridViewCellStyle13;
-            resources.ApplyResources(this.cAID, "cAID");
-            this.cAID.Name = "cAID";
-            this.cAID.ReadOnly = true;
-            this.cAID.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAID.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cIPAddress
-            // 
-            this.cIPAddress.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cIPAddress.DataPropertyName = "IPAddress";
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPAddress.DefaultCellStyle = dataGridViewCellStyle14;
-            resources.ApplyResources(this.cIPAddress, "cIPAddress");
-            this.cIPAddress.Name = "cIPAddress";
-            this.cIPAddress.ReadOnly = true;
-            this.cIPAddress.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cIPAddress.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cUserName
-            // 
-            this.cUserName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cUserName.DefaultCellStyle = dataGridViewCellStyle15;
-            resources.ApplyResources(this.cUserName, "cUserName");
-            this.cUserName.Name = "cUserName";
-            this.cUserName.ReadOnly = true;
-            this.cUserName.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cUserName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cLinksNumber
-            // 
-            this.cLinksNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cLinksNumber.DataPropertyName = "LinksNumber";
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLinksNumber.DefaultCellStyle = dataGridViewCellStyle16;
-            resources.ApplyResources(this.cLinksNumber, "cLinksNumber");
-            this.cLinksNumber.Name = "cLinksNumber";
-            this.cLinksNumber.ReadOnly = true;
-            this.cLinksNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cLinksNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cDevicesNumber
-            // 
-            this.cDevicesNumber.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cDevicesNumber.DataPropertyName = "DevicesNumber";
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cDevicesNumber.DefaultCellStyle = dataGridViewCellStyle17;
-            resources.ApplyResources(this.cDevicesNumber, "cDevicesNumber");
-            this.cDevicesNumber.Name = "cDevicesNumber";
-            this.cDevicesNumber.ReadOnly = true;
-            this.cDevicesNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.cDevicesNumber.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // cAuthResult
-            // 
-            this.cAuthResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.cAuthResult.DataPropertyName = "AuthResult";
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle18.NullValue")));
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.cAuthResult.DefaultCellStyle = dataGridViewCellStyle18;
-            resources.ApplyResources(this.cAuthResult, "cAuthResult");
-            this.cAuthResult.Name = "cAuthResult";
-            this.cAuthResult.ReadOnly = true;
-            this.cAuthResult.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             // 
             // Proxy_AccountAuthForm
             // 

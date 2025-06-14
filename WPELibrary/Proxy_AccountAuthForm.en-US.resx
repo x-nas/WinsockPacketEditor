@@ -146,10 +146,10 @@
     <value>43</value>
   </data>
   <data name="cDevicesNumber.HeaderText" xml:space="preserve">
-    <value>Devices</value>
+    <value>Total Devices</value>
   </data>
   <data name="cDevicesNumber.Width" type="System.Int32, mscorlib">
-    <value>58</value>
+    <value>91</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="dataGridViewCellStyle18.NullValue" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -175,8 +175,20 @@
   <data name="cAuthResult.Width" type="System.Int32, mscorlib">
     <value>79</value>
   </data>
+  <data name="dgvAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 647</value>
+  </data>
+  <data name="ssAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 22</value>
+  </data>
+  <data name="gbAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
+    <value>628, 74</value>
+  </data>
   <data name="gbAccountAuth_Search.Text" xml:space="preserve">
     <value>[ Find Record ]</value>
+  </data>
+  <data name="tlpAccountAuth.Size" type="System.Drawing.Size, System.Drawing">
+    <value>634, 761</value>
   </data>
   <data name="tsslAuthCount.Size" type="System.Drawing.Size, System.Drawing">
     <value>92, 17</value>
@@ -196,11 +208,17 @@
   <data name="tsslDevicesCount.Text" xml:space="preserve">
     <value>Total Devices:</value>
   </data>
+  <data name="tlpAccountAuth_Search.Size" type="System.Drawing.Size, System.Drawing">
+    <value>622, 52</value>
+  </data>
   <data name="txtSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
     <value>90, 14</value>
   </data>
   <data name="txtSearch_Account.Size" type="System.Drawing.Size, System.Drawing">
-    <value>369, 23</value>
+    <value>419, 23</value>
+  </data>
+  <data name="bSearch_Account.Location" type="System.Drawing.Point, System.Drawing">
+    <value>522, 11</value>
   </data>
   <data name="bSearch_Account.Text" xml:space="preserve">
     <value>Find Next (&amp;F)</value>
@@ -210,6 +228,9 @@
   </data>
   <data name="lSearch_Account.Text" xml:space="preserve">
     <value>Account / IP:</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>634, 761</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
