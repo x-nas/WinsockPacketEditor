@@ -7,15 +7,18 @@
 [![Visitors](https://visitor-badge.laobi.icu/badge?page_id=x-nas.WinsockPacketEditor&title=Visitors)](https://github.com/x-nas/WinsockPacketEditor)
 ![GitHub Repo stars](https://img.shields.io/github/stars/x-nas/WinsockPacketEditor?style=dark)
 ![GitHub Repo forks](https://img.shields.io/github/forks/x-nas/WinsockPacketEditor?style=dark)
-[![star](https://gitee.com/x-nas/WinsockPacketEditor/badge/star.svg?theme=dark)](https://gitee.com/x-nas/WinsockPacketEditor/stargazers)
-[![fork](https://gitee.com/x-nas/WinsockPacketEditor/badge/fork.svg?theme=dark)](https://gitee.com/x-nas/WinsockPacketEditor/members)
+[![Release](https://img.shields.io/github/v/release/x-nas/WinsockPacketEditor?sort=semver)](https://github.com/x-nas/WinsockPacketEditor/releases)
 
 &bull; <a href="https://www.wpe64.com">官方网站</a>
 &bull; <a href="https://www.wpe64.com">Official website</a>
 
 </div>
 
-## 软件简介
+## [⭐] 星星历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=x-nas/WinsockPacketEditor&type=Date)](https://www.star-history.com/#x-nas/WinsockPacketEditor&Date)
+
+## [📚] 软件简介
 
 WPE x64 是一款可以拦截并修改 WinSock 封包的 Windows 软件，自适应支持 32 位及 64 位的目标程序，软件支持 SOCKS 代理和进程注入两种模式，并且具有高级滤镜和自动化机器人等功能，开发中使用了 C# 的多线程和消息队列技术，测试拦截了 100 万+的封包不会卡死或退出，软件不定期会修复 Bug 和更新功能，每次启动的时候支持在线自动更新.
 
@@ -23,7 +26,7 @@ WPE x64 支持直接注入 Windows 进程来拦截 Winsock 封包，也可以通
 
 本软件使用了微软的 VS2022 集成开发环境，.NET Framework 4.8 开发框架，以及 ClickOnce 部署资源。每次版本更新后，都会在启动程序时自动下载最新版本。如果更新服务器不可用，也不会导致程序无法使用。当然，如果您不希望自动更新，也可以在启动时手动关闭自动更新，或者直接下载离线打包版使用。
 
-## Introduction
+## [📚] Introduction
 
 WPE x64 is a Windows software that can intercept and modify WinSock packets, with adaptive support for 32-bit and 64-bit target programs. The software supports two modes: SOCKS proxy and process injection, and has advanced filters and automated robots. It uses C# multi threading and message queue technology in development, and has intercepted over 1 million packets without freezing or exiting. The software fixes bugs and updates periodically, and supports online automatic updates every time it starts.
 
@@ -31,7 +34,7 @@ WPE x64 supports direct injection into Windows processes to intercept Winsock pa
 
 This software uses Microsoft's VS2022 integrated development environment NET Framework 4.8 development framework, as well as GTK deployment resources. After each version update, the latest version will be automatically downloaded when the program is launched. If the update server is unavailable, it will not cause the program to be unusable. Of course, if you do not want automatic updates, you can manually turn off automatic updates at startup or download the offline packaged version directly for use.
 
-## 软件特色
+## [🎖️] 软件特色
 
 - [x] 支持 SOCKS 代理和进程注入两种模式，确保在各种情况下都可以拦截到 Winsock 封包.
 - [x] 代理模式下支持多种主流代理协议和 SSL 安全协议，并具有端口映射和断点调试等功能.
@@ -57,7 +60,7 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] 采用微软 ClickOnce 发布技术，支持在线自动安装和更新.
 - [x] 支持多语言版本，方便不同国家和地区的用户使用.
 
-## Features
+## [🎖️] Features
 
 - [x] Supports both SOCKS proxy and process injection modes to ensure that Winsock packets can be intercepted in various situations.
 - [x] In proxy mode, it supports multiple mainstream proxy protocols and SSL security protocols, and has functions such as port mapping and breakpoint debugging.
@@ -83,14 +86,18 @@ This software uses Microsoft's VS2022 integrated development environment NET Fra
 - [x] Adopting Microsoft ClickOnce release technology, supporting online automatic installation and updates.
 - [x] Supports multiple language versions, making it convenient for users from different countries and regions to use.
 
-## 软件界面 Software UI
+## [🖼️] 软件界面 Software UI
 
 ![Proxy](https://github.com/user-attachments/assets/ba1bfe80-3c1c-4839-aa68-24aa5ddb4738)
 
 ![Process](https://github.com/user-attachments/assets/6bfe3e16-cfc0-42c3-987c-26724363adb2)
 
-![111](https://github.com/user-attachments/assets/cb9c6c4d-e742-4789-beb0-94288b105194)
-![222](https://github.com/user-attachments/assets/54b81cbb-73b8-43e1-ac49-2368be7a3eb8)
+![111](https://github.com/user-attachments/assets/e33412c1-3a9f-41f8-b23e-aada6a1bb104)
+![222](https://github.com/user-attachments/assets/6c9f6fa8-94a9-4aea-8119-2ebe152ff7c2)
 
+## [👏] 特别说明 Special Note
 
+本项目已加入 [DotNetGuide](https://github.com/YSGStudyHards/DotNetGuide)  列表。<br/>
+本项目已加入 [dotNET China](https://gitee.com/dotnetchina)  组织。<br/>
 
+![dotnetchina](https://images.gitee.com/uploads/images/2021/0324/120117_2da9922c_416720.png "132645_21007ea0_974299.png")
