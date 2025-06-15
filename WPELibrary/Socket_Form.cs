@@ -1100,7 +1100,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(nameof(tSocketList_Tick), ex.Message);
             }
         }
 

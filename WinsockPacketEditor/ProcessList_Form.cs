@@ -27,7 +27,14 @@ namespace WinsockPacketEditor
 
         private async void ProcessList_Form_Load(object sender, EventArgs e)
         {
-            await this.ShowProcessList();
+            try
+            {
+                await this.ShowProcessList();
+            }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog(nameof(InitDGV), ex.Message);
+            }            
         }
 
         #endregion      
@@ -58,7 +65,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(nameof(ShowProcessList), ex.Message);
             }
         }
 

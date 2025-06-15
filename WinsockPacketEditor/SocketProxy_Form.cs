@@ -932,7 +932,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(nameof(Event_RecProxyData), ex.Message);
             }
         }        
 
@@ -994,7 +994,7 @@ namespace WinsockPacketEditor
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog_Proxy(nameof(Event_RecProxyInfo), ex.Message);
             }
         }
 
@@ -1080,7 +1080,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(nameof(UpdateClientLinks), ex.Message);
                 }
             });
         }
@@ -1104,7 +1104,7 @@ namespace WinsockPacketEditor
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(nameof(UpdateAccountLinksAndDevices), ex.Message);
                 }
             });
         }

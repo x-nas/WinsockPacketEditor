@@ -931,12 +931,19 @@ namespace WPELibrary.Lib
 
             public static void LoadSystemList_FromDB()
             {
-                Task.Run(() =>
+                try
                 {
-                    Socket_Cache.FilterList.LoadFilterList_FromDB();
-                    Socket_Cache.SendList.LoadSendList_FromDB();
-                    Socket_Cache.RobotList.LoadRobotList_FromDB();
-                });
+                    Task.Run(() =>
+                    {
+                        Socket_Cache.FilterList.LoadFilterList_FromDB();
+                        Socket_Cache.SendList.LoadSendList_FromDB();
+                        Socket_Cache.RobotList.LoadRobotList_FromDB();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog(nameof(LoadSystemList_FromDB), ex.Message);
+                }                
             }
 
             #endregion
@@ -1569,6 +1576,12 @@ namespace WPELibrary.Lib
             {
                 try
                 {
+                    if (spt?.Client?.Socket == null)
+                    {
+                        spt?.Dispose();
+                        return;
+                    }
+
                     var args = new SocketAsyncEventArgs();
                     args.SetBuffer(spt.Client.Buffer, 0, spt.Client.Buffer.Length);
                     args.UserToken = spt;
@@ -2397,7 +2410,7 @@ namespace WPELibrary.Lib
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Socket_Operation.DoLog_Proxy(nameof(UpdateProxyUDP), ex.Message);
                     }
                 });                
             }
@@ -2738,7 +2751,7 @@ namespace WPELibrary.Lib
 
             #endregion
 
-            #region//查找代理认证
+            #region//查找代理认证            
 
             public static Proxy_AuthInfo GetProxyAuthInfo(Guid AID, string IPAddress)
             {
@@ -3073,24 +3086,27 @@ namespace WPELibrary.Lib
 
             #region//设置代理账号的在线情况
 
-            public static void SetOnline_ByAccountID(Guid AccountID, bool IsOnline)
+            public static void SetOnline_ByAccountID(Guid AID, bool IsOnline)
             {
                 try
                 {
-                    foreach (Proxy_AccountInfo pai in Socket_Cache.ProxyAccount.lstProxyAccount)
+                    Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(AID);
+                    if (pai != null) 
                     {
-                        if (pai.AID.Equals(AccountID))
-                        {                            
-                            pai.IsOnLine = IsOnline;
-
-                            if (IsOnline)
-                            { 
-                                pai.LoginTime = DateTime.Now;
-                            }
-
-                            break;
+                        if (IsOnline)
+                        {
+                            pai.IsOnLine = true;
+                            pai.LoginTime = DateTime.Now;
                         }
-                    }
+                        else
+                        {
+                            int DevicesNumber = GetDevicesNumber_ByAccountID(AID);
+                            if (DevicesNumber == 0) 
+                            {
+                                pai.IsOnLine = false;
+                            }
+                        }
+                    }                    
                 }
                 catch (Exception ex)
                 {
@@ -3168,7 +3184,7 @@ namespace WPELibrary.Lib
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Socket_Operation.DoLog_Proxy(nameof(UpdateOnlineStatus), ex.Message);
                     }
                 });                
             }
@@ -3206,7 +3222,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog_Proxy(nameof(RecordLoginIP_ByAccountID), ex.Message);
                 }
             }
 
@@ -3864,7 +3880,7 @@ namespace WPELibrary.Lib
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Socket_Operation.DoLog_Proxy(nameof(LoadProxyAccountList_FromDB), ex.Message);
                     }
                 });
             }
@@ -4865,7 +4881,7 @@ namespace WPELibrary.Lib
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Socket_Operation.DoLog_Proxy(nameof(LoadProxyMapLocal_FromDB), ex.Message);
                     }
                 });
             }
@@ -4910,7 +4926,7 @@ namespace WPELibrary.Lib
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        Socket_Operation.DoLog_Proxy(nameof(LoadProxyMapRemote_FromDB), ex.Message);
                     }
                 });
             }
@@ -5841,7 +5857,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(SocketToList), ex.Message);
                 }
             }
 
@@ -6058,14 +6074,14 @@ namespace WPELibrary.Lib
                                 await SaveSocketListToExcel(FilePath, SaveCount);
 
                                 sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_150), FilePath);
-                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                Socket_Operation.DoLog(nameof(SaveSocketList_Dialog), sLog);
                             }
                         }
                     }               
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(SaveSocketList_Dialog), ex.Message);
                 }
             }
 
@@ -6110,7 +6126,7 @@ namespace WPELibrary.Lib
                             }
                             catch (Exception ex)
                             {
-                                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                                Socket_Operation.DoLog(nameof(SaveSocketListToExcel), ex.Message);
                             }
                         }
 
@@ -6120,7 +6136,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(SaveSocketListToExcel), ex.Message);
                 }
 
                 return iSuccess;
@@ -9320,7 +9336,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(DoRobotAsync), ex.Message);
                 }
 
                 return srReturn;
@@ -10248,7 +10264,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(DoSendAsync), ex.Message);
                 }
 
                 return ssReturn;

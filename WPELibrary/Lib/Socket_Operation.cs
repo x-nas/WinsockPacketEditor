@@ -356,7 +356,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    Socket_Operation.DoLog(nameof(InitCPUAndMemoryCounter), ex.Message);
                 }
             });            
         }
@@ -440,7 +440,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(nameof(GetProcess), ex.Message);
             }
 
             return dtProcessList;
@@ -2018,7 +2018,7 @@ namespace WPELibrary.Lib
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                    
+                    Socket_Operation.DoLog(nameof(ProcessingHookResultAsync), ex.Message);                    
                 }
             });
         }
@@ -2330,7 +2330,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(nameof(GetIPLocation), ex.Message);
             }
 
             return sReturn;
@@ -2403,43 +2403,49 @@ namespace WPELibrary.Lib
 
         private static async Task<IPAddress> ResolveAddressAsync(string addressString)
         {
-            var addressType = Socket_Operation.GetAddressType_ByString(addressString);
-
-            switch (addressType)
+            try
             {
-                case Socket_Cache.SocketProxy.AddressType.IPv4:
-                case Socket_Cache.SocketProxy.AddressType.IPv6:
-                    return IPAddress.Parse(addressString);
+                var addressType = Socket_Operation.GetAddressType_ByString(addressString);
 
-                case Socket_Cache.SocketProxy.AddressType.Domain:
+                switch (addressType)
+                {
+                    case Socket_Cache.SocketProxy.AddressType.IPv4:
+                    case Socket_Cache.SocketProxy.AddressType.IPv6:
+                        return IPAddress.Parse(addressString);
 
-                    if (Socket_Cache.SocketProxy.DnsCache.TryGetValue(addressString, out var cachedIp))
-                    {
-                        return cachedIp;
-                    }
+                    case Socket_Cache.SocketProxy.AddressType.Domain:
 
-                    try
-                    {
-                        var entry = await Dns.GetHostEntryAsync(addressString).ConfigureAwait(false);
-                        var ipv4 = entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
-                        var result = ipv4 ?? entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6)
-                                     ?? entry.AddressList.First();
+                        if (Socket_Cache.SocketProxy.DnsCache.TryGetValue(addressString, out var cachedIp))
+                        {
+                            return cachedIp;
+                        }
 
-                        Socket_Cache.SocketProxy.DnsCache.AddOrUpdate(
-                            key: addressString,
-                            addValue: result,
-                            updateValueFactory: (key, oldValue) => result);
+                        try
+                        {
+                            var entry = await Dns.GetHostEntryAsync(addressString).ConfigureAwait(false);
+                            var ipv4 = entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork);
+                            var result = ipv4 ?? entry.AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6)
+                                         ?? entry.AddressList.First();
 
-                        return result;
-                    }
-                    catch
-                    {
-                        return null;
-                    }
+                            Socket_Cache.SocketProxy.DnsCache.AddOrUpdate(
+                                key: addressString,
+                                addValue: result,
+                                updateValueFactory: (key, oldValue) => result);
 
-                default:
-                    return null;
+                            return result;
+                        }
+                        catch
+                        {
+                            return null;
+                        }                    
+                }
             }
+            catch (Exception ex)
+            {
+                Socket_Operation.DoLog_Proxy(nameof(ResolveAddressAsync), ex.Message);
+            }
+
+            return null;
         }
 
         #endregion
@@ -3229,7 +3235,7 @@ namespace WPELibrary.Lib
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Socket_Operation.DoLog(nameof(CompareData), ex.Message);
             }
 
             return sReturn;
