@@ -7562,8 +7562,11 @@ namespace WPELibrary.Lib
 
                     if (byte.TryParse(parts[1], NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte value))
                     {
-                        bufferSpan[index] = value;
-                        modified = true;
+                        if (bufferSpan[index] != value)
+                        {
+                            bufferSpan[index] = value;
+                            modified = true;
+                        }                        
                     }
                 }
 
@@ -7980,8 +7983,7 @@ namespace WPELibrary.Lib
                         {
                             continue;
                         }
-
-                        faReturn = sfi.FAction;
+                        
                         byte[] tempBuffer = null;
 
                         switch (sfi.FAction)
@@ -8002,10 +8004,9 @@ namespace WPELibrary.Lib
                                 {
                                     foreach (int iIndex in MatchIndex)
                                     {
-                                        Socket_Cache.Filter.Replace_Advanced(sfi, iIndex, bufferSpan);
+                                        bDoFilter = Socket_Cache.Filter.Replace_Advanced(sfi, iIndex, bufferSpan);
                                     }
 
-                                    bDoFilter = true;
                                     tempBuffer = bufferSpan.ToArray();
                                 }
 
@@ -8042,6 +8043,7 @@ namespace WPELibrary.Lib
 
                         if (bDoFilter)
                         {
+                            faReturn = sfi.FAction;
                             sfi.ExecutionCount++;
                             Interlocked.Increment(ref Socket_Cache.Filter.FilterExecute_CNT);
 
