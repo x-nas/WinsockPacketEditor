@@ -2273,67 +2273,55 @@ namespace WPELibrary.Lib
                 .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
                 .Select(addr => addr.Address)
                 .ToArray();
-        }        
+        }
 
         public static async Task<string> GetIPLocation(string ipAddress)
         {
-            string sReturn = string.Empty;
+            if (string.IsNullOrEmpty(ipAddress))
+                return string.Empty;
+
+            if (!IPAddress.TryParse(ipAddress, out _))
+                return string.Empty;
 
             try
             {
-                if (!string.IsNullOrEmpty(ipAddress))
+                using (HttpClient client = new HttpClient())
                 {
-                    using (HttpClient client = new HttpClient())
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
+                    string url = $"https://ip-api.com/json/{ipAddress}?lang=zh-CN";
+
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+                    string json = await response.Content.ReadAsStringAsync();
+
+                    var data = JObject.Parse(json);
+                    if (data["status"]?.ToString() == "success")
                     {
-                        string API_URL = API_URL = "http://ip-api.com/json/{0}?lang=zh-CN";
-                        string url = string.Format(API_URL, ipAddress);
-
-                        HttpResponseMessage response = await client.GetAsync(url);
-                        response.EnsureSuccessStatusCode();
-                        string IPLocation = await response.Content.ReadAsStringAsync();
-
-                        JObject locationData = JObject.Parse(IPLocation);
-
-                        string status = locationData["status"]?.ToString();
-
-                        if (status.Equals("success"))
+                        return $"{data["country"]} {data["regionName"]} {data["city"]} {data["isp"]}";
+                    }
+                    else
+                    {
+                        string message = data["message"]?.ToString();
+                        switch (message)
                         {
-                            string country = locationData["country"]?.ToString();
-                            string region = locationData["regionName"]?.ToString();
-                            string city = locationData["city"]?.ToString();
-                            string isp = locationData["isp"]?.ToString();
-
-                            sReturn = $"{country} {region} {city} {isp}";
-                        }
-                        else
-                        { 
-                            string message = locationData["message"]?.ToString();
-
-                            switch(message)
-                            {
-                                case "invalid query":
-                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_199);
-                                    break;
-                                case "private range":
-                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_200);
-                                    break;
-                                case "reserved range":
-                                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_201);
-                                    break;
-                                default:
-                                    sReturn = message;
-                                    break;
-                            }
+                            case "invalid query":
+                            case "private range":
+                            case "reserved range":
+                                return string.Empty;
+                            default:
+                                return string.Empty;
                         }
                     }
                 }
             }
-            catch (Exception ex)
+            catch (HttpRequestException)
             {
-                Socket_Operation.DoLog(nameof(GetIPLocation), ex.Message);
+                return string.Empty;
             }
-
-            return sReturn;
+            catch (Exception)
+            {
+                return string.Empty;
+            }
         }
 
         public static IPEndPoint GetIPEndPoint_ByAddressString(string AddressString, ushort Port)

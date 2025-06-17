@@ -3206,7 +3206,12 @@ namespace WPELibrary.Lib
                             if (paiItem.LoginIP != IPAddress)
                             {
                                 paiItem.LoginIP = IPAddress;
-                                paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+
+                                string IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                if (!string.IsNullOrEmpty(IPLocation))
+                                {
+                                    paiItem.IPLocation = IPLocation;
+                                }                                
 
                                 Socket_Cache.ProxyAccount.SaveProxyAccount_LoginInfo_ToDB(paiItem);
                             }
@@ -3214,7 +3219,11 @@ namespace WPELibrary.Lib
                             {
                                 if (string.IsNullOrEmpty(paiItem.IPLocation))
                                 {
-                                    paiItem.IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                    string IPLocation = await Socket_Operation.GetIPLocation(IPAddress);
+                                    if (!string.IsNullOrEmpty(IPLocation))
+                                    {
+                                        paiItem.IPLocation = IPLocation;
+                                    }                                    
                                 }
                             }
                         }
