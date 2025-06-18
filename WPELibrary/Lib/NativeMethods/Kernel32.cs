@@ -47,6 +47,10 @@ namespace WPELibrary.Lib.NativeMethods
         [SuppressUnmanagedCodeSecurity]
         public static extern IntPtr GetCurrentProcess();
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [SuppressUnmanagedCodeSecurity]
+        public static extern uint GetCurrentThreadId();
+
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         [SuppressUnmanagedCodeSecurity]
         public static extern int QueryDosDevice(string lpDeviceName, StringBuilder lpTargetPath, int ucchMax);

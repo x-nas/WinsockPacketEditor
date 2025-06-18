@@ -8,6 +8,8 @@ namespace WPELibrary
 {
     public partial class Proxy_AccountAuthForm : Form
     {
+        private BindingSource _authBindingSource = new BindingSource();
+
         #region//窗体事件
 
         public Proxy_AccountAuthForm()
@@ -31,8 +33,10 @@ namespace WPELibrary
         {
             try
             {
+                _authBindingSource.DataSource = Socket_Cache.ProxyAccount.lstProxyAuth;
+
                 dgvAuth.AutoGenerateColumns = false;
-                dgvAuth.DataSource = Socket_Cache.ProxyAccount.lstProxyAuth;
+                dgvAuth.DataSource = _authBindingSource;
                 dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
                 Socket_Cache.ProxyAccount.RecProxyAuth += new Socket_Cache.ProxyAccount.ProxyAuthReceived(Event_RecProxyAuth);
             }
@@ -50,26 +54,37 @@ namespace WPELibrary
         {
             try
             {
-                if (!dgvAuth.IsDisposed)
-                {
-                    dgvAuth.Invoke(new MethodInvoker(delegate
-                    {
-                        Proxy_AuthInfo paiItem = Socket_Cache.ProxyAccount.lstProxyAuth.FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
+                if (this.IsDisposed || dgvAuth.IsDisposed)
+                    return;
 
-                        if (paiItem != null)
+                this.BeginInvoke(new Action(() =>
+                {
+                    try
+                    {
+                        if (this.IsDisposed || dgvAuth.IsDisposed)
+                            return;
+
+                        var existingItem = Socket_Cache.ProxyAccount.lstProxyAuth
+                            .FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
+
+                        if (existingItem != null)
                         {
-                            paiItem.AuthResult = pai.AuthResult;
-                            paiItem.AuthTime = pai.AuthTime;
+                            existingItem.AuthResult = pai.AuthResult;
+                            existingItem.AuthTime = pai.AuthTime;
                         }
                         else
                         {
                             Socket_Cache.ProxyAccount.lstProxyAuth.Add(pai);
-                        }                        
+                        }
 
-                        this.dgvAuth.Refresh();
+                        _authBindingSource.ResetBindings(false);
                         this.ShowAuthListInfo();
-                    }));
-                }
+                    }
+                    catch (Exception ex)
+                    {
+                        Socket_Operation.DoLog_Proxy("Event_RecProxyAuth(inner)", ex.Message);
+                    }
+                }));
             }
             catch (Exception ex)
             {

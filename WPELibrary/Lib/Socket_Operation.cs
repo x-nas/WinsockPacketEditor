@@ -2374,14 +2374,18 @@ namespace WPELibrary.Lib
                         break;
                 }
 
-                port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
-                return new IPEndPoint(ip, port);
+                if (ip != null)
+                {
+                    port = Socket_Operation.ByteArrayToInt16BigEndian(bData.Slice(portPosition, 2).ToArray());
+                    return new IPEndPoint(ip, port);
+                }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
-                return null;
+                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);                
             }
+
+            return null;
         }
 
         private static IPAddress ResolveAddress(string addressString)

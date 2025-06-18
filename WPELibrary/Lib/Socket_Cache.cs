@@ -1845,6 +1845,12 @@ namespace WPELibrary.Lib
                             ReadOnlySpan<byte> bServerTCP_Port = BitConverter.GetBytes(Socket_Cache.SocketProxy.ProxyPort);
                                                         
                             IPEndPoint epServer = Socket_Operation.GetIPEndPoint_ByAddressType(spt.AddressType, bADDRESS, out string AddressString);
+                            if (epServer == null)
+                            {
+                                Socket_Operation.SendTCPData(spt.Client.Socket, Socket_Operation.GetProxyReturnData(Socket_Cache.SocketProxy.CommandResponse.Fault, bServerTCP_IP, bServerTCP_Port));
+                                return;
+                            }
+
                             spt.Server.Socket = new Socket(epServer.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                             spt.Server.EndPoint = epServer;
                             ushort uPort = ((ushort)epServer.Port);
@@ -2307,15 +2313,17 @@ namespace WPELibrary.Lib
 
                                 ReadOnlySpan<byte> bADDRESS = bData.Slice(4, bData.Length - 4);
                                 IPEndPoint targetEndPoint = Socket_Operation.GetIPEndPoint_ByAddressType(addressType, bADDRESS, out string AddressString);
-
-                                ReadOnlySpan<byte> bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
-                                if (!bUDP_Data.IsEmpty)
+                                if (targetEndPoint != null) 
                                 {
-                                    spu.ClientUDP_Time = DateTime.Now;
-                                    Socket_Cache.SocketProxy.Total_Request += bUDP_Data.Length;
-                                    Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bUDP_Data.Length);
-                                    Socket_Operation.SendUDPData(spu.ClientUDP, bUDP_Data, targetEndPoint);
-                                }
+                                    ReadOnlySpan<byte> bUDP_Data = Socket_Operation.GetUDPData_ByAddressType(addressType, bData);
+                                    if (!bUDP_Data.IsEmpty)
+                                    {
+                                        spu.ClientUDP_Time = DateTime.Now;
+                                        Socket_Cache.SocketProxy.Total_Request += bUDP_Data.Length;
+                                        Socket_Operation.CountProxySpeed(Socket_Cache.SocketProxy.ProxySpeedType.Uplink, bUDP_Data.Length);
+                                        Socket_Operation.SendUDPData(spu.ClientUDP, bUDP_Data, targetEndPoint);
+                                    }
+                                }                                
                             }
                         }
                         else
