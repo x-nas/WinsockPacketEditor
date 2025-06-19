@@ -475,12 +475,18 @@ namespace WinsockPacketEditor
         {
             try
             {
+                SocketServer?.Close();
+                SocketServer?.Dispose();
+
                 IPEndPoint ep = new IPEndPoint(IPAddress.Any, Socket_Cache.SocketProxy.ProxyPort);
                 SocketServer = new Socket(ep.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
                 {
                     NoDelay = true,
-                    LingerState = new LingerOption(false, 0)
+                    LingerState = new LingerOption(false, 0),
+                    ExclusiveAddressUse = false
                 };
+
+                SocketServer.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
 
                 SocketServer.Bind(ep);
                 SocketServer.Listen(backlog: 1000);
@@ -541,38 +547,88 @@ namespace WinsockPacketEditor
         {
             try
             {
-                if (Socket_Cache.SocketProxy.IsListening)
+                if (Socket_Cache.SocketProxy.IsListening && SocketServer != null)
                 {
-                    SocketServer.BeginAccept(new AsyncCallback(AcceptCallback), null);
+                    var acceptArgs = new SocketAsyncEventArgs();
+                    acceptArgs.Completed += AcceptCompleted;
+
+                    if (!SocketServer.AcceptAsync(acceptArgs))
+                    {
+                        AcceptCompleted(null, acceptArgs);
+                    }                    
                 }
+            }
+            catch (ObjectDisposedException)
+            {
+                // Socket已关闭，正常退出
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Task.Delay(5000).ContinueWith(_ => AcceptClients());
             }
         }
 
-        private void AcceptCallback(IAsyncResult ar)
+        private void AcceptCompleted(object sender, SocketAsyncEventArgs e)
         {
             try
             {
-                if (Socket_Cache.SocketProxy.IsListening)
+                if (e.SocketError == SocketError.Success && Socket_Cache.SocketProxy.IsListening && e.AcceptSocket != null)
                 {
-                    Socket clientSocket = SocketServer.EndAccept(ar);
+                    Socket_Cache.SocketProxy.HandleClient(e.AcceptSocket);
 
-                    if (clientSocket != null)
+                    e.AcceptSocket = null;
+
+                    if (Socket_Cache.SocketProxy.IsListening)
                     {
-                        Socket_Cache.SocketProxy.HandleClient(clientSocket);
+                        if (!SocketServer.AcceptAsync(e))
+                        {
+                            AcceptCompleted(null, e);
+                        }
                     }
-
-                    AcceptClients();
+                    else
+                    {
+                        e.Dispose();
+                    }
+                }
+                else
+                {
+                    e.Dispose();
                 }
             }
             catch (Exception ex)
             {
                 Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                e.Dispose();
+
+                if (Socket_Cache.SocketProxy.IsListening)
+                {
+                    Task.Delay(1000).ContinueWith(_ => AcceptClients());
+                }
             }
         }
+
+        //private void AcceptCallback(IAsyncResult ar)
+        //{
+        //    try
+        //    {
+        //        if (Socket_Cache.SocketProxy.IsListening)
+        //        {
+        //            Socket clientSocket = SocketServer.EndAccept(ar);
+
+        //            if (clientSocket != null)
+        //            {
+        //                Socket_Cache.SocketProxy.HandleClient(clientSocket);
+        //            }
+
+        //            AcceptClients();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+        //    }
+        //}
 
         #endregion
 

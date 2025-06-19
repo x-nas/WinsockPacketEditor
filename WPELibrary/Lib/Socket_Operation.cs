@@ -2450,15 +2450,22 @@ namespace WPELibrary.Lib
             {
                 switch (addressType)
                 {
-                    case Socket_Cache.SocketProxy.AddressType.IPv4: 
-                        return bData.Slice(10);
+                    case Socket_Cache.SocketProxy.AddressType.IPv4:
+                        return bData.Length >= 10 ? bData.Slice(10) : ReadOnlySpan<byte>.Empty;
 
                     case Socket_Cache.SocketProxy.AddressType.Domain:
-                        byte LENGTH = bData[4];
-                        return bData.Slice(LENGTH + 7);
+
+                        if (bData.Length < 5)
+                        {
+                            return ReadOnlySpan<byte>.Empty;
+                        }
+                        
+                        byte domainLength = bData[4];
+                        int domainStart = 5 + domainLength + 2;
+                        return bData.Length >= domainStart ? bData.Slice(domainStart) : ReadOnlySpan<byte>.Empty;
 
                     case Socket_Cache.SocketProxy.AddressType.IPv6:
-                        return bData.Slice(22);
+                        return bData.Length >= 22 ? bData.Slice(22) : ReadOnlySpan<byte>.Empty;
 
                     default:
                         return ReadOnlySpan<byte>.Empty;

@@ -2291,14 +2291,21 @@ namespace WPELibrary.Lib
 
             private static void UdpReceiveCallback(IAsyncResult ar)
             {
-                Socket_ProxyUDP spu = (Socket_ProxyUDP)ar.AsyncState;
+                if (ar == null || !(ar.AsyncState is Socket_ProxyUDP spu))
+                {
+                    return;
+                }
+
+                if (spu.ClientUDP == null)
+                {
+                    return;
+                }
 
                 try
                 {
                     IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
                     byte[] receivedData = Socket_Operation.ReceiveUDPData(spu.ClientUDP, ar, ref remoteEndPoint);
                     ReadOnlySpan<byte> bData = receivedData.AsSpan();
-
                     if (!bData.IsEmpty && !remoteEndPoint.Address.Equals(IPAddress.Any) && remoteEndPoint.Port != 0)
                     {
                         if (bData[0] == 0 && bData[1] == 0 && bData[2] == 0)
@@ -2328,6 +2335,11 @@ namespace WPELibrary.Lib
                         }
                         else
                         {
+                            if (spu.ClientUDP_EndPoint == null)
+                            {
+                                return;
+                            }
+
                             ReadOnlySpan<byte> bIP = spu.ClientUDP_EndPoint.Address.GetAddressBytes();
                             ushort port = ((ushort)spu.ClientUDP_EndPoint.Port);
                             ReadOnlySpan<byte> bPort = new byte[2] { (byte)(port >> 8), (byte)port };
@@ -2688,7 +2700,18 @@ namespace WPELibrary.Lib
 
             public static void ClearTCP(Socket_ProxyTCP spt)
             {
-                Socket_Cache.SocketProxyList.lstProxyTCP.Remove(spt);
+                try
+                {
+                    var list = Socket_Cache.SocketProxyList.lstProxyTCP;
+                    if (list.Contains(spt))
+                    {
+                        list.Remove(spt);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
             }            
 
             #endregion
