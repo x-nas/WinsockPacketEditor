@@ -1066,7 +1066,8 @@ namespace WinsockPacketEditor
                 {
                     ConcurrentBag<Socket_ProxyTCP> sptRemove = new ConcurrentBag<Socket_ProxyTCP>();
 
-                    foreach (Socket_ProxyTCP spt in Socket_Cache.SocketProxyList.lstProxyTCP.ToList())
+                    var snapshot = Socket_Cache.SocketProxyList.lstProxyTCP.ToArray();
+                    foreach (Socket_ProxyTCP spt in snapshot)
                     {
                         if (spt.Client.Socket == null)
                         {
