@@ -1,5 +1,4 @@
-﻿using Be.Windows.Forms;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Be.Windows.Forms;
 
 namespace WPELibrary.Lib
 {
