@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -35,7 +35,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Proxy_AccountInfo pai = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(this.SelectAID);
+                    Proxy_AccountInfo pai = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByAccountID(this.SelectAID);
 
                     if (pai != null)
                     {
@@ -74,7 +74,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -157,13 +157,13 @@ namespace WPELibrary
 
                 if (this.SelectAID == null || this.SelectAID == Guid.Empty)
                 {
-                    if (Socket_Cache.ProxyAccount.CheckProxyAccount_Exist(UserName))
+                    if (Operate.ProxyConfig.ProxyAccount.CheckProxyAccount_Exist(UserName))
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_177));
                         return;
                     }
 
-                    Socket_Cache.ProxyAccount.AddProxyAccount(
+                    Operate.ProxyConfig.ProxyAccount.AddProxyAccount(
                         Guid.NewGuid(), 
                         IsEnable, 
                         UserName, 
@@ -181,7 +181,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Socket_Cache.ProxyAccount.UpdateProxyAccount_ByAccountID(
+                    Operate.ProxyConfig.ProxyAccount.UpdateProxyAccount_ByAccountID(
                         this.SelectAID, 
                         IsEnable, 
                         PassWord, 
@@ -197,7 +197,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -221,7 +221,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;

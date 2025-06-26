@@ -54,6 +54,9 @@
     <ApplicationIcon>wpe.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntdUI, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0e24e5118ea3d6af, processorArchitecture=MSIL">
+      <HintPath>..\packages\AntdUI.2.0.6\lib\net48\AntdUI.dll</HintPath>
+    </Reference>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
     </Reference>
@@ -105,6 +108,7 @@
     <Reference Include="System.Data.SQLite.Linq, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.119.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -143,34 +147,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lib\IconExtractor\IconExtractor.cs" />
-    <Compile Include="Lib\IconExtractor\IconUtil.cs" />
-    <Compile Include="Lib\NativeMethods\Kernel32.cs" />
-    <Compile Include="Lib\NativeMethods\Mswsock.cs" />
-    <Compile Include="Lib\Proxy_AccountInfo.cs" />
-    <Compile Include="Lib\Proxy_AuthInfo.cs" />
-    <Compile Include="Lib\Proxy_MapLocal.cs" />
-    <Compile Include="Lib\Proxy_MapRemote.cs" />
-    <Compile Include="Lib\Socket_ProxyData.cs" />
-    <Compile Include="Lib\Socket_ProxyTCP.cs" />
-    <Compile Include="Lib\Socket_BitInfo.cs" />
-    <Compile Include="Lib\Socket_ProxyUDP.cs" />
-    <Compile Include="Lib\Socket_Robot.cs" />
-    <Compile Include="Lib\Socket_RobotInfo.cs" />
-    <Compile Include="Lib\NativeMethods\User32.cs" />
-    <Compile Include="Lib\NativeMethods\WS2_32.cs" />
-    <Compile Include="Lib\NativeMethods\WSock32.cs" />
-    <Compile Include="Lib\Socket_Send.cs" />
-    <Compile Include="Lib\Socket_SendInfo.cs" />
-    <Compile Include="Lib\UserControl\HotkeyTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Lib\WebAPI\CCProxy_Controller.cs" />
-    <Compile Include="Lib\WebAPI\SocketInfo_Controller.cs" />
-    <Compile Include="Lib\WebAPI\Socket_Web.cs" />
-    <Compile Include="Lib\WebAPI\ProxyInfo_Controller.cs" />
-    <Compile Include="Lib\WebAPI\ProxyAccount_Controller.cs" />
-    <Compile Include="Lib\WebAPI\SystemInfo_Controller.cs" />
+    <Compile Include="Hook.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -254,9 +231,6 @@
     <Compile Include="Socket_FilterForm.Designer.cs">
       <DependentUpon>Socket_FilterForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lib\MultiLanguage.cs" />
-    <Compile Include="Lib\Socket_FilterInfo.cs" />
-    <Compile Include="Lib\Socket_LogInfo.cs" />
     <Compile Include="Socket_FindForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,17 +243,7 @@
     <Compile Include="Socket_Form.Designer.cs">
       <DependentUpon>Socket_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Lib\Socket_Operation.cs" />
-    <Compile Include="Lib\Socket_PacketInfo.cs" />
-    <Compile Include="Lib\Socket_Cache.cs" />
-    <Compile Include="Lib\WinSockHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Socket_PasswordFrom.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Socket_PasswordFrom.Designer.cs">
-      <DependentUpon>Socket_PasswordFrom.cs</DependentUpon>
-    </Compile>
     <Compile Include="Socket_RobotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -297,18 +261,6 @@
     </Compile>
     <Compile Include="Socket_SendForm.Designer.cs">
       <DependentUpon>Socket_SendForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TextComparison\TextCompareForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextComparison\TextCompareForm.Designer.cs">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="TextComparison\TextDuplicateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TextComparison\TextDuplicateForm.Designer.cs">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +282,7 @@
     <Content Include="EasyLoad64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\wpe.ico" />
     <Content Include="wpe.ico" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -498,12 +451,6 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Socket_PasswordFrom.en-US.resx">
-      <DependentUpon>Socket_PasswordFrom.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Socket_PasswordFrom.resx">
-      <DependentUpon>Socket_PasswordFrom.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Socket_RobotForm.en-US.resx">
       <DependentUpon>Socket_RobotForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -523,18 +470,12 @@
     <EmbeddedResource Include="Socket_SendForm.resx">
       <DependentUpon>Socket_SendForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextComparison\TextCompareForm.en-US.resx">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextComparison\TextCompareForm.resx">
-      <DependentUpon>TextCompareForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextComparison\TextDuplicateForm.en-US.resx">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TextComparison\TextDuplicateForm.resx">
-      <DependentUpon>TextDuplicateForm.cs</DependentUpon>
-    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WPE.Lib\WPE.Lib.csproj">
+      <Project>{6bcb0079-f5db-4894-b089-250ef00aaa2c}</Project>
+      <Name>WPE.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

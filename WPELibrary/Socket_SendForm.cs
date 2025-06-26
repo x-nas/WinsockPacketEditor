@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
     public partial class Socket_SendForm : Form
     {
-        private Socket_PacketInfo SPI;
+        private PacketInfo SPI;
         private int Send_CNT = 0;
         private int Send_Success = 0;
         private int Send_Fail = 0;        
@@ -18,7 +18,7 @@ namespace WPELibrary
 
         #region//窗体加载
 
-        public Socket_SendForm(Socket_PacketInfo spi)
+        public Socket_SendForm(PacketInfo spi)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -61,18 +61,18 @@ namespace WPELibrary
             try
             {  
                 this.txtPacketTime.Text = this.SPI.PacketTime.ToString("HH: mm: ss: fffffff");              
-                this.txtPacketType.Text = Socket_Cache.SocketPacket.GetName_ByPacketType(this.SPI.PacketType);
+                this.txtPacketType.Text = Operate.PacketConfig.Packet.GetName_ByPacketType(this.SPI.PacketType);
 
                 this.txtIPFrom.Text = this.SPI.PacketFrom;
                 this.txtIPTo.Text = this.SPI.PacketTo;
-                this.pbSocketType.Image = Socket_Cache.SocketPacket.GetImg_ByPacketType(this.SPI.PacketType);
+                this.pbSocketType.Image = Operate.PacketConfig.Packet.GetImg_ByPacketType(this.SPI.PacketType);
                 
                 this.nudSendSocket_Len.Value = hbPacketData.ByteProvider.Length;
                 this.nudSendSocket_Socket.Value = this.SPI.PacketSocket;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -98,7 +98,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -194,7 +194,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                 return false;
             }
 
@@ -234,7 +234,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -287,7 +287,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -307,7 +307,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -365,7 +365,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -394,7 +394,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -415,7 +415,7 @@ namespace WPELibrary
                         byte[] bNewBuff = dbp.Bytes.ToArray();
                         int iNewLen = bNewBuff.Length;
                         Span<byte> bufferSpan = bNewBuff.AsSpan();
-                        string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Socket_Cache.SocketPacket.PacketData_MaxLen);
+                        string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Operate.PacketConfig.Packet.PacketData_MaxLen);
 
                         this.SPI.PacketSocket = (int)this.nudSendSocket_Socket.Value;
                         this.SPI.PacketBuffer = bNewBuff;
@@ -428,7 +428,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
             finally
             {
@@ -460,9 +460,9 @@ namespace WPELibrary
             {
                 if (this.tscbSendList.SelectedItem != null)
                 {
-                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
-                    BindingList<Socket_PacketInfo> SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+                    BindingList<PacketInfo> SCollection = Operate.SendConfig.Send.GetSendCollection_ByGuid(SID);
 
                     if (SCollection != null)
                     {
@@ -475,7 +475,7 @@ namespace WPELibrary
                         if (this.hbPacketData.CanCopy())
                         {
                             this.hbPacketData.CopyHex();
-                            bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());                            
+                            bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());                            
                         }
                         else
                         {
@@ -483,7 +483,7 @@ namespace WPELibrary
                             bBuffer = dbp.Bytes.ToArray();
                         }                        
 
-                        Socket_Cache.Send.AddSendCollection(SCollection, iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bBuffer);                      
+                        Operate.SendConfig.Send.AddSendCollection(SCollection, iSocket, this.SPI.PacketType, sIPFrom, sIPTo, bBuffer);                      
                     }                                       
 
                     this.cmsHexBox.Close();
@@ -491,7 +491,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -513,12 +513,12 @@ namespace WPELibrary
                         {
                             this.hbPacketData.CopyHex();
 
-                            byte[] bBufferCopy = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                            Socket_Cache.Filter.AddFilter_ByPacketInfo(this.SPI, bBufferCopy);
+                            byte[] bBufferCopy = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                            Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.SPI, bBufferCopy);
                         }
                         else
                         {
-                            Socket_Cache.Filter.AddFilter_ByPacketInfo(this.SPI, bBuffer);
+                            Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(this.SPI, bBuffer);
                         }
 
                         break;
@@ -532,7 +532,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -590,7 +590,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -644,16 +644,16 @@ namespace WPELibrary
                         }
 
                         sBits_Value = bitInfo.ToString();
-                        sChar_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Char, buffer64);
-                        sByte_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Byte, buffer64);
-                        sShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Short, buffer64);
-                        sUShort_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UShort, buffer64);
-                        sInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int32, buffer64);
-                        sUInt32_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt32, buffer64);
-                        sInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Int64, buffer64);
-                        sUInt64_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UInt64, buffer64);
-                        sFloat_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Float, buffer64);
-                        sDouble_Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Double, buffer64);
+                        sChar_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Char, buffer64);
+                        sByte_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Byte, buffer64);
+                        sShort_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Short, buffer64);
+                        sUShort_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UShort, buffer64);
+                        sInt32_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int32, buffer64);
+                        sUInt32_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt32, buffer64);
+                        sInt64_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int64, buffer64);
+                        sUInt64_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt64, buffer64);
+                        sFloat_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Float, buffer64);
+                        sDouble_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Double, buffer64);
                     }
                 }
 
@@ -673,7 +673,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -702,7 +702,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -717,7 +717,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -778,14 +778,14 @@ namespace WPELibrary
             {
                 this.ShowFindForm();
 
-                if (Socket_Cache.SocketList.DoSearch)
+                if (Operate.PacketConfig.List.DoSearch)
                 {
                     this.HexBox_FindNext();
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -803,7 +803,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -811,9 +811,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SocketList.FindOptions.IsValid)
+                if (Operate.PacketConfig.List.FindOptions.IsValid)
                 {
-                    long res = hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
+                    long res = hbPacketData.Find(Operate.PacketConfig.List.FindOptions);
 
                     if (res == -1)
                     {
@@ -823,7 +823,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -840,7 +840,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -867,7 +867,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

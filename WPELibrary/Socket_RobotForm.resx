@@ -321,46 +321,46 @@
   <data name="tlpSet_SystemSocket.ColumnCount" type="System.Int32, mscorlib">
     <value>4</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Location" type="System.Drawing.Point, System.Drawing">
     <value>62, 32</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Size" type="System.Drawing.Size, System.Drawing">
     <value>114, 21</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.TabIndex" type="System.Int32, mscorlib">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.Text" xml:space="preserve">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.Text" xml:space="preserve">
     <value>调用滤镜的套接字</value>
   </data>
-  <data name="lSet_SystemSocket_Filter.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="lSet_SystemSocket_FilterConfig.Filter.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_Filter.Name" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_FilterConfig.Filter.Name" xml:space="preserve">
     <value>lSet_SystemSocket_Filter</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_Filter.Type" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_FilterConfig.Filter.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_Filter.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_FilterConfig.Filter.Parent" xml:space="preserve">
     <value>tlpSet_SystemSocket</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_Filter.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_FilterConfig.Filter.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="bSet_SystemSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -399,109 +399,109 @@
   <data name="&gt;&gt;bSet_SystemSocket.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.AutoSize" type="System.Boolean, mscorlib">
+  <data name="rbSet_SystemSocket_PacketConfig.List.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="rbSet_SystemSocket_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="rbSet_SystemSocket_PacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rbSet_SystemSocket_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rbSet_SystemSocket_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 23</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="rbSet_SystemSocket_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
-  <data name="rbSet_SystemSocket_SocketList.Text" xml:space="preserve">
+  <data name="rbSet_SystemSocket_PacketConfig.List.Text" xml:space="preserve">
     <value>等于:</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_SocketList.Name" xml:space="preserve">
-    <value>rbSet_SystemSocket_SocketList</value>
+  <data name="&gt;&gt;rbSet_SystemSocket_PacketConfig.List.Name" xml:space="preserve">
+    <value>rbSet_SystemSocket_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_SocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_PacketConfig.List.Parent" xml:space="preserve">
     <value>tlpSet_SystemSocket</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.AutoSize" type="System.Boolean, mscorlib">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 32</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.Size" type="System.Drawing.Size, System.Drawing">
     <value>53, 21</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.TabIndex" type="System.Int32, mscorlib">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="rbSet_SystemSocket_Filter.Text" xml:space="preserve">
+  <data name="rbSet_SystemSocket_FilterConfig.Filter.Text" xml:space="preserve">
     <value>等于:</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_Filter.Name" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_FilterConfig.Filter.Name" xml:space="preserve">
     <value>rbSet_SystemSocket_Filter</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_Filter.Type" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_FilterConfig.Filter.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_Filter.Parent" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_FilterConfig.Filter.Parent" xml:space="preserve">
     <value>tlpSet_SystemSocket</value>
   </data>
-  <data name="&gt;&gt;rbSet_SystemSocket_Filter.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;rbSet_SystemSocket_FilterConfig.Filter.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lSet_SystemSocket_PacketConfig.List.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lSet_SystemSocket_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="lSet_SystemSocket_PacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lSet_SystemSocket_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>62, 3</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lSet_SystemSocket_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lSet_SystemSocket_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>114, 23</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="lSet_SystemSocket_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.Text" xml:space="preserve">
+  <data name="lSet_SystemSocket_PacketConfig.List.Text" xml:space="preserve">
     <value>选中封包的套接字</value>
   </data>
-  <data name="lSet_SystemSocket_SocketList.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="lSet_SystemSocket_PacketConfig.List.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_SocketList.Name" xml:space="preserve">
-    <value>lSet_SystemSocket_SocketList</value>
+  <data name="&gt;&gt;lSet_SystemSocket_PacketConfig.List.Name" xml:space="preserve">
+    <value>lSet_SystemSocket_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_SocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_PacketConfig.List.Parent" xml:space="preserve">
     <value>tlpSet_SystemSocket</value>
   </data>
-  <data name="&gt;&gt;lSet_SystemSocket_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lSet_SystemSocket_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
   <data name="rbSet_SystemSocket_Customize.AutoSize" type="System.Boolean, mscorlib">
@@ -601,7 +601,7 @@
     <value>0</value>
   </data>
   <data name="tlpSet_SystemSocket.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSet_SystemSocket_Filter" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSet_SystemSocket" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_Filter" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lSet_SystemSocket_SocketList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_Customize" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudSet_SystemSocket_Customize" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Percent,100,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSet_SystemSocket_Filter" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bSet_SystemSocket" Row="0" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_PacketConfig.List" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_Filter" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lSet_SystemSocket_PacketConfig.List" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="rbSet_SystemSocket_Customize" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="nudSet_SystemSocket_Customize" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0,Percent,100,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbSet_SystemSocket.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -636,151 +636,151 @@
   <data name="&gt;&gt;gbSet_SystemSocket.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpSend_SocketList.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tlpSend_PacketConfig.List.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="lSend_SocketList.AutoSize" type="System.Boolean, mscorlib">
+  <data name="lSend_PacketConfig.List.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="lSend_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="lSend_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="lSend_SocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="lSend_PacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="lSend_SocketList.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="lSend_PacketConfig.List.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="lSend_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="lSend_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="lSend_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="lSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lSend_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>128, 23</value>
   </data>
-  <data name="lSend_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="lSend_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="lSend_SocketList.Text" xml:space="preserve">
+  <data name="lSend_PacketConfig.List.Text" xml:space="preserve">
     <value>封包列表中选中的封包</value>
   </data>
-  <data name="lSend_SocketList.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+  <data name="lSend_PacketConfig.List.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;lSend_SocketList.Name" xml:space="preserve">
-    <value>lSend_SocketList</value>
+  <data name="&gt;&gt;lSend_PacketConfig.List.Name" xml:space="preserve">
+    <value>lSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;lSend_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;lSend_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;lSend_SocketList.Parent" xml:space="preserve">
-    <value>tlpSend_SocketList</value>
+  <data name="&gt;&gt;lSend_PacketConfig.List.Parent" xml:space="preserve">
+    <value>tlpSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;lSend_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;lSend_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="bSend_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="bSend_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="bSend_SocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="bSend_PacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="bSend_SocketList.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="bSend_PacketConfig.List.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="bSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="bSend_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>245, 1</value>
   </data>
-  <data name="bSend_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="bSend_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 1, 1, 1</value>
   </data>
-  <data name="bSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="bSend_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 27</value>
   </data>
-  <data name="bSend_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="bSend_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="bSend_SocketList.Text" xml:space="preserve">
+  <data name="bSend_PacketConfig.List.Text" xml:space="preserve">
     <value>插 入</value>
   </data>
-  <data name="&gt;&gt;bSend_SocketList.Name" xml:space="preserve">
-    <value>bSend_SocketList</value>
+  <data name="&gt;&gt;bSend_PacketConfig.List.Name" xml:space="preserve">
+    <value>bSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;bSend_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;bSend_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;bSend_SocketList.Parent" xml:space="preserve">
-    <value>tlpSend_SocketList</value>
+  <data name="&gt;&gt;bSend_PacketConfig.List.Parent" xml:space="preserve">
+    <value>tlpSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;bSend_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;bSend_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpSend_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpSend_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="tlpSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tlpSend_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 19</value>
   </data>
-  <data name="tlpSend_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tlpSend_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
-  <data name="tlpSend_SocketList.RowCount" type="System.Int32, mscorlib">
+  <data name="tlpSend_PacketConfig.List.RowCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="tlpSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlpSend_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>324, 55</value>
   </data>
-  <data name="tlpSend_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="tlpSend_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;tlpSend_SocketList.Name" xml:space="preserve">
-    <value>tlpSend_SocketList</value>
+  <data name="&gt;&gt;tlpSend_PacketConfig.List.Name" xml:space="preserve">
+    <value>tlpSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;tlpSend_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlpSend_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tlpSend_SocketList.Parent" xml:space="preserve">
-    <value>gbSend_SocketList</value>
+  <data name="&gt;&gt;tlpSend_PacketConfig.List.Parent" xml:space="preserve">
+    <value>gbSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;tlpSend_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tlpSend_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpSend_SocketList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSend_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bSend_SocketList" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="tlpSend_PacketConfig.List.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lSend_PacketConfig.List" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bSend_PacketConfig.List" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100,Absolute,80" /&gt;&lt;Rows Styles="AutoSize,0,Percent,100,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="gbSend_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbSend_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="gbSend_SocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="gbSend_PacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt, style=Bold</value>
   </data>
-  <data name="gbSend_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="gbSend_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 83</value>
   </data>
-  <data name="gbSend_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="gbSend_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
-  <data name="gbSend_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="gbSend_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>330, 77</value>
   </data>
-  <data name="gbSend_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="gbSend_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="gbSend_SocketList.Text" xml:space="preserve">
+  <data name="gbSend_PacketConfig.List.Text" xml:space="preserve">
     <value>发送 [ 封包列表 ]</value>
   </data>
-  <data name="&gt;&gt;gbSend_SocketList.Name" xml:space="preserve">
-    <value>gbSend_SocketList</value>
+  <data name="&gt;&gt;gbSend_PacketConfig.List.Name" xml:space="preserve">
+    <value>gbSend_PacketConfig.List</value>
   </data>
-  <data name="&gt;&gt;gbSend_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbSend_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbSend_SocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;gbSend_PacketConfig.List.Parent" xml:space="preserve">
     <value>tlpInstruction_Socket</value>
   </data>
-  <data name="&gt;&gt;gbSend_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbSend_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="tlpSend_SendLIst.ColumnCount" type="System.Int32, mscorlib">
@@ -946,7 +946,7 @@
     <value>0</value>
   </data>
   <data name="tlpInstruction_Socket.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSet_SystemSocket" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSend_SocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSend_SendLIst" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80,Absolute,80,Absolute,150,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbSet_SystemSocket" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSend_PacketConfig.List" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="gbSend_SendLIst" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,80,Absolute,80,Absolute,150,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tpInstruction_Socket.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>

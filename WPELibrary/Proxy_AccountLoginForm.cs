@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -28,12 +28,12 @@ namespace WPELibrary
         {
             try
             {
-                string UserName = Socket_Cache.ProxyAccount.GetProxyAccount_ByAccountID(this.AccountID).UserName;
+                string UserName = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByAccountID(this.AccountID).UserName;
                 this.Text += " - " + UserName;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -42,12 +42,12 @@ namespace WPELibrary
             try
             {
                 dgvAccountLogin.AutoGenerateColumns = false;
-                dgvAccountLogin.DataSource = Socket_Cache.ProxyAccount.LoadProxyAccount_LoginInfo_FromDB(this.AccountID);
+                dgvAccountLogin.DataSource = Operate.ProxyConfig.ProxyAccount.LoadProxyAccount_LoginInfo_FromDB(this.AccountID);
                 dgvAccountLogin.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAccountLogin, true, null);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -63,7 +63,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

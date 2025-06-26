@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Text;
@@ -40,13 +40,13 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_28));
                     this.Close();
                 }                                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -63,11 +63,11 @@ namespace WPELibrary
                              
                 switch (sfiSelect.FMode)
                 {
-                    case Socket_Cache.Filter.FilterMode.Normal:
+                    case Operate.FilterConfig.Filter.FilterMode.Normal:
                         this.rbFilterMode_Normal.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterMode.Advanced:
+                    case Operate.FilterConfig.Filter.FilterMode.Advanced:
                         this.rbFilterMode_Advanced.Checked = true;
                         break;
                 }
@@ -75,34 +75,34 @@ namespace WPELibrary
 
                 switch (sfiSelect.FAction)
                 {
-                    case Socket_Cache.Filter.FilterAction.Replace:
+                    case Operate.FilterConfig.Filter.FilterAction.Replace:
                         this.rbFilterAction_Replace.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterAction.Intercept:
+                    case Operate.FilterConfig.Filter.FilterAction.Intercept:
                         this.rbFilterAction_Intercept.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterAction.Change:
+                    case Operate.FilterConfig.Filter.FilterAction.Change:
                         this.rbFilterAction_Change.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterAction.NoModify_Display:
+                    case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
                         this.rbFilterAction_NoModify_Display.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterAction.NoModify_NoDisplay:
+                    case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
                         this.rbFilterAction_NoModify_NoDisplay.Checked = true;
                         break;                    
                 }            
 
                 switch (sfiSelect.FStartFrom)
                 {
-                    case Socket_Cache.Filter.FilterStartFrom.Head:
+                    case Operate.FilterConfig.Filter.FilterStartFrom.Head:
                         this.rbFilterModifyFrom_Head.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.FilterStartFrom.Position:
+                    case Operate.FilterConfig.Filter.FilterStartFrom.Position:
                         this.rbFilterModifyFrom_Position.Checked = true;
                         break;
                 }
@@ -113,11 +113,11 @@ namespace WPELibrary
 
                 switch (sfiSelect.FEType)
                 { 
-                    case Socket_Cache.Filter.FilterExecuteType.Send:
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Send:
                         this.cbbFilterAction_ExecuteType.SelectedIndex = 0;
                         break;
 
-                    case Socket_Cache.Filter.FilterExecuteType.Robot:
+                    case Operate.FilterConfig.Filter.FilterExecuteType.Robot:
                         this.cbbFilterAction_ExecuteType.SelectedIndex = 1;
                         break;
                 }
@@ -181,7 +181,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -220,7 +220,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -233,7 +233,7 @@ namespace WPELibrary
                     this.dgvFilterNormal.Columns.Clear();
                 }
 
-                for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.LightYellow);
                     dgvFilterNormal.Columns.Add(dgv);
@@ -248,7 +248,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -265,7 +265,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -278,7 +278,7 @@ namespace WPELibrary
                     this.dgvFilterAdvanced_Search.Columns.Clear();
                 }                
 
-                for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.LightYellow);
                     dgvFilterAdvanced_Search.Columns.Add(dgv);
@@ -292,7 +292,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -305,7 +305,7 @@ namespace WPELibrary
                     this.dgvFilterAdvanced_Modify_FromHead.Columns.Clear();
                 }                                
 
-                for (int i = 0; i < Socket_Cache.Filter.FilterSize_MaxLen; i++)
+                for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
                 {
                     DataGridViewTextBoxColumn dgv = Socket_Operation.InitDGVColumn(i + 1, Color.RoyalBlue, Color.Yellow);
                     dgvFilterAdvanced_Modify_FromHead.Columns.Add(dgv);
@@ -319,7 +319,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -332,7 +332,7 @@ namespace WPELibrary
                     this.dgvFilterAdvanced_Modify_FromPosition.Columns.Clear();
                 }
 
-                int iSize = Socket_Cache.Filter.FilterSize_MaxLen;
+                int iSize = Operate.FilterConfig.Filter.FilterSize_MaxLen;
 
                 for (int i = -iSize; i < iSize; i++)
                 {
@@ -348,7 +348,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -368,7 +368,7 @@ namespace WPELibrary
                             {
                                 switch (sfiSelect.FMode)
                                 {
-                                    case Socket_Cache.Filter.FilterMode.Normal:
+                                    case Operate.FilterConfig.Filter.FilterMode.Normal:
 
                                         if (dgvFilterNormal.Rows.Count == 2 && dgvFilterNormal.Columns.Count > iIndex)
                                         {
@@ -377,11 +377,11 @@ namespace WPELibrary
 
                                         break;
 
-                                    case Socket_Cache.Filter.FilterMode.Advanced:
+                                    case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
                                         switch (sfiSelect.FStartFrom)
                                         {
-                                            case Socket_Cache.Filter.FilterStartFrom.Head:
+                                            case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
                                                 if (dgvFilterAdvanced_Modify_FromHead.Rows.Count == 1 && dgvFilterAdvanced_Modify_FromHead.Columns.Count > iIndex)
                                                 {
@@ -390,9 +390,9 @@ namespace WPELibrary
 
                                                 break;
 
-                                            case Socket_Cache.Filter.FilterStartFrom.Position:
+                                            case Operate.FilterConfig.Filter.FilterStartFrom.Position:
 
-                                                iIndex += Socket_Cache.Filter.FilterSize_MaxLen;
+                                                iIndex += Operate.FilterConfig.Filter.FilterSize_MaxLen;
 
                                                 if (dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 1 && dgvFilterAdvanced_Modify_FromPosition.Columns.Count > iIndex)
                                                 {                                                    
@@ -411,7 +411,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -449,7 +449,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -457,9 +457,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SendList.lstSend.Count > 0)
+                if (Operate.SendConfig.SendList.lstSend.Count > 0)
                 {
-                    cbbFilterAction_Execute.DataSource = Socket_Cache.SendList.lstSend;
+                    cbbFilterAction_Execute.DataSource = Operate.SendConfig.SendList.lstSend;
                     cbbFilterAction_Execute.DisplayMember = "SName";
                     cbbFilterAction_Execute.ValueMember = "SID";
 
@@ -468,7 +468,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -476,9 +476,9 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
                 {
-                    cbbFilterAction_Execute.DataSource = Socket_Cache.RobotList.lstRobot;
+                    cbbFilterAction_Execute.DataSource = Operate.RobotConfig.RobotList.lstRobot;
                     cbbFilterAction_Execute.DisplayMember = "RName";
                     cbbFilterAction_Execute.ValueMember = "RID";
 
@@ -487,7 +487,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -521,7 +521,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -551,7 +551,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -582,7 +582,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -647,7 +647,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -719,7 +719,7 @@ namespace WPELibrary
 
                             switch (sfiSelect.FMode)
                             {
-                                case Socket_Cache.Filter.FilterMode.Normal:
+                                case Operate.FilterConfig.Filter.FilterMode.Normal:
 
                                     if (this.dgvFilterNormal.Rows.Count == 2)
                                     {
@@ -731,11 +731,11 @@ namespace WPELibrary
 
                                     break;
 
-                                case Socket_Cache.Filter.FilterMode.Advanced:
+                                case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
                                     switch (sfiSelect.FStartFrom)
                                     {
-                                        case Socket_Cache.Filter.FilterStartFrom.Head:
+                                        case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
                                             if (this.dgvFilterAdvanced_Modify_FromHead.Rows.Count == 1)
                                             {
@@ -747,11 +747,11 @@ namespace WPELibrary
 
                                             break;
 
-                                        case Socket_Cache.Filter.FilterStartFrom.Position:
+                                        case Operate.FilterConfig.Filter.FilterStartFrom.Position:
 
                                             if (this.dgvFilterAdvanced_Modify_FromPosition.Rows.Count == 1)
                                             {
-                                                iIndex += Socket_Cache.Filter.FilterSize_MaxLen;
+                                                iIndex += Operate.FilterConfig.Filter.FilterSize_MaxLen;
 
                                                 if (iIndex < this.dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells.Count)
                                                 {                                                    
@@ -773,7 +773,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -789,7 +789,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -867,7 +867,7 @@ namespace WPELibrary
                 }
                 catch (Exception ex)
                 {
-                    Socket_Operation.DoLog(nameof(PastePacketData), ex.Message);
+                    Operate.DoLog(nameof(PastePacketData), ex.Message);
                 }
             });
 
@@ -1030,7 +1030,7 @@ namespace WPELibrary
                     //高级滤镜（从发现有连锁的位置）
                     if (this.rbFilterMode_Advanced.Checked && this.rbFilterModifyFrom_Position.Checked)
                     {
-                        int iStartIndex = Socket_Cache.Filter.FilterSize_MaxLen;
+                        int iStartIndex = Operate.FilterConfig.Filter.FilterSize_MaxLen;
 
                         for (int i = iStartIndex; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
                         {
@@ -1063,7 +1063,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -1102,13 +1102,13 @@ namespace WPELibrary
                     StringBuilder sbSearch = new StringBuilder();
                     StringBuilder sbModify = new StringBuilder();
 
-                    Socket_Cache.Filter.FilterMode FilterMode_New;
-                    Socket_Cache.Filter.FilterAction FilterAction_New;
-                    Socket_Cache.Filter.FilterExecuteType FilterExecuteType_New;
+                    Operate.FilterConfig.Filter.FilterMode FilterMode_New;
+                    Operate.FilterConfig.Filter.FilterAction FilterAction_New;
+                    Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_New;
                     Guid SID_New = Guid.Empty;
                     Guid RID_New = Guid.Empty;
-                    Socket_Cache.Filter.FilterFunction FilterFunction_New;
-                    Socket_Cache.Filter.FilterStartFrom FilterStartFrom_New;
+                    Operate.FilterConfig.Filter.FilterFunction FilterFunction_New;
+                    Operate.FilterConfig.Filter.FilterStartFrom FilterStartFrom_New;
 
                     bIsExecute_New = this.cbFilterAction_Execute.Checked;
                     bAppointHeader_New = this.cbFilter_AppointHeader.Checked;
@@ -1127,47 +1127,47 @@ namespace WPELibrary
 
                     if (rbFilterMode_Normal.Checked)
                     {
-                        FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
+                        FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Normal;
                     }
                     else if (rbFilterMode_Advanced.Checked)
                     {
-                        FilterMode_New = Socket_Cache.Filter.FilterMode.Advanced;
+                        FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Advanced;
                     }
                     else
                     {
-                        FilterMode_New = Socket_Cache.Filter.FilterMode.Normal;
+                        FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Normal;
                     }
 
                     if (rbFilterAction_Replace.Checked)
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.Replace;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Replace;
                     }
                     else if (rbFilterAction_Intercept.Checked)
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.Intercept;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Intercept;
                     }
                     else if (rbFilterAction_Change.Checked)
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.Change;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Change;
                     }
                     else if (rbFilterAction_NoModify_Display.Checked)
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
                     }
                     else if (rbFilterAction_NoModify_NoDisplay.Checked)
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay;
                     }
                     else
                     {
-                        FilterAction_New = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                        FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
                     }
 
                     if (cbFilterAction_Execute.Checked)
                     {
                         if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
                         {
-                            FilterExecuteType_New = Socket_Cache.Filter.FilterExecuteType.Send;
+                            FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Send;
 
                             if (cbbFilterAction_Execute.SelectedValue != null)
                             {
@@ -1176,7 +1176,7 @@ namespace WPELibrary
                         }
                         else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
                         {
-                            FilterExecuteType_New = Socket_Cache.Filter.FilterExecuteType.Robot;
+                            FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Robot;
 
                             if (cbbFilterAction_Execute.SelectedValue != null)
                             {
@@ -1185,12 +1185,12 @@ namespace WPELibrary
                         }
                         else
                         {
-                            FilterExecuteType_New = new Socket_Cache.Filter.FilterExecuteType();
+                            FilterExecuteType_New = new Operate.FilterConfig.Filter.FilterExecuteType();
                         }
                     }
                     else
                     {
-                        FilterExecuteType_New = new Socket_Cache.Filter.FilterExecuteType();
+                        FilterExecuteType_New = new Operate.FilterConfig.Filter.FilterExecuteType();
                     }
 
                     FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
@@ -1204,16 +1204,16 @@ namespace WPELibrary
 
                     if (rbFilterModifyFrom_Head.Checked)
                     {
-                        FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Head;
+                        FilterStartFrom_New = Operate.FilterConfig.Filter.FilterStartFrom.Head;
                     }
                     else
                     {
-                        FilterStartFrom_New = Socket_Cache.Filter.FilterStartFrom.Position;
+                        FilterStartFrom_New = Operate.FilterConfig.Filter.FilterStartFrom.Position;
                     }                    
 
                     switch (FilterMode_New)
                     {
-                        case Socket_Cache.Filter.FilterMode.Normal:
+                        case Operate.FilterConfig.Filter.FilterMode.Normal:
 
                             for (int i = 0; i < this.dgvFilterNormal.Columns.Count; i++)
                             {
@@ -1245,7 +1245,7 @@ namespace WPELibrary
 
                             break;
 
-                        case Socket_Cache.Filter.FilterMode.Advanced:
+                        case Operate.FilterConfig.Filter.FilterMode.Advanced:
 
                             for (int i = 0; i < this.dgvFilterAdvanced_Search.Columns.Count; i++)
                             {
@@ -1264,7 +1264,7 @@ namespace WPELibrary
 
                             switch (FilterStartFrom_New)
                             {
-                                case Socket_Cache.Filter.FilterStartFrom.Head:
+                                case Operate.FilterConfig.Filter.FilterStartFrom.Head:
 
                                     for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromHead.Columns.Count; i++)
                                     {
@@ -1286,7 +1286,7 @@ namespace WPELibrary
 
                                     break;
 
-                                case Socket_Cache.Filter.FilterStartFrom.Position:
+                                case Operate.FilterConfig.Filter.FilterStartFrom.Position:
 
                                     for (int i = 0; i < this.dgvFilterAdvanced_Modify_FromPosition.Columns.Count; i++)
                                     {
@@ -1318,7 +1318,7 @@ namespace WPELibrary
                     string sSearch_New = sbSearch.ToString().TrimEnd(',');
                     string sModify_New = sbModify.ToString().TrimEnd(',');
 
-                    Socket_Cache.Filter.UpdateFilter(
+                    Operate.FilterConfig.Filter.UpdateFilter(
                         sfiSelect,
                         sFName_New,
                         bAppointHeader_New,
@@ -1351,7 +1351,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1461,7 +1461,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

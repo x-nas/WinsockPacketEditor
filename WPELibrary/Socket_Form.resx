@@ -122,7 +122,7 @@
     <value>27, 36</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tlpListSet_SocketList.RowCount" type="System.Int32, mscorlib">
+  <data name="tlpListSet_PacketConfig.List.RowCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="&gt;&gt;cmsIcon.Type" xml:space="preserve">
@@ -204,7 +204,7 @@
   <data name="cbCheckHead.Text" xml:space="preserve">
     <value>指定包头:</value>
   </data>
-  <data name="cbSocketList_AutoClear.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoClear.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 3</value>
   </data>
   <data name="tlpFilterList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
@@ -261,8 +261,8 @@
   <data name="&gt;&gt;hbXOR_From.Parent" xml:space="preserve">
     <value>tlpPacketInfo_XOR</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_FilterList.Name" xml:space="preserve">
-    <value>cmsSocketList_FilterList</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_FilterList.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_FilterList</value>
   </data>
   <data name="&gt;&gt;rbFilter_NotShow.Name" xml:space="preserve">
     <value>rbFilter_NotShow</value>
@@ -309,7 +309,7 @@
   <data name="&gt;&gt;tsslSplit1.Name" xml:space="preserve">
     <value>tsslSplit1</value>
   </data>
-  <data name="ssSocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="ssPacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 125</value>
   </data>
   <data name="&gt;&gt;tlpHookButton.Parent" xml:space="preserve">
@@ -342,7 +342,7 @@
   <data name="cmsRobotList_Copy.Text" xml:space="preserve">
     <value>复制</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Comparison_B.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_Comparison_B.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tlpComparison_Button.Location" type="System.Drawing.Point, System.Drawing">
@@ -363,7 +363,7 @@
   <data name="tlpBackUp_Content.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 19</value>
   </data>
-  <data name="cbSocketList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbPacketConfig.List_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 24</value>
   </data>
   <data name="tlpBackUp_Content.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -435,7 +435,7 @@
   <data name="tlpSystemSet_ListExecute.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="rbListExecute_Sequence" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rbListExecute_Together" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="&gt;&gt;ssSocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;ssPacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.StatusStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_tscbSendList.Type" xml:space="preserve">
@@ -579,7 +579,7 @@
   <data name="tsRobotList.Size" type="System.Drawing.Size, System.Drawing">
     <value>213, 26</value>
   </data>
-  <data name="&gt;&gt;tlpListSet_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlpListSet_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tlpSystemSet.Type" xml:space="preserve">
@@ -696,7 +696,7 @@
   <data name="&gt;&gt;tsslProcessInfo.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+  <data name="nudPacketConfig.List_AutoClearValue.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
   </data>
   <data name="&gt;&gt;rbListExecute_Sequence.Name" xml:space="preserve">
@@ -747,7 +747,7 @@
   <data name="tlpParameter.Size" type="System.Drawing.Size, System.Drawing">
     <value>1084, 125</value>
   </data>
-  <data name="cbSocketList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbPacketConfig.List_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 36</value>
   </data>
   <data name="&gt;&gt;txtHotKey3.Name" xml:space="preserve">
@@ -780,7 +780,7 @@
   <data name="&gt;&gt;txtPacketInfo_Encoding_UTF32.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoRoll.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="cbCheckData.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -840,7 +840,7 @@
   <data name="bSearchNext.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoClear.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbPacketConfig.List_AutoClear.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="cmsIcon.Size" type="System.Drawing.Size, System.Drawing">
@@ -861,7 +861,7 @@
   <data name="nudLogList_AutoClearValue.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="cmsSocketList_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_FilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="&gt;&gt;cbHookWS1_SendTo.Parent" xml:space="preserve">
@@ -876,7 +876,7 @@
   <data name="&gt;&gt;lPacketInfo_Encoding_ANSIUTF8.ZOrder" xml:space="preserve">
     <value>17</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Send.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_Send.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lPacketInfo_Encoding_ASCII.Parent" xml:space="preserve">
@@ -891,8 +891,8 @@
   <data name="txtHotKey3.Size" type="System.Drawing.Size, System.Drawing">
     <value>131, 23</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoClear.Parent" xml:space="preserve">
-    <value>tlpListSet_SocketList</value>
+  <data name="&gt;&gt;cbPacketConfig.List_AutoClear.Parent" xml:space="preserve">
+    <value>tlpListSet_PacketConfig.List</value>
   </data>
   <data name="&gt;&gt;lHotKey11.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -993,14 +993,14 @@
   <data name="&gt;&gt;tlpExtraction.Name" xml:space="preserve">
     <value>tlpExtraction</value>
   </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>166, 226</value>
   </data>
   <data name="&gt;&gt;txtPacketInfo_Encoding_UTF8.Name" xml:space="preserve">
     <value>txtPacketInfo_Encoding_UTF8</value>
   </data>
-  <data name="&gt;&gt;nudSocketList_AutoClearValue.Name" xml:space="preserve">
-    <value>nudSocketList_AutoClearValue</value>
+  <data name="&gt;&gt;nudPacketConfig.List_AutoClearValue.Name" xml:space="preserve">
+    <value>nudPacketConfig.List_AutoClearValue</value>
   </data>
   <data name="tlFilterExecute_CNT.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt, style=Bold</value>
@@ -1128,7 +1128,7 @@
   <data name="&gt;&gt;gbBackUp_Content.Parent" xml:space="preserve">
     <value>tlpSystemBackup</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_tss1.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_tss1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtCheckLength.ZOrder" xml:space="preserve">
@@ -1441,7 +1441,7 @@
     <value>15, 17</value>
   </data>
   <data name="&gt;&gt;txtHotKey9.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;cmsSendList_Down.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1777,16 +1777,16 @@
   <data name="&gt;&gt;lPacketInfo_Encoding_ANSIUTF8.Parent" xml:space="preserve">
     <value>tlpPacketInfo_Encoding_Result</value>
   </data>
-  <data name="cmsSocketList_ToExcel.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_ToExcel.Text" xml:space="preserve">
     <value>导出到 Excel</value>
   </data>
-  <data name="ssSocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="ssPacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="tlRecvFrom_CNT.Size" type="System.Drawing.Size, System.Drawing">
     <value>15, 17</value>
   </data>
-  <data name="tlpListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="tlpListSet_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="bHotKey5.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -1801,8 +1801,8 @@
   <data name="&gt;&gt;cmsHexBox_CopyText.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Name" xml:space="preserve">
-    <value>cmsSocketList_ToExcel</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_ToExcel.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_ToExcel</value>
   </data>
   <data name="&gt;&gt;cbTopMost.Parent" xml:space="preserve">
     <value>tlpSystemSet_ShowMode</value>
@@ -1873,7 +1873,7 @@
   <data name="lFAColor_Replace.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
   </data>
-  <data name="ssSocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="ssPacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>70</value>
   </data>
   <data name="pComparison_A.Size" type="System.Drawing.Size, System.Drawing">
@@ -1918,7 +1918,7 @@
   <data name="&gt;&gt;tpExtraction.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="&gt;&gt;ssSocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;ssPacketConfig.List.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;bSearchNext.ZOrder" xml:space="preserve">
@@ -2005,7 +2005,7 @@
   <data name="tlpHookButton_Start.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 93</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="nudPacketConfig.List_AutoClearValue.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="pbEncoding.Location" type="System.Drawing.Point, System.Drawing">
@@ -2077,7 +2077,7 @@
   <data name="&gt;&gt;txtPacketInfo_Encoding_UTF8.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbSocketList_AutoRoll.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbPacketConfig.List_AutoRoll.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
   <data name="gbHookSet_WinsockWSA.Location" type="System.Drawing.Point, System.Drawing">
@@ -2161,7 +2161,7 @@
   <data name="txtHotKey10.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
     <value>Center</value>
   </data>
-  <data name="gbListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="gbListSet_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
   <data name="tlpPacketInfo.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
@@ -2179,8 +2179,8 @@
   <data name="&gt;&gt;tlpPacketStatistics.Type" xml:space="preserve">
     <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_SendList.Name" xml:space="preserve">
-    <value>cmsSocketList_SendList</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_SendList.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_SendList</value>
   </data>
   <data name="lPacketInfo_Encoding_UTF7.TabIndex" type="System.Int32, mscorlib">
     <value>30</value>
@@ -2230,8 +2230,8 @@
   <data name="&gt;&gt;cbBackUp_ProxyAccount.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;nudSocketList_AutoClearValue.Parent" xml:space="preserve">
-    <value>tlpListSet_SocketList</value>
+  <data name="&gt;&gt;nudPacketConfig.List_AutoClearValue.Parent" xml:space="preserve">
+    <value>tlpListSet_PacketConfig.List</value>
   </data>
   <data name="bHotKey12.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -2319,7 +2319,7 @@
   <data name="tlpSystemSet.ColumnCount" type="System.Int32, mscorlib">
     <value>5</value>
   </data>
-  <data name="cmsSocketList_ShowModified.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_ShowModified.Text" xml:space="preserve">
     <value>查看 数据修改</value>
   </data>
   <data name="tsFilterList_SelectNo.Size" type="System.Drawing.Size, System.Drawing">
@@ -2379,13 +2379,13 @@
   <data name="tcAutomation.Size" type="System.Drawing.Size, System.Drawing">
     <value>227, 232</value>
   </data>
-  <data name="gbListSet_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="gbListSet_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
   </data>
-  <data name="&gt;&gt;tlpListSet_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;tlpListSet_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cmsSocketList_FilterList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_FilterList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="&gt;&gt;cLogTime.Name" xml:space="preserve">
@@ -2437,7 +2437,7 @@
   <data name="cbHookWS2_Recv.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 9pt</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoClear.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbPacketConfig.List_AutoClear.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;pComparison_B.Name" xml:space="preserve">
@@ -2521,7 +2521,7 @@
   <data name="cbBackUp_ProxyAccount.Location" type="System.Drawing.Point, System.Drawing">
     <value>177, 3</value>
   </data>
-  <data name="&gt;&gt;dgvSocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;dgvPacketConfig.List.Parent" xml:space="preserve">
     <value>tlpSocketForm</value>
   </data>
   <data name="&gt;&gt;lHotKey9.Parent" xml:space="preserve">
@@ -2560,7 +2560,7 @@
   <data name="&gt;&gt;lPacketInfo_Encoding_ANSIASCII.Parent" xml:space="preserve">
     <value>tlpPacketInfo_Encoding_Result</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
+  <data name="nudPacketConfig.List_AutoClearValue.TabIndex" type="System.Int32, mscorlib">
     <value>56</value>
   </data>
   <data name="&gt;&gt;tlpSystemSet_ListExecute.Parent" xml:space="preserve">
@@ -2621,7 +2621,7 @@
   <data name="gbHookButton_Search.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbSocketList_AutoRoll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoRoll.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="&gt;&gt;tsRobotList_Start.Type" xml:space="preserve">
@@ -2636,7 +2636,7 @@
   <data name="&gt;&gt;cbBackUp_SendList.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Text" xml:space="preserve">
+  <data name="cbPacketConfig.List_AutoRoll.Text" xml:space="preserve">
     <value>自动滚动</value>
   </data>
   <data name="bHotKey3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -2678,7 +2678,7 @@
   <data name="&gt;&gt;tsFilterList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cmsSocketList_tss1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_tss1.Size" type="System.Drawing.Size, System.Drawing">
     <value>162, 6</value>
   </data>
   <data name="&gt;&gt;tlpPacketStatistics_Button.Type" xml:space="preserve">
@@ -2756,7 +2756,7 @@
   <data name="tlpSystemSet_FilterActionColor.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lFAColor_Other" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lFAColor_Change" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lFAColor_Intercept" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lFAColor_Replace" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="Percent,50,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="tlpListSet_SocketList.ColumnCount" type="System.Int32, mscorlib">
+  <data name="tlpListSet_PacketConfig.List.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
   <data name="&gt;&gt;lComparison_B.ZOrder" xml:space="preserve">
@@ -3006,7 +3006,7 @@
     <value>新增滤镜</value>
   </data>
   <data name="&gt;&gt;txtHotKey4.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="nudLogList_AutoClearValue.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
@@ -3057,7 +3057,7 @@
     <value>添加到 滤镜列表</value>
   </data>
   <data name="&gt;&gt;txtHotKey7.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;sfdExtraction.Type" xml:space="preserve">
     <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3143,13 +3143,13 @@
   <data name="txtPacketInfo_Encoding_Bytes.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;dgvSocketList.Name" xml:space="preserve">
-    <value>dgvSocketList</value>
+  <data name="&gt;&gt;dgvPacketConfig.List.Name" xml:space="preserve">
+    <value>dgvPacketConfig.List</value>
   </data>
   <data name="tlpComparison_Button.ColumnCount" type="System.Int32, mscorlib">
     <value>3</value>
   </data>
-  <data name="gbListSet_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="gbListSet_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="lPacketInfo_Encoding_Bytes.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -3161,7 +3161,7 @@
   <data name="tlRecv_CNT.Text" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tlpListSet_SocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="tlpListSet_PacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="pPacketInfo_Encoding.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -3179,7 +3179,7 @@
   <data name="lPacketStatistics.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="&gt;&gt;ssSocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;ssPacketConfig.List.Parent" xml:space="preserve">
     <value>tlpSocketForm</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel8.Name" xml:space="preserve">
@@ -3194,8 +3194,8 @@
   <data name="tlRecvFrom_CNT.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt, style=Bold</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoRoll.Name" xml:space="preserve">
-    <value>cbSocketList_AutoRoll</value>
+  <data name="&gt;&gt;cbPacketConfig.List_AutoRoll.Name" xml:space="preserve">
+    <value>cbPacketConfig.List_AutoRoll</value>
   </data>
   <data name="&gt;&gt;txtPacketInfo_Encoding_UTF16.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -3254,7 +3254,7 @@
   <data name="rtbComparison_A.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
   </data>
-  <data name="cmsSocketList_Send.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_Send.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="txtHotKey8.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
@@ -3527,8 +3527,8 @@
   <data name="cbbExtraction.Items1" xml:space="preserve">
     <value>{ FILT过滤器文件（.filt）} =&gt; { WPE64 滤镜文件（.sp）}</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoRoll.Parent" xml:space="preserve">
-    <value>tlpListSet_SocketList</value>
+  <data name="&gt;&gt;cbPacketConfig.List_AutoRoll.Parent" xml:space="preserve">
+    <value>tlpListSet_PacketConfig.List</value>
   </data>
   <data name="lXOR.Location" type="System.Drawing.Point, System.Drawing">
     <value>82, 3</value>
@@ -3597,7 +3597,7 @@
     <value>Magenta</value>
   </data>
   <data name="&gt;&gt;txtHotKey1.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;lPacketInfo_Encoding_ASCII.Name" xml:space="preserve">
     <value>lPacketInfo_Encoding_ASCII</value>
@@ -3659,8 +3659,8 @@
   <data name="&gt;&gt;bPacketInfo_Encoding.Parent" xml:space="preserve">
     <value>tlpPacketInfo_Encoding_Button</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_tss1.Name" xml:space="preserve">
-    <value>cmsSocketList_tss1</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_tss1.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_tss1</value>
   </data>
   <data name="lComparison_A.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3794,7 +3794,7 @@
   <data name="cbCheckIP.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 0, 0</value>
   </data>
-  <data name="cmsSocketList_SendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_SendList.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="cbHookWS1_Send.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -3896,7 +3896,7 @@
   <data name="tlpListSet_LogList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_SendList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_SendList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIUTF7.TabIndex" type="System.Int32, mscorlib">
@@ -3911,7 +3911,7 @@
   <data name="tsFilterList_Add.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
-  <data name="cbSocketList_AutoRoll.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbPacketConfig.List_AutoRoll.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="pPacketInfo_Encoding.Size" type="System.Drawing.Size, System.Drawing">
@@ -3929,8 +3929,8 @@
   <data name="tlpExtraction.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList.Name" xml:space="preserve">
-    <value>cmsSocketList</value>
+  <data name="&gt;&gt;cmsPacketConfig.List.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIGBK.TabIndex" type="System.Int32, mscorlib">
     <value>28</value>
@@ -3950,7 +3950,7 @@
   <data name="&gt;&gt;cmsRobotList_Top.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="gbListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="gbListSet_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>379, 93</value>
   </data>
   <data name="tlpExtraction.Size" type="System.Drawing.Size, System.Drawing">
@@ -3971,8 +3971,8 @@
   <data name="&gt;&gt;cbBackUp_ProxySet.Name" xml:space="preserve">
     <value>cbBackUp_ProxySet</value>
   </data>
-  <data name="&gt;&gt;tlFilterSocketList.Name" xml:space="preserve">
-    <value>tlFilterSocketList</value>
+  <data name="&gt;&gt;tlFilterPacketConfig.List.Name" xml:space="preserve">
+    <value>tlFilterPacketConfig.List</value>
   </data>
   <data name="cmsFilterList_tss3.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 6</value>
@@ -3995,7 +3995,7 @@
   <data name="tlpSendList.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_FilterList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_FilterList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tss17.Size" type="System.Drawing.Size, System.Drawing">
@@ -4007,7 +4007,7 @@
   <data name="tlpHookButton.TabIndex" type="System.Int32, mscorlib">
     <value>59</value>
   </data>
-  <data name="cmsSocketList_SystemSocket.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_SystemSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="&gt;&gt;txtCheckHead.Type" xml:space="preserve">
@@ -4115,7 +4115,7 @@
   <data name="lPacketInfo_Encoding_ANSIGBK.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cmsSocketList_Comparison_A.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_Comparison_A.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="lPacketInfo_Encoding_UTF8.TabIndex" type="System.Int32, mscorlib">
@@ -4142,8 +4142,8 @@
   <data name="lHotKey12.Text" xml:space="preserve">
     <value>12:</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Send.Name" xml:space="preserve">
-    <value>cmsSocketList_Send</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_Send.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_Send</value>
   </data>
   <data name="&gt;&gt;lPacketInfo_Encoding_ANSIASCII.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -4187,7 +4187,7 @@
   <data name="lPacketInfo_Encoding_ANSIUTF32.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="dgvSocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="dgvPacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>60</value>
   </data>
   <data name="&gt;&gt;cmsIcon_StartHook.Name" xml:space="preserve">
@@ -4208,7 +4208,7 @@
   <data name="lHotKey3.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Enabled" type="System.Boolean, mscorlib">
+  <data name="nudPacketConfig.List_AutoClearValue.Enabled" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
   <data name="toolStripStatusLabel14.Size" type="System.Drawing.Size, System.Drawing">
@@ -4265,8 +4265,8 @@
   <data name="tcPacketInfo.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;tlpListSet_SocketList.Parent" xml:space="preserve">
-    <value>gbListSet_SocketList</value>
+  <data name="&gt;&gt;tlpListSet_PacketConfig.List.Parent" xml:space="preserve">
+    <value>gbListSet_PacketConfig.List</value>
   </data>
   <data name="tscbSendList.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -4319,7 +4319,7 @@
   <data name="&gt;&gt;txtPacketInfo_Encoding_ANSIUTF32.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ssSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="ssPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>1078, 22</value>
   </data>
   <data name="cbHookWS2_SendTo.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -4337,7 +4337,7 @@
   <data name="&gt;&gt;cbBackUp_ProxyAccount.Name" xml:space="preserve">
     <value>cbBackUp_ProxyAccount</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoRoll.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;cbPacketConfig.List_AutoRoll.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="cbHookWS2_Send.Text" xml:space="preserve">
@@ -4445,7 +4445,7 @@
   <data name="rtbExtraction.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_SystemSocket.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_SystemSocket.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lHotKey4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -4475,7 +4475,7 @@
   <data name="pComparison_A.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_ShowModified.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_ShowModified.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIASCII.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
@@ -4493,7 +4493,7 @@
   <data name="&gt;&gt;toolStripSeparator11.Name" xml:space="preserve">
     <value>toolStripSeparator11</value>
   </data>
-  <data name="cmsSocketList_SystemSocket.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_SystemSocket.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="&gt;&gt;cmsFilterList.Name" xml:space="preserve">
@@ -4589,7 +4589,7 @@
   <data name="&gt;&gt;txtPacketInfo_Encoding_UTF7.ZOrder" xml:space="preserve">
     <value>23</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="cbBackUp_InjectionSet.Text" xml:space="preserve">
@@ -4674,7 +4674,7 @@
     <value>lPacketInfo_Encoding_ANSIUnicode</value>
   </data>
   <data name="&gt;&gt;txtHotKey5.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="txtCheckSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>153, 23</value>
@@ -4748,7 +4748,7 @@
   <data name="tlpSocketForm.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="&gt;&gt;gbListSet_SocketList.Parent" xml:space="preserve">
+  <data name="&gt;&gt;gbListSet_PacketConfig.List.Parent" xml:space="preserve">
     <value>tlpListSet</value>
   </data>
   <data name="lFAColor_Other.Size" type="System.Drawing.Size, System.Drawing">
@@ -4763,7 +4763,7 @@
   <data name="lPacketInfo_Encoding_ANSIUTF8.TabIndex" type="System.Int32, mscorlib">
     <value>33</value>
   </data>
-  <data name="dgvSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="dgvPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>1078, 347</value>
   </data>
   <data name="tlpInformation.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
@@ -4781,7 +4781,7 @@
   <data name="tlpSystemSet_FilterSet.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoRoll.Type" xml:space="preserve">
+  <data name="&gt;&gt;cbPacketConfig.List_AutoRoll.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tlpPacketData.TabIndex" type="System.Int32, mscorlib">
@@ -4832,7 +4832,7 @@
   <data name="&gt;&gt;txtCheckPort.Name" xml:space="preserve">
     <value>txtCheckPort</value>
   </data>
-  <data name="cmsSocketList_Send.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Send.Text" xml:space="preserve">
     <value>发送</value>
   </data>
   <data name="cbHookWSA_RecvFrom.TabIndex" type="System.Int32, mscorlib">
@@ -4862,11 +4862,11 @@
   <data name="tcSocketInfo_SystemBackup.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_ShowModified.Name" xml:space="preserve">
-    <value>cmsSocketList_ShowModified</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_ShowModified.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_ShowModified</value>
   </data>
-  <data name="&gt;&gt;tSocketList.Name" xml:space="preserve">
-    <value>tSocketList</value>
+  <data name="&gt;&gt;tPacketConfig.List.Name" xml:space="preserve">
+    <value>tPacketConfig.List</value>
   </data>
   <data name="rbListExecute_Together.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -4907,7 +4907,7 @@
   <data name="tlWSASendTo.Size" type="System.Drawing.Size, System.Drawing">
     <value>74, 17</value>
   </data>
-  <data name="&gt;&gt;dgvSocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;dgvPacketConfig.List.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="lComparison_B.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -11210,7 +11210,7 @@
   <data name="pPacketInfo_Encoding.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 0</value>
   </data>
-  <data name="cbSocketList_AutoClear.AutoSize" type="System.Boolean, mscorlib">
+  <data name="cbPacketConfig.List_AutoClear.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="txtPacketInfo_Encoding_UTF16.TabIndex" type="System.Int32, mscorlib">
@@ -11222,7 +11222,7 @@
   <data name="&gt;&gt;txtHotKey4.Name" xml:space="preserve">
     <value>txtHotKey4</value>
   </data>
-  <data name="cbSocketList_AutoClear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoClear.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="txtHotKey9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -11339,7 +11339,7 @@
   <data name="&gt;&gt;cbHookWS2_Send.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="nudPacketConfig.List_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>87, 33</value>
   </data>
   <data name="cbLogList_AutoClear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -11348,8 +11348,8 @@
   <data name="cmsHexBox_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 22</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Comparison_B.Name" xml:space="preserve">
-    <value>cmsSocketList_Comparison_B</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_Comparison_B.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_Comparison_B</value>
   </data>
   <data name="&gt;&gt;txtXOR.Parent" xml:space="preserve">
     <value>tlpPacketInfo_XOR_Button</value>
@@ -11372,7 +11372,7 @@
   <data name="cbCheckData.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="ssSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="ssPacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="&gt;&gt;cFuncName.Type" xml:space="preserve">
@@ -11612,7 +11612,7 @@
   <data name="&gt;&gt;cRName.Name" xml:space="preserve">
     <value>cRName</value>
   </data>
-  <data name="tlpListSet_SocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="tlpListSet_PacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="tlpBackUp_Content.Size" type="System.Drawing.Size, System.Drawing">
@@ -11627,7 +11627,7 @@
   <data name="gbHookSet_Winsock.Text" xml:space="preserve">
     <value>WinSock 1.1</value>
   </data>
-  <data name="cmsSocketList_SendList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_SendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="&gt;&gt;tsslProcessName.Name" xml:space="preserve">
@@ -11750,7 +11750,7 @@
   <data name="&gt;&gt;cbHookWS2_SendTo.Parent" xml:space="preserve">
     <value>tlpHookSet_WinsockWSA</value>
   </data>
-  <data name="ssSocketList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="ssPacketConfig.List.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>1, 0, 18, 0</value>
   </data>
   <data name="txtCheckPort.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -11835,7 +11835,7 @@
     <value>ImageAboveText</value>
   </data>
   <data name="tlpSocketForm.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssSocketList" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvSocketList" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,125,AutoSize,0,Percent,60,Percent,40,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="ssPacketConfig.List" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="dgvPacketConfig.List" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpParameter" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="tlpInformation" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="ssProcessInfo" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100" /&gt;&lt;Rows Styles="Absolute,125,AutoSize,0,Percent,60,Percent,40,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;cPacketType.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -11993,11 +11993,11 @@
   <data name="bSearchNext.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 30</value>
   </data>
-  <data name="cmsSocketList_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
-  <data name="&gt;&gt;gbListSet_SocketList.Name" xml:space="preserve">
-    <value>gbListSet_SocketList</value>
+  <data name="&gt;&gt;gbListSet_PacketConfig.List.Name" xml:space="preserve">
+    <value>gbListSet_PacketConfig.List</value>
   </data>
   <data name="gbBackUp_Content.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 0</value>
@@ -12152,7 +12152,7 @@
   <data name="&gt;&gt;tlWSASend_CNT.Name" xml:space="preserve">
     <value>tlWSASend_CNT</value>
   </data>
-  <data name="cmsSocketList_Comparison_B.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_Comparison_B.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="tsRobotList_Stop.Enabled" type="System.Boolean, mscorlib">
@@ -12294,7 +12294,7 @@
     <value>微软雅黑, 9pt</value>
   </data>
   <data name="&gt;&gt;txtHotKey6.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;cbCheckIP.Name" xml:space="preserve">
     <value>cbCheckIP</value>
@@ -12371,7 +12371,7 @@
   <data name="rbFilterSet_Sequence.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="cbSocketList_AutoClear.Text" xml:space="preserve">
+  <data name="cbPacketConfig.List_AutoClear.Text" xml:space="preserve">
     <value>自动清理</value>
   </data>
   <data name="&gt;&gt;tlQueue_CNT.Name" xml:space="preserve">
@@ -12491,7 +12491,7 @@
   <data name="&gt;&gt;txtHotKey5.Parent" xml:space="preserve">
     <value>tlpHotKeySet</value>
   </data>
-  <data name="tlFilterSocketList_CNT.Text" xml:space="preserve">
+  <data name="tlFilterPacketConfig.List_CNT.Text" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;tss6.Type" xml:space="preserve">
@@ -12687,7 +12687,7 @@
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtHotKey3.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="dgvRobotList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 32</value>
@@ -12699,12 +12699,12 @@
     <value>tlpListSet</value>
   </data>
   <data name="&gt;&gt;txtHotKey12.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="txtPacketInfo_Encoding_ANSIGBK.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cmsSocketList_Comparison_A.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Comparison_A.Text" xml:space="preserve">
     <value>添加到 文本A</value>
   </data>
   <data name="&gt;&gt;bHotKey1.ZOrder" xml:space="preserve">
@@ -12722,7 +12722,7 @@
   <data name="cbHookWSA_RecvFrom.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft YaHei UI, 9pt</value>
   </data>
-  <data name="cmsSocketList_FilterList.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_FilterList.Text" xml:space="preserve">
     <value>添加到 滤镜列表</value>
   </data>
   <data name="gbSystemSet_ListExecute.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -12793,7 +12793,7 @@
   <data name="lHotKey2.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;dgvSocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;dgvPacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lPacketInfo_Encoding_Bytes.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -12920,7 +12920,7 @@
   <data name="tlpFilterSet.ColumnCount" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="nudPacketConfig.List_AutoClearValue.Size" type="System.Drawing.Size, System.Drawing">
     <value>100, 23</value>
   </data>
   <data name="lPacketInfo_Encoding_base64.Location" type="System.Drawing.Point, System.Drawing">
@@ -12974,7 +12974,7 @@
   <data name="lPacketInfo_Encoding_ANSIUTF8.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbPacketConfig.List_AutoRoll.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
   </data>
   <data name="&gt;&gt;bHotKey3.Name" xml:space="preserve">
@@ -13049,7 +13049,7 @@
   <data name="bStopHook.TextImageRelation" type="System.Windows.Forms.TextImageRelation, System.Windows.Forms">
     <value>ImageBeforeText</value>
   </data>
-  <data name="cbSocketList_AutoClear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoClear.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="&gt;&gt;rbFromHead.Parent" xml:space="preserve">
@@ -13277,8 +13277,8 @@
   <data name="cbTopMost.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 27</value>
   </data>
-  <data name="&gt;&gt;cbSocketList_AutoClear.Name" xml:space="preserve">
-    <value>cbSocketList_AutoClear</value>
+  <data name="&gt;&gt;cbPacketConfig.List_AutoClear.Name" xml:space="preserve">
+    <value>cbPacketConfig.List_AutoClear</value>
   </data>
   <data name="&gt;&gt;cbCheckPort.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -13544,7 +13544,7 @@
   <data name="tlpComparison.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lComparison_B" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="lComparison_A" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pComparison_A" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pComparison_B" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpComparison_Button" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,40,Percent,40,Percent,20" /&gt;&lt;Rows Styles="Absolute,30,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="&gt;&gt;nudSocketList_AutoClearValue.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;nudPacketConfig.List_AutoClearValue.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="&gt;&gt;lPacketInfo_Encoding_UTF32.Name" xml:space="preserve">
@@ -13584,9 +13584,9 @@
     <value>907, 3</value>
   </data>
   <data name="tlpListSet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_SocketList" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="gbListSet_LogList" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="gbListSet_PacketConfig.List" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50,Absolute,20" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="ssSocketList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="ssPacketConfig.List.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 0, 3, 0</value>
   </data>
   <data name="cTo.Width" type="System.Int32, mscorlib">
@@ -13904,7 +13904,7 @@
   <data name="tlpPacketInfo_Encoding.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
     <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="tlpPacketInfo_Encoding_Button" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="tlpPacketInfo_Encoding_Result" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="pPacketInfo_Encoding" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,30,Absolute,100,Percent,70" /&gt;&lt;Rows Styles="Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
-  <data name="cmsSocketList_SendList.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_SendList.Text" xml:space="preserve">
     <value>添加到 发送列表</value>
   </data>
   <data name="cbHookWS2_Send.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -13934,7 +13934,7 @@
   <data name="bHotKey12.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 3, 3</value>
   </data>
-  <data name="gbListSet_SocketList.Text" xml:space="preserve">
+  <data name="gbListSet_PacketConfig.List.Text" xml:space="preserve">
     <value>封包列表</value>
   </data>
   <data name="tlpHookSet.TabIndex" type="System.Int32, mscorlib">
@@ -13976,7 +13976,7 @@
   <data name="bExtraction.Text" xml:space="preserve">
     <value>选择文件</value>
   </data>
-  <data name="&gt;&gt;tSocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tPacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="bHotKey10.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -14024,7 +14024,7 @@
   <data name="tlpHookSet_Winsock.ColumnCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="cmsSocketList_ToExcel.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_ToExcel.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="tlpHookSet_Winsock.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -14066,7 +14066,7 @@
   <data name="&gt;&gt;tlWSASendTo.Name" xml:space="preserve">
     <value>tlWSASendTo</value>
   </data>
-  <data name="cmsSocketList_ShowModified.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
+  <data name="cmsPacketConfig.List_ShowModified.ImageScaling" type="System.Windows.Forms.ToolStripItemImageScaling, System.Windows.Forms">
     <value>None</value>
   </data>
   <data name="gbSystemSet_FilterActionColor.Text" xml:space="preserve">
@@ -14159,7 +14159,7 @@
   <data name="lFAColor_Replace.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlpListSet_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>373, 71</value>
   </data>
   <data name="&gt;&gt;gbSystemSet_ShowMode.Parent" xml:space="preserve">
@@ -14289,16 +14289,16 @@
   <data name="&gt;&gt;cmsRobotList_Copy.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="cbSocketList_AutoClear.TabIndex" type="System.Int32, mscorlib">
+  <data name="cbPacketConfig.List_AutoClear.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
   <data name="lPacketInfo_Encoding_ANSIGBK.Text" xml:space="preserve">
     <value>ANSI-GBK:</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Comparison_A.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_Comparison_A.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlFilterSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlFilterPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 17</value>
   </data>
   <data name="gbListSet_LogList.TabIndex" type="System.Int32, mscorlib">
@@ -14436,8 +14436,8 @@
   <data name="txtPacketInfo_Encoding_ANSIGBK.Size" type="System.Drawing.Size, System.Drawing">
     <value>176, 23</value>
   </data>
-  <data name="&gt;&gt;tlFilterSocketList_CNT.Name" xml:space="preserve">
-    <value>tlFilterSocketList_CNT</value>
+  <data name="&gt;&gt;tlFilterPacketConfig.List_CNT.Name" xml:space="preserve">
+    <value>tlFilterPacketConfig.List_CNT</value>
   </data>
   <data name="tlpPacketInfo_Encoding.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -14472,8 +14472,8 @@
   <data name="cImg.HeaderText" xml:space="preserve">
     <value>图标</value>
   </data>
-  <data name="&gt;&gt;ssSocketList.Name" xml:space="preserve">
-    <value>ssSocketList</value>
+  <data name="&gt;&gt;ssPacketConfig.List.Name" xml:space="preserve">
+    <value>ssPacketConfig.List</value>
   </data>
   <data name="lPacketInfo_Encoding_ASCII.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 23</value>
@@ -14490,7 +14490,7 @@
   <data name="&gt;&gt;rbListExecute_Sequence.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="gbListSet_SocketList.TabIndex" type="System.Int32, mscorlib">
+  <data name="gbListSet_PacketConfig.List.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="tlpHookSet_WinsockWSA.RowCount" type="System.Int32, mscorlib">
@@ -14505,7 +14505,7 @@
   <data name="lHotKey5.Size" type="System.Drawing.Size, System.Drawing">
     <value>18, 23</value>
   </data>
-  <data name="cmsSocketList_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="&gt;&gt;cmsFilterList_tss1.Type" xml:space="preserve">
@@ -14535,7 +14535,7 @@
   <data name="&gt;&gt;lHotKey12.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="cmsSocketList_SystemSocket.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_SystemSocket.Text" xml:space="preserve">
     <value>设置 系统套接字</value>
   </data>
   <data name="&gt;&gt;tcPacketInfo.Type" xml:space="preserve">
@@ -14595,7 +14595,7 @@
   <data name="tlpExtraction_Button.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbPacketConfig.List_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 27</value>
   </data>
   <data name="tlpFilterList.RowCount" type="System.Int32, mscorlib">
@@ -14613,7 +14613,7 @@
   <data name="tlpSystemSet_ShowMode.RowCount" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="nudPacketConfig.List_AutoClearValue.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 0, 0, 0</value>
   </data>
   <data name="&gt;&gt;cbHookWS1_Send.Name" xml:space="preserve">
@@ -14631,8 +14631,8 @@
   <data name="cbTopMost.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_SystemSocket.Name" xml:space="preserve">
-    <value>cmsSocketList_SystemSocket</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_SystemSocket.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_SystemSocket</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel5.Name" xml:space="preserve">
     <value>toolStripStatusLabel5</value>
@@ -14706,8 +14706,8 @@
   <data name="&gt;&gt;rbFilterSet_Sequence.Name" xml:space="preserve">
     <value>rbFilterSet_Sequence</value>
   </data>
-  <data name="tlpListSet_SocketList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocketList_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  <data name="tlpListSet_PacketConfig.List.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudPacketConfig.List_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbPacketConfig.List_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbPacketConfig.List_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,100,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,100" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="&gt;&gt;cmsRobotList_Delete.Name" xml:space="preserve">
     <value>cmsRobotList_Delete</value>
@@ -14715,7 +14715,7 @@
   <data name="txtCheckData.WordWrap" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="dgvSocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="dgvPacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 150</value>
   </data>
   <data name="cbBackUp_ProxyMapping.Size" type="System.Drawing.Size, System.Drawing">
@@ -14827,7 +14827,7 @@
   <data name="&gt;&gt;cbBackUp_ProxyMapping.Name" xml:space="preserve">
     <value>cbBackUp_ProxyMapping</value>
   </data>
-  <data name="&gt;&gt;tlFilterSocketList_CNT.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlFilterPacketConfig.List_CNT.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="txtHotKey6.TabIndex" type="System.Int32, mscorlib">
@@ -14872,7 +14872,7 @@
   <data name="lXOR2.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 24</value>
   </data>
-  <data name="&gt;&gt;nudSocketList_AutoClearValue.Type" xml:space="preserve">
+  <data name="&gt;&gt;nudPacketConfig.List_AutoClearValue.Type" xml:space="preserve">
     <value>System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtPacketInfo_Encoding_ANSIUnicode.Parent" xml:space="preserve">
@@ -14890,7 +14890,7 @@
   <data name="&gt;&gt;tlFilterExecute.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlFilterSocketList_CNT.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlFilterPacketConfig.List_CNT.Size" type="System.Drawing.Size, System.Drawing">
     <value>15, 17</value>
   </data>
   <data name="lFAColor_Intercept.AutoSize" type="System.Boolean, mscorlib">
@@ -14992,11 +14992,11 @@
   <data name="cbBackUp_ProxyAccount.Text" xml:space="preserve">
     <value>代理账号</value>
   </data>
-  <data name="cmsSocketList_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="&gt;&gt;txtHotKey11.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="hbXOR_From.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -15020,7 +15020,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="&gt;&gt;txtHotKey2.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;cmsExtraction_Export.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -15028,8 +15028,8 @@
   <data name="&gt;&gt;txtHotKey12.ZOrder" xml:space="preserve">
     <value>21</value>
   </data>
-  <data name="&gt;&gt;tlpListSet_SocketList.Name" xml:space="preserve">
-    <value>tlpListSet_SocketList</value>
+  <data name="&gt;&gt;tlpListSet_PacketConfig.List.Name" xml:space="preserve">
+    <value>tlpListSet_PacketConfig.List</value>
   </data>
   <data name="lFAColor_Intercept.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -15098,7 +15098,7 @@
     <value>3, 0, 0, 0</value>
   </data>
   <data name="&gt;&gt;txtHotKey10.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="cbCheckData.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -15136,7 +15136,7 @@
   <data name="&gt;&gt;cLogTime.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="tlFilterSocketList_CNT.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="tlFilterPacketConfig.List_CNT.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt, style=Bold</value>
   </data>
   <data name="tlpBackUp_Content.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
@@ -15337,7 +15337,7 @@
   <data name="lHotKey4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
   </data>
-  <data name="&gt;&gt;tlFilterSocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;tlFilterPacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;tcSocketInfo_FilterSet.Name" xml:space="preserve">
@@ -15505,7 +15505,7 @@
   <data name="&gt;&gt;lXOR2.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_ToExcel.Type" xml:space="preserve">
+  <data name="&gt;&gt;cmsPacketConfig.List_ToExcel.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="tlpPacketInfo_Encoding_Result.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
@@ -15598,7 +15598,7 @@
   <data name="lPacketInfo_Encoding_ANSIASCII.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="dgvSocketList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="dgvPacketConfig.List.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="&gt;&gt;lHotKey7.ZOrder" xml:space="preserve">
@@ -21941,7 +21941,7 @@
   <data name="&gt;&gt;cmsSendList_Top.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;gbListSet_SocketList.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;gbListSet_PacketConfig.List.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="&gt;&gt;cLogID.Name" xml:space="preserve">
@@ -22061,7 +22061,7 @@
   <data name="bHotKey2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>0, 3, 3, 3</value>
   </data>
-  <data name="&gt;&gt;gbListSet_SocketList.Type" xml:space="preserve">
+  <data name="&gt;&gt;gbListSet_PacketConfig.List.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripStatusLabel14.Name" xml:space="preserve">
@@ -22070,7 +22070,7 @@
   <data name="tlQueue_CNT.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt, style=Bold</value>
   </data>
-  <data name="tlFilterSocketList.Text" xml:space="preserve">
+  <data name="tlFilterPacketConfig.List.Text" xml:space="preserve">
     <value>过滤:</value>
   </data>
   <data name="cbHookWSA_Send.Font" type="System.Drawing.Font, System.Drawing">
@@ -22101,7 +22101,7 @@
     <value>8, 13</value>
   </data>
   <data name="&gt;&gt;txtHotKey8.Type" xml:space="preserve">
-    <value>WPELibrary.Lib.UserControl.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
+    <value>WPE.Lib.Controls.HotkeyTextBox, WPELibrary, Version=2.0.0.21, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="gbHookSet_Winsock.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -22124,7 +22124,7 @@
   <data name="tlpPacketInfo_Encoding_Button.Location" type="System.Drawing.Point, System.Drawing">
     <value>225, 3</value>
   </data>
-  <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Comparison_B.Text" xml:space="preserve">
     <value>添加到 文本B</value>
   </data>
   <data name="tlpSearch.ColumnCount" type="System.Int32, mscorlib">
@@ -22175,7 +22175,7 @@
   <data name="cbHookWS2_Send.Font" type="System.Drawing.Font, System.Drawing">
     <value>微软雅黑, 9pt</value>
   </data>
-  <data name="cmsSocketList_Send.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Send.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="bHotKey2.Location" type="System.Drawing.Point, System.Drawing">
@@ -22184,7 +22184,7 @@
   <data name="&gt;&gt;tcAutomation.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="tlpListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tlpListSet_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 19</value>
   </data>
   <data name="cLogTime.Width" type="System.Int32, mscorlib">
@@ -22205,10 +22205,10 @@
   <data name="tlpSystemBackup.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;cmsSocketList_Comparison_A.Name" xml:space="preserve">
-    <value>cmsSocketList_Comparison_A</value>
+  <data name="&gt;&gt;cmsPacketConfig.List_Comparison_A.Name" xml:space="preserve">
+    <value>cmsPacketConfig.List_Comparison_A</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+  <data name="cbPacketConfig.List_AutoRoll.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
   <data name="&gt;&gt;cmsHexBox_FilterList.Type" xml:space="preserve">
@@ -22238,7 +22238,7 @@
   <data name="lXOR2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+  <data name="nudPacketConfig.List_AutoClearValue.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="cbCheckHead.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -22316,7 +22316,7 @@
   <data name="&gt;&gt;cbHookWS1_Send.Parent" xml:space="preserve">
     <value>tlpHookSet_Winsock</value>
   </data>
-  <data name="cmsSocketList_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
     <value>165, 24</value>
   </data>
   <data name="tlpHookButton.Size" type="System.Drawing.Size, System.Drawing">
@@ -22346,7 +22346,7 @@
   <data name="txtHotKey4.Location" type="System.Drawing.Point, System.Drawing">
     <value>216, 7</value>
   </data>
-  <metadata name="ssSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="ssPacketConfig.List.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1494, 17</value>
   </metadata>
   <metadata name="cData.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -22451,7 +22451,7 @@
   <metadata name="cLogTime.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="cmsSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="cmsPacketConfig.List.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>423, 17</value>
   </metadata>
   <metadata name="cIsEnable.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -22478,7 +22478,7 @@
   <metadata name="cmsHexBox.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1172, 17</value>
   </metadata>
-  <metadata name="tSocketList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="tPacketConfig.List.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>122, 17</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">

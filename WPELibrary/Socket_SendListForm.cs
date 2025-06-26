@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -12,8 +12,8 @@ namespace WPELibrary
     {
         private Socket_SendInfo SSI;
         private string SendName = string.Empty;
-        private BindingList<Socket_PacketInfo> SendCollection;
-        private Socket_PacketInfo spiSelect;
+        private BindingList<PacketInfo> SendCollection;
+        private PacketInfo spiSelect;
         private readonly Socket_Send ss = new Socket_Send();
 
         #region//窗体事件
@@ -53,7 +53,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -71,7 +71,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -85,17 +85,17 @@ namespace WPELibrary
                 this.SendName = this.SSI.SName;
                 this.txtSendName.Text = this.SendName;
                 this.cbSystemSocket.Checked = this.SSI.SSystemSocket;
-                this.lSystemSocket.Text = Socket_Cache.System.SystemSocket.ToString();
+                this.lSystemSocket.Text = Operate.SystemConfig.SystemSocket.ToString();
                 this.nudLoop_CNT.Value = this.SSI.SLoopCNT;
                 this.nudLoop_INT.Value = this.SSI.SLoopINT;
-                this.SendCollection = new BindingList<Socket_PacketInfo>(this.SSI.SCollection.ToList());
+                this.SendCollection = new BindingList<PacketInfo>(this.SSI.SCollection.ToList());
                 this.rtbNotes.Text = this.SSI.SNotes;
 
                 this.InitSend();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }          
         }
 
@@ -111,7 +111,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -128,14 +128,14 @@ namespace WPELibrary
                 {
                     string sType = dgvSendCollection.Rows[e.RowIndex].Cells["cType"].Value.ToString();
 
-                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType(Socket_Cache.SocketPacket.GetPacketType_ByString(sType));
+                    e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType(Operate.PacketConfig.Packet.GetPacketType_ByString(sType));
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cData"].Index)
                 {
                     byte[] buffer = (byte[])dgvSendCollection.Rows[e.RowIndex].Cells["cBuffer"].Value;
 
-                    e.Value = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, buffer);
+                    e.Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, buffer);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cLength"].Index)
@@ -148,7 +148,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -173,13 +173,13 @@ namespace WPELibrary
                 int SLoopINT_New = ((int)this.nudLoop_INT.Value);
                 string SNotes_New = this.rtbNotes.Text.Trim();
 
-                Socket_Cache.Send.UpdateSend(this.SSI, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.SendCollection, SNotes_New);
+                Operate.SendConfig.Send.UpdateSend(this.SSI, SName_New, SSystemSocket_New, SLoopCNT_New, SLoopINT_New, this.SendCollection, SNotes_New);
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -226,7 +226,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -265,7 +265,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -281,7 +281,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -306,7 +306,7 @@ namespace WPELibrary
             {
                 if (this.cbSystemSocket.Checked)
                 {
-                    if (Socket_Cache.System.SystemSocket <= 0)
+                    if (Operate.SystemConfig.SystemSocket <= 0)
                     {
                         Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_49));
                         return false;
@@ -315,7 +315,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return bReturn;
@@ -334,7 +334,7 @@ namespace WPELibrary
             {
                 if (this.dgvSendCollection.Rows.Count > 0)
                 {
-                    List<Socket_PacketInfo> spiList = Socket_Operation.GetSelectedSendCollection(this.dgvSendCollection, this.SendCollection);
+                    List<PacketInfo> spiList = Socket_Operation.GetSelectedSendCollection(this.dgvSendCollection, this.SendCollection);
 
                     if (spiList.Count > 0)
                     {
@@ -350,41 +350,41 @@ namespace WPELibrary
                                 break;
 
                             case "cmsSendList_Top":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Top, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Top, spiList);
                                 break;
 
                             case "cmsSendList_Up":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Up, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Up, spiList);
                                 break;
 
                             case "cmsSendList_Down":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Down, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Down, spiList);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Bottom, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Bottom, spiList);
                                 break;
 
                             case "cmsSendList_Delete":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Delete, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Delete, spiList);
                                 break;
 
                             case "cmsSendList_Export":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Export, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Export, spiList);
                                 break;
 
                             case "cmsSendList_Import":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.Import, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Import, spiList);
                                 break;
 
                             case "cmsSendList_CleanUp":
-                                Socket_Cache.Send.UpdateSendCollection_ByListAction(this.SendCollection, Socket_Cache.System.ListAction.CleanUp, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, spiList);
                                 break;
                         }
 
                         this.dgvSendCollection.ClearSelection();
 
-                        foreach (Socket_PacketInfo spi in spiList)
+                        foreach (PacketInfo spi in spiList)
                         {
                             int iIndex = SendCollection.IndexOf(spi);
 
@@ -399,7 +399,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

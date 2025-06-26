@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -21,28 +21,28 @@ namespace WPELibrary
 
         private void Proxy_AccountAuthForm_Load(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow_ProxyAuth = true;
+            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAuth = true;
         }
 
         private void Proxy_AccountAuthForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow_ProxyAuth = false;
+            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAuth = false;
         }
 
         private void InitDGV()
         {
             try
             {
-                _authBindingSource.DataSource = Socket_Cache.ProxyAccount.lstProxyAuth;
+                _authBindingSource.DataSource = Operate.ProxyConfig.ProxyAccount.lstProxyAuth;
 
                 dgvAuth.AutoGenerateColumns = false;
                 dgvAuth.DataSource = _authBindingSource;
                 dgvAuth.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvAuth, true, null);
-                Socket_Cache.ProxyAccount.RecProxyAuth += new Socket_Cache.ProxyAccount.ProxyAuthReceived(Event_RecProxyAuth);
+                Operate.ProxyConfig.ProxyAccount.RecProxyAuth += new Operate.ProxyConfig.ProxyAccount.ProxyAuthReceived(Event_RecProxyAuth);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -64,7 +64,7 @@ namespace WPELibrary
                         if (this.IsDisposed || dgvAuth.IsDisposed)
                             return;
 
-                        var existingItem = Socket_Cache.ProxyAccount.lstProxyAuth
+                        var existingItem = Operate.ProxyConfig.ProxyAccount.lstProxyAuth
                             .FirstOrDefault(item => item.IPAddress == pai.IPAddress && item.AID == pai.AID);
 
                         if (existingItem != null)
@@ -74,7 +74,7 @@ namespace WPELibrary
                         }
                         else
                         {
-                            Socket_Cache.ProxyAccount.lstProxyAuth.Add(pai);
+                            Operate.ProxyConfig.ProxyAccount.lstProxyAuth.Add(pai);
                         }
 
                         _authBindingSource.ResetBindings(false);
@@ -82,13 +82,13 @@ namespace WPELibrary
                     }
                     catch (Exception ex)
                     {
-                        Socket_Operation.DoLog_Proxy("Event_RecProxyAuth(inner)", ex.Message);
+                        Operate.DoLog("Event_RecProxyAuth(inner)", ex.Message);
                     }
                 }));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -104,18 +104,18 @@ namespace WPELibrary
                 else if (e.ColumnIndex == dgvAuth.Columns["cUserName"].Index)
                 {
                     Guid AID = Guid.Parse(dgvAuth.Rows[e.RowIndex].Cells["cAID"].Value.ToString());
-                    e.Value = Socket_Cache.ProxyAccount.GetUserName_ByAccountID(AID);
+                    e.Value = Operate.ProxyConfig.ProxyAccount.GetUserName_ByAccountID(AID);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvAuth.Columns["cAuthResult"].Index)
                 {
-                    e.Value = Socket_Cache.ProxyAccount.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
+                    //e.Value = Operate.ProxyConfig.ProxyAccount.GetImg_ByAuthResult(Convert.ToBoolean(e.Value));
                     e.FormattingApplied = true;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -125,9 +125,9 @@ namespace WPELibrary
 
         private void ShowAuthListInfo()
         { 
-            this.tsslAuthCount_Value.Text = Socket_Cache.ProxyAccount.lstProxyAuth.Count.ToString();
-            this.tsslLinksCount_Value.Text = Socket_Cache.ProxyAccount.GetLinksCount_FromProxyAuthList().ToString();
-            this.tsslDevicesCount_Value.Text = Socket_Cache.ProxyAccount.GetDevicesCount_FromProxyAuthList().ToString();
+            this.tsslAuthCount_Value.Text = Operate.ProxyConfig.ProxyAccount.lstProxyAuth.Count.ToString();
+            this.tsslLinksCount_Value.Text = Operate.ProxyConfig.ProxyAccount.GetLinksCount_FromProxyAuthList().ToString();
+            this.tsslDevicesCount_Value.Text = Operate.ProxyConfig.ProxyAccount.GetDevicesCount_FromProxyAuthList().ToString();
         }
 
         #endregion
@@ -155,7 +155,7 @@ namespace WPELibrary
                     FromIndex = this.dgvAuth.SelectedRows[0].Index + 1;
                 }
 
-                int iIndex = Socket_Cache.ProxyAccount.SearchForProxyAuthList(FromIndex, FindString);
+                int iIndex = Operate.ProxyConfig.ProxyAccount.SearchForProxyAuthList(FromIndex, FindString);
                 if (iIndex >= 0 && iIndex < this.dgvAuth.Rows.Count)
                 {
                     this.dgvAuth.Rows[iIndex].Selected = true;
@@ -169,7 +169,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 

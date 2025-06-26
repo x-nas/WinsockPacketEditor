@@ -10,18 +10,18 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using WPELibrary.Lib;
-using WPELibrary.Lib.NativeMethods;
-using WPELibrary.TextComparison;
+using WPE.Lib;
+using WPE.Lib.NativeMethods;
+using WPE.Lib.Forms;
 
 namespace WPELibrary
 {
     public partial class Socket_Form : Form
     {
-        private readonly Socket_Cache.System.SystemMode RunMode = Socket_Cache.System.SystemMode.Process;
+        private readonly Operate.SystemConfig.SystemMode RunMode = Operate.SystemConfig.SystemMode.Process;
         private bool bWakeUp = true;
         private readonly ToolTip tt = new ToolTip();
-        private readonly WinSockHook ws = new WinSockHook();
+        private readonly Hook ws = new Hook();
 
         #region//加载窗体
 
@@ -29,12 +29,11 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.System.LoadSystemConfig_FromDB();
-                MultiLanguage.SetDefaultLanguage(Socket_Cache.System.DefaultLanguage);
+                Operate.SystemConfig.LoadSystemConfig_FromDB();
 
                 InitializeComponent();
 
-                Socket_Cache.System.InvokeAction = action =>
+                Operate.SystemConfig.InvokeAction = action =>
                 {
                     if (this.InvokeRequired)
                     {
@@ -50,7 +49,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -66,10 +65,10 @@ namespace WPELibrary
             this.InitHotKeys();
 
             Socket_Operation.StartRemoteMGT();
-            Socket_Cache.System.LoadSystemList_FromDB();
-            Socket_Cache.ProxyAccount.LoadProxyAccountList_FromDB();
-            Socket_Cache.ProxyMapping.LoadProxyMapLocal_FromDB();
-            Socket_Cache.ProxyMapping.LoadProxyMapRemote_FromDB();
+            Operate.SystemConfig.LoadSystemList_FromDB();
+            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_FromDB();
+            Operate.ProxyConfig.ProxyMapping.LoadProxyMapLocal_FromDB();
+            Operate.ProxyConfig.ProxyMapping.LoadProxyMapRemote_FromDB();
         }
 
         private void Socket_Form_FormClosing(object sender, FormClosingEventArgs e)
@@ -89,7 +88,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -104,7 +103,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -118,7 +117,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -130,15 +129,15 @@ namespace WPELibrary
                 this.niWPE.Visible = false;
 
                 Socket_Operation.StopRemoteMGT(this.RunMode);
-                Socket_Cache.System.SaveSystemList_ToDB();
-                Socket_Cache.System.SaveRunConfig_ToDB(this.RunMode);
-                Socket_Cache.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
-                Socket_Cache.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
-                Socket_Cache.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
+                Operate.SystemConfig.SaveSystemList_ToDB();
+                Operate.SystemConfig.SaveRunConfig_ToDB(this.RunMode);
+                Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_ToDB(this.RunMode);
+                Operate.ProxyConfig.ProxyMapping.SaveProxyMapLocal_ToDB(this.RunMode);
+                Operate.ProxyConfig.ProxyMapping.SaveProxyMapRemote_ToDB(this.RunMode);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -152,17 +151,17 @@ namespace WPELibrary
 
                     if (this.tcAutomation.SelectedIndex == 1)
                     {
-                        Socket_Cache.Send.DoSend_ByHotKey(HOTKEY_ID);
+                        Operate.SendConfig.Send.DoSend_ByHotKey(HOTKEY_ID);
                     }
                     else if (this.tcAutomation.SelectedIndex == 2)
                     {
-                        Socket_Cache.Robot.DoRobot_ByHotKey(HOTKEY_ID);
+                        Operate.RobotConfig.Robot.DoRobot_ByHotKey(HOTKEY_ID);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             base.WndProc(ref m);
@@ -176,7 +175,7 @@ namespace WPELibrary
         {
             try
             {
-                this.Text = Socket_Cache.System.WPE + " - " + Socket_Operation.AssemblyVersion;
+                this.Text = "WPE x64 - " + Operate.SystemConfig.AssemblyVersion;
 
                 tt.SetToolTip(cbWorkingMode_Speed, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_22));
                 tt.SetToolTip(rbFilterSet_Priority, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_63));
@@ -184,10 +183,10 @@ namespace WPELibrary
                 tt.SetToolTip(bSearch, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_25));
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
-                Socket_Cache.System.MainHandle = this.Handle;
+                Operate.SystemConfig.MainHandle = this.Handle;
                 string sProcessName = Socket_Operation.GetProcessName();
                 this.tsslProcessName.Text = sProcessName;
-                this.niWPE.Text = Socket_Cache.System.WPE + "\r\n" + sProcessName;
+                this.niWPE.Text = "WPE x64\r\n" + sProcessName;
 
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
@@ -204,13 +203,13 @@ namespace WPELibrary
                 this.InitFilterActionColor();
                 Socket_Operation.InitCPUAndMemoryCounter();
 
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
+                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -223,7 +222,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -252,28 +251,28 @@ namespace WPELibrary
             try
             {
                 dgvSocketList.AutoGenerateColumns = false;
-                dgvSocketList.DataSource = Socket_Cache.SocketList.lstRecPacket;
+                dgvSocketList.DataSource = Operate.PacketConfig.List.lstRecPacket;
                 dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
 
                 dgvFilterList.AutoGenerateColumns = false;
-                dgvFilterList.DataSource = Socket_Cache.FilterList.lstFilter;
+                dgvFilterList.DataSource = Operate.FilterConfig.List.lstFilter;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
 
                 dgvSendList.AutoGenerateColumns = false;
-                dgvSendList.DataSource = Socket_Cache.SendList.lstSend;
+                dgvSendList.DataSource = Operate.SendConfig.SendList.lstSend;
                 dgvSendList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSendList, true, null);
 
                 dgvRobotList.AutoGenerateColumns = false;
-                dgvRobotList.DataSource = Socket_Cache.RobotList.lstRobot;
+                dgvRobotList.DataSource = Operate.RobotConfig.RobotList.lstRobot;
                 dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
 
                 dgvLogList.AutoGenerateColumns = false;
-                dgvLogList.DataSource = Socket_Cache.LogList.lstSocketLog;
+                dgvLogList.DataSource = Operate.LogConfig.lstLogInfo;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -285,35 +284,35 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.System.LoadRunConfig_FromDB();
+                Operate.SystemConfig.LoadRunConfig_FromDB();
 
-                this.cbHookWS1_Send.Checked = Socket_Cache.SocketPacket.HookWS1_Send;
-                this.cbHookWS1_SendTo.Checked = Socket_Cache.SocketPacket.HookWS1_SendTo;
-                this.cbHookWS1_Recv.Checked = Socket_Cache.SocketPacket.HookWS1_Recv;
-                this.cbHookWS1_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS1_RecvFrom;
-                this.cbHookWS2_Send.Checked = Socket_Cache.SocketPacket.HookWS2_Send;
-                this.cbHookWS2_SendTo.Checked = Socket_Cache.SocketPacket.HookWS2_SendTo;
-                this.cbHookWS2_Recv.Checked = Socket_Cache.SocketPacket.HookWS2_Recv;
-                this.cbHookWS2_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWS2_RecvFrom;
-                this.cbHookWSA_Send.Checked = Socket_Cache.SocketPacket.HookWSA_Send;
-                this.cbHookWSA_SendTo.Checked = Socket_Cache.SocketPacket.HookWSA_SendTo;
-                this.cbHookWSA_Recv.Checked = Socket_Cache.SocketPacket.HookWSA_Recv;
-                this.cbHookWSA_RecvFrom.Checked = Socket_Cache.SocketPacket.HookWSA_RecvFrom;
+                this.cbHookWS1_Send.Checked = Operate.PacketConfig.Packet.HookWS1_Send;
+                this.cbHookWS1_SendTo.Checked = Operate.PacketConfig.Packet.HookWS1_SendTo;
+                this.cbHookWS1_Recv.Checked = Operate.PacketConfig.Packet.HookWS1_Recv;
+                this.cbHookWS1_RecvFrom.Checked = Operate.PacketConfig.Packet.HookWS1_RecvFrom;
+                this.cbHookWS2_Send.Checked = Operate.PacketConfig.Packet.HookWS2_Send;
+                this.cbHookWS2_SendTo.Checked = Operate.PacketConfig.Packet.HookWS2_SendTo;
+                this.cbHookWS2_Recv.Checked = Operate.PacketConfig.Packet.HookWS2_Recv;
+                this.cbHookWS2_RecvFrom.Checked = Operate.PacketConfig.Packet.HookWS2_RecvFrom;
+                this.cbHookWSA_Send.Checked = Operate.PacketConfig.Packet.HookWSA_Send;
+                this.cbHookWSA_SendTo.Checked = Operate.PacketConfig.Packet.HookWSA_SendTo;
+                this.cbHookWSA_Recv.Checked = Operate.PacketConfig.Packet.HookWSA_Recv;
+                this.cbHookWSA_RecvFrom.Checked = Operate.PacketConfig.Packet.HookWSA_RecvFrom;
 
-                this.txtHotKey1.Text = Socket_Cache.SocketPacket.HotKey1;
-                this.txtHotKey2.Text = Socket_Cache.SocketPacket.HotKey2;
-                this.txtHotKey3.Text = Socket_Cache.SocketPacket.HotKey3;
-                this.txtHotKey4.Text = Socket_Cache.SocketPacket.HotKey4;
-                this.txtHotKey5.Text = Socket_Cache.SocketPacket.HotKey5;
-                this.txtHotKey6.Text = Socket_Cache.SocketPacket.HotKey6;
-                this.txtHotKey7.Text = Socket_Cache.SocketPacket.HotKey7;
-                this.txtHotKey8.Text = Socket_Cache.SocketPacket.HotKey8;
-                this.txtHotKey9.Text = Socket_Cache.SocketPacket.HotKey9;
-                this.txtHotKey10.Text = Socket_Cache.SocketPacket.HotKey10;
-                this.txtHotKey11.Text = Socket_Cache.SocketPacket.HotKey11;
-                this.txtHotKey12.Text = Socket_Cache.SocketPacket.HotKey12;
+                this.txtHotKey1.Text = Operate.PacketConfig.Packet.HotKey1;
+                this.txtHotKey2.Text = Operate.PacketConfig.Packet.HotKey2;
+                this.txtHotKey3.Text = Operate.PacketConfig.Packet.HotKey3;
+                this.txtHotKey4.Text = Operate.PacketConfig.Packet.HotKey4;
+                this.txtHotKey5.Text = Operate.PacketConfig.Packet.HotKey5;
+                this.txtHotKey6.Text = Operate.PacketConfig.Packet.HotKey6;
+                this.txtHotKey7.Text = Operate.PacketConfig.Packet.HotKey7;
+                this.txtHotKey8.Text = Operate.PacketConfig.Packet.HotKey8;
+                this.txtHotKey9.Text = Operate.PacketConfig.Packet.HotKey9;
+                this.txtHotKey10.Text = Operate.PacketConfig.Packet.HotKey10;
+                this.txtHotKey11.Text = Operate.PacketConfig.Packet.HotKey11;
+                this.txtHotKey12.Text = Operate.PacketConfig.Packet.HotKey12;
 
-                if (Socket_Cache.SocketPacket.CheckNotShow)
+                if (Operate.PacketConfig.Packet.CheckNotShow)
                 {
                     this.rbFilter_NotShow.Checked = true;
                 }
@@ -322,59 +321,59 @@ namespace WPELibrary
                     this.rbFilter_Show.Checked = true;
                 }
 
-                this.cbCheckSocket.Checked = Socket_Cache.SocketPacket.CheckSocket;
-                this.cbCheckIP.Checked = Socket_Cache.SocketPacket.CheckIP;
-                this.cbCheckPort.Checked = Socket_Cache.SocketPacket.CheckPort;
-                this.cbCheckHead.Checked = Socket_Cache.SocketPacket.CheckHead;
-                this.cbCheckData.Checked = Socket_Cache.SocketPacket.CheckData;
-                this.cbCheckSize.Checked = Socket_Cache.SocketPacket.CheckSize;
+                this.cbCheckSocket.Checked = Operate.PacketConfig.Packet.CheckSocket;
+                this.cbCheckIP.Checked = Operate.PacketConfig.Packet.CheckIP;
+                this.cbCheckPort.Checked = Operate.PacketConfig.Packet.CheckPort;
+                this.cbCheckHead.Checked = Operate.PacketConfig.Packet.CheckHead;
+                this.cbCheckData.Checked = Operate.PacketConfig.Packet.CheckData;
+                this.cbCheckSize.Checked = Operate.PacketConfig.Packet.CheckSize;
 
-                this.txtCheckSocket.Text = Socket_Cache.SocketPacket.CheckSocket_Value;
-                this.txtCheckLength.Text = Socket_Cache.SocketPacket.CheckLength_Value;
-                this.txtCheckIP.Text = Socket_Cache.SocketPacket.CheckIP_Value;
-                this.txtCheckPort.Text = Socket_Cache.SocketPacket.CheckPort_Value;
-                this.txtCheckHead.Text = Socket_Cache.SocketPacket.CheckHead_Value;
-                this.txtCheckData.Text = Socket_Cache.SocketPacket.CheckData_Value;
+                this.txtCheckSocket.Text = Operate.PacketConfig.Packet.CheckSocket_Value;
+                this.txtCheckLength.Text = Operate.PacketConfig.Packet.CheckLength_Value;
+                this.txtCheckIP.Text = Operate.PacketConfig.Packet.CheckIP_Value;
+                this.txtCheckPort.Text = Operate.PacketConfig.Packet.CheckPort_Value;
+                this.txtCheckHead.Text = Operate.PacketConfig.Packet.CheckHead_Value;
+                this.txtCheckData.Text = Operate.PacketConfig.Packet.CheckData_Value;
 
-                this.cbSocketList_AutoRoll.Checked = Socket_Cache.SocketList.AutoRoll;
-                this.cbSocketList_AutoClear.Checked = Socket_Cache.SocketList.AutoClear;
-                this.nudSocketList_AutoClearValue.Value = Socket_Cache.SocketList.AutoClear_Value;
+                this.cbSocketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
+                this.cbSocketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
+                this.nudSocketList_AutoClearValue.Value = Operate.PacketConfig.List.AutoClear_Value;
                 this.SocketList_AutoClearChange();
 
-                this.cbLogList_AutoRoll.Checked = Socket_Cache.LogList.Socket_AutoRoll;
-                this.cbLogList_AutoClear.Checked = Socket_Cache.LogList.Socket_AutoClear;
-                this.nudLogList_AutoClearValue.Value = Socket_Cache.LogList.Socket_AutoClear_Value;
+                this.cbLogList_AutoRoll.Checked = Operate.LogConfig.AutoRoll;
+                this.cbLogList_AutoClear.Checked = Operate.LogConfig.AutoClear;
+                this.nudLogList_AutoClearValue.Value = Operate.LogConfig.AutoClear_Value;
                 this.LogList_AutoClearChange();
 
-                this.cbWorkingMode_Speed.Checked = Socket_Cache.SocketPacket.SpeedMode;
+                this.cbWorkingMode_Speed.Checked = Operate.PacketConfig.Packet.SpeedMode;
 
-                switch (Socket_Cache.System.ListExecute)
+                switch (Operate.SystemConfig.ListExecute)
                 {
-                    case Socket_Cache.System.Execute.Together:
+                    case Operate.SystemConfig.Execute.Together:
                         this.rbListExecute_Together.Checked = true;
                         break;
 
-                    case Socket_Cache.System.Execute.Sequence:
+                    case Operate.SystemConfig.Execute.Sequence:
                         this.rbListExecute_Sequence.Checked = true;
                         break;
                 }
 
-                switch (Socket_Cache.Filter.FilterExecute)
+                switch (Operate.FilterConfig.Filter.FilterExecute)
                 {
-                    case Socket_Cache.Filter.Execute.Priority:
+                    case Operate.FilterConfig.Filter.Execute.Priority:
                         this.rbFilterSet_Priority.Checked = true;
                         break;
 
-                    case Socket_Cache.Filter.Execute.Sequence:
+                    case Operate.FilterConfig.Filter.Execute.Sequence:
                         this.rbFilterSet_Sequence.Checked = true;
                         break;
                 }
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_35));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -386,78 +385,78 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketPacket.HookWS1_Send = cbHookWS1_Send.Checked;
-                Socket_Cache.SocketPacket.HookWS1_SendTo = cbHookWS1_SendTo.Checked;
-                Socket_Cache.SocketPacket.HookWS1_Recv = cbHookWS1_Recv.Checked;
-                Socket_Cache.SocketPacket.HookWS1_RecvFrom = cbHookWS1_RecvFrom.Checked;
-                Socket_Cache.SocketPacket.HookWS2_Send = cbHookWS2_Send.Checked;
-                Socket_Cache.SocketPacket.HookWS2_SendTo = cbHookWS2_SendTo.Checked;
-                Socket_Cache.SocketPacket.HookWS2_Recv = cbHookWS2_Recv.Checked;
-                Socket_Cache.SocketPacket.HookWS2_RecvFrom = cbHookWS2_RecvFrom.Checked;
-                Socket_Cache.SocketPacket.HookWSA_Send = cbHookWSA_Send.Checked;
-                Socket_Cache.SocketPacket.HookWSA_SendTo = cbHookWSA_SendTo.Checked;
-                Socket_Cache.SocketPacket.HookWSA_Recv = cbHookWSA_Recv.Checked;
-                Socket_Cache.SocketPacket.HookWSA_RecvFrom = cbHookWSA_RecvFrom.Checked;
+                Operate.PacketConfig.Packet.HookWS1_Send = cbHookWS1_Send.Checked;
+                Operate.PacketConfig.Packet.HookWS1_SendTo = cbHookWS1_SendTo.Checked;
+                Operate.PacketConfig.Packet.HookWS1_Recv = cbHookWS1_Recv.Checked;
+                Operate.PacketConfig.Packet.HookWS1_RecvFrom = cbHookWS1_RecvFrom.Checked;
+                Operate.PacketConfig.Packet.HookWS2_Send = cbHookWS2_Send.Checked;
+                Operate.PacketConfig.Packet.HookWS2_SendTo = cbHookWS2_SendTo.Checked;
+                Operate.PacketConfig.Packet.HookWS2_Recv = cbHookWS2_Recv.Checked;
+                Operate.PacketConfig.Packet.HookWS2_RecvFrom = cbHookWS2_RecvFrom.Checked;
+                Operate.PacketConfig.Packet.HookWSA_Send = cbHookWSA_Send.Checked;
+                Operate.PacketConfig.Packet.HookWSA_SendTo = cbHookWSA_SendTo.Checked;
+                Operate.PacketConfig.Packet.HookWSA_Recv = cbHookWSA_Recv.Checked;
+                Operate.PacketConfig.Packet.HookWSA_RecvFrom = cbHookWSA_RecvFrom.Checked;
 
-                Socket_Cache.SocketPacket.HotKey1 = this.txtHotKey1.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey2 = this.txtHotKey2.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey3 = this.txtHotKey3.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey4 = this.txtHotKey4.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey5 = this.txtHotKey5.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey6 = this.txtHotKey6.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey7 = this.txtHotKey7.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey8 = this.txtHotKey8.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey9 = this.txtHotKey9.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey10 = this.txtHotKey10.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey11 = this.txtHotKey11.Text.Trim();
-                Socket_Cache.SocketPacket.HotKey12 = this.txtHotKey12.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey1 = this.txtHotKey1.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey2 = this.txtHotKey2.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey3 = this.txtHotKey3.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey4 = this.txtHotKey4.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey5 = this.txtHotKey5.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey6 = this.txtHotKey6.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey7 = this.txtHotKey7.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey8 = this.txtHotKey8.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey9 = this.txtHotKey9.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey10 = this.txtHotKey10.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey11 = this.txtHotKey11.Text.Trim();
+                Operate.PacketConfig.Packet.HotKey12 = this.txtHotKey12.Text.Trim();
 
-                Socket_Cache.SocketPacket.CheckNotShow = rbFilter_NotShow.Checked;
-                Socket_Cache.SocketPacket.CheckSocket = cbCheckSocket.Checked;
-                Socket_Cache.SocketPacket.CheckIP = cbCheckIP.Checked;
-                Socket_Cache.SocketPacket.CheckPort = cbCheckPort.Checked;
-                Socket_Cache.SocketPacket.CheckHead = cbCheckHead.Checked;
-                Socket_Cache.SocketPacket.CheckData = cbCheckData.Checked;
-                Socket_Cache.SocketPacket.CheckSize = cbCheckSize.Checked;
+                Operate.PacketConfig.Packet.CheckNotShow = rbFilter_NotShow.Checked;
+                Operate.PacketConfig.Packet.CheckSocket = cbCheckSocket.Checked;
+                Operate.PacketConfig.Packet.CheckIP = cbCheckIP.Checked;
+                Operate.PacketConfig.Packet.CheckPort = cbCheckPort.Checked;
+                Operate.PacketConfig.Packet.CheckHead = cbCheckHead.Checked;
+                Operate.PacketConfig.Packet.CheckData = cbCheckData.Checked;
+                Operate.PacketConfig.Packet.CheckSize = cbCheckSize.Checked;
 
-                Socket_Cache.SocketPacket.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
-                Socket_Cache.SocketPacket.CheckLength_Value = this.txtCheckLength.Text.Trim();
-                Socket_Cache.SocketPacket.CheckIP_Value = this.txtCheckIP.Text.Trim();
-                Socket_Cache.SocketPacket.CheckPort_Value = this.txtCheckPort.Text.Trim();
-                Socket_Cache.SocketPacket.CheckHead_Value = this.txtCheckHead.Text.Trim();
-                Socket_Cache.SocketPacket.CheckData_Value = this.txtCheckData.Text.Trim();
+                Operate.PacketConfig.Packet.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
+                Operate.PacketConfig.Packet.CheckLength_Value = this.txtCheckLength.Text.Trim();
+                Operate.PacketConfig.Packet.CheckIP_Value = this.txtCheckIP.Text.Trim();
+                Operate.PacketConfig.Packet.CheckPort_Value = this.txtCheckPort.Text.Trim();
+                Operate.PacketConfig.Packet.CheckHead_Value = this.txtCheckHead.Text.Trim();
+                Operate.PacketConfig.Packet.CheckData_Value = this.txtCheckData.Text.Trim();
 
-                Socket_Cache.SocketList.AutoRoll = this.cbSocketList_AutoRoll.Checked;
-                Socket_Cache.SocketList.AutoClear = this.cbSocketList_AutoClear.Checked;
-                Socket_Cache.SocketList.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
+                Operate.PacketConfig.List.AutoRoll = this.cbSocketList_AutoRoll.Checked;
+                Operate.PacketConfig.List.AutoClear = this.cbSocketList_AutoClear.Checked;
+                Operate.PacketConfig.List.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
 
-                Socket_Cache.LogList.Socket_AutoRoll = this.cbLogList_AutoRoll.Checked;
-                Socket_Cache.LogList.Socket_AutoClear = this.cbLogList_AutoClear.Checked;
-                Socket_Cache.LogList.Socket_AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+                Operate.LogConfig.AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Operate.LogConfig.AutoClear = this.cbLogList_AutoClear.Checked;
+                Operate.LogConfig.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
-                Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
+                Operate.PacketConfig.Packet.SpeedMode = this.cbWorkingMode_Speed.Checked;
 
                 if (this.rbListExecute_Together.Checked)
                 {
-                    Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Together;
+                    Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Together;
                 }
                 else
                 {
-                    Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Sequence;
+                    Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Sequence;
                 }
 
                 if (this.rbFilterSet_Priority.Checked)
                 {
-                    Socket_Cache.Filter.FilterExecute = Socket_Cache.Filter.Execute.Priority;
+                    Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Priority;
                 }
                 else
                 {
-                    Socket_Cache.Filter.FilterExecute = Socket_Cache.Filter.Execute.Sequence;
+                    Operate.FilterConfig.Filter.FilterExecute = Operate.FilterConfig.Filter.Execute.Sequence;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -476,7 +475,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -491,7 +490,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -506,7 +505,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -521,7 +520,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -536,7 +535,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -551,7 +550,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -579,7 +578,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -603,7 +602,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -759,7 +758,7 @@ namespace WPELibrary
 
         private void cbWorkingMode_Speed_CheckedChanged(object sender, EventArgs e)
         {
-            Socket_Cache.SocketPacket.SpeedMode = this.cbWorkingMode_Speed.Checked;
+            Operate.PacketConfig.Packet.SpeedMode = this.cbWorkingMode_Speed.Checked;
         }
 
         private void rbListExecute_Together_CheckedChanged(object sender, EventArgs e)
@@ -771,11 +770,11 @@ namespace WPELibrary
         {
             if (this.rbListExecute_Together.Checked)
             {
-                Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Together;
+                Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Together;
             }
             else
             {
-                Socket_Cache.System.ListExecute = Socket_Cache.System.Execute.Sequence;
+                Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Sequence;
             }
         }
 
@@ -783,21 +782,21 @@ namespace WPELibrary
         {
             try
             {
-                this.lFAColor_Replace.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Replace;
-                this.lFAColor_Replace.BackColor = Socket_Cache.Filter.FilterActionBackColor_Replace;
+                this.lFAColor_Replace.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
+                this.lFAColor_Replace.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
 
-                this.lFAColor_Intercept.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Intercept;
-                this.lFAColor_Intercept.BackColor = Socket_Cache.Filter.FilterActionBackColor_Intercept;
+                this.lFAColor_Intercept.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
+                this.lFAColor_Intercept.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
 
-                this.lFAColor_Change.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Change;
-                this.lFAColor_Change.BackColor = Socket_Cache.Filter.FilterActionBackColor_Change;
+                this.lFAColor_Change.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
+                this.lFAColor_Change.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
 
-                this.lFAColor_Other.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Other;
-                this.lFAColor_Other.BackColor = Socket_Cache.Filter.FilterActionBackColor_Other;
+                this.lFAColor_Other.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Other;
+                this.lFAColor_Other.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Other;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -809,7 +808,7 @@ namespace WPELibrary
         {
             try
             {
-                string FileName = Socket_Operation.AssemblyVersion;
+                string FileName = Operate.SystemConfig.AssemblyVersion;
                 bool SystemConfig = this.cbBackUp_SystemConfig.Checked;
                 bool ProxySet = this.cbBackUp_ProxySet.Checked;
                 bool ProxyAccount = this.cbBackUp_ProxyAccount.Checked;
@@ -819,7 +818,7 @@ namespace WPELibrary
                 bool SendList = this.cbBackUp_SendList.Checked;
                 bool RobotList = this.cbBackUp_RobotList.Checked;
 
-                Socket_Cache.System.ExportSystemBackUp_Dialog(
+                Operate.SystemConfig.ExportSystemBackUp_Dialog(
                     FileName,
                     SystemConfig,
                     ProxySet,
@@ -832,7 +831,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -857,24 +856,24 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketPacket.TotalPackets = 0;
-                Socket_Cache.SocketPacket.Total_SendBytes = 0;
-                Socket_Cache.SocketPacket.Total_RecvBytes = 0;
-                Socket_Cache.Filter.FilterExecute_CNT = 0;
+                Operate.PacketConfig.Packet.TotalPackets = 0;
+                Operate.PacketConfig.Packet.Total_SendBytes = 0;
+                Operate.PacketConfig.Packet.Total_RecvBytes = 0;
+                Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
 
-                Socket_Cache.SocketQueue.FilterSocketList_CNT = 0;
-                Socket_Cache.SocketQueue.Send_CNT = 0;
-                Socket_Cache.SocketQueue.Recv_CNT = 0;
-                Socket_Cache.SocketQueue.SendTo_CNT = 0;
-                Socket_Cache.SocketQueue.RecvFrom_CNT = 0;
-                Socket_Cache.SocketQueue.WSASend_CNT = 0;
-                Socket_Cache.SocketQueue.WSARecv_CNT = 0;
-                Socket_Cache.SocketQueue.WSASendTo_CNT = 0;
-                Socket_Cache.SocketQueue.WSARecvFrom_CNT = 0;
+                Operate.PacketConfig.Queue.FilterSocketList_CNT = 0;
+                Operate.PacketConfig.Queue.Send_CNT = 0;
+                Operate.PacketConfig.Queue.Recv_CNT = 0;
+                Operate.PacketConfig.Queue.SendTo_CNT = 0;
+                Operate.PacketConfig.Queue.RecvFrom_CNT = 0;
+                Operate.PacketConfig.Queue.WSASend_CNT = 0;
+                Operate.PacketConfig.Queue.WSARecv_CNT = 0;
+                Operate.PacketConfig.Queue.WSASendTo_CNT = 0;
+                Operate.PacketConfig.Queue.WSARecvFrom_CNT = 0;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -882,14 +881,14 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketQueue.ResetSocketQueue();
-                Socket_Cache.SocketList.lstRecPacket.Clear();
-                Socket_Cache.SocketList.spiSelect = null;
+                Operate.PacketConfig.Queue.ClearPacketQueue();
+                Operate.PacketConfig.List.lstRecPacket.Clear();
+                Operate.PacketConfig.List.spiSelect = null;
                 this.dgvSocketList.Rows.Clear();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -897,13 +896,13 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.LogQueue.ResetLogQueue(Socket_Cache.System.LogType.Socket);
-                Socket_Cache.LogList.ResetLogList(Socket_Cache.System.LogType.Socket);
+                Operate.LogConfig.ClearLogQueue();
+                Operate.LogConfig.ClearLogList();
                 this.dgvLogList.Rows.Clear();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -942,7 +941,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -965,7 +964,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -993,14 +992,14 @@ namespace WPELibrary
                 this.cmsIcon_StopHook.Enabled = true;
 
                 this.SaveConfigs_Parameter();
-                Socket_Cache.FilterList.InitFilterList_Count();
+                Operate.FilterConfig.List.InitFilterList_Count();
 
                 ws.StartHook();
 
                 if (this.cbWorkingMode_Speed.Checked)
                 {
                     this.CleanUp_MainForm();
-                    Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_41));
                 }
 
                 if (bWakeUp)
@@ -1009,11 +1008,11 @@ namespace WPELibrary
                     this.bWakeUp = false;
                 }
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_39));
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_39));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1042,11 +1041,11 @@ namespace WPELibrary
 
                 ws.StopHook();
 
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_40));
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_40));
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1058,25 +1057,25 @@ namespace WPELibrary
         {
             try
             {
-                this.tlTotal_CNT.Text = Socket_Cache.SocketPacket.TotalPackets.ToString();
-                this.tlFilterExecute_CNT.Text = Socket_Cache.Filter.FilterExecute_CNT.ToString();
-                this.tlQueue_CNT.Text = Socket_Cache.SocketQueue.qSocket_PacketInfo.Count.ToString();
-                this.tlFilterSocketList_CNT.Text = Socket_Cache.SocketQueue.FilterSocketList_CNT.ToString();
-                this.tlSend_CNT.Text = Socket_Cache.SocketQueue.Send_CNT.ToString();
-                this.tlRecv_CNT.Text = Socket_Cache.SocketQueue.Recv_CNT.ToString();
-                this.tlSendTo_CNT.Text = Socket_Cache.SocketQueue.SendTo_CNT.ToString();
-                this.tlRecvFrom_CNT.Text = Socket_Cache.SocketQueue.RecvFrom_CNT.ToString();
-                this.tlWSASend_CNT.Text = Socket_Cache.SocketQueue.WSASend_CNT.ToString();
-                this.tlWSARecv_CNT.Text = Socket_Cache.SocketQueue.WSARecv_CNT.ToString();
-                this.tlWSASendTo_CNT.Text = Socket_Cache.SocketQueue.WSASendTo_CNT.ToString();
-                this.tlWSARecvFrom_CNT.Text = Socket_Cache.SocketQueue.WSARecvFrom_CNT.ToString();
+                this.tlTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
+                this.tlFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+                this.tlQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
+                this.tlFilterSocketList_CNT.Text = Operate.PacketConfig.Queue.FilterSocketList_CNT.ToString();
+                this.tlSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
+                this.tlRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
+                this.tlSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
+                this.tlRecvFrom_CNT.Text = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
+                this.tlWSASend_CNT.Text = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
+                this.tlWSARecv_CNT.Text = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
+                this.tlWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
+                this.tlWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
 
-                Socket_Cache.SocketPacket.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_SendBytes), Socket_Operation.GetDisplayBytes(Socket_Cache.SocketPacket.Total_RecvBytes));
-                this.tsslTotalBytes.Text = Socket_Cache.SocketPacket.SocketBytesInfo;
+                Operate.PacketConfig.Packet.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
+                this.tsslTotalBytes.Text = Operate.PacketConfig.Packet.SocketBytesInfo;
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1084,23 +1083,23 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SocketQueue.qSocket_PacketInfo.Count > 0)
+                if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
                 {
-                    await Socket_Cache.SocketList.SocketToList();
+                    await Operate.PacketConfig.List.SocketToList();
                     this.AutoScrollDataGridView(dgvSocketList, cbSocketList_AutoRoll.Checked);
                     this.AutoCleanUp_SocketList();
                 }
 
-                if (Socket_Cache.LogQueue.qSocket_Log.Count > 0)
+                if (Operate.LogConfig.cqLogInfo.Count > 0)
                 {
-                    Socket_Cache.LogList.LogToList(Socket_Cache.System.LogType.Socket);
+                    Operate.LogConfig.LogToList();
                     this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
                     this.AutoCleanUp_LogList();
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(nameof(tSocketList_Tick), ex.Message);
+                Operate.DoLog(nameof(tSocketList_Tick), ex.Message);
             }
         }
 
@@ -1114,12 +1113,12 @@ namespace WPELibrary
             {
                 if (e.ColumnIndex == dgvSocketList.Columns["cTypeImg"].Index)
                 {
-                    e.Value = Socket_Cache.SocketPacket.GetImg_ByPacketType((Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
+                    e.Value = Operate.PacketConfig.Packet.GetImg_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cPacketType"].Index)
                 {
-                    e.Value = Socket_Cache.SocketPacket.GetName_ByPacketType((Socket_Cache.SocketPacket.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
+                    e.Value = Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)dgvSocketList.Rows[e.RowIndex].Cells["cPacketType"].Value);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cPacketID"].Index)
@@ -1129,28 +1128,28 @@ namespace WPELibrary
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cData"].Index)
                 {
-                    switch (Socket_Cache.SocketList.lstRecPacket[e.RowIndex].FilterAction)
+                    switch (Operate.PacketConfig.List.lstRecPacket[e.RowIndex].FilterAction)
                     {
-                        case Socket_Cache.Filter.FilterAction.Replace:
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Replace;
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Replace;
+                        case Operate.FilterConfig.Filter.FilterAction.Replace:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
                             break;
 
-                        case Socket_Cache.Filter.FilterAction.Intercept:
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Intercept;
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Intercept;
+                        case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
                             break;
 
-                        case Socket_Cache.Filter.FilterAction.Change:
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Socket_Cache.Filter.FilterActionForeColor_Change;
-                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Socket_Cache.Filter.FilterActionBackColor_Change;
+                        case Operate.FilterConfig.Filter.FilterAction.Change:
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
+                            this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
                             break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1170,7 +1169,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1188,12 +1187,12 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Socket_Cache.FilterList.lstFilter[FIndex].IsEnable = bCheck;
+                    Operate.FilterConfig.List.lstFilter[FIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1203,14 +1202,14 @@ namespace WPELibrary
             {
                 int iSelectIndex = this.dgvFilterList.SelectedRows[0].Index;
 
-                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.FilterList.lstFilter.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.FilterConfig.List.lstFilter.Count)
                 {
-                    Socket_Operation.ShowFilterForm_Dialog(Socket_Cache.FilterList.lstFilter[iSelectIndex]);
+                    Socket_Operation.ShowFilterForm_Dialog(Operate.FilterConfig.List.lstFilter[iSelectIndex]);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1229,12 +1228,12 @@ namespace WPELibrary
 
                     dgvSendList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
 
-                    Socket_Cache.Send.SetIsCheck_BySendIndex(SIndex, bCheck);
+                    Operate.SendConfig.Send.SetIsCheck_BySendIndex(SIndex, bCheck);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1246,15 +1245,15 @@ namespace WPELibrary
                 {
                     int SIndex = e.RowIndex;
 
-                    if (SIndex > -1 && SIndex < Socket_Cache.SendList.lstSend.Count)
+                    if (SIndex > -1 && SIndex < Operate.SendConfig.SendList.lstSend.Count)
                     {
-                        Socket_Operation.ShowSendListForm_Dialog(Socket_Cache.SendList.lstSend[SIndex]);
+                        Socket_Operation.ShowSendListForm_Dialog(Operate.SendConfig.SendList.lstSend[SIndex]);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1272,12 +1271,12 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvRobotList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Socket_Cache.RobotList.lstRobot[RIndex].IsEnable = bCheck;
+                    Operate.RobotConfig.RobotList.lstRobot[RIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1287,14 +1286,14 @@ namespace WPELibrary
             {
                 int iSelectIndex = this.dgvRobotList.SelectedRows[0].Index;
 
-                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.RobotList.lstRobot.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.RobotConfig.RobotList.lstRobot.Count)
                 {
-                    Socket_Operation.ShowRobotForm_Dialog(Socket_Cache.RobotList.lstRobot[iSelectIndex]);
+                    Socket_Operation.ShowRobotForm_Dialog(Operate.RobotConfig.RobotList.lstRobot[iSelectIndex]);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1306,7 +1305,7 @@ namespace WPELibrary
         {
             Socket_Operation.ShowFindForm();
 
-            if (Socket_Cache.SocketList.DoSearch)
+            if (Operate.PacketConfig.List.DoSearch)
             {
                 this.bSearchNext.Focus();
                 this.SearchSocketListNext();
@@ -1322,20 +1321,20 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SocketList.FindOptions.IsValid)
+                if (Operate.PacketConfig.List.FindOptions.IsValid)
                 {
-                    long res = this.hbPacketData.Find(Socket_Cache.SocketList.FindOptions);
+                    long res = this.hbPacketData.Find(Operate.PacketConfig.List.FindOptions);
 
                     if (res == -1)
                     {
-                        Socket_Cache.SocketList.Search_Index += 1;
+                        Operate.PacketConfig.List.Search_Index += 1;
                         this.SearchSocketListNext();
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1353,22 +1352,22 @@ namespace WPELibrary
             {
                 if (dgvSocketList.Rows.Count > 0)
                 {
-                    if (Socket_Cache.SocketList.FindOptions.IsValid)
+                    if (Operate.PacketConfig.List.FindOptions.IsValid)
                     {
                         byte[] bSearchContent = null;
-                        FindType fType = Socket_Cache.SocketList.FindOptions.Type;
-                        Socket_Cache.SocketPacket.EncodingFormat efFormat = new Socket_Cache.SocketPacket.EncodingFormat();
+                        FindType fType = Operate.PacketConfig.List.FindOptions.Type;
+                        Operate.PacketConfig.Packet.EncodingFormat efFormat = new Operate.PacketConfig.Packet.EncodingFormat();
 
                         switch (fType)
                         {
                             case FindType.Text:
-                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.UTF7;
-                                bSearchContent = Socket_Operation.StringToBytes(efFormat, Socket_Cache.SocketList.FindOptions.Text);
+                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.UTF7;
+                                bSearchContent = Socket_Operation.StringToBytes(efFormat, Operate.PacketConfig.List.FindOptions.Text);
                                 break;
 
                             case FindType.Hex:
-                                efFormat = Socket_Cache.SocketPacket.EncodingFormat.Hex;
-                                bSearchContent = Socket_Cache.SocketList.FindOptions.Hex;
+                                efFormat = Operate.PacketConfig.Packet.EncodingFormat.Hex;
+                                bSearchContent = Operate.PacketConfig.List.FindOptions.Hex;
                                 break;
                         }
 
@@ -1379,17 +1378,17 @@ namespace WPELibrary
                                 this.dgvSocketList.ClearSelection();
                                 this.rbFromIndex.Checked = true;
                                 this.hbPacketData.SelectionStart = 0;
-                                Socket_Cache.SocketList.Search_Index = 0;
+                                Operate.PacketConfig.List.Search_Index = 0;
                             }));
                         }
 
-                        e.Result = Socket_Cache.SocketList.SearchForSocketList(Socket_Cache.SocketList.Search_Index, bSearchContent);
+                        e.Result = Operate.PacketConfig.List.SearchForSocketList(Operate.PacketConfig.List.Search_Index, bSearchContent);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1418,7 +1417,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1439,19 +1438,19 @@ namespace WPELibrary
                 {
                     int iSelectIndex = this.dgvSocketList.SelectedRows[0].Index;
 
-                    if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.SocketList.lstRecPacket.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.PacketConfig.List.lstRecPacket.Count)
                     {
-                        Socket_Cache.SocketList.Search_Index = iSelectIndex;
-                        Socket_Cache.SocketList.spiSelect = Socket_Cache.SocketList.lstRecPacket[iSelectIndex];
+                        Operate.PacketConfig.List.Search_Index = iSelectIndex;
+                        Operate.PacketConfig.List.spiSelect = Operate.PacketConfig.List.lstRecPacket[iSelectIndex];
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(Socket_Cache.SocketList.spiSelect.PacketBuffer);
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.spiSelect.PacketBuffer);
                         hbPacketData.ByteProvider = dbp;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1477,15 +1476,15 @@ namespace WPELibrary
                 switch (selectedIndex)
                 {
                     case 0:
-                        e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketLen();
+                        e.Result = Operate.PacketConfig.List.StatisticalSocketList_ByPacketLen();
                         break;
 
                     case 1:
-                        e.Result = Socket_Cache.SocketList.StatisticalSocketList_ByPacketSocket();
+                        e.Result = Operate.PacketConfig.List.StatisticalSocketList_ByPacketSocket();
                         break;
 
                     case 2:
-                        e.Result = Socket_Cache.SocketList.StatisticalFilterList_ByExecutionCount();
+                        e.Result = Operate.PacketConfig.List.StatisticalFilterList_ByExecutionCount();
                         break;
 
                     default:
@@ -1495,7 +1494,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1507,7 +1506,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1524,34 +1523,34 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.SocketList.spiSelect != null)
+                if (Operate.PacketConfig.List.spiSelect != null)
                 {
                     if (this.cmsHexBox_tscbSendList.SelectedItem != null)
                     {
-                        Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
+                        Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.cmsHexBox_tscbSendList.SelectedItem;
                         Guid SID = item.SID;
-                        BindingList<Socket_PacketInfo> SCollection = Socket_Cache.Send.GetSendCollection_ByGuid(SID);
+                        BindingList<PacketInfo> SCollection = Operate.SendConfig.Send.GetSendCollection_ByGuid(SID);
 
                         if (SCollection != null)
                         {
-                            int iSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;
-                            Socket_Cache.SocketPacket.PacketType ptType = Socket_Cache.SocketList.spiSelect.PacketType;
-                            string sIPFrom = Socket_Cache.SocketList.spiSelect.PacketFrom;
-                            string sIPTo = Socket_Cache.SocketList.spiSelect.PacketTo;
+                            int iSocket = Operate.PacketConfig.List.spiSelect.PacketSocket;
+                            Operate.PacketConfig.Packet.PacketType ptType = Operate.PacketConfig.List.spiSelect.PacketType;
+                            string sIPFrom = Operate.PacketConfig.List.spiSelect.PacketFrom;
+                            string sIPTo = Operate.PacketConfig.List.spiSelect.PacketTo;
 
                             byte[] bBuffer = null;
 
                             if (this.hbPacketData.CanCopy())
                             {
                                 this.hbPacketData.CopyHex();
-                                bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
+                                bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
                             }
                             else
                             {
-                                bBuffer = Socket_Cache.SocketList.spiSelect.PacketBuffer;
+                                bBuffer = Operate.PacketConfig.List.spiSelect.PacketBuffer;
                             }
 
-                            Socket_Cache.Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
+                            Operate.SendConfig.Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
                         }
 
                         this.cmsHexBox.Close();
@@ -1560,7 +1559,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1571,13 +1570,13 @@ namespace WPELibrary
 
             try
             {
-                if (Socket_Cache.SocketList.spiSelect != null)
+                if (Operate.PacketConfig.List.spiSelect != null)
                 {
                     switch (sItemText)
                     {
                         case "cmsHexBox_Send":
 
-                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.spiSelect);
+                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.spiSelect);
 
                             break;
 
@@ -1587,12 +1586,12 @@ namespace WPELibrary
                             {
                                 this.hbPacketData.CopyHex();
 
-                                byte[] bBuffer = Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, Clipboard.GetText());
-                                Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, bBuffer);
+                                byte[] bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, bBuffer);
                             }
                             else
                             {
-                                Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, null);
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, null);
                             }
 
                             break;
@@ -1633,7 +1632,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1673,7 +1672,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1692,14 +1691,14 @@ namespace WPELibrary
             {
                 if (this.tscbSendList.SelectedItem != null)
                 {
-                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.tscbSendList.SelectedItem;
+                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.tscbSendList.SelectedItem;
                     Guid SID = item.SID;
 
-                    List<Socket_PacketInfo> spiList = Socket_Operation.GetSelectedSocket(this.dgvSocketList);
+                    List<PacketInfo> spiList = Socket_Operation.GetSelectedSocket(this.dgvSocketList);
 
                     if (spiList.Count > 0)
                     {
-                        Socket_Cache.Send.AddSendCollection_ByPacketInfo(SID, spiList);
+                        Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, spiList);
                     }
 
                     this.cmsSocketList.Close();
@@ -1707,7 +1706,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1718,31 +1717,31 @@ namespace WPELibrary
 
             try
             {
-                if (Socket_Cache.SocketList.spiSelect != null)
+                if (Operate.PacketConfig.List.spiSelect != null)
                 {
                     switch (sItemText)
                     {
                         case "cmsSocketList_Send":
 
-                            Socket_Operation.ShowSendForm(Socket_Cache.SocketList.spiSelect);
+                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.spiSelect);
 
                             break;
 
                         case "cmsSocketList_FilterList":
 
-                            Socket_Cache.Filter.AddFilter_ByPacketInfo(Socket_Cache.SocketList.spiSelect, null);
+                            Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, null);
 
                             break;
 
                         case "cmsSocketList_SystemSocket":
 
-                            Socket_Cache.System.SystemSocket = Socket_Cache.SocketList.spiSelect.PacketSocket;
+                            Operate.SystemConfig.SystemSocket = Operate.PacketConfig.List.spiSelect.PacketSocket;
 
                             break;
 
                         case "cmsSocketList_ShowModified":
 
-                            Socket_Operation.ShowSocketCompareForm(Socket_Cache.SocketList.spiSelect);
+                            Socket_Operation.ShowSocketCompareForm(Operate.PacketConfig.List.spiSelect);
 
                             break;
 
@@ -1750,20 +1749,20 @@ namespace WPELibrary
 
                             if (dgvSocketList.Rows.Count > 0)
                             {
-                                Socket_Cache.SocketList.SaveSocketList_Dialog();
+                                Operate.PacketConfig.List.SaveSocketList_Dialog();
                             }
 
                             break;
 
                         case "cmsSocketList_Comparison_A":
 
-                            this.rtbComparison_A.Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.spiSelect.PacketBuffer);
+                            this.rtbComparison_A.Text = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.spiSelect.PacketBuffer);
 
                             break;
 
                         case "cmsSocketList_Comparison_B":
 
-                            this.rtbComparison_B.Text = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Cache.SocketList.spiSelect.PacketBuffer);
+                            this.rtbComparison_B.Text = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.spiSelect.PacketBuffer);
 
                             break;
                     }
@@ -1771,7 +1770,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1795,31 +1794,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsFilterList_Top":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Top, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Top, sfiList);
                                 break;
 
                             case "cmsFilterList_Up":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Up, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Up, sfiList);
                                 break;
 
                             case "cmsFilterList_Down":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Down, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Down, sfiList);
                                 break;
 
                             case "cmsFilterList_Bottom":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Bottom, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Bottom, sfiList);
                                 break;
 
                             case "cmsFilterList_Copy":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Copy, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Copy, sfiList);
                                 break;
 
                             case "cmsFilterList_Export":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Export, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Export, sfiList);
                                 break;
 
                             case "cmsFilterList_Delete":
-                                Socket_Cache.FilterList.UpdateFilterList_ByListAction(Socket_Cache.System.ListAction.Delete, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Delete, sfiList);
                                 break;
                         }
 
@@ -1827,7 +1826,7 @@ namespace WPELibrary
 
                         foreach (Socket_FilterInfo sfi in sfiList)
                         {
-                            int iIndex = Socket_Cache.FilterList.lstFilter.IndexOf(sfi);
+                            int iIndex = Operate.FilterConfig.List.lstFilter.IndexOf(sfi);
 
                             if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
                             {
@@ -1840,7 +1839,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1864,31 +1863,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsSendList_Top":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Top, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Top, ssiList);
                                 break;
 
                             case "cmsSendList_Up":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Up, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Up, ssiList);
                                 break;
 
                             case "cmsSendList_Down":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Down, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Down, ssiList);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Bottom, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Bottom, ssiList);
                                 break;
 
                             case "cmsSendList_Copy":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Copy, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Copy, ssiList);
                                 break;
 
                             case "cmsSendList_Export":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Export, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Export, ssiList);
                                 break;
 
                             case "cmsSendList_Delete":
-                                Socket_Cache.SendList.UpdateSendList_ByListAction(Socket_Cache.System.ListAction.Delete, ssiList);
+                                Operate.SendConfig.SendList.UpdateSendList_ByListAction(Operate.SystemConfig.ListAction.Delete, ssiList);
                                 break;
                         }
 
@@ -1896,7 +1895,7 @@ namespace WPELibrary
 
                         foreach (Socket_SendInfo ssi in ssiList)
                         {
-                            int iIndex = Socket_Cache.SendList.lstSend.IndexOf(ssi);
+                            int iIndex = Operate.SendConfig.SendList.lstSend.IndexOf(ssi);
 
                             if (iIndex > -1 && iIndex < dgvSendList.RowCount)
                             {
@@ -1909,7 +1908,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1933,31 +1932,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsRobotList_Top":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Top, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Top, sriList);
                                 break;
 
                             case "cmsRobotList_Up":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Up, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Up, sriList);
                                 break;
 
                             case "cmsRobotList_Down":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Down, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Down, sriList);
                                 break;
 
                             case "cmsRobotList_Bottom":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Bottom, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Bottom, sriList);
                                 break;
 
                             case "cmsRobotList_Copy":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Copy, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Copy, sriList);
                                 break;
 
                             case "cmsRobotList_Export":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Export, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Export, sriList);
                                 break;
 
                             case "cmsRobotList_Delete":
-                                Socket_Cache.RobotList.UpdateRobotList_ByListAction(Socket_Cache.System.ListAction.Delete, sriList);
+                                Operate.RobotConfig.RobotList.UpdateRobotList_ByListAction(Operate.SystemConfig.ListAction.Delete, sriList);
                                 break;
                         }
 
@@ -1965,7 +1964,7 @@ namespace WPELibrary
 
                         foreach (Socket_RobotInfo sri in sriList)
                         {
-                            int iIndex = Socket_Cache.RobotList.lstRobot.IndexOf(sri);
+                            int iIndex = Operate.RobotConfig.RobotList.lstRobot.IndexOf(sri);
 
                             if (iIndex > -1 && iIndex < dgvRobotList.RowCount)
                             {
@@ -1978,7 +1977,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -1999,7 +1998,7 @@ namespace WPELibrary
 
                         if (dgvLogList.Rows.Count > 0)
                         {
-                            Socket_Cache.LogList.SaveLogListToExcel();
+                            Operate.LogConfig.SaveLogListToExcel();
                         }
 
                         break;
@@ -2013,7 +2012,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2023,30 +2022,30 @@ namespace WPELibrary
 
         private void tsFilterList_Load_Click(object sender, EventArgs e)
         {
-            Socket_Cache.FilterList.LoadFilterList_Dialog();
+            Operate.FilterConfig.List.LoadFilterList_Dialog();
         }
 
         private void tsFilterList_Save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilter.Count > 0)
                 {
                     List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
-                    sfiList.AddRange(Socket_Cache.FilterList.lstFilter);
+                    sfiList.AddRange(Operate.FilterConfig.List.lstFilter);
 
-                    Socket_Cache.FilterList.SaveFilterList_Dialog(string.Empty, sfiList);
+                    Operate.FilterConfig.List.SaveFilterList_Dialog(string.Empty, sfiList);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
         private void tsFilterList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.Filter.AddFilter_New();
+            Operate.FilterConfig.Filter.AddFilter_New();
 
             this.dgvFilterList.ClearSelection();
             this.dgvFilterList.CurrentCell = this.dgvFilterList.Rows[this.dgvFilterList.Rows.Count - 1].Cells[0];
@@ -2056,7 +2055,7 @@ namespace WPELibrary
         {
             if (dgvFilterList.Rows.Count > 0)
             {
-                Socket_Cache.FilterList.CleanUpFilterList_Dialog();
+                Operate.FilterConfig.List.CleanUpFilterList_Dialog();
             }
         }
 
@@ -2064,7 +2063,7 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilter.Count > 0)
                 {
                     List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
@@ -2079,7 +2078,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2087,7 +2086,7 @@ namespace WPELibrary
         {
             try
             {
-                if (Socket_Cache.FilterList.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilter.Count > 0)
                 {
                     List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
@@ -2102,7 +2101,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2112,24 +2111,24 @@ namespace WPELibrary
 
         private void tsSendList_Load_Click(object sender, EventArgs e)
         {
-            Socket_Cache.SendList.LoadSendList_Dialog();
+            Operate.SendConfig.SendList.LoadSendList_Dialog();
         }
 
         private void tsSendList_Save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Socket_Cache.SendList.lstSend.Count > 0)
+                if (Operate.SendConfig.SendList.lstSend.Count > 0)
                 {
                     List<Socket_SendInfo> ssiList = new List<Socket_SendInfo>();
-                    ssiList.AddRange(Socket_Cache.SendList.lstSend);
+                    ssiList.AddRange(Operate.SendConfig.SendList.lstSend);
 
-                    Socket_Cache.SendList.SaveSendList_Dialog(string.Empty, ssiList);
+                    Operate.SendConfig.SendList.SaveSendList_Dialog(string.Empty, ssiList);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2141,7 +2140,7 @@ namespace WPELibrary
                 {
                     this.tsSendList_Start.Enabled = false;
                     this.tsSendList_Stop.Enabled = true;
-                    Socket_Cache.SendList.lstExecute.Clear();
+                    Operate.SendConfig.SendList.lstExecute.Clear();
 
                     this.bgwSendList.RunWorkerAsync();
                 }
@@ -2155,7 +2154,7 @@ namespace WPELibrary
 
         private void tsSendList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.Send.AddSend_New();
+            Operate.SendConfig.Send.AddSend_New();
 
             this.dgvSendList.ClearSelection();
             this.dgvSendList.CurrentCell = this.dgvSendList.Rows[this.dgvSendList.Rows.Count - 1].Cells[0];
@@ -2165,7 +2164,7 @@ namespace WPELibrary
         {
             if (dgvSendList.Rows.Count > 0)
             {
-                Socket_Cache.SendList.CleanUpSendList_Dialog();
+                Operate.SendConfig.SendList.CleanUpSendList_Dialog();
             }
         }
 
@@ -2177,16 +2176,16 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_SendInfo ssi in Socket_Cache.SendList.lstSend)
+                foreach (Socket_SendInfo ssi in Operate.SendConfig.SendList.lstSend)
                 {
                     if (ssi.IsEnable)
                     {
-                        Socket_Send ss = Socket_Cache.Send.DoSend(ssi.SID);
+                        Socket_Send ss = Operate.SendConfig.Send.DoSend(ssi.SID);
                         if (ss != null)
                         {
-                            if (Socket_Cache.System.ListExecute == Socket_Cache.System.Execute.Together)
+                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                             { 
-                                Socket_Cache.SendList.lstExecute.Add(ss);
+                                Operate.SendConfig.SendList.lstExecute.Add(ss);
                             }
                             else
                             {
@@ -2207,9 +2206,9 @@ namespace WPELibrary
                     }
                 }
 
-                while (Socket_Cache.SendList.lstExecute.Count > 0)
+                while (Operate.SendConfig.SendList.lstExecute.Count > 0)
                 {
-                    foreach (Socket_Send ss in Socket_Cache.SendList.lstExecute.ToList())
+                    foreach (Socket_Send ss in Operate.SendConfig.SendList.lstExecute.ToList())
                     {
                         if (this.bgwSendList.CancellationPending)
                         {
@@ -2218,7 +2217,7 @@ namespace WPELibrary
 
                         if (!ss.Worker.IsBusy)
                         {
-                            Socket_Cache.SendList.lstExecute.Remove(ss);
+                            Operate.SendConfig.SendList.lstExecute.Remove(ss);
                         }
                     }
 
@@ -2227,7 +2226,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2240,7 +2239,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2250,24 +2249,24 @@ namespace WPELibrary
 
         private void tsRobotList_Load_Click(object sender, EventArgs e)
         {
-            Socket_Cache.RobotList.LoadRobotList_Dialog();
+            Operate.RobotConfig.RobotList.LoadRobotList_Dialog();
         }
 
         private void tsRobotList_Save_Click(object sender, EventArgs e)
         {
             try
             {
-                if (Socket_Cache.RobotList.lstRobot.Count > 0)
+                if (Operate.RobotConfig.RobotList.lstRobot.Count > 0)
                 {
                     List<Socket_RobotInfo> sriList = new List<Socket_RobotInfo>();
-                    sriList.AddRange(Socket_Cache.RobotList.lstRobot);
+                    sriList.AddRange(Operate.RobotConfig.RobotList.lstRobot);
 
-                    Socket_Cache.RobotList.SaveRobotList_Dialog(string.Empty, sriList);
+                    Operate.RobotConfig.RobotList.SaveRobotList_Dialog(string.Empty, sriList);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2279,7 +2278,7 @@ namespace WPELibrary
                 {
                     this.tsRobotList_Start.Enabled = false;
                     this.tsRobotList_Stop.Enabled = true;
-                    Socket_Cache.RobotList.lstExecute.Clear();
+                    Operate.RobotConfig.RobotList.lstExecute.Clear();
 
                     this.bgwRobotList.RunWorkerAsync();
                 }
@@ -2293,7 +2292,7 @@ namespace WPELibrary
 
         private void tsRobotList_Add_Click(object sender, EventArgs e)
         {
-            Socket_Cache.Robot.AddRobot_New();
+            Operate.RobotConfig.Robot.AddRobot_New();
 
             this.dgvRobotList.ClearSelection();
             this.dgvRobotList.CurrentCell = this.dgvRobotList.Rows[this.dgvRobotList.Rows.Count - 1].Cells[0];
@@ -2303,7 +2302,7 @@ namespace WPELibrary
         {
             if (dgvRobotList.Rows.Count > 0)
             {
-                Socket_Cache.RobotList.CleanUpRobotList_Dialog();
+                Operate.RobotConfig.RobotList.CleanUpRobotList_Dialog();
             }
         }
 
@@ -2315,16 +2314,16 @@ namespace WPELibrary
         {
             try
             {
-                foreach (Socket_RobotInfo sri in Socket_Cache.RobotList.lstRobot)
+                foreach (Socket_RobotInfo sri in Operate.RobotConfig.RobotList.lstRobot)
                 {
                     if (sri.IsEnable)
                     {
-                        Socket_Robot sr = Socket_Cache.Robot.DoRobot(sri.RID, null);
+                        Socket_Robot sr = Operate.RobotConfig.Robot.DoRobot(sri.RID, null);
                         if (sr != null)
                         {
-                            if (Socket_Cache.System.ListExecute == Socket_Cache.System.Execute.Together)
+                            if (Operate.SystemConfig.ListExecute == Operate.SystemConfig.Execute.Together)
                             {
-                                Socket_Cache.RobotList.lstExecute.Add(sr);
+                                Operate.RobotConfig.RobotList.lstExecute.Add(sr);
                             }
                             else
                             {
@@ -2345,9 +2344,9 @@ namespace WPELibrary
                     }
                 }
 
-                while (Socket_Cache.RobotList.lstExecute.Count > 0)
+                while (Operate.RobotConfig.RobotList.lstExecute.Count > 0)
                 {
-                    foreach (Socket_Robot sr in Socket_Cache.RobotList.lstExecute.ToList())
+                    foreach (Socket_Robot sr in Operate.RobotConfig.RobotList.lstExecute.ToList())
                     {
                         if (this.bgwRobotList.CancellationPending)
                         {
@@ -2356,7 +2355,7 @@ namespace WPELibrary
 
                         if (!sr.Worker.IsBusy)
                         {
-                            Socket_Cache.RobotList.lstExecute.Remove(sr);
+                            Operate.RobotConfig.RobotList.lstExecute.Remove(sr);
                         }
                     }
 
@@ -2365,7 +2364,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2378,7 +2377,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2391,7 +2390,7 @@ namespace WPELibrary
             string TextA = this.rtbComparison_A.Text.Trim();
             string TextB = this.rtbComparison_B.Text.Trim();
 
-            if (!Socket_Cache.System.IsShow_TextCompare)
+            if (!Operate.SystemConfig.IsShow_TextCompare)
             {
                 TextCompareForm tcForm = new TextCompareForm(TextA, TextB);
                 tcForm.Show();
@@ -2403,7 +2402,7 @@ namespace WPELibrary
             string TextA = this.rtbComparison_A.Text.Trim();
             string TextB = this.rtbComparison_B.Text.Trim();
 
-            if (!Socket_Cache.System.IsShow_TextDuplicate)
+            if (!Operate.SystemConfig.IsShow_TextDuplicate)
             {
                 TextDuplicateForm tdForm = new TextDuplicateForm(TextA, TextB);
                 tdForm.Show();
@@ -2420,26 +2419,26 @@ namespace WPELibrary
             {
                 string sEncodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sEncodingText));
-                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.GBK, sEncodingText));
+                string sBytes = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
 
-                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
-                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF7, sEncodingText));
+                string sUTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
 
-                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
-                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF8, sEncodingText));
+                string sUTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
 
-                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
-                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF16, sEncodingText));
+                string sUTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
 
-                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
-                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.UTF32, sEncodingText));
+                string sUTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
 
-                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
-                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Unicode, sEncodingText));
+                string sUnicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
 
                 string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
-                string sANSI_Base64 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Hex, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sBase64));
+                string sANSI_Base64 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
@@ -2458,7 +2457,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2468,26 +2467,26 @@ namespace WPELibrary
             {
                 string sDecodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_GBK = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.GBK, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sBytes = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_GBK = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF7 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF8 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF16 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF32 = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUnicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Default, sDecodingText));
-                string sANSI_Unicode = Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText));
+                string sUnicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_Unicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
                 string sBase64 = Socket_Operation.Base64_Decoding(sDecodingText);
-                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Socket_Operation.BytesToString(Socket_Cache.SocketPacket.EncodingFormat.Default, Socket_Operation.StringToBytes(Socket_Cache.SocketPacket.EncodingFormat.Hex, sDecodingText)));
+                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
@@ -2506,7 +2505,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2561,7 +2560,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2576,7 +2575,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2717,33 +2716,33 @@ namespace WPELibrary
                                             string sFAppointLength = Socket_Operation.GetBoolFromChineseString(s0).ToString();
                                             string sFLengthContent = s1;
 
-                                            Socket_Cache.Filter.FilterMode FMode = new Socket_Cache.Filter.FilterMode();
+                                            Operate.FilterConfig.Filter.FilterMode FMode = new Operate.FilterConfig.Filter.FilterMode();
                                             if (Socket_Operation.GetBoolFromChineseString(s22) == true)
                                             {
-                                                FMode = Socket_Cache.Filter.FilterMode.Normal;
+                                                FMode = Operate.FilterConfig.Filter.FilterMode.Normal;
                                             }
                                             else if (Socket_Operation.GetBoolFromChineseString(s23) == true)
                                             {
-                                                FMode = Socket_Cache.Filter.FilterMode.Advanced;
+                                                FMode = Operate.FilterConfig.Filter.FilterMode.Advanced;
                                             }
                                             string sFMode = ((int)FMode).ToString();
 
-                                            Socket_Cache.Filter.FilterAction FAction = new Socket_Cache.Filter.FilterAction();
+                                            Operate.FilterConfig.Filter.FilterAction FAction = new Operate.FilterConfig.Filter.FilterAction();
                                             if (Socket_Operation.GetBoolFromChineseString(s9) == true)
                                             {
-                                                FAction = Socket_Cache.Filter.FilterAction.Replace;
+                                                FAction = Operate.FilterConfig.Filter.FilterAction.Replace;
                                             }
                                             else if (Socket_Operation.GetBoolFromChineseString(s10) == true)
                                             {
-                                                FAction = Socket_Cache.Filter.FilterAction.Intercept;
+                                                FAction = Operate.FilterConfig.Filter.FilterAction.Intercept;
                                             }
                                             else if (Socket_Operation.GetBoolFromChineseString(s11) == true)
                                             {
-                                                FAction = Socket_Cache.Filter.FilterAction.NoModify_NoDisplay;
+                                                FAction = Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay;
                                             }
                                             else
                                             {
-                                                FAction = Socket_Cache.Filter.FilterAction.NoModify_Display;
+                                                FAction = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
                                             }
                                             string sFAction = ((int)FAction).ToString();
 
@@ -2756,17 +2755,17 @@ namespace WPELibrary
                                             bool bWSASendTo = Convert.ToBoolean(int.Parse(s20));
                                             bool bWSARecvFrom = false;
 
-                                            Socket_Cache.Filter.FilterFunction filterFunction = new Socket_Cache.Filter.FilterFunction(bSend, bSendTo, bRecv, bRecvFrom, bWSASend, bWSASendTo, bWSARecv, bWSARecvFrom);
-                                            string sFFunction = Socket_Cache.Filter.GetFilterFunctionString(filterFunction);
+                                            Operate.FilterConfig.Filter.FilterFunction filterFunction = new Operate.FilterConfig.Filter.FilterFunction(bSend, bSendTo, bRecv, bRecvFrom, bWSASend, bWSASendTo, bWSARecv, bWSARecvFrom);
+                                            string sFFunction = Operate.FilterConfig.Filter.GetFilterFunctionString(filterFunction);
 
-                                            Socket_Cache.Filter.FilterStartFrom FStartFrom = new Socket_Cache.Filter.FilterStartFrom();
+                                            Operate.FilterConfig.Filter.FilterStartFrom FStartFrom = new Operate.FilterConfig.Filter.FilterStartFrom();
                                             if (Socket_Operation.GetBoolFromChineseString(s24) == true)
                                             {
-                                                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Head;
+                                                FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Head;
                                             }
                                             else if (Socket_Operation.GetBoolFromChineseString(s25) == true)
                                             {
-                                                FStartFrom = Socket_Cache.Filter.FilterStartFrom.Position;
+                                                FStartFrom = Operate.FilterConfig.Filter.FilterStartFrom.Position;
                                             }
                                             string sFStartFrom = ((int)FStartFrom).ToString();
 
@@ -2775,18 +2774,18 @@ namespace WPELibrary
 
                                             string sFSearch = string.Empty;
                                             string sFModify = string.Empty;
-                                            if (FMode == Socket_Cache.Filter.FilterMode.Normal)
+                                            if (FMode == Operate.FilterConfig.Filter.FilterMode.Normal)
                                             {
                                                 sFProgressionPosition = Socket_Operation.ConvertFILTString(s31, false);
                                                 sFSearch = Socket_Operation.ConvertFILTString(s26, false);
                                                 sFModify = Socket_Operation.ConvertFILTString(s27, false);
                                             }
-                                            else if (FMode == Socket_Cache.Filter.FilterMode.Advanced)
+                                            else if (FMode == Operate.FilterConfig.Filter.FilterMode.Advanced)
                                             {
                                                 sFProgressionPosition = Socket_Operation.ConvertFILTString(s32, false);
                                                 sFSearch = Socket_Operation.ConvertFILTString(s28, false);
 
-                                                if (FStartFrom == Socket_Cache.Filter.FilterStartFrom.Position)
+                                                if (FStartFrom == Operate.FilterConfig.Filter.FilterStartFrom.Position)
                                                 {
                                                     sFModify = Socket_Operation.ConvertFILTString(s29, true);
                                                 }
@@ -2836,7 +2835,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -2888,7 +2887,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

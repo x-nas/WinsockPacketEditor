@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -33,7 +33,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -54,14 +54,14 @@ namespace WPELibrary
                         AddHours = AddHours * 24;
                     }
 
-                    Socket_Cache.ProxyAccount.ProxyAccountAddTime_Dialog(this.gList, AddHours);
+                    Operate.ProxyConfig.ProxyAccount.ProxyAccountAddTime_Dialog(this.gList, AddHours);
                 }
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

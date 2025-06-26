@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="ssSocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="ssPacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
   <data name="tlTotal.Size" type="System.Drawing.Size, System.Drawing">
@@ -154,10 +154,10 @@
   <data name="tlSplit2.Size" type="System.Drawing.Size, System.Drawing">
     <value>10, 17</value>
   </data>
-  <data name="tlFilterSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlFilterPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 17</value>
   </data>
-  <data name="tlFilterSocketList.Text" xml:space="preserve">
+  <data name="tlFilterPacketConfig.List.Text" xml:space="preserve">
     <value>Filter:</value>
   </data>
   <data name="toolStripStatusLabel9.Size" type="System.Drawing.Size, System.Drawing">
@@ -317,73 +317,73 @@
   <data name="cData.HeaderText" xml:space="preserve">
     <value>Packet Data</value>
   </data>
-  <data name="cmsSocketList.Font" type="System.Drawing.Font, System.Drawing">
+  <data name="cmsPacketConfig.List.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 9pt</value>
   </data>
-  <data name="cmsSocketList_Send.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Send.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_Send.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Send.Text" xml:space="preserve">
     <value>Send</value>
   </data>
-  <data name="cmsSocketList_tss1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_tss1.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
-  <data name="cmsSocketList_SendList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_SendList.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_SendList.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_SendList.Text" xml:space="preserve">
     <value>AddTo Send List</value>
   </data>
-  <data name="cmsSocketList_FilterList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_FilterList.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_FilterList.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_FilterList.Text" xml:space="preserve">
     <value>AddTo Filter List</value>
   </data>
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
-  <data name="cmsSocketList_SystemSocket.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_SystemSocket.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_SystemSocket.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_SystemSocket.Text" xml:space="preserve">
     <value>Set SYS Socket</value>
   </data>
   <data name="tss5.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
-  <data name="cmsSocketList_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_ShowModified.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_ShowModified.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_ShowModified.Text" xml:space="preserve">
     <value>Show Data Modify</value>
   </data>
   <data name="tss6.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
-  <data name="cmsSocketList_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_ToExcel.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_ToExcel.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_ToExcel.Text" xml:space="preserve">
     <value>Save To Excel</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>171, 6</value>
   </data>
-  <data name="cmsSocketList_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Comparison_A.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_Comparison_A.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Comparison_A.Text" xml:space="preserve">
     <value>Add To Text A</value>
   </data>
-  <data name="cmsSocketList_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List_Comparison_B.Size" type="System.Drawing.Size, System.Drawing">
     <value>174, 24</value>
   </data>
-  <data name="cmsSocketList_Comparison_B.Text" xml:space="preserve">
+  <data name="cmsPacketConfig.List_Comparison_B.Text" xml:space="preserve">
     <value>Add To Text B</value>
   </data>
-  <data name="cmsSocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cmsPacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>175, 226</value>
   </data>
   <data name="rbFromIndex.Location" type="System.Drawing.Point, System.Drawing">
@@ -672,31 +672,31 @@
   <data name="gbListSet_LogList.Text" xml:space="preserve">
     <value>Log List</value>
   </data>
-  <data name="nudSocketList_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="nudPacketConfig.List_AutoClearValue.Location" type="System.Drawing.Point, System.Drawing">
     <value>94, 31</value>
   </data>
-  <data name="cbSocketList_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="cbPacketConfig.List_AutoClear.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 34</value>
   </data>
-  <data name="cbSocketList_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbPacketConfig.List_AutoClear.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 22</value>
   </data>
-  <data name="cbSocketList_AutoClear.Text" xml:space="preserve">
+  <data name="cbPacketConfig.List_AutoClear.Text" xml:space="preserve">
     <value>Auto Clear</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="cbPacketConfig.List_AutoRoll.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 25</value>
   </data>
-  <data name="cbSocketList_AutoRoll.Text" xml:space="preserve">
+  <data name="cbPacketConfig.List_AutoRoll.Text" xml:space="preserve">
     <value>Auto Roll</value>
   </data>
-  <data name="tlpListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="tlpListSet_PacketConfig.List.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 17</value>
   </data>
-  <data name="tlpListSet_SocketList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tlpListSet_PacketConfig.List.Size" type="System.Drawing.Size, System.Drawing">
     <value>373, 73</value>
   </data>
-  <data name="gbListSet_SocketList.Text" xml:space="preserve">
+  <data name="gbListSet_PacketConfig.List.Text" xml:space="preserve">
     <value>Socket List</value>
   </data>
   <data name="tcSocketInfo_ListSet.Text" xml:space="preserve">

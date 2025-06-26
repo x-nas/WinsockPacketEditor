@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -25,7 +25,7 @@ namespace WPELibrary
 
             if (this.pmrSelect != null)
             {
-                if (this.pmrSelect.ProtocolType_From == Socket_Cache.SocketProxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolType_From == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_From.SelectedIndex = 0;
                 }
@@ -34,11 +34,11 @@ namespace WPELibrary
                 this.nudPort_From.Value = this.pmrSelect.Port_From;
                 this.txtPath_From.Text = this.pmrSelect.Path_From;
 
-                if (this.pmrSelect.ProtocolType_To == Socket_Cache.SocketProxy.MapProtocol.Http)
+                if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
                 {
                     this.cbbProtocol_To.SelectedIndex = 0;
                 }
-                else if (this.pmrSelect.ProtocolType_To == Socket_Cache.SocketProxy.MapProtocol.Https)
+                else if (this.pmrSelect.ProtocolType_To == Operate.ProxyConfig.SocketProxy.MapProtocol.Https)
                 {
                     this.cbbProtocol_To.SelectedIndex = 1;
                 }
@@ -57,24 +57,24 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketProxy.MapProtocol ProtocolType_From_New = new Socket_Cache.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_From_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
                 if (this.cbbProtocol_From.SelectedIndex == 0)
                 {
-                    ProtocolType_From_New = Socket_Cache.SocketProxy.MapProtocol.Http;
+                    ProtocolType_From_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
                 }
                 else
                 {
-                    ProtocolType_From_New = Socket_Cache.SocketProxy.MapProtocol.Http;
+                    ProtocolType_From_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
                 }
 
-                Socket_Cache.SocketProxy.MapProtocol ProtocolType_To_New = new Socket_Cache.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_To_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
                 if (this.cbbProtocol_To.SelectedIndex == 0)
                 {
-                    ProtocolType_To_New = Socket_Cache.SocketProxy.MapProtocol.Http;
+                    ProtocolType_To_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
                 }
                 else if(this.cbbProtocol_To.SelectedIndex == 1)
                 {
-                    ProtocolType_To_New = Socket_Cache.SocketProxy.MapProtocol.Https;
+                    ProtocolType_To_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Https;
                 }
 
                 string Host_From_New = this.txtHost_From.Text.Trim();
@@ -94,7 +94,7 @@ namespace WPELibrary
 
                 if (this.pmrSelect == null)
                 {
-                    Socket_Cache.ProxyMapping.AddMapRemote(
+                    Operate.ProxyConfig.ProxyMapping.AddMapRemote(
                         false, 
                         ProtocolType_From_New, 
                         Host_From_New, 
@@ -107,7 +107,7 @@ namespace WPELibrary
                 }
                 else
                 {
-                    Socket_Cache.ProxyMapping.UpdateMapRemote(
+                    Operate.ProxyConfig.ProxyMapping.UpdateMapRemote(
                         this.pmrSelect, 
                         ProtocolType_From_New, 
                         Host_From_New, 
@@ -123,7 +123,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

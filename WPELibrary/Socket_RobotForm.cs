@@ -3,7 +3,7 @@ using System.Data;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -33,7 +33,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -59,7 +59,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -89,7 +89,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -106,7 +106,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -116,9 +116,9 @@ namespace WPELibrary
             {
                 if (e.ColumnIndex == dgvRobotInstruction.Columns["cRobotInstruction_Type"].Index)
                 {
-                    Socket_Cache.Robot.InstructionType instructionType = (Socket_Cache.Robot.InstructionType)dgvRobotInstruction.Rows[e.RowIndex].Cells["cRobotInstruction_Type"].Value;
-                    e.Value = Socket_Cache.Robot.GetName_ByInstructionType(instructionType);
-                    e.CellStyle.ForeColor = Socket_Cache.Robot.GetColor_ByInstructionType(instructionType);
+                    Operate.RobotConfig.Robot.InstructionType instructionType = (Operate.RobotConfig.Robot.InstructionType)dgvRobotInstruction.Rows[e.RowIndex].Cells["cRobotInstruction_Type"].Value;
+                    e.Value = Operate.RobotConfig.Robot.GetName_ByInstructionType(instructionType);
+                    e.CellStyle.ForeColor = Operate.RobotConfig.Robot.GetColor_ByInstructionType(instructionType);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvRobotInstruction.Columns["cRobotInstruction_ID"].Index)
@@ -130,14 +130,14 @@ namespace WPELibrary
                 else if (e.ColumnIndex == dgvRobotInstruction.Columns["cRobotInstruction_Content"].Index)
                 {
                     string sContent = dgvRobotInstruction.Rows[e.RowIndex].Cells["cRobotInstruction_Content"].Value.ToString();
-                    Socket_Cache.Robot.InstructionType instructionType = (Socket_Cache.Robot.InstructionType)dgvRobotInstruction.Rows[e.RowIndex].Cells["cRobotInstruction_Type"].Value;
-                    e.Value = Socket_Cache.Robot.GetContentString_ByInstructionType(instructionType, sContent);                    
+                    Operate.RobotConfig.Robot.InstructionType instructionType = (Operate.RobotConfig.Robot.InstructionType)dgvRobotInstruction.Rows[e.RowIndex].Cells["cRobotInstruction_Type"].Value;
+                    e.Value = Operate.RobotConfig.Robot.GetContentString_ByInstructionType(instructionType, sContent);                    
                     e.FormattingApplied = true;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -159,7 +159,7 @@ namespace WPELibrary
 
                 if (this.dtRobotInstruction.Rows.Count > 0)
                 {
-                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
+                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
 
                     if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
                     {
@@ -170,13 +170,13 @@ namespace WPELibrary
                     }
                 }
 
-                Socket_Cache.Robot.UpdateRobot(sriSelect, RName_New, this.dtRobotInstruction);
+                Operate.RobotConfig.Robot.UpdateRobot(sriSelect, RName_New, this.dtRobotInstruction);
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -199,7 +199,7 @@ namespace WPELibrary
             {
                 if (this.dtRobotInstruction.Rows.Count > 0)
                 {
-                    int iReturn = Socket_Cache.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
+                    int iReturn = Operate.RobotConfig.Robot.CheckRobotInstruction(this.dtRobotInstruction, false);
 
                     if (iReturn > -1 && iReturn < dgvRobotInstruction.Rows.Count)
                     {
@@ -227,7 +227,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -262,7 +262,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -282,7 +282,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -299,7 +299,7 @@ namespace WPELibrary
 
         #region//指令集的列表操作
 
-        public int UpdateInstruction_ByListAction(Socket_Cache.System.ListAction listAction, int InstructionIndex)
+        public int UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction listAction, int InstructionIndex)
         {
             int iReturn = -1;
 
@@ -311,7 +311,7 @@ namespace WPELibrary
 
                 switch (listAction)
                 {
-                    case Socket_Cache.System.ListAction.Top:
+                    case Operate.SystemConfig.ListAction.Top:
 
                         if (InstructionIndex > 0)
                         {
@@ -322,7 +322,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.System.ListAction.Up:
+                    case Operate.SystemConfig.ListAction.Up:
 
                         if (InstructionIndex > 0)
                         {
@@ -333,7 +333,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.System.ListAction.Down:
+                    case Operate.SystemConfig.ListAction.Down:
 
                         if (InstructionIndex < iInstructionCount - 1)
                         {
@@ -344,7 +344,7 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.System.ListAction.Bottom:
+                    case Operate.SystemConfig.ListAction.Bottom:
 
                         if (InstructionIndex < iInstructionCount - 1)
                         {
@@ -355,13 +355,13 @@ namespace WPELibrary
 
                         break;
 
-                    case Socket_Cache.System.ListAction.Delete:
+                    case Operate.SystemConfig.ListAction.Delete:
 
                         this.dtRobotInstruction.Rows.RemoveAt(InstructionIndex);                        
 
                         break;
 
-                    case Socket_Cache.System.ListAction.CleanUp:
+                    case Operate.SystemConfig.ListAction.CleanUp:
 
                         this.dtRobotInstruction.Clear();
 
@@ -370,7 +370,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return iReturn;
@@ -397,27 +397,27 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsRobotInstruction_Top":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Top, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Top, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Up":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Up, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Up, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Down":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Down, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Down, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Bottom":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Bottom, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Bottom, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_Delete":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.Delete, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.Delete, iInstructionIndex);
                                 break;
 
                             case "cmsRobotInstruction_CleanUp":
-                                iIndex = this.UpdateInstruction_ByListAction(Socket_Cache.System.ListAction.CleanUp, iInstructionIndex);
+                                iIndex = this.UpdateInstruction_ByListAction(Operate.SystemConfig.ListAction.CleanUp, iInstructionIndex);
                                 break;
                         }
 
@@ -432,7 +432,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -440,7 +440,7 @@ namespace WPELibrary
 
         #region//添加指令
 
-        public void AddInstruction(Socket_Cache.Robot.InstructionType instructionType, string sContent)
+        public void AddInstruction(Operate.RobotConfig.Robot.InstructionType instructionType, string sContent)
         {
             try
             {
@@ -461,7 +461,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -475,16 +475,16 @@ namespace WPELibrary
             {
                 if (this.cbbSend_SendLIst.SelectedItem != null)
                 {
-                    Socket_Cache.SendList.SendListItem item = (Socket_Cache.SendList.SendListItem)this.cbbSend_SendLIst.SelectedItem;              
+                    Operate.SendConfig.SendList.SendListItem item = (Operate.SendConfig.SendList.SendListItem)this.cbbSend_SendLIst.SelectedItem;              
                     Guid SID = item.SID;
                     string sContent = SID.ToString().ToUpper();
 
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.SendSendList, sContent);
+                    this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.SendSendList, sContent);
                 }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }           
         }
 
@@ -496,11 +496,11 @@ namespace WPELibrary
         {
             try
             {
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.SendSocketList, string.Empty);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.SendSocketList, string.Empty);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -515,7 +515,7 @@ namespace WPELibrary
                 string sContent = string.Empty;
                 if (this.rbSet_SystemSocket_SocketList.Checked)
                 {
-                    sContent = "SocketList";
+                    sContent = "PacketConfig.List";
                 }
                 else if (this.rbSet_SystemSocket_Filter.Checked)
                 {
@@ -527,11 +527,11 @@ namespace WPELibrary
                     sContent = "Customize" + "|" + sSocket;
                 }
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.SetSystemSocket, sContent);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.SetSystemSocket, sContent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -567,11 +567,11 @@ namespace WPELibrary
                     sContent = DelayFrom.ToString() + "-" + DelayTo.ToString();
                 }
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Delay, sContent);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.Delay, sContent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -586,11 +586,11 @@ namespace WPELibrary
                 int LoopCNT = ((int)this.nudLoop.Value);
                 string sContent = LoopCNT.ToString();
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopStart, sContent);                
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.LoopStart, sContent);                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -598,11 +598,11 @@ namespace WPELibrary
         {
             try
             {
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.LoopEnd, string.Empty);                    
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.LoopEnd, string.Empty);                    
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -618,30 +618,30 @@ namespace WPELibrary
 
                 if (!string.IsNullOrEmpty(KeyCode))
                 {
-                    Socket_Cache.Robot.KeyBoardType kbType = new Socket_Cache.Robot.KeyBoardType();
+                    Operate.RobotConfig.Robot.KeyBoardType kbType = new Operate.RobotConfig.Robot.KeyBoardType();
 
                     switch (this.cbbKeyBoard_KeyType.SelectedIndex)
                     {
                         case 0:
-                            kbType = Socket_Cache.Robot.KeyBoardType.Press;
+                            kbType = Operate.RobotConfig.Robot.KeyBoardType.Press;
                             break;
 
                         case 1:
-                            kbType = Socket_Cache.Robot.KeyBoardType.Down;
+                            kbType = Operate.RobotConfig.Robot.KeyBoardType.Down;
                             break;
 
                         case 2:
-                            kbType = Socket_Cache.Robot.KeyBoardType.Up;
+                            kbType = Operate.RobotConfig.Robot.KeyBoardType.Up;
                             break;
                     }
 
                     string sContent = kbType + "|" + KeyCode;
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                    this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.KeyBoard, sContent);
                 }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -656,7 +656,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -672,15 +672,15 @@ namespace WPELibrary
 
                 if (!string.IsNullOrEmpty(KeyCode))
                 {
-                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Combine;
+                    Operate.RobotConfig.Robot.KeyBoardType kbType = Operate.RobotConfig.Robot.KeyBoardType.Combine;
                     string sContent = kbType + "|" + KeyCode;
 
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                    this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.KeyBoard, sContent);
                 }                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -739,7 +739,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -754,7 +754,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -770,15 +770,15 @@ namespace WPELibrary
 
                 if (!string.IsNullOrEmpty(KeyCode))
                 {
-                    Socket_Cache.Robot.KeyBoardType kbType = Socket_Cache.Robot.KeyBoardType.Text;
+                    Operate.RobotConfig.Robot.KeyBoardType kbType = Operate.RobotConfig.Robot.KeyBoardType.Text;
                     string sContent = kbType + "|" + KeyCode;
 
-                    this.AddInstruction(Socket_Cache.Robot.InstructionType.KeyBoard, sContent);
+                    this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.KeyBoard, sContent);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -790,48 +790,48 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
+                Operate.RobotConfig.Robot.MouseType mType = new Operate.RobotConfig.Robot.MouseType();
                 switch (this.cbbMouse.SelectedIndex)
                 { 
                     case 0:
-                        mType = Socket_Cache.Robot.MouseType.LeftClick;
+                        mType = Operate.RobotConfig.Robot.MouseType.LeftClick;
                         break;
 
                     case 1:
-                        mType = Socket_Cache.Robot.MouseType.RightClick;
+                        mType = Operate.RobotConfig.Robot.MouseType.RightClick;
                         break;
 
                     case 2:
-                        mType = Socket_Cache.Robot.MouseType.LeftDBClick;
+                        mType = Operate.RobotConfig.Robot.MouseType.LeftDBClick;
                         break;
 
                     case 3:
-                        mType = Socket_Cache.Robot.MouseType.RightDBClick;
+                        mType = Operate.RobotConfig.Robot.MouseType.RightDBClick;
                         break;
 
                     case 4:
-                        mType = Socket_Cache.Robot.MouseType.LeftDown;
+                        mType = Operate.RobotConfig.Robot.MouseType.LeftDown;
                         break;
 
                     case 5:
-                        mType = Socket_Cache.Robot.MouseType.LeftUp;
+                        mType = Operate.RobotConfig.Robot.MouseType.LeftUp;
                         break;
 
                     case 6:
-                        mType = Socket_Cache.Robot.MouseType.RightDown;
+                        mType = Operate.RobotConfig.Robot.MouseType.RightDown;
                         break;
 
                     case 7:
-                        mType = Socket_Cache.Robot.MouseType.RightUp;
+                        mType = Operate.RobotConfig.Robot.MouseType.RightUp;
                         break;
                 }
                 
                 string sContent = mType + "|" + string.Empty;
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.Mouse, sContent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -845,25 +845,25 @@ namespace WPELibrary
             {
                 int MouseWheel_Distance = ((int)this.nudMouseWheel_Distance.Value);             
 
-                Socket_Cache.Robot.MouseType mType = new Socket_Cache.Robot.MouseType();
+                Operate.RobotConfig.Robot.MouseType mType = new Operate.RobotConfig.Robot.MouseType();
                 switch (this.cbbMouseWheel_Direction.SelectedIndex)
                 {
                     case 0:
-                        mType = Socket_Cache.Robot.MouseType.WheelUp;
+                        mType = Operate.RobotConfig.Robot.MouseType.WheelUp;
                         break;
 
                     case 1:
-                        mType = Socket_Cache.Robot.MouseType.WheelDown;
+                        mType = Operate.RobotConfig.Robot.MouseType.WheelDown;
                         break;              
                 }
 
                 string sContent = mType + "|" + MouseWheel_Distance;
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.Mouse, sContent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -878,23 +878,23 @@ namespace WPELibrary
                 int MouseMove_X = ((int)this.nudMouseMove_X.Value);
                 int MouseMove_Y = ((int)this.nudMouseMove_Y.Value);
 
-                Socket_Cache.Robot.MouseType mType =new Socket_Cache.Robot.MouseType();
+                Operate.RobotConfig.Robot.MouseType mType =new Operate.RobotConfig.Robot.MouseType();
                 if (this.rbMoveTo.Checked)
                 {
-                    mType = Socket_Cache.Robot.MouseType.MoveTo;
+                    mType = Operate.RobotConfig.Robot.MouseType.MoveTo;
                 }
                 else
                 {
-                    mType = Socket_Cache.Robot.MouseType.MoveBy;
+                    mType = Operate.RobotConfig.Robot.MouseType.MoveBy;
                 }                
 
                 string sContent = mType + "|" + MouseMove_X + ", " + MouseMove_Y;
 
-                this.AddInstruction(Socket_Cache.Robot.InstructionType.Mouse, sContent);
+                this.AddInstruction(Operate.RobotConfig.Robot.InstructionType.Mouse, sContent);
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

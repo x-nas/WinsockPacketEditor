@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -24,7 +24,7 @@ namespace WPELibrary
 
             if (this.pmlSelect != null)
             {
-                if (this.pmlSelect.ProtocolType == Socket_Cache.SocketProxy.MapProtocol.Http)
+                if (this.pmlSelect.ProtocolType == Operate.ProxyConfig.SocketProxy.MapProtocol.Http)
                 {
                     this.cbbProtocol.SelectedIndex = 0;
                 }
@@ -44,14 +44,14 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketProxy.MapProtocol ProtocolType_New = new Socket_Cache.SocketProxy.MapProtocol();
+                Operate.ProxyConfig.SocketProxy.MapProtocol ProtocolType_New = new Operate.ProxyConfig.SocketProxy.MapProtocol();
                 if (this.cbbProtocol.SelectedIndex == 0)
                 {
-                    ProtocolType_New = Socket_Cache.SocketProxy.MapProtocol.Http;
+                    ProtocolType_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
                 }
                 else
                 {
-                    ProtocolType_New = Socket_Cache.SocketProxy.MapProtocol.Http;
+                    ProtocolType_New = Operate.ProxyConfig.SocketProxy.MapProtocol.Http;
                 }
 
                 string Host_New = this.txtHost.Text.Trim();
@@ -67,18 +67,18 @@ namespace WPELibrary
 
                 if (this.pmlSelect == null)
                 {
-                    Socket_Cache.ProxyMapping.AddMapLocal(false, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
+                    Operate.ProxyConfig.ProxyMapping.AddMapLocal(false, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
                 }
                 else
                 {
-                    Socket_Cache.ProxyMapping.UpdateMapLocal(this.pmlSelect, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
+                    Operate.ProxyConfig.ProxyMapping.UpdateMapLocal(this.pmlSelect, ProtocolType_New, Host_New, port_New, RemotePath_New, LocalPath_New);
                 }
 
                 this.Close();                
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -110,7 +110,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

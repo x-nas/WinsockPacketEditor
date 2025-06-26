@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -52,18 +52,18 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
         private void Proxy_AccountListForm_Load(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow_ProxyAccount = true;            
+            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAccount = true;            
         }
 
         private void Proxy_AccountListForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Socket_Cache.ProxyAccount.IsShow_ProxyAccount = false;
+            Operate.ProxyConfig.ProxyAccount.IsShow_ProxyAccount = false;
         }
 
         #endregion
@@ -93,7 +93,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -104,65 +104,65 @@ namespace WPELibrary
                 switch (SearchType)
                 {
                     case "UserName":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByUserName(this.Search_UserName);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByUserName(this.Search_UserName);
                         break;
 
                     case "UserName_All":
-                        e.Result = Socket_Cache.ProxyAccount.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.ProxyAccount.lstProxyAccount;
                         break;
 
                     case "IsEnable_True":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsEnable(true);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsEnable(true);
                         break;
 
                     case "IsEnable_False":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsEnable(false);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsEnable(false);
                         break;
 
                     case "IsOnLine_True":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsOnLine(true);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsOnLine(true);
                         break;
 
                     case "IsOnLine_False":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsOnLine(false);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsOnLine(false);
                         break;
 
                     case "IsExpiry_True":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsExpiry(true);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsExpiry(true);
                         break;
 
                     case "IsExpiry_False":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsExpiry(false);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsExpiry(false);
                         break;                        
 
                     case "IsLimitLinks_True":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitLinks(true);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitLinks(true);
                         break;
 
                     case "IsLimitLinks_False":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitLinks(false);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitLinks(false);
                         break;
 
                     case "IsLimitDevices_True":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitDevices(true);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitDevices(true);
                         break;
 
                     case "IsLimitDevices_False":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByIsLimitDevices(false);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByIsLimitDevices(false);
                         break;
 
                     case "Expire_Time":
-                        e.Result = Socket_Cache.ProxyAccount.GetProxyAccount_ByExpireTime(this.Search_ExpireFrom, this.Search_ExpireTo);
+                        e.Result = Operate.ProxyConfig.ProxyAccount.GetProxyAccount_ByExpireTime(this.Search_ExpireFrom, this.Search_ExpireTo);
                         break;
 
                     default:
-                        e.Result = Socket_Cache.ProxyAccount.lstProxyAccount;
+                        e.Result = Operate.ProxyConfig.ProxyAccount.lstProxyAccount;
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -177,7 +177,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -227,7 +227,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -324,7 +324,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -359,7 +359,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }        
 
@@ -377,14 +377,14 @@ namespace WPELibrary
 
                     if (gList.Count > 0)
                     {
-                        Socket_Cache.ProxyAccount.DeleteProxyAccount_Dialog(gList);
+                        Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_Dialog(gList);
                         this.LoadData(string.Empty);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -409,7 +409,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -425,12 +425,12 @@ namespace WPELibrary
 
                 if (gList.Count > 0)
                 {
-                    Socket_Cache.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gList);
+                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gList);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -440,7 +440,7 @@ namespace WPELibrary
 
         private void bImport_Click(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyAccount.LoadProxyAccountList_Dialog();
+            Operate.ProxyConfig.ProxyAccount.LoadProxyAccountList_Dialog();
             this.LoadData(string.Empty);
         }
 
@@ -572,7 +572,7 @@ namespace WPELibrary
                                         gExport.Add(pai.AID);
                                     }
 
-                                    Socket_Cache.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gExport);
+                                    Operate.ProxyConfig.ProxyAccount.SaveProxyAccountList_Dialog(string.Empty, gExport);
 
                                     break;
 
@@ -587,7 +587,7 @@ namespace WPELibrary
 
                                     if (gClear.Count > 0)
                                     {
-                                        Socket_Cache.ProxyAccount.DeleteProxyAccount_Dialog(gClear);
+                                        Operate.ProxyConfig.ProxyAccount.DeleteProxyAccount_Dialog(gClear);
                                         this.LoadData(string.Empty);
                                     }                                    
 
@@ -650,7 +650,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

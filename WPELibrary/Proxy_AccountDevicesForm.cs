@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -38,7 +38,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -55,14 +55,14 @@ namespace WPELibrary
                     bool IsLimitDevices = this.cbIsLimitDevices.Checked;
                     int LimitDevices = ((int)this.nudLimitDevices.Value);
                  
-                    Socket_Cache.ProxyAccount.ProxyAccountDevices_Dialog(this.gList, IsLimitDevices, LimitDevices);
+                    Operate.ProxyConfig.ProxyAccount.ProxyAccountDevices_Dialog(this.gList, IsLimitDevices, LimitDevices);
                 }
 
                 this.Close();
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

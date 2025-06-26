@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -20,12 +20,12 @@ namespace WPELibrary
 
         private void Proxy_MapRemoteListForm_Load(object sender, EventArgs e)
         {
-            Socket_Cache.ProxyMapping.IsShow_MapRemote = true;
+            Operate.ProxyConfig.ProxyMapping.IsShow_MapRemote = true;
         }
 
         private void Proxy_MapRemoteListForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Socket_Cache.ProxyMapping.IsShow_MapRemote = false;
+            Operate.ProxyConfig.ProxyMapping.IsShow_MapRemote = false;
         }
 
         #endregion
@@ -34,7 +34,7 @@ namespace WPELibrary
 
         private void InitDGV()
         {
-            bindingSource.DataSource = Socket_Cache.ProxyMapping.lstMapRemote;
+            bindingSource.DataSource = Operate.ProxyConfig.ProxyMapping.lstMapRemote;
             dgvMapRemote.AutoGenerateColumns = false;
             dgvMapRemote.DataSource = bindingSource;
             dgvMapRemote.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvMapRemote, true, null);
@@ -75,7 +75,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -84,15 +84,15 @@ namespace WPELibrary
             try
             {
                 int iSelectIndex = this.dgvMapRemote.SelectedRows[0].Index;
-                if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.ProxyMapping.lstMapRemote.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapRemote.Count)
                 {
-                    Socket_Operation.ShowProxyMapRemoteForm(Socket_Cache.ProxyMapping.lstMapRemote[iSelectIndex]);
+                    Socket_Operation.ShowProxyMapRemoteForm(Operate.ProxyConfig.ProxyMapping.lstMapRemote[iSelectIndex]);
                     bindingSource.ResetBindings(false);
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -104,12 +104,12 @@ namespace WPELibrary
                 {
                     bool bCheck = Convert.ToBoolean(dgvMapRemote.Rows[e.RowIndex].Cells[e.ColumnIndex].Value);
                     dgvMapRemote.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = !bCheck;
-                    Socket_Cache.ProxyMapping.lstMapRemote[e.RowIndex].IsEnable = !bCheck;
+                    Operate.ProxyConfig.ProxyMapping.lstMapRemote[e.RowIndex].IsEnable = !bCheck;
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -134,16 +134,16 @@ namespace WPELibrary
                 if (this.dgvMapRemote.Rows.Count > 0 && this.dgvMapRemote.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapRemote.SelectedRows[0].Index;
-                    if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.ProxyMapping.lstMapRemote.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapRemote.Count)
                     {
-                        Socket_Cache.ProxyMapping.DelMapRemote(Socket_Cache.ProxyMapping.lstMapRemote[iSelectIndex]);
+                        Operate.ProxyConfig.ProxyMapping.DelMapRemote(Operate.ProxyConfig.ProxyMapping.lstMapRemote[iSelectIndex]);
                         bindingSource.ResetBindings(false);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -171,9 +171,9 @@ namespace WPELibrary
                 if (this.dgvMapRemote.Rows.Count > 0 && this.dgvMapRemote.SelectedRows.Count > 0)
                 {
                     int iSelectIndex = this.dgvMapRemote.SelectedRows[0].Index;
-                    if (iSelectIndex >= 0 && iSelectIndex < Socket_Cache.ProxyMapping.lstMapRemote.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.ProxyConfig.ProxyMapping.lstMapRemote.Count)
                     {
-                        pmr = Socket_Cache.ProxyMapping.lstMapRemote[iSelectIndex];
+                        pmr = Operate.ProxyConfig.ProxyMapping.lstMapRemote[iSelectIndex];
                     }
                 }
 
@@ -183,7 +183,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Top, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Top, pmr);
                         }
 
                         break;
@@ -192,7 +192,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Up, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Up, pmr);
                         }
 
                         break;
@@ -201,7 +201,7 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Down, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Down, pmr);
                         }
 
                         break;
@@ -210,14 +210,14 @@ namespace WPELibrary
 
                         if (pmr != null)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Bottom, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Bottom, pmr);
                         }
 
                         break;
 
                     case "cmsMapRemote_Import":
 
-                        Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Import, pmr);
+                        Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Import, pmr);
                         bindingSource.ResetBindings(false);
 
                         break;
@@ -226,7 +226,7 @@ namespace WPELibrary
 
                         if (this.dgvMapRemote.Rows.Count > 0)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.Export, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.Export, pmr);
                         }
 
                         break;
@@ -235,7 +235,7 @@ namespace WPELibrary
 
                         if (this.dgvMapRemote.Rows.Count > 0)
                         {
-                            Socket_Cache.ProxyMapping.UpdateMapRemote_ByListAction(Socket_Cache.System.ListAction.CleanUp, pmr);
+                            Operate.ProxyConfig.ProxyMapping.UpdateMapRemote_ByListAction(Operate.SystemConfig.ListAction.CleanUp, pmr);
                             bindingSource.ResetBindings(false);
                         }
 
@@ -244,7 +244,7 @@ namespace WPELibrary
 
                 this.dgvMapRemote.ClearSelection();
 
-                int iIndex = Socket_Cache.ProxyMapping.lstMapRemote.IndexOf(pmr);
+                int iIndex = Operate.ProxyConfig.ProxyMapping.lstMapRemote.IndexOf(pmr);
                 if (iIndex > -1 && iIndex < this.dgvMapRemote.RowCount)
                 {
                     this.dgvMapRemote.Rows[iIndex].Selected = true;
@@ -255,7 +255,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog_Proxy(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 

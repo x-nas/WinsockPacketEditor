@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
-using WPELibrary.Lib;
+using WPE.Lib;
 
 namespace WPELibrary
 {
@@ -23,23 +23,23 @@ namespace WPELibrary
         {
             try
             {
-                Socket_Cache.SocketList.DoSearch = false;                
+                Operate.PacketConfig.List.DoSearch = false;                
 
-                if (Socket_Cache.SocketList.FindOptions.Type == FindType.Text)
+                if (Operate.PacketConfig.List.FindOptions.Type == FindType.Text)
                 { 
                     this.rbString.Checked = true;                    
                 }
-                else if(Socket_Cache.SocketList.FindOptions.Type == FindType.Hex)
+                else if(Operate.PacketConfig.List.FindOptions.Type == FindType.Hex)
                 {                    
                     this.rbHex.Checked = true;                    
                 }
 
-                this.txtFind.Text = Socket_Cache.SocketList.FindOptions.Text;
-                //this.chkMatchCase.Checked = Socket_Cache.SocketList.FindOptions.MatchCase;              
+                this.txtFind.Text = Operate.PacketConfig.List.FindOptions.Text;
+                //this.chkMatchCase.Checked = Operate.PacketConfig.List.FindOptions.MatchCase;              
 
-                if (Socket_Cache.SocketList.FindOptions.Hex != null && Socket_Cache.SocketList.FindOptions.Hex.Length > 0)
+                if (Operate.PacketConfig.List.FindOptions.Hex != null && Operate.PacketConfig.List.FindOptions.Hex.Length > 0)
                 {
-                    hexFind.ByteProvider = new DynamicByteProvider(Socket_Cache.SocketList.FindOptions.Hex);                   
+                    hexFind.ByteProvider = new DynamicByteProvider(Operate.PacketConfig.List.FindOptions.Hex);                   
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -75,7 +75,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }
 
@@ -93,25 +93,25 @@ namespace WPELibrary
                 {
                     if (rbString.Checked)
                     {
-                        Socket_Cache.SocketList.FindOptions.Type = FindType.Text;
+                        Operate.PacketConfig.List.FindOptions.Type = FindType.Text;
                     }
                     else
                     {
-                        Socket_Cache.SocketList.FindOptions.Type = FindType.Hex;
+                        Operate.PacketConfig.List.FindOptions.Type = FindType.Hex;
                     }
 
-                    Socket_Cache.SocketList.FindOptions.Text = txtFind.Text;
-                    //Socket_Cache.SocketList.FindOptions.MatchCase = chkMatchCase.Checked;
+                    Operate.PacketConfig.List.FindOptions.Text = txtFind.Text;
+                    //Operate.PacketConfig.List.FindOptions.MatchCase = chkMatchCase.Checked;
 
                     DynamicByteProvider dbp = this.hexFind.ByteProvider as DynamicByteProvider;
 
                     if (dbp != null && dbp.Bytes.Count > 0)
                     {
-                        Socket_Cache.SocketList.FindOptions.Hex = dbp.Bytes.ToArray();
+                        Operate.PacketConfig.List.FindOptions.Hex = dbp.Bytes.ToArray();
                     }
 
-                    Socket_Cache.SocketList.FindOptions.IsValid = true;
-                    Socket_Cache.SocketList.DoSearch = true;
+                    Operate.PacketConfig.List.FindOptions.IsValid = true;
+                    Operate.PacketConfig.List.DoSearch = true;
                     this.Close();
                 }
                 else
@@ -121,7 +121,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }            
         }       
 
@@ -137,7 +137,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
@@ -176,7 +176,7 @@ namespace WPELibrary
             }
             catch (Exception ex)
             {
-                Socket_Operation.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
         }
 
