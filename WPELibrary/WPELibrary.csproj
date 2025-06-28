@@ -237,13 +237,13 @@
     <Compile Include="Socket_FindForm.Designer.cs">
       <DependentUpon>Socket_FindForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Socket_Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Socket_Form.Designer.cs">
       <DependentUpon>Socket_Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Socket_RobotForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -440,16 +440,16 @@
     <EmbeddedResource Include="Socket_FindForm.resx">
       <DependentUpon>Socket_FindForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.en-US.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_Form.resx">
       <DependentUpon>Socket_Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Socket_RobotForm.en-US.resx">
       <DependentUpon>Socket_RobotForm.cs</DependentUpon>

@@ -38,15 +38,12 @@
             this.bRefresh = new AntdUI.Button();
             this.bInject = new AntdUI.Button();
             this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
-            this.pSearchProcess = new AntdUI.Panel();
-            this.bSearch = new AntdUI.Button();
-            this.txtSearchProcess = new AntdUI.Input();
             this.txtSelectProcess = new AntdUI.Input();
+            this.txtSearchProcess = new AntdUI.Input();
             this.tlpSelectProcess.SuspendLayout();
             this.pProcessList.SuspendLayout();
             this.tlpButton.SuspendLayout();
             this.tlpSearch.SuspendLayout();
-            this.pSearchProcess.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -182,65 +179,46 @@
             this.tlpSearch.ColumnCount = 2;
             this.tlpSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpSearch.Controls.Add(this.pSearchProcess, 1, 1);
+            this.tlpSearch.Controls.Add(this.txtSearchProcess, 1, 1);
             this.tlpSearch.Controls.Add(this.txtSelectProcess, 0, 1);
             this.tlpSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSearch.Location = new System.Drawing.Point(0, 0);
             this.tlpSearch.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSearch.Name = "tlpSearch";
-            this.tlpSearch.RowCount = 2;
-            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSearch.RowCount = 3;
+            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlpSearch.Size = new System.Drawing.Size(1100, 60);
             this.tlpSearch.TabIndex = 3;
-            // 
-            // pSearchProcess
-            // 
-            this.pSearchProcess.Controls.Add(this.bSearch);
-            this.pSearchProcess.Controls.Add(this.txtSearchProcess);
-            this.pSearchProcess.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSearchProcess.Location = new System.Drawing.Point(553, 13);
-            this.pSearchProcess.Name = "pSearchProcess";
-            this.pSearchProcess.Size = new System.Drawing.Size(544, 44);
-            this.pSearchProcess.TabIndex = 1;
-            this.pSearchProcess.Text = "panel1";
-            // 
-            // bSearch
-            // 
-            this.bSearch.Dock = System.Windows.Forms.DockStyle.Right;
-            this.bSearch.IconSvg = "SearchOutlined";
-            this.bSearch.JoinMode = AntdUI.TJoinMode.Right;
-            this.bSearch.Location = new System.Drawing.Point(474, 0);
-            this.bSearch.Name = "bSearch";
-            this.bSearch.Size = new System.Drawing.Size(70, 44);
-            this.bSearch.TabIndex = 3;
-            this.bSearch.Type = AntdUI.TTypeMini.Primary;
-            // 
-            // txtSearchProcess
-            // 
-            this.txtSearchProcess.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSearchProcess.JoinMode = AntdUI.TJoinMode.Left;
-            this.txtSearchProcess.LocalizationPlaceholderText = "SelectProcessForm.{id}";
-            this.txtSearchProcess.Location = new System.Drawing.Point(0, 0);
-            this.txtSearchProcess.Name = "txtSearchProcess";
-            this.txtSearchProcess.PlaceholderText = "筛选进程列表";
-            this.txtSearchProcess.Size = new System.Drawing.Size(544, 44);
-            this.txtSearchProcess.TabIndex = 2;
-            this.txtSearchProcess.TextChanged += new System.EventHandler(this.txtSearchProcess_TextChanged);
             // 
             // txtSelectProcess
             // 
             this.txtSelectProcess.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSelectProcess.LocalizationPlaceholderText = "SelectProcessForm.{id}";
-            this.txtSelectProcess.Location = new System.Drawing.Point(3, 13);
+            this.txtSelectProcess.Location = new System.Drawing.Point(3, 8);
             this.txtSelectProcess.Name = "txtSelectProcess";
             this.txtSelectProcess.PlaceholderText = "请选择一个进程或程序";
             this.txtSelectProcess.ReadOnly = true;
+            this.txtSelectProcess.Round = true;
             this.txtSelectProcess.Size = new System.Drawing.Size(544, 44);
             this.txtSelectProcess.Status = AntdUI.TType.Error;
             this.txtSelectProcess.TabIndex = 2;
+            this.txtSelectProcess.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtSelectProcess.TextChanged += new System.EventHandler(this.txtSelectProcess_TextChanged);
+            // 
+            // txtSearchProcess
+            // 
+            this.txtSearchProcess.AllowClear = true;
+            this.txtSearchProcess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSearchProcess.LocalizationPlaceholderText = "SelectProcessForm.{id}";
+            this.txtSearchProcess.Location = new System.Drawing.Point(553, 8);
+            this.txtSearchProcess.Name = "txtSearchProcess";
+            this.txtSearchProcess.PlaceholderText = "筛选进程列表";
+            this.txtSearchProcess.PrefixSvg = "SearchOutlined";
+            this.txtSearchProcess.Size = new System.Drawing.Size(544, 44);
+            this.txtSearchProcess.TabIndex = 3;
+            this.txtSearchProcess.TextChanged += new System.EventHandler(this.txtSearchProcess_TextChanged);
             // 
             // SelectProcessForm
             // 
@@ -264,7 +242,6 @@
             this.pProcessList.ResumeLayout(false);
             this.tlpButton.ResumeLayout(false);
             this.tlpSearch.ResumeLayout(false);
-            this.pSearchProcess.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -280,9 +257,7 @@
         private AntdUI.Button bRefresh;
         private AntdUI.Button bInject;
         private System.Windows.Forms.TableLayoutPanel tlpSearch;
-        private AntdUI.Panel pSearchProcess;
         private AntdUI.Input txtSelectProcess;
-        private AntdUI.Button bSearch;
         private AntdUI.Input txtSearchProcess;
     }
 }

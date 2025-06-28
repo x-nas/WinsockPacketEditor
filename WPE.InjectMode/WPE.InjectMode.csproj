@@ -35,6 +35,9 @@
     <Reference Include="AntdUI, Version=2.0.6.0, Culture=neutral, PublicKeyToken=0e24e5118ea3d6af, processorArchitecture=MSIL">
       <HintPath>..\packages\AntdUI.2.0.6\lib\net48\AntdUI.dll</HintPath>
     </Reference>
+    <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
+    </Reference>
     <Reference Include="EasyHook, Version=2.7.7097.0, Culture=neutral, PublicKeyToken=4b580fca19d0b0c5, processorArchitecture=MSIL">
       <HintPath>..\packages\EasyHook.2.7.7097\lib\net40\EasyHook.dll</HintPath>
     </Reference>
@@ -52,6 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackUpSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackUpSettingsForm.Designer.cs">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FilterSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,11 +74,23 @@
     <Compile Include="HookSettingsForm.Designer.cs">
       <DependentUpon>HookSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="HotKeyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HotKeyForm.Designer.cs">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InjectModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="InjectModeForm.Designer.cs">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ListSettingsForm.Designer.cs">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -77,8 +98,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SystemSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemSettingsForm.Designer.cs">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -109,18 +137,30 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BackUpSettingsForm.resx">
+      <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FilterSettingsForm.resx">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="HookSettingsForm.resx">
       <DependentUpon>HookSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="HotKeyForm.resx">
+      <DependentUpon>HotKeyForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ListSettingsForm.resx">
+      <DependentUpon>ListSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemSettingsForm.resx">
+      <DependentUpon>SystemSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

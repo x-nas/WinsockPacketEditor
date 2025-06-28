@@ -29,7 +29,6 @@ namespace WPELibrary
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Socket_Form));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -96,7 +95,7 @@ namespace WPELibrary
             this.cTo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLen = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSocketList = new System.Windows.Forms.ContextMenuStrip();
             this.cmsSocketList_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsSocketList_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSocketList_SendList = new System.Windows.Forms.ToolStripMenuItem();
@@ -185,19 +184,7 @@ namespace WPELibrary
             this.lHotKey7 = new System.Windows.Forms.Label();
             this.lHotKey4 = new System.Windows.Forms.Label();
             this.lHotKey1 = new System.Windows.Forms.Label();
-            this.txtHotKey3 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey4 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey5 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey6 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey7 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey8 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey9 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey10 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey11 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey12 = new WPE.Lib.Controls.HotkeyTextBox();
             this.bHotKey1 = new System.Windows.Forms.Button();
-            this.txtHotKey1 = new WPE.Lib.Controls.HotkeyTextBox();
-            this.txtHotKey2 = new WPE.Lib.Controls.HotkeyTextBox();
             this.bHotKey2 = new System.Windows.Forms.Button();
             this.bHotKey3 = new System.Windows.Forms.Button();
             this.bHotKey4 = new System.Windows.Forms.Button();
@@ -251,7 +238,7 @@ namespace WPELibrary
             this.tlpPacketData = new System.Windows.Forms.TableLayoutPanel();
             this.tlpHexBox = new System.Windows.Forms.TableLayoutPanel();
             this.hbPacketData = new Be.Windows.Forms.HexBox();
-            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsHexBox = new System.Windows.Forms.ContextMenuStrip();
             this.cmsHexBox_Send = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsHexBox_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsHexBox_SendList = new System.Windows.Forms.ToolStripMenuItem();
@@ -334,7 +321,7 @@ namespace WPELibrary
             this.tlpExtraction = new System.Windows.Forms.TableLayoutPanel();
             this.pExtraction = new System.Windows.Forms.Panel();
             this.rtbExtraction = new System.Windows.Forms.RichTextBox();
-            this.cmsExtraction = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsExtraction = new System.Windows.Forms.ContextMenuStrip();
             this.cmsExtraction_Export = new System.Windows.Forms.ToolStripMenuItem();
             this.tlpExtraction_Button = new System.Windows.Forms.TableLayoutPanel();
             this.bExtraction = new System.Windows.Forms.Button();
@@ -345,7 +332,7 @@ namespace WPELibrary
             this.cLogTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cFuncName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cLogContent = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsLogList = new System.Windows.Forms.ContextMenuStrip();
             this.cmsLogList_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsLogList_ToExcel = new System.Windows.Forms.ToolStripMenuItem();
@@ -356,7 +343,7 @@ namespace WPELibrary
             this.cIsCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cFilterICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cFName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsFilterList = new System.Windows.Forms.ContextMenuStrip();
             this.cmsFilterList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsFilterList_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsFilterList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -382,7 +369,7 @@ namespace WPELibrary
             this.cIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cICO = new System.Windows.Forms.DataGridViewImageColumn();
             this.cName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsSendList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsSendList = new System.Windows.Forms.ContextMenuStrip();
             this.cmsSendList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsSendList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -408,7 +395,7 @@ namespace WPELibrary
             this.cRIsEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cImg = new System.Windows.Forms.DataGridViewImageColumn();
             this.cRName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cmsRobotList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsRobotList = new System.Windows.Forms.ContextMenuStrip();
             this.cmsRobotList_Top = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRobotList_Split1 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsRobotList_Up = new System.Windows.Forms.ToolStripMenuItem();
@@ -436,9 +423,9 @@ namespace WPELibrary
             this.tsslWinSock = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslSplit3 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsslTotalBytes = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tSocketInfo = new System.Windows.Forms.Timer(this.components);
-            this.niWPE = new System.Windows.Forms.NotifyIcon(this.components);
-            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tSocketInfo = new System.Windows.Forms.Timer();
+            this.niWPE = new System.Windows.Forms.NotifyIcon();
+            this.cmsIcon = new System.Windows.Forms.ContextMenuStrip();
             this.cmsIcon_Show = new System.Windows.Forms.ToolStripMenuItem();
             this.tss17 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_StartHook = new System.Windows.Forms.ToolStripMenuItem();
@@ -447,7 +434,7 @@ namespace WPELibrary
             this.cmsIcon_CleanUp = new System.Windows.Forms.ToolStripMenuItem();
             this.tss19 = new System.Windows.Forms.ToolStripSeparator();
             this.cmsIcon_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tSocketList = new System.Windows.Forms.Timer(this.components);
+            this.tSocketList = new System.Windows.Forms.Timer();
             this.ofdExtraction = new System.Windows.Forms.OpenFileDialog();
             this.sfdExtraction = new System.Windows.Forms.SaveFileDialog();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
@@ -1528,19 +1515,7 @@ namespace WPELibrary
             this.tlpHotKeySet.Controls.Add(this.lHotKey7, 6, 1);
             this.tlpHotKeySet.Controls.Add(this.lHotKey4, 3, 1);
             this.tlpHotKeySet.Controls.Add(this.lHotKey1, 0, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey3, 1, 3);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey4, 4, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey5, 4, 2);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey6, 4, 3);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey7, 7, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey8, 7, 2);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey9, 7, 3);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey10, 10, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey11, 10, 2);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey12, 10, 3);
             this.tlpHotKeySet.Controls.Add(this.bHotKey1, 2, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey1, 1, 1);
-            this.tlpHotKeySet.Controls.Add(this.txtHotKey2, 1, 2);
             this.tlpHotKeySet.Controls.Add(this.bHotKey2, 2, 2);
             this.tlpHotKeySet.Controls.Add(this.bHotKey3, 2, 3);
             this.tlpHotKeySet.Controls.Add(this.bHotKey4, 5, 1);
@@ -1614,109 +1589,13 @@ namespace WPELibrary
             resources.ApplyResources(this.lHotKey1, "lHotKey1");
             this.lHotKey1.Name = "lHotKey1";
             // 
-            // txtHotKey3
-            // 
-            this.txtHotKey3.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey3, "txtHotKey3");
-            this.txtHotKey3.Name = "txtHotKey3";
-            this.txtHotKey3.ReadOnly = true;
-            this.txtHotKey3.ShortcutsEnabled = false;
-            // 
-            // txtHotKey4
-            // 
-            this.txtHotKey4.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey4, "txtHotKey4");
-            this.txtHotKey4.Name = "txtHotKey4";
-            this.txtHotKey4.ReadOnly = true;
-            this.txtHotKey4.ShortcutsEnabled = false;
-            // 
-            // txtHotKey5
-            // 
-            this.txtHotKey5.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey5, "txtHotKey5");
-            this.txtHotKey5.Name = "txtHotKey5";
-            this.txtHotKey5.ReadOnly = true;
-            this.txtHotKey5.ShortcutsEnabled = false;
-            // 
-            // txtHotKey6
-            // 
-            this.txtHotKey6.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey6, "txtHotKey6");
-            this.txtHotKey6.Name = "txtHotKey6";
-            this.txtHotKey6.ReadOnly = true;
-            this.txtHotKey6.ShortcutsEnabled = false;
-            // 
-            // txtHotKey7
-            // 
-            this.txtHotKey7.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey7, "txtHotKey7");
-            this.txtHotKey7.Name = "txtHotKey7";
-            this.txtHotKey7.ReadOnly = true;
-            this.txtHotKey7.ShortcutsEnabled = false;
-            // 
-            // txtHotKey8
-            // 
-            this.txtHotKey8.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey8, "txtHotKey8");
-            this.txtHotKey8.Name = "txtHotKey8";
-            this.txtHotKey8.ReadOnly = true;
-            this.txtHotKey8.ShortcutsEnabled = false;
-            // 
-            // txtHotKey9
-            // 
-            this.txtHotKey9.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey9, "txtHotKey9");
-            this.txtHotKey9.Name = "txtHotKey9";
-            this.txtHotKey9.ReadOnly = true;
-            this.txtHotKey9.ShortcutsEnabled = false;
-            // 
-            // txtHotKey10
-            // 
-            this.txtHotKey10.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey10, "txtHotKey10");
-            this.txtHotKey10.Name = "txtHotKey10";
-            this.txtHotKey10.ReadOnly = true;
-            this.txtHotKey10.ShortcutsEnabled = false;
-            // 
-            // txtHotKey11
-            // 
-            this.txtHotKey11.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey11, "txtHotKey11");
-            this.txtHotKey11.Name = "txtHotKey11";
-            this.txtHotKey11.ReadOnly = true;
-            this.txtHotKey11.ShortcutsEnabled = false;
-            // 
-            // txtHotKey12
-            // 
-            this.txtHotKey12.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey12, "txtHotKey12");
-            this.txtHotKey12.Name = "txtHotKey12";
-            this.txtHotKey12.ReadOnly = true;
-            this.txtHotKey12.ShortcutsEnabled = false;
-            // 
             // bHotKey1
             // 
             this.bHotKey1.Image = global::WPELibrary.Properties.Resources.Compare;
             resources.ApplyResources(this.bHotKey1, "bHotKey1");
             this.bHotKey1.Name = "bHotKey1";
             this.bHotKey1.UseVisualStyleBackColor = true;
-            this.bHotKey1.Click += new System.EventHandler(this.bHotKey1_Click);
-            // 
-            // txtHotKey1
-            // 
-            this.txtHotKey1.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey1, "txtHotKey1");
-            this.txtHotKey1.Name = "txtHotKey1";
-            this.txtHotKey1.ReadOnly = true;
-            this.txtHotKey1.ShortcutsEnabled = false;
-            // 
-            // txtHotKey2
-            // 
-            this.txtHotKey2.BackColor = System.Drawing.SystemColors.Window;
-            resources.ApplyResources(this.txtHotKey2, "txtHotKey2");
-            this.txtHotKey2.Name = "txtHotKey2";
-            this.txtHotKey2.ReadOnly = true;
-            this.txtHotKey2.ShortcutsEnabled = false;
+         
             // 
             // bHotKey2
             // 
@@ -1724,7 +1603,7 @@ namespace WPELibrary
             resources.ApplyResources(this.bHotKey2, "bHotKey2");
             this.bHotKey2.Name = "bHotKey2";
             this.bHotKey2.UseVisualStyleBackColor = true;
-            this.bHotKey2.Click += new System.EventHandler(this.bHotKey2_Click);
+       
             // 
             // bHotKey3
             // 
@@ -1732,70 +1611,70 @@ namespace WPELibrary
             resources.ApplyResources(this.bHotKey3, "bHotKey3");
             this.bHotKey3.Name = "bHotKey3";
             this.bHotKey3.UseVisualStyleBackColor = true;
-            this.bHotKey3.Click += new System.EventHandler(this.bHotKey3_Click);
+        
             // 
             // bHotKey4
             // 
             resources.ApplyResources(this.bHotKey4, "bHotKey4");
             this.bHotKey4.Name = "bHotKey4";
             this.bHotKey4.UseVisualStyleBackColor = true;
-            this.bHotKey4.Click += new System.EventHandler(this.bHotKey4_Click);
+         
             // 
             // bHotKey5
             // 
             resources.ApplyResources(this.bHotKey5, "bHotKey5");
             this.bHotKey5.Name = "bHotKey5";
             this.bHotKey5.UseVisualStyleBackColor = true;
-            this.bHotKey5.Click += new System.EventHandler(this.bHotKey5_Click);
+       
             // 
             // bHotKey6
             // 
             resources.ApplyResources(this.bHotKey6, "bHotKey6");
             this.bHotKey6.Name = "bHotKey6";
             this.bHotKey6.UseVisualStyleBackColor = true;
-            this.bHotKey6.Click += new System.EventHandler(this.bHotKey6_Click);
+      
             // 
             // bHotKey7
             // 
             resources.ApplyResources(this.bHotKey7, "bHotKey7");
             this.bHotKey7.Name = "bHotKey7";
             this.bHotKey7.UseVisualStyleBackColor = true;
-            this.bHotKey7.Click += new System.EventHandler(this.bHotKey7_Click);
+       
             // 
             // bHotKey8
             // 
             resources.ApplyResources(this.bHotKey8, "bHotKey8");
             this.bHotKey8.Name = "bHotKey8";
             this.bHotKey8.UseVisualStyleBackColor = true;
-            this.bHotKey8.Click += new System.EventHandler(this.bHotKey8_Click);
+       
             // 
             // bHotKey9
             // 
             resources.ApplyResources(this.bHotKey9, "bHotKey9");
             this.bHotKey9.Name = "bHotKey9";
             this.bHotKey9.UseVisualStyleBackColor = true;
-            this.bHotKey9.Click += new System.EventHandler(this.bHotKey9_Click);
+      
             // 
             // bHotKey10
             // 
             resources.ApplyResources(this.bHotKey10, "bHotKey10");
             this.bHotKey10.Name = "bHotKey10";
             this.bHotKey10.UseVisualStyleBackColor = true;
-            this.bHotKey10.Click += new System.EventHandler(this.bHotKey10_Click);
+      
             // 
             // bHotKey11
             // 
             resources.ApplyResources(this.bHotKey11, "bHotKey11");
             this.bHotKey11.Name = "bHotKey11";
             this.bHotKey11.UseVisualStyleBackColor = true;
-            this.bHotKey11.Click += new System.EventHandler(this.bHotKey11_Click);
+         
             // 
             // bHotKey12
             // 
             resources.ApplyResources(this.bHotKey12, "bHotKey12");
             this.bHotKey12.Name = "bHotKey12";
             this.bHotKey12.UseVisualStyleBackColor = true;
-            this.bHotKey12.Click += new System.EventHandler(this.bHotKey12_Click);
+         
             // 
             // tcSocketInfo_SystemSet
             // 
@@ -4319,18 +4198,6 @@ namespace WPELibrary
         private System.Windows.Forms.Label lHotKey5;
         private System.Windows.Forms.Label lHotKey2;
         private System.Windows.Forms.Button bHotKey1;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey3;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey4;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey5;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey6;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey7;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey8;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey9;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey10;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey11;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey12;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey1;
-        private WPE.Lib.Controls.HotkeyTextBox txtHotKey2;
         private System.Windows.Forms.Button bHotKey2;
         private System.Windows.Forms.Button bHotKey3;
         private System.Windows.Forms.Button bHotKey4;

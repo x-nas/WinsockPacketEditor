@@ -228,18 +228,7 @@ namespace WPELibrary
 
         private void InitHotKeys()
         {
-            this.txtHotKey1.RegisterHotkeyFromText(9001);
-            this.txtHotKey2.RegisterHotkeyFromText(9002);
-            this.txtHotKey3.RegisterHotkeyFromText(9003);
-            this.txtHotKey4.RegisterHotkeyFromText(9004);
-            this.txtHotKey5.RegisterHotkeyFromText(9005);
-            this.txtHotKey6.RegisterHotkeyFromText(9006);
-            this.txtHotKey7.RegisterHotkeyFromText(9007);
-            this.txtHotKey8.RegisterHotkeyFromText(9008);
-            this.txtHotKey9.RegisterHotkeyFromText(9009);
-            this.txtHotKey10.RegisterHotkeyFromText(9010);
-            this.txtHotKey11.RegisterHotkeyFromText(9011);
-            this.txtHotKey12.RegisterHotkeyFromText(9012);
+            
         }
 
         #endregion
@@ -299,18 +288,7 @@ namespace WPELibrary
                 this.cbHookWSA_Recv.Checked = Operate.PacketConfig.Packet.HookWSA_Recv;
                 this.cbHookWSA_RecvFrom.Checked = Operate.PacketConfig.Packet.HookWSA_RecvFrom;
 
-                this.txtHotKey1.Text = Operate.PacketConfig.Packet.HotKey1;
-                this.txtHotKey2.Text = Operate.PacketConfig.Packet.HotKey2;
-                this.txtHotKey3.Text = Operate.PacketConfig.Packet.HotKey3;
-                this.txtHotKey4.Text = Operate.PacketConfig.Packet.HotKey4;
-                this.txtHotKey5.Text = Operate.PacketConfig.Packet.HotKey5;
-                this.txtHotKey6.Text = Operate.PacketConfig.Packet.HotKey6;
-                this.txtHotKey7.Text = Operate.PacketConfig.Packet.HotKey7;
-                this.txtHotKey8.Text = Operate.PacketConfig.Packet.HotKey8;
-                this.txtHotKey9.Text = Operate.PacketConfig.Packet.HotKey9;
-                this.txtHotKey10.Text = Operate.PacketConfig.Packet.HotKey10;
-                this.txtHotKey11.Text = Operate.PacketConfig.Packet.HotKey11;
-                this.txtHotKey12.Text = Operate.PacketConfig.Packet.HotKey12;
+              
 
                 if (Operate.PacketConfig.Packet.CheckNotShow)
                 {
@@ -398,18 +376,7 @@ namespace WPELibrary
                 Operate.PacketConfig.Packet.HookWSA_Recv = cbHookWSA_Recv.Checked;
                 Operate.PacketConfig.Packet.HookWSA_RecvFrom = cbHookWSA_RecvFrom.Checked;
 
-                Operate.PacketConfig.Packet.HotKey1 = this.txtHotKey1.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey2 = this.txtHotKey2.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey3 = this.txtHotKey3.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey4 = this.txtHotKey4.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey5 = this.txtHotKey5.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey6 = this.txtHotKey6.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey7 = this.txtHotKey7.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey8 = this.txtHotKey8.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey9 = this.txtHotKey9.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey10 = this.txtHotKey10.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey11 = this.txtHotKey11.Text.Trim();
-                Operate.PacketConfig.Packet.HotKey12 = this.txtHotKey12.Text.Trim();
+            
 
                 Operate.PacketConfig.Packet.CheckNotShow = rbFilter_NotShow.Checked;
                 Operate.PacketConfig.Packet.CheckSocket = cbCheckSocket.Checked;
@@ -630,119 +597,7 @@ namespace WPELibrary
             }
         }
 
-        #endregion        
-
-        #region//快捷键
-
-        private void bHotKey1_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey1.RegisterHotkeyFromText(9001))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey1.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey2_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey2.RegisterHotkeyFromText(9002))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey2.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey3_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey3.RegisterHotkeyFromText(9003))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey3.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey4_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey4.RegisterHotkeyFromText(9004))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey4.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey5_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey5.RegisterHotkeyFromText(9005))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey5.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey6_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey6.RegisterHotkeyFromText(9006))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey6.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey7_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey7.RegisterHotkeyFromText(9007))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey7.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey8_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey8.RegisterHotkeyFromText(9008))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey8.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey9_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey9.RegisterHotkeyFromText(9009))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey9.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey10_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey10.RegisterHotkeyFromText(9010))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey10.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey11_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey11.RegisterHotkeyFromText(9011))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey11.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        private void bHotKey12_Click(object sender, EventArgs e)
-        {
-            if (this.txtHotKey12.RegisterHotkeyFromText(9012))
-            {
-                string Msg = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_133), this.txtHotKey12.Text.Trim());
-                Socket_Operation.ShowMessageBox(Msg);
-            }
-        }
-
-        #endregion
+        #endregion                
 
         #region//系统设置
 

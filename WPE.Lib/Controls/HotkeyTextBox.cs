@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace WPE.Lib.Controls
 {
-    public class HotkeyTextBox : TextBox
+    public class HotkeyTextBox : AntdUI.Input
     {
         private Keys _currentKey = Keys.None;
         private bool _expectingKeyRelease = false;
@@ -18,7 +18,7 @@ namespace WPE.Lib.Controls
             this.KeyUp += HotkeyTextBox_KeyUp;
             this.KeyPress += (s, e) => e.Handled = true;
             this.TabStop = true;
-            this.ShortcutsEnabled = false;
+            this.HandShortcutKeys = true;
         }
 
         private void HotkeyTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -150,7 +150,8 @@ namespace WPE.Lib.Controls
                 {
                     _currentKey = parsedKey;
 
-                    bool bOK = RegisterRecordedHotkey(KeyID);
+                    bool bOK = RegisterRecordedHotkey(KeyID);                    
+
                     if (bOK)
                     {
                         this.ForeColor = SystemColors.WindowText;

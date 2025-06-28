@@ -16,6 +16,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -255,6 +256,120 @@ namespace WPE.Lib
                     .Where(addr => addr.Address.AddressFamily == AddressFamily.InterNetwork)
                     .Select(addr => addr.Address)
                     .ToArray();
+            }
+
+            #endregion
+
+            #region//加解密滤XML文件
+
+            public static bool IsEncryptXMLFile(string FilePath)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    XDocument xdoc = XDocument.Load(FilePath);
+                    XElement xeRoot = xdoc.Root;
+                }
+                catch
+                {
+                    bReturn = true;
+                }
+
+                return bReturn;
+            }
+
+            private static byte[] GetAESKeyFromString(string Password)
+            {
+                byte[] bReturn = null;
+
+                try
+                {
+                    using (MD5 md5 = MD5.Create())
+                    {
+                        byte[] bPW = Encoding.Default.GetBytes(Password);
+
+                        byte[] bPW_MD5 = md5.ComputeHash(bPW);
+                        string sPW_MD5 = BitConverter.ToString(bPW_MD5, 4, 8).Replace("-", "");
+
+                        bReturn = Encoding.UTF8.GetBytes(sPW_MD5);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static void EncryptXMLFile(string FilePath, string Password)
+            {
+                try
+                {
+                    byte[] bAES = GetAESKeyFromString(Password);
+
+                    using (Aes aesAlg = Aes.Create())
+                    {
+                        aesAlg.Key = bAES;
+                        aesAlg.IV = bAES;
+
+                        XDocument xmlDoc = XDocument.Load(FilePath);
+
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateEncryptor(), CryptoStreamMode.Write))
+                            {
+                                xmlDoc.Save(cs);
+                            }
+
+                            File.WriteAllBytes(FilePath, ms.ToArray());
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static XDocument DecryptXMLFile(string FilterList_Path, string Password)
+            {
+                XDocument xdReturn = new XDocument();
+
+                try
+                {
+                    byte[] bAES = GetAESKeyFromString(Password);
+
+                    using (Aes aesAlg = Aes.Create())
+                    {
+                        aesAlg.Key = bAES;
+                        aesAlg.IV = bAES;
+
+                        byte[] xmlBytes = File.ReadAllBytes(FilterList_Path);
+
+                        using (MemoryStream ms = new MemoryStream(xmlBytes))
+                        {
+                            try
+                            {
+                                using (CryptoStream cs = new CryptoStream(ms, aesAlg.CreateDecryptor(), CryptoStreamMode.Read))
+                                {
+                                    xdReturn = XDocument.Load(cs);
+                                }
+                            }
+                            catch
+                            {
+                                xdReturn = null;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return xdReturn;
             }
 
             #endregion
@@ -523,9 +638,9 @@ namespace WPE.Lib
                         new XElement("HotKey10", PacketConfig.Packet.HotKey10),
                         new XElement("HotKey11", PacketConfig.Packet.HotKey11),
                         new XElement("HotKey12", PacketConfig.Packet.HotKey12),
-                        new XElement("PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll),
-                        new XElement("PacketConfig.List_AutoClear", PacketConfig.List.AutoClear),
-                        new XElement("PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value),
+                        new XElement("PacketList_AutoRoll", PacketConfig.List.AutoRoll),
+                        new XElement("PacketList_AutoClear", PacketConfig.List.AutoClear),
+                        new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value),
                         new XElement("LogList_AutoRoll", LogConfig.AutoRoll),
                         new XElement("LogList_AutoClear", LogConfig.AutoClear),
                         new XElement("LogList_AutoClear_Value", LogConfig.AutoClear_Value),
@@ -593,9 +708,9 @@ namespace WPE.Lib
                         PacketConfig.Packet.HotKey10 = InjectMode.Rows[0]["HotKey10"].ToString();
                         PacketConfig.Packet.HotKey11 = InjectMode.Rows[0]["HotKey11"].ToString();
                         PacketConfig.Packet.HotKey12 = InjectMode.Rows[0]["HotKey12"].ToString();
-                        PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketConfig.List_AutoRoll"]);
-                        PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketConfig.List_AutoClear"]);
-                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketConfig.List_AutoClear_Value"]);
+                        PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoRoll"]);
+                        PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoClear"]);
+                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketList_AutoClear_Value"]);
                         LogConfig.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoRoll"]);
                         LogConfig.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
                         LogConfig.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
@@ -1741,7 +1856,7 @@ namespace WPE.Lib
 
                         if (!string.IsNullOrEmpty(sPassword))
                         {
-                            Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                            SystemConfig.EncryptXMLFile(FilePath, sPassword);
                         }
                     }
                 }
@@ -1761,7 +1876,7 @@ namespace WPE.Lib
                 {
                     OpenFileDialog ofdLoadFile = new OpenFileDialog();
 
-                    ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_213) + "（*.sb）|*.sb";
+                    ofdLoadFile.Filter = AntdUI.Localization.Get("WPEBackUpFile", "WPE x64 备份文件") + "（*.sb）|*.sb";
                     ofdLoadFile.RestoreDirectory = true;
 
                     if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -1788,7 +1903,7 @@ namespace WPE.Lib
                     {
                         XDocument xdoc = new XDocument();
 
-                        bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                        bool bEncrypt = IsEncryptXMLFile(FilePath);
                         if (bEncrypt)
                         {
                             if (LoadFromUser)
@@ -1797,7 +1912,7 @@ namespace WPE.Lib
                                 pwForm.ShowDialog();
                             }
 
-                            xdoc = Socket_Operation.DecryptXMLFile(FilePath, SystemConfig.AESKey);
+                            xdoc = DecryptXMLFile(FilePath, SystemConfig.AESKey);
                         }
                         else
                         {
@@ -1806,7 +1921,7 @@ namespace WPE.Lib
 
                         if (xdoc == null)
                         {
-                            string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+                            string sError = AntdUI.Localization.Get("AESKeyError", "加载失败: 密码错误");
 
                             if (LoadFromUser)
                             {
@@ -1869,7 +1984,7 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//代理设置
+                #region//代理模式配置
 
                 try
                 {
@@ -1888,7 +2003,7 @@ namespace WPE.Lib
 
                 #endregion
 
-                #region//注入设置
+                #region//注入模式配置
 
                 try
                 {
@@ -4720,7 +4835,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -4823,7 +4938,7 @@ namespace WPE.Lib
 
                                     XDocument xdoc = new XDocument();
 
-                                    bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                                    bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                                     if (bEncrypt)
                                     {
@@ -4833,7 +4948,7 @@ namespace WPE.Lib
                                             pwForm.ShowDialog();
                                         }
 
-                                        xdoc = Socket_Operation.DecryptXMLFile(FilePath, ProxyConfig.ProxyAccount.AESKey);
+                                        xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyAccount.AESKey);
                                     }
                                     else
                                     {
@@ -5767,7 +5882,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -5876,7 +5991,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -5957,7 +6072,7 @@ namespace WPE.Lib
                         {
                             XDocument xdoc = new XDocument();
 
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -5967,7 +6082,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
                             }
                             else
                             {
@@ -6096,7 +6211,7 @@ namespace WPE.Lib
                         {
                             XDocument xdoc = new XDocument();
 
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -6106,7 +6221,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, ProxyConfig.ProxyMapping.AESKey);
                             }
                             else
                             {
@@ -8854,7 +8969,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -8979,7 +9094,7 @@ namespace WPE.Lib
                         {
                             XDocument xdoc = new XDocument();
 
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -8989,7 +9104,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, FilterConfig.List.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, FilterConfig.List.AESKey);
                             }
                             else
                             {
@@ -9768,7 +9883,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -9849,7 +9964,7 @@ namespace WPE.Lib
                         if (File.Exists(FilePath))
                         {
                             XDocument xdoc = new XDocument();
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -9859,7 +9974,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, Send.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, Send.AESKey);
                             }
                             else
                             {
@@ -10310,7 +10425,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -10411,7 +10526,7 @@ namespace WPE.Lib
                         {
                             XDocument xdoc = new XDocument();
 
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -10421,7 +10536,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, SendConfig.SendList.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, SendConfig.SendList.AESKey);
                             }
                             else
                             {
@@ -11587,7 +11702,7 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(sPassword))
                             {
-                                Socket_Operation.EncryptXMLFile(FilePath, sPassword);
+                                SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
                     }
@@ -11680,7 +11795,7 @@ namespace WPE.Lib
                         {
                             XDocument xdoc = new XDocument();
 
-                            bool bEncrypt = Socket_Operation.IsEncryptXMLFile(FilePath);
+                            bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
 
                             if (bEncrypt)
                             {
@@ -11690,7 +11805,7 @@ namespace WPE.Lib
                                     pwForm.ShowDialog();
                                 }
 
-                                xdoc = Socket_Operation.DecryptXMLFile(FilePath, RobotConfig.RobotList.AESKey);
+                                xdoc = SystemConfig.DecryptXMLFile(FilePath, RobotConfig.RobotList.AESKey);
                             }
                             else
                             {

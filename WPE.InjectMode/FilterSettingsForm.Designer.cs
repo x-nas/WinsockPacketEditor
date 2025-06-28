@@ -102,6 +102,7 @@
             // 
             // txtCheckData
             // 
+            this.txtCheckData.AllowClear = true;
             this.txtCheckData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckData.Location = new System.Drawing.Point(115, 301);
             this.txtCheckData.Name = "txtCheckData";
@@ -123,6 +124,7 @@
             // 
             // txtCheckHead
             // 
+            this.txtCheckHead.AllowClear = true;
             this.txtCheckHead.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckHead.Location = new System.Drawing.Point(115, 253);
             this.txtCheckHead.Name = "txtCheckHead";
@@ -144,6 +146,7 @@
             // 
             // txtCheckPort
             // 
+            this.txtCheckPort.AllowClear = true;
             this.txtCheckPort.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckPort.Location = new System.Drawing.Point(115, 205);
             this.txtCheckPort.Name = "txtCheckPort";
@@ -165,6 +168,7 @@
             // 
             // txtCheckIP
             // 
+            this.txtCheckIP.AllowClear = true;
             this.txtCheckIP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckIP.Location = new System.Drawing.Point(115, 157);
             this.txtCheckIP.Name = "txtCheckIP";
@@ -186,6 +190,7 @@
             // 
             // txtCheckLen
             // 
+            this.txtCheckLen.AllowClear = true;
             this.txtCheckLen.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckLen.Location = new System.Drawing.Point(115, 109);
             this.txtCheckLen.Name = "txtCheckLen";
@@ -218,6 +223,7 @@
             // 
             // txtCheckSocket
             // 
+            this.txtCheckSocket.AllowClear = true;
             this.txtCheckSocket.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCheckSocket.Location = new System.Drawing.Point(115, 61);
             this.txtCheckSocket.Name = "txtCheckSocket";
@@ -281,6 +287,7 @@
             // lIsShow
             // 
             this.lIsShow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lIsShow.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lIsShow.Location = new System.Drawing.Point(3, 3);
             this.lIsShow.Name = "lIsShow";
             this.lIsShow.Size = new System.Drawing.Size(106, 32);

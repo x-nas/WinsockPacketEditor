@@ -173,6 +173,7 @@
             // 
             // txtRemote_UserName
             // 
+            this.txtRemote_UserName.AllowClear = true;
             this.txtRemote_UserName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRemote_UserName.LocalizationPlaceholderText = "Input.LetterOrNum";
             this.txtRemote_UserName.Location = new System.Drawing.Point(108, 9);
@@ -184,15 +185,16 @@
             // 
             // txtRemote_PassWord
             // 
+            this.txtRemote_PassWord.AllowClear = true;
             this.txtRemote_PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtRemote_PassWord.LocalizationPlaceholderText = "Input.LetterOrNum";
             this.txtRemote_PassWord.Location = new System.Drawing.Point(108, 55);
             this.txtRemote_PassWord.Name = "txtRemote_PassWord";
-            this.txtRemote_PassWord.PasswordChar = '*';
             this.txtRemote_PassWord.PasswordCopy = true;
             this.txtRemote_PassWord.PlaceholderText = "输入英文字母，或者数字";
             this.txtRemote_PassWord.Size = new System.Drawing.Size(274, 40);
             this.txtRemote_PassWord.TabIndex = 3;
+            this.txtRemote_PassWord.UseSystemPasswordChar = true;
             this.txtRemote_PassWord.TextChanged += new System.EventHandler(this.txtRemote_PassWord_TextChanged);
             // 
             // nudRemote_Port

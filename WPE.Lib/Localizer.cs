@@ -74,6 +74,12 @@ namespace WPE.Lib
                 case "PasswordEncryption":
                     return "Please enter the password. This password will require verification when importing the list file.\r\n If you do not need to set a password, please click the[Cancel] button!";
 
+                case "WPEBackUpFile":
+                    return "WPE x64 BackUp File";
+
+                case "AESKeyError":
+                    return "Failed to load: Password incorrect";
+
                 #endregion
 
                 #region//StartForm
@@ -210,6 +216,30 @@ namespace WPE.Lib
 
                 case "HookSettingsForm.Success":
                     return "Hook Settings Success";
+
+                #endregion
+
+                #region//ListSettingsForm
+
+                case "ListSettingsForm":
+                    return "List Settings";
+
+                case "ListSettingsForm.Success":
+                    return "List Settings Success";
+
+                #endregion
+
+                #region//BackUpSettingsForm
+
+                case "BackUpSettingsForm":
+                    return "BackUp Settings";
+
+                #endregion
+
+                #region//SystemSettingsForm
+
+                case "SystemSettingsForm":
+                    return "System Settings";
 
                 #endregion
 

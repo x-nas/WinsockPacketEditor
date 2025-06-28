@@ -2412,7 +2412,7 @@
     <value>0</value>
   </data>
   <data name="tlpListSet_SocketList.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocketList_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Absolute,20" /&gt;&lt;Rows Styles="Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="nudSocketList_AutoClearValue" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoClear" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cbSocketList_AutoRoll" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,20,Absolute,180" /&gt;&lt;Rows Styles="Absolute,20,Absolute,20" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="gbListSet_SocketList.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -2963,276 +2963,6 @@
   <data name="&gt;&gt;lHotKey1.ZOrder" xml:space="preserve">
     <value>11</value>
   </data>
-  <data name="txtHotKey3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>27, 63</value>
-  </data>
-  <data name="txtHotKey3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey3.TabIndex" type="System.Int32, mscorlib">
-    <value>26</value>
-  </data>
-  <data name="txtHotKey3.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey3.Name" xml:space="preserve">
-    <value>txtHotKey3</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey3.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey3.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey3.ZOrder" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="txtHotKey4.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>216, 5</value>
-  </data>
-  <data name="txtHotKey4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey4.TabIndex" type="System.Int32, mscorlib">
-    <value>27</value>
-  </data>
-  <data name="txtHotKey4.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey4.Name" xml:space="preserve">
-    <value>txtHotKey4</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey4.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey4.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey4.ZOrder" xml:space="preserve">
-    <value>13</value>
-  </data>
-  <data name="txtHotKey5.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>216, 34</value>
-  </data>
-  <data name="txtHotKey5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey5.TabIndex" type="System.Int32, mscorlib">
-    <value>28</value>
-  </data>
-  <data name="txtHotKey5.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey5.Name" xml:space="preserve">
-    <value>txtHotKey5</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey5.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey5.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey5.ZOrder" xml:space="preserve">
-    <value>14</value>
-  </data>
-  <data name="txtHotKey6.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>216, 63</value>
-  </data>
-  <data name="txtHotKey6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey6.TabIndex" type="System.Int32, mscorlib">
-    <value>29</value>
-  </data>
-  <data name="txtHotKey6.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey6.Name" xml:space="preserve">
-    <value>txtHotKey6</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey6.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey6.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey6.ZOrder" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="txtHotKey7.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>407, 5</value>
-  </data>
-  <data name="txtHotKey7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey7.TabIndex" type="System.Int32, mscorlib">
-    <value>30</value>
-  </data>
-  <data name="txtHotKey7.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey7.Name" xml:space="preserve">
-    <value>txtHotKey7</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey7.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey7.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey7.ZOrder" xml:space="preserve">
-    <value>16</value>
-  </data>
-  <data name="txtHotKey8.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>407, 34</value>
-  </data>
-  <data name="txtHotKey8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey8.TabIndex" type="System.Int32, mscorlib">
-    <value>31</value>
-  </data>
-  <data name="txtHotKey8.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey8.Name" xml:space="preserve">
-    <value>txtHotKey8</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey8.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey8.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey8.ZOrder" xml:space="preserve">
-    <value>17</value>
-  </data>
-  <data name="txtHotKey9.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>407, 63</value>
-  </data>
-  <data name="txtHotKey9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey9.TabIndex" type="System.Int32, mscorlib">
-    <value>32</value>
-  </data>
-  <data name="txtHotKey9.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey9.Name" xml:space="preserve">
-    <value>txtHotKey9</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey9.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey9.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey9.ZOrder" xml:space="preserve">
-    <value>18</value>
-  </data>
-  <data name="txtHotKey10.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>605, 5</value>
-  </data>
-  <data name="txtHotKey10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey10.TabIndex" type="System.Int32, mscorlib">
-    <value>33</value>
-  </data>
-  <data name="txtHotKey10.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey10.Name" xml:space="preserve">
-    <value>txtHotKey10</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey10.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey10.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey10.ZOrder" xml:space="preserve">
-    <value>19</value>
-  </data>
-  <data name="txtHotKey11.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey11.Location" type="System.Drawing.Point, System.Drawing">
-    <value>605, 34</value>
-  </data>
-  <data name="txtHotKey11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey11.TabIndex" type="System.Int32, mscorlib">
-    <value>34</value>
-  </data>
-  <data name="txtHotKey11.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey11.Name" xml:space="preserve">
-    <value>txtHotKey11</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey11.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey11.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey11.ZOrder" xml:space="preserve">
-    <value>20</value>
-  </data>
-  <data name="txtHotKey12.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey12.Location" type="System.Drawing.Point, System.Drawing">
-    <value>605, 63</value>
-  </data>
-  <data name="txtHotKey12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey12.TabIndex" type="System.Int32, mscorlib">
-    <value>35</value>
-  </data>
-  <data name="txtHotKey12.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey12.Name" xml:space="preserve">
-    <value>txtHotKey12</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey12.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey12.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey12.ZOrder" xml:space="preserve">
-    <value>21</value>
-  </data>
   <data name="bHotKey1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -3261,61 +2991,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey1.ZOrder" xml:space="preserve">
-    <value>22</value>
-  </data>
-  <data name="txtHotKey1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>27, 5</value>
-  </data>
-  <data name="txtHotKey1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey1.TabIndex" type="System.Int32, mscorlib">
-    <value>37</value>
-  </data>
-  <data name="txtHotKey1.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey1.Name" xml:space="preserve">
-    <value>txtHotKey1</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey1.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey1.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey1.ZOrder" xml:space="preserve">
-    <value>23</value>
-  </data>
-  <data name="txtHotKey2.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="txtHotKey2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>27, 34</value>
-  </data>
-  <data name="txtHotKey2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 23</value>
-  </data>
-  <data name="txtHotKey2.TabIndex" type="System.Int32, mscorlib">
-    <value>38</value>
-  </data>
-  <data name="txtHotKey2.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Center</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey2.Name" xml:space="preserve">
-    <value>txtHotKey2</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey2.Type" xml:space="preserve">
-    <value>WPE.Lib.Controls.HotkeyTextBox, WPE.Lib, Version=2.0.0.24, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey2.Parent" xml:space="preserve">
-    <value>tlpHotKeySet</value>
-  </data>
-  <data name="&gt;&gt;txtHotKey2.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>12</value>
   </data>
   <data name="bHotKey2.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -3342,7 +3018,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey2.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>13</value>
   </data>
   <data name="bHotKey3.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -3369,7 +3045,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey3.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>14</value>
   </data>
   <data name="bHotKey4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3406,7 +3082,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey4.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>15</value>
   </data>
   <data name="bHotKey5.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3443,7 +3119,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey5.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>16</value>
   </data>
   <data name="bHotKey6.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3480,7 +3156,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey6.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>17</value>
   </data>
   <data name="bHotKey7.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3517,7 +3193,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey7.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>18</value>
   </data>
   <data name="bHotKey8.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3554,7 +3230,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey8.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>19</value>
   </data>
   <data name="bHotKey9.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3591,7 +3267,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey9.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>20</value>
   </data>
   <data name="bHotKey10.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3628,7 +3304,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey10.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>21</value>
   </data>
   <data name="bHotKey11.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3665,7 +3341,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey11.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>22</value>
   </data>
   <data name="bHotKey12.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -3702,7 +3378,7 @@
     <value>tlpHotKeySet</value>
   </data>
   <data name="&gt;&gt;bHotKey12.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>23</value>
   </data>
   <data name="tlpHotKeySet.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3735,7 +3411,7 @@
     <value>0</value>
   </data>
   <data name="tlpHotKeySet.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHotKey12" Row="3" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey9" Row="3" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey6" Row="3" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey3" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey11" Row="2" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey8" Row="2" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey5" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey10" Row="1" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey7" Row="1" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey4" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey3" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey4" Row="1" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey5" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey6" Row="3" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey7" Row="1" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey8" Row="2" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey9" Row="3" RowSpan="1" Column="7" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey10" Row="1" RowSpan="1" Column="10" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey11" Row="2" RowSpan="1" Column="10" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey12" Row="3" RowSpan="1" Column="10" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey1" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey1" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="txtHotKey2" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey2" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey3" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey4" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey5" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey6" Row="3" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey7" Row="1" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey8" Row="2" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey9" Row="3" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey10" Row="1" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey11" Row="2" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey12" Row="3" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="lHotKey12" Row="3" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey9" Row="3" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey6" Row="3" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey3" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey11" Row="2" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey8" Row="2" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey5" Row="2" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey2" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey10" Row="1" RowSpan="1" Column="9" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey7" Row="1" RowSpan="1" Column="6" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey4" Row="1" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="lHotKey1" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey1" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey2" Row="2" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey3" Row="3" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey4" Row="1" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey5" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey6" Row="3" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey7" Row="1" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey8" Row="2" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey9" Row="3" RowSpan="1" Column="8" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey10" Row="1" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey11" Row="2" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;Control Name="bHotKey12" Row="3" RowSpan="1" Column="11" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0,AutoSize,0,Percent,25,AutoSize,0" /&gt;&lt;Rows Styles="Percent,50,AutoSize,0,AutoSize,0,AutoSize,0,Percent,50" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tcSocketInfo_HotKey.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 26</value>

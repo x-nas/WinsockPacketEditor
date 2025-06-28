@@ -1,15 +1,20 @@
 ﻿using AntdUI;
+using EasyHook;
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
 using WPE.Lib.Controls;
 
 namespace WPE.InjectMode
 {
-    public partial class InjectModeForm : AntdUI.Window
+    public partial class InjectModeForm : Window
     {
+        private bool StartHook = true;
+        private bool bWakeUp = true;
         private bool setcolor = false;
+        private readonly Hook ws = new Hook();
 
         #region//窗体事件
 
@@ -23,8 +28,11 @@ namespace WPE.InjectMode
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
+            Operate.SystemConfig.MainHandle = this.Handle;
             Operate.SystemConfig.LoadSystemConfig_FromDB();
             Operate.SystemConfig.LoadInjectMode_FromDB();
+
+            this.InitTable_PacketList();
 
             this.tabInjectMode.TabMenuVisible = false;
         }
@@ -60,6 +68,20 @@ namespace WPE.InjectMode
             {
                 btn_global.SelectedValue = btn_global.Items[0];
             }
+        }
+
+        private void InitTable_PacketList()
+        {
+            tPacketList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketID", "序号").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketSocket", "套接字").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketFrom", "本机地址").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketTo", "远端地址", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketLen", "长度").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
+            };
         }
 
         private void InitIsDark()
@@ -243,32 +265,166 @@ namespace WPE.InjectMode
 
         #endregion
 
+        #region//分段菜单
+
         private void segmented_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
         {
-            if (this.segmented.SelectIndex == 0)//过滤设置
+            switch (this.segmented.SelectIndex)
             {
-                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
-                {
-                    Align = AntdUI.TAlignMini.Right,
-                    Mask = true,
-                    MaskClosable = false,
-                    DisplayDelay = 0,
-                });
-            }
-            else if (this.segmented.SelectIndex == 1)//拦截设置
-            {
-                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
-                {
-                    Align = AntdUI.TAlignMini.Right,
-                    Mask = true,
-                    MaskClosable = false,
-                    DisplayDelay = 0,
-                });
+                //过滤设置
+                case 0:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //拦截设置
+                case 1:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //列表设置
+                case 2:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new ListSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //快捷键设置
+                case 3:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HotKeyForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //备份设置
+                case 4:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new BackUpSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //系统设置
+                case 5:
+                    AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new SystemSettingsForm())
+                    {
+                        Align = AntdUI.TAlignMini.Right,
+                        Mask = true,
+                        MaskClosable = false,
+                        DisplayDelay = 0,
+                    });
+                    break;
+
+                //搜索封包
+                case 6:
+
+                    break;
+
+                //清空数据
+                case 7:
+
+                    break;
+
+                //拦截
+                case 8:
+
+                    if (this.StartHook)
+                    {
+                        this.segmented.Items[8].IconSvg = "PauseCircleFilled";
+                        this.segmented.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
+                        this.StartHook = false;
+
+                        this.Start_Hook();
+                    }
+                    else
+                    {
+                        this.segmented.Items[8].IconSvg = "PlayCircleFilled";
+                        this.segmented.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StartHook", "开始拦截");
+                        this.StartHook = true;
+
+                        this.Stop_Hook();
+                    }
+
+                    break;
             }
 
             this.segmented.SelectIndex = -1;
         }
 
-        
+        #endregion
+
+        #region//开始拦截
+
+        private void Start_Hook()
+        {
+            try
+            {
+                Operate.FilterConfig.List.InitFilterList_Count();
+
+                ws.StartHook();
+
+                if (bWakeUp)
+                {
+                    RemoteHooking.WakeUpProcess();
+                    this.bWakeUp = false;
+                }
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "开始拦截", TType.Warn)
+                {
+                    LocalizationText = "InjectModeForm.StartHook"
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//停止拦截        
+
+        private void Stop_Hook()
+        {
+            try
+            {
+                ws.StopHook();
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "停止拦截", TType.Warn)
+                {
+                    LocalizationText = "InjectModeForm.StopHook"
+                });
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+
     }
 }
