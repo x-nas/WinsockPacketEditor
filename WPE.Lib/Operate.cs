@@ -260,6 +260,90 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//格式化速率字符串
+
+            public static string GetDisplayBytes(long size)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    const long multi = 1024;
+                    long kb = multi;
+                    long mb = kb * multi;
+                    long gb = mb * multi;
+                    long tb = gb * multi;
+
+                    const string BYTES = "Bytes";
+                    const string KB = "KB";
+                    const string MB = "MB";
+                    const string GB = "GB";
+                    const string TB = "TB";
+
+                    if (size < kb)
+                    {
+                        sReturn = string.Format("{0} {1}", size, BYTES);
+                    }
+                    else if (size < mb)
+                    {
+                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, kb), KB, ConvertBytesDisplay(size));
+                    }
+                    else if (size < gb)
+                    {
+                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, mb), MB, ConvertBytesDisplay(size));
+                    }
+                    else if (size < tb)
+                    {
+                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, gb), GB, ConvertBytesDisplay(size));
+                    }
+                    else
+                    {
+                        sReturn = string.Format("{0} {1} ({2} Bytes)", ConvertToOneDigit(size, tb), TB, ConvertBytesDisplay(size));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            private static string ConvertBytesDisplay(long size)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    sReturn = size.ToString("###,###,###,###,###", CultureInfo.CurrentCulture);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            private static string ConvertToOneDigit(long size, long quan)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    double quotient = (double)size / (double)quan;
+                    sReturn = quotient.ToString("0.#", CultureInfo.CurrentCulture);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
             #region//加解密滤XML文件
 
             public static bool IsEncryptXMLFile(string FilePath)
@@ -2300,7 +2384,129 @@ namespace WPE.Lib
                 return sReturn;
             }
 
-            #endregion            
+            #endregion
+
+            #region//获取注入的进程的名称
+
+            public static string GetInjectProcessName()
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    Process pProcess = Process.GetCurrentProcess();
+                    Operate.PacketConfig.Packet.InjectProcess = string.Format("{0} [{1}]", pProcess.ProcessName, pProcess.Id);
+
+                    sReturn = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_20) + Operate.PacketConfig.Packet.InjectProcess;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
+            #region//获取注入的模块名称        
+
+            public static string GetInjectModuleName()
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    Process pProcess = Process.GetCurrentProcess();
+
+                    if (pProcess.MainWindowHandle != IntPtr.Zero)
+                    {
+                        if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
+                        {
+                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainModule.ModuleName, pProcess.MainWindowHandle.ToString());
+                        }
+                        else
+                        {
+                            sReturn = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_144), pProcess.MainWindowTitle, pProcess.MainWindowHandle.ToString());
+                        }
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(pProcess.MainWindowTitle))
+                        {
+                            sReturn = pProcess.MainModule.ModuleName;
+                        }
+                        else
+                        {
+                            sReturn = pProcess.MainWindowTitle;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
+            #region//获取注入的进程的 Winsock 版本信息
+
+            public static string GetInjectWinsockInfo()
+            {
+                string sReturn = "WinSock";
+
+                try
+                {
+                    Operate.PacketConfig.Packet.Support_WS1 = false;
+                    Operate.PacketConfig.Packet.Support_WS2 = false;
+
+                    foreach (ProcessModule module in Process.GetCurrentProcess().Modules)
+                    {
+                        string sModuleName = module.ModuleName;
+
+                        if (sModuleName.Equals(NativeMethods.WSock32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            Operate.PacketConfig.Packet.Support_WS1 = true;
+                        }
+
+                        if (sModuleName.Equals(NativeMethods.WS2_32.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            Operate.PacketConfig.Packet.Support_WS2 = true;
+                        }
+
+                        if (sModuleName.Equals(NativeMethods.Mswsock.ModuleName, StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            Operate.PacketConfig.Packet.Support_MsWS = true;
+                        }
+                    }
+
+                    if (Operate.PacketConfig.Packet.Support_WS1)
+                    {
+                        sReturn += " 1.1";
+                    }
+
+                    if (Operate.PacketConfig.Packet.Support_WS2)
+                    {
+                        sReturn += " 2.0";
+                    }
+
+                    if (Operate.PacketConfig.Packet.Support_MsWS)
+                    {
+                        sReturn += " Microsoft";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
         }
 
         #endregion

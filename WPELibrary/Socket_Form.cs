@@ -29,21 +29,9 @@ namespace WPELibrary
         {
             try
             {
-                Operate.SystemConfig.LoadSystemConfig_FromDB();
-
                 InitializeComponent();
 
-                Operate.SystemConfig.InvokeAction = action =>
-                {
-                    if (this.InvokeRequired)
-                    {
-                        this.Invoke(action);
-                    }
-                    else
-                    {
-                        action();
-                    }
-                };
+                
 
                 this.InitSocketDGV();
             }
@@ -61,8 +49,7 @@ namespace WPELibrary
         {
             this.InitSocketForm();
             this.InitHexBox_XOR();
-            this.LoadConfigs_Parameter();
-            this.InitHotKeys();
+            this.LoadConfigs_Parameter();        
 
             Socket_Operation.StartRemoteMGT();
             Operate.SystemConfig.LoadSystemList_FromDB();
@@ -184,28 +171,18 @@ namespace WPELibrary
                 tt.SetToolTip(bSearchNext, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_26));
 
                 Operate.SystemConfig.MainHandle = this.Handle;
-                string sProcessName = Socket_Operation.GetProcessName();
-                this.tsslProcessName.Text = sProcessName;
-                this.niWPE.Text = "WPE x64\r\n" + sProcessName;
+                
 
                 this.tSocketInfo.Enabled = true;
                 this.tSocketList.Enabled = true;
-
-                this.tsslProcessInfo.Text = Socket_Operation.GetProcessInfo();
-                this.tsslWinSock.Text = Socket_Operation.GetWinSockSupportInfo();
-
-                this.bStartHook.Enabled = true;
-                this.bStopHook.Enabled = false;
-                this.cmsIcon_StartHook.Enabled = true;
-                this.cmsIcon_StopHook.Enabled = false;
+          
                 this.cbbExtraction.SelectedIndex = 0;
 
-                this.InitFilterActionColor();
                 Socket_Operation.InitCPUAndMemoryCounter();
 
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
+                
 
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, sProcessName);
+                
             }
             catch (Exception ex)
             {
@@ -224,11 +201,6 @@ namespace WPELibrary
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
-        }
-
-        private void InitHotKeys()
-        {
-            
         }
 
         #endregion
@@ -631,29 +603,7 @@ namespace WPELibrary
             {
                 Operate.SystemConfig.ListExecute = Operate.SystemConfig.Execute.Sequence;
             }
-        }
-
-        private void InitFilterActionColor()
-        {
-            try
-            {
-                this.lFAColor_Replace.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
-                this.lFAColor_Replace.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace;
-
-                this.lFAColor_Intercept.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept;
-                this.lFAColor_Intercept.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept;
-
-                this.lFAColor_Change.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change;
-                this.lFAColor_Change.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change;
-
-                this.lFAColor_Other.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Other;
-                this.lFAColor_Other.BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Other;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-        }
+        }        
 
         #endregion
 
@@ -925,7 +875,7 @@ namespace WPELibrary
                 this.tlWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
                 this.tlWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
 
-                Operate.PacketConfig.Packet.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
+                //Operate.PacketConfig.Packet.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
                 this.tsslTotalBytes.Text = Operate.PacketConfig.Packet.SocketBytesInfo;
             }
             catch (Exception ex)

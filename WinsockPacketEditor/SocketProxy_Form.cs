@@ -127,7 +127,7 @@ namespace WinsockPacketEditor
                 this.tShowProxyState.Enabled = true;
                 this.cbbAuthType.SelectedIndex = 0;                
 
-                this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Response));
+                //this.tsslTotalBytes.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Response));
                 this.tsslProxySpeed.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_172), "0.00", "0.00");
             }
             catch (Exception ex)
@@ -1223,7 +1223,7 @@ namespace WinsockPacketEditor
                 ulong ProxyTotal_CNT = ProxyTCP_CNT + ProxyUDP_CNT;
                 int ProxyAccountOnLine = Socket_Operation.GetOnLineProxyAccountCount(Operate.ProxyConfig.ProxyAccount.lstProxyAccount);
                 Operate.ProxyConfig.SocketProxy.ProxyOnLineInfo = ProxyAccountOnLine.ToString() + "/" + Operate.ProxyConfig.ProxyAccount.lstProxyAccount.Count.ToString();
-                Operate.ProxyConfig.SocketProxy.ProxyBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Response));
+                //Operate.ProxyConfig.SocketProxy.ProxyBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_43), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Request), Socket_Operation.GetDisplayBytes(Operate.ProxyConfig.SocketProxy.Total_Response));
                 
                 this.tlProxyTotal_CNT.Text = ProxyTotal_CNT.ToString();
                 this.tlProxyTCP_CNT.Text = ProxyTCP_CNT.ToString();

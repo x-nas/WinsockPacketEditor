@@ -20,18 +20,28 @@ namespace WPE.InjectMode
 
         public InjectModeForm()
         {
-            InitializeComponent();            
-
-            this.InitIsDark();
-            this.InitForm();            
+            InitializeComponent();
         }
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
             Operate.SystemConfig.MainHandle = this.Handle;
+            Operate.SystemConfig.InvokeAction = action =>
+            {
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(action);
+                }
+                else
+                {
+                    action();
+                }
+            };
             Operate.SystemConfig.LoadSystemConfig_FromDB();
             Operate.SystemConfig.LoadInjectMode_FromDB();
 
+            this.InitForm();
+            this.InitIsDark();            
             this.InitTable_PacketList();
 
             this.tabInjectMode.TabMenuVisible = false;
@@ -48,6 +58,14 @@ namespace WPE.InjectMode
             this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
             this.pageHeader.Text = "Winsock Packet Editor";
             this.pageHeader.SubText = Operate.SystemConfig.AssemblyVersion;
+
+            this.lProcessName.Text = Operate.ProcessConfig.GetInjectProcessName();
+            this.lModuleName.Text = Operate.ProcessConfig.GetInjectModuleName();
+            this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();
+            string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes);
+            string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes);
+            string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送: {0}  接收: {1}");
+            this.lSpeedInfo.Text = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
 
             this.mInjectMode.Collapsed = true;
             this.MenuCollapseChange();

@@ -194,6 +194,9 @@ namespace WPE.Lib
                 case "InjectModeForm.FilterSettings.Success":
                     return "Filter settings saved successfully";
 
+                case "InjectModeForm.SpeedInfo":
+                    return "Sent: {0} Received: {1}";
+
                 #endregion
 
                 #region//FilterSettingsForm
