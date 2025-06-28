@@ -52,7 +52,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterSettingsForm.Designer.cs">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Hook.cs" />
+    <Compile Include="HookSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HookSettingsForm.Designer.cs">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="InjectModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -97,6 +109,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FilterSettingsForm.resx">
+      <DependentUpon>FilterSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HookSettingsForm.resx">
+      <DependentUpon>HookSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="InjectModeForm.resx">
       <DependentUpon>InjectModeForm.cs</DependentUpon>
     </EmbeddedResource>

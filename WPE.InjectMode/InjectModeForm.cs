@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AntdUI;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 using WPE.Lib;
@@ -14,14 +15,24 @@ namespace WPE.InjectMode
 
         public InjectModeForm()
         {
-            InitializeComponent();
+            InitializeComponent();            
+
             this.InitIsDark();
             this.InitForm();            
         }
 
         private void InjectModeForm_Load(object sender, EventArgs e)
         {
+            Operate.SystemConfig.LoadSystemConfig_FromDB();
+            Operate.SystemConfig.LoadInjectMode_FromDB();
+
             this.tabInjectMode.TabMenuVisible = false;
+        }
+
+        private void InjectModeForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Operate.SystemConfig.SaveSystemList_ToDB();
+            Operate.SystemConfig.SaveInjectMode_ToDB();
         }
 
         private void InitForm()
@@ -228,8 +239,36 @@ namespace WPE.InjectMode
                     this.tabInjectMode.SelectTab(6);
                     break;
             }
-        }        
+        }
 
         #endregion
+
+        private void segmented_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
+        {
+            if (this.segmented.SelectIndex == 0)//过滤设置
+            {
+                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterSettingsForm())
+                {
+                    Align = AntdUI.TAlignMini.Right,
+                    Mask = true,
+                    MaskClosable = false,
+                    DisplayDelay = 0,
+                });
+            }
+            else if (this.segmented.SelectIndex == 1)//拦截设置
+            {
+                AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new HookSettingsForm())
+                {
+                    Align = AntdUI.TAlignMini.Right,
+                    Mask = true,
+                    MaskClosable = false,
+                    DisplayDelay = 0,
+                });
+            }
+
+            this.segmented.SelectIndex = -1;
+        }
+
+        
     }
 }

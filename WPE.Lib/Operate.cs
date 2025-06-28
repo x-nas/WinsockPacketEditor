@@ -472,6 +472,432 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//保存注入模式到数据库
+
+            public static void SaveInjectMode_ToDB()
+            {
+                DataBase.DeleteTable_InjectMode();
+                DataBase.InsertTable_InjectMode();
+            }            
+
+            public static XElement GetInjectMode_XML()
+            {
+                try
+                {
+                    XElement xeInjectMode =
+                        new XElement("InjectMode",
+                        new XElement("CheckNotShow", PacketConfig.Packet.CheckNotShow),
+                        new XElement("CheckSocket", PacketConfig.Packet.CheckSocket),
+                        new XElement("CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value),
+                        new XElement("CheckIP", PacketConfig.Packet.CheckIP),
+                        new XElement("CheckIP_Value", PacketConfig.Packet.CheckIP_Value),
+                        new XElement("CheckPort", PacketConfig.Packet.CheckPort),
+                        new XElement("CheckPort_Value", PacketConfig.Packet.CheckPort_Value),
+                        new XElement("CheckHead", PacketConfig.Packet.CheckHead),
+                        new XElement("CheckHead_Value", PacketConfig.Packet.CheckHead_Value),
+                        new XElement("CheckData", PacketConfig.Packet.CheckData),
+                        new XElement("CheckData_Value", PacketConfig.Packet.CheckData_Value),
+                        new XElement("CheckSize", PacketConfig.Packet.CheckLen),
+                        new XElement("CheckLength_Value", PacketConfig.Packet.CheckLength_Value),
+                        new XElement("HookWS1_Send", PacketConfig.Packet.HookWS1_Send),
+                        new XElement("HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo),
+                        new XElement("HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv),
+                        new XElement("HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom),
+                        new XElement("HookWS2_Send", PacketConfig.Packet.HookWS2_Send),
+                        new XElement("HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo),
+                        new XElement("HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv),
+                        new XElement("HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom),
+                        new XElement("HookWSA_Send", PacketConfig.Packet.HookWSA_Send),
+                        new XElement("HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo),
+                        new XElement("HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv),
+                        new XElement("HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom),
+                        new XElement("HotKey1", PacketConfig.Packet.HotKey1),
+                        new XElement("HotKey2", PacketConfig.Packet.HotKey2),
+                        new XElement("HotKey3", PacketConfig.Packet.HotKey3),
+                        new XElement("HotKey4", PacketConfig.Packet.HotKey4),
+                        new XElement("HotKey5", PacketConfig.Packet.HotKey5),
+                        new XElement("HotKey6", PacketConfig.Packet.HotKey6),
+                        new XElement("HotKey7", PacketConfig.Packet.HotKey7),
+                        new XElement("HotKey8", PacketConfig.Packet.HotKey8),
+                        new XElement("HotKey9", PacketConfig.Packet.HotKey9),
+                        new XElement("HotKey10", PacketConfig.Packet.HotKey10),
+                        new XElement("HotKey11", PacketConfig.Packet.HotKey11),
+                        new XElement("HotKey12", PacketConfig.Packet.HotKey12),
+                        new XElement("PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll),
+                        new XElement("PacketConfig.List_AutoClear", PacketConfig.List.AutoClear),
+                        new XElement("PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value),
+                        new XElement("LogList_AutoRoll", LogConfig.AutoRoll),
+                        new XElement("LogList_AutoClear", LogConfig.AutoClear),
+                        new XElement("LogList_AutoClear_Value", LogConfig.AutoClear_Value),
+                        new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
+                        new XElement("ListExecute", ListExecute),
+                        new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
+                        );
+
+                    return xeInjectMode;
+                }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return null;
+            }
+
+            #endregion
+
+            #region//从数据库加载注入模式
+
+            public static void LoadInjectMode_FromDB()
+            {
+                try
+                {
+                    DataTable InjectMode = DataBase.SelectTable_InjectMode();
+
+                    if (InjectMode.Rows.Count > 0)
+                    {                        
+                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(InjectMode.Rows[0]["CheckNotShow"]);
+                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(InjectMode.Rows[0]["CheckSocket"]);
+                        PacketConfig.Packet.CheckSocket_Value = InjectMode.Rows[0]["CheckSocket_Value"].ToString();
+                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(InjectMode.Rows[0]["CheckIP"]);
+                        PacketConfig.Packet.CheckIP_Value = InjectMode.Rows[0]["CheckIP_Value"].ToString();
+                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(InjectMode.Rows[0]["CheckPort"]);
+                        PacketConfig.Packet.CheckPort_Value = InjectMode.Rows[0]["CheckPort_Value"].ToString();
+                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(InjectMode.Rows[0]["CheckHead"]);
+                        PacketConfig.Packet.CheckHead_Value = InjectMode.Rows[0]["CheckHead_Value"].ToString();
+                        PacketConfig.Packet.CheckData = Convert.ToBoolean(InjectMode.Rows[0]["CheckData"]);
+                        PacketConfig.Packet.CheckData_Value = InjectMode.Rows[0]["CheckData_Value"].ToString();
+                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(InjectMode.Rows[0]["CheckSize"]);
+                        PacketConfig.Packet.CheckLength_Value = InjectMode.Rows[0]["CheckLength_Value"].ToString();
+                        PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_Send"]);
+                        PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_SendTo"]);
+                        PacketConfig.Packet.HookWS1_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_Recv"]);
+                        PacketConfig.Packet.HookWS1_RecvFrom = Convert.ToBoolean(InjectMode.Rows[0]["HookWS1_RecvFrom"]);
+                        PacketConfig.Packet.HookWS2_Send = Convert.ToBoolean(InjectMode.Rows[0]["HookWS2_Send"]);
+                        PacketConfig.Packet.HookWS2_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWS2_SendTo"]);
+                        PacketConfig.Packet.HookWS2_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWS2_Recv"]);
+                        PacketConfig.Packet.HookWS2_RecvFrom = Convert.ToBoolean(InjectMode.Rows[0]["HookWS2_RecvFrom"]);
+                        PacketConfig.Packet.HookWSA_Send = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_Send"]);
+                        PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_SendTo"]);
+                        PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_Recv"]);
+                        PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(InjectMode.Rows[0]["HookWSA_RecvFrom"]);
+                        PacketConfig.Packet.HotKey1 = InjectMode.Rows[0]["HotKey1"].ToString();
+                        PacketConfig.Packet.HotKey2 = InjectMode.Rows[0]["HotKey2"].ToString();
+                        PacketConfig.Packet.HotKey3 = InjectMode.Rows[0]["HotKey3"].ToString();
+                        PacketConfig.Packet.HotKey4 = InjectMode.Rows[0]["HotKey4"].ToString();
+                        PacketConfig.Packet.HotKey5 = InjectMode.Rows[0]["HotKey5"].ToString();
+                        PacketConfig.Packet.HotKey6 = InjectMode.Rows[0]["HotKey6"].ToString();
+                        PacketConfig.Packet.HotKey7 = InjectMode.Rows[0]["HotKey7"].ToString();
+                        PacketConfig.Packet.HotKey8 = InjectMode.Rows[0]["HotKey8"].ToString();
+                        PacketConfig.Packet.HotKey9 = InjectMode.Rows[0]["HotKey9"].ToString();
+                        PacketConfig.Packet.HotKey10 = InjectMode.Rows[0]["HotKey10"].ToString();
+                        PacketConfig.Packet.HotKey11 = InjectMode.Rows[0]["HotKey11"].ToString();
+                        PacketConfig.Packet.HotKey12 = InjectMode.Rows[0]["HotKey12"].ToString();
+                        PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketConfig.List_AutoRoll"]);
+                        PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketConfig.List_AutoClear"]);
+                        PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketConfig.List_AutoClear_Value"]);
+                        LogConfig.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoRoll"]);
+                        LogConfig.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
+                        LogConfig.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
+                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);
+                        ListExecute = GetListExecute_ByString(InjectMode.Rows[0]["ListExecute"].ToString());
+                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(InjectMode.Rows[0]["FilterExecute"].ToString());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }            
+
+            public static void SetInjectMode_FromXML(XElement xeInjectMode)
+            {
+                try
+                {
+                    XElement CheckNotShow = xeInjectMode.Element("CheckNotShow");
+                    if (CheckNotShow != null)
+                    {
+                        PacketConfig.Packet.CheckNotShow = Convert.ToBoolean(CheckNotShow.Value);
+                    }
+
+                    XElement CheckSocket = xeInjectMode.Element("CheckSocket");
+                    if (CheckSocket != null)
+                    {
+                        PacketConfig.Packet.CheckSocket = Convert.ToBoolean(CheckSocket.Value);
+                    }
+
+                    XElement CheckSocket_Value = xeInjectMode.Element("CheckSocket_Value");
+                    if (CheckSocket_Value != null)
+                    {
+                        PacketConfig.Packet.CheckSocket_Value = CheckSocket_Value.Value;
+                    }
+
+                    XElement CheckIP = xeInjectMode.Element("CheckIP");
+                    if (CheckIP != null)
+                    {
+                        PacketConfig.Packet.CheckIP = Convert.ToBoolean(CheckIP.Value);
+                    }
+
+                    XElement CheckIP_Value = xeInjectMode.Element("CheckIP_Value");
+                    if (CheckIP_Value != null)
+                    {
+                        PacketConfig.Packet.CheckIP_Value = CheckIP_Value.Value;
+                    }
+
+                    XElement CheckPort = xeInjectMode.Element("CheckPort");
+                    if (CheckPort != null)
+                    {
+                        PacketConfig.Packet.CheckPort = Convert.ToBoolean(CheckPort.Value);
+                    }
+
+                    XElement CheckPort_Value = xeInjectMode.Element("CheckPort_Value");
+                    if (CheckPort_Value != null)
+                    {
+                        PacketConfig.Packet.CheckPort_Value = CheckPort_Value.Value;
+                    }
+
+                    XElement CheckHead = xeInjectMode.Element("CheckHead");
+                    if (CheckHead != null)
+                    {
+                        PacketConfig.Packet.CheckHead = Convert.ToBoolean(CheckHead.Value);
+                    }
+
+                    XElement CheckHead_Value = xeInjectMode.Element("CheckHead_Value");
+                    if (CheckHead_Value != null)
+                    {
+                        PacketConfig.Packet.CheckHead_Value = CheckHead_Value.Value;
+                    }
+
+                    XElement CheckData = xeInjectMode.Element("CheckData");
+                    if (CheckData != null)
+                    {
+                        PacketConfig.Packet.CheckData = Convert.ToBoolean(CheckData.Value);
+                    }
+
+                    XElement CheckData_Value = xeInjectMode.Element("CheckData_Value");
+                    if (CheckData_Value != null)
+                    {
+                        PacketConfig.Packet.CheckData_Value = CheckData_Value.Value;
+                    }
+
+                    XElement CheckSize = xeInjectMode.Element("CheckSize");
+                    if (CheckSize != null)
+                    {
+                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(CheckSize.Value);
+                    }
+
+                    XElement CheckLength_Value = xeInjectMode.Element("CheckLength_Value");
+                    if (CheckLength_Value != null)
+                    {
+                        PacketConfig.Packet.CheckLength_Value = CheckLength_Value.Value;
+                    }
+
+                    XElement HookWS1_Send = xeInjectMode.Element("HookWS1_Send");
+                    if (HookWS1_Send != null)
+                    {
+                        PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(HookWS1_Send.Value);
+                    }
+
+                    XElement HookWS1_SendTo = xeInjectMode.Element("HookWS1_SendTo");
+                    if (HookWS1_SendTo != null)
+                    {
+                        PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(HookWS1_SendTo.Value);
+                    }
+
+                    XElement HookWS1_Recv = xeInjectMode.Element("HookWS1_Recv");
+                    if (HookWS1_Recv != null)
+                    {
+                        PacketConfig.Packet.HookWS1_Recv = Convert.ToBoolean(HookWS1_Recv.Value);
+                    }
+
+                    XElement HookWS1_RecvFrom = xeInjectMode.Element("HookWS1_RecvFrom");
+                    if (HookWS1_RecvFrom != null)
+                    {
+                        PacketConfig.Packet.HookWS1_RecvFrom = Convert.ToBoolean(HookWS1_RecvFrom.Value);
+                    }
+
+                    XElement HookWS2_Send = xeInjectMode.Element("HookWS2_Send");
+                    if (HookWS2_Send != null)
+                    {
+                        PacketConfig.Packet.HookWS2_Send = Convert.ToBoolean(HookWS2_Send.Value);
+                    }
+
+                    XElement HookWS2_SendTo = xeInjectMode.Element("HookWS2_SendTo");
+                    if (HookWS2_SendTo != null)
+                    {
+                        PacketConfig.Packet.HookWS2_SendTo = Convert.ToBoolean(HookWS2_SendTo.Value);
+                    }
+
+                    XElement HookWS2_Recv = xeInjectMode.Element("HookWS2_Recv");
+                    if (HookWS2_Recv != null)
+                    {
+                        PacketConfig.Packet.HookWS2_Recv = Convert.ToBoolean(HookWS2_Recv.Value);
+                    }
+
+                    XElement HookWS2_RecvFrom = xeInjectMode.Element("HookWS2_RecvFrom");
+                    if (HookWS2_RecvFrom != null)
+                    {
+                        PacketConfig.Packet.HookWS2_RecvFrom = Convert.ToBoolean(HookWS2_RecvFrom.Value);
+                    }
+
+                    XElement HookWSA_Send = xeInjectMode.Element("HookWSA_Send");
+                    if (HookWSA_Send != null)
+                    {
+                        PacketConfig.Packet.HookWSA_Send = Convert.ToBoolean(HookWSA_Send.Value);
+                    }
+
+                    XElement HookWSA_SendTo = xeInjectMode.Element("HookWSA_SendTo");
+                    if (HookWSA_SendTo != null)
+                    {
+                        PacketConfig.Packet.HookWSA_SendTo = Convert.ToBoolean(HookWSA_SendTo.Value);
+                    }
+
+                    XElement HookWSA_Recv = xeInjectMode.Element("HookWSA_Recv");
+                    if (HookWSA_Recv != null)
+                    {
+                        PacketConfig.Packet.HookWSA_Recv = Convert.ToBoolean(HookWSA_Recv.Value);
+                    }
+
+                    XElement HookWSA_RecvFrom = xeInjectMode.Element("HookWSA_RecvFrom");
+                    if (HookWSA_RecvFrom != null)
+                    {
+                        PacketConfig.Packet.HookWSA_RecvFrom = Convert.ToBoolean(HookWSA_RecvFrom.Value);
+                    }
+
+                    XElement HotKey1 = xeInjectMode.Element("HotKey1");
+                    if (HotKey1 != null)
+                    {
+                        PacketConfig.Packet.HotKey1 = HotKey1.Value;
+                    }
+
+                    XElement HotKey2 = xeInjectMode.Element("HotKey2");
+                    if (HotKey2 != null)
+                    {
+                        PacketConfig.Packet.HotKey2 = HotKey2.Value;
+                    }
+
+                    XElement HotKey3 = xeInjectMode.Element("HotKey3");
+                    if (HotKey3 != null)
+                    {
+                        PacketConfig.Packet.HotKey3 = HotKey3.Value;
+                    }
+
+                    XElement HotKey4 = xeInjectMode.Element("HotKey4");
+                    if (HotKey4 != null)
+                    {
+                        PacketConfig.Packet.HotKey4 = HotKey4.Value;
+                    }
+
+                    XElement HotKey5 = xeInjectMode.Element("HotKey5");
+                    if (HotKey5 != null)
+                    {
+                        PacketConfig.Packet.HotKey5 = HotKey5.Value;
+                    }
+
+                    XElement HotKey6 = xeInjectMode.Element("HotKey6");
+                    if (HotKey6 != null)
+                    {
+                        PacketConfig.Packet.HotKey6 = HotKey6.Value;
+                    }
+
+                    XElement HotKey7 = xeInjectMode.Element("HotKey7");
+                    if (HotKey7 != null)
+                    {
+                        PacketConfig.Packet.HotKey7 = HotKey7.Value;
+                    }
+
+                    XElement HotKey8 = xeInjectMode.Element("HotKey8");
+                    if (HotKey8 != null)
+                    {
+                        PacketConfig.Packet.HotKey8 = HotKey8.Value;
+                    }
+
+                    XElement HotKey9 = xeInjectMode.Element("HotKey9");
+                    if (HotKey9 != null)
+                    {
+                        PacketConfig.Packet.HotKey9 = HotKey9.Value;
+                    }
+
+                    XElement HotKey10 = xeInjectMode.Element("HotKey10");
+                    if (HotKey10 != null)
+                    {
+                        PacketConfig.Packet.HotKey10 = HotKey10.Value;
+                    }
+
+                    XElement HotKey11 = xeInjectMode.Element("HotKey11");
+                    if (HotKey11 != null)
+                    {
+                        PacketConfig.Packet.HotKey11 = HotKey11.Value;
+                    }
+
+                    XElement HotKey12 = xeInjectMode.Element("HotKey12");
+                    if (HotKey12 != null)
+                    {
+                        PacketConfig.Packet.HotKey12 = HotKey12.Value;
+                    }
+
+                    XElement xePacketList_AutoRoll = xeInjectMode.Element("PacketList_AutoRoll");
+                    if (xePacketList_AutoRoll != null)
+                    {
+                        PacketConfig.List.AutoRoll = Convert.ToBoolean(xePacketList_AutoRoll.Value);
+                    }
+
+                    XElement xePacketList_AutoClear = xeInjectMode.Element("PacketList_AutoClear");
+                    if (xePacketList_AutoClear != null)
+                    {
+                        PacketConfig.List.AutoClear = Convert.ToBoolean(xePacketList_AutoClear.Value);
+                    }
+
+                    XElement xePacketList_AutoClear_Value = xeInjectMode.Element("PacketList_AutoClear_Value");
+                    if (xePacketList_AutoClear_Value != null)
+                    {
+                        PacketConfig.List.AutoClear_Value = int.Parse(xePacketList_AutoClear_Value.Value);
+                    }
+
+                    XElement LogList_AutoRoll = xeInjectMode.Element("LogList_AutoRoll");
+                    if (LogList_AutoRoll != null)
+                    {
+                        LogConfig.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                    }
+
+                    XElement LogList_AutoClear = xeInjectMode.Element("LogList_AutoClear");
+                    if (LogList_AutoClear != null)
+                    {
+                        LogConfig.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
+                    }
+
+                    XElement LogList_AutoClear_Value = xeInjectMode.Element("LogList_AutoClear_Value");
+                    if (LogList_AutoClear_Value != null)
+                    {
+                        LogConfig.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                    }
+
+                    XElement SpeedMode = xeInjectMode.Element("SpeedMode");
+                    if (SpeedMode != null)
+                    {
+                        PacketConfig.Packet.SpeedMode = Convert.ToBoolean(SpeedMode.Value);
+                    }
+
+                    XElement xeListExecute = xeInjectMode.Element("ListExecute");
+                    if (xeListExecute != null)
+                    {
+                        ListExecute = GetListExecute_ByString(xeListExecute.Value);
+                    }
+
+                    XElement FilterExecute = xeInjectMode.Element("FilterExecute");
+                    if (FilterExecute != null)
+                    {
+                        FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(FilterExecute.Value);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//保存运行配置到数据库
 
             public static void SaveRunConfig_ToDB(SystemMode FromMode)
@@ -545,7 +971,7 @@ namespace WPE.Lib
                         new XElement("CheckHead_Value", PacketConfig.Packet.CheckHead_Value),
                         new XElement("CheckData", PacketConfig.Packet.CheckData),
                         new XElement("CheckData_Value", PacketConfig.Packet.CheckData_Value),
-                        new XElement("CheckSize", PacketConfig.Packet.CheckSize),
+                        new XElement("CheckSize", PacketConfig.Packet.CheckLen),
                         new XElement("CheckLength_Value", PacketConfig.Packet.CheckLength_Value),
                         new XElement("HookWS1_Send", PacketConfig.Packet.HookWS1_Send),
                         new XElement("HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo),
@@ -635,7 +1061,7 @@ namespace WPE.Lib
                         PacketConfig.Packet.CheckHead_Value = RunConfig.Rows[0]["InjectionConfig_CheckHead_Value"].ToString();
                         PacketConfig.Packet.CheckData = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckData"]);
                         PacketConfig.Packet.CheckData_Value = RunConfig.Rows[0]["InjectionConfig_CheckData_Value"].ToString();
-                        PacketConfig.Packet.CheckSize = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSize"]);
+                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_CheckSize"]);
                         PacketConfig.Packet.CheckLength_Value = RunConfig.Rows[0]["InjectionConfig_CheckLength_Value"].ToString();
                         PacketConfig.Packet.HookWS1_Send = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_Send"]);
                         PacketConfig.Packet.HookWS1_SendTo = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_HookWS1_SendTo"]);
@@ -881,7 +1307,7 @@ namespace WPE.Lib
                     XElement CheckSize = xeInjectionConfig.Element("CheckSize");
                     if (CheckSize != null)
                     {
-                        PacketConfig.Packet.CheckSize = Convert.ToBoolean(CheckSize.Value);
+                        PacketConfig.Packet.CheckLen = Convert.ToBoolean(CheckSize.Value);
                     }
 
                     XElement CheckLength_Value = xeInjectionConfig.Element("CheckLength_Value");
@@ -5827,7 +6253,7 @@ namespace WPE.Lib
                 public static bool HookWS1_Send = true, HookWS1_SendTo = true, HookWS1_Recv = true, HookWS1_RecvFrom = true;
                 public static bool HookWS2_Send = true, HookWS2_SendTo = true, HookWS2_Recv = true, HookWS2_RecvFrom = true;
                 public static bool HookWSA_Send = true, HookWSA_SendTo = true, HookWSA_Recv = true, HookWSA_RecvFrom = true;
-                public static bool CheckNotShow = true, CheckSize, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
+                public static bool CheckNotShow = true, CheckLen, CheckSocket, CheckIP, CheckPort, CheckHead, CheckData;
                 public static string CheckSocket_Value, CheckLength_Value, CheckIP_Value, CheckPort_Value, CheckHead_Value, CheckData_Value;
                 public static string HotKey1 = "Ctrl + Alt + F1";
                 public static string HotKey2 = "Ctrl + Alt + F2";
@@ -11526,7 +11952,7 @@ namespace WPE.Lib
                 DataBase.InitdbPath();
 
                 DataBase.CreateTable_SystemConfig();
-                DataBase.CreateTable_RunConfig();
+                DataBase.CreateTable_InjectMode();                
                 DataBase.CreateTable_Filter();
                 DataBase.CreateTable_Send();
                 DataBase.CreateTable_Robot();
@@ -11732,6 +12158,291 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//注入模式
+
+            private static bool CreateTable_InjectMode()
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "CREATE TABLE IF NOT EXISTS InjectMode (";
+                        sql += "CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
+                        sql += "CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
+                        sql += "CheckSocket_Value TEXT,";//过滤套接字内容
+                        sql += "CheckIP BOOLEAN DEFAULT 0,";//过滤IP
+                        sql += "CheckIP_Value TEXT,";//过滤IP内容
+                        sql += "CheckPort BOOLEAN DEFAULT 0,";//过滤端口
+                        sql += "CheckPort_Value TEXT,";//过滤端口内容
+                        sql += "CheckHead BOOLEAN DEFAULT 0,";//过滤包头
+                        sql += "CheckHead_Value TEXT,";//过滤包头内容
+                        sql += "CheckData BOOLEAN DEFAULT 0,";//过滤数据
+                        sql += "CheckData_Value TEXT,";//过滤数据内容
+                        sql += "CheckSize BOOLEAN DEFAULT 0,";//过滤长度
+                        sql += "CheckLength_Value TEXT,";//过滤长度内容
+                        sql += "HookWS1_Send BOOLEAN DEFAULT 1,";//发送1.1
+                        sql += "HookWS1_SendTo BOOLEAN DEFAULT 1,";//发送到1.1
+                        sql += "HookWS1_Recv BOOLEAN DEFAULT 1,";//接收1.1
+                        sql += "HookWS1_RecvFrom BOOLEAN DEFAULT 1,";//接收自1.1
+                        sql += "HookWS2_Send BOOLEAN DEFAULT 1,";//发送
+                        sql += "HookWS2_SendTo BOOLEAN DEFAULT 1,";//发送到
+                        sql += "HookWS2_Recv BOOLEAN DEFAULT 1,";//接收
+                        sql += "HookWS2_RecvFrom BOOLEAN DEFAULT 1,";//接收自
+                        sql += "HookWSA_Send BOOLEAN DEFAULT 1,";//WSA 发送
+                        sql += "HookWSA_SendTo BOOLEAN DEFAULT 1,";//WSA 发送到
+                        sql += "HookWSA_Recv BOOLEAN DEFAULT 1,";//WSA 接收
+                        sql += "HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自
+                        sql += "HotKey1 TEXT,";//快捷键1
+                        sql += "HotKey2 TEXT,";//快捷键2
+                        sql += "HotKey3 TEXT,";//快捷键3
+                        sql += "HotKey4 TEXT,";//快捷键4
+                        sql += "HotKey5 TEXT,";//快捷键5
+                        sql += "HotKey6 TEXT,";//快捷键6
+                        sql += "HotKey7 TEXT,";//快捷键7
+                        sql += "HotKey8 TEXT,";//快捷键8
+                        sql += "HotKey9 TEXT,";//快捷键9
+                        sql += "HotKey10 TEXT,";//快捷键10
+                        sql += "HotKey11 TEXT,";//快捷键11
+                        sql += "HotKey12 TEXT,";//快捷键12
+                        sql += "PacketList_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
+                        sql += "PacketList_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
+                        sql += "PacketList_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值
+                        sql += "LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
+                        sql += "LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
+                        sql += "LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "SpeedMode BOOLEAN DEFAULT 0,";//极速模式
+                        sql += "ListExecute INTEGER DEFAULT 1,";//列表执行模式
+                        sql += "FilterExecute INTEGER DEFAULT 1";//滤镜执行模式
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    bReturn = true;
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static DataTable SelectTable_InjectMode()
+            {
+                DataTable dtReturn = new DataTable();
+
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "SELECT * FROM InjectMode;";
+
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(sql, conn))
+                        {
+                            adapter.Fill(dtReturn);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return dtReturn;
+            }
+
+            public static void DeleteTable_InjectMode()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "DELETE FROM InjectMode;";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            public static void InsertTable_InjectMode()
+            {
+                try
+                {
+                    using (SQLiteConnection conn = new SQLiteConnection(conStr))
+                    {
+                        string sql = "INSERT INTO InjectMode (";                   
+                        sql += "CheckNotShow,";
+                        sql += "CheckSocket,";
+                        sql += "CheckSocket_Value,";
+                        sql += "CheckIP,";
+                        sql += "CheckIP_Value,";
+                        sql += "CheckPort,";
+                        sql += "CheckPort_Value,";
+                        sql += "CheckHead,";
+                        sql += "CheckHead_Value,";
+                        sql += "CheckData,";
+                        sql += "CheckData_Value,";
+                        sql += "CheckSize,";
+                        sql += "CheckLength_Value,";
+                        sql += "HookWS1_Send,";
+                        sql += "HookWS1_SendTo,";
+                        sql += "HookWS1_Recv,";
+                        sql += "HookWS1_RecvFrom,";
+                        sql += "HookWS2_Send,";
+                        sql += "HookWS2_SendTo,";
+                        sql += "HookWS2_Recv,";
+                        sql += "HookWS2_RecvFrom,";
+                        sql += "HookWSA_Send,";
+                        sql += "HookWSA_SendTo,";
+                        sql += "HookWSA_Recv,";
+                        sql += "HookWSA_RecvFrom,";
+                        sql += "HotKey1,";
+                        sql += "HotKey2,";
+                        sql += "HotKey3,";
+                        sql += "HotKey4,";
+                        sql += "HotKey5,";
+                        sql += "HotKey6,";
+                        sql += "HotKey7,";
+                        sql += "HotKey8,";
+                        sql += "HotKey9,";
+                        sql += "HotKey10,";
+                        sql += "HotKey11,";
+                        sql += "HotKey12,";
+                        sql += "PacketList_AutoRoll,";
+                        sql += "PacketList_AutoClear,";
+                        sql += "PacketList_AutoClear_Value,";
+                        sql += "LogList_AutoRoll,";
+                        sql += "LogList_AutoClear,";
+                        sql += "LogList_AutoClear_Value,";
+                        sql += "SpeedMode,";
+                        sql += "ListExecute,";
+                        sql += "FilterExecute";
+                        sql += ") VALUES (";                     
+                        sql += "@CheckNotShow,";
+                        sql += "@CheckSocket,";
+                        sql += "@CheckSocket_Value,";
+                        sql += "@CheckIP,";
+                        sql += "@CheckIP_Value,";
+                        sql += "@CheckPort,";
+                        sql += "@CheckPort_Value,";
+                        sql += "@CheckHead,";
+                        sql += "@CheckHead_Value,";
+                        sql += "@CheckData,";
+                        sql += "@CheckData_Value,";
+                        sql += "@CheckSize,";
+                        sql += "@CheckLength_Value,";
+                        sql += "@HookWS1_Send,";
+                        sql += "@HookWS1_SendTo,";
+                        sql += "@HookWS1_Recv,";
+                        sql += "@HookWS1_RecvFrom,";
+                        sql += "@HookWS2_Send,";
+                        sql += "@HookWS2_SendTo,";
+                        sql += "@HookWS2_Recv,";
+                        sql += "@HookWS2_RecvFrom,";
+                        sql += "@HookWSA_Send,";
+                        sql += "@HookWSA_SendTo,";
+                        sql += "@HookWSA_Recv,";
+                        sql += "@HookWSA_RecvFrom,";
+                        sql += "@HotKey1,";
+                        sql += "@HotKey2,";
+                        sql += "@HotKey3,";
+                        sql += "@HotKey4,";
+                        sql += "@HotKey5,";
+                        sql += "@HotKey6,";
+                        sql += "@HotKey7,";
+                        sql += "@HotKey8,";
+                        sql += "@HotKey9,";
+                        sql += "@HotKey10,";
+                        sql += "@HotKey11,";
+                        sql += "@HotKey12,";
+                        sql += "@PacketList_AutoRoll,";
+                        sql += "@PacketList_AutoClear,";
+                        sql += "@PacketList_AutoClear_Value,";
+                        sql += "@LogList_AutoRoll,";
+                        sql += "@LogList_AutoClear,";
+                        sql += "@LogList_AutoClear_Value,";
+                        sql += "@SpeedMode,";
+                        sql += "@ListExecute,";
+                        sql += "@FilterExecute";
+                        sql += ");";
+
+                        using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
+                        {                            
+                            cmd.Parameters.AddWithValue("@CheckNotShow", PacketConfig.Packet.CheckNotShow);
+                            cmd.Parameters.AddWithValue("@CheckSocket", PacketConfig.Packet.CheckSocket);
+                            cmd.Parameters.AddWithValue("@CheckSocket_Value", PacketConfig.Packet.CheckSocket_Value);
+                            cmd.Parameters.AddWithValue("@CheckIP", PacketConfig.Packet.CheckIP);
+                            cmd.Parameters.AddWithValue("@CheckIP_Value", PacketConfig.Packet.CheckIP_Value);
+                            cmd.Parameters.AddWithValue("@CheckPort", PacketConfig.Packet.CheckPort);
+                            cmd.Parameters.AddWithValue("@CheckPort_Value", PacketConfig.Packet.CheckPort_Value);
+                            cmd.Parameters.AddWithValue("@CheckHead", PacketConfig.Packet.CheckHead);
+                            cmd.Parameters.AddWithValue("@CheckHead_Value", PacketConfig.Packet.CheckHead_Value);
+                            cmd.Parameters.AddWithValue("@CheckData", PacketConfig.Packet.CheckData);
+                            cmd.Parameters.AddWithValue("@CheckData_Value", PacketConfig.Packet.CheckData_Value);
+                            cmd.Parameters.AddWithValue("@CheckSize", PacketConfig.Packet.CheckLen);
+                            cmd.Parameters.AddWithValue("@CheckLength_Value", PacketConfig.Packet.CheckLength_Value);
+                            cmd.Parameters.AddWithValue("@HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
+                            cmd.Parameters.AddWithValue("@HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);
+                            cmd.Parameters.AddWithValue("@HookWS1_Recv", PacketConfig.Packet.HookWS1_Recv);
+                            cmd.Parameters.AddWithValue("@HookWS1_RecvFrom", PacketConfig.Packet.HookWS1_RecvFrom);
+                            cmd.Parameters.AddWithValue("@HookWS2_Send", PacketConfig.Packet.HookWS2_Send);
+                            cmd.Parameters.AddWithValue("@HookWS2_SendTo", PacketConfig.Packet.HookWS2_SendTo);
+                            cmd.Parameters.AddWithValue("@HookWS2_Recv", PacketConfig.Packet.HookWS2_Recv);
+                            cmd.Parameters.AddWithValue("@HookWS2_RecvFrom", PacketConfig.Packet.HookWS2_RecvFrom);
+                            cmd.Parameters.AddWithValue("@HookWSA_Send", PacketConfig.Packet.HookWSA_Send);
+                            cmd.Parameters.AddWithValue("@HookWSA_SendTo", PacketConfig.Packet.HookWSA_SendTo);
+                            cmd.Parameters.AddWithValue("@HookWSA_Recv", PacketConfig.Packet.HookWSA_Recv);
+                            cmd.Parameters.AddWithValue("@HookWSA_RecvFrom", PacketConfig.Packet.HookWSA_RecvFrom);
+                            cmd.Parameters.AddWithValue("@HotKey1", PacketConfig.Packet.HotKey1);
+                            cmd.Parameters.AddWithValue("@HotKey2", PacketConfig.Packet.HotKey2);
+                            cmd.Parameters.AddWithValue("@HotKey3", PacketConfig.Packet.HotKey3);
+                            cmd.Parameters.AddWithValue("@HotKey4", PacketConfig.Packet.HotKey4);
+                            cmd.Parameters.AddWithValue("@HotKey5", PacketConfig.Packet.HotKey5);
+                            cmd.Parameters.AddWithValue("@HotKey6", PacketConfig.Packet.HotKey6);
+                            cmd.Parameters.AddWithValue("@HotKey7", PacketConfig.Packet.HotKey7);
+                            cmd.Parameters.AddWithValue("@HotKey8", PacketConfig.Packet.HotKey8);
+                            cmd.Parameters.AddWithValue("@HotKey9", PacketConfig.Packet.HotKey9);
+                            cmd.Parameters.AddWithValue("@HotKey10", PacketConfig.Packet.HotKey10);
+                            cmd.Parameters.AddWithValue("@HotKey11", PacketConfig.Packet.HotKey11);
+                            cmd.Parameters.AddWithValue("@HotKey12", PacketConfig.Packet.HotKey12);
+                            cmd.Parameters.AddWithValue("@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@PacketList_AutoClear", PacketConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.AutoRoll);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.AutoClear);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);
+                            cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
+                            cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
+
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+            }
+
+            #endregion
+
             #region//运行配置表
 
             private static bool CreateTable_RunConfig()
@@ -11764,52 +12475,52 @@ namespace WPE.Lib
                         sql += "ProxyConfig_ExternalProxy_UserName TEXT,";//代理模式 - 外部代理用户名
                         sql += "ProxyConfig_ExternalProxy_PassWord TEXT,";//代理模式 - 外部代理密码
                         sql += "ProxyConfig_SpeedMode BOOLEAN DEFAULT 0,";//代理模式 - 极速模式
-                        sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//注入模式 - 过滤设置不显示
-                        sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//注入模式 - 过滤套接字
-                        sql += "InjectionConfig_CheckSocket_Value TEXT,";//注入模式 - 过滤套接字内容
-                        sql += "InjectionConfig_CheckIP BOOLEAN DEFAULT 0,";//注入模式 - 过滤IP
-                        sql += "InjectionConfig_CheckIP_Value TEXT,";//注入模式 - 过滤IP内容
-                        sql += "InjectionConfig_CheckPort BOOLEAN DEFAULT 0,";//注入模式 - 过滤端口
-                        sql += "InjectionConfig_CheckPort_Value TEXT,";//注入模式 - 过滤端口内容
-                        sql += "InjectionConfig_CheckHead BOOLEAN DEFAULT 0,";//注入模式 - 过滤包头
-                        sql += "InjectionConfig_CheckHead_Value TEXT,";//注入模式 - 过滤包头内容
-                        sql += "InjectionConfig_CheckData BOOLEAN DEFAULT 0,";//注入模式 - 过滤数据
-                        sql += "InjectionConfig_CheckData_Value TEXT,";//注入模式 - 过滤数据内容
-                        sql += "InjectionConfig_CheckSize BOOLEAN DEFAULT 0,";//注入模式 - 过滤长度
-                        sql += "InjectionConfig_CheckLength_Value TEXT,";//注入模式 - 过滤长度内容
-                        sql += "InjectionConfig_HookWS1_Send BOOLEAN DEFAULT 1,";//注入模式 - 发送1.1
-                        sql += "InjectionConfig_HookWS1_SendTo BOOLEAN DEFAULT 1,";//注入模式 - 发送到1.1
-                        sql += "InjectionConfig_HookWS1_Recv BOOLEAN DEFAULT 1,";//注入模式 - 接收1.1
-                        sql += "InjectionConfig_HookWS1_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - 接收自1.1
-                        sql += "InjectionConfig_HookWS2_Send BOOLEAN DEFAULT 1,";//注入模式 - 发送
-                        sql += "InjectionConfig_HookWS2_SendTo BOOLEAN DEFAULT 1,";//注入模式 - 发送到
-                        sql += "InjectionConfig_HookWS2_Recv BOOLEAN DEFAULT 1,";//注入模式 - 接收
-                        sql += "InjectionConfig_HookWS2_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - 接收自
-                        sql += "InjectionConfig_HookWSA_Send BOOLEAN DEFAULT 1,";//注入模式 - WSA 发送
-                        sql += "InjectionConfig_HookWSA_SendTo BOOLEAN DEFAULT 1,";//注入模式 - WSA 发送到
-                        sql += "InjectionConfig_HookWSA_Recv BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收
-                        sql += "InjectionConfig_HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//注入模式 - WSA 接收自
-                        sql += "InjectionConfig_HotKey1 TEXT,";//注入模式 - 快捷键1
-                        sql += "InjectionConfig_HotKey2 TEXT,";//注入模式 - 快捷键2
-                        sql += "InjectionConfig_HotKey3 TEXT,";//注入模式 - 快捷键3
-                        sql += "InjectionConfig_HotKey4 TEXT,";//注入模式 - 快捷键4
-                        sql += "InjectionConfig_HotKey5 TEXT,";//注入模式 - 快捷键5
-                        sql += "InjectionConfig_HotKey6 TEXT,";//注入模式 - 快捷键6
-                        sql += "InjectionConfig_HotKey7 TEXT,";//注入模式 - 快捷键7
-                        sql += "InjectionConfig_HotKey8 TEXT,";//注入模式 - 快捷键8
-                        sql += "InjectionConfig_HotKey9 TEXT,";//注入模式 - 快捷键9
-                        sql += "InjectionConfig_HotKey10 TEXT,";//注入模式 - 快捷键10
-                        sql += "InjectionConfig_HotKey11 TEXT,";//注入模式 - 快捷键11
-                        sql += "InjectionConfig_HotKey12 TEXT,";//注入模式 - 快捷键12
-                        sql += "InjectionConfig_PacketConfig.List_AutoRoll BOOLEAN DEFAULT 0,";//注入模式 - 封包列表自动滚动
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 封包列表自动清理
-                        sql += "InjectionConfig_PacketConfig.List_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 封包列表自动清理数值
-                        sql += "InjectionConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//注入模式 - 日志列表自动滚动
-                        sql += "InjectionConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//注入模式 - 日志列表自动清理
-                        sql += "InjectionConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//注入模式 - 日志列表自动清理数值
-                        sql += "InjectionConfig_SpeedMode BOOLEAN DEFAULT 0,";//注入模式 - 极速模式
-                        sql += "InjectionConfig_ListExecute INTEGER DEFAULT 1,";//注入模式 - 列表执行模式
-                        sql += "InjectionConfig_FilterExecute INTEGER DEFAULT 1";//注入模式 - 滤镜执行模式
+                        sql += "InjectionConfig_CheckNotShow BOOLEAN DEFAULT 1,";//过滤设置不显示
+                        sql += "InjectionConfig_CheckSocket BOOLEAN DEFAULT 0,";//过滤套接字
+                        sql += "InjectionConfig_CheckSocket_Value TEXT,";//过滤套接字内容
+                        sql += "InjectionConfig_CheckIP BOOLEAN DEFAULT 0,";//过滤IP
+                        sql += "InjectionConfig_CheckIP_Value TEXT,";//过滤IP内容
+                        sql += "InjectionConfig_CheckPort BOOLEAN DEFAULT 0,";//过滤端口
+                        sql += "InjectionConfig_CheckPort_Value TEXT,";//过滤端口内容
+                        sql += "InjectionConfig_CheckHead BOOLEAN DEFAULT 0,";//过滤包头
+                        sql += "InjectionConfig_CheckHead_Value TEXT,";//过滤包头内容
+                        sql += "InjectionConfig_CheckData BOOLEAN DEFAULT 0,";//过滤数据
+                        sql += "InjectionConfig_CheckData_Value TEXT,";//过滤数据内容
+                        sql += "InjectionConfig_CheckSize BOOLEAN DEFAULT 0,";//过滤长度
+                        sql += "InjectionConfig_CheckLength_Value TEXT,";//过滤长度内容
+                        sql += "InjectionConfig_HookWS1_Send BOOLEAN DEFAULT 1,";//发送1.1
+                        sql += "InjectionConfig_HookWS1_SendTo BOOLEAN DEFAULT 1,";//发送到1.1
+                        sql += "InjectionConfig_HookWS1_Recv BOOLEAN DEFAULT 1,";//接收1.1
+                        sql += "InjectionConfig_HookWS1_RecvFrom BOOLEAN DEFAULT 1,";//接收自1.1
+                        sql += "InjectionConfig_HookWS2_Send BOOLEAN DEFAULT 1,";//发送
+                        sql += "InjectionConfig_HookWS2_SendTo BOOLEAN DEFAULT 1,";//发送到
+                        sql += "InjectionConfig_HookWS2_Recv BOOLEAN DEFAULT 1,";//接收
+                        sql += "InjectionConfig_HookWS2_RecvFrom BOOLEAN DEFAULT 1,";//接收自
+                        sql += "InjectionConfig_HookWSA_Send BOOLEAN DEFAULT 1,";//WSA 发送
+                        sql += "InjectionConfig_HookWSA_SendTo BOOLEAN DEFAULT 1,";//WSA 发送到
+                        sql += "InjectionConfig_HookWSA_Recv BOOLEAN DEFAULT 1,";//WSA 接收
+                        sql += "InjectionConfig_HookWSA_RecvFrom BOOLEAN DEFAULT 1,";//WSA 接收自
+                        sql += "InjectionConfig_HotKey1 TEXT,";//快捷键1
+                        sql += "InjectionConfig_HotKey2 TEXT,";//快捷键2
+                        sql += "InjectionConfig_HotKey3 TEXT,";//快捷键3
+                        sql += "InjectionConfig_HotKey4 TEXT,";//快捷键4
+                        sql += "InjectionConfig_HotKey5 TEXT,";//快捷键5
+                        sql += "InjectionConfig_HotKey6 TEXT,";//快捷键6
+                        sql += "InjectionConfig_HotKey7 TEXT,";//快捷键7
+                        sql += "InjectionConfig_HotKey8 TEXT,";//快捷键8
+                        sql += "InjectionConfig_HotKey9 TEXT,";//快捷键9
+                        sql += "InjectionConfig_HotKey10 TEXT,";//快捷键10
+                        sql += "InjectionConfig_HotKey11 TEXT,";//快捷键11
+                        sql += "InjectionConfig_HotKey12 TEXT,";//快捷键12
+                        sql += "InjectionConfig_PacketConfig.List_AutoRoll BOOLEAN DEFAULT 0,";//封包列表自动滚动
+                        sql += "InjectionConfig_PacketConfig.List_AutoClear BOOLEAN DEFAULT 1,";//封包列表自动清理
+                        sql += "InjectionConfig_PacketConfig.List_AutoClear_Value INTEGER DEFAULT 5000,";//封包列表自动清理数值
+                        sql += "InjectionConfig_LogList_AutoRoll BOOLEAN DEFAULT 0,";//日志列表自动滚动
+                        sql += "InjectionConfig_LogList_AutoClear BOOLEAN DEFAULT 1,";//日志列表自动清理
+                        sql += "InjectionConfig_LogList_AutoClear_Value INTEGER DEFAULT 5000,";//日志列表自动清理数值
+                        sql += "InjectionConfig_SpeedMode BOOLEAN DEFAULT 0,";//极速模式
+                        sql += "InjectionConfig_ListExecute INTEGER DEFAULT 1,";//列表执行模式
+                        sql += "InjectionConfig_FilterExecute INTEGER DEFAULT 1";//滤镜执行模式
                         sql += ");";
 
                         using (SQLiteCommand cmd = new SQLiteCommand(sql, conn))
@@ -12049,7 +12760,7 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckHead_Value", PacketConfig.Packet.CheckHead_Value);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckData", PacketConfig.Packet.CheckData);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckData_Value", PacketConfig.Packet.CheckData_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSize", PacketConfig.Packet.CheckSize);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_CheckSize", PacketConfig.Packet.CheckLen);
                             cmd.Parameters.AddWithValue("@InjectionConfig_CheckLength_Value", PacketConfig.Packet.CheckLength_Value);
                             cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_Send", PacketConfig.Packet.HookWS1_Send);
                             cmd.Parameters.AddWithValue("@InjectionConfig_HookWS1_SendTo", PacketConfig.Packet.HookWS1_SendTo);

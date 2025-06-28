@@ -36,8 +36,14 @@
             AntdUI.MenuItem menuItem6 = new AntdUI.MenuItem();
             AntdUI.MenuItem menuItem7 = new AntdUI.MenuItem();
             AntdUI.Tabs.StyleLine styleLine1 = new AntdUI.Tabs.StyleLine();
+            AntdUI.SegmentedItem segmentedItem1 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem2 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem3 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem4 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem5 = new AntdUI.SegmentedItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
+            this.colorTheme = new AntdUI.ColorPicker();
             this.btn_mode = new AntdUI.Button();
             this.btn_global = new AntdUI.Dropdown();
             this.btn_setting = new AntdUI.Button();
@@ -45,18 +51,20 @@
             this.mInjectMode = new AntdUI.Menu();
             this.bMenuCollapse = new AntdUI.Button();
             this.tabInjectMode = new AntdUI.Tabs();
-            this.tabPage1 = new AntdUI.TabPage();
-            this.tabPage2 = new AntdUI.TabPage();
-            this.tabPage3 = new AntdUI.TabPage();
-            this.tabPage4 = new AntdUI.TabPage();
-            this.tabPage5 = new AntdUI.TabPage();
-            this.tabPage6 = new AntdUI.TabPage();
-            this.tabPage7 = new AntdUI.TabPage();
-            this.colorTheme = new AntdUI.ColorPicker();
-            this.tabPage8 = new AntdUI.TabPage();
+            this.tpPacketList = new AntdUI.TabPage();
+            this.tpStatistical = new AntdUI.TabPage();
+            this.tpComparison = new AntdUI.TabPage();
+            this.tpXOR = new AntdUI.TabPage();
+            this.tpTranscoding = new AntdUI.TabPage();
+            this.tpExtraction = new AntdUI.TabPage();
+            this.tpLog = new AntdUI.TabPage();
+            this.tlpPacketList = new System.Windows.Forms.TableLayoutPanel();
+            this.segmented = new AntdUI.Segmented();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
+            this.tpPacketList.SuspendLayout();
+            this.tlpPacketList.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -77,6 +85,17 @@
             this.pageHeader.SubText = "2.0.0.0";
             this.pageHeader.TabIndex = 6;
             this.pageHeader.Text = "WPE x64";
+            // 
+            // colorTheme
+            // 
+            this.colorTheme.Dock = System.Windows.Forms.DockStyle.Right;
+            this.colorTheme.Location = new System.Drawing.Point(966, 0);
+            this.colorTheme.Name = "colorTheme";
+            this.colorTheme.Padding = new System.Windows.Forms.Padding(5);
+            this.colorTheme.Size = new System.Drawing.Size(40, 40);
+            this.colorTheme.TabIndex = 13;
+            this.colorTheme.Value = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
+            this.colorTheme.ValueChanged += new AntdUI.ColorEventHandler(this.colorTheme_ValueChanged);
             // 
             // btn_mode
             // 
@@ -197,105 +216,165 @@
             // 
             // tabInjectMode
             // 
-            this.tabInjectMode.Controls.Add(this.tabPage1);
-            this.tabInjectMode.Controls.Add(this.tabPage8);
-            this.tabInjectMode.Controls.Add(this.tabPage2);
-            this.tabInjectMode.Controls.Add(this.tabPage3);
-            this.tabInjectMode.Controls.Add(this.tabPage4);
-            this.tabInjectMode.Controls.Add(this.tabPage5);
-            this.tabInjectMode.Controls.Add(this.tabPage6);
-            this.tabInjectMode.Controls.Add(this.tabPage7);
+            this.tabInjectMode.Controls.Add(this.tpPacketList);
+            this.tabInjectMode.Controls.Add(this.tpStatistical);
+            this.tabInjectMode.Controls.Add(this.tpComparison);
+            this.tabInjectMode.Controls.Add(this.tpXOR);
+            this.tabInjectMode.Controls.Add(this.tpTranscoding);
+            this.tabInjectMode.Controls.Add(this.tpExtraction);
+            this.tabInjectMode.Controls.Add(this.tpLog);
             this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
-            this.tabInjectMode.Pages.Add(this.tabPage8);
-            this.tabInjectMode.Pages.Add(this.tabPage2);
-            this.tabInjectMode.Pages.Add(this.tabPage3);
-            this.tabInjectMode.Pages.Add(this.tabPage4);
-            this.tabInjectMode.Pages.Add(this.tabPage5);
-            this.tabInjectMode.Pages.Add(this.tabPage6);
-            this.tabInjectMode.Pages.Add(this.tabPage7);
+            this.tabInjectMode.Pages.Add(this.tpPacketList);
+            this.tabInjectMode.Pages.Add(this.tpStatistical);
+            this.tabInjectMode.Pages.Add(this.tpComparison);
+            this.tabInjectMode.Pages.Add(this.tpXOR);
+            this.tabInjectMode.Pages.Add(this.tpTranscoding);
+            this.tabInjectMode.Pages.Add(this.tpExtraction);
+            this.tabInjectMode.Pages.Add(this.tpLog);
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 680);
             this.tabInjectMode.Style = styleLine1;
-            this.tabInjectMode.TabIndex = 8;
-            this.tabInjectMode.TabStop = false;
-            this.tabInjectMode.TypExceed = AntdUI.TabTypExceed.None;
+            this.tabInjectMode.TabIndex = 10;
+            this.tabInjectMode.Text = "tabs1";
             // 
-            // tabPage1
+            // tpPacketList
             // 
-            this.tabPage1.Location = new System.Drawing.Point(3, 33);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1124, 644);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "封包列表";
+            this.tpPacketList.Controls.Add(this.tlpPacketList);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
+            this.tpPacketList.Name = "tpPacketList";
+            this.tpPacketList.Size = new System.Drawing.Size(1124, 644);
+            this.tpPacketList.TabIndex = 0;
+            this.tpPacketList.Text = "封包列表";
             // 
-            // tabPage2
+            // tpStatistical
             // 
-            this.tabPage2.Location = new System.Drawing.Point(0, 0);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Size = new System.Drawing.Size(0, 0);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "统计数据";
+            this.tpStatistical.Location = new System.Drawing.Point(0, 0);
+            this.tpStatistical.Name = "tpStatistical";
+            this.tpStatistical.Size = new System.Drawing.Size(0, 0);
+            this.tpStatistical.TabIndex = 1;
+            this.tpStatistical.Text = "统计数据";
             // 
-            // tabPage3
+            // tpComparison
             // 
-            this.tabPage3.Location = new System.Drawing.Point(0, 0);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(0, 0);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "文本对比";
+            this.tpComparison.Location = new System.Drawing.Point(0, 0);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(0, 0);
+            this.tpComparison.TabIndex = 2;
+            this.tpComparison.Text = "文本对比";
             // 
-            // tabPage4
+            // tpXOR
             // 
-            this.tabPage4.Location = new System.Drawing.Point(0, 0);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(0, 0);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "异或计算";
+            this.tpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tpXOR.TabIndex = 3;
+            this.tpXOR.Text = "异或计算";
             // 
-            // tabPage5
+            // tpTranscoding
             // 
-            this.tabPage5.Location = new System.Drawing.Point(0, 0);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(0, 0);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "编码转换";
+            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tpTranscoding.TabIndex = 4;
+            this.tpTranscoding.Text = "编码转换";
             // 
-            // tabPage6
+            // tpExtraction
             // 
-            this.tabPage6.Location = new System.Drawing.Point(0, 0);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(0, 0);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "数据提取";
+            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
+            this.tpExtraction.TabIndex = 5;
+            this.tpExtraction.Text = "数据提取";
             // 
-            // tabPage7
+            // tpLog
             // 
-            this.tabPage7.Location = new System.Drawing.Point(0, 0);
-            this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(0, 0);
-            this.tabPage7.TabIndex = 6;
-            this.tabPage7.Text = "系统日志";
+            this.tpLog.Location = new System.Drawing.Point(0, 0);
+            this.tpLog.Name = "tpLog";
+            this.tpLog.Size = new System.Drawing.Size(0, 0);
+            this.tpLog.TabIndex = 6;
+            this.tpLog.Text = "系统日志";
             // 
-            // colorTheme
+            // tlpPacketList
             // 
-            this.colorTheme.Dock = System.Windows.Forms.DockStyle.Right;
-            this.colorTheme.Location = new System.Drawing.Point(966, 0);
-            this.colorTheme.Name = "colorTheme";
-            this.colorTheme.Padding = new System.Windows.Forms.Padding(5);
-            this.colorTheme.Size = new System.Drawing.Size(40, 40);
-            this.colorTheme.TabIndex = 13;
-            this.colorTheme.Value = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
-            this.colorTheme.ValueChanged += new AntdUI.ColorEventHandler(this.colorTheme_ValueChanged);
+            this.tlpPacketList.ColumnCount = 1;
+            this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketList.Controls.Add(this.segmented, 0, 0);
+            this.tlpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpPacketList.Location = new System.Drawing.Point(0, 0);
+            this.tlpPacketList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpPacketList.Name = "tlpPacketList";
+            this.tlpPacketList.RowCount = 2;
+            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpPacketList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpPacketList.Size = new System.Drawing.Size(1124, 644);
+            this.tlpPacketList.TabIndex = 10;
             // 
-            // tabPage8
+            // segmented
             // 
-            this.tabPage8.Location = new System.Drawing.Point(0, 0);
-            this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(0, 0);
-            this.tabPage8.TabIndex = 7;
-            this.tabPage8.Text = "封包列表";
+            this.segmented.Dock = System.Windows.Forms.DockStyle.Top;
+            this.segmented.IconAlign = AntdUI.TAlignMini.Left;
+            segmentedItem1.Badge = null;
+            segmentedItem1.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem1.BadgeBack = null;
+            segmentedItem1.BadgeMode = false;
+            segmentedItem1.BadgeOffsetX = 0;
+            segmentedItem1.BadgeOffsetY = 0;
+            segmentedItem1.BadgeSize = 0.6F;
+            segmentedItem1.BadgeSvg = null;
+            segmentedItem1.IconSvg = "FilterOutlined";
+            segmentedItem1.Text = "过滤设置";
+            segmentedItem2.Badge = null;
+            segmentedItem2.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem2.BadgeBack = null;
+            segmentedItem2.BadgeMode = false;
+            segmentedItem2.BadgeOffsetX = 0;
+            segmentedItem2.BadgeOffsetY = 0;
+            segmentedItem2.BadgeSize = 0.6F;
+            segmentedItem2.BadgeSvg = null;
+            segmentedItem2.IconSvg = "AimOutlined";
+            segmentedItem2.Text = "拦截设置";
+            segmentedItem3.Badge = null;
+            segmentedItem3.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem3.BadgeBack = null;
+            segmentedItem3.BadgeMode = false;
+            segmentedItem3.BadgeOffsetX = 0;
+            segmentedItem3.BadgeOffsetY = 0;
+            segmentedItem3.BadgeSize = 0.6F;
+            segmentedItem3.BadgeSvg = null;
+            segmentedItem3.IconSvg = "UnorderedListOutlined";
+            segmentedItem3.Text = "列表设置";
+            segmentedItem4.Badge = null;
+            segmentedItem4.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem4.BadgeBack = null;
+            segmentedItem4.BadgeMode = false;
+            segmentedItem4.BadgeOffsetX = 0;
+            segmentedItem4.BadgeOffsetY = 0;
+            segmentedItem4.BadgeSize = 0.6F;
+            segmentedItem4.BadgeSvg = null;
+            segmentedItem4.IconSvg = "GoldOutlined";
+            segmentedItem4.Text = "快捷键";
+            segmentedItem5.Badge = null;
+            segmentedItem5.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem5.BadgeBack = null;
+            segmentedItem5.BadgeMode = false;
+            segmentedItem5.BadgeOffsetX = 0;
+            segmentedItem5.BadgeOffsetY = 0;
+            segmentedItem5.BadgeSize = 0.6F;
+            segmentedItem5.BadgeSvg = null;
+            segmentedItem5.IconSvg = "SettingOutlined";
+            segmentedItem5.Text = "系统设置";
+            this.segmented.Items.Add(segmentedItem1);
+            this.segmented.Items.Add(segmentedItem2);
+            this.segmented.Items.Add(segmentedItem3);
+            this.segmented.Items.Add(segmentedItem4);
+            this.segmented.Items.Add(segmentedItem5);
+            this.segmented.Location = new System.Drawing.Point(3, 3);
+            this.segmented.Name = "segmented";
+            this.segmented.Size = new System.Drawing.Size(1118, 45);
+            this.segmented.TabIndex = 0;
+            this.segmented.SelectIndexChanged += new AntdUI.IntEventHandler(this.segmented_SelectIndexChanged);
             // 
             // InjectModeForm
             // 
@@ -314,10 +393,13 @@
             this.Name = "InjectModeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "WPE x64";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InjectModeForm_FormClosing);
             this.Load += new System.EventHandler(this.InjectModeForm_Load);
             this.pageHeader.ResumeLayout(false);
             this.tlpMenu.ResumeLayout(false);
             this.tabInjectMode.ResumeLayout(false);
+            this.tpPacketList.ResumeLayout(false);
+            this.tlpPacketList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -330,15 +412,16 @@
         private System.Windows.Forms.TableLayoutPanel tlpMenu;
         private AntdUI.Menu mInjectMode;
         private AntdUI.Button bMenuCollapse;
-        private AntdUI.Tabs tabInjectMode;
-        private AntdUI.TabPage tabPage1;
-        private AntdUI.TabPage tabPage2;
-        private AntdUI.TabPage tabPage3;
-        private AntdUI.TabPage tabPage4;
-        private AntdUI.TabPage tabPage5;
-        private AntdUI.TabPage tabPage6;
-        private AntdUI.TabPage tabPage7;
         private AntdUI.ColorPicker colorTheme;
-        private AntdUI.TabPage tabPage8;
+        private AntdUI.Tabs tabInjectMode;
+        private AntdUI.TabPage tpPacketList;
+        private AntdUI.TabPage tpStatistical;
+        private AntdUI.TabPage tpComparison;
+        private AntdUI.TabPage tpXOR;
+        private AntdUI.TabPage tpTranscoding;
+        private AntdUI.TabPage tpExtraction;
+        private AntdUI.TabPage tpLog;
+        private System.Windows.Forms.TableLayoutPanel tlpPacketList;
+        private AntdUI.Segmented segmented;
     }
 }

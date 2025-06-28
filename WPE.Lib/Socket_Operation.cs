@@ -3224,7 +3224,7 @@ namespace WPE.Lib
                 }
 
                 //封包大小
-                if (Operate.PacketConfig.Packet.CheckSize)
+                if (Operate.PacketConfig.Packet.CheckLen)
                 {
                     bool bIsFilter = Socket_Operation.IsFilter_BySize(spi.PacketLen);
                     if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)

@@ -326,7 +326,7 @@ namespace WPELibrary
                 this.cbCheckPort.Checked = Operate.PacketConfig.Packet.CheckPort;
                 this.cbCheckHead.Checked = Operate.PacketConfig.Packet.CheckHead;
                 this.cbCheckData.Checked = Operate.PacketConfig.Packet.CheckData;
-                this.cbCheckSize.Checked = Operate.PacketConfig.Packet.CheckSize;
+                this.cbCheckSize.Checked = Operate.PacketConfig.Packet.CheckLen;
 
                 this.txtCheckSocket.Text = Operate.PacketConfig.Packet.CheckSocket_Value;
                 this.txtCheckLength.Text = Operate.PacketConfig.Packet.CheckLength_Value;
@@ -417,7 +417,7 @@ namespace WPELibrary
                 Operate.PacketConfig.Packet.CheckPort = cbCheckPort.Checked;
                 Operate.PacketConfig.Packet.CheckHead = cbCheckHead.Checked;
                 Operate.PacketConfig.Packet.CheckData = cbCheckData.Checked;
-                Operate.PacketConfig.Packet.CheckSize = cbCheckSize.Checked;
+                Operate.PacketConfig.Packet.CheckLen = cbCheckSize.Checked;
 
                 Operate.PacketConfig.Packet.CheckSocket_Value = this.txtCheckSocket.Text.Trim();
                 Operate.PacketConfig.Packet.CheckLength_Value = this.txtCheckLength.Text.Trim();

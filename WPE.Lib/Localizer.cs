@@ -185,6 +185,32 @@ namespace WPE.Lib
                 case "InjectModeForm.miSystemLog":
                     return "System Log";
 
+                case "InjectModeForm.FilterSettings.Success":
+                    return "Filter settings saved successfully";
+
+                #endregion
+
+                #region//FilterSettingsForm
+
+                case "FilterSettingsForm":
+                    return "Filter Settings";
+
+                case "FilterSettingsForm.FilterEmpty":
+                    return "Filter Settings Empty";
+
+                case "FilterSettingsForm.Success":
+                    return "Filter Settings Success";
+
+                #endregion
+
+                #region//HookSettingsForm
+
+                case "HookSettingsForm":
+                    return "Hook Settings";
+
+                case "HookSettingsForm.Success":
+                    return "Hook Settings Success";
+
                 #endregion
 
                 default:
