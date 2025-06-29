@@ -34,8 +34,8 @@ namespace WPELibrary
                 this.rtbCompare.Clear();
                 this.rtbCompare.Text = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_155);      
 
-                string sRawData = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.SPI.RawBuffer);
-                string sModifiedData = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.SPI.PacketBuffer);                
+                string sRawData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.SPI.RawBuffer);
+                string sModifiedData = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, this.SPI.PacketBuffer);                
 
                 this.lRawData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_134), this.SPI.RawBuffer.Length);
                 this.lModifiedData.Text = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_135), this.SPI.PacketBuffer.Length);

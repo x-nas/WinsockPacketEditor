@@ -666,7 +666,7 @@ namespace WPELibrary
                 Operate.PacketConfig.Packet.Total_RecvBytes = 0;
                 Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
 
-                Operate.PacketConfig.Queue.FilterSocketList_CNT = 0;
+                Operate.PacketConfig.Queue.FilterPacketList_CNT = 0;
                 Operate.PacketConfig.Queue.Send_CNT = 0;
                 Operate.PacketConfig.Queue.Recv_CNT = 0;
                 Operate.PacketConfig.Queue.SendTo_CNT = 0;
@@ -688,7 +688,7 @@ namespace WPELibrary
             {
                 Operate.PacketConfig.Queue.ClearPacketQueue();
                 Operate.PacketConfig.List.lstRecPacket.Clear();
-                Operate.PacketConfig.List.spiSelect = null;
+                Operate.PacketConfig.List.piSelect = null;
                 this.dgvSocketList.Rows.Clear();
             }
             catch (Exception ex)
@@ -860,28 +860,28 @@ namespace WPELibrary
 
         private void tSocketInfo_Tick(object sender, EventArgs e)
         {
-            try
-            {
-                this.tlTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
-                this.tlFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
-                this.tlQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-                this.tlFilterSocketList_CNT.Text = Operate.PacketConfig.Queue.FilterSocketList_CNT.ToString();
-                this.tlSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
-                this.tlRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
-                this.tlSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
-                this.tlRecvFrom_CNT.Text = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
-                this.tlWSASend_CNT.Text = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
-                this.tlWSARecv_CNT.Text = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
-                this.tlWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
-                this.tlWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
+            //try
+            //{
+            //    this.tlTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
+            //    this.tlFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+            //    this.tlQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
+            //    this.tlFilterSocketList_CNT.Text = Operate.PacketConfig.Queue.FilterSocketList_CNT.ToString();
+            //    this.tlSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
+            //    this.tlRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
+            //    this.tlSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
+            //    this.tlRecvFrom_CNT.Text = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
+            //    this.tlWSASend_CNT.Text = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
+            //    this.tlWSARecv_CNT.Text = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
+            //    this.tlWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
+            //    this.tlWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
 
-                //Operate.PacketConfig.Packet.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
-                this.tsslTotalBytes.Text = Operate.PacketConfig.Packet.SocketBytesInfo;
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
+            //    //Operate.PacketConfig.Packet.SocketBytesInfo = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_31), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes), Socket_Operation.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes));
+            //    this.tsslTotalBytes.Text = Operate.PacketConfig.Packet.SocketBytesInfo;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            //}
         }
 
         private async void tSocketList_Tick(object sender, EventArgs e)
@@ -890,7 +890,7 @@ namespace WPELibrary
             {
                 if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
                 {
-                    await Operate.PacketConfig.List.SocketToList();
+                    //await Operate.PacketConfig.List.PacketToList();
                     this.AutoScrollDataGridView(dgvSocketList, cbSocketList_AutoRoll.Checked);
                     this.AutoCleanUp_SocketList();
                 }
@@ -1246,9 +1246,9 @@ namespace WPELibrary
                     if (iSelectIndex >= 0 && iSelectIndex < Operate.PacketConfig.List.lstRecPacket.Count)
                     {
                         Operate.PacketConfig.List.Search_Index = iSelectIndex;
-                        Operate.PacketConfig.List.spiSelect = Operate.PacketConfig.List.lstRecPacket[iSelectIndex];
+                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstRecPacket[iSelectIndex];
 
-                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.spiSelect.PacketBuffer);
+                        DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
                         hbPacketData.ByteProvider = dbp;
                     }
                 }
@@ -1328,7 +1328,7 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.PacketConfig.List.spiSelect != null)
+                if (Operate.PacketConfig.List.piSelect != null)
                 {
                     if (this.cmsHexBox_tscbSendList.SelectedItem != null)
                     {
@@ -1338,10 +1338,10 @@ namespace WPELibrary
 
                         if (SCollection != null)
                         {
-                            int iSocket = Operate.PacketConfig.List.spiSelect.PacketSocket;
-                            Operate.PacketConfig.Packet.PacketType ptType = Operate.PacketConfig.List.spiSelect.PacketType;
-                            string sIPFrom = Operate.PacketConfig.List.spiSelect.PacketFrom;
-                            string sIPTo = Operate.PacketConfig.List.spiSelect.PacketTo;
+                            int iSocket = Operate.PacketConfig.List.piSelect.PacketSocket;
+                            Operate.PacketConfig.Packet.PacketType ptType = Operate.PacketConfig.List.piSelect.PacketType;
+                            string sIPFrom = Operate.PacketConfig.List.piSelect.PacketFrom;
+                            string sIPTo = Operate.PacketConfig.List.piSelect.PacketTo;
 
                             byte[] bBuffer = null;
 
@@ -1352,7 +1352,7 @@ namespace WPELibrary
                             }
                             else
                             {
-                                bBuffer = Operate.PacketConfig.List.spiSelect.PacketBuffer;
+                                bBuffer = Operate.PacketConfig.List.piSelect.PacketBuffer;
                             }
 
                             Operate.SendConfig.Send.AddSendCollection(SCollection, iSocket, ptType, sIPFrom, sIPTo, bBuffer);
@@ -1375,13 +1375,13 @@ namespace WPELibrary
 
             try
             {
-                if (Operate.PacketConfig.List.spiSelect != null)
+                if (Operate.PacketConfig.List.piSelect != null)
                 {
                     switch (sItemText)
                     {
                         case "cmsHexBox_Send":
 
-                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.spiSelect);
+                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.piSelect);
 
                             break;
 
@@ -1392,11 +1392,11 @@ namespace WPELibrary
                                 this.hbPacketData.CopyHex();
 
                                 byte[] bBuffer = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, Clipboard.GetText());
-                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, bBuffer);
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, bBuffer);
                             }
                             else
                             {
-                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, null);
+                                Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, null);
                             }
 
                             break;
@@ -1522,31 +1522,31 @@ namespace WPELibrary
 
             try
             {
-                if (Operate.PacketConfig.List.spiSelect != null)
+                if (Operate.PacketConfig.List.piSelect != null)
                 {
                     switch (sItemText)
                     {
                         case "cmsSocketList_Send":
 
-                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.spiSelect);
+                            Socket_Operation.ShowSendForm(Operate.PacketConfig.List.piSelect);
 
                             break;
 
                         case "cmsSocketList_FilterList":
 
-                            Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.spiSelect, null);
+                            Operate.FilterConfig.Filter.AddFilter_ByPacketInfo(Operate.PacketConfig.List.piSelect, null);
 
                             break;
 
                         case "cmsSocketList_SystemSocket":
 
-                            Operate.SystemConfig.SystemSocket = Operate.PacketConfig.List.spiSelect.PacketSocket;
+                            Operate.SystemConfig.SystemSocket = Operate.PacketConfig.List.piSelect.PacketSocket;
 
                             break;
 
                         case "cmsSocketList_ShowModified":
 
-                            Socket_Operation.ShowSocketCompareForm(Operate.PacketConfig.List.spiSelect);
+                            Socket_Operation.ShowSocketCompareForm(Operate.PacketConfig.List.piSelect);
 
                             break;
 
@@ -1561,13 +1561,13 @@ namespace WPELibrary
 
                         case "cmsSocketList_Comparison_A":
 
-                            this.rtbComparison_A.Text = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.spiSelect.PacketBuffer);
+                            this.rtbComparison_A.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.piSelect.PacketBuffer);
 
                             break;
 
                         case "cmsSocketList_Comparison_B":
 
-                            this.rtbComparison_B.Text = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.spiSelect.PacketBuffer);
+                            this.rtbComparison_B.Text = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Operate.PacketConfig.List.piSelect.PacketBuffer);
 
                             break;
                     }
@@ -2224,26 +2224,26 @@ namespace WPELibrary
             {
                 string sEncodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
-                string sANSI_GBK = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
+                string sBytes = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sEncodingText));
+                string sANSI_GBK = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.GBK, sEncodingText));
 
-                string sUTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
-                string sANSI_UTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
+                string sUTF7 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
+                string sANSI_UTF7 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF7, sEncodingText));
 
-                string sUTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
-                string sANSI_UTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
+                string sUTF8 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
+                string sANSI_UTF8 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF8, sEncodingText));
 
-                string sUTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
-                string sANSI_UTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
+                string sUTF16 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
+                string sANSI_UTF16 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF16, sEncodingText));
 
-                string sUTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
-                string sANSI_UTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
+                string sUTF32 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
+                string sANSI_UTF32 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.UTF32, sEncodingText));
 
-                string sUnicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
-                string sANSI_Unicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
+                string sUnicode = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
+                string sANSI_Unicode = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Unicode, sEncodingText));
 
                 string sBase64 = Socket_Operation.Base64_Encoding(sEncodingText);
-                string sANSI_Base64 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
+                string sANSI_Base64 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sBase64));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;
@@ -2272,26 +2272,26 @@ namespace WPELibrary
             {
                 string sDecodingText = this.rtbPacketInfo_Encoding.Text;
 
-                string sBytes = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_GBK = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sBytes = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Bytes, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_GBK = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.GBK, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF7 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sUTF7 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF7 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF7, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF8 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sUTF8 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF8 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF8, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF16 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sUTF16 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF16 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF16, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_UTF32 = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sUTF32 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_UTF32 = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UTF32, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
-                string sUnicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
-                string sANSI_Unicode = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
+                string sUnicode = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Default, sDecodingText));
+                string sANSI_Unicode = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Unicode, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText));
 
                 string sBase64 = Socket_Operation.Base64_Decoding(sDecodingText);
-                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
+                string sANSI_Base64 = Socket_Operation.Base64_Decoding(Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Default, Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, sDecodingText)));
 
                 this.txtPacketInfo_Encoding_Bytes.Text = sBytes;
                 this.txtPacketInfo_Encoding_ANSIGBK.Text = sANSI_GBK;

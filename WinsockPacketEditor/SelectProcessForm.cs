@@ -22,7 +22,7 @@ namespace WinsockPacketEditor
         public SelectProcessForm()
         {
             InitializeComponent();
-            this.InitIsDark();
+            this.Dark_Changed();
             this.InitTableColumns();
             this.InitLastInjection();
         }
@@ -49,19 +49,20 @@ namespace WinsockPacketEditor
                 new AntdUI.Column("ProcessID", "进程编号", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.ProcessList.Column."),
                 new AntdUI.Column("ProcessPath", "路径").SetLocalizationTitleID("Table.ProcessList.Column."),
             };
-        }
+        }        
 
-        private void InitIsDark()
+        private void Dark_Changed()
         {
-            if (AntdUI.Config.IsDark)
+            this.Dark = AntdUI.Config.IsDark;
+            if (Dark)
             {
-                BackColor = Color.Black;
-                ForeColor = Color.White;
+                this.BackColor = Color.FromArgb(30, 30, 30);
+                this.ForeColor = Color.White;
             }
             else
             {
-                BackColor = Color.White;
-                ForeColor = Color.Black;
+                this.BackColor = Color.White;
+                this.ForeColor = Color.Black;
             }
         }
 

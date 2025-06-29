@@ -1,4 +1,5 @@
 ﻿using AntdUI;
+using Be.Windows.Forms;
 using EasyHook;
 using System;
 using System.Drawing;
@@ -41,7 +42,7 @@ namespace WPE.InjectMode
             Operate.SystemConfig.LoadInjectMode_FromDB();
 
             this.InitForm();
-            this.InitIsDark();            
+            this.Dark_Changed();
             this.InitTable_PacketList();
 
             this.tabInjectMode.TabMenuVisible = false;
@@ -58,14 +59,10 @@ namespace WPE.InjectMode
             this.Text = "WPE x64 - " + AntdUI.Localization.Get("InjectModeForm", "注入模式");
             this.pageHeader.Text = "Winsock Packet Editor";
             this.pageHeader.SubText = Operate.SystemConfig.AssemblyVersion;
-
             this.lProcessName.Text = Operate.ProcessConfig.GetInjectProcessName();
             this.lModuleName.Text = Operate.ProcessConfig.GetInjectModuleName();
-            this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();
-            string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes);
-            string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes);
-            string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送: {0}  接收: {1}");
-            this.lSpeedInfo.Text = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
+            this.lWinsockInfo.Text = Operate.ProcessConfig.GetInjectWinsockInfo();            
+            this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
 
             this.mInjectMode.Collapsed = true;
             this.MenuCollapseChange();
@@ -91,30 +88,79 @@ namespace WPE.InjectMode
         private void InitTable_PacketList()
         {
             tPacketList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("ICO", string.Empty, AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketID", "序号").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketSocket", "套接字").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center).SetFixed(),                
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketTime", "时间戳", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return ((DateTime)value).ToString("HH:mm:ss:fffffff");
+                    },
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketType", "类别", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
+                    },                    
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketFrom", "本机地址").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketTo", "远端地址", AntdUI.ColumnAlign.Center).SetSortOrder().SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("PacketLen", "长度").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketTo", "远端地址").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
+            
+            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
+            this.tPacketList.Binding(Operate.PacketConfig.List.lstRecPacket);
         }
 
-        private void InitIsDark()
+        private Table.CellStyleInfo tPacketList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
         {
-            if (AntdUI.Config.IsDark)
+            try
             {
-                BackColor = Color.Black;
-                ForeColor = Color.White;
+                switch (Operate.PacketConfig.List.lstRecPacket[e.RowIndex - 1].FilterAction)
+                {
+                    case Operate.FilterConfig.Filter.FilterAction.Replace:
+
+                        return new AntdUI.Table.CellStyleInfo
+                        {
+                            ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace,
+                            BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Replace,
+                        };
+
+                    case Operate.FilterConfig.Filter.FilterAction.Intercept:
+
+                        return new AntdUI.Table.CellStyleInfo
+                        {
+                            ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Intercept,
+                            BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Intercept,
+                        };
+
+                    case Operate.FilterConfig.Filter.FilterAction.Change:
+
+                        return new AntdUI.Table.CellStyleInfo
+                        {
+                            ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Change,
+                            BackColor = Operate.FilterConfig.Filter.FilterActionBackColor_Change,
+                        };
+
+                    default:
+                        return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                BackColor = Color.White;
-                ForeColor = Color.Black;
-            }
-        }
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                return null;
+            }            
+        }               
 
         #endregion
 
@@ -133,33 +179,43 @@ namespace WPE.InjectMode
 
         private void btn_mode_Click(object sender, EventArgs e)
         {
+            AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
+
+            this.Dark_Changed();
+            OnSizeChanged(e);
+        }
+
+        private void Dark_Changed()
+        {
             if (setcolor)
             {
                 var color = AntdUI.Style.Db.Primary;
-                AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
-                Dark = AntdUI.Config.IsDark;
                 AntdUI.Style.SetPrimary(color);
             }
-            else
-            {
-                AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
-                Dark = AntdUI.Config.IsDark;
-            }
 
+            Dark = AntdUI.Config.IsDark;
             btn_mode.Toggle = Dark;
 
             if (Dark)
             {
-                BackColor = Color.Black;
+                BackColor = Color.FromArgb(30, 30, 30);
                 ForeColor = Color.White;
+
+                this.tPacketList.ColumnFore = Color.Silver;
+                this.tPacketList.ForeColor = Color.LimeGreen;
+                this.hbPacketData.BackColor = Color.FromArgb(30, 30, 30);
+                this.hbPacketData.ForeColor = Color.Silver;
             }
             else
             {
                 BackColor = Color.White;
                 ForeColor = Color.Black;
-            }
 
-            OnSizeChanged(e);
+                this.tPacketList.ColumnFore = Color.Black;
+                this.tPacketList.ForeColor = Color.Black;
+                this.hbPacketData.BackColor = Color.White;
+                this.hbPacketData.ForeColor = Color.Black;
+            }            
         }
 
         #endregion
@@ -363,6 +419,11 @@ namespace WPE.InjectMode
                 //清空数据
                 case 7:
 
+                    this.CleanUp_PacketListInfo();
+                    this.CleanUp_PacketList();
+                    this.CleanUp_HexBox();
+                    this.CleanUp_LogList();
+
                     break;
 
                 //拦截
@@ -399,6 +460,9 @@ namespace WPE.InjectMode
         {
             try
             {
+                this.timerPacketList.Start();
+                this.timerPacketListInfo.Start();
+
                 Operate.FilterConfig.List.InitFilterList_Count();
 
                 ws.StartHook();
@@ -409,7 +473,7 @@ namespace WPE.InjectMode
                     this.bWakeUp = false;
                 }
 
-                AntdUI.Message.open(new AntdUI.Message.Config(this, "开始拦截", TType.Warn)
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "开始拦截", TType.Success)
                 {
                     LocalizationText = "InjectModeForm.StartHook"
                 });
@@ -430,6 +494,9 @@ namespace WPE.InjectMode
             {
                 ws.StopHook();
 
+                this.timerPacketList.Stop();
+                this.timerPacketListInfo.Stop();
+
                 AntdUI.Message.open(new AntdUI.Message.Config(this, "停止拦截", TType.Warn)
                 {
                     LocalizationText = "InjectModeForm.StopHook"
@@ -441,8 +508,153 @@ namespace WPE.InjectMode
             }
         }
 
+
         #endregion
 
+        #region//清理数据
 
+        private void CleanUp_PacketListInfo()
+        {
+            try
+            {
+                Operate.PacketConfig.Packet.TotalPackets = 0;
+                Operate.PacketConfig.Packet.Total_SendBytes = 0;
+                Operate.PacketConfig.Packet.Total_RecvBytes = 0;
+                Operate.FilterConfig.Filter.FilterExecute_CNT = 0;
+                Operate.PacketConfig.Queue.FilterPacketList_CNT = 0;
+                Operate.PacketConfig.Queue.Send_CNT = 0;
+                Operate.PacketConfig.Queue.Recv_CNT = 0;
+                Operate.PacketConfig.Queue.SendTo_CNT = 0;
+                Operate.PacketConfig.Queue.RecvFrom_CNT = 0;
+                Operate.PacketConfig.Queue.WSASend_CNT = 0;
+                Operate.PacketConfig.Queue.WSARecv_CNT = 0;
+                Operate.PacketConfig.Queue.WSASendTo_CNT = 0;
+                Operate.PacketConfig.Queue.WSARecvFrom_CNT = 0;
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_PacketList()
+        {
+            try
+            {
+                Operate.PacketConfig.Queue.ClearPacketQueue();
+                Operate.PacketConfig.List.lstRecPacket.Clear();
+                Operate.PacketConfig.List.piSelect = null;                
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void CleanUp_HexBox()
+        {
+            if (hbPacketData.ByteProvider != null)
+            {
+                IDisposable byteProvider = hbPacketData.ByteProvider as IDisposable;
+
+                if (byteProvider != null)
+                {
+                    byteProvider.Dispose();
+                }
+
+                hbPacketData.ByteProvider = null;
+            }
+        }
+
+        private void CleanUp_LogList()
+        {
+            try
+            {
+                Operate.LogConfig.ClearLogQueue();
+                Operate.LogConfig.ClearLogList();
+                //this.dgvLogList.Rows.Clear();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//计时器
+
+        private void timerPacketList_Tick(object sender, EventArgs e)
+        {
+            if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
+            {
+                Operate.PacketConfig.List.PacketToList();
+
+                if (Operate.PacketConfig.List.AutoRoll && Operate.PacketConfig.List.lstRecPacket.Count > 0)
+                {
+                    tPacketList.ScrollLine(Operate.PacketConfig.List.lstRecPacket.Count, true);
+                }
+
+                if (Operate.PacketConfig.List.AutoClear)
+                {
+                    if (Operate.PacketConfig.List.lstRecPacket.Count > Operate.PacketConfig.List.AutoClear_Value)
+                    {
+                        this.CleanUp_PacketList();
+                        this.CleanUp_HexBox();
+                    }
+                }                
+            }
+
+            //if (Operate.LogConfig.cqLogInfo.Count > 0)
+            //{
+            //    Operate.LogConfig.LogToList();
+            //    this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
+            //    this.AutoCleanUp_LogList();
+            //}            
+        }        
+
+        private void timerPacketListInfo_Tick(object sender, EventArgs e)
+        {
+            this.lTotal_CNT.Text = Operate.PacketConfig.Packet.TotalPackets.ToString();
+            this.lFilterExecute_CNT.Text = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
+            this.lQueue_CNT.Text = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
+            this.lFilterPacketList_CNT.Text = Operate.PacketConfig.Queue.FilterPacketList_CNT.ToString();
+            this.lSend_CNT.Text = Operate.PacketConfig.Queue.Send_CNT.ToString();
+            this.lRecv_CNT.Text = Operate.PacketConfig.Queue.Recv_CNT.ToString();
+            this.lSendTo_CNT.Text = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
+            this.lRecvFrom_CNT.Text = Operate.PacketConfig.Queue.RecvFrom_CNT.ToString();
+            this.lWSASend_CNT.Text = Operate.PacketConfig.Queue.WSASend_CNT.ToString();
+            this.lWSARecv_CNT.Text = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
+            this.lWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
+            this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
+            this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
+        }
+
+
+        #endregion
+
+        #region//显示选中的封包数据
+
+        private void tPacketList_CellClick(object sender, TableClickEventArgs e)
+        {
+            try
+            {
+                int selectedIndex = tPacketList.SelectedIndex - 1;
+                if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstRecPacket.Count)
+                {
+                    Operate.PacketConfig.List.Search_Index = selectedIndex;
+                    Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstRecPacket[selectedIndex];
+
+                    DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
+                    hbPacketData.ByteProvider = dbp;
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }            
+        }
+
+        #endregion
     }
 }

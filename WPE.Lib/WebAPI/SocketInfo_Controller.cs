@@ -19,7 +19,7 @@ namespace WPE.Lib.WebAPI
             string SocketTotal = Operate.PacketConfig.Packet.TotalPackets.ToString();
             string SocketFilter = Operate.FilterConfig.Filter.FilterExecute_CNT.ToString();
             string SocketCache = Operate.PacketConfig.Queue.cqPacketInfo.Count.ToString();
-            string SocketLeach = Operate.PacketConfig.Queue.FilterSocketList_CNT.ToString();
+            string SocketLeach = Operate.PacketConfig.Queue.FilterPacketList_CNT.ToString();
             string SocketSend = Operate.PacketConfig.Queue.Send_CNT.ToString();
             string SocketRecv = Operate.PacketConfig.Queue.Recv_CNT.ToString();
             string SocketSendTo = Operate.PacketConfig.Queue.SendTo_CNT.ToString();
@@ -28,7 +28,7 @@ namespace WPE.Lib.WebAPI
             string SocketWSARecv = Operate.PacketConfig.Queue.WSARecv_CNT.ToString();
             string SocketWSASendTo = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
             string SocketWSARecvFrom = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
-            string SocketBytes = Operate.PacketConfig.Packet.SocketBytesInfo;
+            string SocketBytes = Operate.PacketConfig.Packet.SpeedInfo;
 
             string[] SocketInfo = new string[15];
             SocketInfo[0] = SocketProcess;

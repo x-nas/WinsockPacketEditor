@@ -177,9 +177,9 @@ namespace WPE.Lib
                                     int iSocket = 0;
                                     if (sContent.Equals("PacketConfig.List"))
                                     {
-                                        if (Operate.PacketConfig.List.spiSelect != null)
+                                        if (Operate.PacketConfig.List.piSelect != null)
                                         {
-                                            iSocket = Operate.PacketConfig.List.spiSelect.PacketSocket;                                            
+                                            iSocket = Operate.PacketConfig.List.piSelect.PacketSocket;                                            
                                         }
                                     }
                                     else if (sContent.Equals("FilterSocket"))

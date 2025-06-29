@@ -415,7 +415,7 @@ namespace WPELibrary
                         byte[] bNewBuff = dbp.Bytes.ToArray();
                         int iNewLen = bNewBuff.Length;
                         Span<byte> bufferSpan = bNewBuff.AsSpan();
-                        string sNewPacketData_Hex = Socket_Operation.GetPacketData_Hex(bufferSpan, Operate.PacketConfig.Packet.PacketData_MaxLen);
+                        string sNewPacketData_Hex = Operate.PacketConfig.Packet.GetPacketData_Hex(bufferSpan, Operate.PacketConfig.Packet.PacketData_MaxLen);
 
                         this.SPI.PacketSocket = (int)this.nudSendSocket_Socket.Value;
                         this.SPI.PacketBuffer = bNewBuff;
@@ -644,16 +644,16 @@ namespace WPELibrary
                         }
 
                         sBits_Value = bitInfo.ToString();
-                        sChar_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Char, buffer64);
-                        sByte_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Byte, buffer64);
-                        sShort_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Short, buffer64);
-                        sUShort_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UShort, buffer64);
-                        sInt32_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int32, buffer64);
-                        sUInt32_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt32, buffer64);
-                        sInt64_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int64, buffer64);
-                        sUInt64_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt64, buffer64);
-                        sFloat_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Float, buffer64);
-                        sDouble_Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Double, buffer64);
+                        sChar_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Char, buffer64);
+                        sByte_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Byte, buffer64);
+                        sShort_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Short, buffer64);
+                        sUShort_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UShort, buffer64);
+                        sInt32_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int32, buffer64);
+                        sUInt32_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt32, buffer64);
+                        sInt64_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Int64, buffer64);
+                        sUInt64_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.UInt64, buffer64);
+                        sFloat_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Float, buffer64);
+                        sDouble_Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Double, buffer64);
                     }
                 }
 

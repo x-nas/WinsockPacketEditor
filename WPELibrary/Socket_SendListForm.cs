@@ -135,7 +135,7 @@ namespace WPELibrary
                 {
                     byte[] buffer = (byte[])dgvSendCollection.Rows[e.RowIndex].Cells["cBuffer"].Value;
 
-                    e.Value = Socket_Operation.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, buffer);
+                    e.Value = Operate.SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, buffer);
                     e.FormattingApplied = true;
                 }
                 else if (e.ColumnIndex == dgvSendCollection.Columns["cLength"].Index)

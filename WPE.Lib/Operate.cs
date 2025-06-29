@@ -458,6 +458,154 @@ namespace WPE.Lib
 
             #endregion
 
+            #region//byte[]转字符串
+
+            public static string BytesToString(Operate.PacketConfig.Packet.EncodingFormat efFormat, ReadOnlySpan<byte> buffer)
+            {
+                string sReturn = string.Empty;
+
+                try
+                {
+                    if (buffer.Length > 0)
+                    {
+                        switch (efFormat)
+                        {
+                            case Operate.PacketConfig.Packet.EncodingFormat.Default:
+                                sReturn = Encoding.Default.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Char:
+                                char c = (char)buffer[0];
+                                sReturn = (char.IsControl(c) ? "." : c.ToString());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Byte:
+                                sReturn = buffer[0].ToString();
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Bytes:
+                                StringBuilder sbBytes = new StringBuilder();
+                                foreach (byte b in buffer)
+                                {
+                                    sbBytes.Append(b).Append(",");
+                                }
+                                sReturn = sbBytes.ToString().TrimEnd(',');
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Short:
+                                if (buffer.Length >= 2)
+                                {
+                                    sReturn = BitConverter.ToInt16(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UShort:
+                                if (buffer.Length >= 2)
+                                {
+                                    sReturn = BitConverter.ToUInt16(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Int32:
+                                if (buffer.Length >= 4)
+                                {
+                                    sReturn = BitConverter.ToInt32(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UInt32:
+                                if (buffer.Length >= 4)
+                                {
+                                    sReturn = BitConverter.ToUInt32(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Int64:
+                                if (buffer.Length >= 8)
+                                {
+                                    sReturn = BitConverter.ToInt64(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UInt64:
+                                if (buffer.Length >= 8)
+                                {
+                                    sReturn = BitConverter.ToUInt64(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Float:
+                                if (buffer.Length >= 4)
+                                {
+                                    sReturn = BitConverter.ToSingle(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Double:
+                                if (buffer.Length >= 8)
+                                {
+                                    sReturn = BitConverter.ToDouble(buffer.ToArray(), 0).ToString();
+                                }
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Bin:
+                                StringBuilder sbBin = new StringBuilder();
+                                foreach (byte b in buffer)
+                                {
+                                    sbBin.Append(Convert.ToString(b, 2).PadLeft(8, '0')).Append(" ");
+                                }
+                                sReturn = sbBin.ToString().Trim();
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Hex:
+                                StringBuilder sbHex = new StringBuilder();
+                                foreach (byte b in buffer)
+                                {
+                                    sbHex.Append(b.ToString("X2")).Append(" ");
+                                }
+                                sReturn = sbHex.ToString().Trim();
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.GBK:
+                                sReturn = Encoding.GetEncoding("GBK").GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.Unicode:
+                                sReturn = Encoding.Unicode.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.ASCII:
+                                sReturn = Encoding.ASCII.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UTF7:
+                                sReturn = Encoding.UTF7.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UTF8:
+                                sReturn = Encoding.UTF8.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UTF16:
+                                sReturn = Encoding.BigEndianUnicode.GetString(buffer.ToArray());
+                                break;
+
+                            case Operate.PacketConfig.Packet.EncodingFormat.UTF32:
+                                sReturn = Encoding.UTF32.GetString(buffer.ToArray());
+                                break;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return sReturn;
+            }
+
+            #endregion
+
             #region//保存注入进程名称到数据库
 
             public static void SaveSystemConfig_LastInjection_ToDB()
@@ -2837,8 +2985,8 @@ namespace WPE.Lib
                             int PASSWORD_LENGTH = bData[2 + USERNAME_LENGTH];
                             ReadOnlySpan<byte> PASSWORD = bData.Slice(3 + USERNAME_LENGTH, PASSWORD_LENGTH);
 
-                            string sUserName = Socket_Operation.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, USERNAME);
-                            string sPassWord = Socket_Operation.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, PASSWORD);
+                            string sUserName = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, USERNAME);
+                            string sPassWord = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.UTF8, PASSWORD);
                             string ClientIP = spt.Client.EndPoint.Address.ToString();
 
                             Span<byte> bAuth = stackalloc byte[2];
@@ -6569,7 +6717,7 @@ namespace WPE.Lib
                 public static bool SpeedMode;
                 public static byte[] bByteBuff = new byte[0];
                 public static string InjectProcess = string.Empty;
-                public static string SocketBytesInfo = string.Empty;
+                public static string SpeedInfo = string.Empty;
                 public static bool Support_WS1, Support_WS2, Support_MsWS;
                 public static bool HookWS1_Send = true, HookWS1_SendTo = true, HookWS1_Recv = true, HookWS1_RecvFrom = true;
                 public static bool HookWS2_Send = true, HookWS2_SendTo = true, HookWS2_Recv = true, HookWS2_RecvFrom = true;
@@ -6588,8 +6736,8 @@ namespace WPE.Lib
                 public static string HotKey10 = "Ctrl + Alt + F10";
                 public static string HotKey11 = "Ctrl + Alt + F11";
                 public static string HotKey12 = "Ctrl + Alt + F12";
-                //private static readonly Image SentImage = Properties.Resources.sent;
-                //private static readonly Image ReceivedImage = Properties.Resources.received;
+                public static readonly Image SentImage = Properties.Resources.sent;
+                public static readonly Image ReceivedImage = Properties.Resources.received;
                 public static readonly Font FontUnderline = new Font(RichTextBox.DefaultFont, FontStyle.Underline);
                 public static readonly Font FontStrikeout = new Font(RichTextBox.DefaultFont, FontStyle.Strikeout);
 
@@ -6685,6 +6833,29 @@ namespace WPE.Lib
                     UTF16 = 19,
                     UTF32 = 20,
                     Base64 = 21,
+                }
+
+                #endregion
+
+                #region//获取封包收发速率
+
+                public static string GetPacketSpeedInfo()
+                {
+                    string sReturn = string.Empty;
+
+                    try
+                    {
+                        string sTotal_SendBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_SendBytes);
+                        string sTotal_RecvBytes = Operate.SystemConfig.GetDisplayBytes(Operate.PacketConfig.Packet.Total_RecvBytes);
+                        string sSpeedInfo = AntdUI.Localization.Get("InjectModeForm.SpeedInfo", "发送: {0}  接收: {1}");
+                        sReturn = string.Format(sSpeedInfo, sTotal_SendBytes, sTotal_RecvBytes);
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sReturn;
                 }
 
                 #endregion
@@ -6788,40 +6959,367 @@ namespace WPE.Lib
 
                 #region//获取封包类型对应的图标
 
-                public static Image GetImg_ByPacketType(PacketType socketType)
+                public static Image GetImg_ByPacketType(PacketType ptType)
                 {
-                    return null;
+                    try
+                    {
+                        switch (ptType)
+                        {
+                            case PacketConfig.Packet.PacketType.WS1_Send:
+                            case PacketConfig.Packet.PacketType.WS2_Send:
+                            case PacketConfig.Packet.PacketType.WS1_SendTo:
+                            case PacketConfig.Packet.PacketType.WS2_SendTo:
+                            case PacketConfig.Packet.PacketType.WSASend:
+                            case PacketConfig.Packet.PacketType.WSASendTo:
+                                return PacketConfig.Packet.SentImage;
 
-                    //try
-                    //{
-                    //    switch (socketType)
-                    //    {
-                    //        case PacketConfig.Packet.PacketType.WS1_Send:
-                    //        case PacketConfig.Packet.PacketType.WS2_Send:
-                    //        case PacketConfig.Packet.PacketType.WS1_SendTo:
-                    //        case PacketConfig.Packet.PacketType.WS2_SendTo:
-                    //        case PacketConfig.Packet.PacketType.WSASend:
-                    //        case PacketConfig.Packet.PacketType.WSASendTo:
-                    //            return PacketConfig.SentImage;
+                            case PacketConfig.Packet.PacketType.WS1_Recv:
+                            case PacketConfig.Packet.PacketType.WS2_Recv:
+                            case PacketConfig.Packet.PacketType.WS1_RecvFrom:
+                            case PacketConfig.Packet.PacketType.WS2_RecvFrom:
+                            case PacketConfig.Packet.PacketType.WSARecv:
+                            case PacketConfig.Packet.PacketType.WSARecvEx:
+                            case PacketConfig.Packet.PacketType.WSARecvFrom:
+                                return PacketConfig.Packet.ReceivedImage;
 
-                    //        case PacketConfig.Packet.PacketType.WS1_Recv:
-                    //        case PacketConfig.Packet.PacketType.WS2_Recv:
-                    //        case PacketConfig.Packet.PacketType.WS1_RecvFrom:
-                    //        case PacketConfig.Packet.PacketType.WS2_RecvFrom:
-                    //        case PacketConfig.Packet.PacketType.WSARecv:
-                    //        case PacketConfig.Packet.PacketType.WSARecvEx:
-                    //        case PacketConfig.Packet.PacketType.WSARecvFrom:
-                    //            return PacketConfig.ReceivedImage;
+                            default:
+                                return null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                        return null;
+                    }
+                }
 
-                    //        default:
-                    //            return null;
-                    //    }
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    //    return null;
-                    //}
+                #endregion
+
+                #region//是否显示封包（过滤条件）
+
+                public static bool IsShowPacket_ByFilter(PacketInfo pi)
+                {
+                    try
+                    {
+                        //套接字
+                        if (Operate.PacketConfig.Packet.CheckSocket)
+                        {
+                            bool bIsFilter = IsFilter_BySocket(pi.PacketSocket);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //IP地址
+                        if (Operate.PacketConfig.Packet.CheckIP)
+                        {
+                            bool bIsFilter_From = IsFilter_ByIP(pi.PacketFrom);
+                            bool bIsFilter_To = IsFilter_ByIP(pi.PacketTo);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            {
+                                return false;
+                            }
+                        }
+
+                        //端口号
+                        if (Operate.PacketConfig.Packet.CheckPort)
+                        {
+                            bool bIsFilter_From = IsFilter_ByPort(pi.PacketFrom);
+                            bool bIsFilter_To = IsFilter_ByPort(pi.PacketTo);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == (bIsFilter_From || bIsFilter_To))
+                            {
+                                return false;
+                            }
+                        }
+
+                        //指定包头
+                        if (Operate.PacketConfig.Packet.CheckHead)
+                        {
+                            bool bIsFilter = IsFilter_ByHead(pi.PacketBuffer);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //封包内容
+                        if (Operate.PacketConfig.Packet.CheckData)
+                        {
+                            bool bIsFilter = IsFilter_ByPacket(pi.PacketBuffer);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+
+                        //封包大小
+                        if (Operate.PacketConfig.Packet.CheckLen)
+                        {
+                            bool bIsFilter = IsFilter_BySize(pi.PacketLen);
+                            if (Operate.PacketConfig.Packet.CheckNotShow == bIsFilter)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return true;
+                }
+
+                #region//检测套接字
+
+                private static bool IsFilter_BySocket(int iPacketSocket)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckSocket_Value))
+                        {
+                            string[] sSocketArr = Operate.PacketConfig.Packet.CheckSocket_Value.Split(';');
+                            HashSet<int> socketSet = new HashSet<int>();
+
+                            foreach (string sSocket in sSocketArr)
+                            {
+                                if (!string.IsNullOrEmpty(sSocket) && int.TryParse(sSocket, out int iCheckSocket))
+                                {
+                                    socketSet.Add(iCheckSocket);
+                                }
+                            }
+
+                            return socketSet.Contains(iPacketSocket);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测IP地址
+
+                private static bool IsFilter_ByIP(string sPacketIP)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(sPacketIP) || string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckIP_Value))
+                        {
+                            return false;
+                        }
+
+                        string sIP = sPacketIP.Split(':')[0];
+                        HashSet<string> ipSet = new HashSet<string>(Operate.PacketConfig.Packet.CheckIP_Value.Split(';'));
+
+                        return ipSet.Contains(sIP);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测端口号
+
+                private static bool IsFilter_ByPort(string sPacketPort)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(sPacketPort) || string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckPort_Value))
+                        {
+                            return false;
+                        }
+
+                        string sPort = sPacketPort.Split(':')[1];
+                        HashSet<string> portSet = new HashSet<string>(Operate.PacketConfig.Packet.CheckPort_Value.Split(';'));
+
+                        return portSet.Contains(sPort);
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测包头
+
+                private static bool IsFilter_ByHead(byte[] bBuffer)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckHead_Value))
+                        {
+                            return false;
+                        }
+
+                        string checkHeadValue = Operate.PacketConfig.Packet.CheckHead_Value.Replace(" ", "");
+                        string[] headValues = checkHeadValue.Split(';');
+
+                        foreach (string headValue in headValues)
+                        {
+                            if (!string.IsNullOrEmpty(headValue))
+                            {
+                                byte[] headBytes = Socket_Operation.StringToBytes(Operate.PacketConfig.Packet.EncodingFormat.Hex, headValue);
+
+                                if (bBuffer.Length >= headBytes.Length)
+                                {
+                                    bool match = true;
+                                    for (int i = 0; i < headBytes.Length; i++)
+                                    {
+                                        if (bBuffer[i] != headBytes[i])
+                                        {
+                                            match = false;
+                                            break;
+                                        }
+                                    }
+
+                                    if (match)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测封包内容
+
+                private static bool IsFilter_ByPacket(byte[] bBuffer)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckData_Value))
+                        {
+                            return false;
+                        }
+
+                        string checkDataValue = Operate.PacketConfig.Packet.CheckData_Value.Replace(" ", "");
+                        string[] checkDataArray = checkDataValue.Split(';');
+
+                        string packetString = SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bBuffer).Replace(" ", "");
+
+                        foreach (string checkData in checkDataArray)
+                        {
+                            if (!string.IsNullOrEmpty(checkData) && packetString.IndexOf(checkData) >= 0)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #region//检测封包大小
+
+                private static bool IsFilter_BySize(int PacketLength)
+                {
+                    try
+                    {
+                        if (string.IsNullOrEmpty(Operate.PacketConfig.Packet.CheckLength_Value))
+                        {
+                            return false;
+                        }
+
+                        string[] lengthArray = Operate.PacketConfig.Packet.CheckLength_Value.Split(';');
+
+                        foreach (string length in lengthArray)
+                        {
+                            if (string.IsNullOrEmpty(length))
+                            {
+                                continue;
+                            }
+
+                            if (length.Contains("-"))
+                            {
+                                string[] range = length.Split('-');
+                                if (range.Length == 2 && int.TryParse(range[0], out int iFrom) && int.TryParse(range[1], out int iTo))
+                                {
+                                    if (PacketLength >= iFrom && PacketLength <= iTo)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (int.TryParse(length, out int iLength))
+                                {
+                                    if (PacketLength == iLength)
+                                    {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return false;
+                }
+
+                #endregion
+
+                #endregion
+
+                #region//获取封包数据字符串（十六进制）
+
+                public static string GetPacketData_Hex(Span<byte> bBuff, int Max_DataLen)
+                {
+                    string sReturn = string.Empty;
+
+                    try
+                    {
+                        int iPacketLen = bBuff.Length;
+
+                        if (iPacketLen > Max_DataLen)
+                        {
+                            Span<byte> bBuffSlice = bBuff.Slice(0, Max_DataLen);
+                            sReturn = SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bBuffSlice) + " ...";
+                        }
+                        else
+                        {
+                            sReturn = SystemConfig.BytesToString(Operate.PacketConfig.Packet.EncodingFormat.Hex, bBuff);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return sReturn;
                 }
 
                 #endregion
@@ -6841,7 +7339,7 @@ namespace WPE.Lib
                 public static int WSASendTo_CNT = 0;
                 public static int WSARecv_CNT = 0;
                 public static int WSARecvFrom_CNT = 0;
-                public static int FilterSocketList_CNT = 0;
+                public static int FilterPacketList_CNT = 0;
 
                 public static ConcurrentQueue<PacketInfo> cqPacketInfo = new ConcurrentQueue<PacketInfo>();
 
@@ -6915,47 +7413,44 @@ namespace WPE.Lib
                 public static decimal AutoClear_Value = 5000;
                 public static int Search_Index = -1;
                 public static FindOptions FindOptions = new FindOptions();
-                public static PacketInfo spiSelect;
+                public static PacketInfo piSelect;
                 public static BindingList<PacketInfo> lstRecPacket = new BindingList<PacketInfo>();
 
                 #region//封包入列表
 
-                public static async Task SocketToList()
+                public static void PacketToList()
                 {
                     try
                     {
-                        await Task.Run(() =>
+                        if (PacketConfig.Queue.cqPacketInfo.TryDequeue(out PacketInfo pi))
                         {
-                            if (PacketConfig.Queue.cqPacketInfo.TryDequeue(out PacketInfo spi))
+                            bool bIsShow = PacketConfig.Packet.IsShowPacket_ByFilter(pi);
+                            if (bIsShow)
                             {
-                                bool bIsShow = Socket_Operation.IsShowPacketConfig_ByFilter(spi);
-                                if (bIsShow)
-                                {
-                                    Span<byte> bufferSpan = spi.PacketBuffer.AsSpan();
-                                    spi.PacketData = Socket_Operation.GetPacketData_Hex(bufferSpan, PacketConfig.Packet.PacketData_MaxLen);
+                                Span<byte> bufferSpan = pi.PacketBuffer.AsSpan();
+                                pi.PacketData = PacketConfig.Packet.GetPacketData_Hex(bufferSpan, PacketConfig.Packet.PacketData_MaxLen);
 
-                                    if (SystemConfig.InvokeAction != null)
+                                if (SystemConfig.InvokeAction != null)
+                                {
+                                    SystemConfig.InvokeAction(() =>
                                     {
-                                        SystemConfig.InvokeAction(() =>
-                                        {
-                                            PacketConfig.List.lstRecPacket.Add(spi);
-                                        });
-                                    }
-                                    else
-                                    {
-                                        PacketConfig.List.lstRecPacket.Add(spi);
-                                    }
+                                        PacketConfig.List.lstRecPacket.Add(pi);
+                                    });
                                 }
                                 else
                                 {
-                                    PacketConfig.Queue.FilterSocketList_CNT++;
+                                    PacketConfig.List.lstRecPacket.Add(pi);
                                 }
                             }
-                        });
+                            else
+                            {
+                                PacketConfig.Queue.FilterPacketList_CNT++;
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
-                        Operate.DoLog(nameof(SocketToList), ex.Message);
+                        Operate.DoLog(nameof(PacketToList), ex.Message);
                     }
                 }
 
@@ -7124,13 +7619,13 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        if (PacketConfig.List.spiSelect != null)
+                        if (PacketConfig.List.piSelect != null)
                         {
-                            int Socket = PacketConfig.List.spiSelect.PacketSocket;
-                            PacketConfig.Packet.PacketType ptType = PacketConfig.List.spiSelect.PacketType;
-                            string From = PacketConfig.List.spiSelect.PacketFrom;
-                            string To = PacketConfig.List.spiSelect.PacketTo;
-                            byte[] bBuffer = PacketConfig.List.spiSelect.PacketBuffer;
+                            int Socket = PacketConfig.List.piSelect.PacketSocket;
+                            PacketConfig.Packet.PacketType ptType = PacketConfig.List.piSelect.PacketType;
+                            string From = PacketConfig.List.piSelect.PacketFrom;
+                            string To = PacketConfig.List.piSelect.PacketTo;
+                            byte[] bBuffer = PacketConfig.List.piSelect.PacketBuffer;
 
                             Socket_Operation.SendPacket(Socket, ptType, From, To, bBuffer);
                         }
@@ -7215,7 +7710,7 @@ namespace WPE.Lib
                                     string sTo = PacketConfig.List.lstRecPacket[i].PacketTo;
                                     string sLen = PacketConfig.List.lstRecPacket[i].PacketLen.ToString();
                                     byte[] bBuff = PacketConfig.List.lstRecPacket[i].PacketBuffer;
-                                    string sData = Socket_Operation.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, bBuff);
+                                    string sData = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, bBuff);
 
                                     sColValue += sTime + "\t" + sType + "\t" + sSocket + "\t" + sFrom + "\t" + sTo + "\t" + sLen + "\t" + sData + "\t";
                                     sw.WriteLine(sColValue);
@@ -10113,7 +10608,7 @@ namespace WPE.Lib
 
                         foreach (PacketInfo spi in SendCollection)
                         {
-                            string sBuffer = Socket_Operation.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, spi.PacketBuffer);
+                            string sBuffer = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, spi.PacketBuffer);
 
                             XElement xeColl =
                                 new XElement("Collection",
@@ -10666,7 +11161,7 @@ namespace WPE.Lib
 
                                 foreach (PacketInfo spi in ssi.SCollection)
                                 {
-                                    string sBuffer = Socket_Operation.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, spi.PacketBuffer);
+                                    string sBuffer = SystemConfig.BytesToString(PacketConfig.Packet.EncodingFormat.Hex, spi.PacketBuffer);
 
                                     XElement xeColl =
                                         new XElement("Collection",

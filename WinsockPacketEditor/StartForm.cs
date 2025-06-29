@@ -20,7 +20,7 @@ namespace WinsockPacketEditor
         public StartForm()
         {
             InitializeComponent();
-            this.InitIsDark();
+            this.Dark_Changed();
             this.InitForm();
         }
 
@@ -51,21 +51,7 @@ namespace WinsockPacketEditor
         private void StartForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             Operate.SystemConfig.SaveSystemConfig_ToDB();
-        }
-
-        private void InitIsDark()
-        {
-            if (AntdUI.Config.IsDark)
-            {
-                BackColor = Color.Black;
-                ForeColor = Color.White;
-            }
-            else
-            {
-                BackColor = Color.White;
-                ForeColor = Color.Black;
-            }
-        }
+        }        
 
         private void InitForm()
         {
@@ -134,13 +120,19 @@ namespace WinsockPacketEditor
         private void btn_mode_Click(object sender, EventArgs e)
         {
             AntdUI.Config.IsDark = !AntdUI.Config.IsDark;
-            this.Dark = AntdUI.Config.IsDark;
 
+            this.Dark_Changed();
+            OnSizeChanged(e);
+        }
+
+        private void Dark_Changed()
+        {
+            this.Dark = AntdUI.Config.IsDark;
             btn_mode.Toggle = Dark;
 
             if (Dark)
             {
-                this.BackColor = Color.Black;
+                this.BackColor = Color.FromArgb(30, 30, 30);
                 this.ForeColor = Color.White;
             }
             else
@@ -148,8 +140,6 @@ namespace WinsockPacketEditor
                 this.BackColor = Color.White;
                 this.ForeColor = Color.Black;
             }
-
-            OnSizeChanged(e);
         }
 
         #endregion
