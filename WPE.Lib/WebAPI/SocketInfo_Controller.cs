@@ -59,7 +59,7 @@ namespace WPE.Lib.WebAPI
 
         public IEnumerable<LogInfo> GetSocketLogList()
         {
-            return Operate.LogConfig.lstLogInfo;
+            return Operate.LogConfig.List.lstLogInfo;
         }
 
         #endregion

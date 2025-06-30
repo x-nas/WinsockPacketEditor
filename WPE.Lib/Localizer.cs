@@ -246,6 +246,16 @@ namespace WPE.Lib
 
                 #endregion
 
+                #region//SearchPacketForm
+
+                case "SearchPacketForm":
+                    return "Search Packet";
+
+                case "SearchPacketForm.NoMatch":
+                    return "No Match Found";
+
+                #endregion
+
                 default:
                     return null;
             }

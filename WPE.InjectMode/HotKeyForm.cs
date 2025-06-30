@@ -16,7 +16,7 @@ namespace WPE.InjectMode
 
         private void HotKeyForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("HotKeyForm", "快捷键设置");
+            this.Text = AntdUI.Localization.Get("HotKeyForm", "快捷键设置");
 
             this.txtHotKey1.Text = Operate.PacketConfig.Packet.HotKey1;
             this.txtHotKey2.Text = Operate.PacketConfig.Packet.HotKey2;

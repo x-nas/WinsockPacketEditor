@@ -29,10 +29,10 @@ namespace WinsockPacketEditor
 
         private void SelectProcessForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("SelectProcessForm", "选择进程");
+            this.Text = AntdUI.Localization.Get("SelectProcessForm", "选择进程");
             this.pageHeader.Text = "WPE x64";
-            this.pageHeader.SubText = Operate.SystemConfig.AssemblyVersion;            
-            
+            this.pageHeader.SubText = AntdUI.Localization.Get("SelectProcessForm", "选择进程");
+
             this.ShowProcessList();
         }
 

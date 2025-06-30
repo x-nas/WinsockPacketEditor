@@ -59,7 +59,7 @@ namespace WPE.Lib.WebAPI
 
         public IEnumerable<LogInfo> GetProxyLogList()
         {
-            return Operate.LogConfig.lstLogInfo;
+            return Operate.LogConfig.List.lstLogInfo;
         }
 
         #endregion

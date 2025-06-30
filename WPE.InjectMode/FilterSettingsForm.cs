@@ -16,7 +16,7 @@ namespace WPE.InjectMode
 
         private void FilterSettingsForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("FilterSettingsForm", "过滤设置");
+            this.Text = AntdUI.Localization.Get("FilterSettingsForm", "过滤设置");
 
             this.cbCheckSocket.Checked = Operate.PacketConfig.Packet.CheckSocket;
             this.cbCheckIP.Checked = Operate.PacketConfig.Packet.CheckIP;

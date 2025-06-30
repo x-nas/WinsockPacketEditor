@@ -16,7 +16,7 @@ namespace WPE.InjectMode
 
         private void HookSettingsForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("HookSettingsForm", "拦截设置");
+            this.Text = AntdUI.Localization.Get("HookSettingsForm", "拦截设置");
 
             this.cbHookWS1_Send.Checked = Operate.PacketConfig.Packet.HookWS1_Send;
             this.cbHookWS1_SendTo.Checked = Operate.PacketConfig.Packet.HookWS1_SendTo;

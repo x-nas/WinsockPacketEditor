@@ -1,41 +1,57 @@
-﻿using System;
+﻿using AntdUI;
+using System;
 
 namespace WPE.Lib
 {
-    public class LogInfo
+    public class LogInfo : NotifyProperty
     {
         #region//时间戳
 
-        protected string logtime;
+        DateTime _LogTime;
 
-        public string LogTime
+        public DateTime LogTime
         {
-            get { return logtime; }
-            set { logtime = value; }
+            get => _LogTime;
+            set
+            {
+                if (_LogTime == value) return;
+                _LogTime = value;
+                OnPropertyChanged();
+            }
         }
 
-        #endregion
+        #endregion        
 
-        #region//模块名称
+        #region//模块
 
-        protected string funcname;
+        string _FuncName;
 
         public string FuncName
         {
-            get { return funcname; }
-            set { funcname = value; }
+            get => _FuncName;
+            set
+            {
+                if (_FuncName == value) return;
+                _FuncName = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
 
         #region//日志内容
 
-        protected string logcontent;
+        string _LogContent;
 
         public string LogContent
         {
-            get { return logcontent; }
-            set { logcontent = value; }
+            get => _LogContent;
+            set
+            {
+                if (_LogContent == value) return;
+                _LogContent = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -44,9 +60,9 @@ namespace WPE.Lib
 
         public LogInfo(string funcname, string logcontent)
         {
-            this.logtime = DateTime.Now.ToString("HH:mm:ss:fff");
-            this.funcname = funcname;
-            this.logcontent = logcontent;
+            this._LogTime = DateTime.Now;
+            this._FuncName = funcname;
+            this._LogContent = logcontent;
         }
 
         #endregion        

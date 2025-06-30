@@ -98,8 +98,9 @@
             this.lFilterExecute = new AntdUI.Label();
             this.lTotal = new AntdUI.Label();
             this.segmented = new AntdUI.Segmented();
-            this.splitter1 = new AntdUI.Splitter();
+            this.splitter = new AntdUI.Splitter();
             this.tPacketList = new AntdUI.Table();
+            this.hbPacketData = new Be.Windows.Forms.HexBox();
             this.tlpProcessInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lSpeedInfo = new AntdUI.Label();
             this.lSplit3 = new AntdUI.Label();
@@ -116,21 +117,23 @@
             this.tpXOR = new AntdUI.TabPage();
             this.tpTranscoding = new AntdUI.TabPage();
             this.tpExtraction = new AntdUI.TabPage();
-            this.tpLog = new AntdUI.TabPage();
+            this.tpSystemLog = new AntdUI.TabPage();
             this.timerPacketList = new System.Windows.Forms.Timer(this.components);
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
-            this.hbPacketData = new Be.Windows.Forms.HexBox();
+            this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
+            this.tSystemLog = new AntdUI.Table();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
             this.tpPacketList.SuspendLayout();
             this.tlpPacketList.SuspendLayout();
             this.tlpPacketListInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitter1)).BeginInit();
-            this.splitter1.Panel1.SuspendLayout();
-            this.splitter1.Panel2.SuspendLayout();
-            this.splitter1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).BeginInit();
+            this.splitter.Panel1.SuspendLayout();
+            this.splitter.Panel2.SuspendLayout();
+            this.splitter.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -224,23 +227,33 @@
             // mInjectMode
             // 
             this.mInjectMode.Dock = System.Windows.Forms.DockStyle.Left;
+            menuItem1.Badge = "";
+            menuItem1.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem1.IconSvg = "ProjectFilled";
             menuItem1.ID = "miPacketList";
             menuItem1.LocalizationText = "InjectModeForm.{id}";
             menuItem1.Select = true;
             menuItem1.Text = "封包列表";
+            menuItem2.Badge = "";
+            menuItem2.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem2.IconSvg = "FunnelPlotFilled";
             menuItem2.ID = "miFilterList";
             menuItem2.LocalizationText = "InjectModeForm.{id}";
             menuItem2.Text = "滤镜列表";
+            menuItem3.Badge = "";
+            menuItem3.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem3.IconSvg = "PlaySquareFilled";
             menuItem3.ID = "miSendList";
             menuItem3.LocalizationText = "InjectModeForm.{id}";
             menuItem3.Text = "发送列表";
+            menuItem4.Badge = "";
+            menuItem4.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem4.IconSvg = "RobotFilled";
             menuItem4.ID = "miRobotList";
             menuItem4.LocalizationText = "InjectModeForm.{id}";
             menuItem4.Text = "机器人列表";
+            menuItem5.Badge = "";
+            menuItem5.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem5.IconSvg = "PieChartFilled";
             menuItem5.ID = "miStatistical";
             menuItem5.LocalizationText = "InjectModeForm.{id}";
@@ -261,6 +274,8 @@
             menuItem9.ID = "miExtraction";
             menuItem9.LocalizationText = "InjectModeForm.{id}";
             menuItem9.Text = "数据提取";
+            menuItem10.Badge = "";
+            menuItem10.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem10.IconSvg = "ContainerFilled";
             menuItem10.ID = "miSystemLog";
             menuItem10.LocalizationText = "InjectModeForm.{id}";
@@ -306,7 +321,7 @@
             this.tabInjectMode.Controls.Add(this.tpXOR);
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
-            this.tabInjectMode.Controls.Add(this.tpLog);
+            this.tabInjectMode.Controls.Add(this.tpSystemLog);
             this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
@@ -320,7 +335,7 @@
             this.tabInjectMode.Pages.Add(this.tpXOR);
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
-            this.tabInjectMode.Pages.Add(this.tpLog);
+            this.tabInjectMode.Pages.Add(this.tpSystemLog);
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -341,7 +356,7 @@
             this.tlpPacketList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpPacketList.Controls.Add(this.tlpPacketListInfo, 0, 1);
             this.tlpPacketList.Controls.Add(this.segmented, 0, 0);
-            this.tlpPacketList.Controls.Add(this.splitter1, 0, 2);
+            this.tlpPacketList.Controls.Add(this.splitter, 0, 2);
             this.tlpPacketList.Controls.Add(this.tlpProcessInfo, 0, 3);
             this.tlpPacketList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpPacketList.Location = new System.Drawing.Point(0, 0);
@@ -924,7 +939,7 @@
             segmentedItem7.BadgeSize = 0.6F;
             segmentedItem7.BadgeSvg = null;
             segmentedItem7.IconSvg = "SearchOutlined";
-            segmentedItem7.Text = "搜索封包";
+            segmentedItem7.Text = "查找封包";
             segmentedItem8.Badge = null;
             segmentedItem8.BadgeAlign = AntdUI.TAlign.TR;
             segmentedItem8.BadgeBack = null;
@@ -962,29 +977,29 @@
             this.segmented.TabIndex = 3;
             this.segmented.SelectIndexChanged += new AntdUI.IntEventHandler(this.segmented_SelectIndexChanged);
             // 
-            // splitter1
+            // splitter
             // 
-            this.splitter1.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel2;
-            this.splitter1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.splitter1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitter1.Location = new System.Drawing.Point(3, 79);
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitter.CollapsePanel = AntdUI.Splitter.ADCollapsePanel.Panel2;
+            this.splitter.Cursor = System.Windows.Forms.Cursors.Default;
+            this.splitter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitter.Location = new System.Drawing.Point(3, 79);
+            this.splitter.Name = "splitter";
+            this.splitter.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitter1.Panel1
+            // splitter.Panel1
             // 
-            this.splitter1.Panel1.Controls.Add(this.tPacketList);
-            this.splitter1.Panel1MinSize = 0;
+            this.splitter.Panel1.Controls.Add(this.tPacketList);
+            this.splitter.Panel1MinSize = 0;
             // 
-            // splitter1.Panel2
+            // splitter.Panel2
             // 
-            this.splitter1.Panel2.Controls.Add(this.hbPacketData);
-            this.splitter1.Panel2MinSize = 0;
-            this.splitter1.Size = new System.Drawing.Size(1118, 612);
-            this.splitter1.SplitterDistance = 428;
-            this.splitter1.SplitterSize = 80;
-            this.splitter1.SplitterWidth = 10;
-            this.splitter1.TabIndex = 2;
+            this.splitter.Panel2.Controls.Add(this.hbPacketData);
+            this.splitter.Panel2MinSize = 0;
+            this.splitter.Size = new System.Drawing.Size(1118, 612);
+            this.splitter.SplitterDistance = 428;
+            this.splitter.SplitterSize = 80;
+            this.splitter.SplitterWidth = 10;
+            this.splitter.TabIndex = 2;
             // 
             // tPacketList
             // 
@@ -1000,8 +1015,23 @@
             this.tPacketList.Name = "tPacketList";
             this.tPacketList.Size = new System.Drawing.Size(1118, 428);
             this.tPacketList.TabIndex = 0;
-            this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
+            this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
+            // 
+            // hbPacketData
+            // 
+            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.hbPacketData.ColumnInfoVisible = true;
+            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hbPacketData.LineInfoVisible = true;
+            this.hbPacketData.Location = new System.Drawing.Point(0, 0);
+            this.hbPacketData.Name = "hbPacketData";
+            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
+            this.hbPacketData.Size = new System.Drawing.Size(1118, 174);
+            this.hbPacketData.StringViewVisible = true;
+            this.hbPacketData.TabIndex = 0;
+            this.hbPacketData.VScrollBarVisible = true;
             // 
             // tlpProcessInfo
             // 
@@ -1178,38 +1208,45 @@
             this.tpExtraction.TabIndex = 5;
             this.tpExtraction.Text = "数据提取";
             // 
-            // tpLog
+            // tpSystemLog
             // 
-            this.tpLog.Location = new System.Drawing.Point(0, 0);
-            this.tpLog.Name = "tpLog";
-            this.tpLog.Size = new System.Drawing.Size(0, 0);
-            this.tpLog.TabIndex = 6;
-            this.tpLog.Text = "系统日志";
+            this.tpSystemLog.Controls.Add(this.tSystemLog);
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
             // 
             // timerPacketList
             // 
+            this.timerPacketList.Enabled = true;
             this.timerPacketList.Interval = 10;
             this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
             // 
             // timerPacketListInfo
             // 
+            this.timerPacketListInfo.Enabled = true;
             this.timerPacketListInfo.Interval = 1000;
             this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
             // 
-            // hbPacketData
+            // bgwSearchPacketList
             // 
-            this.hbPacketData.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.hbPacketData.ColumnInfoVisible = true;
-            this.hbPacketData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hbPacketData.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.hbPacketData.LineInfoVisible = true;
-            this.hbPacketData.Location = new System.Drawing.Point(0, 0);
-            this.hbPacketData.Name = "hbPacketData";
-            this.hbPacketData.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
-            this.hbPacketData.Size = new System.Drawing.Size(1118, 174);
-            this.hbPacketData.StringViewVisible = true;
-            this.hbPacketData.TabIndex = 0;
-            this.hbPacketData.VScrollBarVisible = true;
+            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
+            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
+            // 
+            // tSystemLog
+            // 
+            this.tSystemLog.Bordered = true;
+            this.tSystemLog.CellImpactHeight = false;
+            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSystemLog.EmptyHeader = true;
+            this.tSystemLog.Gap = 8;
+            this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.Name = "tSystemLog";
+            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tSystemLog.TabIndex = 2;
+            this.tSystemLog.Text = "table1";
             // 
             // InjectModeForm
             // 
@@ -1237,12 +1274,13 @@
             this.tlpPacketList.ResumeLayout(false);
             this.tlpPacketListInfo.ResumeLayout(false);
             this.tlpPacketListInfo.PerformLayout();
-            this.splitter1.Panel1.ResumeLayout(false);
-            this.splitter1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitter1)).EndInit();
-            this.splitter1.ResumeLayout(false);
+            this.splitter.Panel1.ResumeLayout(false);
+            this.splitter.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitter)).EndInit();
+            this.splitter.ResumeLayout(false);
             this.tlpProcessInfo.ResumeLayout(false);
             this.tlpProcessInfo.PerformLayout();
+            this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1263,12 +1301,12 @@
         private AntdUI.TabPage tpXOR;
         private AntdUI.TabPage tpTranscoding;
         private AntdUI.TabPage tpExtraction;
-        private AntdUI.TabPage tpLog;
+        private AntdUI.TabPage tpSystemLog;
         private System.Windows.Forms.TableLayoutPanel tlpPacketList;
         private AntdUI.TabPage tpFilterList;
         private AntdUI.TabPage tpSendList;
         private AntdUI.TabPage tpRobotList;
-        private AntdUI.Splitter splitter1;
+        private AntdUI.Splitter splitter;
         private AntdUI.Table tPacketList;
         private AntdUI.Segmented segmented;
         private System.Windows.Forms.TableLayoutPanel tlpProcessInfo;
@@ -1318,5 +1356,7 @@
         private System.Windows.Forms.Timer timerPacketList;
         private System.Windows.Forms.Timer timerPacketListInfo;
         private Be.Windows.Forms.HexBox hbPacketData;
+        private System.ComponentModel.BackgroundWorker bgwSearchPacketList;
+        private AntdUI.Table tSystemLog;
     }
 }

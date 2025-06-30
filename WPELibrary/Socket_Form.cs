@@ -228,7 +228,7 @@ namespace WPELibrary
                 dgvRobotList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvRobotList, true, null);
 
                 dgvLogList.AutoGenerateColumns = false;
-                dgvLogList.DataSource = Operate.LogConfig.lstLogInfo;
+                dgvLogList.DataSource = Operate.LogConfig.List.lstLogInfo;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);
             }
             catch (Exception ex)
@@ -290,9 +290,9 @@ namespace WPELibrary
                 this.nudSocketList_AutoClearValue.Value = Operate.PacketConfig.List.AutoClear_Value;
                 this.SocketList_AutoClearChange();
 
-                this.cbLogList_AutoRoll.Checked = Operate.LogConfig.AutoRoll;
-                this.cbLogList_AutoClear.Checked = Operate.LogConfig.AutoClear;
-                this.nudLogList_AutoClearValue.Value = Operate.LogConfig.AutoClear_Value;
+                this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
+                this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
+                this.nudLogList_AutoClearValue.Value = Operate.LogConfig.List.AutoClear_Value;
                 this.LogList_AutoClearChange();
 
                 this.cbWorkingMode_Speed.Checked = Operate.PacketConfig.Packet.SpeedMode;
@@ -369,9 +369,9 @@ namespace WPELibrary
                 Operate.PacketConfig.List.AutoClear = this.cbSocketList_AutoClear.Checked;
                 Operate.PacketConfig.List.AutoClear_Value = this.nudSocketList_AutoClearValue.Value;
 
-                Operate.LogConfig.AutoRoll = this.cbLogList_AutoRoll.Checked;
-                Operate.LogConfig.AutoClear = this.cbLogList_AutoClear.Checked;
-                Operate.LogConfig.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+                Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
+                Operate.LogConfig.List.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
                 Operate.PacketConfig.Packet.SpeedMode = this.cbWorkingMode_Speed.Checked;
 
@@ -701,8 +701,8 @@ namespace WPELibrary
         {
             try
             {
-                Operate.LogConfig.ClearLogQueue();
-                Operate.LogConfig.ClearLogList();
+                Operate.LogConfig.Queue.ClearLogQueue();
+                Operate.LogConfig.List.ClearLogList();
                 this.dgvLogList.Rows.Clear();
             }
             catch (Exception ex)
@@ -895,9 +895,9 @@ namespace WPELibrary
                     this.AutoCleanUp_SocketList();
                 }
 
-                if (Operate.LogConfig.cqLogInfo.Count > 0)
+                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
                 {
-                    Operate.LogConfig.LogToList();
+                    Operate.LogConfig.List.LogToList();
                     this.AutoScrollDataGridView(dgvLogList, cbLogList_AutoRoll.Checked);
                     this.AutoCleanUp_LogList();
                 }
@@ -1803,7 +1803,7 @@ namespace WPELibrary
 
                         if (dgvLogList.Rows.Count > 0)
                         {
-                            Operate.LogConfig.SaveLogListToExcel();
+                            Operate.LogConfig.List.SaveLogListToExcel();
                         }
 
                         break;

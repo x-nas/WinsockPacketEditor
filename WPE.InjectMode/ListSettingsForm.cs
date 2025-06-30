@@ -16,16 +16,16 @@ namespace WPE.InjectMode
 
         private void ListSettingsForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("ListSettingsForm", "列表设置");
+            this.Text = AntdUI.Localization.Get("ListSettingsForm", "列表设置");
 
             this.cbPacketList_AutoRoll.Checked = Operate.PacketConfig.List.AutoRoll;
             this.cbPacketList_AutoClear.Checked = Operate.PacketConfig.List.AutoClear;
             this.txtPacketList_AutoClear.Value = Operate.PacketConfig.List.AutoClear_Value;
             this.PacketList_AutoClear_Changed();
 
-            this.cbLogList_AutoRoll.Checked = Operate.LogConfig.AutoRoll;
-            this.cbLogList_AutoClear.Checked = Operate.LogConfig.AutoClear;
-            this.txtLogList_AutoClear.Value = Operate.LogConfig.AutoClear_Value;
+            this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
+            this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
+            this.txtLogList_AutoClear.Value = Operate.LogConfig.List.AutoClear_Value;
             this.LogList_AutoClear_Changed();
         }
 
@@ -59,9 +59,9 @@ namespace WPE.InjectMode
             Operate.PacketConfig.List.AutoClear = this.cbPacketList_AutoClear.Checked;
             Operate.PacketConfig.List.AutoClear_Value = this.txtPacketList_AutoClear.Value;
 
-            Operate.LogConfig.AutoRoll = this.cbLogList_AutoRoll.Checked;
-            Operate.LogConfig.AutoClear = this.cbLogList_AutoClear.Checked;
-            Operate.LogConfig.AutoClear_Value = this.txtLogList_AutoClear.Value;
+            Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
+            Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
+            Operate.LogConfig.List.AutoClear_Value = this.txtLogList_AutoClear.Value;
 
             AntdUI.Message.open(new AntdUI.Message.Config(this, "列表设置保存成功", TType.Success)
             {

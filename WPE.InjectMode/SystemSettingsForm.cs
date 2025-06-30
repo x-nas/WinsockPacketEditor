@@ -16,7 +16,7 @@ namespace WPE.InjectMode
 
         private void SystemSettingsForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
+            this.Text = AntdUI.Localization.Get("SystemSettingsForm", "系统设置");
 
             this.cbSpeedMode.Checked = Operate.PacketConfig.Packet.SpeedMode;
 

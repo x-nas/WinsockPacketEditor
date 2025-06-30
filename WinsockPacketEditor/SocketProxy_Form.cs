@@ -98,7 +98,7 @@ namespace WinsockPacketEditor
                 tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
           
                 dgvLogList.AutoGenerateColumns = false;
-                dgvLogList.DataSource = Operate.LogConfig.lstLogInfo;
+                dgvLogList.DataSource = Operate.LogConfig.List.lstLogInfo;
                 dgvLogList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvLogList, true, null);                
 
                 tvProxyData.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(tvProxyData, true, null);
@@ -219,9 +219,9 @@ namespace WinsockPacketEditor
                 this.cbNoRecordData.Checked = Operate.ProxyConfig.SocketProxy.NoRecord;
                 this.cbDeleteClosed.Checked = Operate.ProxyConfig.SocketProxy.DelClosed;
 
-                this.cbLogList_AutoRoll.Checked = Operate.LogConfig.AutoRoll;
-                this.cbLogList_AutoClear.Checked = Operate.LogConfig.AutoClear;
-                this.nudLogList_AutoClearValue.Value = Operate.LogConfig.AutoClear_Value;
+                this.cbLogList_AutoRoll.Checked = Operate.LogConfig.List.AutoRoll;
+                this.cbLogList_AutoClear.Checked = Operate.LogConfig.List.AutoClear;
+                this.nudLogList_AutoClearValue.Value = Operate.LogConfig.List.AutoClear_Value;
 
                 this.cbEnable_MapLocal.Checked = Operate.ProxyConfig.ProxyMapping.Enable_MapLocal;
                 this.cbEnable_MapRemote.Checked = Operate.ProxyConfig.ProxyMapping.Enable_MapRemote;
@@ -261,9 +261,9 @@ namespace WinsockPacketEditor
                 Operate.ProxyConfig.SocketProxy.NoRecord = this.cbNoRecordData.Checked;
                 Operate.ProxyConfig.SocketProxy.DelClosed = this.cbDeleteClosed.Checked;
 
-                Operate.LogConfig.AutoRoll = this.cbLogList_AutoRoll.Checked;
-                Operate.LogConfig.AutoClear = this.cbLogList_AutoClear.Checked;
-                Operate.LogConfig.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
+                Operate.LogConfig.List.AutoRoll = this.cbLogList_AutoRoll.Checked;
+                Operate.LogConfig.List.AutoClear = this.cbLogList_AutoClear.Checked;
+                Operate.LogConfig.List.AutoClear_Value = this.nudLogList_AutoClearValue.Value;
 
                 Operate.ProxyConfig.ProxyMapping.Enable_MapLocal = this.cbEnable_MapLocal.Checked;
                 Operate.ProxyConfig.ProxyMapping.Enable_MapRemote = this.cbEnable_MapRemote.Checked;
@@ -772,9 +772,9 @@ namespace WinsockPacketEditor
                     Operate.ProxyConfig.SocketProxyList.ProxyData_ToList();
                 }
 
-                if (Operate.LogConfig.cqLogInfo.Count > 0)
+                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
                 {
-                    Operate.LogConfig.LogToList();
+                    Operate.LogConfig.List.LogToList();
 
                     if (this.cbLogList_AutoRoll.Checked && !this.dgvLogList.IsDisposed)
                     {
@@ -853,8 +853,8 @@ namespace WinsockPacketEditor
 
         private void CleanUp_LogList()
         {
-            Operate.LogConfig.ClearLogQueue();
-            Operate.LogConfig.ClearLogList();
+            Operate.LogConfig.Queue.ClearLogQueue();
+            Operate.LogConfig.List.ClearLogList();
             this.dgvLogList.Rows.Clear();
         }
 

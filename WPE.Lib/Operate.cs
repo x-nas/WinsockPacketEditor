@@ -873,9 +873,9 @@ namespace WPE.Lib
                         new XElement("PacketList_AutoRoll", PacketConfig.List.AutoRoll),
                         new XElement("PacketList_AutoClear", PacketConfig.List.AutoClear),
                         new XElement("PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value),
-                        new XElement("LogList_AutoRoll", LogConfig.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.AutoClear_Value),
+                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
+                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
+                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
                         new XElement("ListExecute", ListExecute),
                         new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
@@ -943,9 +943,9 @@ namespace WPE.Lib
                         PacketConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoRoll"]);
                         PacketConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["PacketList_AutoClear"]);
                         PacketConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["PacketList_AutoClear_Value"]);
-                        LogConfig.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoRoll"]);
-                        LogConfig.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
-                        LogConfig.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoRoll"]);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(InjectMode.Rows[0]["LogList_AutoClear"]);
+                        LogConfig.List.AutoClear_Value = Convert.ToInt32(InjectMode.Rows[0]["LogList_AutoClear_Value"]);
                         PacketConfig.Packet.SpeedMode = Convert.ToBoolean(InjectMode.Rows[0]["SpeedMode"]);
                         ListExecute = GetListExecute_ByString(InjectMode.Rows[0]["ListExecute"].ToString());
                         FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(InjectMode.Rows[0]["FilterExecute"].ToString());
@@ -1204,19 +1204,19 @@ namespace WPE.Lib
                     XElement LogList_AutoRoll = xeInjectMode.Element("LogList_AutoRoll");
                     if (LogList_AutoRoll != null)
                     {
-                        LogConfig.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
                     }
 
                     XElement LogList_AutoClear = xeInjectMode.Element("LogList_AutoClear");
                     if (LogList_AutoClear != null)
                     {
-                        LogConfig.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
                     }
 
                     XElement LogList_AutoClear_Value = xeInjectMode.Element("LogList_AutoClear_Value");
                     if (LogList_AutoClear_Value != null)
                     {
-                        LogConfig.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
                     XElement SpeedMode = xeInjectMode.Element("SpeedMode");
@@ -1275,9 +1275,9 @@ namespace WPE.Lib
                         new XElement("Enable_Auth", ProxyConfig.SocketProxy.Enable_Auth),
                         new XElement("NoRecord", ProxyConfig.SocketProxy.NoRecord),
                         new XElement("DelClosed", ProxyConfig.SocketProxy.DelClosed),
-                        new XElement("LogList_AutoRoll", LogConfig.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.AutoClear_Value),
+                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
+                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
+                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("Enable_MapLocal", ProxyConfig.ProxyMapping.Enable_MapLocal),
                         new XElement("Enable_MapRemote", ProxyConfig.ProxyMapping.Enable_MapRemote),
                         new XElement("Enable_ExternalProxy", ProxyConfig.SocketProxy.Enable_ExternalProxy),
@@ -1347,9 +1347,9 @@ namespace WPE.Lib
                         new XElement("PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll),
                         new XElement("PacketConfig.List_AutoClear", PacketConfig.List.AutoClear),
                         new XElement("PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value),
-                        new XElement("LogList_AutoRoll", LogConfig.AutoRoll),
-                        new XElement("LogList_AutoClear", LogConfig.AutoClear),
-                        new XElement("LogList_AutoClear_Value", LogConfig.AutoClear_Value),
+                        new XElement("LogList_AutoRoll", LogConfig.List.AutoRoll),
+                        new XElement("LogList_AutoClear", LogConfig.List.AutoClear),
+                        new XElement("LogList_AutoClear_Value", LogConfig.List.AutoClear_Value),
                         new XElement("SpeedMode", PacketConfig.Packet.SpeedMode),
                         new XElement("ListExecute", ListExecute),
                         new XElement("FilterExecute", FilterConfig.Filter.FilterExecute)
@@ -1383,9 +1383,9 @@ namespace WPE.Lib
                         ProxyConfig.SocketProxy.Enable_Auth = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_EnableAuth"]);
                         ProxyConfig.SocketProxy.NoRecord = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ProxyList_NoRecord"]);
                         ProxyConfig.SocketProxy.DelClosed = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_ClientList_DelClosed"]);
-                        LogConfig.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
-                        LogConfig.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
-                        LogConfig.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoRoll"]);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear"]);
+                        LogConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["ProxyConfig_LogList_AutoClear_Value"]);
                         ProxyConfig.ProxyMapping.Enable_MapLocal = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapLocal"]);
                         ProxyConfig.ProxyMapping.Enable_MapRemote = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_MapRemote"]);
                         ProxyConfig.SocketProxy.Enable_ExternalProxy = Convert.ToBoolean(RunConfig.Rows[0]["ProxyConfig_Enable_ExternalProxy"]);
@@ -1437,9 +1437,9 @@ namespace WPE.Lib
                         PacketConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoRoll"]);
                         PacketConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoClear"]);
                         PacketConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_PacketConfig.List_AutoClear_Value"]);
-                        LogConfig.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoRoll"]);
-                        LogConfig.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear"]);
-                        LogConfig.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear_Value"]);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoRoll"]);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear"]);
+                        LogConfig.List.AutoClear_Value = Convert.ToInt32(RunConfig.Rows[0]["InjectionConfig_LogList_AutoClear_Value"]);
                         PacketConfig.Packet.SpeedMode = Convert.ToBoolean(RunConfig.Rows[0]["InjectionConfig_SpeedMode"]);
                         ListExecute = GetListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_ListExecute"].ToString());
                         FilterConfig.Filter.FilterExecute = FilterConfig.List.GetFilterListExecute_ByString(RunConfig.Rows[0]["InjectionConfig_FilterExecute"].ToString());
@@ -1494,19 +1494,19 @@ namespace WPE.Lib
                     XElement LogList_AutoRoll = xeProxyConfig.Element("LogList_AutoRoll");
                     if (LogList_AutoRoll != null)
                     {
-                        LogConfig.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
                     }
 
                     XElement LogList_AutoClear = xeProxyConfig.Element("LogList_AutoClear");
                     if (LogList_AutoClear != null)
                     {
-                        LogConfig.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
                     }
 
                     XElement LogList_AutoClear_Value = xeProxyConfig.Element("LogList_AutoClear_Value");
                     if (LogList_AutoClear_Value != null)
                     {
-                        LogConfig.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
                     XElement Enable_MapLocal = xeProxyConfig.Element("Enable_MapLocal");
@@ -1828,19 +1828,19 @@ namespace WPE.Lib
                     XElement LogList_AutoRoll = xeInjectionConfig.Element("LogList_AutoRoll");
                     if (LogList_AutoRoll != null)
                     {
-                        LogConfig.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
+                        LogConfig.List.AutoRoll = Convert.ToBoolean(LogList_AutoRoll.Value);
                     }
 
                     XElement LogList_AutoClear = xeInjectionConfig.Element("LogList_AutoClear");
                     if (LogList_AutoClear != null)
                     {
-                        LogConfig.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
+                        LogConfig.List.AutoClear = Convert.ToBoolean(LogList_AutoClear.Value);
                     }
 
                     XElement LogList_AutoClear_Value = xeInjectionConfig.Element("LogList_AutoClear_Value");
                     if (LogList_AutoClear_Value != null)
                     {
-                        LogConfig.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
+                        LogConfig.List.AutoClear_Value = int.Parse(LogList_AutoClear_Value.Value);
                     }
 
                     XElement SpeedMode = xeInjectionConfig.Element("SpeedMode");
@@ -7475,6 +7475,11 @@ namespace WPE.Lib
                             return -1;
                         }
 
+                        if (fromIndex == -1)
+                        {
+                            fromIndex = 0;
+                        }
+
                         for (int i = fromIndex; i < listCount; i++)
                         {
                             byte[] packetBuffer = PacketConfig.List.lstRecPacket[i].PacketBuffer;
@@ -12604,129 +12609,134 @@ namespace WPE.Lib
 
         public static class LogConfig
         {
-            public static bool AutoRoll = false, AutoClear = true;
-            public static decimal AutoClear_Value = 5000;
-
             #region//日志队列
 
-            public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
-
-            #region//日志入队列
-
-            public static void LogToQueue(string sFuncName, string sLogContent)
+            public static class Queue
             {
-                LogInfo li = new LogInfo(sFuncName, sLogContent);
-                cqLogInfo.Enqueue(li);
-            }
+                public static ConcurrentQueue<LogInfo> cqLogInfo = new ConcurrentQueue<LogInfo>();
 
-            #endregion
+                #region//日志入队列
 
-            #region//清除日志队列
-
-            public static void ClearLogQueue()
-            {
-                while (!cqLogInfo.IsEmpty)
+                public static void LogToQueue(string sFuncName, string sLogContent)
                 {
-                    cqLogInfo.TryDequeue(out LogInfo li);
+                    LogInfo li = new LogInfo(sFuncName, sLogContent);
+                    cqLogInfo.Enqueue(li);
                 }
-            }
 
-            #endregion
+                #endregion
+
+                #region//清除日志队列
+
+                public static void ClearLogQueue()
+                {
+                    while (!cqLogInfo.IsEmpty)
+                    {
+                        cqLogInfo.TryDequeue(out LogInfo li);
+                    }
+                }
+
+                #endregion                
+            }
 
             #endregion
 
             #region//日志列表
 
-            public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();            
-
-            #region//日志入列表
-
-            public static void LogToList()
+            public static class List
             {
-                if (cqLogInfo.TryDequeue(out LogInfo li))
+                public static bool AutoRoll = false, AutoClear = true;
+                public static decimal AutoClear_Value = 5000;
+                public static BindingList<LogInfo> lstLogInfo = new BindingList<LogInfo>();
+
+                #region//日志入列表
+
+                public static void LogToList()
                 {
-                    if (SystemConfig.InvokeAction != null)
+                    if (Queue.cqLogInfo.TryDequeue(out LogInfo li))
                     {
-                        SystemConfig.InvokeAction(() =>
+                        if (SystemConfig.InvokeAction != null)
+                        {
+                            SystemConfig.InvokeAction(() =>
+                            {
+                                lstLogInfo.Add(li);
+                            });
+                        }
+                        else
                         {
                             lstLogInfo.Add(li);
-                        });
-                    }
-                    else
-                    {
-                        lstLogInfo.Add(li);
-                    }
-                }
-            }
-
-            #endregion
-
-            #region//清除日志列表
-
-            public static void ClearLogList()
-            {
-                lstLogInfo.Clear();
-            }
-
-            #endregion
-
-            #region//保存日志列表为Excel
-
-            public static int SaveLogListToExcel()
-            {
-                int iSuccess = 0;
-
-                try
-                {
-                    SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
-                    sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
-                    sfdSaveToExcel.FilterIndex = 0;
-                    sfdSaveToExcel.RestoreDirectory = true;
-                    sfdSaveToExcel.CreatePrompt = true;
-
-                    sfdSaveToExcel.Title = AntdUI.Localization.Get("SaveToExcel", "保存为Excel文件");
-
-                    if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
-                    {
-                        Stream myStream = sfdSaveToExcel.OpenFile();
-                        StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
-
-                        string sColTitle = AntdUI.Localization.Get("ExcelColumn", "记录时间\t模块\t日志内容\t");
-                        sw.WriteLine(sColTitle);
-
-                        foreach (LogInfo li in lstLogInfo)
-                        {
-                            try
-                            {
-                                string sColValue = string.Empty;
-                                string sTime = li.LogTime;
-                                string sFuncName = li.FuncName;
-                                string sContent = li.LogContent;
-
-                                sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
-                                sw.WriteLine(sColValue);
-
-                                iSuccess++;
-                            }
-                            catch
-                            {
-                                //
-                            }
                         }
-
-                        sw.Close();
-                        myStream.Close();
                     }
                 }
-                catch (Exception ex)
+
+                #endregion
+
+                #region//清除日志列表
+
+                public static void ClearLogList()
                 {
-                    DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    lstLogInfo.Clear();
                 }
 
-                return iSuccess;
-            }
+                #endregion
 
-            #endregion
+                #region//保存日志列表为Excel
+
+                public static int SaveLogListToExcel()
+                {
+                    int iSuccess = 0;
+
+                    try
+                    {
+                        SaveFileDialog sfdSaveToExcel = new SaveFileDialog();
+                        sfdSaveToExcel.Filter = "Execl files (*.xls)|*.xls";
+                        sfdSaveToExcel.FilterIndex = 0;
+                        sfdSaveToExcel.RestoreDirectory = true;
+                        sfdSaveToExcel.CreatePrompt = true;
+
+                        sfdSaveToExcel.Title = AntdUI.Localization.Get("SaveToExcel", "保存为Excel文件");
+
+                        if (sfdSaveToExcel.ShowDialog() == DialogResult.OK)
+                        {
+                            Stream myStream = sfdSaveToExcel.OpenFile();
+                            StreamWriter sw = new StreamWriter(myStream, Encoding.GetEncoding(-0));
+
+                            string sColTitle = AntdUI.Localization.Get("ExcelColumn", "记录时间\t模块\t日志内容\t");
+                            sw.WriteLine(sColTitle);
+
+                            foreach (LogInfo li in lstLogInfo)
+                            {
+                                try
+                                {
+                                    string sColValue = string.Empty;
+                                    string sTime = li.LogTime.ToString("HH:mm:ss:fffffff");
+                                    string sFuncName = li.FuncName;
+                                    string sContent = li.LogContent;
+
+                                    sColValue += sTime + "\t" + sFuncName + "\t" + sContent + "\t";
+                                    sw.WriteLine(sColValue);
+
+                                    iSuccess++;
+                                }
+                                catch
+                                {
+                                    //
+                                }
+                            }
+
+                            sw.Close();
+                            myStream.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                    }
+
+                    return iSuccess;
+                }
+
+                #endregion                
+            }
 
             #endregion
         }
@@ -12739,7 +12749,7 @@ namespace WPE.Lib
         {
             Task.Run(() =>
             {
-                LogConfig.LogToQueue(sFuncName, sLogContent);
+                LogConfig.Queue.LogToQueue(sFuncName, sLogContent);
             });
         }
 
@@ -12747,7 +12757,7 @@ namespace WPE.Lib
         {
             Task.Run(() =>
             {
-                LogConfig.LogToQueue(sFuncName, sLogContent);
+                LogConfig.Queue.LogToQueue(sFuncName, sLogContent);
             });
         }
 
@@ -13239,9 +13249,9 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@PacketList_AutoRoll", PacketConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@PacketList_AutoClear", PacketConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@PacketList_AutoClear_Value", PacketConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.AutoRoll);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.AutoClear);
-                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear", LogConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
                             cmd.Parameters.AddWithValue("@SpeedMode", PacketConfig.Packet.SpeedMode);
                             cmd.Parameters.AddWithValue("@ListExecute", SystemConfig.ListExecute);
                             cmd.Parameters.AddWithValue("@FilterExecute", FilterConfig.Filter.FilterExecute);
@@ -13551,9 +13561,9 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@ProxyConfig_EnableAuth", ProxyConfig.SocketProxy.Enable_Auth);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ProxyList_NoRecord", ProxyConfig.SocketProxy.NoRecord);
                             cmd.Parameters.AddWithValue("@ProxyConfig_ClientList_DelClosed", ProxyConfig.SocketProxy.DelClosed);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", LogConfig.AutoRoll);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", LogConfig.AutoClear);
-                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", LogConfig.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear", LogConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@ProxyConfig_LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapLocal", ProxyConfig.ProxyMapping.Enable_MapLocal);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_MapRemote", ProxyConfig.ProxyMapping.Enable_MapRemote);
                             cmd.Parameters.AddWithValue("@ProxyConfig_Enable_ExternalProxy", ProxyConfig.SocketProxy.Enable_ExternalProxy);
@@ -13605,9 +13615,9 @@ namespace WPE.Lib
                             cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoRoll", PacketConfig.List.AutoRoll);
                             cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoClear", PacketConfig.List.AutoClear);
                             cmd.Parameters.AddWithValue("@InjectionConfig_PacketConfig.List_AutoClear_Value", PacketConfig.List.AutoClear_Value);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoRoll", LogConfig.AutoRoll);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear", LogConfig.AutoClear);
-                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear_Value", LogConfig.AutoClear_Value);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoRoll", LogConfig.List.AutoRoll);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear", LogConfig.List.AutoClear);
+                            cmd.Parameters.AddWithValue("@InjectionConfig_LogList_AutoClear_Value", LogConfig.List.AutoClear_Value);
                             cmd.Parameters.AddWithValue("@InjectionConfig_SpeedMode", PacketConfig.Packet.SpeedMode);
                             cmd.Parameters.AddWithValue("@InjectionConfig_ListExecute", SystemConfig.ListExecute);
                             cmd.Parameters.AddWithValue("@InjectionConfig_FilterExecute", FilterConfig.Filter.FilterExecute);

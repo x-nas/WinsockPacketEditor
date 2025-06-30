@@ -16,7 +16,7 @@ namespace WPE.InjectMode
 
         private void BackUpSettingsForm_Load(object sender, EventArgs e)
         {
-            this.Text = "WPE x64 - " + AntdUI.Localization.Get("BackUpSettingsForm", "备份设置");
+            this.Text = AntdUI.Localization.Get("BackUpSettingsForm", "备份设置");
         }
 
         #endregion
