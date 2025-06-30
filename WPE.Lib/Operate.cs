@@ -7414,7 +7414,7 @@ namespace WPE.Lib
                 public static int Search_Index = -1;
                 public static FindOptions FindOptions = new FindOptions();
                 public static PacketInfo piSelect;
-                public static BindingList<PacketInfo> lstRecPacket = new BindingList<PacketInfo>();
+                public static List<PacketInfo> lstRecPacket = new List<PacketInfo>();
 
                 #region//封包入列表
 
