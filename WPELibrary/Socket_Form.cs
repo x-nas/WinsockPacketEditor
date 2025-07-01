@@ -1599,31 +1599,31 @@ namespace WPELibrary
                         switch (sItemText)
                         {
                             case "cmsFilterList_Top":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Top, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Top, sfiList);
                                 break;
 
                             case "cmsFilterList_Up":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Up, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Up, sfiList);
                                 break;
 
                             case "cmsFilterList_Down":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Down, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Down, sfiList);
                                 break;
 
                             case "cmsFilterList_Bottom":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Bottom, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, sfiList);
                                 break;
 
                             case "cmsFilterList_Copy":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Copy, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, sfiList);
                                 break;
 
                             case "cmsFilterList_Export":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Export, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Export, sfiList);
                                 break;
 
                             case "cmsFilterList_Delete":
-                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(Operate.SystemConfig.ListAction.Delete, sfiList);
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, sfiList);
                                 break;
                         }
 
@@ -1827,7 +1827,7 @@ namespace WPELibrary
 
         private void tsFilterList_Load_Click(object sender, EventArgs e)
         {
-            Operate.FilterConfig.List.LoadFilterList_Dialog();
+            Operate.FilterConfig.List.LoadFilterList_Dialog(this);
         }
 
         private void tsFilterList_Save_Click(object sender, EventArgs e)
@@ -1839,7 +1839,7 @@ namespace WPELibrary
                     List<FilterInfo> sfiList = new List<FilterInfo>();
                     sfiList.AddRange(Operate.FilterConfig.List.lstFilterInfo);
 
-                    Operate.FilterConfig.List.SaveFilterList_Dialog(string.Empty, sfiList);
+                    Operate.FilterConfig.List.SaveFilterList_Dialog(this, string.Empty, sfiList);
                 }
             }
             catch (Exception ex)
@@ -1860,7 +1860,7 @@ namespace WPELibrary
         {
             if (dgvFilterList.Rows.Count > 0)
             {
-                Operate.FilterConfig.List.CleanUpFilterList_Dialog();
+                Operate.FilterConfig.List.CleanUpFilterList_Dialog(this);
             }
         }
 

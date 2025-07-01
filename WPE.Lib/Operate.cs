@@ -1,4 +1,5 @@
-﻿using Be.Windows.Forms;
+﻿using AntdUI;
+using Be.Windows.Forms;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -7850,7 +7851,7 @@ namespace WPE.Lib
                     {
                         Guid FID = Guid.NewGuid();
                         int FNum = FilterConfig.List.lstFilterInfo.Count + 1;
-                        string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50), FNum.ToString());
+                        string FName = string.Format(AntdUI.Localization.Get("NewFilterName", "滤镜 {0}"), FNum.ToString());
 
                         FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
                         FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
@@ -8046,21 +8047,27 @@ namespace WPE.Lib
 
                 #region//删除滤镜
 
-                public static void DeleteFilter_Dialog(List<FilterInfo> sfiList)
+                public static void DeleteFilter_Dialog(Form form, List<FilterInfo> fiList)
                 {
                     try
                     {
-                        if (sfiList.Count > 0)
+                        if (fiList.Count > 0)
                         {
-                            DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_37));
-
-                            if (dr.Equals(DialogResult.OK))
+                            AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n确定删除选中的数据吗\r\n\r\n")
                             {
-                                foreach (FilterInfo sfi in sfiList)
+                                Icon = TType.Warn,
+                                Keyboard = false,
+                                MaskClosable = false,
+                                OnOk = config =>
                                 {
-                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
+                                    foreach (FilterInfo fi in fiList)
+                                    {
+                                        FilterConfig.List.lstFilterInfo.Remove(fi);
+                                    }
+
+                                    return true;
                                 }
-                            }
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -9188,21 +9195,19 @@ namespace WPE.Lib
 
                 #region//清空滤镜列表（对话框）
 
-                public static void CleanUpFilterList_Dialog()
+                public static void CleanUpFilterList_Dialog(Form form)
                 {
-                    try
+                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miFilterList", "滤镜列表"), "\r\n确定删除所有数据吗\r\n\r\n")
                     {
-                        DialogResult dr = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-
-                        if (dr.Equals(DialogResult.OK))
+                        Icon = TType.Warn,                   
+                        Keyboard = false,
+                        MaskClosable = false,
+                        OnOk = config =>
                         {
                             FilterConfig.List.FilterListClear();
+                            return true;
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-                    }
+                    });
                 }
 
                 public static void FilterListClear()
@@ -9242,7 +9247,7 @@ namespace WPE.Lib
 
                 #region//滤镜列表的列表操作
 
-                public static void UpdateFilterList_ByListAction(SystemConfig.ListAction listAction, List<FilterInfo> sfiList)
+                public static void UpdateFilterList_ByListAction(Form form, SystemConfig.ListAction listAction, List<FilterInfo> fiList)
                 {
                     try
                     {
@@ -9250,26 +9255,24 @@ namespace WPE.Lib
                         {
                             case SystemConfig.ListAction.Top:
 
-                                sfiList.Reverse();
-
-                                foreach (FilterInfo sfi in sfiList)
+                                foreach (FilterInfo fi in fiList)
                                 {
-                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
-                                    FilterConfig.List.lstFilterInfo.Insert(0, sfi);
+                                    FilterConfig.List.lstFilterInfo.Remove(fi);
+                                    FilterConfig.List.lstFilterInfo.Insert(0, fi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Up:
 
-                                foreach (FilterInfo sfi in sfiList)
+                                foreach (FilterInfo fi in fiList)
                                 {
-                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(sfi);
+                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(fi);
 
                                     if (iIndex > 0)
                                     {
-                                        FilterConfig.List.lstFilterInfo.Remove(sfi);
-                                        FilterConfig.List.lstFilterInfo.Insert(iIndex - 1, sfi);
+                                        FilterConfig.List.lstFilterInfo.Remove(fi);
+                                        FilterConfig.List.lstFilterInfo.Insert(iIndex - 1, fi);
                                     }
                                 }
 
@@ -9277,16 +9280,14 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Down:
 
-                                sfiList.Reverse();
-
-                                foreach (FilterInfo sfi in sfiList)
+                                foreach (FilterInfo fi in fiList)
                                 {
-                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(sfi);
+                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(fi);
 
                                     if (iIndex > -1 && iIndex < FilterConfig.List.lstFilterInfo.Count - 1)
                                     {
-                                        FilterConfig.List.lstFilterInfo.Remove(sfi);
-                                        FilterConfig.List.lstFilterInfo.Insert(iIndex + 1, sfi);
+                                        FilterConfig.List.lstFilterInfo.Remove(fi);
+                                        FilterConfig.List.lstFilterInfo.Insert(iIndex + 1, fi);
                                     }
                                 }
 
@@ -9294,33 +9295,33 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Bottom:
 
-                                foreach (FilterInfo sfi in sfiList)
+                                foreach (FilterInfo fi in fiList)
                                 {
-                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
-                                    FilterConfig.List.lstFilterInfo.Add(sfi);
+                                    FilterConfig.List.lstFilterInfo.Remove(fi);
+                                    FilterConfig.List.lstFilterInfo.Add(fi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Copy:
 
-                                foreach (FilterInfo sfi in sfiList)
+                                foreach (FilterInfo fi in fiList)
                                 {
-                                    FilterConfig.Filter.CopyFilter(sfi);
+                                    FilterConfig.Filter.CopyFilter(fi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Export:
 
-                                string sFName = sfiList[0].FName;
-                                FilterConfig.List.SaveFilterList_Dialog(sFName, sfiList);
+                                string sFName = fiList[0].FName;
+                                FilterConfig.List.SaveFilterList_Dialog(form, sFName, fiList);
 
                                 break;
 
                             case SystemConfig.ListAction.Delete:
 
-                                FilterConfig.Filter.DeleteFilter_Dialog(sfiList);
+                                FilterConfig.Filter.DeleteFilter_Dialog(form, fiList);
 
                                 break;
                         }
@@ -9611,7 +9612,7 @@ namespace WPE.Lib
 
                 #region//保存滤镜列表到文件（对话框）
 
-                public static void SaveFilterList_Dialog(string FileName, List<FilterInfo> sfiList)
+                public static void SaveFilterList_Dialog(Form form, string FileName, List<FilterInfo> sfiList)
                 {
                     try
                     {
@@ -9619,7 +9620,7 @@ namespace WPE.Lib
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
 
-                            sfdSaveFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
+                            sfdSaveFile.Filter = AntdUI.Localization.Get("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
 
                             if (!string.IsNullOrEmpty(FileName))
                             {
@@ -9627,20 +9628,26 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
-
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
                                 PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.FilterList_Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
-
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    SaveFilterList(FilePath, sfiList, true);
-
-                                    string sLog = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_153), FilePath);
-                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, sLog);
+                                    if (SaveFilterList(FilePath, sfiList, true))
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Success", "导出滤镜列表成功");
+                                        AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                    }
+                                    else
+                                    {
+                                        string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Error", "导出滤镜列表失败");
+                                        string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                        AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                    }
                                 }
                             }
                         }
@@ -9651,7 +9658,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveFilterList(string FilePath, List<FilterInfo> sfiList, bool DoEncrypt)
+                private static bool SaveFilterList(string FilePath, List<FilterInfo> sfiList, bool DoEncrypt)
                 {
                     try
                     {
@@ -9663,7 +9670,7 @@ namespace WPE.Lib
                         XElement xeRoot = FilterConfig.List.GetFilterList_XML(sfiList);
                         if (xeRoot == null)
                         {
-                            return;
+                            return false;
                         }
 
                         xdoc.Add(xeRoot);
@@ -9678,11 +9685,15 @@ namespace WPE.Lib
                                 SystemConfig.EncryptXMLFile(FilePath, sPassword);
                             }
                         }
+
+                        return true;
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static XElement GetFilterList_XML(List<FilterInfo> sfiList)
@@ -9767,13 +9778,12 @@ namespace WPE.Lib
 
                 #region//从文件加载滤镜列表（对话框）
 
-                public static void LoadFilterList_Dialog()
+                public static void LoadFilterList_Dialog(Form form)
                 {
                     try
                     {
                         OpenFileDialog ofdLoadFile = new OpenFileDialog();
-
-                        ofdLoadFile.Filter = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_75) + "（*.fp）|*.fp";
+                        ofdLoadFile.Filter = AntdUI.Localization.Get("FilterListFile", "滤镜列表文件") + "（*.fp）|*.fp";
                         ofdLoadFile.RestoreDirectory = true;
 
                         if (ofdLoadFile.ShowDialog() == DialogResult.OK)
@@ -9782,7 +9792,18 @@ namespace WPE.Lib
 
                             if (!string.IsNullOrEmpty(FilePath))
                             {
-                                LoadFilterList(FilePath, true);
+                                if (LoadFilterList(FilePath, true))
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportFilterList.Success", "导入滤镜列表成功");
+                                    AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
+                                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, Title + ": " + FilePath);
+                                }
+                                else
+                                {
+                                    string Title = AntdUI.Localization.Get("InjectModeForm.ImportFilterList.Error", "导入滤镜列表失败");
+                                    string Content = AntdUI.Localization.Get("InjectModeForm.CheckSystemLog", "请检查系统日志");
+                                    AntdUI.Notification.error(form, Title, Content, AntdUI.TAlignFrom.TR);
+                                }
                             }
                         }
                     }
@@ -9792,7 +9813,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void LoadFilterList(string FilePath, bool LoadFromUser)
+                private static bool LoadFilterList(string FilePath, bool LoadFromUser)
                 {
                     try
                     {
@@ -9801,7 +9822,6 @@ namespace WPE.Lib
                             XDocument xdoc = new XDocument();
 
                             bool bEncrypt = SystemConfig.IsEncryptXMLFile(FilePath);
-
                             if (bEncrypt)
                             {
                                 if (LoadFromUser)
@@ -9819,7 +9839,7 @@ namespace WPE.Lib
 
                             if (xdoc == null)
                             {
-                                string sError = MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_92);
+                                string sError = AntdUI.Localization.Get("AESKeyError", "加载失败: 密码错误");
 
                                 if (LoadFromUser)
                                 {
@@ -9843,12 +9863,16 @@ namespace WPE.Lib
                                     Operate.DoLog(MethodBase.GetCurrentMethod().Name, MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_80));
                                 }
                             }
+
+                            return true;
                         }
                     }
                     catch (Exception ex)
                     {
                         Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
                     }
+
+                    return false;
                 }
 
                 public static void LoadFilterList_FromXDocument(XDocument xdoc)

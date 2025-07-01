@@ -2,7 +2,9 @@
 using Be.Windows.Forms;
 using EasyHook;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
@@ -17,6 +19,7 @@ namespace WPE.InjectMode
         private bool setcolor = false;
         private bool SearchFromHead = true;
         private readonly Hook ws = new Hook();
+        private AntdUI.IContextMenuStripItem[] cmsFilterList = { };
 
         #region//窗体事件
 
@@ -45,9 +48,12 @@ namespace WPE.InjectMode
 
             this.InitForm();
             this.Dark_Changed();
+
             this.InitTable_PacketList();
             this.InitTable_FilterList();
             this.InitTable_LogList();
+
+            this.InitCMS_FilterList();
 
             this.splitterPacketList.SplitterWidth = 10;
             this.splitterFilterList.SplitterWidth = 10;
@@ -92,12 +98,17 @@ namespace WPE.InjectMode
                 btn_global.SelectedValue = btn_global.Items[0];
             }
 
+            for (int i = 0; i < this.mInjectMode.Items.Count; i++)
+            {
+                this.mInjectMode.Items[i].BadgeBack = this.colorTheme.Value;
+            }
+
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
         #endregion
 
-        #region//初始化 Table
+        #region//初始化数据表
 
         private void InitTable_PacketList()
         {
@@ -137,17 +148,23 @@ namespace WPE.InjectMode
 
         private void InitTable_FilterList()
         {
-            tFilterList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.ColumnCheck("check").SetFixed(),
-                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+            tFilterList.Columns = new AntdUI.ColumnCollection {                
+                new AntdUI.Column("", string.Empty, AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
                         return (rowindex + 1);
                     },
-                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("FName", "名称").SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("ExecutionCount", "已执行", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+                }.SetFixed(),
+                new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
+                {
+                    Call = (value, record, i_row, i_col) => 
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                        return value;
+                    }
+                }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),                
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
@@ -231,12 +248,68 @@ namespace WPE.InjectMode
 
         #endregion
 
+        #region//初始化右键菜单
+
+        private void InitCMS_FilterList()
+        {
+            cmsFilterList = new AntdUI.IContextMenuStripItem[]
+            {
+                new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                {
+                    ID = "cmsFilterList_Top",
+                    IconSvg = "VerticalAlignTopOutlined",
+                    LocalizationText = "InjectModeForm.cmsFilterList.Top",                    
+                },
+                new AntdUI.ContextMenuStripItemDivider(),
+                new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                {
+                    ID = "cmsFilterList_Up",
+                    IconSvg = "ArrowUpOutlined",
+                },
+                new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                {
+                    ID = "cmsFilterList_Down",
+                    IconSvg = "ArrowDownOutlined",
+                },
+                new AntdUI.ContextMenuStripItemDivider(),
+                new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                {
+                    ID = "cmsFilterList_Bottom",
+                    IconSvg = "VerticalAlignBottomOutlined",
+                },
+                new AntdUI.ContextMenuStripItemDivider(),
+                new AntdUI.ContextMenuStripItem("复制")
+                {
+                    ID = "cmsFilterList_Copy",
+                    IconSvg = "CopyOutlined",
+                },
+                new AntdUI.ContextMenuStripItem("导出到文件")
+                {
+                    ID = "cmsFilterList_Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                new AntdUI.ContextMenuStripItem("删除")
+                {
+                    ID = "cmsFilterList_Delete",
+                    IconSvg = "DeleteOutlined",
+                },
+            };
+        }
+
+        #endregion
+
         #region//更换主题颜色
 
         private void colorTheme_ValueChanged(object sender, AntdUI.ColorEventArgs e)
         {
             setcolor = true;
             AntdUI.Style.SetPrimary(e.Value);
+
+            for (int i = 0; i < this.mInjectMode.Items.Count; i ++)
+            {
+                this.mInjectMode.Items[i].BadgeBack = e.Value;
+            }
+            
             Refresh();
         }
 
@@ -418,7 +491,7 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//封包列表 - 分段菜单
+        #region//封包列表 - 菜单
 
         private void sPacketList_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
         {
@@ -534,6 +607,135 @@ namespace WPE.InjectMode
             }
 
             this.sPacketList.SelectIndex = -1;
+        }
+
+        #endregion
+
+        #region//滤镜列表 - 菜单
+
+        private void sFilterList_SelectIndexChanged(object sender, IntEventArgs e)
+        {
+            switch (this.sFilterList.SelectIndex)
+            {
+                //导入
+                case 0:
+                    Operate.FilterConfig.List.LoadFilterList_Dialog(this);
+                    break;
+
+                //导出
+                case 1:                    
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        Operate.FilterConfig.List.SaveFilterList_Dialog(this, string.Empty, Operate.FilterConfig.List.lstFilterInfo.ToList());
+                    }
+                    break;
+
+                //新增
+                case 2:                    
+                    Operate.FilterConfig.Filter.AddFilter_New();
+                    this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                    break;
+
+                //清空
+                case 3:                    
+                    if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
+                    {
+                        Operate.FilterConfig.List.CleanUpFilterList_Dialog(this);
+                    }
+                    break;
+            }
+
+            this.sFilterList.SelectIndex = -1;
+        }
+
+        #endregion
+
+        #region//滤镜列表 - 右键菜单
+
+        private void tFilterList_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                AntdUI.ContextMenuStrip.open(this, it =>
+                {
+                    List<FilterInfo> fiList = new List<FilterInfo>();
+
+                    foreach (int SelectIndex in this.tFilterList.SelectedIndexs)
+                    {
+                        fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
+                    }
+
+                    switch (it.ID)
+                    {
+                        case "cmsFilterList_Top":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Top, fiList);
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Up":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Up, fiList);
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Down":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Down, fiList);
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Bottom":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Bottom, fiList);
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Copy":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Copy, fiList);
+                                this.tFilterList.ScrollBar.ValueY = tFilterList.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Export":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Export, fiList);
+                            }
+
+                            break;
+
+                        case "cmsFilterList_Delete":
+
+                            if (fiList.Count > 0)
+                            {
+                                Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, fiList);
+                            }
+
+                            break;
+                    }
+
+                    this.tFilterList.SelectedIndex = -1;
+
+                }, cmsFilterList);
+            }
         }
 
         #endregion
@@ -877,6 +1079,9 @@ namespace WPE.InjectMode
         }
 
 
-        #endregion        
+
+        #endregion
+
+        
     }
 }

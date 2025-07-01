@@ -51,6 +51,8 @@
             AntdUI.SegmentedItem segmentedItem9 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem10 = new AntdUI.SegmentedItem();
             AntdUI.SegmentedItem segmentedItem11 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem12 = new AntdUI.SegmentedItem();
+            AntdUI.SegmentedItem segmentedItem13 = new AntdUI.SegmentedItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InjectModeForm));
             this.pageHeader = new AntdUI.PageHeader();
             this.colorTheme = new AntdUI.ColorPicker();
@@ -240,32 +242,27 @@
             // 
             this.mInjectMode.Dock = System.Windows.Forms.DockStyle.Left;
             menuItem1.Badge = "";
-            menuItem1.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem1.IconSvg = "ProjectFilled";
             menuItem1.ID = "miPacketList";
             menuItem1.LocalizationText = "InjectModeForm.{id}";
             menuItem1.Select = true;
             menuItem1.Text = "封包列表";
             menuItem2.Badge = "";
-            menuItem2.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem2.IconSvg = "FunnelPlotFilled";
             menuItem2.ID = "miFilterList";
             menuItem2.LocalizationText = "InjectModeForm.{id}";
             menuItem2.Text = "滤镜列表";
             menuItem3.Badge = "";
-            menuItem3.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem3.IconSvg = "PlaySquareFilled";
             menuItem3.ID = "miSendList";
             menuItem3.LocalizationText = "InjectModeForm.{id}";
             menuItem3.Text = "发送列表";
             menuItem4.Badge = "";
-            menuItem4.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem4.IconSvg = "RobotFilled";
             menuItem4.ID = "miRobotList";
             menuItem4.LocalizationText = "InjectModeForm.{id}";
             menuItem4.Text = "机器人列表";
             menuItem5.Badge = "";
-            menuItem5.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem5.IconSvg = "PieChartFilled";
             menuItem5.ID = "miStatistical";
             menuItem5.LocalizationText = "InjectModeForm.{id}";
@@ -287,7 +284,6 @@
             menuItem9.LocalizationText = "InjectModeForm.{id}";
             menuItem9.Text = "数据提取";
             menuItem10.Badge = "";
-            menuItem10.BadgeBack = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(119)))), ((int)(((byte)(255)))));
             menuItem10.IconSvg = "ContainerFilled";
             menuItem10.ID = "miSystemLog";
             menuItem10.LocalizationText = "InjectModeForm.{id}";
@@ -334,7 +330,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -1207,19 +1203,20 @@
             this.tFilterList.Bordered = true;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.EmptyHeader = true;
             this.tFilterList.Gap = 8;
             this.tFilterList.GapCell = 0;
-            this.tFilterList.Location = new System.Drawing.Point(3, 32);
+            this.tFilterList.Location = new System.Drawing.Point(3, 44);
+            this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
-            this.tFilterList.Size = new System.Drawing.Size(294, 689);
+            this.tFilterList.Size = new System.Drawing.Size(294, 677);
             this.tFilterList.TabIndex = 1;
+            this.tFilterList.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tFilterList_MouseClick);
             // 
             // sFilterList
             // 
             this.sFilterList.Dock = System.Windows.Forms.DockStyle.Top;
             this.sFilterList.Full = true;
-            this.sFilterList.IconRatio = 0.8F;
+            this.sFilterList.IconRatio = 1F;
             segmentedItem10.Badge = null;
             segmentedItem10.BadgeAlign = AntdUI.TAlign.TR;
             segmentedItem10.BadgeBack = null;
@@ -1228,9 +1225,10 @@
             segmentedItem10.BadgeOffsetY = 0;
             segmentedItem10.BadgeSize = 0.6F;
             segmentedItem10.BadgeSvg = null;
-            segmentedItem10.IconSvg = "ImportOutlined";
+            segmentedItem10.IconSvg = "FolderOpenOutlined";
             segmentedItem10.ID = "siImport";
             segmentedItem10.Text = "";
+            segmentedItem10.Tooltip = "导入滤镜列表";
             segmentedItem11.Badge = null;
             segmentedItem11.BadgeAlign = AntdUI.TAlign.TR;
             segmentedItem11.BadgeBack = null;
@@ -1239,15 +1237,41 @@
             segmentedItem11.BadgeOffsetY = 0;
             segmentedItem11.BadgeSize = 0.6F;
             segmentedItem11.BadgeSvg = null;
-            segmentedItem11.IconSvg = "ExportOutlined";
+            segmentedItem11.IconSvg = "DeliveredProcedureOutlined";
             segmentedItem11.ID = "siExport";
             segmentedItem11.Text = "";
+            segmentedItem11.Tooltip = "导出滤镜列表";
+            segmentedItem12.Badge = null;
+            segmentedItem12.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem12.BadgeBack = null;
+            segmentedItem12.BadgeMode = false;
+            segmentedItem12.BadgeOffsetX = 0;
+            segmentedItem12.BadgeOffsetY = 0;
+            segmentedItem12.BadgeSize = 0.6F;
+            segmentedItem12.BadgeSvg = null;
+            segmentedItem12.IconSvg = "FileAddOutlined";
+            segmentedItem12.ID = "siAdd";
+            segmentedItem12.Tooltip = "新增滤镜";
+            segmentedItem13.Badge = null;
+            segmentedItem13.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem13.BadgeBack = null;
+            segmentedItem13.BadgeMode = false;
+            segmentedItem13.BadgeOffsetX = 0;
+            segmentedItem13.BadgeOffsetY = 0;
+            segmentedItem13.BadgeSize = 0.6F;
+            segmentedItem13.BadgeSvg = null;
+            segmentedItem13.IconSvg = "DeleteOutlined";
+            segmentedItem13.ID = "siClear";
+            segmentedItem13.Tooltip = "清空所有滤镜";
             this.sFilterList.Items.Add(segmentedItem10);
             this.sFilterList.Items.Add(segmentedItem11);
+            this.sFilterList.Items.Add(segmentedItem12);
+            this.sFilterList.Items.Add(segmentedItem13);
             this.sFilterList.Location = new System.Drawing.Point(3, 3);
             this.sFilterList.Name = "sFilterList";
-            this.sFilterList.Size = new System.Drawing.Size(294, 23);
+            this.sFilterList.Size = new System.Drawing.Size(294, 35);
             this.sFilterList.TabIndex = 2;
+            this.sFilterList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sFilterList_SelectIndexChanged);
             // 
             // tpSendList
             // 

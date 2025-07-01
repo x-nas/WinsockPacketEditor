@@ -38,14 +38,19 @@ namespace WPE.Lib
 
                 case "Setting":
                     return "Setting";
+
                 case "AnimationEnabled":
                     return "Animation Enabled";
+
                 case "ShadowEnabled":
                     return "Shadow Enabled";
+
                 case "PopupWindow":
                     return "Popup in the window";
+
                 case "ScrollBarHidden":
                     return "ScrollBar Hidden Style";
+
                 case "TextRenderingHighQuality":
                     return "TextRendering HighQuality";
 
@@ -79,6 +84,9 @@ namespace WPE.Lib
 
                 case "AESKeyError":
                     return "Failed to load: Password incorrect";
+
+                case "FilterListFile":
+                    return "Filter List File";
 
                 #endregion
 
@@ -172,6 +180,9 @@ namespace WPE.Lib
 
                 case "InjectModeForm.miPacketList":
                     return "Packet List";
+
+                case "InjectModeForm.miFilterList":
+                    return "Filter List";
 
                 case "InjectModeForm.miStatistical":
                     return "Statistical";
