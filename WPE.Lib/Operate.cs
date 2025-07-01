@@ -23,6 +23,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using WPE.Lib.Controls;
 using WPE.Lib.Forms;
 
 namespace WPE.Lib
@@ -81,22 +82,8 @@ namespace WPE.Lib
 
             public enum PWType
             {
-                FilterList_Import = 0,
-                FilterList_Export = 1,
-                RobotList_Import = 2,
-                RobotList_Export = 3,
-                SendList_Import = 4,
-                SendList_Export = 5,
-                SendCollection_Import = 6,
-                SendCollection_Export = 7,
-                ProxyAccount_Import = 8,
-                ProxyAccount_Export = 9,
-                SystemBackUp_Import = 10,
-                SystemBackUp_Export = 11,
-                MapLocal_Import = 12,
-                MapLocal_Export = 13,
-                MapRemote_Import = 14,
-                MapRemote_Export = 15,
+                Import = 0,
+                Export = 1,
             }
 
             public enum ListAction
@@ -1928,7 +1915,7 @@ namespace WPE.Lib
 
                     if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                     {
-                        PasswordForm pwForm = new PasswordForm(PWType.SystemBackUp_Export);
+                        PasswordForm pwForm = new PasswordForm(PWType.Export);
                         pwForm.ShowDialog();
 
                         string FilePath = sfdSaveFile.FileName;
@@ -2141,7 +2128,7 @@ namespace WPE.Lib
                         {
                             if (LoadFromUser)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.SystemBackUp_Import);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Import);
                                 pwForm.ShowDialog();
                             }
 
@@ -5145,7 +5132,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.ProxyAccount_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -5299,7 +5286,7 @@ namespace WPE.Lib
                                     {
                                         if (LoadFromUser)
                                         {
-                                            PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.ProxyAccount_Import);
+                                            PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                             pwForm.ShowDialog();
                                         }
 
@@ -6192,7 +6179,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.MapLocal_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -6301,7 +6288,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.MapRemote_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -6433,7 +6420,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.MapLocal_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 
@@ -6572,7 +6559,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.MapRemote_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 
@@ -9628,15 +9615,45 @@ namespace WPE.Lib
                             }
 
                             sfdSaveFile.RestoreDirectory = true;
+
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.FilterList_Export);
-                                pwForm.ShowDialog();
-
                                 string FilePath = sfdSaveFile.FileName;
                                 if (!string.IsNullOrEmpty(FilePath))
                                 {
-                                    if (SaveFilterList(FilePath, sfiList, true))
+                                    bool DoEncrypt = false;
+                                    using (EncryptionPassword eForm = new EncryptionPassword(SystemConfig.PWType.Export))
+                                    {
+                                        string Title = AntdUI.Localization.Get("ExportFilterList", "导出滤镜列表");
+                                        AntdUI.Modal.open(new AntdUI.Modal.Config(form, Title, eForm, TType.Info)
+                                        {
+                                            Keyboard = false,
+                                            MaskClosable = false,
+                                            OnOk = config =>
+                                            {
+                                                string sPW = eForm.GetPassword();
+                                                if (string.IsNullOrEmpty(sPW))
+                                                {
+                                                    eForm.EncryptionText_Changed();
+
+                                                    AntdUI.Message.open(new AntdUI.Message.Config(form, "密码不能为空", TType.Error)
+                                                    {
+                                                        LocalizationText = "ExportFilterList.Error"
+                                                    });
+
+                                                    return false;
+                                                }
+                                                else
+                                                {
+                                                    FilterConfig.List.AESKey = sPW;
+                                                    DoEncrypt = true;
+                                                    return true;
+                                                }                                                    
+                                            }
+                                        });
+                                    }
+
+                                    if (SaveFilterList(FilePath, sfiList, DoEncrypt))
                                     {
                                         string Title = AntdUI.Localization.Get("InjectModeForm.ExportFilterList.Success", "导出滤镜列表成功");
                                         AntdUI.Notification.success(form, Title, FilePath, AntdUI.TAlignFrom.TR);
@@ -9826,7 +9843,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.FilterList_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 
@@ -10580,7 +10597,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.SendList_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -10700,7 +10717,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.SendCollection_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 
@@ -11110,7 +11127,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.SendList_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -11262,7 +11279,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.SendList_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 
@@ -12387,7 +12404,7 @@ namespace WPE.Lib
 
                             if (sfdSaveFile.ShowDialog() == DialogResult.OK)
                             {
-                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.RobotList_Export);
+                                PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                 pwForm.ShowDialog();
 
                                 string FilePath = sfdSaveFile.FileName;
@@ -12531,7 +12548,7 @@ namespace WPE.Lib
                             {
                                 if (LoadFromUser)
                                 {
-                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.RobotList_Import);
+                                    PasswordForm pwForm = new PasswordForm(SystemConfig.PWType.Export);
                                     pwForm.ShowDialog();
                                 }
 

@@ -26,32 +26,32 @@ namespace WPE.Lib.Forms
                 string sTitle = string.Empty;
                 string sShow = string.Empty;
 
-                switch (PWType)
-                {
-                    case Operate.SystemConfig.PWType.FilterList_Import:
-                    case Operate.SystemConfig.PWType.RobotList_Import:
-                    case Operate.SystemConfig.PWType.SendList_Import:
-                    case Operate.SystemConfig.PWType.SendCollection_Import:
-                    case Operate.SystemConfig.PWType.ProxyAccount_Import:
-                    case Operate.SystemConfig.PWType.SystemBackUp_Import:
-                    case Operate.SystemConfig.PWType.MapLocal_Import:
-                    case Operate.SystemConfig.PWType.MapRemote_Import:
-                        sTitle = AntdUI.Localization.Get("ImportListFile", "导入列表文件");
-                        sShow = AntdUI.Localization.Get("InputPassword", "请输入密码");
-                        break;
+                //switch (PWType)
+                //{
+                //    case Operate.SystemConfig.PWType.FilterList_Import:
+                //    case Operate.SystemConfig.PWType.RobotList_Import:
+                //    case Operate.SystemConfig.PWType.SendList_Import:
+                //    case Operate.SystemConfig.PWType.SendCollection_Import:
+                //    case Operate.SystemConfig.PWType.ProxyAccount_Import:
+                //    case Operate.SystemConfig.PWType.SystemBackUp_Import:
+                //    case Operate.SystemConfig.PWType.MapLocal_Import:
+                //    case Operate.SystemConfig.PWType.MapRemote_Import:
+                //        sTitle = AntdUI.Localization.Get("ImportListFile", "导入列表文件");
+                //        sShow = AntdUI.Localization.Get("InputPassword", "请输入密码");
+                //        break;
 
-                    case Operate.SystemConfig.PWType.FilterList_Export:
-                    case Operate.SystemConfig.PWType.RobotList_Export:
-                    case Operate.SystemConfig.PWType.SendList_Export:
-                    case Operate.SystemConfig.PWType.SendCollection_Export:
-                    case Operate.SystemConfig.PWType.ProxyAccount_Export:
-                    case Operate.SystemConfig.PWType.SystemBackUp_Export:
-                    case Operate.SystemConfig.PWType.MapLocal_Export:
-                    case Operate.SystemConfig.PWType.MapRemote_Export:
-                        sTitle = AntdUI.Localization.Get("ExportListFile", "导出列表文件");
-                        sShow = AntdUI.Localization.Get("PasswordEncryption", "请输入密码, 此密码在导入列表文件时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!");
-                        break;
-                }
+                //    case Operate.SystemConfig.PWType.FilterList_Export:
+                //    case Operate.SystemConfig.PWType.RobotList_Export:
+                //    case Operate.SystemConfig.PWType.SendList_Export:
+                //    case Operate.SystemConfig.PWType.SendCollection_Export:
+                //    case Operate.SystemConfig.PWType.ProxyAccount_Export:
+                //    case Operate.SystemConfig.PWType.SystemBackUp_Export:
+                //    case Operate.SystemConfig.PWType.MapLocal_Export:
+                //    case Operate.SystemConfig.PWType.MapRemote_Export:
+                //        sTitle = AntdUI.Localization.Get("ExportListFile", "导出列表文件");
+                //        sShow = AntdUI.Localization.Get("PasswordEncryption", "请输入密码, 此密码在导入列表文件时会要求输入验证!\r\n 如无需设置密码，请点击 [ 取消 ] 按钮!");
+                //        break;
+                //}
 
                 this.Text = sTitle;
                 this.rtbShowInfo.Text = sShow;
@@ -64,45 +64,45 @@ namespace WPE.Lib.Forms
 
         private void PasswordForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            switch (PWType)
-            {
-                case Operate.SystemConfig.PWType.FilterList_Import:
-                case Operate.SystemConfig.PWType.FilterList_Export:
-                    WPE.Lib.Operate.FilterConfig.List.AESKey = Password;
-                    break;
+            //switch (PWType)
+            //{
+            //    case Operate.SystemConfig.PWType.FilterList_Import:
+            //    case Operate.SystemConfig.PWType.FilterList_Export:
+            //        WPE.Lib.Operate.FilterConfig.List.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.RobotList_Import:
-                case Operate.SystemConfig.PWType.RobotList_Export:
-                    WPE.Lib.Operate.RobotConfig.RobotList.AESKey = Password;
-                    break;
+            //    case Operate.SystemConfig.PWType.RobotList_Import:
+            //    case Operate.SystemConfig.PWType.RobotList_Export:
+            //        WPE.Lib.Operate.RobotConfig.RobotList.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.SendList_Import:
-                case Operate.SystemConfig.PWType.SendList_Export:
-                    WPE.Lib.Operate.SendConfig.SendList.AESKey = Password;
-                    break;
+            //    case Operate.SystemConfig.PWType.SendList_Import:
+            //    case Operate.SystemConfig.PWType.SendList_Export:
+            //        WPE.Lib.Operate.SendConfig.SendList.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.SendCollection_Import:
-                case Operate.SystemConfig.PWType.SendCollection_Export:
-                    WPE.Lib.Operate.SendConfig.Send.AESKey = Password;
-                    break;
+            //    case Operate.SystemConfig.PWType.SendCollection_Import:
+            //    case Operate.SystemConfig.PWType.SendCollection_Export:
+            //        WPE.Lib.Operate.SendConfig.Send.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.ProxyAccount_Import:
-                case Operate.SystemConfig.PWType.ProxyAccount_Export:
-                    WPE.Lib.Operate.ProxyConfig.ProxyAccount.AESKey = Password;
-                    break;
+            //    case Operate.SystemConfig.PWType.ProxyAccount_Import:
+            //    case Operate.SystemConfig.PWType.ProxyAccount_Export:
+            //        WPE.Lib.Operate.ProxyConfig.ProxyAccount.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.SystemBackUp_Import:
-                case Operate.SystemConfig.PWType.SystemBackUp_Export:
-                    Operate.SystemConfig.AESKey = Password;
-                    break;
+            //    case Operate.SystemConfig.PWType.SystemBackUp_Import:
+            //    case Operate.SystemConfig.PWType.SystemBackUp_Export:
+            //        Operate.SystemConfig.AESKey = Password;
+            //        break;
 
-                case Operate.SystemConfig.PWType.MapLocal_Import:
-                case Operate.SystemConfig.PWType.MapLocal_Export:
-                case Operate.SystemConfig.PWType.MapRemote_Import:
-                case Operate.SystemConfig.PWType.MapRemote_Export:
-                    WPE.Lib.Operate.ProxyConfig.ProxyMapping.AESKey = Password;
-                    break;
-            }
+            //    case Operate.SystemConfig.PWType.MapLocal_Import:
+            //    case Operate.SystemConfig.PWType.MapLocal_Export:
+            //    case Operate.SystemConfig.PWType.MapRemote_Import:
+            //    case Operate.SystemConfig.PWType.MapRemote_Export:
+            //        WPE.Lib.Operate.ProxyConfig.ProxyMapping.AESKey = Password;
+            //        break;
+            //}
         }
 
         #endregion

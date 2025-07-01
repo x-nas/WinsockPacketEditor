@@ -123,6 +123,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\EncryptionPassword.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\EncryptionPassword.Designer.cs">
+      <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\HotkeyTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -197,6 +203,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\EncryptionPassword.resx">
+      <DependentUpon>EncryptionPassword.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\PasswordForm.en-US.resx">
       <DependentUpon>PasswordForm.cs</DependentUpon>
     </EmbeddedResource>
