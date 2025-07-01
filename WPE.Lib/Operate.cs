@@ -2043,9 +2043,9 @@ namespace WPE.Lib
                     //滤镜列表
                     if (bFilterList)
                     {
-                        if (FilterConfig.List.lstFilter.Count > 0)
+                        if (FilterConfig.List.lstFilterInfo.Count > 0)
                         {
-                            XElement xeFilterList = FilterConfig.List.GetFilterList_XML(FilterConfig.List.lstFilter.ToList());
+                            XElement xeFilterList = FilterConfig.List.GetFilterList_XML(FilterConfig.List.lstFilterInfo.ToList());
                             if (xeFilterList != null)
                             {
                                 xeBackUp.Add(xeFilterList);
@@ -7597,7 +7597,7 @@ namespace WPE.Lib
 
                     try
                     {
-                        foreach (Socket_FilterInfo sfi in FilterConfig.List.lstFilter)
+                        foreach (FilterInfo sfi in FilterConfig.List.lstFilterInfo)
                         {
                             if (sfi.ExecutionCount > 0)
                             {
@@ -7849,7 +7849,7 @@ namespace WPE.Lib
                     try
                     {
                         Guid FID = Guid.NewGuid();
-                        int FNum = FilterConfig.List.lstFilter.Count + 1;
+                        int FNum = FilterConfig.List.lstFilterInfo.Count + 1;
                         string FName = string.Format(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_50), FNum.ToString());
 
                         FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
@@ -7907,11 +7907,11 @@ namespace WPE.Lib
                     bool bAppointHeader,
                     string HeaderContent,
                     bool bAppointSocket,
-                    decimal SocketContent,
+                    int SocketContent,
                     bool bAppointLength,
                     string LengthContent,
                     bool bAppointPort,
-                    decimal PortContent,
+                    int PortContent,
                     FilterConfig.Filter.FilterMode FilterMode,
                     FilterConfig.Filter.FilterAction FilterAction,
                     bool IsExecute,
@@ -7922,9 +7922,9 @@ namespace WPE.Lib
                     FilterConfig.Filter.FilterStartFrom FilterStartFrom,
                     bool IsProgressionDone,
                     bool IsProgressionContinuous,
-                    decimal ProgressionStep,
+                    int ProgressionStep,
                     bool IsProgressionCarry,
-                    decimal ProgressionCarryNumber,
+                    int ProgressionCarryNumber,
                     string ProgressionPosition,
                     int ProgressionCount,
                     string FSearch,
@@ -7934,7 +7934,7 @@ namespace WPE.Lib
                     {
                         if (FID != null && !string.IsNullOrEmpty(FName))
                         {
-                            Socket_FilterInfo sfi = new Socket_FilterInfo(
+                            FilterInfo sfi = new FilterInfo(
                             IsEnable,
                             FID,
                             FName,
@@ -7978,16 +7978,16 @@ namespace WPE.Lib
                 #region//更新滤镜
 
                 public static void UpdateFilter(
-                    Socket_FilterInfo sfi,
+                    FilterInfo sfi,
                     string FName,
                     bool AppointHeader,
                     string HeaderContent,
                     bool AppointSocket,
-                    decimal SocketContent,
+                    int SocketContent,
                     bool AppointLength,
                     string LengthContent,
                     bool AppointPort,
-                    decimal PortContent,
+                    int PortContent,
                     FilterConfig.Filter.FilterMode FilterMode,
                     FilterConfig.Filter.FilterAction FilterAction,
                     bool IsExecute,
@@ -7997,9 +7997,9 @@ namespace WPE.Lib
                     FilterConfig.Filter.FilterFunction FilterFunction,
                     FilterConfig.Filter.FilterStartFrom FilterStartFrom,
                     bool IsProgressionContinuous,
-                    decimal ProgressionStep,
+                    int ProgressionStep,
                     bool IsProgressionCarry,
-                    decimal ProgressionCarryNumber,
+                    int ProgressionCarryNumber,
                     string ProgressionPosition,
                     int ProgressionCount,
                     string FSearch,
@@ -8046,7 +8046,7 @@ namespace WPE.Lib
 
                 #region//删除滤镜
 
-                public static void DeleteFilter_Dialog(List<Socket_FilterInfo> sfiList)
+                public static void DeleteFilter_Dialog(List<FilterInfo> sfiList)
                 {
                     try
                     {
@@ -8056,9 +8056,9 @@ namespace WPE.Lib
 
                             if (dr.Equals(DialogResult.OK))
                             {
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
-                                    FilterConfig.List.lstFilter.Remove(sfi);
+                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
                                 }
                             }
                         }
@@ -8073,7 +8073,7 @@ namespace WPE.Lib
 
                 #region//复制滤镜
 
-                public static void CopyFilter(Socket_FilterInfo sfi)
+                public static void CopyFilter(FilterInfo sfi)
                 {
                     try
                     {
@@ -8083,11 +8083,11 @@ namespace WPE.Lib
                         bool bAppointHeader = sfi.AppointHeader;
                         string HeaderContent = sfi.HeaderContent;
                         bool bAppointSocket = sfi.AppointSocket;
-                        decimal SocketContent = sfi.SocketContent;
+                        int SocketContent = sfi.SocketContent;
                         bool bAppointLength = sfi.AppointLength;
                         string LengthContent = sfi.LengthContent;
                         bool bAppointPort = sfi.AppointPort;
-                        decimal PortContent = sfi.PortContent;
+                        int PortContent = sfi.PortContent;
                         FilterConfig.Filter.FilterMode FMode = sfi.FMode;
                         FilterConfig.Filter.FilterAction FAction = sfi.FAction;
                         bool IsExecute = sfi.IsExecute;
@@ -8098,9 +8098,9 @@ namespace WPE.Lib
                         FilterConfig.Filter.FilterStartFrom FStartFrom = sfi.FStartFrom;
                         bool IsProgressionDone = false;
                         bool IsProgressionContinuous = sfi.IsProgressionContinuous;
-                        decimal ProgressionStep = sfi.ProgressionStep;
+                        int ProgressionStep = sfi.ProgressionStep;
                         bool IsProgressionCarry = sfi.IsProgressionCarry;
-                        decimal ProgressionCarryNumber = sfi.ProgressionCarryNumber;
+                        int ProgressionCarryNumber = sfi.ProgressionCarryNumber;
                         string ProgressionPosition = sfi.ProgressionPosition;
                         int ProgressionCount = 0;
                         string FSearch = sfi.FSearch;
@@ -8410,7 +8410,7 @@ namespace WPE.Lib
                     Span<byte> bufferSpan,
                     PacketConfig.Packet.PacketType ptType,
                     PacketConfig.Packet.SockAddr sAddr,
-                    Socket_FilterInfo sfi)
+                    FilterInfo sfi)
                 {
                     if (!sfi.IsEnable)
                         return false;
@@ -8600,7 +8600,7 @@ namespace WPE.Lib
                 #region//检查滤镜是否匹配成功（普通滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool CheckFilter_IsMatch_Normal(Socket_FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
+                public static bool CheckFilter_IsMatch_Normal(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
                     if (string.IsNullOrEmpty(sfi.FSearch))
                         return false;
@@ -8676,7 +8676,7 @@ namespace WPE.Lib
                 #region//检查滤镜是否匹配成功（高级滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static List<int> CheckFilter_IsMatch_Advanced(Socket_FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
+                public static List<int> CheckFilter_IsMatch_Advanced(FilterInfo sfi, ReadOnlySpan<byte> bufferSpan)
                 {
                     var result = new List<int>();
                     if (string.IsNullOrEmpty(sfi.FSearch))
@@ -8769,7 +8769,7 @@ namespace WPE.Lib
                 #region//执行替换（普通滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool Replace_Normal(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+                public static bool Replace_Normal(FilterInfo sfi, Span<byte> bufferSpan)
                 {
                     if (string.IsNullOrEmpty(sfi.FSearch))
                         return false;
@@ -8804,7 +8804,7 @@ namespace WPE.Lib
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool ProcessModifications(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+                private static bool ProcessModifications(FilterInfo sfi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
                     string[] modifications = sfi.FModify.Split(',');
@@ -8832,7 +8832,7 @@ namespace WPE.Lib
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool ProcessProgressions(Socket_FilterInfo sfi, Span<byte> bufferSpan)
+                private static bool ProcessProgressions(FilterInfo sfi, Span<byte> bufferSpan)
                 {
                     bool modified = false;
                     int carryCount = 0;
@@ -8882,7 +8882,7 @@ namespace WPE.Lib
                 #region//执行替换（高级滤镜）
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static bool Replace_Advanced(Socket_FilterInfo sfi, int matchIndex, Span<byte> bufferSpan)
+                public static bool Replace_Advanced(FilterInfo sfi, int matchIndex, Span<byte> bufferSpan)
                 {
                     if (string.IsNullOrEmpty(sfi.FSearch))
                         return false;
@@ -8919,7 +8919,7 @@ namespace WPE.Lib
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static bool ProcessAdvancedModifications(
-                    Socket_FilterInfo sfi,
+                    FilterInfo sfi,
                     int matchIndex,
                     Span<byte> bufferSpan,
                     FilterConfig.Filter.FilterStartFrom startFrom)
@@ -8962,7 +8962,7 @@ namespace WPE.Lib
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
                 private static bool ProcessAdvancedProgressions(
-                    Socket_FilterInfo sfi,
+                    FilterInfo sfi,
                     int matchIndex,
                     Span<byte> bufferSpan,
                     FilterConfig.Filter.FilterStartFrom startFrom)
@@ -9001,7 +9001,7 @@ namespace WPE.Lib
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static void HandleCarryOver(Socket_FilterInfo sfi, Span<byte> bufferSpan, int index, ref int carryCount)
+                private static void HandleCarryOver(FilterInfo sfi, Span<byte> bufferSpan, int index, ref int carryCount)
                 {
                     for (int i = 0; i < sfi.ProgressionCarryNumber && carryCount > 0; i++)
                     {
@@ -9020,7 +9020,7 @@ namespace WPE.Lib
                 #region//执行换包
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public static byte[] ChangePacket_Filter(Socket_FilterInfo sfi)
+                public static byte[] ChangePacket_Filter(FilterInfo sfi)
                 {
                     if (string.IsNullOrEmpty(sfi.FModify))
                     {
@@ -9088,7 +9088,7 @@ namespace WPE.Lib
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static void ApplyProgressions(Socket_FilterInfo sfi, byte[] buffer)
+                private static void ApplyProgressions(FilterInfo sfi, byte[] buffer)
                 {
                     int carryCount = 0;
                     int step = (int)sfi.ProgressionStep;
@@ -9138,11 +9138,11 @@ namespace WPE.Lib
             public static class List
             {
                 public static string AESKey = string.Empty;
-                public static BindingList<Socket_FilterInfo> lstFilter = new BindingList<Socket_FilterInfo>();
+                public static BindingList<FilterInfo> lstFilterInfo = new BindingList<FilterInfo>();
 
                 #region//滤镜入列表
 
-                public static void FilterToList(Socket_FilterInfo sfi)
+                public static void FilterToList(FilterInfo sfi)
                 {
                     try
                     {
@@ -9150,12 +9150,12 @@ namespace WPE.Lib
                         {
                             SystemConfig.InvokeAction(() =>
                             {
-                                FilterConfig.List.lstFilter.Add(sfi);
+                                FilterConfig.List.lstFilterInfo.Add(sfi);
                             });
                         }
                         else
                         {
-                            FilterConfig.List.lstFilter.Add(sfi);
+                            FilterConfig.List.lstFilterInfo.Add(sfi);
                         }
                     }
                     catch (Exception ex)
@@ -9172,7 +9172,7 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        foreach (Socket_FilterInfo sfi in lstFilter)
+                        foreach (FilterInfo sfi in lstFilterInfo)
                         {
                             sfi.ExecutionCount = 0;
                             sfi.ProgressionCount = 0;
@@ -9209,7 +9209,7 @@ namespace WPE.Lib
                 {
                     try
                     {
-                        lstFilter.Clear();
+                        lstFilterInfo.Clear();
                     }
                     catch (Exception ex)
                     {
@@ -9242,7 +9242,7 @@ namespace WPE.Lib
 
                 #region//滤镜列表的列表操作
 
-                public static void UpdateFilterList_ByListAction(SystemConfig.ListAction listAction, List<Socket_FilterInfo> sfiList)
+                public static void UpdateFilterList_ByListAction(SystemConfig.ListAction listAction, List<FilterInfo> sfiList)
                 {
                     try
                     {
@@ -9252,24 +9252,24 @@ namespace WPE.Lib
 
                                 sfiList.Reverse();
 
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
-                                    FilterConfig.List.lstFilter.Remove(sfi);
-                                    FilterConfig.List.lstFilter.Insert(0, sfi);
+                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
+                                    FilterConfig.List.lstFilterInfo.Insert(0, sfi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Up:
 
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
-                                    int iIndex = FilterConfig.List.lstFilter.IndexOf(sfi);
+                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(sfi);
 
                                     if (iIndex > 0)
                                     {
-                                        FilterConfig.List.lstFilter.Remove(sfi);
-                                        FilterConfig.List.lstFilter.Insert(iIndex - 1, sfi);
+                                        FilterConfig.List.lstFilterInfo.Remove(sfi);
+                                        FilterConfig.List.lstFilterInfo.Insert(iIndex - 1, sfi);
                                     }
                                 }
 
@@ -9279,14 +9279,14 @@ namespace WPE.Lib
 
                                 sfiList.Reverse();
 
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
-                                    int iIndex = FilterConfig.List.lstFilter.IndexOf(sfi);
+                                    int iIndex = FilterConfig.List.lstFilterInfo.IndexOf(sfi);
 
-                                    if (iIndex > -1 && iIndex < FilterConfig.List.lstFilter.Count - 1)
+                                    if (iIndex > -1 && iIndex < FilterConfig.List.lstFilterInfo.Count - 1)
                                     {
-                                        FilterConfig.List.lstFilter.Remove(sfi);
-                                        FilterConfig.List.lstFilter.Insert(iIndex + 1, sfi);
+                                        FilterConfig.List.lstFilterInfo.Remove(sfi);
+                                        FilterConfig.List.lstFilterInfo.Insert(iIndex + 1, sfi);
                                     }
                                 }
 
@@ -9294,17 +9294,17 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Bottom:
 
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
-                                    FilterConfig.List.lstFilter.Remove(sfi);
-                                    FilterConfig.List.lstFilter.Add(sfi);
+                                    FilterConfig.List.lstFilterInfo.Remove(sfi);
+                                    FilterConfig.List.lstFilterInfo.Add(sfi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Copy:
 
-                                foreach (Socket_FilterInfo sfi in sfiList)
+                                foreach (FilterInfo sfi in sfiList)
                                 {
                                     FilterConfig.Filter.CopyFilter(sfi);
                                 }
@@ -9343,7 +9343,7 @@ namespace WPE.Lib
 
                     try
                     {
-                        var filters = FilterConfig.List.lstFilter;
+                        var filters = FilterConfig.List.lstFilterInfo;
                         for (int i = 0; i < filters.Count; i++)
                         {
                             var sfi = filters[i];
@@ -9518,7 +9518,7 @@ namespace WPE.Lib
                     {
                         DataBase.DeleteTable_Filter();
 
-                        foreach (Socket_FilterInfo sfi in FilterConfig.List.lstFilter)
+                        foreach (FilterInfo sfi in FilterConfig.List.lstFilterInfo)
                         {
                             DataBase.InsertTable_Filter(sfi);
                         }
@@ -9547,11 +9547,11 @@ namespace WPE.Lib
                             bool AppointHeader = Convert.ToBoolean(dataRow["AppointHeader"]);
                             string FHeaderContent = dataRow["HeaderContent"].ToString();
                             bool AppointSocket = Convert.ToBoolean(dataRow["AppointSocket"]);
-                            decimal FSocketContent = Convert.ToDecimal(dataRow["SocketContent"]);
+                            int FSocketContent = Convert.ToInt32(dataRow["SocketContent"]);
                             bool AppointLength = Convert.ToBoolean(dataRow["AppointLength"]);
                             string FLengthContent = dataRow["LengthContent"].ToString();
                             bool AppointPort = Convert.ToBoolean(dataRow["AppointPort"]);
-                            decimal FPortContent = Convert.ToDecimal(dataRow["PortContent"]);
+                            int FPortContent = Convert.ToInt32(dataRow["PortContent"]);
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString());
                             FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.GetFilterAction_ByString(dataRow["Action"].ToString());
                             bool IsExecute = Convert.ToBoolean(dataRow["IsExecute"]);
@@ -9562,9 +9562,9 @@ namespace WPE.Lib
                             FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.GetFilterStartFrom_ByString(dataRow["StartFrom"].ToString());
                             bool IsProgressionDone = false;
                             bool IsProgressionContinuous = Convert.ToBoolean(dataRow["IsProgressionContinuous"]);
-                            decimal FProgressionStep = Convert.ToDecimal(dataRow["ProgressionStep"]);
+                            int FProgressionStep = Convert.ToInt32(dataRow["ProgressionStep"]);
                             bool IsProgressionCarry = Convert.ToBoolean(dataRow["IsProgressionCarry"]);
-                            decimal ProgressionCarryNumber = Convert.ToDecimal(dataRow["ProgressionCarryNumber"]);
+                            int ProgressionCarryNumber = Convert.ToInt32(dataRow["ProgressionCarryNumber"]);
                             string FProgressionPosition = dataRow["ProgressionPosition"].ToString();
                             int ProgressionCount = 0;
                             string FSearch = dataRow["Search"].ToString();
@@ -9611,11 +9611,11 @@ namespace WPE.Lib
 
                 #region//保存滤镜列表到文件（对话框）
 
-                public static void SaveFilterList_Dialog(string FileName, List<Socket_FilterInfo> sfiList)
+                public static void SaveFilterList_Dialog(string FileName, List<FilterInfo> sfiList)
                 {
                     try
                     {
-                        if (FilterConfig.List.lstFilter.Count > 0)
+                        if (FilterConfig.List.lstFilterInfo.Count > 0)
                         {
                             SaveFileDialog sfdSaveFile = new SaveFileDialog();
 
@@ -9651,7 +9651,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveFilterList(string FilePath, List<Socket_FilterInfo> sfiList, bool DoEncrypt)
+                private static void SaveFilterList(string FilePath, List<FilterInfo> sfiList, bool DoEncrypt)
                 {
                     try
                     {
@@ -9685,13 +9685,13 @@ namespace WPE.Lib
                     }
                 }
 
-                public static XElement GetFilterList_XML(List<Socket_FilterInfo> sfiList)
+                public static XElement GetFilterList_XML(List<FilterInfo> sfiList)
                 {
                     try
                     {
                         XElement xeRoot = new XElement("FilterList");
 
-                        foreach (Socket_FilterInfo sfi in sfiList)
+                        foreach (FilterInfo sfi in sfiList)
                         {
                             string sIsEnable = sfi.IsEnable.ToString();
                             string sFID = sfi.FID.ToString().ToUpper();
@@ -9889,10 +9889,10 @@ namespace WPE.Lib
                                 bAppointSocket = bool.Parse(xeFilter.Element("AppointSocket").Value);
                             }
 
-                            decimal dFSocketContent = 1;
+                            int iFSocketContent = 1;
                             if (xeFilter.Element("SocketContent") != null)
                             {
-                                dFSocketContent = decimal.Parse(xeFilter.Element("SocketContent").Value);
+                                iFSocketContent = int.Parse(xeFilter.Element("SocketContent").Value);
                             }
 
                             bool bAppointLength = false;
@@ -9913,10 +9913,10 @@ namespace WPE.Lib
                                 bAppointPort = bool.Parse(xeFilter.Element("AppointPort").Value);
                             }
 
-                            decimal dFPortContent = 1;
+                            int iFPortContent = 1;
                             if (xeFilter.Element("PortContent") != null)
                             {
-                                dFPortContent = decimal.Parse(xeFilter.Element("PortContent").Value);
+                                iFPortContent = int.Parse(xeFilter.Element("PortContent").Value);
                             }
 
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
@@ -9983,10 +9983,10 @@ namespace WPE.Lib
                                 bIsProgressionContinuous = bool.Parse(xeFilter.Element("IsProgressionContinuous").Value);
                             }
 
-                            decimal dFProgressionStep = 1;
+                            int iFProgressionStep = 1;
                             if (xeFilter.Element("ProgressionStep") != null)
                             {
-                                dFProgressionStep = decimal.Parse(xeFilter.Element("ProgressionStep").Value);
+                                iFProgressionStep = int.Parse(xeFilter.Element("ProgressionStep").Value);
                             }
 
                             bool bIsProgressionCarry = false;
@@ -9995,10 +9995,10 @@ namespace WPE.Lib
                                 bIsProgressionCarry = bool.Parse(xeFilter.Element("IsProgressionCarry").Value);
                             }
 
-                            decimal dFProgressionCarryNumber = 1;
+                            int iFProgressionCarryNumber = 1;
                             if (xeFilter.Element("ProgressionCarryNumber") != null)
                             {
-                                dFProgressionCarryNumber = decimal.Parse(xeFilter.Element("ProgressionCarryNumber").Value);
+                                iFProgressionCarryNumber = int.Parse(xeFilter.Element("ProgressionCarryNumber").Value);
                             }
 
                             string sFProgressionPosition = string.Empty;
@@ -10028,11 +10028,11 @@ namespace WPE.Lib
                                 bAppointHeader,
                                 sFHeaderContent,
                                 bAppointSocket,
-                                dFSocketContent,
+                                iFSocketContent,
                                 bAppointLength,
                                 sFLengthContent,
                                 bAppointPort,
-                                dFPortContent,
+                                iFPortContent,
                                 FilterMode,
                                 FilterAction,
                                 bIsExecute,
@@ -10043,9 +10043,9 @@ namespace WPE.Lib
                                 FilterStartFrom,
                                 IsProgressionDone,
                                 bIsProgressionContinuous,
-                                dFProgressionStep,
+                                iFProgressionStep,
                                 bIsProgressionCarry,
-                                dFProgressionCarryNumber,
+                                iFProgressionCarryNumber,
                                 sFProgressionPosition,
                                 iProgressionCount,
                                 sFSearch,
@@ -13736,7 +13736,7 @@ namespace WPE.Lib
                 }
             }
 
-            public static void InsertTable_Filter(Socket_FilterInfo sfi)
+            public static void InsertTable_Filter(FilterInfo sfi)
             {
                 try
                 {

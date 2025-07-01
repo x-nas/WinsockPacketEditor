@@ -216,7 +216,7 @@ namespace WPELibrary
                 dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
 
                 dgvFilterList.AutoGenerateColumns = false;
-                dgvFilterList.DataSource = Operate.FilterConfig.List.lstFilter;
+                dgvFilterList.DataSource = Operate.FilterConfig.List.lstFilterInfo;
                 dgvFilterList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvFilterList, true, null);
 
                 dgvSendList.AutoGenerateColumns = false;
@@ -992,7 +992,7 @@ namespace WPELibrary
                     bool bCheck = !bool.Parse(dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString());
 
                     dgvFilterList.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = bCheck;
-                    Operate.FilterConfig.List.lstFilter[FIndex].IsEnable = bCheck;
+                    Operate.FilterConfig.List.lstFilterInfo[FIndex].IsEnable = bCheck;
                 }
             }
             catch (Exception ex)
@@ -1007,9 +1007,9 @@ namespace WPELibrary
             {
                 int iSelectIndex = this.dgvFilterList.SelectedRows[0].Index;
 
-                if (iSelectIndex >= 0 && iSelectIndex < Operate.FilterConfig.List.lstFilter.Count)
+                if (iSelectIndex >= 0 && iSelectIndex < Operate.FilterConfig.List.lstFilterInfo.Count)
                 {
-                    Socket_Operation.ShowFilterForm_Dialog(Operate.FilterConfig.List.lstFilter[iSelectIndex]);
+                    Socket_Operation.ShowFilterForm_Dialog(Operate.FilterConfig.List.lstFilterInfo[iSelectIndex]);
                 }
             }
             catch (Exception ex)
@@ -1592,7 +1592,7 @@ namespace WPELibrary
             {
                 if (dgvFilterList.Rows.Count > 0)
                 {
-                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
+                    List<FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
                     if (sfiList.Count > 0)
                     {
@@ -1629,9 +1629,9 @@ namespace WPELibrary
 
                         this.dgvFilterList.ClearSelection();
 
-                        foreach (Socket_FilterInfo sfi in sfiList)
+                        foreach (FilterInfo sfi in sfiList)
                         {
-                            int iIndex = Operate.FilterConfig.List.lstFilter.IndexOf(sfi);
+                            int iIndex = Operate.FilterConfig.List.lstFilterInfo.IndexOf(sfi);
 
                             if (iIndex > -1 && iIndex < dgvFilterList.RowCount)
                             {
@@ -1834,10 +1834,10 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.FilterConfig.List.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
-                    List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
-                    sfiList.AddRange(Operate.FilterConfig.List.lstFilter);
+                    List<FilterInfo> sfiList = new List<FilterInfo>();
+                    sfiList.AddRange(Operate.FilterConfig.List.lstFilterInfo);
 
                     Operate.FilterConfig.List.SaveFilterList_Dialog(string.Empty, sfiList);
                 }
@@ -1868,11 +1868,11 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.FilterConfig.List.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
-                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
+                    List<FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
-                    foreach (Socket_FilterInfo sfi in sfiList)
+                    foreach (FilterInfo sfi in sfiList)
                     {
                         sfi.IsEnable = true;
                     }
@@ -1891,11 +1891,11 @@ namespace WPELibrary
         {
             try
             {
-                if (Operate.FilterConfig.List.lstFilter.Count > 0)
+                if (Operate.FilterConfig.List.lstFilterInfo.Count > 0)
                 {
-                    List<Socket_FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
+                    List<FilterInfo> sfiList = Socket_Operation.GetSelectedFilter(this.dgvFilterList);
 
-                    foreach (Socket_FilterInfo sfi in sfiList)
+                    foreach (FilterInfo sfi in sfiList)
                     {
                         sfi.IsEnable = false;
                     }

@@ -2380,9 +2380,9 @@ namespace WPE.Lib
         }
 
         //滤镜列表
-        public static List<Socket_FilterInfo> GetSelectedFilter(DataGridView dgvFilterList)
+        public static List<FilterInfo> GetSelectedFilter(DataGridView dgvFilterList)
         {
-            List<Socket_FilterInfo> sfiList = new List<Socket_FilterInfo>();
+            List<FilterInfo> sfiList = new List<FilterInfo>();
 
             try
             {
@@ -2390,7 +2390,7 @@ namespace WPE.Lib
                 {
                     if (dgvFilterList.Rows[i].Selected)
                     {
-                        sfiList.Add(Operate.FilterConfig.List.lstFilter[i]);
+                        sfiList.Add(Operate.FilterConfig.List.lstFilterInfo[i]);
                     }
                 }
             }
@@ -3052,7 +3052,7 @@ namespace WPE.Lib
 
         #region//显示滤镜窗体（对话框）
 
-        public static void ShowFilterForm_Dialog(Socket_FilterInfo sfi)
+        public static void ShowFilterForm_Dialog(FilterInfo sfi)
         {
             //try
             //{

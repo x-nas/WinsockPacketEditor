@@ -10,12 +10,12 @@ namespace WPELibrary
 {
     public partial class Socket_FilterForm : Form
     {
-        private Socket_FilterInfo sfiSelect;
+        private FilterInfo sfiSelect;
         private int LoadAllCount = 0;
 
         #region//窗体加载
 
-        public Socket_FilterForm(Socket_FilterInfo sfi)
+        public Socket_FilterForm(FilterInfo sfi)
         {
             try
             {
@@ -1091,10 +1091,10 @@ namespace WPELibrary
                     string sFName_New = this.txtFilterName.Text.Trim();
                     string sHeaderContent_New = string.Empty;
                     string sLengthContent_New = string.Empty;
-                    decimal dSocketContent_New = 0;                    
-                    decimal dPortContent_New = 0;
-                    decimal dProgressionStep_New = 1;
-                    decimal dProgressionCarryNumber_New = 1;
+                    int iSocketContent_New = 0;
+                    int iPortContent_New = 0;
+                    int iProgressionStep_New = 1;
+                    int iProgressionCarryNumber_New = 1;
                     int iProgressionCount_New = 0;                    
                     bool bIsExecute_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
                     bool bAppointHeader_New, bAppointSocket_New, bAppointLength_New, bAppointPort_New;
@@ -1120,10 +1120,10 @@ namespace WPELibrary
 
                     sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
                     sLengthContent_New = this.nudFilter_LengthContent_From.Value.ToString() + "-" + this.nudFilter_LengthContent_To.Value.ToString();
-                    dSocketContent_New = this.nudFilter_SocketContent.Value;                    
-                    dPortContent_New = this.nudFilter_PortContent.Value;
-                    dProgressionStep_New = this.nudProgressionStep.Value;
-                    dProgressionCarryNumber_New = this.nudProgressionCarry.Value;
+                    iSocketContent_New = ((int)this.nudFilter_SocketContent.Value);                    
+                    iPortContent_New = ((int)this.nudFilter_PortContent.Value);
+                    iProgressionStep_New = ((int)this.nudProgressionStep.Value);
+                    iProgressionCarryNumber_New = ((int)this.nudProgressionCarry.Value);
 
                     if (rbFilterMode_Normal.Checked)
                     {
@@ -1324,11 +1324,11 @@ namespace WPELibrary
                         bAppointHeader_New,
                         sHeaderContent_New,
                         bAppointSocket_New,
-                        dSocketContent_New,
+                        iSocketContent_New,
                         bAppointLength_New,
                         sLengthContent_New,
                         bAppointPort_New,
-                        dPortContent_New,
+                        iPortContent_New,
                         FilterMode_New,
                         FilterAction_New,
                         bIsExecute_New,
@@ -1338,9 +1338,9 @@ namespace WPELibrary
                         FilterFunction_New,
                         FilterStartFrom_New,
                         bIsProgressionContinuous_New,
-                        dProgressionStep_New,
+                        iProgressionStep_New,
                         bIsProgressionCarry_New,
-                        dProgressionCarryNumber_New,
+                        iProgressionCarryNumber_New,
                         sProgression_New,
                         iProgressionCount_New,
                         sSearch_New,

@@ -41,13 +41,16 @@ namespace WPE.InjectMode
             };
             Operate.SystemConfig.LoadSystemConfig_FromDB();
             Operate.SystemConfig.LoadInjectMode_FromDB();
+            Operate.SystemConfig.LoadSystemList_FromDB();
 
             this.InitForm();
             this.Dark_Changed();
             this.InitTable_PacketList();
+            this.InitTable_FilterList();
             this.InitTable_LogList();
 
-            this.splitter.SplitterWidth = 10;
+            this.splitterPacketList.SplitterWidth = 10;
+            this.splitterFilterList.SplitterWidth = 10;
             this.tabInjectMode.TabMenuVisible = false;
             this.mInjectMode.SelectIndex(0, true);            
         }
@@ -56,6 +59,7 @@ namespace WPE.InjectMode
         {
             Operate.SystemConfig.SaveSystemList_ToDB();
             Operate.SystemConfig.SaveInjectMode_ToDB();
+            Operate.SystemConfig.SaveSystemList_ToDB();
         }
 
         private void InitForm()
@@ -91,10 +95,14 @@ namespace WPE.InjectMode
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
+        #endregion
+
+        #region//初始化 Table
+
         private void InitTable_PacketList()
         {
             tPacketList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center).SetFixed(),                
+                new AntdUI.Column("PacketImg", string.Empty, AntdUI.ColumnAlign.Center).SetFixed(),
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -114,7 +122,7 @@ namespace WPE.InjectMode
                     Render = (value, record, rowindex)=>
                     {
                         return Operate.PacketConfig.Packet.GetName_ByPacketType((Operate.PacketConfig.Packet.PacketType)value);
-                    },                    
+                    },
                 }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketSocket", "套接字", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketFrom", "本机地址").SetLocalizationTitleID("Table.PacketList.Column."),
@@ -122,14 +130,33 @@ namespace WPE.InjectMode
                 new AntdUI.Column("PacketLen", "长度", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
-            
-            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
+
+            this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tPacketList.DataSource = Operate.PacketConfig.List.lstRecPacket;
+        }
+
+        private void InitTable_FilterList()
+        {
+            tFilterList.Columns = new AntdUI.ColumnCollection {
+                new AntdUI.ColumnCheck("check").SetFixed(),
+                new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        return (rowindex + 1);
+                    },
+                }.SetFixed().SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("FName", "名称").SetLocalizationTitleID("Table.PacketList.Column."),
+                new AntdUI.Column("ExecutionCount", "已执行", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
+            };
+
+            this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
+            this.tFilterList.Binding(Operate.FilterConfig.List.lstFilterInfo);
         }
 
         private void InitTable_LogList()
         {
-            tSystemLog.Columns = new AntdUI.ColumnCollection {                
+            tSystemLog.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("", "序号", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -143,9 +170,9 @@ namespace WPE.InjectMode
                     {
                         return ((DateTime)value).ToString("HH:mm:ss:fffffff");
                     },
-                }.SetLocalizationTitleID("Table.PacketList.Column."),                
+                }.SetLocalizationTitleID("Table.PacketList.Column."),
                 new AntdUI.Column("FuncName", "模块", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.PacketList.Column."),
-                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.PacketList.Column."),                
+                new AntdUI.Column("LogContent", "日志内容").SetLocalizationTitleID("Table.PacketList.Column."),
             };
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
@@ -191,16 +218,16 @@ namespace WPE.InjectMode
                             default:
                                 return null;
                         }
-                    }                    
-                }                
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
             }
 
             return null;
-        }               
+        }
 
         #endregion
 
@@ -391,11 +418,11 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//封包列表 - 顶部菜单
+        #region//封包列表 - 分段菜单
 
-        private void segmented_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
+        private void sPacketList_SelectIndexChanged(object sender, AntdUI.IntEventArgs e)
         {
-            switch (this.segmented.SelectIndex)
+            switch (this.sPacketList.SelectIndex)
             {
                 //过滤设置
                 case 0:
@@ -488,16 +515,16 @@ namespace WPE.InjectMode
 
                     if (this.StartHook)
                     {
-                        this.segmented.Items[8].IconSvg = "PauseCircleFilled";
-                        this.segmented.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
+                        this.sPacketList.Items[8].IconSvg = "PauseCircleFilled";
+                        this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StopHook", "停止拦截");
                         this.StartHook = false;
 
                         this.Start_Hook();
                     }
                     else
                     {
-                        this.segmented.Items[8].IconSvg = "PlayCircleFilled";
-                        this.segmented.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StartHook", "开始拦截");
+                        this.sPacketList.Items[8].IconSvg = "PlayCircleFilled";
+                        this.sPacketList.Items[8].Text = AntdUI.Localization.Get("InjectModeForm.StartHook", "开始拦截");
                         this.StartHook = true;
 
                         this.Stop_Hook();
@@ -506,7 +533,7 @@ namespace WPE.InjectMode
                     break;
             }
 
-            this.segmented.SelectIndex = -1;
+            this.sPacketList.SelectIndex = -1;
         }
 
         #endregion
@@ -635,22 +662,15 @@ namespace WPE.InjectMode
 
         private void timerPacketList_Tick(object sender, EventArgs e)
         {
-            try
+            if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
             {
-                if (Operate.PacketConfig.Queue.cqPacketInfo.Count > 0)
-                {
-                    Operate.PacketConfig.List.PacketToList();                    
-                }
-
-                if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
-                {
-                    Operate.LogConfig.List.LogToList();                    
-                }
+                Operate.PacketConfig.List.PacketToList();
             }
-            catch (Exception ex)
+
+            if (Operate.LogConfig.Queue.cqLogInfo.Count > 0)
             {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }                        
+                Operate.LogConfig.List.LogToList();
+            }
         }        
 
         private void timerPacketListInfo_Tick(object sender, EventArgs e)
@@ -669,7 +689,7 @@ namespace WPE.InjectMode
             this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
             this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstRecPacket.Count.ToString();
-            this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilter.Count.ToString();
+            this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
             this.mInjectMode.Items[2].Badge = Operate.SendConfig.SendList.lstSend.Count.ToString();
             this.mInjectMode.Items[3].Badge = Operate.RobotConfig.RobotList.lstRobot.Count.ToString();
             this.mInjectMode.Items[9].Badge = Operate.LogConfig.List.lstLogInfo.Count.ToString();
@@ -715,30 +735,28 @@ namespace WPE.InjectMode
 
             try
             {
-                int PacketListCNT = tPacketList.ToDataTable().Rows.Count - 1;
-                if (Operate.PacketConfig.List.AutoRoll && PacketListCNT > 0)
+                if (Operate.PacketConfig.List.AutoRoll)
                 {
-                    tPacketList.ScrollLine(PacketListCNT, true);
+                    tPacketList.ScrollBar.ValueY = tPacketList.ScrollBar.MaxY;
                 }
 
                 if (Operate.PacketConfig.List.AutoClear)
                 {
-                    if (PacketListCNT > Operate.PacketConfig.List.AutoClear_Value)
+                    if (Operate.PacketConfig.List.lstRecPacket.Count > Operate.PacketConfig.List.AutoClear_Value)
                     {
                         this.CleanUp_PacketList();
                         this.CleanUp_HexBox();
                     }
                 }
 
-                int SystemLogCNT = tSystemLog.ToDataTable().Rows.Count - 1;
-                if (Operate.LogConfig.List.AutoRoll && SystemLogCNT > 0)
+                if (Operate.LogConfig.List.AutoRoll)
                 {
-                    tSystemLog.ScrollLine(SystemLogCNT, true);
+                    tSystemLog.ScrollBar.ValueY = tSystemLog.ScrollBar.MaxY;
                 }
 
                 if (Operate.LogConfig.List.AutoClear)
                 {
-                    if (SystemLogCNT > Operate.LogConfig.List.AutoClear_Value)
+                    if (Operate.LogConfig.List.lstLogInfo.Count > Operate.LogConfig.List.AutoClear_Value)
                     {
                         this.CleanUp_LogList();
                     }

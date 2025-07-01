@@ -1,6 +1,7 @@
 ﻿using AntdUI;
 using Be.Windows.Forms;
 using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using WPE.Lib;
@@ -17,6 +18,7 @@ namespace WPE.InjectMode
         {
             this.imForm = form;
             InitializeComponent();
+            this.Dark_Changed();
             this.FindTypeChanged();
         }
 
@@ -53,6 +55,20 @@ namespace WPE.InjectMode
             catch (Exception ex)
             {
                 Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        private void Dark_Changed()
+        {
+            if (AntdUI.Config.IsDark)
+            {
+                this.hexFind.BackColor = Color.FromArgb(30, 30, 30);
+                this.hexFind.ForeColor = Color.Silver;
+            }
+            else
+            {
+                this.hexFind.BackColor = Color.White;
+                this.hexFind.ForeColor = Color.Black;
             }
         }
 
