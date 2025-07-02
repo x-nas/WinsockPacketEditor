@@ -3,6 +3,7 @@ using Be.Windows.Forms;
 using EasyHook;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -19,7 +20,7 @@ namespace WPE.InjectMode
         private bool setcolor = false;
         private bool SearchFromHead = true;
         private readonly Hook ws = new Hook();
-        private AntdUI.IContextMenuStripItem[] cmsFilterList = { };
+        private AntdUI.IContextMenuStripItem[] cmsFilterList = { };        
 
         #region//窗体事件
 
@@ -52,12 +53,12 @@ namespace WPE.InjectMode
             this.InitTable_PacketList();
             this.InitTable_FilterList();
             this.InitTable_LogList();
+            
 
             this.InitCMS_FilterList();
 
-            this.splitterPacketList.SplitterWidth = 10;
-            this.splitterFilterList.SplitterWidth = 10;
-            this.tabInjectMode.TabMenuVisible = false;
+            this.splitterPacketList.SplitterWidth = 10;        
+            this.tabInjectMode.TabMenuVisible = false;            
             this.mInjectMode.SelectIndex(0, true);            
         }
 
@@ -148,9 +149,10 @@ namespace WPE.InjectMode
 
         private void InitTable_FilterList()
         {
-            tFilterList.Columns = new AntdUI.ColumnCollection {                
+            tFilterList.Columns = new AntdUI.ColumnCollection {
                 new AntdUI.Column("", string.Empty, AntdUI.ColumnAlign.Center)
                 {
+                    Width = "50",
                     Render = (value, record, rowindex)=>
                     {
                         return (rowindex + 1);
@@ -158,13 +160,17 @@ namespace WPE.InjectMode
                 }.SetFixed(),
                 new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
                 {
-                    Call = (value, record, i_row, i_col) => 
+                    Width = "60",
+                    Call = (value, record, i_row, i_col) =>
                     {
-                        System.Threading.Thread.Sleep(1000);
+                        System.Threading.Thread.Sleep(500);
                         return value;
                     }
                 }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),                
+                new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FMode", "模式").SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FAction", "动作").SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FStartFrom", "动作").SetLocalizationTitleID("Table.FilterList.Column."),
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
@@ -194,7 +200,7 @@ namespace WPE.InjectMode
 
             this.tSystemLog.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSystemLog.DataSource = Operate.LogConfig.List.lstLogInfo;
-        }
+        }        
 
         private Table.CellStyleInfo tPacketList_SetRowStyle(object sender, TableSetRowStyleEventArgs e)
         {
@@ -244,7 +250,7 @@ namespace WPE.InjectMode
             }
 
             return null;
-        }
+        }       
 
         #endregion
 
@@ -1080,8 +1086,20 @@ namespace WPE.InjectMode
 
 
 
-        #endregion
 
-        
+
+
+        #endregion        
+
+        private void tFilterList_CellDoubleClick(object sender, TableClickEventArgs e)
+        {
+            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterEditForm())
+            {
+                Align = AntdUI.TAlignMini.Right,
+                Mask = true,
+                MaskClosable = false,
+                DisplayDelay = 0,
+            });
+        }
     }
 }

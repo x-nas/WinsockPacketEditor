@@ -74,6 +74,12 @@
     <Compile Include="BackUpSettingsForm.Designer.cs">
       <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FilterEditForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FilterEditForm.Designer.cs">
+      <DependentUpon>FilterEditForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="FilterSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,9 @@
   <ItemGroup>
     <EmbeddedResource Include="BackUpSettingsForm.resx">
       <DependentUpon>BackUpSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FilterEditForm.resx">
+      <DependentUpon>FilterEditForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FilterSettingsForm.resx">
       <DependentUpon>FilterSettingsForm.cs</DependentUpon>
