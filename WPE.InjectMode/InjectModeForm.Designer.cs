@@ -114,6 +114,9 @@
             this.lModuleName = new AntdUI.Label();
             this.lProcessName = new AntdUI.Label();
             this.tpFilterList = new AntdUI.TabPage();
+            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
+            this.tFilterList = new AntdUI.Table();
+            this.sFilterList = new AntdUI.Segmented();
             this.tpSendList = new AntdUI.TabPage();
             this.tpRobotList = new AntdUI.TabPage();
             this.tpStatistical = new AntdUI.TabPage();
@@ -127,9 +130,6 @@
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
-            this.tlpFilterList = new System.Windows.Forms.TableLayoutPanel();
-            this.tFilterList = new AntdUI.Table();
-            this.sFilterList = new AntdUI.Segmented();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
             this.tabInjectMode.SuspendLayout();
@@ -142,8 +142,8 @@
             this.splitterPacketList.SuspendLayout();
             this.tlpProcessInfo.SuspendLayout();
             this.tpFilterList.SuspendLayout();
-            this.tpSystemLog.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -326,7 +326,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -1158,6 +1158,101 @@
             this.tpFilterList.TabIndex = 7;
             this.tpFilterList.Text = "滤镜列表";
             // 
+            // tlpFilterList
+            // 
+            this.tlpFilterList.ColumnCount = 1;
+            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterList.Controls.Add(this.tFilterList, 0, 1);
+            this.tlpFilterList.Controls.Add(this.sFilterList, 0, 0);
+            this.tlpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpFilterList.Location = new System.Drawing.Point(0, 0);
+            this.tlpFilterList.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpFilterList.Name = "tlpFilterList";
+            this.tlpFilterList.RowCount = 2;
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterList.Size = new System.Drawing.Size(1124, 724);
+            this.tlpFilterList.TabIndex = 1;
+            // 
+            // tFilterList
+            // 
+            this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tFilterList.Bordered = true;
+            this.tFilterList.CellImpactHeight = false;
+            this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tFilterList.Gap = 8;
+            this.tFilterList.GapCell = 0;
+            this.tFilterList.Location = new System.Drawing.Point(3, 49);
+            this.tFilterList.MultipleRows = true;
+            this.tFilterList.Name = "tFilterList";
+            this.tFilterList.Size = new System.Drawing.Size(1118, 672);
+            this.tFilterList.TabIndex = 1;
+            this.tFilterList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellDoubleClick);
+            this.tFilterList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tFilterList_MouseClick);
+            // 
+            // sFilterList
+            // 
+            this.sFilterList.Dock = System.Windows.Forms.DockStyle.Top;
+            this.sFilterList.IconAlign = AntdUI.TAlignMini.Left;
+            this.sFilterList.IconRatio = 1F;
+            segmentedItem10.Badge = null;
+            segmentedItem10.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem10.BadgeBack = null;
+            segmentedItem10.BadgeMode = false;
+            segmentedItem10.BadgeOffsetX = 0;
+            segmentedItem10.BadgeOffsetY = 0;
+            segmentedItem10.BadgeSize = 0.6F;
+            segmentedItem10.BadgeSvg = null;
+            segmentedItem10.IconSvg = "FolderOpenOutlined";
+            segmentedItem10.ID = "siImport";
+            segmentedItem10.Text = "导入滤镜列表";
+            segmentedItem10.Tooltip = "";
+            segmentedItem11.Badge = null;
+            segmentedItem11.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem11.BadgeBack = null;
+            segmentedItem11.BadgeMode = false;
+            segmentedItem11.BadgeOffsetX = 0;
+            segmentedItem11.BadgeOffsetY = 0;
+            segmentedItem11.BadgeSize = 0.6F;
+            segmentedItem11.BadgeSvg = null;
+            segmentedItem11.IconSvg = "DeliveredProcedureOutlined";
+            segmentedItem11.ID = "siExport";
+            segmentedItem11.Text = "导出滤镜列表";
+            segmentedItem11.Tooltip = "";
+            segmentedItem12.Badge = null;
+            segmentedItem12.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem12.BadgeBack = null;
+            segmentedItem12.BadgeMode = false;
+            segmentedItem12.BadgeOffsetX = 0;
+            segmentedItem12.BadgeOffsetY = 0;
+            segmentedItem12.BadgeSize = 0.6F;
+            segmentedItem12.BadgeSvg = null;
+            segmentedItem12.IconSvg = "FileAddOutlined";
+            segmentedItem12.ID = "siAdd";
+            segmentedItem12.Text = "新增滤镜";
+            segmentedItem12.Tooltip = "";
+            segmentedItem13.Badge = null;
+            segmentedItem13.BadgeAlign = AntdUI.TAlign.TR;
+            segmentedItem13.BadgeBack = null;
+            segmentedItem13.BadgeMode = false;
+            segmentedItem13.BadgeOffsetX = 0;
+            segmentedItem13.BadgeOffsetY = 0;
+            segmentedItem13.BadgeSize = 0.6F;
+            segmentedItem13.BadgeSvg = null;
+            segmentedItem13.IconSvg = "DeleteOutlined";
+            segmentedItem13.ID = "siClear";
+            segmentedItem13.Text = "清空所有滤镜";
+            segmentedItem13.Tooltip = "";
+            this.sFilterList.Items.Add(segmentedItem10);
+            this.sFilterList.Items.Add(segmentedItem11);
+            this.sFilterList.Items.Add(segmentedItem12);
+            this.sFilterList.Items.Add(segmentedItem13);
+            this.sFilterList.Location = new System.Drawing.Point(3, 3);
+            this.sFilterList.Name = "sFilterList";
+            this.sFilterList.Size = new System.Drawing.Size(1118, 40);
+            this.sFilterList.TabIndex = 2;
+            this.sFilterList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sFilterList_SelectIndexChanged);
+            // 
             // tpSendList
             // 
             this.tpSendList.Location = new System.Drawing.Point(0, 0);
@@ -1258,101 +1353,6 @@
             // 
             this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
             // 
-            // tlpFilterList
-            // 
-            this.tlpFilterList.ColumnCount = 1;
-            this.tlpFilterList.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterList.Controls.Add(this.tFilterList, 0, 1);
-            this.tlpFilterList.Controls.Add(this.sFilterList, 0, 0);
-            this.tlpFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpFilterList.Location = new System.Drawing.Point(0, 0);
-            this.tlpFilterList.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpFilterList.Name = "tlpFilterList";
-            this.tlpFilterList.RowCount = 2;
-            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpFilterList.Size = new System.Drawing.Size(1124, 724);
-            this.tlpFilterList.TabIndex = 1;
-            // 
-            // tFilterList
-            // 
-            this.tFilterList.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
-            this.tFilterList.Bordered = true;
-            this.tFilterList.CellImpactHeight = false;
-            this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.Gap = 8;
-            this.tFilterList.GapCell = 0;
-            this.tFilterList.Location = new System.Drawing.Point(3, 49);
-            this.tFilterList.MultipleRows = true;
-            this.tFilterList.Name = "tFilterList";
-            this.tFilterList.Size = new System.Drawing.Size(1118, 672);
-            this.tFilterList.TabIndex = 1;
-            this.tFilterList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellDoubleClick);
-            this.tFilterList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tFilterList_MouseClick);
-            // 
-            // sFilterList
-            // 
-            this.sFilterList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.sFilterList.IconAlign = AntdUI.TAlignMini.Left;
-            this.sFilterList.IconRatio = 1F;
-            segmentedItem10.Badge = null;
-            segmentedItem10.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem10.BadgeBack = null;
-            segmentedItem10.BadgeMode = false;
-            segmentedItem10.BadgeOffsetX = 0;
-            segmentedItem10.BadgeOffsetY = 0;
-            segmentedItem10.BadgeSize = 0.6F;
-            segmentedItem10.BadgeSvg = null;
-            segmentedItem10.IconSvg = "FolderOpenOutlined";
-            segmentedItem10.ID = "siImport";
-            segmentedItem10.Text = "导入滤镜列表";
-            segmentedItem10.Tooltip = "";
-            segmentedItem11.Badge = null;
-            segmentedItem11.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem11.BadgeBack = null;
-            segmentedItem11.BadgeMode = false;
-            segmentedItem11.BadgeOffsetX = 0;
-            segmentedItem11.BadgeOffsetY = 0;
-            segmentedItem11.BadgeSize = 0.6F;
-            segmentedItem11.BadgeSvg = null;
-            segmentedItem11.IconSvg = "DeliveredProcedureOutlined";
-            segmentedItem11.ID = "siExport";
-            segmentedItem11.Text = "导出滤镜列表";
-            segmentedItem11.Tooltip = "";
-            segmentedItem12.Badge = null;
-            segmentedItem12.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem12.BadgeBack = null;
-            segmentedItem12.BadgeMode = false;
-            segmentedItem12.BadgeOffsetX = 0;
-            segmentedItem12.BadgeOffsetY = 0;
-            segmentedItem12.BadgeSize = 0.6F;
-            segmentedItem12.BadgeSvg = null;
-            segmentedItem12.IconSvg = "FileAddOutlined";
-            segmentedItem12.ID = "siAdd";
-            segmentedItem12.Text = "新增滤镜";
-            segmentedItem12.Tooltip = "";
-            segmentedItem13.Badge = null;
-            segmentedItem13.BadgeAlign = AntdUI.TAlign.TR;
-            segmentedItem13.BadgeBack = null;
-            segmentedItem13.BadgeMode = false;
-            segmentedItem13.BadgeOffsetX = 0;
-            segmentedItem13.BadgeOffsetY = 0;
-            segmentedItem13.BadgeSize = 0.6F;
-            segmentedItem13.BadgeSvg = null;
-            segmentedItem13.IconSvg = "DeleteOutlined";
-            segmentedItem13.ID = "siClear";
-            segmentedItem13.Text = "清空所有滤镜";
-            segmentedItem13.Tooltip = "";
-            this.sFilterList.Items.Add(segmentedItem10);
-            this.sFilterList.Items.Add(segmentedItem11);
-            this.sFilterList.Items.Add(segmentedItem12);
-            this.sFilterList.Items.Add(segmentedItem13);
-            this.sFilterList.Location = new System.Drawing.Point(3, 3);
-            this.sFilterList.Name = "sFilterList";
-            this.sFilterList.Size = new System.Drawing.Size(1118, 40);
-            this.sFilterList.TabIndex = 2;
-            this.sFilterList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sFilterList_SelectIndexChanged);
-            // 
             // InjectModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
@@ -1386,8 +1386,8 @@
             this.tlpProcessInfo.ResumeLayout(false);
             this.tlpProcessInfo.PerformLayout();
             this.tpFilterList.ResumeLayout(false);
-            this.tpSystemLog.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

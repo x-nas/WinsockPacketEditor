@@ -160,7 +160,7 @@ namespace WPE.InjectMode
                 }.SetFixed(),
                 new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
                 {
-                    Width = "60",
+                    Width = "80",
                     Call = (value, record, i_row, i_col) =>
                     {
                         System.Threading.Thread.Sleep(500);
@@ -168,9 +168,66 @@ namespace WPE.InjectMode
                     }
                 }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
                 new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FMode", "模式").SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FAction", "动作").SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FStartFrom", "动作").SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FMode", "模式", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterMode)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterMode.Normal:
+                                return AntdUI.Localization.Get("FilterMode.Normal", "普通");
+
+                            case Operate.FilterConfig.Filter.FilterMode.Advanced:
+                                return AntdUI.Localization.Get("FilterMode.Advanced", "高级");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),                
+                new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterAction)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterAction.Replace:
+                                return AntdUI.Localization.Get("FilterAction.Replace", "替换");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Change:
+                                return AntdUI.Localization.Get("FilterAction.Change", "换包");
+
+                            case Operate.FilterConfig.Filter.FilterAction.Intercept:
+                                return AntdUI.Localization.Get("FilterAction.Intercept", "拦截");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_NoDisplay", "不修改不显示");
+
+                            case Operate.FilterConfig.Filter.FilterAction.NoModify_Display:
+                                return AntdUI.Localization.Get("FilterAction.NoModify_Display", "不修改只显示");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("FStartFrom", "修改起始于", AntdUI.ColumnAlign.Center)
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        switch((Operate.FilterConfig.Filter.FilterStartFrom)value)
+                        {
+                            case Operate.FilterConfig.Filter.FilterStartFrom.Head:
+                                return AntdUI.Localization.Get("FilterStartFrom.Head", "数据包开头");
+
+                            case Operate.FilterConfig.Filter.FilterStartFrom.Position:
+                                return AntdUI.Localization.Get("FilterMode.Position", "自发现有连锁的位置");
+
+                            default:
+                                return value;
+                        }
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
