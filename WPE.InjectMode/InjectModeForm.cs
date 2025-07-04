@@ -3,7 +3,6 @@ using Be.Windows.Forms;
 using EasyHook;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +19,6 @@ namespace WPE.InjectMode
         private bool setcolor = false;
         private bool SearchFromHead = true;
         private readonly Hook ws = new Hook();
-        private AntdUI.IContextMenuStripItem[] cmsFilterList = { };        
 
         #region//窗体事件
 
@@ -53,9 +51,6 @@ namespace WPE.InjectMode
             this.InitTable_PacketList();
             this.InitTable_FilterList();
             this.InitTable_LogList();
-            
-
-            this.InitCMS_FilterList();
 
             this.splitterPacketList.SplitterWidth = 10;        
             this.tabInjectMode.TabMenuVisible = false;            
@@ -227,7 +222,8 @@ namespace WPE.InjectMode
                                 return value;
                         }
                     },
-                }.SetLocalizationTitleID("Table.FilterList.Column."),
+                }.SetLocalizationTitleID("Table.FilterList.Column."),                
+                new AntdUI.Column("CellLinks", "操作").SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
             };
 
             this.tFilterList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));           
@@ -309,57 +305,7 @@ namespace WPE.InjectMode
             return null;
         }       
 
-        #endregion
-
-        #region//初始化右键菜单
-
-        private void InitCMS_FilterList()
-        {
-            cmsFilterList = new AntdUI.IContextMenuStripItem[]
-            {
-                new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
-                {
-                    ID = "cmsFilterList_Top",
-                    IconSvg = "VerticalAlignTopOutlined",
-                    LocalizationText = "InjectModeForm.cmsFilterList.Top",                    
-                },
-                new AntdUI.ContextMenuStripItemDivider(),
-                new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
-                {
-                    ID = "cmsFilterList_Up",
-                    IconSvg = "ArrowUpOutlined",
-                },
-                new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
-                {
-                    ID = "cmsFilterList_Down",
-                    IconSvg = "ArrowDownOutlined",
-                },
-                new AntdUI.ContextMenuStripItemDivider(),
-                new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
-                {
-                    ID = "cmsFilterList_Bottom",
-                    IconSvg = "VerticalAlignBottomOutlined",
-                },
-                new AntdUI.ContextMenuStripItemDivider(),
-                new AntdUI.ContextMenuStripItem("复制")
-                {
-                    ID = "cmsFilterList_Copy",
-                    IconSvg = "CopyOutlined",
-                },
-                new AntdUI.ContextMenuStripItem("导出到文件")
-                {
-                    ID = "cmsFilterList_Export",
-                    IconSvg = "DeliveredProcedureOutlined",
-                },
-                new AntdUI.ContextMenuStripItem("删除")
-                {
-                    ID = "cmsFilterList_Delete",
-                    IconSvg = "DeleteOutlined",
-                },
-            };
-        }
-
-        #endregion
+        #endregion        
 
         #region//更换主题颜色
 
@@ -711,15 +657,52 @@ namespace WPE.InjectMode
             this.sFilterList.SelectIndex = -1;
         }
 
+        private void tFilterList_CellButtonClick(object sender, TableButtonEventArgs e)
+        {
+            if (e.Record is FilterInfo fi)
+            {
+                string BtnID = e.Btn.Id;
+
+                switch (BtnID)
+                {
+                    case "bEdit":
+
+                        AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterEditForm(this, fi))
+                        {
+                            Align = AntdUI.TAlignMini.Right,
+                            Mask = true,
+                            MaskClosable = false,
+                            DisplayDelay = 0,
+                        });
+
+                        break;
+
+                    case "bDelete":
+
+                        List<FilterInfo> fiList = new List<FilterInfo>();
+                        fiList.Add(fi);
+                        Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, fiList);
+
+                        break;
+
+                }
+            }
+        }
+
         #endregion
 
         #region//滤镜列表 - 右键菜单
 
-        private void tFilterList_MouseClick(object sender, MouseEventArgs e)
+        private void tFilterList_CellClick(object sender, TableClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                AntdUI.ContextMenuStrip.open(this, it =>
+                if (Operate.FilterConfig.List.lstFilterInfo.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tFilterList, (item) =>
                 {
                     List<FilterInfo> fiList = new List<FilterInfo>();
 
@@ -728,7 +711,7 @@ namespace WPE.InjectMode
                         fiList.Add(Operate.FilterConfig.List.lstFilterInfo[SelectIndex - 1]);
                     }
 
-                    switch (it.ID)
+                    switch (item.ID)
                     {
                         case "cmsFilterList_Top":
 
@@ -796,8 +779,49 @@ namespace WPE.InjectMode
                     }
 
                     this.tFilterList.SelectedIndex = -1;
-
-                }, cmsFilterList);
+                },
+                new AntdUI.IContextMenuStripItem[]
+                {
+                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                {
+                    ID = "cmsFilterList_Top",
+                    IconSvg = "VerticalAlignTopOutlined",
+                    LocalizationText = "InjectModeForm.cmsFilterList.Top",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                {
+                    ID = "cmsFilterList_Up",
+                    IconSvg = "ArrowUpOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                {
+                    ID = "cmsFilterList_Down",
+                    IconSvg = "ArrowDownOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                {
+                    ID = "cmsFilterList_Bottom",
+                    IconSvg = "VerticalAlignBottomOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("复制")
+                {
+                    ID = "cmsFilterList_Copy",
+                    IconSvg = "CopyOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("导出到文件")
+                {
+                    ID = "cmsFilterList_Export",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("删除")
+                {
+                    ID = "cmsFilterList_Delete",
+                    IconSvg = "DeleteOutlined",
+                },
+                }));
             }
         }
 
@@ -1142,21 +1166,6 @@ namespace WPE.InjectMode
         }
 
 
-
-
-
-
-        #endregion        
-
-        private void tFilterList_CellDoubleClick(object sender, TableClickEventArgs e)
-        {
-            AntdUI.Drawer.open(new AntdUI.Drawer.Config(this, new FilterEditForm())
-            {
-                Align = AntdUI.TAlignMini.Right,
-                Mask = true,
-                MaskClosable = false,
-                DisplayDelay = 0,
-            });
-        }
+        #endregion
     }
 }

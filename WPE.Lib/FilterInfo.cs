@@ -118,9 +118,9 @@ namespace WPE.Lib
             }
         }
 
-        int _SocketContent;
+        string _SocketContent;
 
-        public int SocketContent
+        public string SocketContent
         {
             get => _SocketContent;
             set
@@ -178,9 +178,9 @@ namespace WPE.Lib
             }
         }
 
-        int _PortContent;
+        string _PortContent;
 
-        public int PortContent
+        public string PortContent
         {
             get => _PortContent;
             set
@@ -479,22 +479,37 @@ namespace WPE.Lib
             }
         }
 
+        #endregion
+
+        #region//列表操作
+
+        AntdUI.CellLink[] _CellLinks;
+        public AntdUI.CellLink[] CellLinks
+        {
+            get => _CellLinks;
+            set
+            {
+                _CellLinks = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion        
 
         #region//FilterInfo
 
         public FilterInfo(
             bool IsEnable, 
-            Guid FID, 
+            Guid FID,
             string FName, 
             bool AppointHeader, 
             string HeaderContent, 
-            bool AppointSocket, 
-            int SocketContent, 
+            bool AppointSocket,
+            string SocketContent, 
             bool AppointLength, 
             string LengthContent,
             bool AppointPort,
-            int PortContent,
+            string PortContent,
             Operate.FilterConfig.Filter.FilterMode FMode, 
             Operate.FilterConfig.Filter.FilterAction FAction,
             bool IsExecute,
@@ -542,6 +557,12 @@ namespace WPE.Lib
             this._FSearch = FSearch;          
             this._FModify = FModify;            
             this._ExecutionCount = 0;
+
+            CellLinks = new AntdUI.CellLink[] 
+            {
+                new AntdUI.CellButton("bEdit", AntdUI.Localization.Get("System.Button.Edit", "编辑"), AntdUI.TTypeMini.Primary),
+                new AntdUI.CellButton("bDelete", AntdUI.Localization.Get("System.Button.Delete", "删除"), AntdUI.TTypeMini.Error)
+            };
         }
 
         #endregion

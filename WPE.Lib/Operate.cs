@@ -19,6 +19,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -590,6 +591,40 @@ namespace WPE.Lib
                 }
 
                 return sReturn;
+            }
+
+            #endregion
+
+            #region//判断是否十六进制字符串（带空格）
+
+            public static bool IsHexString(string value)
+            {
+                bool bReturn = false;
+
+                try
+                {
+                    const string pattern = @"^([A-Fa-f0-9]{2}\s?)+$";
+                    Regex regex = new Regex(pattern, RegexOptions.Compiled);
+                    bReturn = regex.IsMatch(value);
+                }
+                catch (Exception ex)
+                {
+                    Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+                }
+
+                return bReturn;
+            }
+
+            public static bool IsValidFilterString(string value)
+            {
+                if (!String.IsNullOrEmpty(value))
+                {
+                    return IsHexString(value);
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             #endregion
@@ -7781,9 +7816,10 @@ namespace WPE.Lib
                 }
 
                 public enum FilterExecuteType
-                {
+                {                    
                     Send,
                     Robot,
+                    None,
                 }
 
                 public enum FilterStartFrom
@@ -7842,13 +7878,13 @@ namespace WPE.Lib
 
                         FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
                         FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
-                        FilterConfig.Filter.FilterExecuteType FilterExecuteType = new FilterConfig.Filter.FilterExecuteType();
+                        FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterExecuteType.None;
                         Guid SID = Guid.Empty;
                         Guid RID = Guid.Empty;
                         FilterConfig.Filter.FilterFunction FilterFunction = new FilterConfig.Filter.FilterFunction(true, true, true, true, false, false, false, false);
                         FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
 
-                        FilterConfig.Filter.AddFilter(false, FID, FName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, string.Empty, string.Empty);
+                        FilterConfig.Filter.AddFilter(false, FID, FName, false, string.Empty, false, string.Empty, false, string.Empty, false, string.Empty, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, string.Empty, string.Empty);
                     }
                     catch (Exception ex)
                     {
@@ -7872,14 +7908,14 @@ namespace WPE.Lib
                             PacketConfig.Packet.PacketType ptType = spi.PacketType;
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
                             FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.FilterAction.Replace;
-                            FilterConfig.Filter.FilterExecuteType FilterExecuteType = new FilterConfig.Filter.FilterExecuteType();
+                            FilterConfig.Filter.FilterExecuteType FilterExecuteType = FilterExecuteType.None;
                             Guid SID = Guid.Empty;
                             Guid RID = Guid.Empty;
                             FilterConfig.Filter.FilterFunction FilterFunction = FilterConfig.Filter.GetFilterFunction_ByPacketType(ptType);
                             FilterConfig.Filter.FilterStartFrom FilterStartFrom = FilterConfig.Filter.FilterStartFrom.Head;
                             string sFSearch = FilterConfig.Filter.GetFilterString_ByBytes(bBuffer);
 
-                            FilterConfig.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, 0, false, string.Empty, false, 0, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, sFSearch, string.Empty);
+                            FilterConfig.Filter.AddFilter(false, FID, sFName, false, string.Empty, false, string.Empty, false, string.Empty, false, string.Empty, FilterMode, FilterAction, false, FilterExecuteType, SID, RID, FilterFunction, FilterStartFrom, false, false, 1, false, 1, string.Empty, 0, sFSearch, string.Empty);
                         }
                     }
                     catch (Exception ex)
@@ -7895,11 +7931,11 @@ namespace WPE.Lib
                     bool bAppointHeader,
                     string HeaderContent,
                     bool bAppointSocket,
-                    int SocketContent,
+                    string SocketContent,
                     bool bAppointLength,
                     string LengthContent,
                     bool bAppointPort,
-                    int PortContent,
+                    string PortContent,
                     FilterConfig.Filter.FilterMode FilterMode,
                     FilterConfig.Filter.FilterAction FilterAction,
                     bool IsExecute,
@@ -7971,11 +8007,11 @@ namespace WPE.Lib
                     bool AppointHeader,
                     string HeaderContent,
                     bool AppointSocket,
-                    int SocketContent,
+                    string SocketContent,
                     bool AppointLength,
                     string LengthContent,
                     bool AppointPort,
-                    int PortContent,
+                    string PortContent,
                     FilterConfig.Filter.FilterMode FilterMode,
                     FilterConfig.Filter.FilterAction FilterAction,
                     bool IsExecute,
@@ -8077,11 +8113,11 @@ namespace WPE.Lib
                         bool bAppointHeader = sfi.AppointHeader;
                         string HeaderContent = sfi.HeaderContent;
                         bool bAppointSocket = sfi.AppointSocket;
-                        int SocketContent = sfi.SocketContent;
+                        string SocketContent = sfi.SocketContent;
                         bool bAppointLength = sfi.AppointLength;
                         string LengthContent = sfi.LengthContent;
                         bool bAppointPort = sfi.AppointPort;
-                        int PortContent = sfi.PortContent;
+                        string PortContent = sfi.PortContent;
                         FilterConfig.Filter.FilterMode FMode = sfi.FMode;
                         FilterConfig.Filter.FilterAction FAction = sfi.FAction;
                         bool IsExecute = sfi.IsExecute;
@@ -8412,10 +8448,10 @@ namespace WPE.Lib
                     if (!FilterConfig.Filter.CheckFilterFunction_ByPacketType(ptType, sfi.FFunction))
                         return false;
 
-                    if (sfi.AppointSocket && !FilterConfig.Filter.CheckPacket_IsMatch_AppointSocket(iSocket, ((int)sfi.SocketContent)))
+                    if (sfi.AppointSocket && !FilterConfig.Filter.CheckPacket_IsMatch_AppointSocket(iSocket, sfi.SocketContent))
                         return false;
 
-                    if (sfi.AppointPort && !FilterConfig.Filter.CheckPacket_IsMatch_AppointPort(iSocket, ptType, sAddr, ((int)sfi.PortContent)))
+                    if (sfi.AppointPort && !FilterConfig.Filter.CheckPacket_IsMatch_AppointPort(iSocket, ptType, sAddr, sfi.PortContent))
                         return false;
 
                     if (sfi.AppointLength && !FilterConfig.Filter.CheckPacket_IsMatch_AppointLength(bufferSpan.Length, sfi.LengthContent))
@@ -8467,9 +8503,33 @@ namespace WPE.Lib
 
                 #region//检查是否匹配指定套接字
 
-                public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, int socketContent)
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public static bool CheckPacket_IsMatch_AppointSocket(Int32 iSocket, string socketContent)
                 {
-                    return iSocket == socketContent;
+                    if (string.IsNullOrEmpty(socketContent))
+                        return false;
+
+                    try
+                    {
+                        string[] parts = socketContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        foreach (string part in parts)
+                        {
+                            if (int.TryParse(part.Trim(), out int currentValue))
+                            {
+                                if (currentValue == iSocket)
+                                {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);                        
+                    }
+
+                    return false;
                 }
 
                 #endregion
@@ -8484,21 +8544,36 @@ namespace WPE.Lib
 
                     try
                     {
-                        int dashIndex = lengthContent.IndexOf('-');
+                        string[] parts = lengthContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (dashIndex >= 0)
+                        foreach (string part in parts)
                         {
-                            string fromStr = lengthContent.Substring(0, dashIndex);
-                            string toStr = lengthContent.Substring(dashIndex + 1);
+                            string trimmedPart = part.Trim();
+                            int dashIndex = trimmedPart.IndexOf('-');
 
-                            return int.TryParse(fromStr, out int lenFrom) &&
-                                   int.TryParse(toStr, out int lenTo) &&
-                                   len >= lenFrom &&
-                                   len <= lenTo;
+                            if (dashIndex >= 0)
+                            {
+                                string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
+                                string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
+
+                                if (int.TryParse(fromStr, out int lenFrom) &&
+                                    int.TryParse(toStr, out int lenTo) &&
+                                    len >= lenFrom &&
+                                    len <= lenTo)
+                                {
+                                    return true;
+                                }
+                            }
+                            else
+                            {
+                                if (int.TryParse(trimmedPart, out int exactLen) && len == exactLen)
+                                {
+                                    return true;
+                                }
+                            }
                         }
 
-                        return int.TryParse(lengthContent, out int exactLen) &&
-                               len == exactLen;
+                        return false;
                     }
                     catch (Exception ex)
                     {
@@ -8516,24 +8591,24 @@ namespace WPE.Lib
                     int iSocket,
                     PacketConfig.Packet.PacketType ptType,
                     PacketConfig.Packet.SockAddr sAddr,
-                    int portContent)
+                    string portContent)
                 {
+                    if (string.IsNullOrEmpty(portContent))
+                        return false;
+
                     try
                     {
                         string packetIP = Socket_Operation.GetIPString_BySocketAddr(iSocket, sAddr, ptType);
                         if (string.IsNullOrEmpty(packetIP))
                             return false;
 
-                        ReadOnlySpan<char> ipSpan = packetIP.AsSpan();
-                        int pipeIndex = ipSpan.IndexOf('|');
-
-                        if (pipeIndex <= 0)
+                        // 获取实际端口号
+                        int actualPort = GetPortFromIPString(packetIP);
+                        if (actualPort == -1)
                             return false;
 
-                        if (CheckPortInPart(ipSpan.Slice(0, pipeIndex), portContent))
-                            return true;
-
-                        return CheckPortInPart(ipSpan.Slice(pipeIndex + 1), portContent);
+                        // 检查端口是否匹配
+                        return CheckPortMatch(portContent, actualPort);
                     }
                     catch (Exception ex)
                     {
@@ -8543,21 +8618,77 @@ namespace WPE.Lib
                 }
 
                 [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                private static bool CheckPortInPart(ReadOnlySpan<char> ipPortPart, int port)
+                private static int GetPortFromIPString(string ipString)
+                {
+                    int pipeIndex = ipString.IndexOf('|');
+
+                    if (pipeIndex > 0)
+                    {
+                        // 尝试第一部分
+                        if (TryParsePort(ipString.Substring(0, pipeIndex), out int port))
+                            return port;
+
+                        // 尝试第二部分
+                        if (TryParsePort(ipString.Substring(pipeIndex + 1), out port))
+                            return port;
+                    }
+                    else
+                    {
+                        // 没有管道符，尝试整个字符串
+                        if (TryParsePort(ipString, out int port))
+                            return port;
+                    }
+
+                    return -1;
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                private static bool TryParsePort(string ipPortPart, out int port)
                 {
                     int colonIndex = ipPortPart.IndexOf(':');
-                    if (colonIndex <= 0)
-                        return false;
-
-                    ReadOnlySpan<char> portSpan = ipPortPart.Slice(colonIndex + 1);
-                    unsafe
+                    if (colonIndex > 0)
                     {
-                        fixed (char* ptr = &portSpan.GetPinnableReference())
+                        string portStr = ipPortPart.Substring(colonIndex + 1);
+                        return int.TryParse(portStr, out port);
+                    }
+
+                    port = -1;
+                    return false;
+                }
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                private static bool CheckPortMatch(string portContent, int actualPort)
+                {
+                    string[] parts = portContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (string part in parts)
+                    {
+                        string trimmedPart = part.Trim();
+
+                        // 检查范围格式 (如 "1000-2000")
+                        int dashIndex = trimmedPart.IndexOf('-');
+                        if (dashIndex > 0)
                         {
-                            return int.TryParse(new string(ptr, 0, portSpan.Length), out int actualPort)
-                                && actualPort == port;
+                            string fromStr = trimmedPart.Substring(0, dashIndex).Trim();
+                            string toStr = trimmedPart.Substring(dashIndex + 1).Trim();
+
+                            if (int.TryParse(fromStr, out int minPort) &&
+                                int.TryParse(toStr, out int maxPort) &&
+                                actualPort >= minPort && actualPort <= maxPort)
+                            {
+                                return true;
+                            }
+                            continue;
+                        }
+
+                        // 检查精确匹配
+                        if (int.TryParse(trimmedPart, out int port) && actualPort == port)
+                        {
+                            return true;
                         }
                     }
+
+                    return false;
                 }
 
                 #endregion
@@ -9535,11 +9666,11 @@ namespace WPE.Lib
                             bool AppointHeader = Convert.ToBoolean(dataRow["AppointHeader"]);
                             string FHeaderContent = dataRow["HeaderContent"].ToString();
                             bool AppointSocket = Convert.ToBoolean(dataRow["AppointSocket"]);
-                            int FSocketContent = Convert.ToInt32(dataRow["SocketContent"]);
+                            string FSocketContent = dataRow["SocketContent"].ToString();
                             bool AppointLength = Convert.ToBoolean(dataRow["AppointLength"]);
                             string FLengthContent = dataRow["LengthContent"].ToString();
                             bool AppointPort = Convert.ToBoolean(dataRow["AppointPort"]);
-                            int FPortContent = Convert.ToInt32(dataRow["PortContent"]);
+                            string FPortContent = dataRow["PortContent"].ToString();
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.GetFilterMode_ByString(dataRow["Mode"].ToString());
                             FilterConfig.Filter.FilterAction FilterAction = FilterConfig.Filter.GetFilterAction_ByString(dataRow["Action"].ToString());
                             bool IsExecute = Convert.ToBoolean(dataRow["IsExecute"]);
@@ -9930,10 +10061,10 @@ namespace WPE.Lib
                                 bAppointSocket = bool.Parse(xeFilter.Element("AppointSocket").Value);
                             }
 
-                            int iFSocketContent = 1;
+                            string sFSocketContent = string.Empty;
                             if (xeFilter.Element("SocketContent") != null)
                             {
-                                iFSocketContent = int.Parse(xeFilter.Element("SocketContent").Value);
+                                sFSocketContent = xeFilter.Element("SocketContent").Value;
                             }
 
                             bool bAppointLength = false;
@@ -9954,10 +10085,10 @@ namespace WPE.Lib
                                 bAppointPort = bool.Parse(xeFilter.Element("AppointPort").Value);
                             }
 
-                            int iFPortContent = 1;
+                            string sFPortContent = string.Empty;
                             if (xeFilter.Element("PortContent") != null)
                             {
-                                iFPortContent = int.Parse(xeFilter.Element("PortContent").Value);
+                                sFPortContent = xeFilter.Element("PortContent").Value;
                             }
 
                             FilterConfig.Filter.FilterMode FilterMode = FilterConfig.Filter.FilterMode.Normal;
@@ -10069,11 +10200,11 @@ namespace WPE.Lib
                                 bAppointHeader,
                                 sFHeaderContent,
                                 bAppointSocket,
-                                iFSocketContent,
+                                sFSocketContent,
                                 bAppointLength,
                                 sFLengthContent,
                                 bAppointPort,
-                                iFPortContent,
+                                sFPortContent,
                                 FilterMode,
                                 FilterAction,
                                 bIsExecute,

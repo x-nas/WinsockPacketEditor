@@ -128,7 +128,7 @@ namespace WPELibrary
                 this.FilterAppointHeaderChange();
 
                 this.cbFilter_AppointSocket.Checked = sfiSelect.AppointSocket;
-                this.nudFilter_SocketContent.Value = sfiSelect.SocketContent;
+                //this.nudFilter_SocketContent.Value = sfiSelect.SocketContent;
                 this.FilterAppointSocketChange();
 
                 this.cbFilter_AppointLength.Checked = sfiSelect.AppointLength;
@@ -160,7 +160,7 @@ namespace WPELibrary
                 this.FilterAppointLengthChange();
 
                 this.cbFilter_AppointPort.Checked = sfiSelect.AppointPort;
-                this.nudFilter_PortContent.Value = sfiSelect.PortContent;
+                //this.nudFilter_PortContent.Value = sfiSelect.PortContent;
                 this.FilterAppointPortChange();
 
                 this.cbProgressionContinuous.Checked = sfiSelect.IsProgressionContinuous;
@@ -841,7 +841,7 @@ namespace WPELibrary
             {
                 try
                 {
-                    if (!string.IsNullOrEmpty(sData) && Socket_Operation.IsHexString(sData))
+                    if (!string.IsNullOrEmpty(sData) && Operate.SystemConfig.IsHexString(sData))
                     {
                         string[] DataCells = sData.Split(' ');
 
@@ -900,7 +900,7 @@ namespace WPELibrary
                     if (dgvFilterNormal.Rows[0].Cells[i].Value != null)
                     {
                         sCheckValue = dgvFilterNormal.Rows[0].Cells[i].Value.ToString().Trim();
-                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        if (!Operate.SystemConfig.IsValidFilterString(sCheckValue))
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
                             return false;
@@ -910,7 +910,7 @@ namespace WPELibrary
                     if (dgvFilterNormal.Rows[1].Cells[i].Value != null)
                     {
                         sCheckValue = dgvFilterNormal.Rows[1].Cells[i].Value.ToString().Trim();
-                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        if (!Operate.SystemConfig.IsValidFilterString(sCheckValue))
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
                             return false;
@@ -924,7 +924,7 @@ namespace WPELibrary
                     if (dgvFilterAdvanced_Search.Rows[0].Cells[i].Value != null)
                     {
                         sCheckValue = dgvFilterAdvanced_Search.Rows[0].Cells[i].Value.ToString().Trim();
-                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        if (!Operate.SystemConfig.IsValidFilterString(sCheckValue))
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
                             return false;
@@ -938,7 +938,7 @@ namespace WPELibrary
                     if (dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value != null)
                     {
                         sCheckValue = dgvFilterAdvanced_Modify_FromHead.Rows[0].Cells[i].Value.ToString().Trim();
-                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        if (!Operate.SystemConfig.IsValidFilterString(sCheckValue))
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
                             return false;
@@ -952,7 +952,7 @@ namespace WPELibrary
                     if (dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value != null)
                     {
                         sCheckValue = dgvFilterAdvanced_Modify_FromPosition.Rows[0].Cells[i].Value.ToString().Trim();
-                        if (!Socket_Operation.IsValidFilterString(sCheckValue))
+                        if (!Operate.SystemConfig.IsValidFilterString(sCheckValue))
                         {
                             Socket_Operation.ShowMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_83));
                             return false;
@@ -1091,8 +1091,8 @@ namespace WPELibrary
                     string sFName_New = this.txtFilterName.Text.Trim();
                     string sHeaderContent_New = string.Empty;
                     string sLengthContent_New = string.Empty;
-                    int iSocketContent_New = 0;
-                    int iPortContent_New = 0;
+                    string sSocketContent_New = string.Empty;
+                    string sPortContent_New = string.Empty;
                     int iProgressionStep_New = 1;
                     int iProgressionCarryNumber_New = 1;
                     int iProgressionCount_New = 0;                    
@@ -1120,8 +1120,8 @@ namespace WPELibrary
 
                     sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
                     sLengthContent_New = this.nudFilter_LengthContent_From.Value.ToString() + "-" + this.nudFilter_LengthContent_To.Value.ToString();
-                    iSocketContent_New = ((int)this.nudFilter_SocketContent.Value);                    
-                    iPortContent_New = ((int)this.nudFilter_PortContent.Value);
+                    //sSocketContent_New = this.txtFilter_SocketContent.Text.Trim();
+                    //sPortContent_New = ((int)this.nudFilter_PortContent.Value);
                     iProgressionStep_New = ((int)this.nudProgressionStep.Value);
                     iProgressionCarryNumber_New = ((int)this.nudProgressionCarry.Value);
 
@@ -1324,11 +1324,11 @@ namespace WPELibrary
                         bAppointHeader_New,
                         sHeaderContent_New,
                         bAppointSocket_New,
-                        iSocketContent_New,
+                        sSocketContent_New,
                         bAppointLength_New,
                         sLengthContent_New,
                         bAppointPort_New,
-                        iPortContent_New,
+                        sPortContent_New,
                         FilterMode_New,
                         FilterAction_New,
                         bIsExecute_New,

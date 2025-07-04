@@ -596,39 +596,7 @@ namespace WPE.Lib
 
         #endregion
 
-        #region//判断是否十六进制字符串（带空格）
-
-        public static bool IsHexString(string value)
-        {
-            bool bReturn = false;
-
-            try
-            {
-                const string pattern = @"^([A-Fa-f0-9]{2}\s?)+$";
-                Regex regex = new Regex(pattern, RegexOptions.Compiled);
-                bReturn = regex.IsMatch(value);
-            }
-            catch (Exception ex)
-            {
-                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
-            }
-
-            return bReturn;            
-        }
-
-        public static bool IsValidFilterString(string value)
-        {
-            if (!String.IsNullOrEmpty(value))
-            {
-                return Socket_Operation.IsHexString(value);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        #endregion
+        
 
         #region//获取中文字符串对应的bool类型
 

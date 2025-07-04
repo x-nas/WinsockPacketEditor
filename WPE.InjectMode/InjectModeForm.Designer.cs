@@ -326,7 +326,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -1171,6 +1171,7 @@
             this.tlpFilterList.RowCount = 2;
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpFilterList.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tlpFilterList.Size = new System.Drawing.Size(1124, 724);
             this.tlpFilterList.TabIndex = 1;
             // 
@@ -1180,15 +1181,14 @@
             this.tFilterList.Bordered = true;
             this.tFilterList.CellImpactHeight = false;
             this.tFilterList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tFilterList.Gap = 8;
-            this.tFilterList.GapCell = 0;
+            this.tFilterList.GapCell = 6;
             this.tFilterList.Location = new System.Drawing.Point(3, 49);
             this.tFilterList.MultipleRows = true;
             this.tFilterList.Name = "tFilterList";
             this.tFilterList.Size = new System.Drawing.Size(1118, 672);
             this.tFilterList.TabIndex = 1;
-            this.tFilterList.CellDoubleClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellDoubleClick);
-            this.tFilterList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tFilterList_MouseClick);
+            this.tFilterList.CellClick += new AntdUI.Table.ClickEventHandler(this.tFilterList_CellClick);
+            this.tFilterList.CellButtonClick += new AntdUI.Table.ClickButtonEventHandler(this.tFilterList_CellButtonClick);
             // 
             // sFilterList
             // 
