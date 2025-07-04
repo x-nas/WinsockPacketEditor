@@ -4,14 +4,16 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using WPE.Lib;
 
 namespace WPE.InjectMode
 {
     public partial class FilterEditForm : Form
     {
+        private InjectModeForm imForm;
         private FilterInfo sfiSelect;
         private DataTable dtFilterNormal = new DataTable();
         private DataTable dtFilterAdvanced_Search = new DataTable();
@@ -20,9 +22,9 @@ namespace WPE.InjectMode
 
         #region//初始化
 
-        public FilterEditForm(Form form, FilterInfo fi)
+        public FilterEditForm(InjectModeForm form, FilterInfo fi)
         {
-            InitializeComponent();
+            InitializeComponent();            
 
             if (fi == null)
             {
@@ -34,6 +36,7 @@ namespace WPE.InjectMode
             else
             {
                 this.sfiSelect = fi;
+                this.imForm = form;
             }  
         }        
 
@@ -49,6 +52,7 @@ namespace WPE.InjectMode
                 this.InitTable_FilterAdvanced_Modify_Position();            
                 this.InitProgressionPosition();
                 this.InitFilterExecuteType();
+                this.ShowFilterData();
 
                 switch (sfiSelect.FMode)
                 {
@@ -161,13 +165,12 @@ namespace WPE.InjectMode
 
             for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
             {
-                string title = (i + 1).ToString("D3");
-                string key = "col" + title;
+                string Title = (i + 1).ToString("D3");
 
-                AntdUI.Column column = new AntdUI.Column(key, title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
                 columns.Add(column);
 
-                dtFilterNormal.Columns.Add(key, typeof(CellText));
+                dtFilterNormal.Columns.Add(Title, typeof(CellText));
             }
             tFilterNormal.Columns = columns;
 
@@ -206,12 +209,11 @@ namespace WPE.InjectMode
             for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
             {
                 string Title = (i + 1).ToString("D3");
-                string Key = "col" + Title;
 
-                AntdUI.Column column = new AntdUI.Column(Key, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
                 columns.Add(column);
 
-                dtFilterAdvanced_Search.Columns.Add(Key, typeof(CellText));
+                dtFilterAdvanced_Search.Columns.Add(Title, typeof(CellText));
             }
             tFilterAdvanced_Search.Columns = columns;
 
@@ -236,12 +238,11 @@ namespace WPE.InjectMode
             for (int i = 0; i < Operate.FilterConfig.Filter.FilterSize_MaxLen; i++)
             {
                 string Title = (i + 1).ToString("D3");
-                string Key = "col" + Title;
 
-                AntdUI.Column column = new AntdUI.Column(Key, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
                 columns.Add(column);
 
-                dtFilterAdvanced_Modify_Head.Columns.Add(Key, typeof(CellText));
+                dtFilterAdvanced_Modify_Head.Columns.Add(Title, typeof(CellText));
             }
             tFilterAdvanced_Modify_Head.Columns = columns;
 
@@ -266,13 +267,12 @@ namespace WPE.InjectMode
             int iSize = Operate.FilterConfig.Filter.FilterSize_MaxLen;
             for (int i = -iSize; i < iSize; i++)
             {
-                string Title = i.ToString("D3");
-                string Key = "col" + Title;
+                string Title = i.ToString("D3");                
 
-                AntdUI.Column column = new AntdUI.Column(Key, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
+                AntdUI.Column column = new AntdUI.Column(Title, Title, AntdUI.ColumnAlign.Center).SetWidth("50");
                 columns.Add(column);
 
-                dtFilterAdvanced_Modify_Position.Columns.Add(Key, typeof(CellText));
+                dtFilterAdvanced_Modify_Position.Columns.Add(Title, typeof(CellText));
             }
             tFilterAdvanced_Modify_Position.Columns = columns;
 
@@ -634,6 +634,7 @@ namespace WPE.InjectMode
         private void FilterAppointHeaderChange()
         {
             this.txtFilter_HeaderContent.Enabled = this.cbFilter_AppointHeader.Checked;
+            this.Filter_HeaderContent_Changed();
         }
 
         #endregion
@@ -648,6 +649,7 @@ namespace WPE.InjectMode
         private void FilterAppointSocketChange()
         {
             this.txtFilter_SocketContent.Enabled = this.cbFilter_AppointSocket.Checked;
+            this.Filter_SocketContent_Changed();
         }
 
         #endregion
@@ -662,6 +664,7 @@ namespace WPE.InjectMode
         private void FilterAppointLengthChange()
         {
             this.txtFilter_LengthContent.Enabled = this.cbFilter_AppointLength.Checked;
+            this.Filter_LengthContent_Changed();
         }
 
         #endregion
@@ -676,6 +679,7 @@ namespace WPE.InjectMode
         private void FilterAppointPortChange()
         {
             this.txtFilter_PortContent.Enabled = this.cbFilter_AppointPort.Checked;
+            this.Filter_PortContent_Changed();
         }
 
         #endregion
@@ -694,23 +698,370 @@ namespace WPE.InjectMode
 
         #endregion
 
-        #region//保存
+        #region//滤镜设置合法性检测
 
-        private void bSave_Click(object sender, EventArgs e)
+        public bool CheckFilterIsValid()
         {
+            bool bReturn = true;
 
-            
+            try
+            {
+                //滤镜名称
+                if (string.IsNullOrEmpty(this.txtFilterName.Text.Trim()))
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜名称为空", TType.Error)
+                    {
+                        LocalizationText = "FilterEditForm.FilterName.Error"
+                    });
+
+                    return false;
+                }
+
+                //指定包头
+                if (this.cbFilter_AppointHeader.Checked)
+                {
+                    if (string.IsNullOrEmpty(this.txtFilter_HeaderContent.Text.Trim()))
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
+                        {
+                            LocalizationText = "FilterEditForm.AppointHeader.Error"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Operate.SystemConfig.IsHexString(this.txtFilter_HeaderContent.Text.Trim()))
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定包头数据错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.AppointHeader.Error"
+                            });
+
+                            return false;
+                        }
+                    }
+                }
+
+                //指定套接字
+                if (this.cbFilter_AppointSocket.Checked)
+                {
+                    if (string.IsNullOrEmpty(this.txtFilter_SocketContent.Text.Trim()))
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定套接字错误", TType.Error)
+                        {
+                            LocalizationText = "FilterEditForm.AppointSocket.Error"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Regex.IsMatch(this.txtFilter_SocketContent.Text.Trim(), @"^(\d+)(;\d+)*$"))
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定套接字错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.AppointSocket.Error"
+                            });
+
+                            return false;
+                        }
+                    }
+                }
+
+                //指定端口
+                if (this.cbFilter_AppointPort.Checked)
+                {
+                    if (string.IsNullOrEmpty(this.txtFilter_PortContent.Text.Trim()))
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口错误", TType.Error)
+                        {
+                            LocalizationText = "FilterEditForm.AppointPort.Error"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Regex.IsMatch(this.txtFilter_PortContent.Text.Trim(), @"^(\d+[-;])*\d+$"))
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定端口错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.AppointPort.Error"
+                            });
+
+                            return false;
+                        }
+                    }
+                }
+
+                //指定长度
+                if (this.cbFilter_AppointLength.Checked)
+                {
+                    if (string.IsNullOrEmpty(this.txtFilter_LengthContent.Text.Trim()))
+                    {
+                        AntdUI.Message.open(new AntdUI.Message.Config(this, "指定长度错误", TType.Error)
+                        {
+                            LocalizationText = "FilterEditForm.AppointLength.Error"
+                        });
+
+                        return false;
+                    }
+                    else
+                    {
+                        if (!Regex.IsMatch(this.txtFilter_LengthContent.Text.Trim(), @"^(\d+[-;])*\d+$"))
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "指定长度错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.AppointLength.Error"
+                            });
+
+                            return false;
+                        }
+                    }
+                }
+
+                //换包（数据完整度检测）
+                if (this.rbFilterAction_Change.Checked)
+                {
+                    int iMaxIndex = 0;
+
+                    //普通滤镜
+                    if (this.rbFilterMode_Normal.Checked)
+                    {
+                        for (int i = 0; i < this.dtFilterNormal.Columns.Count; i++)
+                        {
+                            if (dtFilterNormal.Rows[1][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterNormal.Rows[1][i]).Text.Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }
+                        }
+
+                        if (iMaxIndex == 0)
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.Change.Error"
+                            });
+
+                            return false;
+                        }
+
+                        for (int i = 0; i < iMaxIndex; i++)
+                        {
+                            if (dtFilterNormal.Rows[1][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterNormal.Rows[1][i]).Text.Trim();
+                                if (string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    {
+                                        LocalizationText = "FilterEditForm.Change.Error"
+                                    });
+
+                                    return false;
+                                }                                
+                            }
+                        }
+                    }
+
+                    //高级滤镜（从头开始）
+                    if (this.rbFilterMode_Advanced.Checked && this.rbFilterModifyFrom_Head.Checked)
+                    {
+                        for (int i = 0; i < this.dtFilterAdvanced_Modify_Head.Columns.Count; i++)
+                        {
+                            if (dtFilterAdvanced_Modify_Head.Rows[0][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Head.Rows[0][i]).Text.Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }
+                        }
+
+                        if (iMaxIndex == 0)
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.Change.Error"
+                            });
+
+                            return false;
+                        }
+
+                        for (int i = 0; i < iMaxIndex; i++)
+                        {
+                            if (dtFilterAdvanced_Modify_Head.Rows[0][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Head.Rows[0][i]).Text.Trim();
+                                if (string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    {
+                                        LocalizationText = "FilterEditForm.Change.Error"
+                                    });
+
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+
+                    //高级滤镜（从发现有连锁的位置）
+                    if (this.rbFilterMode_Advanced.Checked && this.rbFilterModifyFrom_Position.Checked)
+                    {
+                        int iStartIndex = Operate.FilterConfig.Filter.FilterSize_MaxLen;
+
+                        for (int i = iStartIndex; i < this.dtFilterAdvanced_Modify_Position.Columns.Count; i++)
+                        {
+                            if (dtFilterAdvanced_Modify_Position.Rows[0][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Position.Rows[0][i]).Text.Trim();
+                                if (!string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    iMaxIndex = i;
+                                }
+                            }
+                        }
+
+                        if (iMaxIndex == iStartIndex)
+                        {
+                            AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                            {
+                                LocalizationText = "FilterEditForm.Change.Error"
+                            });
+
+                            return false;
+                        }
+
+                        for (int i = iStartIndex; i < iMaxIndex; i++)
+                        {
+                            if (dtFilterAdvanced_Modify_Position.Rows[0][i] != null)
+                            {
+                                string sCheckValue = ((CellText)dtFilterAdvanced_Modify_Position.Rows[0][i]).Text.Trim();
+                                if (string.IsNullOrEmpty(sCheckValue))
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "换包数据错误", TType.Error)
+                                    {
+                                        LocalizationText = "FilterEditForm.Change.Error"
+                                    });
+
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+
+            return bReturn;
         }
 
-        #endregion
-
-        #region//退出
-
-        private void bExit_Click(object sender, EventArgs e)
+        private void txtFilterName_TextChanged(object sender, EventArgs e)
         {
-            this.Dispose();
+            this.FilterName_Changed();
         }
 
+        private void FilterName_Changed()
+        {
+            if (string.IsNullOrEmpty(this.txtFilterName.Text.Trim()))
+            {
+                this.txtFilterName.Status = TType.Error;
+            }
+            else
+            {
+                this.txtFilterName.Status = TType.Success;
+            }
+        }
+
+        private void txtFilter_HeaderContent_TextChanged(object sender, EventArgs e)
+        {
+            this.Filter_HeaderContent_Changed();
+        }
+
+        private void Filter_HeaderContent_Changed()
+        {
+            if (this.cbFilter_AppointHeader.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtFilter_HeaderContent.Text.Trim()))
+                {
+                    this.txtFilter_HeaderContent.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtFilter_HeaderContent.Status = TType.Success;
+                }
+            }
+        }
+
+        private void txtFilter_SocketContent_TextChanged(object sender, EventArgs e)
+        {
+            this.Filter_SocketContent_Changed();
+        }
+
+        private void Filter_SocketContent_Changed()
+        {
+            if (this.cbFilter_AppointSocket.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtFilter_SocketContent.Text.Trim()))
+                {
+                    this.txtFilter_SocketContent.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtFilter_SocketContent.Status = TType.Success;
+                }
+            }
+        }
+
+        private void txtFilter_PortContent_TextChanged(object sender, EventArgs e)
+        {
+            this.Filter_PortContent_Changed();
+        }
+
+        private void Filter_PortContent_Changed()
+        {
+            if (this.cbFilter_AppointPort.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtFilter_PortContent.Text.Trim()))
+                {
+                    this.txtFilter_PortContent.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtFilter_PortContent.Status = TType.Success;
+                }
+            }
+        }
+
+        private void txtFilter_LengthContent_TextChanged(object sender, EventArgs e)
+        {
+            this.Filter_LengthContent_Changed();
+        }
+
+        private void Filter_LengthContent_Changed()
+        {
+            if (this.cbFilter_AppointLength.Checked)
+            {
+                if (string.IsNullOrEmpty(this.txtFilter_LengthContent.Text.Trim()))
+                {
+                    this.txtFilter_LengthContent.Status = TType.Error;
+                }
+                else
+                {
+                    this.txtFilter_LengthContent.Status = TType.Success;
+                }
+            }
+        }
 
         #endregion
 
@@ -792,21 +1143,15 @@ namespace WPE.InjectMode
                 {
                     case "cmsFilterEdit_Progression_Enable":
 
-                        if (RowIndex == 2)
-                        {
-                            ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.DarkRed;
-                            tFilterEdit.Refresh();
-                        }
+                        ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.DarkRed;
+                        tFilterEdit.Refresh();
 
                         break;
 
                     case "cmsFilterEdit_Progression_Disable":
 
-                        if (RowIndex == 2)
-                        {
-                            ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.Yellow;
-                            tFilterEdit.Refresh();
-                        }
+                        ((CellText)dtFilterEdit.Rows[RowIndex - 1][ColumnIndex]).Back = Color.Yellow;
+                        tFilterEdit.Refresh();
 
                         break;
 
@@ -889,10 +1234,8 @@ namespace WPE.InjectMode
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = PointToClient(MousePosition);
+                Point pMouse = tFilterNormal.PointToClient(MousePosition);
                 tFilterNormal.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                MessageBox.Show(pMouse.X + " | " + pMouse.Y + " - " + RIndex + " | " + CIndex);
 
                 if (RIndex > 0 && CIndex > -1)
                 {
@@ -906,10 +1249,8 @@ namespace WPE.InjectMode
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = PointToClient(MousePosition);
+                Point pMouse = tFilterAdvanced_Search.PointToClient(MousePosition);
                 tFilterAdvanced_Search.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                MessageBox.Show(pMouse.X + " | " + pMouse.Y + " - " + RIndex + " | " + CIndex);
 
                 if (RIndex > 0 && CIndex > -1)
                 {
@@ -923,10 +1264,8 @@ namespace WPE.InjectMode
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = PointToClient(MousePosition);
+                Point pMouse = tFilterAdvanced_Modify_Head.PointToClient(MousePosition);
                 tFilterAdvanced_Modify_Head.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                MessageBox.Show(pMouse.X + " | " + pMouse.Y + " - " + RIndex + " | " + CIndex);
 
                 if (RIndex > 0 && CIndex > -1)
                 {
@@ -940,10 +1279,8 @@ namespace WPE.InjectMode
         {
             if (e.Control && e.KeyCode == Keys.V)
             {
-                Point pMouse = PointToClient(MousePosition);
+                Point pMouse = tFilterAdvanced_Modify_Position.PointToClient(MousePosition);
                 tFilterAdvanced_Modify_Position.HitTest(pMouse.X, pMouse.Y, out int RIndex, out int CIndex);
-
-                MessageBox.Show(pMouse.X + " | " + pMouse.Y + " - " + RIndex + " | " + CIndex);
 
                 if (RIndex > 0 && CIndex > -1)
                 {
@@ -1005,10 +1342,407 @@ namespace WPE.InjectMode
             }
         }
 
+        #endregion
+
+        #region//显示滤镜数据
+
+        private void ShowFilterData()
+        {
+            try
+            {
+                AntdUI.Spin.open(this, new AntdUI.Spin.Config()
+                {
+                    Radius = 6,
+                    Font = new Font("Microsoft YaHei UI", 12f),
+                }, (config) =>
+                {
+                    config.Text = AntdUI.Localization.Get("Loading", "正在加载...");
+
+                    if (!string.IsNullOrEmpty(sfiSelect.FSearch))
+                    {
+                        string[] sSearchAll = sfiSelect.FSearch.Split(',');
+
+                        foreach (string s in sSearchAll)
+                        {
+                            if (int.TryParse(s.Split('|')[0], out int iIndex))
+                            {
+                                string sValue = s.Split('|')[1];
+
+                                if (iIndex < this.dtFilterNormal.Columns.Count)
+                                {
+                                    ((CellText)this.dtFilterNormal.Rows[0][iIndex]).Text = sValue;
+                                }
+
+                                if (iIndex < this.dtFilterAdvanced_Search.Columns.Count)
+                                {
+                                    ((CellText)this.dtFilterAdvanced_Search.Rows[0][iIndex]).Text = sValue;
+                                }
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(sfiSelect.FModify))
+                    {
+                        string[] sModifyAll = sfiSelect.FModify.Split(',');
+                        //this.LoadAllCount = sModifyAll.Length;
+
+                        //int LoadCount = 0;
+                        foreach (string s in sModifyAll)
+                        {
+                            if (int.TryParse(s.Split('|')[0], out int iIndex))
+                            {
+                                string sValue = s.Split('|')[1];
+
+                                switch (sfiSelect.FMode)
+                                {
+                                    case Operate.FilterConfig.Filter.FilterMode.Normal:
+
+                                        if (iIndex < this.dtFilterNormal.Columns.Count)
+                                        {
+                                            ((CellText)this.dtFilterNormal.Rows[1][iIndex]).Text = sValue;
+                                        }
+
+                                        break;
+
+                                    case Operate.FilterConfig.Filter.FilterMode.Advanced:
+
+                                        switch (sfiSelect.FStartFrom)
+                                        {
+                                            case Operate.FilterConfig.Filter.FilterStartFrom.Head:
+
+                                                if (iIndex < this.dtFilterAdvanced_Modify_Head.Columns.Count)
+                                                {
+                                                    ((CellText)this.dtFilterAdvanced_Modify_Head.Rows[0][iIndex]).Text = sValue;
+                                                }
+
+                                                break;
+
+                                            case Operate.FilterConfig.Filter.FilterStartFrom.Position:
+
+                                                iIndex += Operate.FilterConfig.Filter.FilterSize_MaxLen;
+
+                                                if (iIndex < this.dtFilterAdvanced_Modify_Position.Columns.Count)
+                                                {
+                                                    ((CellText)this.dtFilterAdvanced_Modify_Position.Rows[0][iIndex]).Text = sValue;
+
+                                                    //LoadCount++;
+                                                    //this.bgwFilterInfo.ReportProgress(LoadCount * 100 / LoadAllCount);
+                                                }
+
+                                                break;
+                                        }
+
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                }, () =>
+                {
+                    AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜数据加载完毕", TType.Success)
+                    {
+                        LocalizationText = "FilterEditForm.Load.Success"
+                    });
+                });                
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region//保存
+
+        private void bSave_Click(object sender, EventArgs e)
+        {
+            if (!this.CheckFilterIsValid())
+            {
+                return;
+            }
+
+            try
+            {
+                string sFName_New = this.txtFilterName.Text.Trim();
+                string sHeaderContent_New = string.Empty;
+                string sLengthContent_New = string.Empty;
+                string sSocketContent_New = string.Empty;
+                string sPortContent_New = string.Empty;
+                int iProgressionStep_New = 1;
+                int iProgressionCarryNumber_New = 1;
+                int iProgressionCount_New = 0;
+                bool bIsExecute_New, bIsProgressionContinuous_New, bIsProgressionCarry_New;
+                bool bAppointHeader_New, bAppointSocket_New, bAppointLength_New, bAppointPort_New;
+                StringBuilder sbProgression = new StringBuilder();
+                StringBuilder sbSearch = new StringBuilder();
+                StringBuilder sbModify = new StringBuilder();
+
+                Operate.FilterConfig.Filter.FilterMode FilterMode_New;
+                Operate.FilterConfig.Filter.FilterAction FilterAction_New;
+                Operate.FilterConfig.Filter.FilterExecuteType FilterExecuteType_New;
+                Guid SID_New = Guid.Empty;
+                Guid RID_New = Guid.Empty;
+                Operate.FilterConfig.Filter.FilterFunction FilterFunction_New;
+                Operate.FilterConfig.Filter.FilterStartFrom FilterStartFrom_New;
+
+                bIsExecute_New = this.cbFilterAction_Execute.Checked;
+                bAppointHeader_New = this.cbFilter_AppointHeader.Checked;
+                bAppointSocket_New = this.cbFilter_AppointSocket.Checked;
+                bAppointLength_New = this.cbFilter_AppointLength.Checked;
+                bAppointPort_New = this.cbFilter_AppointPort.Checked;
+                bIsProgressionContinuous_New = this.cbProgressionContinuous.Checked;
+                bIsProgressionCarry_New = this.cbProgressionCarry.Checked;
+
+                sHeaderContent_New = this.txtFilter_HeaderContent.Text.Trim();
+                sLengthContent_New = this.txtFilter_LengthContent.Text.Trim();
+                sSocketContent_New = this.txtFilter_SocketContent.Text.Trim();
+                sPortContent_New = this.txtFilter_PortContent.Text.Trim();
+                iProgressionStep_New = ((int)this.nudProgressionStep.Value);
+                iProgressionCarryNumber_New = ((int)this.nudProgressionCarry.Value);
+
+                if (rbFilterMode_Normal.Checked)
+                {
+                    FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Normal;
+                }
+                else if (rbFilterMode_Advanced.Checked)
+                {
+                    FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Advanced;
+                }
+                else
+                {
+                    FilterMode_New = Operate.FilterConfig.Filter.FilterMode.Normal;
+                }
+
+                if (rbFilterAction_Replace.Checked)
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Replace;
+                }
+                else if (rbFilterAction_Intercept.Checked)
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Intercept;
+                }
+                else if (rbFilterAction_Change.Checked)
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.Change;
+                }
+                else if (rbFilterAction_NoModify_Display.Checked)
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
+                }
+                else if (rbFilterAction_NoModify_NoDisplay.Checked)
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_NoDisplay;
+                }
+                else
+                {
+                    FilterAction_New = Operate.FilterConfig.Filter.FilterAction.NoModify_Display;
+                }
+
+                if (cbFilterAction_Execute.Checked)
+                {
+                    if (this.cbbFilterAction_ExecuteType.SelectedIndex == 0)
+                    {
+                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Send;
+
+                        if (cbbFilterAction_Execute.SelectedValue != null)
+                        {
+                            SID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                        }
+                    }
+                    else if (this.cbbFilterAction_ExecuteType.SelectedIndex == 1)
+                    {
+                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.Robot;
+
+                        if (cbbFilterAction_Execute.SelectedValue != null)
+                        {
+                            RID_New = (Guid)cbbFilterAction_Execute.SelectedValue;
+                        }
+                    }
+                    else
+                    {
+                        FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.None;
+                    }
+                }
+                else
+                {
+                    FilterExecuteType_New = Operate.FilterConfig.Filter.FilterExecuteType.None;
+                }
+
+                FilterFunction_New.Send = this.cbFilterFunction_Send.Checked;
+                FilterFunction_New.SendTo = this.cbFilterFunction_SendTo.Checked;
+                FilterFunction_New.Recv = this.cbFilterFunction_Recv.Checked;
+                FilterFunction_New.RecvFrom = this.cbFilterFunction_RecvFrom.Checked;
+                FilterFunction_New.WSASend = this.cbFilterFunction_WSASend.Checked;
+                FilterFunction_New.WSASendTo = this.cbFilterFunction_WSASendTo.Checked;
+                FilterFunction_New.WSARecv = this.cbFilterFunction_WSARecv.Checked;
+                FilterFunction_New.WSARecvFrom = this.cbFilterFunction_WSARecvFrom.Checked;
+
+                if (rbFilterModifyFrom_Head.Checked)
+                {
+                    FilterStartFrom_New = Operate.FilterConfig.Filter.FilterStartFrom.Head;
+                }
+                else
+                {
+                    FilterStartFrom_New = Operate.FilterConfig.Filter.FilterStartFrom.Position;
+                }
+
+                switch (FilterMode_New)
+                {
+                    case Operate.FilterConfig.Filter.FilterMode.Normal:
+
+                        for (int i = 0; i < this.dtFilterNormal.Columns.Count; i++)
+                        {
+                            CellText cell = (CellText)dtFilterNormal.Rows[1][i];
+                            if (cell.Back == Color.DarkRed)
+                            {
+                                sbProgression.Append(i).Append(",");
+                            }
+
+                            if (dtFilterNormal.Rows[0][i] != null)
+                            {
+                                string sSearchValue = ((CellText)dtFilterNormal.Rows[0][i]).Text.Trim();
+                                if (!String.IsNullOrEmpty(sSearchValue))
+                                {
+                                    sbSearch.Append(i).Append("|").Append(sSearchValue).Append(",");
+                                }
+                            }
+
+                            if (dtFilterNormal.Rows[1][i] != null)
+                            {
+                                string sModifyValue = ((CellText)dtFilterNormal.Rows[1][i]).Text.Trim();
+                                if (!String.IsNullOrEmpty(sModifyValue))
+                                {
+                                    sbModify.Append(i).Append("|").Append(sModifyValue).Append(",");
+                                }
+                            }
+                        }
+
+                        break;
+
+                    case Operate.FilterConfig.Filter.FilterMode.Advanced:
+
+                        for (int i = 0; i < this.dtFilterAdvanced_Search.Columns.Count; i++)
+                        {
+                            if (dtFilterAdvanced_Search.Rows[0][i] != null)
+                            {
+                                string sValue = ((CellText)dtFilterAdvanced_Search.Rows[0][i]).Text.Trim();
+                                if (!String.IsNullOrEmpty(sValue))
+                                {
+                                    sbSearch.Append(i).Append("|").Append(sValue).Append(",");
+                                }
+                            }
+                        }
+
+                        switch (FilterStartFrom_New)
+                        {
+                            case Operate.FilterConfig.Filter.FilterStartFrom.Head:
+
+                                for (int i = 0; i < this.dtFilterAdvanced_Modify_Head.Columns.Count; i++)
+                                {
+                                    CellText cell = (CellText)dtFilterAdvanced_Modify_Head.Rows[0][i];
+                                    if (cell.Back == Color.DarkRed)
+                                    {
+                                        sbProgression.Append(i).Append(",");
+                                    }
+
+                                    if (dtFilterAdvanced_Modify_Head.Rows[0][i] != null)
+                                    {
+                                        string sValue = ((CellText)dtFilterAdvanced_Modify_Head.Rows[0][i]).Text.Trim();
+                                        if (!String.IsNullOrEmpty(sValue))
+                                        {
+                                            sbModify.Append(i).Append("|").Append(sValue).Append(",");
+                                        }
+                                    }
+                                }
+
+                                break;
+
+                            case Operate.FilterConfig.Filter.FilterStartFrom.Position:
+
+                                for (int i = 0; i < this.dtFilterAdvanced_Modify_Position.Columns.Count; i++)
+                                {
+                                    if (int.TryParse(dtFilterAdvanced_Modify_Position.Columns[i].ColumnName, out int iIndex))
+                                    {
+                                        CellText cell = (CellText)dtFilterAdvanced_Modify_Position.Rows[0][i];
+                                        if (cell.Back == Color.DarkRed)
+                                        {
+                                            sbProgression.Append(iIndex).Append(",");
+                                        }
+
+                                        if (dtFilterAdvanced_Modify_Position.Rows[0][i] != null)
+                                        {
+                                            string sValue = ((CellText)dtFilterAdvanced_Modify_Position.Rows[0][i]).Text.Trim();
+                                            if (!String.IsNullOrEmpty(sValue))
+                                            {
+                                                sbModify.Append(iIndex).Append("|").Append(sValue).Append(",");
+                                            }
+                                        }
+                                    }                                    
+                                }
+
+                                break;
+                        }
+
+                        break;
+                }
+
+                string sProgression_New = sbProgression.ToString().TrimEnd(',');
+                string sSearch_New = sbSearch.ToString().TrimEnd(',');
+                string sModify_New = sbModify.ToString().TrimEnd(',');
+
+                Operate.FilterConfig.Filter.UpdateFilter(
+                    sfiSelect,
+                    sFName_New,
+                    bAppointHeader_New,
+                    sHeaderContent_New,
+                    bAppointSocket_New,
+                    sSocketContent_New,
+                    bAppointLength_New,
+                    sLengthContent_New,
+                    bAppointPort_New,
+                    sPortContent_New,
+                    FilterMode_New,
+                    FilterAction_New,
+                    bIsExecute_New,
+                    FilterExecuteType_New,
+                    SID_New,
+                    RID_New,
+                    FilterFunction_New,
+                    FilterStartFrom_New,
+                    bIsProgressionContinuous_New,
+                    iProgressionStep_New,
+                    bIsProgressionCarry_New,
+                    iProgressionCarryNumber_New,
+                    sProgression_New,
+                    iProgressionCount_New,
+                    sSearch_New,
+                    sModify_New);
+
+                this.Close();
+                this.imForm.RefreshFilterList();
+            }
+            catch (Exception ex)
+            {
+                Operate.DoLog(MethodBase.GetCurrentMethod().Name, ex.Message);
+
+                AntdUI.Message.open(new AntdUI.Message.Config(this, "滤镜保存出错", TType.Error)
+                {
+                    LocalizationText = "FilterEditForm.Save.Error"
+                });
+            }
+        }
+
+        #endregion
+
+        #region//退出
+
+        private void bExit_Click(object sender, EventArgs e)
+        {
+            this.Dispose();
+        }
+
         #endregion        
-
-        
-
-        
     }
 }

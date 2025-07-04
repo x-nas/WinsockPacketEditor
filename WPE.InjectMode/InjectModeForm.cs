@@ -102,6 +102,11 @@ namespace WPE.InjectMode
             Operate.DoLog(MethodBase.GetCurrentMethod().Name, this.lProcessName.Text);
         }
 
+        public void RefreshFilterList()
+        {
+            this.tFilterList.Refresh();
+        }
+
         #endregion
 
         #region//初始化数据表
@@ -144,15 +149,7 @@ namespace WPE.InjectMode
 
         private void InitTable_FilterList()
         {
-            tFilterList.Columns = new AntdUI.ColumnCollection {
-                new AntdUI.Column("", string.Empty, AntdUI.ColumnAlign.Center)
-                {
-                    Width = "50",
-                    Render = (value, record, rowindex)=>
-                    {
-                        return (rowindex + 1);
-                    },
-                }.SetFixed(),
+            tFilterList.Columns = new AntdUI.ColumnCollection {                
                 new AntdUI.ColumnSwitch("IsEnable", "启用", AntdUI.ColumnAlign.Center)
                 {
                     Width = "80",
@@ -161,25 +158,36 @@ namespace WPE.InjectMode
                         System.Threading.Thread.Sleep(500);
                         return value;
                     }
-                }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),
+                }.SetFixed().SetLocalizationTitleID("Table.FilterList.Column."),                
                 new AntdUI.Column("FName", "滤镜名称").SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FMode", "模式", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("Status", "状态", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        switch((Operate.FilterConfig.Filter.FilterMode)value)
+                        if(record is FilterInfo fi)
                         {
-                            case Operate.FilterConfig.Filter.FilterMode.Normal:
-                                return AntdUI.Localization.Get("FilterMode.Normal", "普通");
+                            AntdUI.CellBadge cellBadge = null;
 
-                            case Operate.FilterConfig.Filter.FilterMode.Advanced:
-                                return AntdUI.Localization.Get("FilterMode.Advanced", "高级");
+                            if(fi.IsEnable)
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Success, "启用");
 
-                            default:
-                                return value;
+                                if(fi.ExecutionCount > 0)
+                                {
+                                    cellBadge = new AntdUI.CellBadge(AntdUI.TState.Processing, "工作");
+                                }
+                            }
+                            else
+                            {
+                                cellBadge = new AntdUI.CellBadge(AntdUI.TState.Error, "停止");
+                            }
+
+                            return cellBadge;
                         }
+
+                        return null;
                     },
-                }.SetLocalizationTitleID("Table.FilterList.Column."),                
+                }.SetLocalizationTitleID("Table.Column."),
                 new AntdUI.Column("FAction", "动作", AntdUI.ColumnAlign.Center)
                 {
                     Render = (value, record, rowindex)=>
@@ -206,23 +214,96 @@ namespace WPE.InjectMode
                         }
                     },
                 }.SetLocalizationTitleID("Table.FilterList.Column."),
-                new AntdUI.Column("FStartFrom", "修改起始于", AntdUI.ColumnAlign.Center)
+                new AntdUI.Column("ExecutionCount", "执行次数", AntdUI.ColumnAlign.Center).SetLocalizationTitleID("Table.FilterList.Column."),
+                new AntdUI.Column("Appoint", "指定类型")
                 {
                     Render = (value, record, rowindex)=>
                     {
-                        switch((Operate.FilterConfig.Filter.FilterStartFrom)value)
+                        if(record is FilterInfo fi)
                         {
-                            case Operate.FilterConfig.Filter.FilterStartFrom.Head:
-                                return AntdUI.Localization.Get("FilterStartFrom.Head", "数据包开头");
+                            List<CellTag> ctList = new List<CellTag>();
+                            
+                            if(fi.AppointHeader)
+                            {
+                                ctList.Add(new AntdUI.CellTag("包头", AntdUI.TTypeMini.Success));
+                            }
 
-                            case Operate.FilterConfig.Filter.FilterStartFrom.Position:
-                                return AntdUI.Localization.Get("FilterMode.Position", "自发现有连锁的位置");
+                            if(fi.AppointSocket)
+                            {
+                                ctList.Add(new AntdUI.CellTag("套接字", AntdUI.TTypeMini.Warn));
+                            }
 
-                            default:
-                                return value;
+                            if(fi.AppointPort)
+                            {
+                                ctList.Add(new AntdUI.CellTag("端口", AntdUI.TTypeMini.Default));
+                            }
+
+                            if(fi.AppointLength)
+                            {
+                                ctList.Add(new AntdUI.CellTag("长度", AntdUI.TTypeMini.Primary));
+                            }
+
+                            if(ctList.Count > 0)
+                            {
+                                AntdUI.CellTag[] cellTags = new AntdUI.CellTag[ctList.Count];
+                                for(int i = 0; i < ctList.Count; i++)
+                                {
+                                    cellTags[i] = ctList[i];
+                                }
+
+                                return cellTags;
+                            }
+                            else
+                            {
+                                return null;
+                            }
                         }
+
+                        return null;
                     },
                 }.SetLocalizationTitleID("Table.FilterList.Column."),                
+                new AntdUI.Column("Progression", "递进")
+                {
+                    Render = (value, record, rowindex)=>
+                    {
+                        if(record is FilterInfo fi)
+                        {
+                            List<CellTag> ctList = new List<CellTag>();
+
+                            if(!string.IsNullOrEmpty(fi.ProgressionPosition))
+                            {
+                                ctList.Add(new AntdUI.CellTag("启用", AntdUI.TTypeMini.Error));
+                            }                            
+
+                            if(fi.IsProgressionContinuous)
+                            {
+                                ctList.Add(new AntdUI.CellTag("连续", AntdUI.TTypeMini.Success));
+                            }
+
+                            if(fi.IsProgressionCarry)
+                            {
+                                ctList.Add(new AntdUI.CellTag("进位", AntdUI.TTypeMini.Warn));
+                            }                        
+
+                            if(ctList.Count > 0)
+                            {
+                                AntdUI.CellTag[] cellTags = new AntdUI.CellTag[ctList.Count];
+                                for(int i = 0; i < ctList.Count; i++)
+                                {
+                                    cellTags[i] = ctList[i];
+                                }
+
+                                return cellTags;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+
+                        return null;
+                    },
+                }.SetLocalizationTitleID("Table.FilterList.Column."),
                 new AntdUI.Column("CellLinks", "操作").SetFixed().SetWidth("auto").SetLocalizationTitleID("Table.Column."),
             };
 
@@ -684,7 +765,6 @@ namespace WPE.InjectMode
                         Operate.FilterConfig.List.UpdateFilterList_ByListAction(this, Operate.SystemConfig.ListAction.Delete, fiList);
 
                         break;
-
                 }
             }
         }
@@ -1166,6 +1246,6 @@ namespace WPE.InjectMode
         }
 
 
-        #endregion
+        #endregion        
     }
 }

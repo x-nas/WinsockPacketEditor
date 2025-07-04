@@ -9484,7 +9484,7 @@ namespace WPE.Lib
                                 MatchIndex = FilterConfig.Filter.CheckFilter_IsMatch_Advanced(sfi, bufferSpan);
                                 isMatch = MatchIndex != null && MatchIndex.Count > 0;
                             }
-
+                            
                             if (!isMatch)
                             {
                                 continue;
