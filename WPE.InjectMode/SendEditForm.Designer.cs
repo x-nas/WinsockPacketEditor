@@ -30,6 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SendEditForm));
             this.tlpSendEdit = new System.Windows.Forms.TableLayoutPanel();
+            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
+            this.bStop = new AntdUI.Button();
+            this.bExecute = new AntdUI.Button();
+            this.bSave = new AntdUI.Button();
+            this.bExit = new AntdUI.Button();
             this.tlpSendCollectionInfo = new System.Windows.Forms.TableLayoutPanel();
             this.lSend_Fail_CNT = new AntdUI.Label();
             this.lSend_Success_CNT = new AntdUI.Label();
@@ -42,39 +47,34 @@
             this.tSendCollection = new AntdUI.Table();
             this.txtNotes = new AntdUI.Input();
             this.tlpSendCollectionSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.pLoopINT = new AntdUI.Panel();
+            this.tlpLoopINT = new System.Windows.Forms.TableLayoutPanel();
+            this.nudLoopINT = new AntdUI.InputNumber();
+            this.dLoopINT = new AntdUI.Divider();
+            this.pLoopCNT = new AntdUI.Panel();
+            this.tlpLoopCNT = new System.Windows.Forms.TableLayoutPanel();
+            this.dLoopCNT = new AntdUI.Divider();
+            this.nudLoopCNT = new AntdUI.InputNumber();
+            this.pSendSocket = new AntdUI.Panel();
+            this.tlpSendSocket = new System.Windows.Forms.TableLayoutPanel();
+            this.dSendSocket = new AntdUI.Divider();
+            this.cbSystemSocket = new AntdUI.Checkbox();
             this.pSendName = new AntdUI.Panel();
             this.tlpSendName = new System.Windows.Forms.TableLayoutPanel();
             this.dSendName = new AntdUI.Divider();
             this.txtSendName = new AntdUI.Input();
-            this.pSendSocket = new AntdUI.Panel();
-            this.tlpSendSocket = new System.Windows.Forms.TableLayoutPanel();
-            this.dSendSocket = new AntdUI.Divider();
-            this.pLoopCNT = new AntdUI.Panel();
-            this.tlpLoopCNT = new System.Windows.Forms.TableLayoutPanel();
-            this.dLoopCNT = new AntdUI.Divider();
-            this.pLoopINT = new AntdUI.Panel();
-            this.tlpLoopINT = new System.Windows.Forms.TableLayoutPanel();
-            this.dLoopINT = new AntdUI.Divider();
-            this.cbSystemSocket = new AntdUI.Checkbox();
-            this.nudLoopCNT = new AntdUI.InputNumber();
-            this.nudLoopINT = new AntdUI.InputNumber();
-            this.tlpButton = new System.Windows.Forms.TableLayoutPanel();
-            this.bSave = new AntdUI.Button();
-            this.bExit = new AntdUI.Button();
-            this.bExecute = new AntdUI.Button();
-            this.bStop = new AntdUI.Button();
             this.tlpSendEdit.SuspendLayout();
+            this.tlpButton.SuspendLayout();
             this.tlpSendCollectionInfo.SuspendLayout();
             this.tlpSendCollectionSettings.SuspendLayout();
-            this.pSendName.SuspendLayout();
-            this.tlpSendName.SuspendLayout();
-            this.pSendSocket.SuspendLayout();
-            this.tlpSendSocket.SuspendLayout();
-            this.pLoopCNT.SuspendLayout();
-            this.tlpLoopCNT.SuspendLayout();
             this.pLoopINT.SuspendLayout();
             this.tlpLoopINT.SuspendLayout();
-            this.tlpButton.SuspendLayout();
+            this.pLoopCNT.SuspendLayout();
+            this.tlpLoopCNT.SuspendLayout();
+            this.pSendSocket.SuspendLayout();
+            this.tlpSendSocket.SuspendLayout();
+            this.pSendName.SuspendLayout();
+            this.tlpSendName.SuspendLayout();
             this.SuspendLayout();
             // 
             // tlpSendEdit
@@ -84,8 +84,8 @@
             this.tlpSendEdit.Controls.Add(this.tlpButton, 0, 4);
             this.tlpSendEdit.Controls.Add(this.tlpSendCollectionInfo, 0, 0);
             this.tlpSendEdit.Controls.Add(this.tSendCollection, 0, 1);
-            this.tlpSendEdit.Controls.Add(this.txtNotes, 0, 2);
-            this.tlpSendEdit.Controls.Add(this.tlpSendCollectionSettings, 0, 3);
+            this.tlpSendEdit.Controls.Add(this.txtNotes, 0, 3);
+            this.tlpSendEdit.Controls.Add(this.tlpSendCollectionSettings, 0, 2);
             this.tlpSendEdit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpSendEdit.Location = new System.Drawing.Point(0, 0);
             this.tlpSendEdit.Margin = new System.Windows.Forms.Padding(0);
@@ -96,8 +96,104 @@
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            this.tlpSendEdit.Size = new System.Drawing.Size(984, 561);
+            this.tlpSendEdit.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpSendEdit.Size = new System.Drawing.Size(984, 761);
             this.tlpSendEdit.TabIndex = 0;
+            // 
+            // tlpButton
+            // 
+            this.tlpButton.ColumnCount = 9;
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Controls.Add(this.bStop, 3, 1);
+            this.tlpButton.Controls.Add(this.bExecute, 1, 1);
+            this.tlpButton.Controls.Add(this.bSave, 5, 1);
+            this.tlpButton.Controls.Add(this.bExit, 7, 1);
+            this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpButton.Location = new System.Drawing.Point(0, 701);
+            this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpButton.Name = "tlpButton";
+            this.tlpButton.RowCount = 3;
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlpButton.Size = new System.Drawing.Size(984, 60);
+            this.tlpButton.TabIndex = 10;
+            // 
+            // bStop
+            // 
+            this.bStop.BackExtend = "135, #6253E1, #04BEFE";
+            this.bStop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bStop.Enabled = false;
+            this.bStop.IconSvg = "PauseCircleOutlined";
+            this.bStop.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bStop.LoadingWaveCount = 6;
+            this.bStop.LoadingWaveSize = 6;
+            this.bStop.LoadingWaveValue = 0.6F;
+            this.bStop.LoadingWaveVertical = true;
+            this.bStop.Location = new System.Drawing.Point(365, 7);
+            this.bStop.Name = "bStop";
+            this.bStop.Size = new System.Drawing.Size(114, 46);
+            this.bStop.TabIndex = 3;
+            this.bStop.Text = "停止";
+            this.bStop.Type = AntdUI.TTypeMini.Info;
+            this.bStop.Click += new System.EventHandler(this.bStop_Click);
+            // 
+            // bExecute
+            // 
+            this.bExecute.BackExtend = "135, #6253E1, #04BEFE";
+            this.bExecute.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bExecute.IconSvg = "PlayCircleOutlined";
+            this.bExecute.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bExecute.LoadingWaveCount = 6;
+            this.bExecute.LoadingWaveSize = 6;
+            this.bExecute.LoadingWaveValue = 0.6F;
+            this.bExecute.LoadingWaveVertical = true;
+            this.bExecute.Location = new System.Drawing.Point(225, 7);
+            this.bExecute.Name = "bExecute";
+            this.bExecute.Size = new System.Drawing.Size(114, 46);
+            this.bExecute.TabIndex = 2;
+            this.bExecute.Text = "执行";
+            this.bExecute.Type = AntdUI.TTypeMini.Info;
+            this.bExecute.Click += new System.EventHandler(this.bExecute_Click);
+            // 
+            // bSave
+            // 
+            this.bSave.BackExtend = "135, #6253E1, #04BEFE";
+            this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bSave.IconSvg = "SaveOutlined";
+            this.bSave.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
+            this.bSave.LoadingWaveCount = 6;
+            this.bSave.LoadingWaveSize = 6;
+            this.bSave.LoadingWaveValue = 0.6F;
+            this.bSave.LoadingWaveVertical = true;
+            this.bSave.Location = new System.Drawing.Point(505, 7);
+            this.bSave.Name = "bSave";
+            this.bSave.Size = new System.Drawing.Size(114, 46);
+            this.bSave.TabIndex = 0;
+            this.bSave.Text = "保存";
+            this.bSave.Type = AntdUI.TTypeMini.Info;
+            this.bSave.Click += new System.EventHandler(this.bSave_Click);
+            // 
+            // bExit
+            // 
+            this.bExit.BackExtend = "135, #6253E1, #04BEFE";
+            this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bExit.IconSvg = "LogoutOutlined";
+            this.bExit.Location = new System.Drawing.Point(645, 7);
+            this.bExit.Name = "bExit";
+            this.bExit.Size = new System.Drawing.Size(114, 46);
+            this.bExit.TabIndex = 1;
+            this.bExit.Text = "退出";
+            this.bExit.Type = AntdUI.TTypeMini.Primary;
+            this.bExit.Click += new System.EventHandler(this.bExit_Click);
             // 
             // tlpSendCollectionInfo
             // 
@@ -226,16 +322,23 @@
             // 
             // tSendCollection
             // 
+            this.tSendCollection.AutoSizeColumnsMode = AntdUI.ColumnsMode.Fill;
+            this.tSendCollection.Bordered = true;
+            this.tSendCollection.CellImpactHeight = false;
             this.tSendCollection.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSendCollection.EmptyHeader = true;
+            this.tSendCollection.Font = new System.Drawing.Font("Consolas", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tSendCollection.Gap = 8;
+            this.tSendCollection.GapCell = 0;
             this.tSendCollection.Location = new System.Drawing.Point(3, 33);
             this.tSendCollection.Name = "tSendCollection";
-            this.tSendCollection.Size = new System.Drawing.Size(978, 265);
+            this.tSendCollection.Size = new System.Drawing.Size(978, 465);
             this.tSendCollection.TabIndex = 7;
             // 
             // txtNotes
             // 
             this.txtNotes.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNotes.Location = new System.Drawing.Point(3, 304);
+            this.txtNotes.Location = new System.Drawing.Point(3, 604);
             this.txtNotes.Multiline = true;
             this.txtNotes.Name = "txtNotes";
             this.txtNotes.PlaceholderText = "备注信息";
@@ -254,13 +357,185 @@
             this.tlpSendCollectionSettings.Controls.Add(this.pSendSocket, 1, 0);
             this.tlpSendCollectionSettings.Controls.Add(this.pSendName, 0, 0);
             this.tlpSendCollectionSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 401);
+            this.tlpSendCollectionSettings.Location = new System.Drawing.Point(0, 501);
             this.tlpSendCollectionSettings.Margin = new System.Windows.Forms.Padding(0);
             this.tlpSendCollectionSettings.Name = "tlpSendCollectionSettings";
             this.tlpSendCollectionSettings.RowCount = 1;
             this.tlpSendCollectionSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tlpSendCollectionSettings.Size = new System.Drawing.Size(984, 100);
             this.tlpSendCollectionSettings.TabIndex = 9;
+            // 
+            // pLoopINT
+            // 
+            this.pLoopINT.BorderWidth = 2F;
+            this.pLoopINT.Controls.Add(this.tlpLoopINT);
+            this.pLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pLoopINT.Location = new System.Drawing.Point(741, 3);
+            this.pLoopINT.Name = "pLoopINT";
+            this.pLoopINT.Radius = 10;
+            this.pLoopINT.Size = new System.Drawing.Size(240, 94);
+            this.pLoopINT.TabIndex = 13;
+            // 
+            // tlpLoopINT
+            // 
+            this.tlpLoopINT.BackColor = System.Drawing.Color.Transparent;
+            this.tlpLoopINT.ColumnCount = 1;
+            this.tlpLoopINT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLoopINT.Controls.Add(this.nudLoopINT, 0, 1);
+            this.tlpLoopINT.Controls.Add(this.dLoopINT, 0, 0);
+            this.tlpLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpLoopINT.Location = new System.Drawing.Point(2, 2);
+            this.tlpLoopINT.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpLoopINT.Name = "tlpLoopINT";
+            this.tlpLoopINT.RowCount = 3;
+            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLoopINT.Size = new System.Drawing.Size(236, 90);
+            this.tlpLoopINT.TabIndex = 0;
+            // 
+            // nudLoopINT
+            // 
+            this.nudLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudLoopINT.Location = new System.Drawing.Point(3, 39);
+            this.nudLoopINT.Minimum = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudLoopINT.Name = "nudLoopINT";
+            this.nudLoopINT.Size = new System.Drawing.Size(230, 34);
+            this.nudLoopINT.SuffixText = "毫秒";
+            this.nudLoopINT.TabIndex = 2;
+            this.nudLoopINT.Text = "100";
+            this.nudLoopINT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLoopINT.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // dLoopINT
+            // 
+            this.dLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dLoopINT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLoopINT.Location = new System.Drawing.Point(3, 3);
+            this.dLoopINT.Name = "dLoopINT";
+            this.dLoopINT.Orientation = AntdUI.TOrientation.Left;
+            this.dLoopINT.Size = new System.Drawing.Size(230, 30);
+            this.dLoopINT.TabIndex = 0;
+            this.dLoopINT.Text = "发送间隔";
+            // 
+            // pLoopCNT
+            // 
+            this.pLoopCNT.BorderWidth = 2F;
+            this.pLoopCNT.Controls.Add(this.tlpLoopCNT);
+            this.pLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pLoopCNT.Location = new System.Drawing.Point(495, 3);
+            this.pLoopCNT.Name = "pLoopCNT";
+            this.pLoopCNT.Radius = 10;
+            this.pLoopCNT.Size = new System.Drawing.Size(240, 94);
+            this.pLoopCNT.TabIndex = 12;
+            // 
+            // tlpLoopCNT
+            // 
+            this.tlpLoopCNT.BackColor = System.Drawing.Color.Transparent;
+            this.tlpLoopCNT.ColumnCount = 1;
+            this.tlpLoopCNT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLoopCNT.Controls.Add(this.dLoopCNT, 0, 0);
+            this.tlpLoopCNT.Controls.Add(this.nudLoopCNT, 0, 1);
+            this.tlpLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpLoopCNT.Location = new System.Drawing.Point(2, 2);
+            this.tlpLoopCNT.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpLoopCNT.Name = "tlpLoopCNT";
+            this.tlpLoopCNT.RowCount = 3;
+            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpLoopCNT.Size = new System.Drawing.Size(236, 90);
+            this.tlpLoopCNT.TabIndex = 0;
+            // 
+            // dLoopCNT
+            // 
+            this.dLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dLoopCNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dLoopCNT.Location = new System.Drawing.Point(3, 3);
+            this.dLoopCNT.Name = "dLoopCNT";
+            this.dLoopCNT.Orientation = AntdUI.TOrientation.Left;
+            this.dLoopCNT.Size = new System.Drawing.Size(230, 30);
+            this.dLoopCNT.TabIndex = 0;
+            this.dLoopCNT.Text = "循环次数";
+            // 
+            // nudLoopCNT
+            // 
+            this.nudLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.nudLoopCNT.Location = new System.Drawing.Point(3, 39);
+            this.nudLoopCNT.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudLoopCNT.Name = "nudLoopCNT";
+            this.nudLoopCNT.Size = new System.Drawing.Size(230, 40);
+            this.nudLoopCNT.SuffixText = "次";
+            this.nudLoopCNT.TabIndex = 1;
+            this.nudLoopCNT.Text = "1";
+            this.nudLoopCNT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudLoopCNT.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // pSendSocket
+            // 
+            this.pSendSocket.BorderWidth = 2F;
+            this.pSendSocket.Controls.Add(this.tlpSendSocket);
+            this.pSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pSendSocket.Location = new System.Drawing.Point(249, 3);
+            this.pSendSocket.Name = "pSendSocket";
+            this.pSendSocket.Radius = 10;
+            this.pSendSocket.Size = new System.Drawing.Size(240, 94);
+            this.pSendSocket.TabIndex = 11;
+            // 
+            // tlpSendSocket
+            // 
+            this.tlpSendSocket.BackColor = System.Drawing.Color.Transparent;
+            this.tlpSendSocket.ColumnCount = 1;
+            this.tlpSendSocket.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendSocket.Controls.Add(this.dSendSocket, 0, 0);
+            this.tlpSendSocket.Controls.Add(this.cbSystemSocket, 0, 1);
+            this.tlpSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tlpSendSocket.Location = new System.Drawing.Point(2, 2);
+            this.tlpSendSocket.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSendSocket.Name = "tlpSendSocket";
+            this.tlpSendSocket.RowCount = 3;
+            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSendSocket.Size = new System.Drawing.Size(236, 90);
+            this.tlpSendSocket.TabIndex = 0;
+            // 
+            // dSendSocket
+            // 
+            this.dSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dSendSocket.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.dSendSocket.Location = new System.Drawing.Point(3, 3);
+            this.dSendSocket.Name = "dSendSocket";
+            this.dSendSocket.Orientation = AntdUI.TOrientation.Left;
+            this.dSendSocket.Size = new System.Drawing.Size(230, 30);
+            this.dSendSocket.TabIndex = 0;
+            this.dSendSocket.Text = "套接字";
+            // 
+            // cbSystemSocket
+            // 
+            this.cbSystemSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
+            this.cbSystemSocket.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbSystemSocket.Location = new System.Drawing.Point(3, 39);
+            this.cbSystemSocket.Name = "cbSystemSocket";
+            this.cbSystemSocket.Size = new System.Drawing.Size(154, 42);
+            this.cbSystemSocket.TabIndex = 1;
+            this.cbSystemSocket.Text = "使用系统套接字";
             // 
             // pSendName
             // 
@@ -312,302 +587,35 @@
             this.txtSendName.TabIndex = 1;
             this.txtSendName.TextChanged += new System.EventHandler(this.txtSendName_TextChanged);
             // 
-            // pSendSocket
-            // 
-            this.pSendSocket.BorderWidth = 2F;
-            this.pSendSocket.Controls.Add(this.tlpSendSocket);
-            this.pSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pSendSocket.Location = new System.Drawing.Point(249, 3);
-            this.pSendSocket.Name = "pSendSocket";
-            this.pSendSocket.Radius = 10;
-            this.pSendSocket.Size = new System.Drawing.Size(240, 94);
-            this.pSendSocket.TabIndex = 11;
-            // 
-            // tlpSendSocket
-            // 
-            this.tlpSendSocket.BackColor = System.Drawing.Color.Transparent;
-            this.tlpSendSocket.ColumnCount = 1;
-            this.tlpSendSocket.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendSocket.Controls.Add(this.dSendSocket, 0, 0);
-            this.tlpSendSocket.Controls.Add(this.cbSystemSocket, 0, 1);
-            this.tlpSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpSendSocket.Location = new System.Drawing.Point(2, 2);
-            this.tlpSendSocket.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpSendSocket.Name = "tlpSendSocket";
-            this.tlpSendSocket.RowCount = 3;
-            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpSendSocket.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpSendSocket.Size = new System.Drawing.Size(236, 90);
-            this.tlpSendSocket.TabIndex = 0;
-            // 
-            // dSendSocket
-            // 
-            this.dSendSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dSendSocket.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dSendSocket.Location = new System.Drawing.Point(3, 3);
-            this.dSendSocket.Name = "dSendSocket";
-            this.dSendSocket.Orientation = AntdUI.TOrientation.Left;
-            this.dSendSocket.Size = new System.Drawing.Size(230, 30);
-            this.dSendSocket.TabIndex = 0;
-            this.dSendSocket.Text = "套接字";
-            // 
-            // pLoopCNT
-            // 
-            this.pLoopCNT.BorderWidth = 2F;
-            this.pLoopCNT.Controls.Add(this.tlpLoopCNT);
-            this.pLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pLoopCNT.Location = new System.Drawing.Point(495, 3);
-            this.pLoopCNT.Name = "pLoopCNT";
-            this.pLoopCNT.Radius = 10;
-            this.pLoopCNT.Size = new System.Drawing.Size(240, 94);
-            this.pLoopCNT.TabIndex = 12;
-            // 
-            // tlpLoopCNT
-            // 
-            this.tlpLoopCNT.BackColor = System.Drawing.Color.Transparent;
-            this.tlpLoopCNT.ColumnCount = 1;
-            this.tlpLoopCNT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopCNT.Controls.Add(this.dLoopCNT, 0, 0);
-            this.tlpLoopCNT.Controls.Add(this.nudLoopCNT, 0, 1);
-            this.tlpLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpLoopCNT.Location = new System.Drawing.Point(2, 2);
-            this.tlpLoopCNT.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpLoopCNT.Name = "tlpLoopCNT";
-            this.tlpLoopCNT.RowCount = 3;
-            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpLoopCNT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopCNT.Size = new System.Drawing.Size(236, 90);
-            this.tlpLoopCNT.TabIndex = 0;
-            // 
-            // dLoopCNT
-            // 
-            this.dLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dLoopCNT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dLoopCNT.Location = new System.Drawing.Point(3, 3);
-            this.dLoopCNT.Name = "dLoopCNT";
-            this.dLoopCNT.Orientation = AntdUI.TOrientation.Left;
-            this.dLoopCNT.Size = new System.Drawing.Size(230, 30);
-            this.dLoopCNT.TabIndex = 0;
-            this.dLoopCNT.Text = "循环次数";
-            // 
-            // pLoopINT
-            // 
-            this.pLoopINT.BorderWidth = 2F;
-            this.pLoopINT.Controls.Add(this.tlpLoopINT);
-            this.pLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pLoopINT.Location = new System.Drawing.Point(741, 3);
-            this.pLoopINT.Name = "pLoopINT";
-            this.pLoopINT.Radius = 10;
-            this.pLoopINT.Size = new System.Drawing.Size(240, 94);
-            this.pLoopINT.TabIndex = 13;
-            // 
-            // tlpLoopINT
-            // 
-            this.tlpLoopINT.BackColor = System.Drawing.Color.Transparent;
-            this.tlpLoopINT.ColumnCount = 1;
-            this.tlpLoopINT.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopINT.Controls.Add(this.nudLoopINT, 0, 1);
-            this.tlpLoopINT.Controls.Add(this.dLoopINT, 0, 0);
-            this.tlpLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpLoopINT.Location = new System.Drawing.Point(2, 2);
-            this.tlpLoopINT.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpLoopINT.Name = "tlpLoopINT";
-            this.tlpLoopINT.RowCount = 3;
-            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            this.tlpLoopINT.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlpLoopINT.Size = new System.Drawing.Size(236, 90);
-            this.tlpLoopINT.TabIndex = 0;
-            // 
-            // dLoopINT
-            // 
-            this.dLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dLoopINT.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.dLoopINT.Location = new System.Drawing.Point(3, 3);
-            this.dLoopINT.Name = "dLoopINT";
-            this.dLoopINT.Orientation = AntdUI.TOrientation.Left;
-            this.dLoopINT.Size = new System.Drawing.Size(230, 30);
-            this.dLoopINT.TabIndex = 0;
-            this.dLoopINT.Text = "发送间隔";
-            // 
-            // cbSystemSocket
-            // 
-            this.cbSystemSocket.AutoSizeMode = AntdUI.TAutoSize.Auto;
-            this.cbSystemSocket.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cbSystemSocket.Location = new System.Drawing.Point(3, 39);
-            this.cbSystemSocket.Name = "cbSystemSocket";
-            this.cbSystemSocket.Size = new System.Drawing.Size(154, 42);
-            this.cbSystemSocket.TabIndex = 1;
-            this.cbSystemSocket.Text = "使用系统套接字";
-            // 
-            // nudLoopCNT
-            // 
-            this.nudLoopCNT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLoopCNT.Location = new System.Drawing.Point(3, 39);
-            this.nudLoopCNT.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudLoopCNT.Name = "nudLoopCNT";
-            this.nudLoopCNT.Size = new System.Drawing.Size(230, 40);
-            this.nudLoopCNT.SuffixText = "次";
-            this.nudLoopCNT.TabIndex = 1;
-            this.nudLoopCNT.Text = "1";
-            this.nudLoopCNT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudLoopCNT.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // nudLoopINT
-            // 
-            this.nudLoopINT.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.nudLoopINT.Location = new System.Drawing.Point(3, 39);
-            this.nudLoopINT.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudLoopINT.Name = "nudLoopINT";
-            this.nudLoopINT.Size = new System.Drawing.Size(230, 34);
-            this.nudLoopINT.SuffixText = "毫秒";
-            this.nudLoopINT.TabIndex = 2;
-            this.nudLoopINT.Text = "100";
-            this.nudLoopINT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.nudLoopINT.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // tlpButton
-            // 
-            this.tlpButton.ColumnCount = 9;
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
-            this.tlpButton.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Controls.Add(this.bStop, 3, 1);
-            this.tlpButton.Controls.Add(this.bExecute, 1, 1);
-            this.tlpButton.Controls.Add(this.bSave, 5, 1);
-            this.tlpButton.Controls.Add(this.bExit, 7, 1);
-            this.tlpButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tlpButton.Location = new System.Drawing.Point(0, 501);
-            this.tlpButton.Margin = new System.Windows.Forms.Padding(0);
-            this.tlpButton.Name = "tlpButton";
-            this.tlpButton.RowCount = 3;
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tlpButton.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpButton.Size = new System.Drawing.Size(984, 60);
-            this.tlpButton.TabIndex = 10;
-            // 
-            // bSave
-            // 
-            this.bSave.BackExtend = "135, #6253E1, #04BEFE";
-            this.bSave.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bSave.IconSvg = "SaveOutlined";
-            this.bSave.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bSave.LoadingWaveCount = 6;
-            this.bSave.LoadingWaveSize = 6;
-            this.bSave.LoadingWaveValue = 0.6F;
-            this.bSave.LoadingWaveVertical = true;
-            this.bSave.Location = new System.Drawing.Point(505, 7);
-            this.bSave.Name = "bSave";
-            this.bSave.Size = new System.Drawing.Size(114, 46);
-            this.bSave.TabIndex = 0;
-            this.bSave.Text = "保存";
-            this.bSave.Type = AntdUI.TTypeMini.Info;
-            this.bSave.Click += new System.EventHandler(this.bSave_Click);
-            // 
-            // bExit
-            // 
-            this.bExit.BackExtend = "135, #6253E1, #04BEFE";
-            this.bExit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bExit.IconSvg = "LogoutOutlined";
-            this.bExit.Location = new System.Drawing.Point(645, 7);
-            this.bExit.Name = "bExit";
-            this.bExit.Size = new System.Drawing.Size(114, 46);
-            this.bExit.TabIndex = 1;
-            this.bExit.Text = "退出";
-            this.bExit.Type = AntdUI.TTypeMini.Primary;
-            this.bExit.Click += new System.EventHandler(this.bExit_Click);
-            // 
-            // bExecute
-            // 
-            this.bExecute.BackExtend = "135, #6253E1, #04BEFE";
-            this.bExecute.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bExecute.IconSvg = "PlayCircleOutlined";
-            this.bExecute.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bExecute.LoadingWaveCount = 6;
-            this.bExecute.LoadingWaveSize = 6;
-            this.bExecute.LoadingWaveValue = 0.6F;
-            this.bExecute.LoadingWaveVertical = true;
-            this.bExecute.Location = new System.Drawing.Point(225, 7);
-            this.bExecute.Name = "bExecute";
-            this.bExecute.Size = new System.Drawing.Size(114, 46);
-            this.bExecute.TabIndex = 2;
-            this.bExecute.Text = "执行";
-            this.bExecute.Type = AntdUI.TTypeMini.Info;
-            this.bExecute.Click += new System.EventHandler(this.bExecute_Click);
-            // 
-            // bStop
-            // 
-            this.bStop.BackExtend = "135, #6253E1, #04BEFE";
-            this.bStop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bStop.Enabled = false;
-            this.bStop.IconSvg = "PauseCircleOutlined";
-            this.bStop.LoadingWaveColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(87)))), ((int)(((byte)(34)))));
-            this.bStop.LoadingWaveCount = 6;
-            this.bStop.LoadingWaveSize = 6;
-            this.bStop.LoadingWaveValue = 0.6F;
-            this.bStop.LoadingWaveVertical = true;
-            this.bStop.Location = new System.Drawing.Point(365, 7);
-            this.bStop.Name = "bStop";
-            this.bStop.Size = new System.Drawing.Size(114, 46);
-            this.bStop.TabIndex = 3;
-            this.bStop.Text = "停止";
-            this.bStop.Type = AntdUI.TTypeMini.Info;
-            this.bStop.Click += new System.EventHandler(this.bStop_Click);
-            // 
             // SendEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 561);
+            this.ClientSize = new System.Drawing.Size(984, 761);
             this.Controls.Add(this.tlpSendEdit);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("微软雅黑", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "SendEditForm";
             this.Text = "SendEditForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SendEditForm_FormClosing);
             this.Load += new System.EventHandler(this.SendEditForm_Load);
             this.tlpSendEdit.ResumeLayout(false);
+            this.tlpButton.ResumeLayout(false);
             this.tlpSendCollectionInfo.ResumeLayout(false);
             this.tlpSendCollectionInfo.PerformLayout();
             this.tlpSendCollectionSettings.ResumeLayout(false);
-            this.pSendName.ResumeLayout(false);
-            this.tlpSendName.ResumeLayout(false);
+            this.pLoopINT.ResumeLayout(false);
+            this.tlpLoopINT.ResumeLayout(false);
+            this.pLoopCNT.ResumeLayout(false);
+            this.tlpLoopCNT.ResumeLayout(false);
             this.pSendSocket.ResumeLayout(false);
             this.tlpSendSocket.ResumeLayout(false);
             this.tlpSendSocket.PerformLayout();
-            this.pLoopCNT.ResumeLayout(false);
-            this.tlpLoopCNT.ResumeLayout(false);
-            this.pLoopINT.ResumeLayout(false);
-            this.tlpLoopINT.ResumeLayout(false);
-            this.tlpButton.ResumeLayout(false);
+            this.pSendName.ResumeLayout(false);
+            this.tlpSendName.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

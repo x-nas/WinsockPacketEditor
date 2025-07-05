@@ -50,7 +50,7 @@ namespace WPE.InjectMode
             this.ss.Worker.RunWorkerCompleted -= this.Worker_RunWorkerCompleted;
             this.ss.Worker.RunWorkerCompleted += this.Worker_RunWorkerCompleted;
 
-            this.InitTable_SendCollection();
+            this.InitTable_SendCollection();            
         }
 
         private void SendEditForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -82,6 +82,17 @@ namespace WPE.InjectMode
                 new AntdUI.Column("PacketData", "数据").SetLocalizationTitleID("Table.PacketList.Column."),
             };
 
+            if (AntdUI.Config.IsDark)
+            {
+                this.tSendCollection.ColumnFore = Color.Silver;
+                this.tSendCollection.ForeColor = Color.LimeGreen;
+            }
+            else
+            {
+                this.tSendCollection.ColumnFore = Color.Black;
+                this.tSendCollection.ForeColor = Color.Green;
+            }
+
             this.tSendCollection.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
             this.tSendCollection.Binding(this.SendCollection);
         }
@@ -96,7 +107,7 @@ namespace WPE.InjectMode
             {
                 this.txtSendName.Status = TType.Success;
             }
-        }
+        }        
 
         #endregion
 

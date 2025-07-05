@@ -124,6 +124,9 @@
             this.tFilterList = new AntdUI.Table();
             this.sFilterList = new AntdUI.Segmented();
             this.tpSendList = new AntdUI.TabPage();
+            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
+            this.tSendList = new AntdUI.Table();
+            this.sSendList = new AntdUI.Segmented();
             this.tpRobotList = new AntdUI.TabPage();
             this.tpStatistical = new AntdUI.TabPage();
             this.tpComparison = new AntdUI.TabPage();
@@ -136,9 +139,6 @@
             this.timerPacketListInfo = new System.Windows.Forms.Timer(this.components);
             this.bgwSearchPacketList = new System.ComponentModel.BackgroundWorker();
             this.bgwPacketList = new System.ComponentModel.BackgroundWorker();
-            this.tlpSendList = new System.Windows.Forms.TableLayoutPanel();
-            this.tSendList = new AntdUI.Table();
-            this.sSendList = new AntdUI.Segmented();
             this.bgwSendList = new System.ComponentModel.BackgroundWorker();
             this.pageHeader.SuspendLayout();
             this.tlpMenu.SuspendLayout();
@@ -154,8 +154,8 @@
             this.tpFilterList.SuspendLayout();
             this.tlpFilterList.SuspendLayout();
             this.tpSendList.SuspendLayout();
-            this.tpSystemLog.SuspendLayout();
             this.tlpSendList.SuspendLayout();
+            this.tpSystemLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // pageHeader
@@ -338,7 +338,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -1032,6 +1032,7 @@
             this.tPacketList.Name = "tPacketList";
             this.tPacketList.Size = new System.Drawing.Size(1118, 449);
             this.tPacketList.TabIndex = 0;
+            this.tPacketList.CellClick += new AntdUI.Table.ClickEventHandler(this.tPacketList_CellClick);
             this.tPacketList.SetRowStyle += new AntdUI.Table.SetRowStyleEventHandler(this.tPacketList_SetRowStyle);
             this.tPacketList.SelectIndexChanged += new System.EventHandler(this.tPacketList_SelectIndexChanged);
             // 
@@ -1274,98 +1275,6 @@
             this.tpSendList.TabIndex = 8;
             this.tpSendList.Text = "发送列表";
             // 
-            // tpRobotList
-            // 
-            this.tpRobotList.Location = new System.Drawing.Point(0, 0);
-            this.tpRobotList.Name = "tpRobotList";
-            this.tpRobotList.Size = new System.Drawing.Size(0, 0);
-            this.tpRobotList.TabIndex = 9;
-            this.tpRobotList.Text = "机器人列表";
-            // 
-            // tpStatistical
-            // 
-            this.tpStatistical.Location = new System.Drawing.Point(0, 0);
-            this.tpStatistical.Name = "tpStatistical";
-            this.tpStatistical.Size = new System.Drawing.Size(0, 0);
-            this.tpStatistical.TabIndex = 1;
-            this.tpStatistical.Text = "统计数据";
-            // 
-            // tpComparison
-            // 
-            this.tpComparison.Location = new System.Drawing.Point(0, 0);
-            this.tpComparison.Name = "tpComparison";
-            this.tpComparison.Size = new System.Drawing.Size(0, 0);
-            this.tpComparison.TabIndex = 2;
-            this.tpComparison.Text = "文本对比";
-            // 
-            // tpXOR
-            // 
-            this.tpXOR.Location = new System.Drawing.Point(0, 0);
-            this.tpXOR.Name = "tpXOR";
-            this.tpXOR.Size = new System.Drawing.Size(0, 0);
-            this.tpXOR.TabIndex = 3;
-            this.tpXOR.Text = "异或计算";
-            // 
-            // tpTranscoding
-            // 
-            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
-            this.tpTranscoding.Name = "tpTranscoding";
-            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
-            this.tpTranscoding.TabIndex = 4;
-            this.tpTranscoding.Text = "编码转换";
-            // 
-            // tpExtraction
-            // 
-            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
-            this.tpExtraction.Name = "tpExtraction";
-            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
-            this.tpExtraction.TabIndex = 5;
-            this.tpExtraction.Text = "数据提取";
-            // 
-            // tpSystemLog
-            // 
-            this.tpSystemLog.Controls.Add(this.tSystemLog);
-            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tpSystemLog.Name = "tpSystemLog";
-            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
-            this.tpSystemLog.TabIndex = 6;
-            this.tpSystemLog.Text = "系统日志";
-            // 
-            // tSystemLog
-            // 
-            this.tSystemLog.Bordered = true;
-            this.tSystemLog.CellImpactHeight = false;
-            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tSystemLog.EmptyHeader = true;
-            this.tSystemLog.Gap = 8;
-            this.tSystemLog.GapCell = 0;
-            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
-            this.tSystemLog.Name = "tSystemLog";
-            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
-            this.tSystemLog.TabIndex = 2;
-            this.tSystemLog.Text = "table1";
-            // 
-            // timerPacketList
-            // 
-            this.timerPacketList.Enabled = true;
-            this.timerPacketList.Interval = 10;
-            this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
-            // 
-            // timerPacketListInfo
-            // 
-            this.timerPacketListInfo.Enabled = true;
-            this.timerPacketListInfo.Interval = 1000;
-            this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
-            // 
-            // bgwSearchPacketList
-            // 
-            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
-            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
-            // 
-            // bgwPacketList
-            // 
-            this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
-            // 
             // tlpSendList
             // 
             this.tlpSendList.ColumnCount = 1;
@@ -1486,6 +1395,98 @@
             this.sSendList.TabIndex = 2;
             this.sSendList.SelectIndexChanged += new AntdUI.IntEventHandler(this.sSendList_SelectIndexChanged);
             // 
+            // tpRobotList
+            // 
+            this.tpRobotList.Location = new System.Drawing.Point(0, 0);
+            this.tpRobotList.Name = "tpRobotList";
+            this.tpRobotList.Size = new System.Drawing.Size(0, 0);
+            this.tpRobotList.TabIndex = 9;
+            this.tpRobotList.Text = "机器人列表";
+            // 
+            // tpStatistical
+            // 
+            this.tpStatistical.Location = new System.Drawing.Point(0, 0);
+            this.tpStatistical.Name = "tpStatistical";
+            this.tpStatistical.Size = new System.Drawing.Size(0, 0);
+            this.tpStatistical.TabIndex = 1;
+            this.tpStatistical.Text = "统计数据";
+            // 
+            // tpComparison
+            // 
+            this.tpComparison.Location = new System.Drawing.Point(0, 0);
+            this.tpComparison.Name = "tpComparison";
+            this.tpComparison.Size = new System.Drawing.Size(0, 0);
+            this.tpComparison.TabIndex = 2;
+            this.tpComparison.Text = "文本对比";
+            // 
+            // tpXOR
+            // 
+            this.tpXOR.Location = new System.Drawing.Point(0, 0);
+            this.tpXOR.Name = "tpXOR";
+            this.tpXOR.Size = new System.Drawing.Size(0, 0);
+            this.tpXOR.TabIndex = 3;
+            this.tpXOR.Text = "异或计算";
+            // 
+            // tpTranscoding
+            // 
+            this.tpTranscoding.Location = new System.Drawing.Point(0, 0);
+            this.tpTranscoding.Name = "tpTranscoding";
+            this.tpTranscoding.Size = new System.Drawing.Size(0, 0);
+            this.tpTranscoding.TabIndex = 4;
+            this.tpTranscoding.Text = "编码转换";
+            // 
+            // tpExtraction
+            // 
+            this.tpExtraction.Location = new System.Drawing.Point(0, 0);
+            this.tpExtraction.Name = "tpExtraction";
+            this.tpExtraction.Size = new System.Drawing.Size(0, 0);
+            this.tpExtraction.TabIndex = 5;
+            this.tpExtraction.Text = "数据提取";
+            // 
+            // tpSystemLog
+            // 
+            this.tpSystemLog.Controls.Add(this.tSystemLog);
+            this.tpSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tpSystemLog.Name = "tpSystemLog";
+            this.tpSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tpSystemLog.TabIndex = 6;
+            this.tpSystemLog.Text = "系统日志";
+            // 
+            // tSystemLog
+            // 
+            this.tSystemLog.Bordered = true;
+            this.tSystemLog.CellImpactHeight = false;
+            this.tSystemLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tSystemLog.EmptyHeader = true;
+            this.tSystemLog.Gap = 8;
+            this.tSystemLog.GapCell = 0;
+            this.tSystemLog.Location = new System.Drawing.Point(0, 0);
+            this.tSystemLog.Name = "tSystemLog";
+            this.tSystemLog.Size = new System.Drawing.Size(0, 0);
+            this.tSystemLog.TabIndex = 2;
+            this.tSystemLog.Text = "table1";
+            // 
+            // timerPacketList
+            // 
+            this.timerPacketList.Enabled = true;
+            this.timerPacketList.Interval = 10;
+            this.timerPacketList.Tick += new System.EventHandler(this.timerPacketList_Tick);
+            // 
+            // timerPacketListInfo
+            // 
+            this.timerPacketListInfo.Enabled = true;
+            this.timerPacketListInfo.Interval = 1000;
+            this.timerPacketListInfo.Tick += new System.EventHandler(this.timerPacketListInfo_Tick);
+            // 
+            // bgwSearchPacketList
+            // 
+            this.bgwSearchPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSearchPacketList_DoWork);
+            this.bgwSearchPacketList.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSearchPacketList_RunWorkerCompleted);
+            // 
+            // bgwPacketList
+            // 
+            this.bgwPacketList.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwPacketList_DoWork);
+            // 
             // bgwSendList
             // 
             this.bgwSendList.WorkerSupportsCancellation = true;
@@ -1527,8 +1528,8 @@
             this.tpFilterList.ResumeLayout(false);
             this.tlpFilterList.ResumeLayout(false);
             this.tpSendList.ResumeLayout(false);
-            this.tpSystemLog.ResumeLayout(false);
             this.tlpSendList.ResumeLayout(false);
+            this.tpSystemLog.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

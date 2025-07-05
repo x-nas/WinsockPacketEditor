@@ -2335,7 +2335,7 @@ namespace WPE.Lib
                 {
                     if (dgvSocketList.Rows[i].Selected)
                     {
-                        spiList.Add(Operate.PacketConfig.List.lstRecPacket[i]);
+                        spiList.Add(Operate.PacketConfig.List.lstPacketInfo[i]);
                     }
                 }
             }

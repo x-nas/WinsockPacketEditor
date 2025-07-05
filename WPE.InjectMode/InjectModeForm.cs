@@ -1,7 +1,9 @@
 ﻿using AntdUI;
+using AntdUI.Svg;
 using Be.Windows.Forms;
 using EasyHook;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -151,7 +153,7 @@ namespace WPE.InjectMode
             };
 
             this.tPacketList.ColumnFont = new Font("Microsoft YaHei UI", 11F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(134)));
-            this.tPacketList.DataSource = Operate.PacketConfig.List.lstRecPacket;
+            this.tPacketList.DataSource = Operate.PacketConfig.List.lstPacketInfo;
         }
 
         private void InitTable_FilterList()
@@ -432,9 +434,9 @@ namespace WPE.InjectMode
             try
             {
                 int index = e.RowIndex - 1;
-                if (index > -1 && index < Operate.PacketConfig.List.lstRecPacket.Count)
+                if (index > -1 && index < Operate.PacketConfig.List.lstPacketInfo.Count)
                 {
-                    PacketInfo pi = Operate.PacketConfig.List.lstRecPacket[index];
+                    PacketInfo pi = Operate.PacketConfig.List.lstPacketInfo[index];
                     if (pi != null)
                     {
                         switch (pi.FilterAction)
@@ -533,7 +535,7 @@ namespace WPE.InjectMode
                 ForeColor = Color.Black;
 
                 this.tPacketList.ColumnFore = Color.Black;
-                this.tPacketList.ForeColor = Color.FromArgb(0, 128, 0);
+                this.tPacketList.ForeColor = Color.Green;
                 this.hbPacketData.BackColor = Color.White;
                 this.hbPacketData.ForeColor = Color.Black;
             }            
@@ -788,6 +790,113 @@ namespace WPE.InjectMode
             }
 
             this.sPacketList.SelectIndex = -1;
+        }
+
+        #endregion
+
+        #region//封包列表 - 右键菜单
+
+        private void InitCMS_PacketList()
+        {
+            AntdUI.IContextMenuStripItem[] menulist = { };
+
+            if (Operate.SendConfig.List.lstSendInfo.Count > 0)
+            {
+                AntdUI.IContextMenuStripItem[] menulist_SendList = new AntdUI.IContextMenuStripItem[Operate.SendConfig.List.lstSendInfo.Count];
+
+                for (int i = 0; i < menulist_SendList.Length; i++)
+                {
+                    menulist_SendList[i] = new AntdUI.ContextMenuStripItem(Operate.SendConfig.List.lstSendInfo[i].SName)
+                    {
+                        ID = Operate.SendConfig.List.lstSendInfo[i].SID.ToString().ToUpper(),
+                    };
+                }
+                
+                menulist = new AntdUI.IContextMenuStripItem[]
+                {
+                    new AntdUI.ContextMenuStripItem("添加到发送列表")
+                {
+                    ID = "cmsPacketList_ToSendList",
+                    IconSvg = "ProfileOutlined",
+                    LocalizationText = "InjectModeForm.cmsPacketList.ToSendList",
+                    Sub = menulist_SendList,
+                },
+                };
+            }
+            else
+            {
+                menulist = new AntdUI.IContextMenuStripItem[]
+                {
+                    new AntdUI.ContextMenuStripItem("添加到发送列表")
+                    {
+                        Enabled = false,
+                        ID = "cmsPacketList_ToSendList",
+                        IconSvg = "ProfileOutlined",
+                        LocalizationText = "InjectModeForm.cmsPacketList.ToSendList",
+                    },
+                };
+            }
+
+            AntdUI.ContextMenuStrip.open(tPacketList, item =>
+            {
+                List<PacketInfo> piList = new List<PacketInfo>();
+
+                foreach (int SelectIndex in this.tPacketList.SelectedIndexs)
+                {
+                    piList.Add(Operate.PacketConfig.List.lstPacketInfo[SelectIndex - 1]);
+                }
+
+                switch (item.ID)
+                {
+                    case "cmsPacketList_ToSendList":
+
+                        if (piList.Count > 0)
+                        {
+                            //
+                        }
+
+                        break;
+
+                    default:
+
+                        if (Guid.TryParse(item.ID, out Guid SID))
+                        { 
+                            SendInfo si = Operate.SendConfig.Send.GetSend_ByGuid(SID);
+                            if (si != null && piList.Count > 0)
+                            {
+                                if (Operate.SendConfig.Send.AddSendCollection_ByPacketInfo(SID, piList))
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "已添加到 " + item.Text, TType.Success)
+                                    {
+                                        LocalizationText = "cmsPacketList_ToSendList.Success"
+                                    });
+                                }
+                                else
+                                {
+                                    AntdUI.Message.open(new AntdUI.Message.Config(this, "添加到发送列表出错", TType.Error)
+                                    {
+                                        LocalizationText = "cmsPacketList_ToSendList.Error"
+                                    });
+                                }
+                            }
+                        }
+
+                        break;
+                }
+            }, menulist);
+        }
+
+        private void tPacketList_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Operate.PacketConfig.List.lstPacketInfo.Count == 0)
+                {
+                    return;
+                }
+
+                this.InitCMS_PacketList();
+            }
         }
 
         #endregion
@@ -1309,7 +1418,7 @@ namespace WPE.InjectMode
             try
             {
                 Operate.PacketConfig.Queue.ClearPacketQueue();
-                Operate.PacketConfig.List.lstRecPacket.Clear();
+                Operate.PacketConfig.List.lstPacketInfo.Clear();
                 Operate.PacketConfig.List.piSelect = null;                
             }
             catch (Exception ex)
@@ -1378,7 +1487,7 @@ namespace WPE.InjectMode
             this.lWSASendTo_CNT.Text = Operate.PacketConfig.Queue.WSASendTo_CNT.ToString();
             this.lWSARecvFrom_CNT.Text = Operate.PacketConfig.Queue.WSARecvFrom_CNT.ToString();
             this.lSpeedInfo.Text = Operate.PacketConfig.Packet.GetPacketSpeedInfo();
-            this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstRecPacket.Count.ToString();
+            this.mInjectMode.Items[0].Badge = Operate.PacketConfig.List.lstPacketInfo.Count.ToString();
             this.mInjectMode.Items[1].Badge = Operate.FilterConfig.List.lstFilterInfo.Count.ToString();
             this.mInjectMode.Items[2].Badge = Operate.SendConfig.List.lstSendInfo.Count.ToString();
             this.mInjectMode.Items[3].Badge = Operate.RobotConfig.RobotList.lstRobot.Count.ToString();
@@ -1399,10 +1508,10 @@ namespace WPE.InjectMode
             try
             {
                 int selectedIndex = tPacketList.SelectedIndex - 1;
-                if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstRecPacket.Count)
+                if (selectedIndex >= 0 && selectedIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
                 {
                     Operate.PacketConfig.List.Search_Index = selectedIndex;
-                    Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstRecPacket[selectedIndex];
+                    Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[selectedIndex];
 
                     DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
                     hbPacketData.ByteProvider = dbp;
@@ -1432,7 +1541,7 @@ namespace WPE.InjectMode
 
                 if (Operate.PacketConfig.List.AutoClear)
                 {
-                    if (Operate.PacketConfig.List.lstRecPacket.Count > Operate.PacketConfig.List.AutoClear_Value)
+                    if (Operate.PacketConfig.List.lstPacketInfo.Count > Operate.PacketConfig.List.AutoClear_Value)
                     {
                         this.CleanUp_PacketList();
                         this.CleanUp_HexBox();
@@ -1496,7 +1605,7 @@ namespace WPE.InjectMode
         {
             try
             {
-                if (Operate.PacketConfig.List.lstRecPacket.Count > 0)
+                if (Operate.PacketConfig.List.lstPacketInfo.Count > 0)
                 {
                     if (Operate.PacketConfig.List.FindOptions.IsValid)
                     {

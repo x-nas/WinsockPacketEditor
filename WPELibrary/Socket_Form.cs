@@ -212,7 +212,7 @@ namespace WPELibrary
             try
             {
                 dgvSocketList.AutoGenerateColumns = false;
-                dgvSocketList.DataSource = Operate.PacketConfig.List.lstRecPacket;
+                dgvSocketList.DataSource = Operate.PacketConfig.List.lstPacketInfo;
                 dgvSocketList.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(dgvSocketList, true, null);
 
                 dgvFilterList.AutoGenerateColumns = false;
@@ -687,7 +687,7 @@ namespace WPELibrary
             try
             {
                 Operate.PacketConfig.Queue.ClearPacketQueue();
-                Operate.PacketConfig.List.lstRecPacket.Clear();
+                Operate.PacketConfig.List.lstPacketInfo.Clear();
                 Operate.PacketConfig.List.piSelect = null;
                 this.dgvSocketList.Rows.Clear();
             }
@@ -933,7 +933,7 @@ namespace WPELibrary
                 }
                 else if (e.ColumnIndex == dgvSocketList.Columns["cData"].Index)
                 {
-                    switch (Operate.PacketConfig.List.lstRecPacket[e.RowIndex].FilterAction)
+                    switch (Operate.PacketConfig.List.lstPacketInfo[e.RowIndex].FilterAction)
                     {
                         case Operate.FilterConfig.Filter.FilterAction.Replace:
                             this.dgvSocketList.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Operate.FilterConfig.Filter.FilterActionForeColor_Replace;
@@ -1243,10 +1243,10 @@ namespace WPELibrary
                 {
                     int iSelectIndex = this.dgvSocketList.SelectedRows[0].Index;
 
-                    if (iSelectIndex >= 0 && iSelectIndex < Operate.PacketConfig.List.lstRecPacket.Count)
+                    if (iSelectIndex >= 0 && iSelectIndex < Operate.PacketConfig.List.lstPacketInfo.Count)
                     {
                         Operate.PacketConfig.List.Search_Index = iSelectIndex;
-                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstRecPacket[iSelectIndex];
+                        Operate.PacketConfig.List.piSelect = Operate.PacketConfig.List.lstPacketInfo[iSelectIndex];
 
                         DynamicByteProvider dbp = new DynamicByteProvider(Operate.PacketConfig.List.piSelect.PacketBuffer);
                         hbPacketData.ByteProvider = dbp;
