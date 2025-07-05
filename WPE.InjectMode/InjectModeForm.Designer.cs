@@ -338,7 +338,7 @@
             this.tabInjectMode.Controls.Add(this.tpTranscoding);
             this.tabInjectMode.Controls.Add(this.tpExtraction);
             this.tabInjectMode.Controls.Add(this.tpSystemLog);
-            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.tabInjectMode.Cursor = System.Windows.Forms.Cursors.Hand;
             this.tabInjectMode.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInjectMode.Location = new System.Drawing.Point(170, 40);
             this.tabInjectMode.Name = "tabInjectMode";
@@ -352,7 +352,6 @@
             this.tabInjectMode.Pages.Add(this.tpTranscoding);
             this.tabInjectMode.Pages.Add(this.tpExtraction);
             this.tabInjectMode.Pages.Add(this.tpSystemLog);
-            this.tabInjectMode.SelectedIndex = 2;
             this.tabInjectMode.Size = new System.Drawing.Size(1130, 760);
             this.tabInjectMode.Style = styleLine1;
             this.tabInjectMode.TabIndex = 10;
@@ -361,7 +360,7 @@
             // tpPacketList
             // 
             this.tpPacketList.Controls.Add(this.tlpPacketList);
-            this.tpPacketList.Location = new System.Drawing.Point(-1124, -724);
+            this.tpPacketList.Location = new System.Drawing.Point(3, 33);
             this.tpPacketList.Name = "tpPacketList";
             this.tpPacketList.Size = new System.Drawing.Size(1124, 724);
             this.tpPacketList.TabIndex = 0;
@@ -1029,6 +1028,7 @@
             this.tPacketList.Gap = 8;
             this.tPacketList.GapCell = 0;
             this.tPacketList.Location = new System.Drawing.Point(0, 0);
+            this.tPacketList.MultipleRows = true;
             this.tPacketList.Name = "tPacketList";
             this.tPacketList.Size = new System.Drawing.Size(1118, 449);
             this.tPacketList.TabIndex = 0;
@@ -1269,7 +1269,7 @@
             // tpSendList
             // 
             this.tpSendList.Controls.Add(this.tlpSendList);
-            this.tpSendList.Location = new System.Drawing.Point(3, 33);
+            this.tpSendList.Location = new System.Drawing.Point(-1124, -724);
             this.tpSendList.Name = "tpSendList";
             this.tpSendList.Size = new System.Drawing.Size(1124, 724);
             this.tpSendList.TabIndex = 8;

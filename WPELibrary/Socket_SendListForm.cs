@@ -350,35 +350,35 @@ namespace WPELibrary
                                 break;
 
                             case "cmsSendList_Top":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Top, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Top, spiList);
                                 break;
 
                             case "cmsSendList_Up":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Up, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Up, spiList);
                                 break;
 
                             case "cmsSendList_Down":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Down, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Down, spiList);
                                 break;
 
                             case "cmsSendList_Bottom":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Bottom, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, spiList);
                                 break;
 
                             case "cmsSendList_Delete":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Delete, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Delete, spiList);
                                 break;
 
                             case "cmsSendList_Export":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Export, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Export, spiList);
                                 break;
 
                             case "cmsSendList_Import":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.Import, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, spiList);
                                 break;
 
                             case "cmsSendList_CleanUp":
-                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, spiList);
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, spiList);
                                 break;
                         }
 

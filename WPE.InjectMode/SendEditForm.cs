@@ -1,5 +1,6 @@
 ﻿using AntdUI;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -295,6 +296,169 @@ namespace WPE.InjectMode
             this.Dispose();
         }
 
-        #endregion        
+        #endregion
+
+        #region//右键菜单
+
+        private void tSendCollection_CellClick(object sender, TableClickEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (this.SendCollection.Count == 0)
+                {
+                    return;
+                }
+
+                AntdUI.ContextMenuStrip.open(new AntdUI.ContextMenuStrip.Config(tSendCollection, (item) =>
+                {
+                    List<PacketInfo> piList = new List<PacketInfo>();
+
+                    foreach (int SelectIndex in this.tSendCollection.SelectedIndexs)
+                    {
+                        piList.Add(this.SendCollection[SelectIndex - 1]);
+                    }
+
+                    switch (item.ID)
+                    {
+                        case "cmsTop":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Top, piList);
+                            }
+
+                            break;
+
+                        case "cmsUp":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Up, piList);
+                            }
+
+                            break;
+
+                        case "cmsDown":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Down, piList);
+                            }
+
+                            break;
+
+                        case "cmsBottom":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Bottom, piList);
+                            }
+
+                            break;
+
+                        case "cmsCopy":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Copy, piList);
+                                this.tSendCollection.ScrollBar.ValueY = tSendCollection.ScrollBar.MaxY;
+                            }
+
+                            break;
+
+                        case "cmsDelete":
+
+                            if (piList.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Delete, piList);
+                            }
+
+                            break;
+
+                        case "cmsExport":
+
+                            if (this.SendCollection.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Export, piList);
+                            }
+
+                            break;
+
+                        case "cmsImport":
+
+                            Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.Import, piList);
+
+                            break;
+
+                        case "cmsClear":
+
+                            if (this.SendCollection.Count > 0)
+                            {
+                                Operate.SendConfig.Send.UpdateSendCollection_ByListAction(this, this.SendCollection, Operate.SystemConfig.ListAction.CleanUp, piList);
+                            }                            
+
+                            break;
+                    }
+
+                    this.tSendCollection.SelectedIndex = -1;
+                },
+                new AntdUI.IContextMenuStripItem[]
+                {
+                    new AntdUI.ContextMenuStripItem("置顶", "Ctrl+向上键")
+                {
+                    ID = "cmsTop",
+                    IconSvg = "VerticalAlignTopOutlined",
+                    LocalizationText = "System.cms.Top",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("向上移动", "Alt+向上键")
+                {
+                    ID = "cmsUp",
+                    IconSvg = "ArrowUpOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("向下移动", "Alt+向下键")
+                {
+                    ID = "cmsDown",
+                    IconSvg = "ArrowDownOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("置底", "Ctrl+向下键")
+                {
+                    ID = "cmsBottom",
+                    IconSvg = "VerticalAlignBottomOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("复制")
+                {
+                    ID = "cmsCopy",
+                    IconSvg = "CopyOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("删除")
+                {
+                    ID = "cmsDelete",
+                    IconSvg = "CloseOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("导出到文件")
+                {
+                    ID = "cmsExport",
+                    IconSvg = "DeliveredProcedureOutlined",
+                },
+                    new AntdUI.ContextMenuStripItem("从文件导入")
+                {
+                    ID = "cmsImport",
+                    IconSvg = "FolderOpenOutlined",
+                },
+                    new AntdUI.ContextMenuStripItemDivider(),
+                    new AntdUI.ContextMenuStripItem("清空列表")
+                {
+                    ID = "cmsClear",
+                    IconSvg = "DeleteOutlined",
+                },
+                }));
+            }
+        }
+
+        #endregion
     }
 }

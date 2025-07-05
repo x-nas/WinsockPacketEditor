@@ -331,9 +331,11 @@
             this.tSendCollection.Gap = 8;
             this.tSendCollection.GapCell = 0;
             this.tSendCollection.Location = new System.Drawing.Point(3, 33);
+            this.tSendCollection.MultipleRows = true;
             this.tSendCollection.Name = "tSendCollection";
             this.tSendCollection.Size = new System.Drawing.Size(978, 465);
             this.tSendCollection.TabIndex = 7;
+            this.tSendCollection.CellClick += new AntdUI.Table.ClickEventHandler(this.tSendCollection_CellClick);
             // 
             // txtNotes
             // 

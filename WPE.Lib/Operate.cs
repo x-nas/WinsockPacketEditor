@@ -2,7 +2,6 @@
 using AntdUI.Chat;
 using Be.Windows.Forms;
 using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10310,7 +10309,7 @@ namespace WPE.Lib
                                 {
                                     foreach (PacketInfo pi in piList)
                                     {
-                                        Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, pi.PacketFrom, pi.PacketTo, pi.PacketBuffer);
+                                        SendConfig.Send.AddSendCollection(si.SCollection, pi.PacketSocket, pi.PacketType, pi.PacketFrom, pi.PacketTo, pi.PacketBuffer);
                                     }
                                 }
                             }
@@ -10346,7 +10345,7 @@ namespace WPE.Lib
                     }
                 }
 
-                #endregion
+                #endregion                
 
                 #region//更新发送
 
@@ -10650,7 +10649,7 @@ namespace WPE.Lib
 
                 #region//发送集的列表操作
 
-                public static void UpdateSendCollection_ByListAction(BindingList<PacketInfo> SendCollection, SystemConfig.ListAction listAction, List<PacketInfo> sscList)
+                public static void UpdateSendCollection_ByListAction(Form form, BindingList<PacketInfo> SendCollection, SystemConfig.ListAction listAction, List<PacketInfo> piList)
                 {
                     try
                     {
@@ -10658,26 +10657,23 @@ namespace WPE.Lib
                         {
                             case SystemConfig.ListAction.Top:
 
-                                sscList.Reverse();
-
-                                foreach (PacketInfo spi in sscList)
+                                foreach (PacketInfo pi in piList)
                                 {
-                                    SendCollection.Remove(spi);
-                                    SendCollection.Insert(0, spi);
+                                    SendCollection.Remove(pi);
+                                    SendCollection.Insert(0, pi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Up:
 
-                                foreach (PacketInfo spi in sscList)
+                                foreach (PacketInfo pi in piList)
                                 {
-                                    int iIndex = SendCollection.IndexOf(spi);
-
+                                    int iIndex = SendCollection.IndexOf(pi);
                                     if (iIndex > 0)
                                     {
-                                        SendCollection.Remove(spi);
-                                        SendCollection.Insert(iIndex - 1, spi);
+                                        SendCollection.Remove(pi);
+                                        SendCollection.Insert(iIndex - 1, pi);
                                     }
                                 }
 
@@ -10685,16 +10681,13 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Down:
 
-                                sscList.Reverse();
-
-                                foreach (PacketInfo spi in sscList)
+                                foreach (PacketInfo pi in piList)
                                 {
-                                    int iIndex = SendCollection.IndexOf(spi);
-
+                                    int iIndex = SendCollection.IndexOf(pi);
                                     if (iIndex > -1 && iIndex < SendCollection.Count - 1)
                                     {
-                                        SendCollection.Remove(spi);
-                                        SendCollection.Insert(iIndex + 1, spi);
+                                        SendCollection.Remove(pi);
+                                        SendCollection.Insert(iIndex + 1, pi);
                                     }
                                 }
 
@@ -10702,26 +10695,48 @@ namespace WPE.Lib
 
                             case SystemConfig.ListAction.Bottom:
 
-                                foreach (PacketInfo spi in sscList)
+                                foreach (PacketInfo pi in piList)
                                 {
-                                    SendCollection.Remove(spi);
-                                    SendCollection.Add(spi);
+                                    SendCollection.Remove(pi);
+                                    SendCollection.Add(pi);
+                                }
+
+                                break;
+
+                            case SystemConfig.ListAction.Copy:
+
+                                foreach (PacketInfo pi in piList)
+                                {
+                                    SendConfig.Send.AddSendCollection(
+                                        SendCollection, 
+                                        pi.PacketSocket, 
+                                        pi.PacketType, 
+                                        pi.PacketFrom, 
+                                        pi.PacketTo, 
+                                        pi.PacketBuffer);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Delete:
 
-                                foreach (PacketInfo spi in sscList)
+                                foreach (PacketInfo pi in piList)
                                 {
-                                    SendCollection.Remove(spi);
+                                    SendCollection.Remove(pi);
                                 }
 
                                 break;
 
                             case SystemConfig.ListAction.Export:
 
-                                Send.SaveSendCollection_Dialog(string.Empty, SendCollection);
+                                if (piList.Count > 0)
+                                {
+                                    Send.SaveSendCollection_Dialog(string.Empty, piList);
+                                }
+                                else
+                                {
+                                    Send.SaveSendCollection_Dialog(string.Empty, SendCollection.ToList());
+                                }                                
 
                                 break;
 
@@ -10735,11 +10750,17 @@ namespace WPE.Lib
 
                                 if (SendCollection.Count > 0)
                                 {
-                                    DialogResult dia = Socket_Operation.ShowSelectMessageBox(MultiLanguage.GetDefaultLanguage(MultiLanguage.MutiLan_38));
-                                    if (dia.Equals(DialogResult.OK))
+                                    AntdUI.Modal.open(new AntdUI.Modal.Config(form, AntdUI.Localization.Get("InjectModeForm.miSendCollection", "发送集列表"), "\r\n确定删除所有数据吗\r\n\r\n")
                                     {
-                                        SendCollection.Clear();
-                                    }
+                                        Icon = TType.Warn,
+                                        Keyboard = false,
+                                        MaskClosable = false,
+                                        OnOk = config =>
+                                        {
+                                            SendCollection.Clear();
+                                            return true;
+                                        }
+                                    });
                                 }
 
                                 break;
@@ -10755,7 +10776,7 @@ namespace WPE.Lib
 
                 #region//保存发送集（对话框）
 
-                public static void SaveSendCollection_Dialog(string FileName, BindingList<PacketInfo> SendCollection)
+                public static void SaveSendCollection_Dialog(string FileName, List<PacketInfo> SendCollection)
                 {
                     try
                     {
@@ -10794,7 +10815,7 @@ namespace WPE.Lib
                     }
                 }
 
-                public static void SaveSendCollection(string FilePath, BindingList<PacketInfo> SendCollection, bool DoEncrypt)
+                public static void SaveSendCollection(string FilePath, List<PacketInfo> SendCollection, bool DoEncrypt)
                 {
                     try
                     {
@@ -10816,7 +10837,7 @@ namespace WPE.Lib
                     }
                 }
 
-                private static void SaveSendCollection_ToXDocument(string FilePath, BindingList<PacketInfo> SendCollection)
+                private static void SaveSendCollection_ToXDocument(string FilePath, List<PacketInfo> SendCollection)
                 {
                     try
                     {
